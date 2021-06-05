@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-confirmation-box',
+  templateUrl: './confirmation-box.component.html',
+  styleUrls: ['./confirmation-box.component.css'],
+})
+export class ConfirmationBoxComponent implements OnInit {
+  constructor(public dialogRef: MatDialogRef<ConfirmationBoxComponent>) {}
+  ngOnInit(): void {}
+  onCloseDialog(response: boolean = false) {
+    this.dialogRef.close(response);
+  }
+}

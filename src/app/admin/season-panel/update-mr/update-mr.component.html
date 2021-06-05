@@ -1,0 +1,159 @@
+<form [formGroup]="matchReport" (ngSubmit)="onSubmit()">
+  <div
+    fxLayoutAlign="center center"
+    fxLayoutGap="20px"
+    fxLayout.lt-md="column"
+    fxLayoutAlign.lt-md="center stretch"
+  >
+    <button
+      [disabled]="matchReport.invalid"
+      type="submit"
+      class="primaryButton buttonText"
+    >
+      Update
+    </button>
+    <button
+      type="button"
+      (click)="matchReport.reset()"
+      class="secondaryButton buttonText"
+    >
+      Reset
+    </button>
+  </div>
+  <div class="form-container" fxLayout="column">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select Season</mat-label>
+      <mat-select (selectionChange)="getMatches($event)">
+        <mat-option
+          [value]="season.name"
+          *ngFor="let season of existingSeasons$ | async"
+        >
+          {{ season.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select Match</mat-label>
+      <mat-select (selectionChange)="onSelectMatch($event)">
+        <mat-option>-Select Match</mat-option>
+        <mat-option [value]="match.id" *ngFor="let match of matches$ | async">
+          {{
+            match.teams[0] +
+              " - " +
+              match.teams[1] +
+              " | " +
+              (match.date.toDate() | date: "short")
+          }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div fxLayoutGap="20px">
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Enter Match FT Time </mat-label>
+        <input type="datetime-local" matInput formControlName="matchEndDate" />
+        <mat-error *ngIf="matchReport.get('matchEndDate').errors?.invalidDate">
+          Invalid Match End Date
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Home Team Final Score</mat-label>
+        <input type="tel" matInput formControlName="homeScore" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Away Team Final Score</mat-label>
+        <input type="tel" matInput formControlName="awayScore" />
+      </mat-form-field>
+    </div>
+    <div fxLayoutGap="20px">
+      <mat-radio-group
+        formControlName="penalties"
+        color="primary"
+        (change)="onSetPenalties($event)"
+        aria-label="Select Penalities"
+        fxLayoutGap="8px"
+      >
+        <span> Penalties after Full Time? </span>
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Home Team Penalty Score</mat-label>
+        <input type="tel" matInput formControlName="pen_resultHome" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Away Team Penalty Score</mat-label>
+        <input type="tel" matInput formControlName="pen_resultAway" />
+      </mat-form-field>
+    </div>
+
+    <!-- home -->
+    <div fxLayoutGap="20px">
+      <span> Add Goalscorer Names (Home) </span>
+      <button
+        mat-icon-button
+        [disabled]="!matchReport.get('scorersHome')?.valid"
+        (click)="onAddControl('home')"
+      >
+        <span class="material-icons-round">add</span>
+      </button>
+    </div>
+    <p class="mat-caption align"></p>
+    <div formArrayName="scorersHome" fxLayout="column">
+      <div
+        *ngFor="let homeScorers of getFormArray('home'); let i = index"
+        fxLayout="row"
+        fxLayoutGap="20px"
+      >
+        <mat-form-field fxFlex="<grow>" appearance="outline" color="primary">
+          <mat-label>Add Scorer Name</mat-label>
+          <input type="text" matInput [formControlName]="i" />
+        </mat-form-field>
+        <button
+          fxFlexAlign="center"
+          *ngIf="this.matchReport.get('scorersHome')?.value.length >= 1"
+          fxLayoutAlign="center center"
+          (click)="onRemoveControl('home', i)"
+          mat-icon-button
+          class="red"
+        >
+          <mat-icon class="material-icons-round">remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- away -->
+    <div fxLayoutGap="20px">
+      <span> Add Goalscorer Names (Away) </span>
+      <button
+        mat-icon-button
+        [disabled]="!matchReport.get('scorersAway')?.valid"
+        (click)="onAddControl('away')"
+      >
+        <span class="material-icons-round">add</span>
+      </button>
+    </div>
+
+    <div formArrayName="scorersAway" fxLayout="column">
+      <div
+        *ngFor="let awayScorers of getFormArray('away'); let i = index"
+        fxLayout="row"
+        fxLayoutGap="20px"
+      >
+        <mat-form-field fxFlex="<grow>" appearance="outline" color="primary">
+          <mat-label>Add Scorer Name</mat-label>
+          <input type="text" matInput [formControlName]="i" />
+        </mat-form-field>
+        <button
+          fxFlexAlign="center"
+          *ngIf="this.matchReport.get('scorersAway')?.value.length >= 1"
+          fxLayoutAlign="center center"
+          (click)="onRemoveControl('away', i)"
+          mat-icon-button
+          class="red"
+        >
+          <mat-icon class="material-icons-round">remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

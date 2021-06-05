@@ -1,0 +1,142 @@
+<div fxLayoutGap="20px" fxLayout="column">
+  <!-- button laoding -->
+  <div
+    *ngIf="showMobile && isLoading"
+    class="_fixture"
+    fxLayout="column"
+    fxLayoutGap="16px"
+  >
+    <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
+  </div>
+  <!-- button laoding -->
+
+  <!-- mobile buttons -->
+  <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
+    <!-- complete your profile button -->
+    <button
+      [routerLink]="['/dashboard', 'account']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">account_box</span>
+        <span class="mat-body-1"> Complete your profile </span>
+      </div>
+
+      <span class="mat-caption"> 25% Done </span>
+    </button>
+    <!-- complete your profile button -->
+
+    <!-- join team button -->
+    <button
+      *ngIf="noTeam"
+      (click)="joinTeam()"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">add_circle</span>
+        <span class="mat-body-1"> Join a Freekyk Team </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- join team button -->
+
+    <!-- create team  button -->
+    <button
+      *ngIf="noTeam"
+      (click)="createTeam()"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div
+        class="b-name"
+        fxLayout
+        fxLayoutGap="20px"
+        fxLayoutAlign="start center"
+        fxLayoutGap.lt-sm="4px"
+      >
+        <span class="material-icons-round">edit</span>
+        <span class="mat-body-1 left"> Create a new Team </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- create team button -->
+
+    <!-- team comms button -->
+    <button
+      *ngIf="!noTeam"
+      (click)="onTCommsMobile()"
+      class="wide-button"
+      fxLayout
+      fxHide.gt-sm="true"
+      fxLayoutAlign="space-between center"
+    >
+      <div
+        class="b-name"
+        fxLayout
+        fxLayoutGap="20px"
+        fxLayoutAlign="start center"
+        fxLayoutGap.lt-sm="4px"
+      >
+        <span class="material-icons-round">chat</span>
+        <span class="mat-body-1 left"> Open Team Communication </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- team comms button -->
+
+    <!-- raise a ticket button -->
+    <button
+      [routerLink]="['/support']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">live_help</span>
+        <span class="mat-body-1"> Need help? Raise a ticket </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- raise a ticket button -->
+  </div>
+  <!-- mobile buttons -->
+
+  <!-- team profile card -->
+  <app-da-te-profile></app-da-te-profile>
+  <!-- team profile card -->
+
+  <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="20px">
+    <div fxFlex.gt-sm="50%" fxLayoutGap="20px" fxLayout="column">
+      <!-- members section -->
+      <app-da-te-members></app-da-te-members>
+      <!-- members section -->
+    </div>
+
+    <div fxLayoutGap="20px" fxFlex.gt-sm="<grow>" fxLayout="column">
+      <!-- team stats -->
+      <div fxFlex="nogrow">
+        <app-da-te-stats></app-da-te-stats>
+      </div>
+      <!-- team stats -->
+
+      <!-- team gallery -->
+      <div fxFlex="nogrow">
+        <app-da-te-gallery></app-da-te-gallery>
+      </div>
+      <!-- team gallery-->
+    </div>
+  </div>
+
+  <!-- lg team communication -->
+  <app-da-te-communication *ngIf="!showMobile"></app-da-te-communication>
+  <!-- lg team communication -->
+</div>

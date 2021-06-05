@@ -1,0 +1,142 @@
+<!-- list laoding -->
+<div *ngIf="isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
+  <span class="_bar shine" *ngFor="let fixt of [1, 2, 3, 4, 5, 6]"></span>
+</div>
+<!-- list laoding -->
+
+<!-- matches section -->
+<div *ngIf="!isLoading" class="list-group" fxLayout="column">
+  <div
+    fxLayout
+    fxLayoutAlign="space-between center"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <span class="dash-h5 align">Freekyk Matches</span>
+    <a
+      [routerLink]="['/play', 'fixtures']"
+      fxHide.lt-md="true"
+      class="mat-caption sec-menu"
+      >view more</a
+    >
+  </div>
+  <mat-tab-group (selectedTabChange)="onChangeIndex($event)">
+    <mat-tab label="My Fixtures">
+      <ng-template matTabContent>
+        <ul *ngIf="noMyFixture">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently, you have no fixtures! </span>
+          </li>
+        </ul>
+        <!-- mobile filter -->
+        <app-filters-sm
+          *ngIf="!noMyFixture"
+          fxHide.gt-sm="true"
+          [filterArray]="fixtFilters"
+        >
+        </app-filters-sm>
+        <!-- mobile filter -->
+
+        <!-- desktop filters -->
+        <app-filters-lg
+          *ngIf="!noMyFixture"
+          fxHide.lt-md="true"
+          [filterArray]="fixtFilters"
+          [margin]="false"
+        ></app-filters-lg>
+        <!-- desktop filters -->
+
+        <!-- list -->
+
+        <ul *ngIf="!noMyFixture">
+          <li *ngFor="let fixture of myFixtures">
+            <app-fixture-dashboard
+              [matchData]="fixture"
+              [resultMode]="false"
+              [premium]="fixture.premium"
+            ></app-fixture-dashboard>
+          </li>
+        </ul>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="All Fixtures">
+      <ng-template matTabContent>
+        <ul *ngIf="noFixture">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently there are no fixtures! </span>
+          </li>
+        </ul>
+        <!-- mobile filter -->
+        <app-filters-sm
+          *ngIf="!noFixture"
+          fxHide.gt-sm="true"
+          [filterArray]="fixtFilters"
+        >
+        </app-filters-sm>
+        <!-- mobile filter -->
+
+        <!-- desktop filters -->
+        <app-filters-lg
+          *ngIf="!noFixture"
+          fxHide.lt-md="true"
+          [filterArray]="fixtFilters"
+          [margin]="false"
+        ></app-filters-lg>
+        <!-- desktop filters -->
+
+        <!-- list -->
+
+        <ul *ngIf="!noFixture">
+          <li *ngFor="let fixture of fixtures">
+            <app-fixture-dashboard
+              [matchData]="fixture"
+              [resultMode]="false"
+              [premium]="fixture.premium"
+            ></app-fixture-dashboard>
+          </li>
+        </ul>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="All Results">
+      <ng-template matTabContent>
+        <ul *ngIf="noFixture">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently there are no results! </span>
+          </li>
+        </ul>
+        <!-- mobile filter -->
+        <app-filters-sm
+          *ngIf="!noFixture"
+          fxHide.gt-sm="true"
+          [filterArray]="fixtFilters"
+        >
+        </app-filters-sm>
+        <!-- mobile filter -->
+
+        <!-- desktop filters -->
+        <app-filters-lg
+          *ngIf="!noFixture"
+          fxHide.lt-md="true"
+          [filterArray]="fixtFilters"
+          [margin]="false"
+        ></app-filters-lg>
+        <!-- desktop filters -->
+
+        <!-- list -->
+
+        <ul *ngIf="!noFixture">
+          <li *ngFor="let result of results">
+            <app-fixture-dashboard
+              [matchData]="result"
+              [resultMode]="true"
+              [premium]="result.premium"
+            ></app-fixture-dashboard>
+          </li>
+        </ul>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<!-- matches section -->

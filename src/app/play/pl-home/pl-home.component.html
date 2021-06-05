@@ -1,0 +1,79 @@
+<div fxLayout="column">
+  <!-- features -->
+  <div
+    class="container section-space-top section-space-bottom"
+    fxLayout="column"
+    fxLayoutGap="48px"
+    fxLayoutGap.gt-sm="120px"
+  >
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="perfect team"
+      [featureContent]="{ head: 'find your perfect team', route: '/play' }"
+    ></app-feature-section>
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="season"
+      [featureContent]="{
+        head: 'be a part of freekyk seasons',
+        route: '/play'
+      }"
+      [invert]="true"
+    ></app-feature-section>
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="fpl"
+      [featureContent]="{
+        head: 'experience freekyk premier league',
+        route: '/play'
+      }"
+    ></app-feature-section>
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="fkc"
+      [featureContent]="{
+        head: 'experience freekyk knockout championship',
+        route: '/play'
+      }"
+      [invert]="true"
+    ></app-feature-section>
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="fcp"
+      [featureContent]="{
+        head: 'experience freekyk community play',
+        route: '/play'
+      }"
+    ></app-feature-section>
+    <app-feature-section
+      [openDialog]="true"
+      DialogData="cust"
+      [featureContent]="{
+        head: 'customize your footballing experience',
+        route: '/play'
+      }"
+      [invert]="true"
+    ></app-feature-section>
+  </div>
+  <!-- features -->
+
+  <!-- action-strip-mini -->
+  <div class="section-space-top">
+    <app-action-strip [compact]="true"></app-action-strip>
+  </div>
+  <!-- action-strip-mini -->
+
+  <!-- why choose fk -->
+  <app-why-choose-section name="Play"></app-why-choose-section>
+  <!-- why choose fk -->
+
+  <!-- covid-19 -->
+  <app-covid-section></app-covid-section>
+  <!-- covid-19 -->
+
+  <!-- community numbers -->
+  <app-community-numbers-section
+    [data]="communityNumbers"
+  ></app-community-numbers-section>
+  <!-- community numbers -->
+</div>

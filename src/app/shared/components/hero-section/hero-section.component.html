@@ -1,0 +1,56 @@
+<section
+  class="container product"
+  ngClass.lt-md="section-space-bottom"
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+  [ngClass]="{ 'hero-big': largeBanner, hero: !largeBanner }"
+  fxLayoutAlign="center center"
+  fxLayoutAlign.gt-sm="space-between center"
+  fxLayoutGap="20px"
+>
+  <app-illustration-hero-section
+    fxFlexOrder.gt-sm="2"
+    fxFlexOrder="1"
+  ></app-illustration-hero-section>
+
+  <div
+    fxFlexOrder.gt-sm="1"
+    fxFlexOrder="2"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutAlign.gt-sm="center start"
+    ngClass.gt-sm="hero-text"
+  >
+    <span
+      *ngIf="headline"
+      ngClass.gt-sm="mat-headline"
+      class="align"
+      ngClass.lt-md="mat-title"
+    >
+      Freekyk - India's No.1 Football Network
+    </span>
+    <div
+      fxLayoutAlign.lt-md="center center"
+      fxLayoutAlign.gt-sm="center start"
+      fxLayout="column"
+    >
+      <span *ngIf="overline" class="overline align"
+        >Your Only Place to {{ overline }}</span
+      >
+      <span *ngIf="title" class="mat-title align">{{ title | titlecase }}</span>
+    </div>
+
+    <p class="mat-body-1 align">
+      For football players & freestylers, Freekyk is India's first online
+      platform that provides end-to-end football solutions so they can
+      experience organized football at a local level.
+    </p>
+    <button
+      *ngIf="button"
+      (click)="onNavigate(button['route'])"
+      class="primaryButton buttonText"
+    >
+      {{ button["name"] | titlecase }}
+    </button>
+  </div>
+</section>

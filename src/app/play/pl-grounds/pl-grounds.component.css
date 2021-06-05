@@ -1,0 +1,39 @@
+.mat-grid-tile {
+  border: 2px solid var(--grey4);
+  border-radius: var(--borderRadiusCard);
+}
+.mat-grid-tile:hover {
+  cursor: pointer;
+}
+.groundContainer {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.box-image {
+  max-height: 70%;
+  width: 100%;
+  object-fit: cover;
+}
+.content {
+  padding: 8px 16px;
+}
+.quality {
+  border-radius: 5px;
+  padding: 0 5px;
+  border: 2px solid var(--primaryColor);
+}
+@media only screen and (max-width: 1279px) {
+  .box-image {
+    max-height: 80%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .box-image {
+    max-height: 67%;
+    width: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,25 @@
+.socialShare {
+  margin: 16px;
+}
+.socialShare a {
+  margin: 4px;
+  height: 56px;
+  width: 56px;
+  background-color: var(--grey4);
+  overflow: hidden;
+  border-radius: 50%;
+}
+.socialShare a:hover {
+  background-color: var(--grey3);
+}
+.mat-subheading-1 {
+  margin: 0px;
+  padding: 0px;
+}
+img {
+  max-width: 32px;
+  max-height: 32px;
+}
+.head {
+  width: 100%;
+}

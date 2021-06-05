@@ -1,0 +1,162 @@
+<div
+  fxLayoutGap="20px"
+  fxLayout.gt-sm="row"
+  fxLayout="column"
+  fxLayoutAlign.gt-md="center"
+>
+  <!-- button laoding -->
+  <div
+    *ngIf="showMobile && isLoading"
+    class="_fixture"
+    fxLayout="column"
+    fxLayoutGap="16px"
+  >
+    <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
+  </div>
+  <!-- button laoding -->
+
+  <!-- mobile buttons -->
+  <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
+    <!-- complete your profile button -->
+    <button
+      [routerLink]="['/dashboard', 'account', 'profile']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">account_box</span>
+        <span class="mat-body-1"> Complete your profile </span>
+      </div>
+
+      <span class="mat-caption"> 25% Done </span>
+    </button>
+    <!-- complete your profile button -->
+
+    <!-- visit store button -->
+    <button
+      [routerLink]="['/equipment']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">store</span>
+        <span class="mat-body-1"> Visit equipment store </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- visit store button -->
+
+    <!-- find academies button -->
+    <button
+      [routerLink]="['/academies']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div
+        class="b-name"
+        fxLayout
+        fxLayoutGap="20px"
+        fxLayoutAlign="start center"
+        fxLayoutGap.lt-sm="4px"
+      >
+        <span class="material-icons-round">school</span>
+        <span class="mat-body-1 left"> Find top academies near you </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- find academies button -->
+
+    <!-- raise a ticket button -->
+    <button
+      [routerLink]="['/support']"
+      class="wide-button"
+      fxLayout
+      fxLayoutAlign="space-between center"
+    >
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">live_help</span>
+        <span class="mat-body-1"> Need help? Raise a ticket </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- raise a ticket button -->
+  </div>
+  <!-- mobile buttons -->
+
+  <div fxFlex.gt-sm="<grow>" fxLayoutGap="20px" fxLayout="column">
+    <app-da-ho-profile></app-da-ho-profile>
+    <app-da-ho-all-fixtures></app-da-ho-all-fixtures>
+    <app-da-ho-all-contests></app-da-ho-all-contests>
+  </div>
+
+  <div fxFlex.gt-sm="360px" fxLayoutGap="20px" fxLayout="column">
+    <!-- your stats -->
+
+    <div [fxFlexOrder]="order1" class="cards-r maxh-cards-r">
+      <app-da-ho-stats-card> </app-da-ho-stats-card>
+    </div>
+    <!-- your stats -->
+
+    <!-- complete your profile section -->
+    <app-da-ho-complete-profile
+      (profileComplete)="onComplete($event)"
+      [fxFlexOrder]="order2"
+    ></app-da-ho-complete-profile>
+    <!-- complete your profile section -->
+
+    <!-- your team card -->
+
+    <mat-card [fxFlexOrder]="order3" class="cards-r yourteam mat-elevation-z8">
+      <mat-tab-group [(selectedIndex)]="yourTeamIndex">
+        <mat-tab label="Your Team">
+          <ng-template matTabContent>
+            <mat-grid-list cols="2" rowHeight="96px">
+              <mat-grid-tile (click)="joinTeam()">
+                <a fxLayout="column" fxLayoutAlign="center center">
+                  <span class="material-icons-round">add_circle </span>
+                  <span class="mat-body-1">Join a Team </span>
+                </a>
+              </mat-grid-tile>
+              <mat-grid-tile (click)="createTeam()">
+                <a fxLayout="column" fxLayoutAlign="center center">
+                  <span class="material-icons-round">group_add </span>
+                  <span class="mat-body-1">Create a Team </span>
+                </a>
+              </mat-grid-tile>
+              <mat-grid-tile (click)="yourTeamIndex = 2">
+                <a fxLayout="column" fxLayoutAlign="center center">
+                  <span class="material-icons-round">groups </span>
+                  <span class="mat-body-1">View Invites </span>
+                </a>
+              </mat-grid-tile>
+              <mat-grid-tile [routerLink]="['/dashboard', 'team-management']">
+                <a fxLayout="column" fxLayoutAlign="center center">
+                  <span class="material-icons-round">settings </span>
+                  <span class="mat-body-1">Manage Team </span>
+                </a>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Upcoming Match">
+          <ng-template matTabContent>
+            <app-da-ho-upcoming-match></app-da-ho-upcoming-match>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Invites Recieved">
+          <ng-template matTabContent>
+            <app-da-ho-invites-list></app-da-ho-invites-list>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+    <!-- your team card -->
+    <app-da-ho-notifs fxFlexOrder="3"></app-da-ho-notifs>
+  </div>
+</div>

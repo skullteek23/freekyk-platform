@@ -1,0 +1,19 @@
+<div class="grey-bg">
+  <app-hero-section
+    [CTA]="{ name: 'play now', route: '/signup' }"
+  ></app-hero-section>
+</div>
+<div class="container">
+  <nav mat-tab-nav-bar color="primary">
+    <a
+      mat-tab-link
+      *ngFor="let link of playLinks"
+      (click)="activeLink = link"
+      [routerLink]="[link]"
+      [active]="activeLink == link"
+    >
+      {{ link | titlecase }}
+    </a>
+  </nav>
+</div>
+<router-outlet></router-outlet>

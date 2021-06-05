@@ -1,0 +1,57 @@
+<mat-list>
+  <mat-list-item
+    [ngClass]="{ 'fin-contest': contestType == 'finished' }"
+    *ngFor="let contest of contests; last as last"
+  >
+    <img
+      [routerLink]="['/freestyle', 'contests']"
+      matListAvatar
+      [src]="contest.imgpath"
+      alt="Contest Image"
+    />
+
+    <div [routerLink]="['/freestyle', 'contests']" matLine>
+      <span class="mat-body-1"> {{ contest.name }} </span>
+    </div>
+    <div
+      [routerLink]="['/freestyle', 'contests']"
+      matLine
+      [ngSwitch]="contestType"
+    >
+      <span *ngSwitchCase="'active'">
+        {{ "Started on "
+        }}{{ contest.start_date.toDate() | date: "mediumDate" }}
+      </span>
+      <span *ngSwitchCase="'finished'">
+        {{ "Finished on " }}{{ contest.end_date.toDate() | date: "mediumDate" }}
+      </span>
+      <span *ngSwitchDefault>
+        {{ "Starts on " }}{{ contest.start_date.toDate() | date: "mediumDate" }}
+      </span>
+    </div>
+
+    <div fxLayout fxLayoutAlign="center center" fxLayoutGap="16px">
+      <button
+        *ngIf="contestType == 'upcoming'"
+        fxHide.lt-sm="true"
+        (click)="onParticipate(contest)"
+        class="secondaryButton smallButton"
+        color="primary"
+      >
+        Participate
+      </button>
+      <span *ngIf="contestType == 'active'" class="material-icons-round filled">
+        sensors
+      </span>
+      <span
+        *ngIf="contestType == 'finished'"
+        class="material-icons-round filled"
+      >
+        check_circle
+      </span>
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </div>
+
+    <mat-divider *ngIf="!last"></mat-divider>
+  </mat-list-item>
+</mat-list>

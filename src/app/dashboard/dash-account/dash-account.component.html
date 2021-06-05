@@ -1,0 +1,14 @@
+<mat-card class="container nopad mat-elevation-z4">
+  <nav mat-tab-nav-bar>
+    <a
+      mat-tab-link
+      *ngFor="let link of accountLinks"
+      (click)="activeLink = link"
+      [routerLink]="[link]"
+      [active]="activeLink == link"
+    >
+      {{ link | titlecase }}
+    </a>
+  </nav>
+  <router-outlet></router-outlet>
+</mat-card>

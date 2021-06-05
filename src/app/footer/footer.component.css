@@ -1,0 +1,12 @@
+a {
+  margin-bottom: 16px;
+  width: 100%;
+}
+a div {
+  margin-right: 16px;
+}
+.upper_space {
+  min-height: 320px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}

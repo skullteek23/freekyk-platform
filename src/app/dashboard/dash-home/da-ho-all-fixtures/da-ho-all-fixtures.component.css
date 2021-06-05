@@ -1,0 +1,24 @@
+._bar {
+  height: 72px;
+  width: 100%;
+  max-width: 740px;
+}
+._fixture {
+  height: 100%;
+  background-color: white;
+  width: 100%;
+  border-radius: var(--borderRadiusCard);
+  max-height: calc(72px * 6 + 6 * 16px);
+  max-width: 760px;
+  padding: 16px;
+  margin: 0px;
+}
+.nofi {
+  margin-top: 20px;
+  height: 72px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0;
+  border-radius: var(--borderRadiusCard);
+  opacity: 0.75;
+}

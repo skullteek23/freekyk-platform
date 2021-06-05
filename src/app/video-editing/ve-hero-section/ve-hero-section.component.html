@@ -1,0 +1,42 @@
+<section
+  class="container product hero"
+  ngClass.lt-md="section-space-bottom"
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+  fxLayoutAlign="center center"
+  fxLayoutAlign.gt-sm="space-between center"
+  fxLayoutGap="20px"
+>
+  <app-illustration-hero-section
+    fxFlexOrder.gt-sm="2"
+    fxFlexOrder="1"
+  ></app-illustration-hero-section>
+
+  <div
+    fxFlexOrder.gt-sm="1"
+    fxFlexOrder="2"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutAlign.gt-sm="center start"
+    ngClass.gt-sm="hero-text"
+  >
+    <div
+      fxLayoutAlign.lt-md="center center"
+      fxLayoutAlign.gt-sm="center start"
+      fxLayout="column"
+    >
+      <span class="mat-title align">{{
+        "Freekyk Video Editing Services" | titlecase
+      }}</span>
+    </div>
+
+    <p class="mat-body-1 align">
+      For football players & freestylers, Freekyk is India's first online
+      platform that provides end-to-end football solutions so they can
+      experience organized football at a local level.
+    </p>
+    <button (click)="onOpenForm()" class="primaryButton buttonText">
+      Start a Project
+    </button>
+  </div>
+</section>

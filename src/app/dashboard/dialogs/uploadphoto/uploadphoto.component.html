@@ -1,0 +1,45 @@
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+>
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Add Profile Photo</span>
+</mat-toolbar>
+<div class="container-2">
+  <div
+    ngClass.lt-md="dialogData"
+    ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <mat-label> Choose Image for Profile Picture </mat-label>
+    <input
+      hidden
+      type="file"
+      name="fileInput"
+      accept="image/*"
+      #fileInput
+      (change)="onChooseImage($event)"
+      id="file"
+    />
+    <p class="file">
+      {{ this.$file?.name }}
+    </p>
+    <div fxLayoutGap="20px">
+      <button (click)="fileInput.click()" class="buttonText secondaryButton">
+        Choose Image
+      </button>
+      <button (click)="onUploadImage()" class="buttonText primaryButton">
+        Upload
+      </button>
+    </div>
+    <div *ngIf="selectedImage != null">
+      <img [src]="selectedImage" class="preview" alt="Image" />
+    </div>
+  </div>
+</div>

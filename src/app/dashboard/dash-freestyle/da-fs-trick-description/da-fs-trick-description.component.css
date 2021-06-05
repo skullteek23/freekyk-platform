@@ -1,0 +1,10 @@
+.mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
+}
+.mat-form-field {
+  width: 100%;
+}
+.youtube-video {
+  margin: 20px 0;
+}

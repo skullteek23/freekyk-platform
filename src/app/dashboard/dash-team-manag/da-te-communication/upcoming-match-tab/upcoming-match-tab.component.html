@@ -1,0 +1,80 @@
+<div fxLayoutGap="20px" class="filter-spacing littleSpace" fxLayout="column">
+  <!-- for players -->
+  <mat-card
+    *ngIf="!isCaptain; else CaptainCard"
+    class="normal mat-elevation-z8"
+  >
+    <div
+      fxLayout.gt-md="row"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutAlign.gt-md="space-between center"
+    >
+      <div fxLayout="column">
+        <span class="mat-body-1 left"> Are you going for this match </span>
+        <span class="mat-body-2 left">
+          Let your team know your availability status
+        </span>
+      </div>
+      <div fxLayout="row" fxLayoutGap="8px">
+        <button
+          (click)="onRespond(false)"
+          [disabled]="disableButton"
+          class="noResponseButton buttonText"
+        >
+          No
+        </button>
+        <button
+          (click)="onRespond(true)"
+          [disabled]="disableButton"
+          class="yesResponseButton buttonText"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </mat-card>
+  <!-- for players -->
+
+  <!-- for captains -->
+  <ng-template #CaptainCard>
+    <mat-card fxLayout="column" fxLayoutGap="20px">
+      <div fxLayout="column">
+        <span class="mat-body-1 left">
+          Which players do you want to include in your squad for this match?
+        </span>
+        <span class="mat-body-2 left"> Let your team know the status! </span>
+      </div>
+      <!-- <div fxLayout="row wrap" fxLayoutGap="20px">
+        <mat-checkbox
+          color="primary"
+          [disabled]="disableCheck"
+          [value]="member.id"
+          *ngFor="let member of memberNames$ | async"
+          class="mat-body-1 name"
+        >
+          {{ member.name }}
+        </mat-checkbox>
+      </div> -->
+      <div fxLayoutAlign="start center">
+        <button
+          (click)="onOpenAskPlayersDialog()"
+          style="max-width: 100%"
+          class="buttonText secondaryButton"
+        >
+          Ask selected players for their availability
+        </button>
+      </div>
+    </mat-card>
+  </ng-template>
+  <!-- for captains -->
+
+  <!-- activity logs -->
+  <mat-card class="activityCard grey-bg">
+    <mat-card-title>
+      <span class="mat-body-2"> Team Activity </span>
+    </mat-card-title>
+    <app-team-activity></app-team-activity>
+  </mat-card>
+  <!-- activity logs -->
+</div>

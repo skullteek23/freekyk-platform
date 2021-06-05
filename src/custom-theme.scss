@@ -1,0 +1,105 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$mat-freekyk-primary: (
+  50: #c5e8c3,
+  100: #c5e8c3,
+  200: #a0d99c,
+  300: #77ca73,
+  400: #57bf54,
+  500: #00810f,
+  600: #29a429,
+  700: #18921d,
+  800: #00810f,
+  900: #006200,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+$mat-freekyk-accent: (
+  50: #ffe8e7,
+  100: #ffc9ba,
+  200: #ffa48d,
+  300: #ff7d5f,
+  400: #ff5a3c,
+  500: #ff2e17,
+  600: #ff2613,
+  700: #ff1a0c,
+  800: #f20505,
+  900: #db0000,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+$freekyk7-primary: mat-palette($mat-freekyk-primary);
+$freekyk7-accent: mat-palette($mat-freekyk-accent, 800, 900, 700);
+
+// The warn palette is optional (defaults to red).
+$freekyk7-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$freekyk7-theme: mat-light-theme(
+  (
+    color: (
+      primary: $freekyk7-primary,
+      accent: $freekyk7-accent,
+      warn: $freekyk7-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+$freekyk-typography-base: mat-typography-config(
+  $font-family: '"Open Sans", Helvetica',
+  $display-1: mat-typography-level(64px, 103.55417528px, 400),
+  $headline: mat-typography-level(48px, 77.66563146px, 400),
+  $title: mat-typography-level(34px, 55.0131556175px, 400),
+  $subheading-2: mat-typography-level(24px, 38.83281573px, 400),
+  $subheading-1: mat-typography-level(20px, 32.360679775px, 400),
+  $body-1: mat-typography-level(15px, 24.2705098312px, 400),
+  $body-2: mat-typography-level(14px, 22.6524758425px, 600),
+  $caption: mat-typography-level(12px, 19.416407865px, 600),
+  $button: mat-typography-level(14px, 22.6524758425px, 600),
+  $input: mat-typography-level(14px, 1.510165, 400),
+);
+@include angular-material-theme($freekyk7-theme);
+@include mat-base-typography($freekyk-typography-base);

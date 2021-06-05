@@ -1,0 +1,10 @@
+.fixtures_placeholder {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.bar {
+  height: 72px;
+  width: 100%;
+  border-radius: var(--borderRadiusCard);
+}

@@ -1,0 +1,12 @@
+.min-height {
+  min-height: 100vh;
+}
+.heading {
+  width: 100%;
+  padding-right: 20px;
+}
+.borderMe {
+  padding: 20px;
+  border: 2px solid var(--grey4);
+  border-radius: 20px;
+}

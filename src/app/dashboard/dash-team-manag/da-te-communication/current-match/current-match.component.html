@@ -1,0 +1,39 @@
+<div fxLayoutGap="20px" class="filter-spacing" fxLayout="column">
+  <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center center">
+    <div class="team" fxLayout="column" fxLayoutGap="8px">
+      <div class="img_cont">
+        <img [src]="data?.logos[0]" alt="profile image" />
+      </div>
+      <span class="mat-body-1 center">{{ data?.teams[0] }} </span>
+    </div>
+    <div
+      class="kickoff"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutGap="8px"
+    >
+      <span class="overline">
+        {{ "kick-off" | uppercase }}
+      </span>
+
+      <span class="score_rec mat-body-2" fxLayoutAlign="center center">
+        {{ data?.date.toDate() | date: "HH:mm" }}
+      </span>
+    </div>
+
+    <div class="team" fxLayout="column" fxLayoutGap="8px">
+      <div class="img_cont">
+        <img [src]="data?.logos[1]" alt="profile image" />
+      </div>
+      <span class="mat-body-1 center"> {{ data?.teams[1] }} </span>
+    </div>
+  </div>
+  <span class="mat-body-2 center"
+    >This match is on {{ data?.date.toDate() | date: "mediumDate" }}</span
+  >
+</div>
+<div fxLayoutAlign="center center">
+  <button (click)="onOpenFixture()" class="secondaryButton buttonText">
+    View Fixture Details
+  </button>
+</div>

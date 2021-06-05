@@ -1,0 +1,22 @@
+.forgot_password {
+  color: black;
+  opacity: 1;
+}
+.forgot_password:hover {
+  opacity: 0.8;
+}
+.wb {
+  max-width: 100% !important;
+}
+@media only screen and (min-width: 959px) {
+  .mat-form-field {
+    width: 360px;
+  }
+  button {
+    width: 360px;
+  }
+  .mat-divider {
+    width: 360px;
+    min-width: 300px;
+  }
+}

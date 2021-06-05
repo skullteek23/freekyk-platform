@@ -1,0 +1,85 @@
+<div class="grey-bg">
+  <app-hero-section
+    title="freekyk equipment"
+    overline="buy"
+    [CTA]="{ name: 'start shopping', route: '/signup' }"
+  ></app-hero-section>
+</div>
+
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filters -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="prodFilters"
+  ></app-filters-sm>
+  <!-- mobile filters -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="prodFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
+  <!-- loading -->
+
+  <!-- list -->
+  <div class="container section-space-bottom">
+    <!-- no equipment -->
+    <ng-template #placeholder>
+      <app-no-items-message></app-no-items-message>
+    </ng-template>
+    <!-- no equipment -->
+
+    <mat-grid-list
+      *ngIf="noProducts == false; else placeholder"
+      [cols]="columns"
+      [rowHeight]="cardHeight"
+      gutterSize="20px"
+    >
+      <mat-grid-tile
+        appElevateOnHover
+        *ngFor="let product of allProducts$ | async"
+      >
+        <div class="productContainer">
+          <img
+            [routerLink]="['/product', product.id]"
+            class="box-image"
+            [src]="product.imgpath"
+            [alt]="product.name"
+          />
+          <div class="content" fxLayoutAlign="space-between center">
+            <div
+              fxLayout="column"
+              fxLayoutAlign="center start"
+              [routerLink]="['/product', product.id]"
+            >
+              <span
+                ngClass.lt-sm="mat-caption left"
+                ngClass.gt-xs="mat-body-1 left"
+              >
+                {{ product.name | textShorten: 50 }}
+              </span>
+              <mat-chip-list>
+                <mat-chip color="primary" class="mat-body-2" selected>
+                  {{ product.price | currency }}
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+            <button
+              fxHide.lt-sm="true"
+              mat-icon-button
+              color="primary"
+              (click)="onShare(product)"
+            >
+              <mat-icon class="material-icons-round"> share </mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <!-- list -->
+</div>

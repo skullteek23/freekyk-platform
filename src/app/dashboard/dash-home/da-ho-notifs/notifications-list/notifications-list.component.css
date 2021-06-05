@@ -1,0 +1,19 @@
+.notification {
+  height: 72px;
+  margin: 8px 0;
+  width: 100%;
+  opacity: 0.8;
+  border-radius: var(--borderRadiusCard);
+  padding: 8px 16px;
+  background-color: white;
+}
+.notification:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.sec-menu {
+  color: var(--grey1);
+}
+.notif_time {
+  color: var(--primaryColor);
+}

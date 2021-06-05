@@ -1,0 +1,65 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="seasonFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="seasonFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
+  <!-- loading -->
+
+  <!-- list -->
+  <div class="container section-space-bottom">
+    <!-- no seasons -->
+    <ng-template #placeholder>
+      <app-no-items-message></app-no-items-message>
+    </ng-template>
+    <!-- no seasons -->
+
+    <!-- seasons -->
+    <mat-grid-list
+      *ngIf="noSeasons == false; else placeholder"
+      [cols]="columns"
+      gutterSize="20px"
+    >
+      <mat-grid-tile appCardElevate *ngFor="let season of seasons$ | async">
+        <div class="seasonContainer">
+          <img
+            [routerLink]="['/s', season.name]"
+            class="box-image"
+            [src]="season.imgpath"
+            [alt]="season.name"
+          />
+          <div class="content" fxLayoutAlign="space-between start">
+            <div
+              [routerLink]="['/s', season.name]"
+              fxLayout="column"
+              fxLayoutAlign="center start"
+            >
+              <span class="mat-body-1 left">
+                {{ season.name | slice: 0:50 }}
+              </span>
+              <span class="mat-caption left">
+                {{ season.locCity + ", " + season.locState | slice: 0:50 }}
+              </span>
+            </div>
+            <button mat-icon-button color="primary" (click)="onShare(season)">
+              <mat-icon class="material-icons-round"> share </mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <!-- seasons -->
+  </div>
+  <!-- list -->
+</div>

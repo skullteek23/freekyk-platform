@@ -1,0 +1,29 @@
+<!-- mobile filter -->
+<app-filters-sm fxHide.gt-sm="true" [filterArray]="plFilters"></app-filters-sm>
+<!-- mobile filter -->
+
+<!-- desktop filters -->
+<app-filters-lg
+  [margin]="margin"
+  fxHide.lt-md="true"
+  [filterArray]="plFilters"
+></app-filters-lg>
+<!-- desktop filters -->
+
+<mat-list>
+  <mat-list-item *ngFor="let teamMember of teamMembers; last as last">
+    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" />
+    <p matLine fxLayoutAlign="space-between center">
+      <span class="mat-body-1">
+        {{ teamMember.name + (capId == teamMember.id ? " (C)" : "") }}
+      </span>
+      <a (click)="onOpenPlayerProfile(teamMember.id)" class="mat-caption">
+        View Profile
+      </a>
+    </p>
+    <p matLine fxLayoutAlign="space-between center">
+      <span class="mat-caption"> {{ teamMember.pl_pos }} </span>
+    </p>
+    <mat-divider *ngIf="!last"></mat-divider>
+  </mat-list-item>
+</mat-list>

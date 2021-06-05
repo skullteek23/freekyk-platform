@@ -1,0 +1,60 @@
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+>
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Feature Info</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="dialogData">
+    <div fxLayout="column" fxLayoutGap="8px">
+      <p class="mat-body-1 left">Heading 1</p>
+
+      <div class="mat-body-2 left">
+        <p mat-line *ngFor="let line of [1, 2, 3]">
+          {{ "Line " + line }}
+        </p>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <p class="mat-body-1 left">Heading 1</p>
+
+      <div class="mat-body-2 left">
+        <p mat-line *ngFor="let line of [1, 2, 3]">
+          {{ "Line " + line }}
+        </p>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <p class="mat-body-1 left">Heading 1</p>
+
+      <div class="mat-body-2 left">
+        <p matLine *ngFor="let line of [1, 2, 3]">
+          {{ "Line " + line }}
+        </p>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <p class="mat-body-1 left">Heading 1</p>
+
+      <div class="mat-body-2 left">
+        <p mat-line *ngFor="let line of [1, 2, 3]">
+          {{ "Line " + line }}
+        </p>
+      </div>
+    </div>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <p class="mat-body-1 left">Heading 1</p>
+
+      <div class="mat-body-2 left">
+        <p mat-line *ngFor="let line of [1, 2, 3]">
+          {{ "Line " + line }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

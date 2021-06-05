@@ -1,0 +1,17 @@
+.star {
+  color: var(--primaryColor);
+}
+.defaultStar {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+.border {
+  border: 1px solid var(--grey4);
+  box-shadow: none;
+  width: 100%;
+}
+.mat-subheading-1 {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}

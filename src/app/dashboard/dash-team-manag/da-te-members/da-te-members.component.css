@@ -1,0 +1,42 @@
+.bg {
+  background-color: white;
+  height: 650px;
+}
+.mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
+}
+.sec-menu {
+  color: var(--grey1);
+}
+mat-tab-group {
+  max-height: 850px;
+}
+.space-top {
+  margin-top: 20px;
+}
+.stats-card {
+  min-height: 250px;
+  height: 350px;
+}
+.normal {
+  margin: 0 16px;
+  border-radius: var(--borderRadiusCard);
+}
+.activityCard {
+  border: none;
+  box-shadow: none;
+}
+.name {
+  margin: 4px;
+}
+
+.nofi {
+  margin-top: 20px;
+  height: 72px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0;
+  border-radius: var(--borderRadiusCard);
+  opacity: 0.75;
+}

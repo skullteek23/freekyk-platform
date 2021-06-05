@@ -1,0 +1,10 @@
+.long-action-strip {
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+.mat-subheading-2,
+.mat-subheading-1 {
+  padding: 0px !important;
+  margin: 0 !important;
+}

@@ -1,0 +1,99 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="conFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="conFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-bar-loading-shimmer *ngIf="isLoading"></app-bar-loading-shimmer>
+  <!-- loading -->
+
+  <!-- contests list -->
+  <mat-accordion togglePosition="before" class="container section-space-bottom">
+    <!-- no contests -->
+    <ng-container *ngIf="noContests">
+      <app-no-items-message items="contests"></app-no-items-message>
+    </ng-container>
+    <!-- no contests -->
+
+    <mat-expansion-panel *ngFor="let contest of contests$ | async">
+      <mat-expansion-panel-header collapsedHeight="72px" expandedHeight="72px">
+        <div
+          fxFlex="<grow>"
+          class="full-width-table"
+          fxLayout
+          fxLayoutAlign="space-between center"
+        >
+          <div fxLayoutGap="20px" fxLayout fxLayoutAlign="start center">
+            <img
+              class="conAvatar"
+              [src]="contest.imgpath"
+              [alt]="contest.name"
+            />
+
+            <p fxLayout="column" fxLayoutAlign="center start">
+              <span class="mat-body-1"> {{ contest.name | titlecase }} </span>
+              <span
+                class="mat-caption"
+                *ngIf="contest.start_date.toDate() >= todaysDate"
+              >
+                Starts {{ contest.start_date.toDate() | date: "mediumDate" }}
+              </span>
+              <span
+                class="mat-caption"
+                *ngIf="contest.end_date.toDate() < todaysDate"
+              >
+                Finished on {{ contest.end_date.toDate() | date: "mediumDate" }}
+              </span>
+            </p>
+          </div>
+          <div fxFlex.gt-sm="64px" fxLayoutGap="16px" fxLayout>
+            <a fxHide.lt-md="true" (click)="onViewContestInfo(contest)">
+              <mat-icon class="material-icons-round">info</mat-icon>
+            </a>
+            <a (click)="onShareContest(contest)">
+              <mat-icon class="material-icons-round">share</mat-icon>
+            </a>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div class="filter-spacing" fxLayoutAlign="center center">
+          <button
+            fxHide.gt-sm="true"
+            (click)="onViewContestInfo(contest)"
+            class="buttonText secondaryButton"
+          >
+            View Contest Info
+          </button>
+        </div>
+        <mat-tab-group>
+          <mat-tab [label]="'Stage ' + stage" *ngFor="let stage of [1, 2, 3]">
+            <ng-template matTabContent>
+              <app-fs-co-stage
+                [stage]="stage"
+                [cid]="contest.id"
+              ></app-fs-co-stage>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Final">
+            <ng-template matTabContent>
+              <app-fs-co-stage-final [cid]="contest.id"></app-fs-co-stage-final>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- contests list -->
+</div>

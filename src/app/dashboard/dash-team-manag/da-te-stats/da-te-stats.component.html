@@ -1,0 +1,57 @@
+<mat-card class="stats-card mat-elevation-z8">
+  <mat-tab-group>
+    <mat-tab label="Team stats">
+      <ng-template matTabContent>
+        <div class="fullpad-20 placehold">
+          <mat-grid-list cols="3" rowHeight="72px" gutterSize="20px">
+            <mat-grid-tile *ngFor="let stat of Stats">
+              <div
+                class="full-width-table"
+                fxLayoutAlign="start center"
+                fxLayoutGap="8px"
+              >
+                <mat-icon
+                  [ngClass]="{
+                    red: stat.name == 'Red cards',
+                    yellow: stat.name == 'Yellow cards'
+                  }"
+                  class="material-icons-round"
+                >
+                  {{ stat.icon }}
+                </mat-icon>
+
+                <div fxLayout="column" fxLayoutAlign="center start">
+                  <span class="mat-body-1 primaryColor">
+                    {{ stat.value ? stat.value : "0" }}
+                  </span>
+                  <span class="mat-caption"> {{ stat.name }}</span>
+                </div>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Premium Stats">
+      <ng-template matTabContent>
+        <div
+          class="grey-bg placeholde"
+          *ngIf="noPremiumWon"
+          fxLayoutAlign="center center"
+        >
+          <p class="mat-body-1" fxLayoutAlign="center center">
+            No Premium Tournaments Won!
+          </p>
+        </div>
+        <div class="fullpad-20" fxLayout="row wrap">
+          <mat-icon
+            *ngFor="let wins of tour_wins"
+            class="material-icons-round premium"
+          >
+            emoji_events
+          </mat-icon>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group></mat-card
+>

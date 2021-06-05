@@ -1,0 +1,19 @@
+<div
+  fxLayout
+  fxLayoutAlign="space-between center"
+  fxLayoutAlign.lt-md="center center"
+>
+  <span class="dash-h5 align">Team Gallery</span>
+  <a
+    fxHide.lt-md="true"
+    [matMenuTriggerFor]="addphotos"
+    class="material-icons-round"
+    >more_vert</a
+  >
+</div>
+<div>
+  <app-gallery-card [photos]="galleryImages$ | async"></app-gallery-card>
+</div>
+<mat-menu #addphotos>
+  <a mat-menu-item (click)="onOpenTeamSettings()"> Add photos</a>
+</mat-menu>

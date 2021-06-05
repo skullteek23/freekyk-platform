@@ -1,0 +1,12 @@
+<header>
+  <app-header (menOpen)="onOpenMenu($event)"></app-header>
+</header>
+<main [fxHide]="menuOpen">
+  <router-outlet></router-outlet>
+</main>
+<aside [fxHide]="menuOpen || dashOpen">
+  <app-action-strip [compact]="false"></app-action-strip>
+</aside>
+<footer [fxHide]="menuOpen || dashOpen">
+  <app-footer></app-footer>
+</footer>

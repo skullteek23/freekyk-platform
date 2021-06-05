@@ -1,0 +1,126 @@
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+>
+  <button mat-icon-button mat-dialog-close (click)="onSubmit()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Update Match Details</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="dialogData seperator">
+    <p class="mat-body-1">Match Info</p>
+    <form [formGroup]="overviewForm" (ngSubmit)="onSubmit()" fxLayout="column">
+      <!-- match description -->
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label> Enter Match Description</mat-label>
+        <textarea
+          matInput
+          formControlName="desc"
+          placeholder="Match description in 300 words"
+        ></textarea>
+        <mat-error *ngIf="overviewForm.get('desc').hasError('pattern')">
+          Only letters and numbers are allowed!
+        </mat-error>
+        <mat-error *ngIf="overviewForm.get('desc').hasError('maxLength')">
+          More than 300 characters not allowed!
+        </mat-error>
+      </mat-form-field>
+      <!-- match description -->
+
+      <!-- referee -->
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Add Referee Name</mat-label>
+        <input type="text" matInput name="ref" formControlName="ref" />
+        <mat-error *ngIf="overviewForm.get('ref').hasError('pattern')">
+          Only letters and numbers are allowed!
+        </mat-error>
+        <span matPrefix>Mr.</span>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Add Referee Contact Number</mat-label>
+        <input type="tel" name="ref_phno" formControlName="ref_phno" matInput />
+        <mat-error *ngIf="overviewForm.get('ref_phno').hasError('pattern')">
+          Invaid Phone number! Try again!
+        </mat-error>
+        <mat-error *ngIf="overviewForm.get('ref_phno').hasError('maxlength')">
+          Please enter a valid 10 digit mobile number!
+        </mat-error>
+      </mat-form-field>
+      <!-- referee -->
+
+      <!-- organizer -->
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Add Organizer Name</mat-label>
+        <input
+          type="text"
+          matInput
+          name="organizer"
+          formControlName="organizer"
+        />
+        <mat-error *ngIf="overviewForm.get('organizer').hasError('pattern')">
+          Certain characters aren't allowed!
+        </mat-error>
+        <mat-error *ngIf="overviewForm.get('organizer').hasError('maxlength')">
+          Only 300 characters are allowed!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Add Organiser Contact Number</mat-label>
+        <input type="tel" name="org_phno" formControlName="org_phno" matInput />
+        <mat-error *ngIf="overviewForm.get('org_phno').hasError('pattern')">
+          Invaid Phone number! Try again!
+        </mat-error>
+        <mat-error *ngIf="overviewForm.get('org_phno').hasError('maxlength')">
+          Please enter a valid 10 digit mobile number!
+        </mat-error>
+      </mat-form-field>
+      <!-- organizer -->
+
+      <!-- refreshment supplier -->
+      <mat-radio-group
+        formControlName="refresh"
+        aria-label="Select an option"
+        fxLayoutGap="20px"
+      >
+        <span class="mat-body">Refreshments availability:</span>
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Add Refreshment Supplier Contact Number</mat-label>
+        <input
+          type="tel"
+          name="refresh_phno"
+          formControlName="refresh_phno"
+          matInput
+        />
+        <mat-error *ngIf="overviewForm.get('refresh_phno').hasError('pattern')">
+          Invaid Phone number! Try again!
+        </mat-error>
+        <mat-error
+          *ngIf="overviewForm.get('refresh_phno').hasError('maxlength')"
+        >
+          Please enter a valid 10 digit mobile number!
+        </mat-error>
+      </mat-form-field>
+      <!-- refreshment supplier -->
+
+      <div
+        fxLayout="column"
+        fxLayoutGap="8px"
+        fxLayoutAlign.gt-sm="center center"
+      >
+        <button
+          class="primaryButton buttonText"
+          [disabled]="!overviewForm.valid"
+          type="submit"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="groundsFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="groundsFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
+  <!-- loading -->
+
+  <!-- list -->
+  <div class="container section-space-bottom">
+    <!-- no seasons -->
+    <ng-template #placeholder>
+      <app-no-items-message items="grounds"></app-no-items-message>
+    </ng-template>
+    <!-- no seasons -->
+
+    <!-- grounds -->
+    <mat-grid-list
+      *ngIf="noGrounds == false; else placeholder"
+      [cols]="columns"
+      gutterSize="20px"
+    >
+      <mat-grid-tile appElevateOnHover *ngFor="let ground of grounds$ | async">
+        <div
+          class="groundContainer"
+          [ngClass]="{ 'premiumBorder-2': ground.own_type == 'FK' }"
+        >
+          <img
+            [routerLink]="['/ground', ground.id]"
+            class="box-image"
+            [src]="ground.imgpath"
+            alt="Football Ground"
+          />
+          <div class="content" fxLayoutAlign="space-between start">
+            <div
+              [routerLink]="['/ground', ground.id]"
+              fxLayout="column"
+              fxLayoutAlign="center start"
+            >
+              <span class="mat-body-1 left">
+                {{ ground.name | slice: 0:50 }}
+              </span>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="16px"
+              >
+                <span> Playability Level: </span>
+                <span class="quality">{{ ground.playLvl | uppercase }}</span>
+              </div>
+            </div>
+            <button mat-icon-button color="primary" (click)="onShare(ground)">
+              <mat-icon class="material-icons-round"> share </mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <!-- grounds -->
+  </div>
+  <!-- list -->
+</div>

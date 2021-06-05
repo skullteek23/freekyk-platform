@@ -1,0 +1,102 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="teFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="teFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
+  <!-- loading -->
+
+  <div class="container section-space-bottom">
+    <!-- for small screens -->
+    <mat-list *ngIf="onMobile; else lgScreen">
+      <mat-list-item
+        [routerLink]="['/t', team.tname]"
+        *ngFor="let team of teams$ | async; last as last"
+      >
+        <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" />
+
+        <p matLine fxLayoutAlign="space-between center">
+          <span class="mat-body-1"> {{ team.tname }} </span>
+          <span class="material-icons-round"> keyboard_arrow_right </span>
+        </p>
+        <p matLine fxLayoutAlign="space-between center">
+          <span class="mat-caption">
+            {{
+              (team.locCity ? team.locCity : "NA") +
+                ", " +
+                (team.locState ? team.locState : "NA")
+            }}
+          </span>
+        </p>
+
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+    <!-- for small screens -->
+
+    <!-- for large screens -->
+    <ng-template #lgScreen>
+      <!-- no teams -->
+      <ng-template #placeholder>
+        <app-no-items-message items="teams"></app-no-items-message>
+      </ng-template>
+      <!-- no teams -->
+
+      <mat-grid-list
+        *ngIf="noTeams == false; else placeholder"
+        [cols]="cols"
+        rowHeight="340px"
+        gutterSize="20px"
+      >
+        <mat-grid-tile
+          [routerLink]="['/t', team.tname]"
+          appElevateOnHover
+          *ngFor="let team of teams$ | async"
+        >
+          <div class="teamContainer">
+            <img class="box-image" [src]="team.imgpath" alt="Team Photo" />
+            <span class="overlay-logo" fxLayoutALign="center center">
+              <img class="logo-image" [src]="team.imgpath_logo" alt="Logo" />
+            </span>
+            <div
+              class="content"
+              fxLayoutAlign="center center"
+              fxLayout="column"
+              fxLayoutGap="20px"
+            >
+              <div fxLayout="column">
+                <span class="mat-body-1 center">{{ team.tname }}</span>
+                <span class="mat-caption center">
+                  {{
+                    (team.locCity ? team.locCity : "NA") +
+                      ", " +
+                      (team.locState ? team.locState : "NA")
+                  }}
+                </span>
+              </div>
+              <button
+                [routerLink]="['/t', team.tname]"
+                color="primary"
+                class="secondaryButton buttonText"
+              >
+                View Team Profile
+              </button>
+            </div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </ng-template>
+    <!-- for large screens -->
+  </div>
+</div>

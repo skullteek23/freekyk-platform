@@ -1,0 +1,19 @@
+.media-container-img {
+  width: 100%;
+  height: auto;
+  margin: auto;
+  overflow: hidden;
+}
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+@media only screen and (min-width: 1280px) {
+  .media-container-img {
+    width: 70%;
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+  }
+}

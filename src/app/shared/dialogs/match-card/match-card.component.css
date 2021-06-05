@@ -1,0 +1,52 @@
+img {
+  height: auto;
+  width: 100%;
+  display: inline-block;
+  border-radius: 10px;
+}
+.img_cont {
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  background: black;
+  border-radius: 10px;
+}
+.kickoff {
+  width: 70px;
+}
+.score_rec {
+  height: 32px;
+  width: 64px;
+  display: inline-block;
+  color: white;
+  border-radius: 2px;
+  background-color: var(--primaryColor);
+}
+.team {
+  height: auto;
+  width: 100px;
+}
+div > a {
+  text-decoration: none;
+  color: var(--primaryColor);
+}
+.other {
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 599px) {
+  mat-tab-group {
+    height: 65%;
+    min-height: 65%;
+    max-height: 65%;
+    overflow-y: auto;
+  }
+}
+@media only screen and (min-width: 600px) {
+  mat-tab-group {
+    height: 60%;
+    min-height: 60%;
+    max-height: 60%;
+    overflow-y: auto;
+  }
+}

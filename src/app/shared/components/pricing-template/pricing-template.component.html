@@ -1,0 +1,108 @@
+<div
+  class="section-space-top section-space-bottom"
+  fxLayout="column"
+  fxLayout.gt-sm="row"
+  fxLayoutGap.lt-md="20px"
+  fxLayoutAlign.gt-sm="space-between stretch"
+>
+  <mat-card fxFlex.gt-sm="30%" class="mat-elevation-z8">
+    <div fxLayout="column" fxLayoutGap="0px">
+      <p class="head grey-bg" fxLayoutAlign="center center">Basic</p>
+      <h2 class="price center">₹0 <span class="grey mat-body-2">/ mo</span></h2>
+
+      <div class="get_started_button_container" fxLayoutAlign="center center">
+        <button (click)="onGotoDashboard()" class="buttonText secondaryButton">
+          {{ notOnDash ? "Get Started" : "Current Plan" }}
+        </button>
+      </div>
+      <p class="mat-body-1 center content_container">
+        For players and freestylers who want to showcase their skills and build
+        their profile.
+      </p>
+      <div class="fullpad-20" fxLayout="column" fxLayoutGap="20px">
+        <p class="mat-body-2 center">Free For Players</p>
+        <div>
+          <div
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            *ngFor="let item of [1, 2, 3, 4, 4, 4, 5, 2, 2, 2, 2, 2, 5]"
+          >
+            <span class="material-icons-round"> check_circle </span>
+            <span> Lorem ipsum dolor sit amedolor sit t </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  <mat-card fxFlex.gt-sm="30%" class="mat-elevation-z8 premiumBorder">
+    <div fxLayout="column" fxLayoutGap="0px">
+      <p
+        class="head primary-bg whiteText"
+        fxLayoutAlign="center center"
+        fxLayoutGap="8px"
+      >
+        <img
+          class="iconSize"
+          src="../../assets/svgs/premium.svg"
+          alt="Premium"
+        />
+        <span> Premium </span>
+      </p>
+      <h2 class="price center">
+        ₹4999 <span class="grey mat-body-2">/ mo</span>
+      </h2>
+
+      <div class="get_started_button_container" fxLayoutAlign="center center">
+        <button (click)="onBuyPremium()" class="buttonText primaryButton">
+          {{ !notOnDash ? "Avail Now" : "Get Started" }}
+        </button>
+      </div>
+      <p class="mat-body-1 center content_container">
+        For players who want to have the ultimate Football Experience.
+      </p>
+      <div class="fullpad-20" fxLayout="column" fxLayoutGap="20px">
+        <p class="mat-body-2 center">Everything in Basic, plus</p>
+        <div>
+          <div
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            *ngFor="let item of [1, 2, 3, 4, 4, 4, 5, 2, 2, 2, 2, 2, 5]"
+          >
+            <span class="material-icons-round green"> check_circle </span>
+            <span> Lorem ipsum dolor sit amedolor sit t </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  <mat-card fxFlex.gt-sm="30%" class="mat-elevation-z8">
+    <div fxLayout="column" fxLayoutGap="0px">
+      <p class="head primary-bg whiteText" fxLayoutAlign="center center">
+        Enterprise
+      </p>
+      <h2 class="price center">Custom</h2>
+
+      <div class="get_started_button_container" fxLayoutAlign="center center">
+        <button (click)="onContactSales()" class="buttonText secondaryButton">
+          Contact Us
+        </button>
+      </div>
+      <p class="mat-body-1 center content_container">
+        For Schools, Academy Owners, Ground Owners, Equipment Sellers, etc.
+      </p>
+      <div class="fullpad-20" fxLayout="column" fxLayoutGap="20px">
+        <p class="mat-body-2 center">Enterprise includes</p>
+        <div>
+          <div
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            *ngFor="let item of [1, 2, 3, 4, 4, 4, 5, 2, 2, 2, 2, 2, 5]"
+          >
+            <span class="material-icons-round green"> check_circle </span>
+            <span> Lorem ipsum dolor sit amedolor sit t </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

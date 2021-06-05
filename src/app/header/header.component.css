@@ -1,0 +1,74 @@
+.mat-drawer {
+  width: 50%;
+}
+.mat-drawer a {
+  color: white;
+}
+.full-header {
+  overflow-y: auto;
+  height: 100%;
+  padding: 0 20px;
+  background-color: white;
+}
+.mat-drawer-content {
+  background-color: white;
+}
+a {
+  color: black;
+}
+a:active,
+a:hover {
+  cursor: pointer;
+  color: var(--primaryLightColor);
+}
+.head {
+  width: 100%;
+}
+.nogap {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.mat-toolbar {
+  background-color: white;
+}
+.subNav {
+  margin-left: 16px;
+  color: white;
+}
+.subCircle {
+  overflow: hidden;
+  border-radius: 50%;
+}
+.subCircle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.circles {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+@media only screen and (min-width: 960px) {
+  .subCircle {
+    overflow: hidden !important;
+    border-radius: 50% !important;
+    background-color: var(--grey4);
+    height: 32px;
+    width: 32px;
+  }
+  .subCircle img {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    object-fit: cover;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .circles {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+  }
+}

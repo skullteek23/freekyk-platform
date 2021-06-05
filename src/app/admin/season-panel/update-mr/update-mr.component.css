@@ -1,0 +1,12 @@
+.form-container {
+  border: 1px solid var(--grey1);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 20px;
+}
+.selections .mat-form-field {
+  min-width: 400px;
+}
+.red {
+  color: var(--red);
+}

@@ -1,0 +1,7 @@
+.content {
+  max-width: 320px;
+}
+ul {
+  list-style: disc;
+  padding-left: 16px;
+}

@@ -1,0 +1,41 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="stFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="stFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- tab groups -->
+  <mat-tab-group
+    (selectedTabChange)="onChangeTab($event)"
+    class="container section-space-bottom"
+  >
+    <mat-tab label="League Tables">
+      <ng-template matTabContent>
+        <app-pl-st-league></app-pl-st-league>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Knockout Groups">
+      <ng-template matTabContent>
+        <app-knockout-sm *ngIf="onMobile; else lgScreen"></app-knockout-sm>
+        <ng-template #lgScreen>
+          <app-pl-st-knockout></app-pl-st-knockout>
+        </ng-template>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Community Play Leaderboard">
+      <ng-template matTabContent>
+        <app-pl-st-community-play></app-pl-st-community-play>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  <!-- tab groups -->
+</div>

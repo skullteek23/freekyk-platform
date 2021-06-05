@@ -1,0 +1,20 @@
+.mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
+  height: 100%;
+  max-height: 350px;
+}
+.red {
+  color: var(--red);
+}
+.yellow {
+  color: var(--premiumServiceColor);
+}
+.stats-card {
+  min-height: 250px;
+  height: 350px;
+  max-height: 350px;
+}
+.premium {
+  color: var(--premiumServiceColor);
+}

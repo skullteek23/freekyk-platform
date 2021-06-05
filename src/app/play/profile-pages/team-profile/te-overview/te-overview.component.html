@@ -1,0 +1,64 @@
+<section
+  class="section-space-top section-space-bottom"
+  fxLayout="column"
+  fxLayoutGap="24px"
+>
+  <div>
+    <h4>Team Created on</h4>
+    <p class="mat-body-1">
+      {{ data?.tdateCreated.toDate() | date: "mediumDate" }}
+    </p>
+  </div>
+  <div>
+    <h4>Team Location</h4>
+    <p class="mat-body-1">{{ loc?.city + ", " + loc?.state }}</p>
+  </div>
+  <div>
+    <h4>Team Captain</h4>
+    <p class="mat-body-1">{{ data?.captainName }}</p>
+  </div>
+  <div>
+    <h4>Team Description</h4>
+    <p class="mat-body-1">
+      {{ data?.tdesc }}
+    </p>
+  </div>
+  <div>
+    <h4>Team Slogan</h4>
+    <p class="mat-body-1">{{ "'" + data?.tslogan + "'" }}</p>
+  </div>
+  <div fxLayout="column" fxLayoutGap="8px">
+    <span class="mat-subheading-1 left"> Team Social Media </span>
+
+    <div fxLayoutGap="8px" fxLayoutAlign="start center">
+      <a
+        class="socialIcon"
+        (click)="onRedirectSocialMedia(data?.tSocials.fb)"
+        fxLayoutAlign="center center"
+      >
+        <img src="../../assets/svgs/facebook.svg" alt="Facebook" />
+      </a>
+      <a
+        class="socialIcon"
+        (click)="onRedirectSocialMedia(data?.tSocials.ig)"
+        fxLayoutAlign="center center"
+      >
+        <img src="../../assets/svgs/instagram.svg" alt="Instagram" />
+      </a>
+      <a
+        class="socialIcon"
+        (click)="onRedirectSocialMedia(data?.tSocials.yt)"
+        fxLayoutAlign="center center"
+      >
+        <img src="../../assets/svgs/youtube.svg" alt="Youtube" />
+      </a>
+      <a
+        class="socialIcon"
+        (click)="onRedirectSocialMedia(data?.tSocials.tw)"
+        fxLayoutAlign="center center"
+      >
+        <img src="../../assets/svgs/twitter.svg" alt="Twitter" />
+      </a>
+    </div>
+  </div>
+</section>

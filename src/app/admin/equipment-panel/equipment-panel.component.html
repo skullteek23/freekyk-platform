@@ -1,0 +1,86 @@
+<div
+  class="container section-space-bottom"
+  fxLayoutGap="20px"
+  fxLayout="column"
+>
+  <span class="mat-subheading-1"> Equipment </span>
+  <mat-grid-list cols="3" gutterSize="20px" rowHeight="185px">
+    <mat-grid-tile>
+      <mat-card
+        [routerLink]="['/admin', 'equipment', 'add']"
+        routerLinkActive="darkGreen"
+        class="box whiteText"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <div>
+          <mat-card-title>
+            <span class="mat-body-2"> Add a New Equipment </span>
+          </mat-card-title>
+          <mat-card-subtitle class="whiteText">
+            <span class="mat-caption">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed sit
+              atque architecto, laboriosam quis iusto autem consequuntur.
+            </span>
+          </mat-card-subtitle>
+        </div>
+        <div class="button" fxLayoutAlign="start center">
+          <span class="mat-body">Add</span>
+          <span class="material-icons-round">keyboard_arrow_right</span>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card
+        [routerLink]="['/admin', 'equipment', 'register-seller']"
+        routerLinkActive="darkGreen"
+        class="box whiteText"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <div>
+          <mat-card-title>
+            <span class="mat-body-2">Register a New Seller </span>
+          </mat-card-title>
+          <mat-card-subtitle class="whiteText">
+            <span class="mat-caption">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed sit
+              atque architecto, laboriosam quis iusto autem consequuntur.
+            </span>
+          </mat-card-subtitle>
+        </div>
+        <div class="button" fxLayoutAlign="start center">
+          <span class="mat-body">Register</span>
+          <span class="material-icons-round">keyboard_arrow_right</span>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card
+        [routerLink]="['/admin', 'equipment', 'add-coupon']"
+        routerLinkActive="darkGreen"
+        class="box whiteText"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <div>
+          <mat-card-title>
+            <span class="mat-body-2">Add a New Coupon </span>
+          </mat-card-title>
+          <mat-card-subtitle class="whiteText">
+            <span class="mat-caption">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed sit
+              atque architecto, laboriosam quis iusto autem consequuntur.
+            </span>
+          </mat-card-subtitle>
+        </div>
+        <div class="button" fxLayoutAlign="start center">
+          <span class="mat-body">Add</span>
+          <span class="material-icons-round">keyboard_arrow_right</span>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-divider> </mat-divider>
+  <router-outlet></router-outlet>
+</div>

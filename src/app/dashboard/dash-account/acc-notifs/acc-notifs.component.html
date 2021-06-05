@@ -1,0 +1,27 @@
+<ng-template #loading>
+  <div fxLayout="column">
+    <div class="_notif" fxLayout="column" fxLayoutGap="16px">
+      <span
+        class="_bar shine"
+        *ngFor="let bars of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+      ></span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noNotif>
+  <ul>
+    <li class="nofi">
+      <p class="mat-body-1 grey-bg line">No notifications!</p>
+    </li>
+  </ul>
+</ng-template>
+<div class="cont" *ngIf="!isLoading; else loading" fxLayout="column">
+  <!-- list -->
+  <app-notifications-list
+    [data]="notifications$ | async"
+    *ngIf="!(noNotif$ | async) as val; else noNotif"
+  ></app-notifications-list>
+  <!-- list -->
+</div>
+<!-- notifications section -->

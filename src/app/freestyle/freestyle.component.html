@@ -1,0 +1,21 @@
+<div class="grey-bg">
+  <app-hero-section
+    overline="freestyle"
+    title="freekyk freestyle"
+    [CTA]="{ name: 'start freestyling', route: '/signup' }"
+  ></app-hero-section>
+</div>
+<nav mat-tab-nav-bar>
+  <div class="container">
+    <a
+      mat-tab-link
+      *ngFor="let link of fsLinks"
+      (click)="activeLink = link"
+      [routerLink]="[link]"
+      [active]="activeLink == link"
+    >
+      {{ link | titlecase }}
+    </a>
+  </div>
+</nav>
+<router-outlet></router-outlet>

@@ -1,0 +1,14 @@
+.mat-column-freestyler {
+  width: 100px !important;
+  text-align: left !important;
+}
+.mat-column-submissionLink {
+  width: 32px !important;
+  text-align: center !important;
+}
+.underline {
+  text-decoration: underline;
+}
+.details {
+  cursor: pointer;
+}

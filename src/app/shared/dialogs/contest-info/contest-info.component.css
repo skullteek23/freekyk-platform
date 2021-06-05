@@ -1,0 +1,32 @@
+.secondaryButton,
+.primaryButton {
+  max-width: 100%;
+}
+.brands {
+  cursor: pointer;
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+  border: 2px solid var(--grey1);
+}
+.prizes {
+  cursor: pointer;
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--grey1);
+  margin-right: 8px;
+  color: black;
+}
+.first {
+  background-color: #ffd700;
+}
+.second {
+  background-color: #c0c0c0;
+}
+.third {
+  background-color: #cd7f32;
+}
+/* taken from https://www.deviantart.com/thewolfbunny/art/Gold-Silver-and-Bronze-Color-Schemes-649070059 */

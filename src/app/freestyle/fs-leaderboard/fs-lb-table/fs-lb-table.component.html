@@ -1,0 +1,62 @@
+<table
+  mat-table
+  [dataSource]="fsLeaderboardDataSource"
+  class="full-width-table"
+>
+  <ng-container matColumnDef="rank">
+    <th mat-header-cell *matHeaderCellDef>Rank</th>
+    <td mat-cell *matCellDef="let fs">
+      <span class="mat-body-2">
+        {{ "#" + fs.rank }}
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="freestyler">
+    <th mat-header-cell *matHeaderCellDef>Freestyler</th>
+    <td mat-cell *matCellDef="let fr">
+      <div fxLayoutAlign="start center" fxLayoutGap="8px">
+        <img
+          class="fsAvatar"
+          [src]="
+            fr.freestyler.imgpath
+              ? fr.freestyler.imgpath
+              : '../../../../assets/images/dummy_player_sm.jpg'
+          "
+          alt="fs"
+        />
+        <span class="mat-body-1 left">
+          {{ fr.freestyler.name | titlecase }}
+        </span>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="nickname">
+    <th mat-header-cell *matHeaderCellDef>Nickname</th>
+    <td mat-cell *matCellDef="let fs">
+      <span class="mat-body-2">
+        {{ fs.freestyler.nickname ? fs.freestyler.nickname : "No Nickname" }}
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="country">
+    <th mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let fs">
+      <span class="mat-body-2">
+        {{ fs.country ? fs.country : "NA" }}
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="pts">
+    <th mat-header-cell *matHeaderCellDef>Points</th>
+    <td mat-cell *matCellDef="let fs">
+      <span class="mat-body-1 points">
+        {{ fs.pts }}
+      </span>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="cols"></tr>
+  <tr mat-row *matRowDef="let myRowData; columns: cols"></tr>
+</table>

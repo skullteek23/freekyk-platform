@@ -1,0 +1,72 @@
+<div class="grey-bg">
+  <app-ve-hero-section></app-ve-hero-section>
+</div>
+
+<div fxLayout="column">
+  <section
+    class="container section-space-top section-space-bottom"
+    fxLayoutAlign.lt-md="center center"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <h4 class="mat-subheading-1 center">
+      Why choose our video editing services?
+    </h4>
+    <div
+      fxLayout.gt-sm="row"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutGap.gt-sm="8px"
+      fxLayoutGap.lt-md="20px"
+    >
+      <div
+        *ngFor="let item of [1, 2, 3]"
+        fxLayoutAlign="center center"
+        fxLayout="column"
+        fxLayoutGap.gt-sm="8px"
+      >
+        <span class="placeholder-alt"></span>
+        <p class="mat-body-1 center">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+          dolor sit amet, consectetur adipiscing elit
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <app-why-choose-section [videoEditing]="true"></app-why-choose-section>
+
+  <section
+    class="container section-space-top section-space-bottom"
+    fxLayout="column"
+    fxLayoutGap="8px"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <div>
+      <h4 class="mat-subheading-1 align">
+        Some videos edited by our professionals
+      </h4>
+      <p class="mat-body-1 align">pretium interdum est, id bibendum arcu</p>
+    </div>
+    <div class="vid_container">
+      <mat-grid-list [cols]="columns" rowHeight="180px" gutterSize="20px">
+        <mat-grid-tile *ngFor="let video of [1, 2, 3, 4, 5, 6, 7, 8]">
+          <span class="placeholder" style="width: 100%; height: 100%"></span>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </section>
+
+  <section
+    class="container section-space-top section-space-bottom"
+    fxLayout="column"
+    fxLayoutGap="8px"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <div>
+      <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
+      <p class="mat-body-1 align">Lorem ipsum dolor sit amet, consectetur</p>
+    </div>
+    <span class="screenshot"></span>
+  </section>
+</div>

@@ -1,0 +1,9 @@
+.filter {
+  padding-left: 16px;
+  margin-top: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 16px;
+
+  border-radius: var(--borderRadiusCard);
+}

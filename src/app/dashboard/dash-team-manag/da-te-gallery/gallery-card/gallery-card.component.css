@@ -1,0 +1,45 @@
+.gallery {
+  border-radius: var(--dashCardBorder);
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 310px;
+  max-width: 550px;
+  max-height: 310px;
+  min-width: 550px;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+}
+
+.cont > img {
+  height: 300px;
+  width: 100%;
+  object-fit: contain;
+}
+.cont {
+  max-width: 300px;
+  max-height: 300px;
+  min-width: 300px;
+  min-height: 300px;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+}
+.add-photo {
+  background-color: var(--grey4);
+  height: 100%;
+  width: 100%;
+}
+@media only screen and (max-width: 959px) {
+  .gallery {
+    border-radius: var(--dashCardBorder);
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 310px;
+    max-width: calc(100vw - 40px);
+    max-height: 310px;
+    min-width: 350px;
+    padding: 0;
+    margin: 0;
+  }
+}

@@ -1,0 +1,43 @@
+.stage {
+  height: calc(100 * 8 + 8 * 20);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.stage_container {
+  overflow-x: auto;
+}
+.match {
+  height: 100px;
+  width: 100%;
+  margin: 10px 0;
+  opacity: 1;
+  border-radius: var(--borderRadiusCard);
+}
+.match:hover {
+  cursor: pointer;
+  background-color: var(--primaryDarkColor);
+}
+.team {
+  width: auto;
+}
+.row {
+  margin: 16px;
+}
+.teAvatar {
+  border: 1px solid white;
+  object-fit: cover;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.mat-grid-tile {
+  border: none !important;
+}
+.mat-grid-tile img {
+  margin-right: 16px;
+}
+.mat-grid-list {
+  height: 100%;
+}

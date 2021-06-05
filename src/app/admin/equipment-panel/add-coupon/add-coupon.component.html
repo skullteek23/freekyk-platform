@@ -1,0 +1,65 @@
+<form [formGroup]="coupForm" (ngSubmit)="onSubmit()">
+  <div
+    fxLayoutAlign="center center"
+    fxLayoutGap="20px"
+    fxLayout.lt-md="column"
+    fxLayoutAlign.lt-md="center stretch"
+  >
+    <button
+      type="button"
+      (click)="onAutofill()"
+      class="primaryButton buttonText"
+    >
+      Autofill and Submit
+    </button>
+    <button
+      [disabled]="coupForm.invalid"
+      type="submit"
+      class="primaryButton buttonText"
+    >
+      Submit
+    </button>
+    <button
+      type="button"
+      (click)="coupForm.reset()"
+      class="secondaryButton buttonText"
+    >
+      Reset
+    </button>
+  </div>
+  <div class="form-container" fxLayout="column">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter Coupon Code</mat-label>
+      <input type="text" matInput formControlName="code" />
+    </mat-form-field>
+    <mat-radio-group
+      formControlName="type"
+      aria-label="Select an option here"
+      fxLayoutGap="20px"
+    >
+      <span class="mat-body">Coupon Discount Type:</span>
+      <mat-radio-button value="discount in percentage"
+        >Percentage Off</mat-radio-button
+      >
+      <mat-radio-button value="discount in exact amount"
+        >Specified Amount Off</mat-radio-button
+      >
+    </mat-radio-group>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter Coupon Value</mat-label>
+      <input type="tel" matInput formControlName="discount" />
+      <span
+        *ngIf="
+          coupForm.get('type').value == 'discount in percentage';
+          else amount
+        "
+        matSuffix
+        >%</span
+      >
+      <ng-template #amount>
+        <span matPrefix>&#8377;</span>
+        <span matSuffix>.00</span>
+      </ng-template>
+    </mat-form-field>
+  </div>
+</form>

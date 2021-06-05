@@ -1,0 +1,9 @@
+.mat-card {
+  border-radius: var(--borderRadiusCard);
+}
+mat-tab-group {
+  min-height: 100vh;
+}
+.nopad {
+  padding: 0 !important;
+}

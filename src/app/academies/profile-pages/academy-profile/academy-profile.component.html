@@ -1,0 +1,96 @@
+<!-- intro-section -->
+<div class="grey-bg">
+  <section
+    class="container product"
+    ngClass.lt-md="section-space-bottom"
+    fxLayout="column"
+    fxLayout.gt-sm="row"
+    ngClass.gt-sm="banner"
+    fxLayoutAlign="center center"
+    fxLayoutAlign.gt-sm="space-between center"
+    fxLayoutGap="20px"
+  >
+    <div
+      (click)="
+        onEnlargePhoto(
+          'https://images.unsplash.com/photo-1534853785576-8206ebceb16b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1279&q=80'
+        )
+      "
+      fxFlexOrder.gt-sm="2"
+      fxFlexOrder="1"
+      class="bannerPhoto"
+    >
+      <img
+        src="https://images.unsplash.com/photo-1534853785576-8206ebceb16b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1279&q=80"
+        alt="Product Image"
+      />
+    </div>
+
+    <div
+      fxFlexOrder.gt-sm="1"
+      fxFlexOrder="2"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutAlign.gt-sm="center start"
+      ngClass.gt-sm="banner-text"
+    >
+      <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
+      Freekyk - India's No.1 Football Network
+    </span> -->
+      <button
+        fxHide.lt-md="true"
+        [routerLink]="['/academies']"
+        mat-mini-fab
+        color="primary"
+        class="back-button"
+      >
+        <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
+      </button>
+      <div
+        fxLayoutAlign.lt-md="center center"
+        fxLayoutAlign.gt-sm="center start"
+        fxLayout="column"
+      >
+        <span class="overline align">Freekyk Academy</span>
+        <span class="mat-title align">Surevin Inter Premier Academy</span>
+      </div>
+
+      <p class="mat-body-1 align">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+        quis ligula dolor. Donec ac pellentesque tortor. Nam tristique
+        condimentum ligula, vulputate faucibus orci facilisis in. Pellentesque
+        pretium, ex vitae fringilla porttitor, leo ligula vehicula massa, sit
+        amet mattis sapien orci vitae justo.
+      </p>
+      <button (click)="onRegister()" class="primaryButton buttonText">
+        Book Now
+      </button>
+    </div>
+  </section>
+</div>
+<!-- intro-section -->
+
+<!-- content -->
+<mat-tab-group class="container section-space-bottom">
+  <mat-tab label="Overview">
+    <ng-template matTabContent>
+      <app-ac-overview></app-ac-overview>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Gallery">
+    <ng-template matTabContent>
+      <app-ac-gallery></app-ac-gallery>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Batches">
+    <ng-template matTabContent>
+      <app-ac-batches></app-ac-batches>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Reviews">
+    <ng-template matTabContent>
+      <app-ac-reviews></app-ac-reviews>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+<!-- content -->

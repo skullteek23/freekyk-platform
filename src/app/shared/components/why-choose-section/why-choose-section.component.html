@@ -1,0 +1,55 @@
+<section class="section-space-bottom primary-bg whiteText">
+  <div
+    class="container"
+    ngClass.gt-sm="longSpace"
+    ngClass.lt-md="compactSpace"
+    fxLayout="column"
+    fxLayoutGap="24px"
+  >
+    <div fxLayout="column" fxLayoutGap="8px">
+      <h4 *ngIf="!isVeSteps; else veHeading" class="mat-subheading-1 left">
+        {{ "Why choose Freekyk " + serviceName + "?" }}
+      </h4>
+      <ng-template #veHeading>
+        <h4 class="mat-subheading-1 left">Our Editing Process</h4>
+      </ng-template>
+      <span class="mat-body-1 left">
+        pretium interdum est, id bibendum arcu vehicula non. Etiam ut diam
+        rutrum.
+      </span>
+    </div>
+    <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px">
+      <li
+        fxFlex="100%"
+        fxFlex.gt-sm="50%"
+        fxLayoutGap="16px"
+        *ngFor="let point of [1, 2, 3, 4]"
+        fxLayoutAlign="start start"
+      >
+        <div
+          fxFlex="40px"
+          class="step_number mat-body-1"
+          fxLayoutAlign="center center"
+        >
+          {{ point }}
+        </div>
+        <div
+          fxLayout="column"
+          fxLayoutAlign="start start"
+          fxLayoutGap.lt-md="8px"
+        >
+          <span *ngIf="!isVeSteps; else steps" class="mat-body-1">
+            Heading
+          </span>
+          <ng-template #steps>
+            <span class="mat-body-1"> {{ "Step " + point }} </span>
+          </ng-template>
+          <span class="left mat-body-2">
+            consectetur adipiscing elit, sed do eiusmod sed do eiusmod tempor
+            incididunt ut labore
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

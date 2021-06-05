@@ -1,0 +1,96 @@
+<form id="seasonInfo" [formGroup]="seasonInfo" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Select Season</mat-label>
+    <mat-select
+      (selectionChange)="onSelectSeason($event)"
+      formControlName="season"
+    >
+      <mat-option
+        [value]="season"
+        *ngFor="let season of existingSeasons$ | async"
+      >
+        {{ season.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Select Preferred Tournament Start Date</mat-label>
+    <input type="date" matInput formControlName="startDate" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Select Allowed Playing Per Team</mat-label>
+    <input
+      type="text"
+      matInput
+      name="perTeamPlaying"
+      formControlName="perTeamPlaying"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of [8, 9, 10, 11, 12, 13]"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-icon matSuffix>person</mat-icon>
+  </mat-form-field>
+</form>
+<div fxLayout="column" fxLayoutGap="20px">
+  <div fxLayoutAlign="space-between center">
+    <span class="mat-body"> Total teams participated: </span>
+    <span class="mat-body-2"> {{ sCount$ | async }}/16 </span>
+  </div>
+  <div fxLayoutAlign="space-between center">
+    <span class="mat-body"> Generate fixtures for: </span>
+    <div fxLayoutGap="20px">
+      <button
+        (click)="selected = 0"
+        [ngClass]="{
+          primaryButton: selected == 0,
+          secondaryButton: selected != 0
+        }"
+        class="primaryButton buttonText"
+      >
+        FCP
+      </button>
+      <button
+        (click)="selected = 1"
+        [ngClass]="{
+          primaryButton: selected == 1,
+          secondaryButton: selected != 1
+        }"
+        class="primaryButton buttonText"
+      >
+        FKC
+      </button>
+      <button
+        (click)="selected = 2"
+        [ngClass]="{
+          primaryButton: selected == 2,
+          secondaryButton: selected != 2
+        }"
+        class="primaryButton buttonText"
+      >
+        FPL
+      </button>
+    </div>
+  </div>
+</div>
+<div class="buttons" fxLayoutAlign="center center" fxLayoutGap="20px">
+  <button
+    [routerLink]="['/admin/seasons/add']"
+    class="secondaryButton buttonText"
+  >
+    Cancel
+  </button>
+  <button
+    [disabled]="seasonInfo.invalid"
+    type="submit"
+    form="seasonInfo"
+    class="primaryButton buttonText"
+  >
+    Next
+  </button>
+</div>

@@ -1,0 +1,27 @@
+.mat-list-item:hover,
+.mat-list-item:active {
+  cursor: pointer;
+  background-color: var(--grey4);
+}
+.mat-grid-tile {
+  border: 2px solid var(--grey4);
+  border-radius: var(--borderRadiusCard);
+}
+.mat-grid-tile:hover {
+  cursor: pointer;
+}
+.profileContainer {
+  height: 100%;
+  width: 100%;
+}
+.box-image {
+  max-width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
+.content {
+  padding: 8px 0px;
+}
+.mat-divider {
+  width: 100%;
+}

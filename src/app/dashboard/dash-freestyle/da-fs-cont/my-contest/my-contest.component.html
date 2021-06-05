@@ -1,0 +1,63 @@
+<!-- loading -->
+<app-bar-loading-shimmer *ngIf="isLoading"></app-bar-loading-shimmer>
+<!-- loading -->
+
+<ng-template #placeholder>
+  <app-no-items-message items="active contests"> </app-no-items-message>
+</ng-template>
+<ng-container *ngIf="noContests == false; else placeholder">
+  <mat-accordion class="scroll">
+    <mat-expansion-panel *ngFor="let contest of contests$ | async">
+      <mat-expansion-panel-header collapsedHeight="72px" expandedHeight="72px">
+        <div fxLayoutGap="16px" fxLayout fxLayoutAlign="start center">
+          <div class="cont_image">
+            <img [src]="contest.imgpath" [alt]="contest.name" />
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <span class="mat-body-1"> {{ contest.name | titlecase }} </span>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <div>
+        <div class="cont" fxLayoutGap="20px" fxLayout>
+          <button
+            [disabled]="!(contest.stage == i + 1)"
+            (click)="onAddVideo(contest.stage, contest.cont_id)"
+            class="submission-box"
+            *ngFor="let stage of [1, 2, 3]; let i = index"
+            [ngClass]="{
+              greenInside:
+                contest.lastVideoStatus == 'accept' &&
+                !(contest.stage == i + 1) &&
+                contest.stage > i,
+              redInside:
+                contest.lastVideoStatus == 'reject' && contest.stage == i + 1
+            }"
+          >
+            <p>
+              {{ "Stage " + (i + 1) }}
+            </p>
+            <div *ngIf="contest.stage > i">
+              <span
+                class="material-icons-round"
+                style="color: var(--grey1)"
+                *ngIf="contest.stage == i + 1; else completed"
+              >
+                pending
+              </span>
+              <ng-template #completed>
+                <span style="color: var(--green)" class="material-icons-round">
+                  check_circle
+                </span>
+              </ng-template>
+            </div>
+          </button>
+          <button [disabled]="!(contest.stage == 4)" class="submission-box">
+            <span>Final</span>
+          </button>
+        </div>
+        <app-add-submission *ngIf="showForm$ | async"></app-add-submission>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-container>

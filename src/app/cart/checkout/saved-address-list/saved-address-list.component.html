@@ -1,0 +1,11 @@
+<mat-selection-list
+  (selectionChange)="onSelectAddress($event)"
+  [multiple]="false"
+>
+  <mat-list-option disabled *ngIf="noAddr">
+    No saved address found!
+  </mat-list-option>
+  <mat-list-option [value]="addr" *ngFor="let addr of addresses$ | async">
+    {{ addr.addr_name }} | {{ addr.ph_numb }}
+  </mat-list-option>
+</mat-selection-list>

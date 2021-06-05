@@ -1,0 +1,125 @@
+<form
+  class="borderMe"
+  *ngIf="newAddressForm"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="newAddressForm"
+  fxLayout="column"
+>
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Add Phone Number</mat-label>
+
+    <span matPrefix>+91 &nbsp;</span>
+    <input type="tel" matInput name="ph_numb" formControlName="ph_numb" />
+    <mat-icon matSuffix>mode_edit</mat-icon>
+    <mat-error *ngIf="this.newAddressForm.get('ph_numb')?.hasError('maxlength')"
+      >Invalid Number! Please try again
+    </mat-error>
+    <mat-error
+      *ngIf="this.newAddressForm.get('ph_numb')?.hasError('minlength')"
+    >
+      Invalid Number! Please try again
+    </mat-error>
+    <mat-error *ngIf="this.newAddressForm.get('ph_numb')?.hasError('required')">
+      This field cannot be empty!
+    </mat-error>
+    <mat-error *ngIf="this.newAddressForm.get('ph_numb')?.errors?.invalidCode">
+      Invalid Number! Please try again
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Add Address Line 1</mat-label>
+    <input
+      type="text"
+      matInput
+      name="addr_line1"
+      formControlName="addr_line1"
+    />
+    <mat-error
+      *ngIf="this.newAddressForm.get('addr_line1')?.hasError('required')"
+    >
+      This field cannot be empty!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Add Address Line 2</mat-label>
+    <input
+      type="text"
+      matInput
+      name="addr_line2"
+      formControlName="addr_line2"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Add Landmark</mat-label>
+    <input type="text" matInput name="landmark" formControlName="landmark" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Select City</mat-label>
+    <mat-select formControlName="city">
+      <mat-option *ngFor="let city of cities" [value]="city">
+        {{ city }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="this.newAddressForm.get('city')?.hasError('required')">
+      This field cannot be empty!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Select State</mat-label>
+    <mat-select formControlName="state">
+      <mat-option *ngFor="let state of states" [value]="state">
+        {{ state }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="this.newAddressForm.get('state')?.hasError('required')">
+      This field cannot be empty!
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Add Pincode</mat-label>
+    <input type="tel" matInput name="pincode" formControlName="pincode" />
+    <mat-error *ngIf="this.newAddressForm.get('pincode')?.hasError('required')">
+      This field cannot be empty!
+    </mat-error>
+    <mat-error *ngIf="this.newAddressForm.get('pincode')?.hasError('maxlength')"
+      >Invalid Code! Please try again
+    </mat-error>
+    <mat-error
+      *ngIf="this.newAddressForm.get('pincode')?.hasError('minlength')"
+    >
+      Invalid Code! Please try again
+    </mat-error>
+    <mat-error *ngIf="this.newAddressForm.get('pincode')?.errors?.invalidCode">
+      Invalid Code! Please try again
+    </mat-error>
+  </mat-form-field>
+  <div style="margin: 20px 0" fxLayoutGap="20px">
+    <mat-form-field *ngIf="check.checked">
+      <mat-label>Choose an Address Name</mat-label>
+      <input #newName type="text" name="id" matInput />
+    </mat-form-field>
+    <mat-checkbox class="example-margin" #check>
+      Save address for later use
+    </mat-checkbox>
+  </div>
+
+  <div
+    fxLayoutAlign.gt-sm="start center"
+    fxLayout.lt-md="column"
+    fxLayout.gt-sm="row"
+    fxLayoutGap="16px"
+  >
+    <button
+      [disabled]="newAddressForm.invalid && disabledButton | async"
+      type="submit"
+      class="buttonText primaryButton"
+    >
+      Add Address
+    </button>
+  </div>
+</form>

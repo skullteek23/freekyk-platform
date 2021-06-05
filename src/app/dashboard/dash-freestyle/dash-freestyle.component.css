@@ -1,0 +1,4 @@
+.mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
+}

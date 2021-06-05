@@ -1,0 +1,46 @@
+<!-- notifications section -->
+
+<ng-template #loading>
+  <div class="cards-r" fxLayout="column">
+    <div class="_notif" fxLayout="column" fxLayoutGap="16px">
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+      <span class="_bar shine"></span>
+    </div>
+  </div>
+</ng-template>
+
+<div class="cards-r" *ngIf="!isLoading; else loading" fxLayout="column">
+  <div
+    fxLayout
+    fxLayoutAlign="space-between center"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <span class="dash-h5 align">Notification</span>
+    <a
+      [routerLink]="['/dashboard', 'account', 'notifications']"
+      fxHide.lt-md="true"
+      class="mat-caption sec-menu"
+      >All Feed</a
+    >
+  </div>
+  <!-- list -->
+  <ng-template #nonotif>
+    <ul>
+      <li class="nofi">
+        <p class="mat-body-1 grey-bg line">No notifications!</p>
+      </li>
+    </ul>
+  </ng-template>
+  <app-notifications-list
+    [data]="notifications$ | async"
+    *ngIf="!(noNotif$ | async) as val; else nonotif"
+  ></app-notifications-list>
+  <!-- list -->
+</div>
+<!-- notifications section -->

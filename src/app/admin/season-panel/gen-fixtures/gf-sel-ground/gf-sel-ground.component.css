@@ -1,0 +1,19 @@
+.calulator {
+  color: var(--primaryColor);
+}
+.calulator:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.mat-divider {
+  width: 50%;
+}
+.list {
+  min-height: 300px;
+}
+.buttons {
+  margin: 48px 0;
+}
+.grey {
+  color: var(--grey1);
+}

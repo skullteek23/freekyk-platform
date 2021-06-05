@@ -1,0 +1,34 @@
+.scroll {
+  height: 500px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.cont_image {
+  height: 32px;
+  width: 32px;
+  overflow: hidden;
+  background-color: black;
+  border-radius: 50%;
+}
+.submission-box {
+  height: 150px;
+  width: 150px;
+  background-color: white;
+  border-radius: var(--borderRadiusCard);
+}
+.cont {
+  height: 100%;
+  padding: 0px 10px;
+  width: 100%;
+}
+
+.submission-box:hover {
+  cursor: pointer;
+  background-color: var(--grey4);
+}
+.redInside {
+  border: solid rgb(161, 6, 6) 2px;
+}
+.greenInside {
+  border: solid var(--green) 2px;
+}

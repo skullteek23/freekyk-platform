@@ -1,0 +1,125 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <!-- mobile filter -->
+  <app-filters-sm
+    fxHide.gt-sm="true"
+    [filterArray]="fsFilters"
+  ></app-filters-sm>
+  <!-- mobile filter -->
+
+  <!-- desktop filters -->
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [filterArray]="fsFilters"
+  ></app-filters-lg>
+  <!-- desktop filters -->
+
+  <!-- loading -->
+  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
+  <!-- loading -->
+
+  <div class="container section-space-bottom">
+    <!-- no freestylers -->
+    <ng-template #placeholder>
+      <app-no-items-message items="freestylers"></app-no-items-message>
+    </ng-template>
+    <!-- no freestylers -->
+    <ng-container *ngIf="noFreestylers == false; else placeholder">
+      <!-- for small screens -->
+      <mat-list *ngIf="onMobile; else lgScreen">
+        <mat-list-item
+          (click)="onOpenPlayerProfile(freestyler)"
+          *ngFor="let freestyler of freestylers$ | async; last as last"
+        >
+          <img
+            matListAvatar
+            [src]="
+              freestyler.imgpath_lg
+                ? freestyler.imgpath_lg
+                : '../../../assets/images/dummy_player_sm.jpg'
+            "
+            [alt]="freestyler.name"
+          />
+          <p matLine fxLayoutAlign="space-between center">
+            <span class="mat-body-1"> {{ freestyler.name }} </span>
+            <span class="material-icons-round"> keyboard_arrow_right </span>
+          </p>
+          <p matLine fxLayoutAlign="space-between center">
+            <span class="mat-caption"> {{ freestyler.locCountry }} </span>
+          </p>
+          <mat-divider *ngIf="!last"></mat-divider>
+        </mat-list-item>
+      </mat-list>
+      <!-- for small screens -->
+
+      <!-- for large screens -->
+      <ng-template #lgScreen>
+        <mat-grid-list rowHeight="175px" [cols]="columns" gutterSize="20px">
+          <mat-grid-tile
+            appElevateOnHover
+            *ngFor="let freestyler of freestylers$ | async"
+          >
+            <div class="profileContainer" fxLayout="row" fxLayoutGap="8px">
+              <img
+                (click)="onOpenPlayerProfile(freestyler)"
+                class="box-image"
+                [src]="
+                  freestyler.imgpath_lg
+                    ? freestyler.imgpath_lg
+                    : '../../../assets/images/dummy_player_sm.jpg'
+                "
+                [alt]="freestyler.name"
+              />
+              <div
+                class="content"
+                fxLayout="column"
+                fxLayoutGap="8px"
+                fxLayoutAlign="center start"
+              >
+                <span
+                  (click)="onOpenPlayerProfile(freestyler)"
+                  class="mat-body-1"
+                >
+                  {{ freestyler.name }}
+                </span>
+                <mat-divider></mat-divider>
+
+                <span
+                  (click)="onOpenPlayerProfile(freestyler)"
+                  class="mat-body-1 left"
+                >
+                  "{{
+                    freestyler.nickname ? freestyler.nickname : "No Nickname"
+                  }}"
+                </span>
+                <span
+                  (click)="onOpenPlayerProfile(freestyler)"
+                  class="mat-caption left"
+                >
+                  {{ freestyler?.born?.toDate() | date: "mediumDate" }}
+                </span>
+                <span
+                  (click)="onOpenPlayerProfile(freestyler)"
+                  class="mat-caption left"
+                >
+                  {{ freestyler.locCountry ? freestyler.locCountry : "NA" }}
+                </span>
+                <a
+                  *ngIf="freestyler.ig"
+                  (click)="onOpenIgProfile(freestyler.ig)"
+                  fxLayoutAlign="center center"
+                >
+                  <img
+                    src="../../../assets/svgs/instagram.svg"
+                    alt="instagram"
+                    class="iconSize"
+                  />
+                </a>
+              </div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </ng-template>
+      <!-- for large screens -->
+    </ng-container>
+  </div>
+</div>

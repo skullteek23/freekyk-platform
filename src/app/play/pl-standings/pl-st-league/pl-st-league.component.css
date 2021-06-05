@@ -1,0 +1,154 @@
+.teAvatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.table_container {
+  overflow-x: auto;
+  width: 100%;
+}
+.points {
+  font-weight: 800;
+  font-family: "Open Sans";
+  font-size: 15px;
+}
+
+@media only screen and (max-width: 359px) {
+  .extra-width-table {
+    width: 400px;
+    max-width: 600px;
+  }
+  .hideAvatar {
+    display: none;
+  }
+  .mat-column-Team {
+    width: 100px;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    text-align: left;
+  }
+  .mat-column-P,
+  .mat-column-W,
+  .mat-column-D,
+  .mat-column-GA,
+  .mat-column-GF,
+  .mat-column-GD,
+  .mat-column-L {
+    width: 20px;
+    text-align: center;
+  }
+
+  .mat-column-pos {
+    width: 25px;
+    text-align: center;
+  }
+  .mat-column-Pts {
+    width: 25px;
+    text-align: center;
+  }
+  .points {
+    font-weight: 600;
+    font-family: "Open Sans";
+    font-size: 15px;
+  }
+}
+@media only screen and (min-width: 360px) and (max-width: 767px) {
+  .extra-width-table {
+    width: 500px;
+    max-width: 600px;
+  }
+  .mat-column-Team {
+    width: 125px;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 125px;
+    text-align: left;
+  }
+  .mat-column-P,
+  .mat-column-W,
+  .mat-column-D,
+  .mat-column-GA,
+  .mat-column-GF,
+  .mat-column-GD,
+  .mat-column-L {
+    width: 20px;
+    text-align: center;
+  }
+
+  .mat-column-pos {
+    width: 25px;
+    text-align: center;
+  }
+  .mat-column-Pts {
+    width: 25px;
+    text-align: center;
+  }
+  .points {
+    font-weight: 700;
+    font-family: "Open Sans";
+    font-size: 15px;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  .extra-width-table {
+    width: 100%;
+    max-width: 100%;
+  }
+  .mat-column-Team {
+    text-align: left;
+  }
+  .mat-column-P,
+  .mat-column-W,
+  .mat-column-D,
+  .mat-column-GA,
+  .mat-column-GF,
+  .mat-column-GD,
+  .mat-column-L {
+    width: 45px;
+    text-align: center;
+  }
+
+  .mat-column-pos {
+    width: 60px;
+    text-align: center;
+  }
+  .mat-column-Pts {
+    width: 45px;
+    text-align: center;
+  }
+}
+@media only screen and (min-width: 960px) {
+  .extra-width-table {
+    width: 100%;
+    max-width: 100%;
+  }
+  .mat-column-Team {
+    text-align: left;
+  }
+  .mat-column-P,
+  .mat-column-W,
+  .mat-column-D,
+  .mat-column-GA,
+  .mat-column-GF,
+  .mat-column-GD,
+  .mat-column-L {
+    width: 45px;
+    text-align: center;
+  }
+
+  .mat-column-pos {
+    width: 70px;
+    text-align: center;
+  }
+  .mat-column-Pts {
+    width: 45px;
+    text-align: center;
+  }
+}

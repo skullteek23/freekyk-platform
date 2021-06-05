@@ -1,0 +1,16 @@
+.scroll {
+  height: 100%;
+  overflow-y: auto;
+}
+.filled {
+  color: var(--primaryColor);
+}
+.nofi {
+  margin-top: 20px;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0;
+  border-radius: var(--borderRadiusCard);
+  opacity: 0.75;
+}

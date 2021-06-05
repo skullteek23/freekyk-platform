@@ -1,0 +1,17 @@
+<ul *ngIf="emptyInvites$ | async as val">
+  <li class="nofi grey-bg">
+    <span class="mat-body-1">No invites!</span>
+  </li>
+</ul>
+<mat-list class="scroll">
+  <mat-list-item *ngFor="let invite of invites$ | async">
+    <div class="full-width-table" fxLayoutAlign="space-between center">
+      <span class="mat-body-1">{{ invite.teamName }}</span>
+      <div fxLayoutGap="8px" fxLayoutAlign="center center">
+        <a (click)="onViewInvite(invite)" class="mat-caption filled"> Open </a>
+        <span class="material-icons-round"> mark_email_unread </span>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>

@@ -1,0 +1,112 @@
+<div fxLayout="column">
+  <!-- banner-section -->
+  <app-hero-section
+    [headline]="true"
+    [overline]="false"
+    [title]="false"
+    [landingPage]="true"
+  ></app-hero-section>
+  <!-- banner-section -->
+
+  <!-- features -->
+  <div
+    class="container section-space-bottom"
+    ngClass.lt-md="section-space-top"
+    fxLayout="column"
+    fxLayoutGap="48px"
+    fxLayoutGap.gt-sm="120px"
+  >
+    <app-feature-section
+      [featureContent]="{ head: 'freekyk play', route: '/play/home' }"
+    ></app-feature-section>
+    <app-feature-section
+      [featureContent]="{ head: 'freekyk freestyle', route: '/freestyle/home' }"
+      [invert]="true"
+    ></app-feature-section>
+    <app-feature-section
+      [featureContent]="{ head: 'freekyk academies', route: '/academies' }"
+    ></app-feature-section>
+    <app-feature-section
+      [featureContent]="{ head: 'freekyk equipment', route: '/equipment' }"
+      [invert]="true"
+    ></app-feature-section>
+  </div>
+  <!-- features -->
+
+  <!-- action-strip-mini -->
+  <div class="section-space-top">
+    <app-action-strip [compact]="true"></app-action-strip>
+  </div>
+  <!-- action-strip-mini -->
+
+  <!-- why choose fk -->
+  <app-why-choose-section></app-why-choose-section>
+  <!-- why choose fk -->
+
+  <!-- covid-19 -->
+  <app-covid-section></app-covid-section>
+  <!-- covid-19 -->
+
+  <!-- other services -->
+  <section
+    class="container section-space-top section-space-bottom"
+    fxLayoutAlign.lt-md="center center"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <h4 class="mat-subheading-1 align">What else do we offer...</h4>
+    <div
+      fxLayout.gt-sm="row"
+      fxLayout="column"
+      fxLayoutGap.gt-sm="20px"
+      fxLayoutGap.lt-md="20px"
+    >
+      <div
+        *ngFor="let otherService of otherServices"
+        fxLayoutAlign.lt-md="center center"
+        fxLayout="column"
+        fxLayoutGap.gt-sm="8px"
+      >
+        <span class="placeholder-2"></span>
+        <span class="mat-body-1 center">
+          {{ otherService.name | titlecase }}</span
+        >
+
+        <button
+          color="primary"
+          mat-button
+          [routerLink]="[otherService.route]"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          fxLayoutGap="8px"
+        >
+          <span>{{ " Explore " + (otherService.name | titlecase) }}</span>
+          <span class="material-icons-round"> keyboard_arrow_right </span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- other services -->
+
+  <!-- community proof -->
+  <section
+    class="container section-space-top section-space-bottom"
+    fxLayout="column"
+    fxLayoutGap="8px"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <div>
+      <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
+      <p class="mat-body-1 align">Lorem ipsum dolor sit amet, consectetur</p>
+    </div>
+    <span class="screenshot"></span>
+  </section>
+  <!-- community proof -->
+
+  <!-- community numbers -->
+
+  <app-community-numbers-section
+    [data]="communityNumbers"
+  ></app-community-numbers-section>
+  <!-- community numbers -->
+</div>

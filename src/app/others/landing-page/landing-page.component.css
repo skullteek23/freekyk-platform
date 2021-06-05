@@ -1,0 +1,17 @@
+.screenshot {
+  height: 640px;
+  width: 100%;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: var(--borderRadiusCard);
+}
+@media only screen and (min-width: 960px) and (max-width: 1279px) {
+  .screenshot {
+    height: 500px;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .screenshot {
+    height: 360px;
+  }
+}

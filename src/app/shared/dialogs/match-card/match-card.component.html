@@ -1,0 +1,203 @@
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+>
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span *ngIf="data?.mode == 'fixture'" class="mat-body-1">
+    Fixture Details
+  </span>
+  <span *ngIf="data?.mode == 'result'" class="mat-body-1">Result Details</span>
+</mat-toolbar>
+<div class="container-2" fxLayout="column" fxLayoutGap="20px">
+  <app-match-detail-header [data]="matchHeaderData"></app-match-detail-header>
+
+  <mat-tab-group
+    mat-align-tabs="start"
+    [(selectedIndex)]="currIndex"
+    color="primary"
+  >
+    <mat-tab label="Overview">
+      <ng-template matTabContent>
+        <div class="seperator" fxLayoutGap="16px" fxLayout="column">
+          <div class="basic" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">
+              {{ "Basic details" | titlecase }}
+            </span>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Kick Off</span
+              ><span class="mat-body-1">
+                {{ data?.date.toDate() | date: "short" }}
+              </span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Stadium/Ground</span
+              ><span class="mat-body-1">{{
+                (overViewData$ | async)?.stadium
+              }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Season Name</span
+              ><span class="mat-body-1">{{ data?.season }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Type</span
+              ><span class="mat-body-1"> {{ getType(data?.type) }} </span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Match Referee</span
+              ><span
+                [matTooltip]="(overViewData$ | async)?.ref_phno | contactNumber"
+                class="mat-body-1"
+                >{{ (overViewData$ | async)?.ref }}</span
+              >
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Match Live Stream</span>
+              <a [href]="(overViewData$ | async)?.live_link" class="mat-body-2">
+                Available
+              </a>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Match Organizer</span
+              ><span
+                [matTooltip]="(overViewData$ | async)?.org_phno | contactNumber"
+                class="mat-body-1"
+              >
+                {{ (overViewData$ | async)?.organizer }}
+              </span>
+            </div>
+
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Refreshments Availability</span>
+              <span
+                [matTooltip]="
+                  (overViewData$ | async)?.refresh_phno | contactNumber
+                "
+                class="mat-body-1"
+              >
+                {{ (overViewData$ | async)?.refresh ? "Available" : "No" }}
+              </span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="other" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">
+              {{ "Other details" | titlecase }}
+            </span>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span class="mat-body-2">Match Description</span
+              ><span class="mat-body-1">
+                {{ (overViewData$ | async)?.desc }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Lineup">
+      <ng-template matTabContent>
+        <div
+          class="filter-spacing seperator"
+          fxLayoutGap="20px"
+          fxLayout="column"
+        >
+          <div fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">
+              {{ data?.teams[0] + " Lineup" | titlecase }}
+            </span>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span
+                *ngFor="let player of (lineups$ | async)?.home"
+                class="mat-body-1"
+              >
+                {{ player }}
+              </span>
+            </div>
+            <mat-divider></mat-divider>
+            <span class="dash-h5 align">
+              {{ data?.teams[1] + " Lineup" | titlecase }}
+            </span>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span
+                *ngFor="let player of (lineups$ | async)?.away"
+                class="mat-body-1"
+              >
+                {{ player }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Stats">
+      <ng-template matTabContent>
+        <div
+          *ngIf="data?.mode == 'fixture'; else stats"
+          class="filter-spacing seperator"
+          fxLayoutAlign="center center"
+        >
+          <i class="center">
+            Match statistics will be available after the fixture.
+          </i>
+        </div>
+        <ng-template #stats>
+          <div class="seperator" fxLayoutGap="16px" fxLayout="column">
+            <div class="basic" fxLayout="column" fxLayoutGap="16px">
+              <span class="dash-h5 align">
+                {{ "Match Stats" | titlecase }}
+              </span>
+              <div fxLayoutAlign="space-between center">
+                <span class="mat-body-2">Match End Time</span>
+                <span class="mat-body-1">
+                  {{ (stats$ | async)?.matchEndDate.toDate() | date: "short" }}
+                </span>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center start">
+                <span class="mat-body-2">Goalscorers (Home)</span>
+
+                <p
+                  *ngIf="
+                    (stats$ | async)?.scorersHome.length == 0 ||
+                    (stats$ | async)?.scorersHome == null
+                  "
+                  class="mat-body-1"
+                >
+                  -
+                </p>
+
+                <div
+                  *ngFor="let scorer of (stats$ | async)?.scorersHome"
+                  class="mat-body-1"
+                >
+                  {{ scorer | titlecase }}
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center start">
+                <span class="mat-body-2">Goalscorers (Away)</span>
+                <p
+                  *ngIf="
+                    (stats$ | async)?.scorersAway.length == 0 ||
+                    (stats$ | async)?.scorersAway == null
+                  "
+                  class="mat-body-1"
+                >
+                  -
+                </p>
+                <div
+                  *ngFor="let scorer of (stats$ | async)?.scorersAway"
+                  class="mat-body-1"
+                >
+                  {{ scorer | titlecase }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

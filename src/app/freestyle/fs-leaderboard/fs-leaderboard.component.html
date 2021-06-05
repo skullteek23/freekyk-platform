@@ -1,0 +1,18 @@
+<div
+  style="margin: 20px 0"
+  fxLayout.gt-sm="row"
+  fxLayout="column"
+  fxLayoutAlign.gt-sm="center center"
+  fxLayoutAlign.lt-md="center stretch"
+  fxLayoutGap.gt-sm="12px"
+  fxLayoutGap.lt-md="8px"
+>
+  <span class="mat-subheading-2 center">Overall Ranking Leaderboard</span>
+  <a (click)="onLearnMore('leaderboard')" class="mat-caption">
+    How it Works?
+  </a>
+</div>
+
+<div class="container mat-elevation-z8 section-space-bottom">
+  <app-fs-lb-table [data]="fsLeaderboardDataSource"></app-fs-lb-table>
+</div>

@@ -1,0 +1,109 @@
+<h4 mat-dialog-title class="center">Set the new {{ data }}</h4>
+<div mat-dialog-content>
+  <form
+    *ngIf="data == 'email'"
+    id="updateForm"
+    [formGroup]="newEmailForm"
+    (ngSubmit)="onChangeSubmit()"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <mat-form-field appearance="fill" color="primary" *ngIf="data == 'email'">
+      <mat-label>Enter New {{ data | titlecase }}</mat-label>
+      <input type="email" matInput name="email" formControlName="email" />
+      <mat-error *ngIf="newEmailForm.get('email')?.hasError('empty')">
+        This field can't be empty
+      </mat-error>
+      <mat-error *ngIf="newEmailForm.get('email')?.hasError('email')">
+        Please enter a valid email
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <form
+    *ngIf="data == 'password'"
+    id="updateForm"
+    [formGroup]="newPassForm"
+    (ngSubmit)="onChangeSubmit()"
+    fxLayout="column"
+  >
+    <mat-form-field
+      appearance="fill"
+      color="primary"
+      *ngIf="data == 'password'"
+    >
+      <mat-label>Enter New Password</mat-label>
+      <input
+        #password
+        type="password"
+        matInput
+        name="pass"
+        formControlName="pass"
+      />
+      <mat-error *ngIf="newPassForm.get('pass')?.hasError('empty')">
+        This field can't be empty
+      </mat-error>
+
+      <mat-error *ngIf="newPassForm.get('pass')?.hasError('minlength')">
+        Password must be atleast 6 characters long
+      </mat-error>
+
+      <mat-error *ngIf="newPassForm.get('pass')?.hasError('maxlength')">
+        Password must contain less than 30 characters
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field
+      appearance="fill"
+      color="primary"
+      *ngIf="data == 'password'"
+    >
+      <mat-label>Retype New Password</mat-label>
+      <input
+        type="password"
+        matInput
+        name="conf_pass"
+        formControlName="conf_pass"
+      />
+      <mat-error *ngIf="newPassForm.controls.conf_pass.errors?.NotEqual">
+        Passwords doesn't match!
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div
+  mat-dialog-actions
+  fxLayout="row"
+  fxLayout.lt-md="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="8px"
+>
+  <button
+    type="button"
+    class="noResponseButton buttonText"
+    cdkFocusInitial
+    mat-dialog-close
+    (click)="onDialogClose()"
+  >
+    Cancel
+  </button>
+  <button
+    *ngIf="data == 'email'; else passwordSubmit"
+    type="submit"
+    [disabled]="!newEmailForm.valid"
+    form="updateForm"
+    class="yesResponseButton buttonText"
+    (click)="onChangeSubmit()"
+  >
+    Update
+  </button>
+  <ng-template #passwordSubmit>
+    <button
+      type="submit"
+      [disabled]="!newPassForm.valid"
+      form="updateForm"
+      class="yesResponseButton buttonText"
+      (click)="onChangeSubmit()"
+    >
+      Update
+    </button>
+  </ng-template>
+</div>

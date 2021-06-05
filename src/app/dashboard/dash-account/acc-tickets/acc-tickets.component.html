@@ -1,0 +1,152 @@
+<div class="min-height fullpad-20" fxLayout="column" fxLayoutGap="20px">
+  <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column">
+    <div style="width: 100%" fxLayoutAlign="center center">
+      <button
+        [disabled]="!additionAvailable"
+        (click)="onOpenTicketForm()"
+        [ngClass]="{
+          secondaryButton: !additionAvailable,
+          primaryButton: additionAvailable
+        }"
+        class="buttonText"
+      >
+        + Raise A Ticket
+      </button>
+    </div>
+  </div>
+  <form
+    class="borderMe"
+    *ngIf="showForm"
+    [formGroup]="newTicketForm"
+    (ngSubmit)="onSubmitTicket()"
+    fxLayout="column"
+    fxLayoutGap="20px"
+  >
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter your name</mat-label>
+      <input type="text" matInput name="name" formControlName="name" />
+      <mat-error *ngIf="newTicketForm.get('name')?.hasError('required')">
+        This field cannot be empty
+      </mat-error>
+      <mat-error *ngIf="newTicketForm.get('name')?.hasError('pattern')">
+        Only letters and spaces are allowed!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter your mobile number</mat-label>
+      <span matPrefix>+91 &nbsp;</span>
+      <input type="tel" matInput name="ph_number" formControlName="ph_number" />
+      <mat-icon matSuffix>mode_edit</mat-icon>
+      <mat-error *ngIf="newTicketForm.get('ph_number')?.hasError('required')">
+        This field cannot be empty
+      </mat-error>
+      <mat-error *ngIf="newTicketForm.get('ph_number')?.hasError('pattern')">
+        Only numbers are allowed!
+      </mat-error>
+      <mat-error
+        *ngIf="
+          newTicketForm.get('ph_number')?.hasError('minlength') ||
+          newTicketForm.get('ph_number')?.hasError('maxlength')
+        "
+      >
+        Enter a valid 10-digit mobile number
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter your email address</mat-label>
+      <input type="text" matInput name="email" formControlName="email" />
+      <mat-error *ngIf="newTicketForm.get('email')?.hasError('required')">
+        This field cannot be empty
+      </mat-error>
+      <mat-error *ngIf="newTicketForm.get('email')?.hasError('email')">
+        Invalid email address!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Tell us your query/message</mat-label>
+      <textarea
+        type="text"
+        matInput
+        name="query"
+        placeholder="Describe your concern in not more than 300 words"
+        formControlName="query"
+      ></textarea>
+      <mat-error *ngIf="newTicketForm.get('query')?.hasError('required')">
+        This field cannot be empty
+      </mat-error>
+      <mat-error *ngIf="newTicketForm.get('query')?.hasError('pattern')">
+        Only letters, numbers and spaces are allowed!
+      </mat-error>
+      <mat-error *ngIf="newTicketForm.get('query')?.hasError('maxlength')">
+        Only 300 characters are allowed!
+      </mat-error>
+    </mat-form-field>
+    <div
+      fxLayoutAlign.gt-sm="start center"
+      fxLayout.lt-md="column"
+      fxLayoutGap="16px"
+    >
+      <button
+        [disabled]="!newTicketForm.valid"
+        type="submit"
+        class="buttonText primaryButton"
+      >
+        Submit Ticket
+      </button>
+      <button (click)="resetAll()" mat-button>Cancel</button>
+    </div>
+  </form>
+  <app-no-items-message
+    *ngIf="noTickets"
+    items="tickets"
+  ></app-no-items-message>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let ticket of myTickets$ | async">
+      <mat-expansion-panel-header>
+        <div class="heading" fxLayoutAlign="space-between center">
+          <span class="mat-body-strong"> Ticket #{{ ticket.ticket_UID }} </span>
+        </div>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div fxLayout="column" fxLayoutGap="16px">
+          <div fxLayout="column" fxLayoutGap="8px">
+            <span class="mat-caption"> Ticket Status </span>
+            <p
+              [ngStyle]="{ color: getColor(ticket.tkt_status) }"
+              fxLayoutGap="4px"
+              fxLayoutAlign="start center"
+            >
+              <span class="mat-body-2">
+                {{ getStatus(ticket.tkt_status) | titlecase }}
+              </span>
+              <span class="material-icons-round">
+                {{ getIcon(ticket.tkt_status) }}
+              </span>
+            </p>
+          </div>
+          <div fxLayout="column" fxLayoutGap="8px">
+            <span class="mat-caption"> Associated Phone Number </span>
+            <p class="mat-body-1">
+              {{ "+91-" + ticket.ph_number }}
+            </p>
+          </div>
+          <div fxLayout="column" fxLayoutGap="8px">
+            <span class="mat-caption"> Query/Message </span>
+            <p class="mat-body-1">
+              {{ ticket.query }}
+            </p>
+          </div>
+          <a
+            style="color: var(--red)"
+            fxHide.lt-md="true"
+            (click)="onDeleteTicket(ticket.id)"
+            fxLayoutAlign="center center"
+          >
+            <mat-icon class="material-icons-round">delete</mat-icon>
+            Delete Ticket
+          </a>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

@@ -1,0 +1,88 @@
+<article
+  class="container section-space-top section-space-bottom"
+  fxLayout="column"
+  fxLayoutGap="32px"
+  fxLayoutGap.lt-md="20px"
+  fxLayoutAlign.gt-sm="stretch center"
+>
+  <h2 class="mat-title center">
+    {{ checkView() ? "Log In" : "Get Started" }}
+  </h2>
+  <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="stretch center">
+    <button
+      (click)="onGoogleLogin()"
+      class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center"
+      fxLayoutGap="8px"
+      fxLayout
+    >
+      <img class="iconSize" src="../../assets/svgs/google.svg" alt="Google" />
+      <span> Continue with Google </span>
+    </button>
+    <button
+      (click)="onFacebookLogin()"
+      class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center"
+      fxLayoutGap="8px"
+      fxLayout
+    >
+      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Google" />
+      <span> Continue with Facebook </span>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <form
+    [formGroup]="formData"
+    (ngSubmit)="onSubmit()"
+    fxLayout="column"
+    fxLayoutGap="8px"
+    fxLayoutAlign.gt-sm="stretch center"
+  >
+    <mat-form-field *ngIf="!checkView()" appearance="outline" color="primary">
+      <mat-label>Enter your name</mat-label>
+      <input type="text" matInput name="name" formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter your email address</mat-label>
+      <input type="email" matInput name="email" formControlName="email" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Enter your password</mat-label>
+      <input type="password" matInput name="passw" formControlName="passw" />
+    </mat-form-field>
+    <a
+      *ngIf="checkView()"
+      (click)="onForgotPassword()"
+      class="forgot_password center"
+    >
+      Forgot Password?
+    </a>
+    <app-loading *ngIf="isLoading"></app-loading>
+    <button
+      type="submit"
+      [disabled]="!formData.valid || isLoading"
+      class="buttonText primaryButton wb"
+    >
+      {{ checkView() ? "Login" : "Take me to Dashboard" }}
+    </button>
+    <span *ngIf="checkView(); else signinShortcut" class="mat-caption center">
+      Don't have an account yet?
+      <a [routerLink]="['/signup']">Sign up</a>
+    </span>
+    <ng-template #signinShortcut>
+      <span class="mat-caption center">
+        Already have an account?
+        <a [routerLink]="['/login']">Sign in</a>
+      </span>
+    </ng-template>
+  </form>
+  <p class="mat-caption center">
+    {{
+      "By clicking 'Continue with Google/Facebook' or '" +
+        (checkView() ? "Login" : "Take me to Dashboard") +
+        "' above, you acknowledge that you have read and understood, and agree to"
+    }}
+    <a [routerLink]="['/terms']">Freekyk's Terms & Conditions</a> and
+    <a [routerLink]="['/privacypolicy']">Privacy Policy</a> .
+  </p>
+</article>

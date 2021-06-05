@@ -1,0 +1,7 @@
+.step_number {
+  height: 40px;
+  width: 40px;
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+}

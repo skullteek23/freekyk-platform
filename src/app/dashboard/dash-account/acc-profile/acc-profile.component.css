@@ -1,0 +1,18 @@
+.spacy {
+  margin: 8px 0 16px 0;
+  width: 100%;
+}
+
+.form {
+  margin: 20px 0;
+}
+.red {
+  color: var(--red);
+}
+.ng-dirty .mat-input-element {
+  opacity: 1 !important;
+}
+.ng-untouched .mat-input-element,
+.ng-touched .mat-input-element {
+  opacity: 0.5;
+}

@@ -1,0 +1,87 @@
+<ng-template #loading>
+  <div class="min-height" fxLayout="column">
+    <div class="_order" fxLayout="column" fxLayoutGap="16px">
+      <span
+        class="_bar shine"
+        *ngFor="let bars of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+      ></span>
+    </div>
+  </div>
+</ng-template>
+<div
+  class="min-height fullpad-20"
+  *ngIf="!isLoading; else loading"
+  fxLayout="column"
+  fxLayoutGap="20px"
+>
+  <ng-template #noOrder>
+    <app-no-items-message items="orders"></app-no-items-message>
+  </ng-template>
+  <ng-container *ngIf="!noOrders; else noOrder">
+    <mat-card
+      class="mat-elevation-z8 cart_item"
+      *ngFor="let order of Orders$ | async"
+    >
+      <mat-card-content>
+        <div fxLayoutGap="16px" fxLayout>
+          <!-- image -->
+          <div class="product_image">
+            <img [src]="order.lastProduct.prodImgpath" alt="Product Image" />
+          </div>
+          <!-- image -->
+
+          <div class="full-width-table" fxLayoutAlign="space-between center">
+            <!-- text -->
+            <div fxLayout="column" fxLayoutAlign="space-evenly start">
+              <div fxLayout="column">
+                <span class="mat-caption"> Order Status: </span>
+                <span
+                  class="overline"
+                  [ngStyle]="{
+                    color: getColor(order.orderStatus)
+                  }"
+                >
+                  {{ order.orderStatus }}
+                </span>
+              </div>
+
+              <div fxLayout="column">
+                <span class="mat-body-1">
+                  {{
+                    order.prodCount > 1
+                      ? (order.lastProduct.prodName | slice: 0:30) +
+                        " & more items"
+                      : (order.lastProduct.prodName | slice: 0:30)
+                  }}
+                </span>
+                <span class="mat-body-1 primaryColor">
+                  {{ order.total | currency }}
+                </span>
+              </div>
+            </div>
+            <!-- text -->
+
+            <!-- buttons -->
+            <div
+              class="touchfull"
+              fxLayout="column"
+              fxLayoutAlign="space-evenly center"
+            >
+              <a [routerLink]="['/product', order.lastProduct.prodId]">
+                <mat-icon class="material-icons-round"> shop </mat-icon>
+              </a>
+              <a
+                disabled
+                download="invoice"
+                href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+              >
+                <mat-icon class="material-icons-round"> get_app </mat-icon>
+              </a>
+            </div>
+            <!-- buttons -->
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

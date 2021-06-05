@@ -1,0 +1,73 @@
+<!-- list laoding -->
+<div *ngIf="isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
+  <span class="_bar shine" *ngFor="let fixt of [1, 2, 3, 4, 5, 6]"></span>
+</div>
+<!-- list laoding -->
+
+<!-- contests section -->
+<div *ngIf="!isLoading" class="list-group" fxLayout="column">
+  <div
+    fxLayout
+    fxLayoutAlign="space-between center"
+    fxLayoutAlign.lt-md="center center"
+  >
+    <span class="dash-h5 align">Freestyle Contests</span>
+    <a
+      [routerLink]="['/freestyle', 'contests']"
+      fxHide.lt-md="true"
+      class="mat-caption sec-menu"
+      >view more</a
+    >
+  </div>
+  <mat-tab-group (selectedTabChange)="onChangeIndex($event)">
+    <mat-tab label="Upcoming">
+      <ng-template matTabContent>
+        <ul *ngIf="noContest">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently there are no contests! </span>
+          </li>
+        </ul>
+        <!-- list -->
+        <app-contest-dashboard
+          *ngIf="!isLoadingContests"
+          type="upcoming"
+          [data]="contests"
+        ></app-contest-dashboard>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Active">
+      <ng-template matTabContent>
+        <ul *ngIf="noContest">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently there are no contests! </span>
+          </li>
+        </ul>
+        <!-- list -->
+        <app-contest-dashboard
+          *ngIf="!isLoadingContests"
+          type="active"
+          [data]="contests"
+        ></app-contest-dashboard>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Finished">
+      <ng-template matTabContent>
+        <ul *ngIf="noContest">
+          <li class="nofi">
+            <span class="mat-body-1"> Currently there are no contests! </span>
+          </li>
+        </ul>
+        <!-- list -->
+        <app-contest-dashboard
+          *ngIf="!isLoadingContests"
+          type="finished"
+          [data]="contests"
+        ></app-contest-dashboard>
+        <!-- list -->
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<!-- contests section -->

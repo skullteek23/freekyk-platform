@@ -1,0 +1,21 @@
+<div>
+  <app-loading *ngIf="isProcessing; else Done"></app-loading>
+  <ng-template #Done>
+    <app-tick-animation></app-tick-animation>
+    <p class="mat-caption center">Payment Completed</p>
+  </ng-template>
+  <div
+    fxLayoutAlign.gt-sm="start center"
+    fxLayout.lt-md="column"
+    fxLayout.gt-sm="row"
+    fxLayoutGap="16px"
+  >
+    <button
+      [disabled]="isProcessing"
+      (click)="onViewOrders()"
+      class="buttonText primaryButton"
+    >
+      Visit My Orders
+    </button>
+  </div>
+</div>

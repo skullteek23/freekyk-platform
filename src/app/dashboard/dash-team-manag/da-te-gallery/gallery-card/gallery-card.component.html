@@ -1,0 +1,14 @@
+<mat-card
+  class="mat-elevation-z8 gallery"
+  fxLayout="row nowrap"
+  fxLayoutGap="20px"
+>
+  <div class="add-photo" fxLayoutAlign="center center">
+    <button mat-icon-button (click)="onOpenTeamSettings()">
+      <mat-icon class="material-icons-round">add_photo_alternate</mat-icon>
+    </button>
+  </div>
+  <div class="cont" *ngFor="let photo of photos; let i = index">
+    <img [src]="photo" [alt]="'Team Photo ' + i" />
+  </div>
+</mat-card>

@@ -1,0 +1,17 @@
+<mat-grid-list
+  *ngIf="photos?.length != 0; else unavailable"
+  class="section-space-top section-space-bottom"
+  [cols]="columns"
+  gutterSize="20px"
+>
+  <mat-grid-tile *ngFor="let galleryItem of photos">
+    <img
+      (click)="onEnlargeView(galleryItem)"
+      [src]="galleryItem"
+      alt="Team Image"
+    />
+  </mat-grid-tile>
+</mat-grid-list>
+<ng-template #unavailable>
+  <app-no-items-message items="photos"></app-no-items-message>
+</ng-template>
