@@ -136,7 +136,7 @@
     <mat-tab label="Stats">
       <ng-template matTabContent>
         <div
-          *ngIf="data?.mode == 'fixture'; else stats"
+          *ngIf="!data.concluded; else stats"
           class="filter-spacing seperator"
           fxLayoutAlign="center center"
         >
