@@ -15,7 +15,7 @@ import { DashState } from './store/dash.reducer';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [TeamService, PlayerService, TeamCommunicationService],
+  providers: [TeamService, PlayerService],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   watcher: Subscription;
