@@ -54,6 +54,7 @@ import { AskPlayerSelectorComponent } from './dash-team-manag/da-te-communicatio
 import { UpcomingMatchTabComponent } from './dash-team-manag/da-te-communication/upcoming-match-tab/upcoming-match-tab.component';
 import { DaTeMangPlayersComponent } from './dash-team-manag/da-te-members/da-te-mang-players/da-te-mang-players.component';
 import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.component';
+import { TeamCommunicationService } from '../services/team-communication.service';
 @NgModule({
   declarations: [
     DashboardComponent,

@@ -13,7 +13,9 @@ import { TeamState } from '../dashboard/dash-team-manag/store/team.reducer';
 import { TeamCommState } from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.reducer';
 import { AngularFireDatabase } from '@angular/fire/database';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TeamCommunicationService {
   setSelectedMatch(selection: number) {
     this.store.dispatch(new TeamCommActions.SelectUpmMatchNo(selection));
