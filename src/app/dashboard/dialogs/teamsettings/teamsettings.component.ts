@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -11,6 +11,7 @@ import {
   TeamMoreInfo,
 } from 'src/app/shared/interfaces/team.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
+import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';
 
 @Component({
   selector: 'app-teamsettings',
@@ -34,7 +35,8 @@ export class TeamsettingsComponent implements OnInit {
     private ngStorage: AngularFireStorage,
     private store: Store<{
       team: TeamState;
-    }>
+    }>,
+    private dialog: MatDialog
   ) {
     this.store
       .select('team')
@@ -102,6 +104,13 @@ export class TeamsettingsComponent implements OnInit {
   onChooseTeamLogoImage(ev: any) {
     this.file2Selected = true;
     this.$teamLogo = ev.target.files[0];
+  }
+  onOpenTeamGalleryDialog() {
+    this.dialog.open(TeamgalleryComponent, {
+      panelClass: 'fk-dialogs',
+      disableClose: true,
+    });
+    this.onCloseDialog();
   }
   async onUploadTeamLogo() {
     // backend code here

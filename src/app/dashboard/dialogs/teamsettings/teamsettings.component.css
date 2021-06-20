@@ -12,3 +12,6 @@
 .ng-touched .mat-input-element {
   opacity: 0.5;
 }
+.wider {
+  min-width: 100%;
+}
