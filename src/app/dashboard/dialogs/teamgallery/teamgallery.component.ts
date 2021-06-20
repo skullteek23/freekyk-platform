@@ -90,7 +90,7 @@ export class TeamgalleryComponent implements OnInit {
               media: mediaLocal,
             });
         }),
-        tap(this.cleanUp.bind(this)),
+        tap(() => this.cleanUp('Photo deleted successfully!')),
         map(() => true)
       );
   }
