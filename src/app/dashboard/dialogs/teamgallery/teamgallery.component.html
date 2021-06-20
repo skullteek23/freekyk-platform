@@ -48,6 +48,7 @@
           <img [src]="photo" alt="Team Photo" />
         </div>
         <button
+          [disabled]="deleteInProgress$ | async"
           (click)="onRemovePhoto(photo)"
           mat-icon-button
           class="remove-button buttonText"

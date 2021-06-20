@@ -3,8 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef } from '@angular/material/dialog';
 import firebase from 'firebase/app';
+import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { TeamMedia } from 'src/app/shared/interfaces/team.model';
 
@@ -18,6 +19,8 @@ export class TeamgalleryComponent implements OnInit {
   isLoading: boolean = true;
   teamGallery$: Observable<TeamMedia>;
   showEditButtons = false;
+  newSub: Subscription;
+  deleteInProgress$: Observable<boolean>;
   constructor(
     public dialogRef: MatDialogRef<TeamgalleryComponent>,
     private ngFire: AngularFirestore,
@@ -56,18 +59,40 @@ export class TeamgalleryComponent implements OnInit {
               media: [url],
             });
         }
-        photoSnap.then(() => {
-          this.snackServ.displayCustomMsg('Photo Uploaded successfully!');
-          this.onCloseDialog();
-        });
+        photoSnap.then(() => this.cleanUp('Photo uploaded successfully!'));
       });
     }
+  }
+  cleanUp(message: string) {
+    this.snackServ.displayCustomMsg(message);
+    this.onCloseDialog();
   }
   onHover(state: boolean) {
     this.showEditButtons = state;
   }
-  onRemovePhoto(photoUrl) {
-    console.log(photoUrl);
+  onRemovePhoto(photoUrl: string) {
+    const tid = sessionStorage.getItem('tid');
+    this.deleteInProgress$ = this.ngFire
+      .collection(`teams/${tid}/additionalInfo`)
+      .doc('media')
+      .get()
+      .pipe(
+        switchMap((val) => {
+          let mediaLocal = (<TeamMedia>val.data()).media;
+          mediaLocal.splice(
+            mediaLocal.findIndex((media) => media == photoUrl),
+            1
+          );
+          return this.ngFire
+            .collection(`teams/${tid}/additionalInfo`)
+            .doc('media')
+            .update({
+              media: mediaLocal,
+            });
+        }),
+        tap(this.cleanUp.bind(this)),
+        map(() => true)
+      );
   }
   getGalleryPhotos() {
     const tid = sessionStorage.getItem('tid');
