@@ -11,9 +11,10 @@
 </mat-toolbar>
 <div class="container-2">
   <div class="dialogData seperator" fxLayout="column" fxLayoutGap="20px">
-    <div>
+    <div fxLayout>
       <button
         type="button"
+        [disabled]="(teamGallery$ | async)?.media.length >= 5"
         (click)="fileInputImage.click()"
         class="buttonText secondaryButton wider"
       >
@@ -28,6 +29,14 @@
         (change)="onChoosePhoto($event)"
         id="file"
       />
+      <div>
+        <span
+          class="error-text buttonText"
+          *ngIf="(teamGallery$ | async)?.media.length >= 5"
+        >
+          Only 5 Photo uploads are allowed!
+        </span>
+      </div>
     </div>
 
     <app-no-items-message
