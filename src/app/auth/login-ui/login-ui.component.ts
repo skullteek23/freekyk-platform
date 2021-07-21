@@ -85,11 +85,11 @@ export class LoginUiComponent implements OnInit {
     this.authServ.onForgotPassword();
   }
   onGoogleLogin() {
-    // this.authServ.onGoogleSignin();
-    alert('currently disabled');
+    this.authServ.onGoogleSignin();
+    // alert('currently disabled');
   }
   onFacebookLogin() {
-    // this.authServ.onFacebookSignin();
-    alert('currently disabled');
+    this.authServ.onFacebookSignin();
+    // alert('currently disabled');
   }
 }

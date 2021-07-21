@@ -107,7 +107,7 @@ export class GenFixtService implements OnDestroy {
     return 1;
   }
   onGenFixtures() {
-    this.ngFunc.useFunctionsEmulator('http://localhost:5001');
+    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const fixtureFunc = this.ngFunc.httpsCallable('generateFixtures');
     const data: CloufFunctionFixtureData = {
       sid: this.selSeason.id,

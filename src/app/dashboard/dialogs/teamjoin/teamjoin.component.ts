@@ -53,7 +53,7 @@ export class TeamjoinComponent implements OnInit {
       name: playerName,
     };
     console.log(FunctionData);
-    this.ngFunc.useFunctionsEmulator('http://localhost:5001');
+    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const callable = this.ngFunc.httpsCallable('sendJoinRequest');
     return await callable(FunctionData).toPromise();
   }

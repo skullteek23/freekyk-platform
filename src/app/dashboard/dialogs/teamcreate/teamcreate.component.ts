@@ -88,7 +88,7 @@ export class TeamcreateComponent implements OnInit {
     this.error = false;
   }
   async createTeam(logo: string, image: string) {
-    this.ngFunc.useFunctionsEmulator('http://localhost:5001');
+    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const uid = localStorage.getItem('uid');
 
     const FunctionData = {

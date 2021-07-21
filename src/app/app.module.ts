@@ -46,14 +46,14 @@ import { CheckoutComponent } from './cart/checkout/checkout.component';
 import { FillAddressComponent } from './cart/checkout/fill-address/fill-address.component';
 import { CompletePaymentComponent } from './cart/checkout/complete-payment/complete-payment.component';
 import { SavedAddressListComponent } from './cart/checkout/saved-address-list/saved-address-list.component';
-export function initializeApp1(afa: AngularFireAuth): any {
-  return () => {
-    return new Promise<void>((resolve) => {
-      afa.useEmulator(`http://${location.hostname}:9099/`);
-      setTimeout(() => resolve(), 100); // delay Angular initialization by 100ms
-    });
-  };
-}
+// export function initializeApp1(afa: AngularFireAuth): any {
+//   return () => {
+//     return new Promise<void>((resolve) => {
+//       afa.useEmulator(`http://${location.hostname}:9099/`);
+//       setTimeout(() => resolve(), 100); // delay Angular initialization by 100ms
+//     });
+//   };
+// }
 
 @NgModule({
   declarations: [
@@ -92,27 +92,27 @@ export function initializeApp1(afa: AngularFireAuth): any {
     FontAwesomeModule,
   ],
   providers: [
-    { provide: USE_AUTH_EMULATOR, useValue: ['localhost', 9099] },
-    { provide: REGION, useValue: 'asia-south1' },
-    {
-      provide: DATABASE_URL,
-      useValue: `http://localhost:9000?ns=${environment.firebase.projectId}`,
-    },
-    { provide: USE_FIRESTORE_EMULATOR, useValue: ['localhost', 8080] },
-    { provide: NEW_ORIGIN_BEHAVIOR, useValue: true },
-    {
-      provide: FUNCTIONS_ORIGIN,
-      useFactory: () => (isDevMode() ? undefined : location.origin),
-    },
-    { provide: DEFAULT_CURRENCY_CODE, useValue: 'INR' },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp1,
-      // for some reason this dependency is necessary for this solution to work.
-      // Maybe in order to trigger the constructor *before* waiting 100ms?
-      deps: [AngularFireAuth],
-      multi: true,
-    },
+    // { provide: USE_AUTH_EMULATOR, useValue: ['localhost', 9099] },
+    // { provide: REGION, useValue: 'asia-south1' },
+    // {
+    //   provide: DATABASE_URL,
+    //   useValue: `http://localhost:9000?ns=${environment.firebase.projectId}`,
+    // },
+    // { provide: USE_FIRESTORE_EMULATOR, useValue: ['localhost', 8080] },
+    // { provide: NEW_ORIGIN_BEHAVIOR, useValue: true },
+    // {
+    //   provide: FUNCTIONS_ORIGIN,
+    //   useFactory: () => (isDevMode() ? undefined : location.origin),
+    // },
+    // { provide: DEFAULT_CURRENCY_CODE, useValue: 'INR' },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeApp1,
+    //   // for some reason this dependency is necessary for this solution to work.
+    //   // Maybe in order to trigger the constructor *before* waiting 100ms?
+    //   deps: [AngularFireAuth],
+    //   multi: true,
+    // },
   ],
   bootstrap: [AppComponent],
 })

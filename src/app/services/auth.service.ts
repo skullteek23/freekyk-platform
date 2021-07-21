@@ -43,7 +43,7 @@ export class AuthService {
     return this.signupOnFirebase(data.email, data.passw);
   }
   public createProfileByClouddFn(cldData: { name: string; uid: string }) {
-    this.ngFunc.useFunctionsEmulator('http://localhost:5001');
+    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const callable = this.ngFunc.httpsCallable('createProfile');
     return callable(cldData).toPromise();
   }

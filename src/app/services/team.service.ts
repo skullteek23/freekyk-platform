@@ -270,7 +270,7 @@ export class TeamService implements OnDestroy {
   }
   onDeleteTeam() {
     const tid = sessionStorage.getItem('tid');
-    this.ngFunc.useFunctionsEmulator('http://localhost:5001');
+    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const callable = this.ngFunc.httpsCallable('deleteTeam');
     callable({ teamId: tid })
       .toPromise()
