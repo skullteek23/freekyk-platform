@@ -23,17 +23,17 @@ import { AppMaterialModule } from './app-material.module';
 import { SharedModule } from './shared/shared.module';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
-import {
-  AngularFireAuth,
-  USE_EMULATOR as USE_AUTH_EMULATOR,
-} from '@angular/fire/auth';
-import { URL as DATABASE_URL } from '@angular/fire/database';
-import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
-import {
-  ORIGIN as FUNCTIONS_ORIGIN,
-  REGION,
-  NEW_ORIGIN_BEHAVIOR,
-} from '@angular/fire/functions';
+// import {
+//   AngularFireAuth,
+//   USE_EMULATOR as USE_AUTH_EMULATOR,
+// } from '@angular/fire/auth';
+// import { URL as DATABASE_URL } from '@angular/fire/database';
+// import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
+// import {
+//   ORIGIN as FUNCTIONS_ORIGIN,
+//   REGION,
+//   NEW_ORIGIN_BEHAVIOR,
+// } from '@angular/fire/functions';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromApp from './store/app.reducer';

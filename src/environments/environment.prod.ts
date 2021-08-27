@@ -1,14 +1,14 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyBEWJKSnolO9oQwiTm7iR8BC33EdeQozOQ',
-    authDomain: 'freekyk8.firebaseapp.com',
     databaseURL:
       'https://freekyk8-default-rtdb.asia-southeast1.firebasedatabase.app',
-    projectId: 'freekyk8',
-    storageBucket: 'freekyk8.appspot.com',
-    messagingSenderId: '961070169740',
-    appId: '1:961070169740:web:185ac71e9627e2bda585a9',
-    measurementId: 'G-MXGXBZVW0D',
+    apiKey: 'AIzaSyBk-AFz7HhA0Htt9WICkVPYWYG4v3jbnmM',
+    authDomain: 'football-platform-v1.firebaseapp.com',
+    projectId: 'football-platform-v1',
+    storageBucket: 'football-platform-v1.appspot.com',
+    messagingSenderId: '581569985509',
+    appId: '1:581569985509:web:fea62348969bd618dc8d0c',
+    measurementId: 'G-DVFLJVY2LP',
   },
 };
