@@ -6,7 +6,7 @@ export const environment = {
   production: true,
   firebase: {
     databaseURL:
-      'https://freekyk8-default-rtdb.asia-southeast1.firebasedatabase.app',
+      'https://football-platform-v1-default-rtdb.asia-southeast1.firebasedatabase.app',
     apiKey: 'AIzaSyBk-AFz7HhA0Htt9WICkVPYWYG4v3jbnmM',
     authDomain: 'football-platform-v1.firebaseapp.com',
     projectId: 'football-platform-v1',
