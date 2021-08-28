@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "freekyk7": {
+    "football-platform-v1": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -41,7 +41,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/freekyk7",
+            "outputPath": "dist/football-platform-v1",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -90,18 +90,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "freekyk7:build"
+            "browserTarget": "football-platform-v1:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "freekyk7:build:production"
+              "browserTarget": "football-platform-v1:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "freekyk7:build"
+            "browserTarget": "football-platform-v1:build"
           }
         },
         "test": {
@@ -138,11 +138,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "freekyk7:serve"
+            "devServerTarget": "football-platform-v1:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "freekyk7:serve:production"
+              "devServerTarget": "football-platform-v1:serve:production"
             }
           }
         },
@@ -153,5 +153,5 @@
       }
     }
   },
-  "defaultProject": "freekyk7"
+  "defaultProject": "football-platform-v1"
 }

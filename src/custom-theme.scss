@@ -67,20 +67,20 @@ $mat-freekyk-accent: (
     A700: #000000,
   ),
 );
-$freekyk7-primary: mat-palette($mat-freekyk-primary);
-$freekyk7-accent: mat-palette($mat-freekyk-accent, 800, 900, 700);
+$football-platform-v1-primary: mat-palette($mat-freekyk-primary);
+$football-platform-v1-accent: mat-palette($mat-freekyk-accent, 800, 900, 700);
 
 // The warn palette is optional (defaults to red).
-$freekyk7-warn: mat-palette($mat-red);
+$football-platform-v1-warn: mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$freekyk7-theme: mat-light-theme(
+$football-platform-v1-theme: mat-light-theme(
   (
     color: (
-      primary: $freekyk7-primary,
-      accent: $freekyk7-accent,
-      warn: $freekyk7-warn,
+      primary: $football-platform-v1-primary,
+      accent: $football-platform-v1-accent,
+      warn: $football-platform-v1-warn,
     ),
   )
 );
@@ -101,5 +101,5 @@ $freekyk-typography-base: mat-typography-config(
   $button: mat-typography-level(14px, 22.6524758425px, 600),
   $input: mat-typography-level(14px, 1.510165, 400),
 );
-@include angular-material-theme($freekyk7-theme);
+@include angular-material-theme($football-platform-v1-theme);
 @include mat-base-typography($freekyk-typography-base);

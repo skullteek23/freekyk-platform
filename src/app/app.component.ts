@@ -16,7 +16,7 @@ import firebase from 'firebase/app';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'freekyk7';
+  title = 'football-platform-v1';
   menuOpen = false;
   dashOpen = false;
   routeSubscription: Subscription = new Subscription();

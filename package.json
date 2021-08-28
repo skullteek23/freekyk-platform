@@ -1,10 +1,10 @@
 {
-  "name": "freekyk7",
+  "name": "-v1",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --stats-json --build-optimizer --aot && webpack-bundle-analyzer dist/freekyk7/stats.json",
+    "build": "ng build --prod --stats-json --build-optimizer --aot && webpack-bundle-analyzer dist/football-platform-v1/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

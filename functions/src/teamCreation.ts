@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 import {
   TeamBasicInfo,
@@ -60,7 +61,7 @@ export async function teamCreation(
       pl_pos: playerSnap?.pl_pos ? playerSnap?.pl_pos : 'Unknown Position',
       imgpath_sm: playerSnap?.imgpath_sm
         ? playerSnap?.imgpath_sm
-        : 'https://firebasestorage.googleapis.com/v0/b/freekyk7.appspot.com/o/dummy_player_sm.jpg?alt=media&token=b4d439a7-f5e8-4cde-8f84-e7751b437763',
+        : 'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/dummy_player_sm.jpg?alt=media&token=b4d439a7-f5e8-4cde-8f84-e7751b437763',
     });
     const tMembers: TeamMembers = {
       memCount: newMember.length,

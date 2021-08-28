@@ -11,7 +11,7 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "dist/freekyk7",
+    "public": "dist/football-platform-v1",
     "ignore": [
       "firebase.json",
       "**/.*",
