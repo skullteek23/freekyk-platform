@@ -12,6 +12,8 @@ export async function newProfile(
 ) {
   try {
     //get
+    console.log(data);
+    console.log(context);
     //get
 
     // create

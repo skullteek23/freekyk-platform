@@ -54,7 +54,12 @@ export class AuthService {
     this.signinGoogle()
       .then((user) => {
         console.log('logged in from google!');
-        this.afterSignup();
+        this.createProfileByClouddFn({
+          name: user.user.displayName,
+          uid: user.user.uid,
+        }).then(() => {
+          this.afterSignup();
+        });
       })
       .catch((error) => this.mapError(error.code));
   }
@@ -63,7 +68,12 @@ export class AuthService {
     this.signinFB()
       .then((user) => {
         console.log('logged in from facebook!');
-        this.afterSignup();
+        this.createProfileByClouddFn({
+          name: user.user.displayName,
+          uid: user.user.uid,
+        }).then(() => {
+          this.afterSignup();
+        });
       })
       .catch((error) => this.mapError(error.code));
   }
