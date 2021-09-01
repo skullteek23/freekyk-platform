@@ -1,0 +1,27 @@
+.img-container {
+  overflow: hidden;
+  border-radius: 2px;
+  width: 300px;
+  height: 200px;
+  max-width: 80%;
+  max-height: 200px;
+  background-color: var(--grey4);
+}
+.img-container img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+.remove-button {
+  background-color: var(--red);
+  color: white;
+  height: 200px;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+.remove-button:hover {
+  opacity: 1;
+}
+.error-text {
+  color: var(--red);
+}

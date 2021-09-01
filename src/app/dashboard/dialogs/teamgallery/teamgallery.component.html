@@ -1,0 +1,70 @@
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+>
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Team Gallery</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="dialogData seperator" fxLayout="column" fxLayoutGap="20px">
+    <div fxLayout>
+      <button
+        type="button"
+        [disabled]="(teamGallery$ | async)?.media.length >= 5"
+        (click)="fileInputImage.click()"
+        class="buttonText secondaryButton wider"
+      >
+        Upload Team Photo
+      </button>
+      <input
+        hidden
+        type="file"
+        name="fileInput"
+        accept="image/*"
+        #fileInputImage
+        (change)="onChoosePhoto($event)"
+        id="file"
+      />
+      <div>
+        <span
+          class="error-text buttonText"
+          *ngIf="(teamGallery$ | async)?.media.length >= 5"
+        >
+          Only 5 Photo uploads are allowed!
+        </span>
+      </div>
+    </div>
+
+    <app-no-items-message
+      items="photos"
+      *ngIf="noGallery"
+    ></app-no-items-message>
+
+    <div class="gallery" fxLayoutGap="20px" fxLayout="column">
+      <div
+        (mouseover)="onHover(true)"
+        (mouseleave)="onHover(false)"
+        fxLayout="row"
+        fxLayoutGap="10px"
+        fxLayoutAlign="center center"
+        *ngFor="let photo of (teamGallery$ | async)?.media"
+      >
+        <div class="img-container" fxLayoutAlign="center center">
+          <img [src]="photo" alt="Team Photo" />
+        </div>
+        <button
+          [disabled]="deleteInProgress$ | async"
+          (click)="onRemovePhoto(photo)"
+          mat-icon-button
+          class="remove-button buttonText"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

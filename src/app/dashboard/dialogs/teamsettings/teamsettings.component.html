@@ -11,6 +11,17 @@
 </mat-toolbar>
 <div class="container-2">
   <div class="dialogData seperator">
+    <div fxLayout="column">
+      <p class="mat-body-1 top_padding">Team Gallery</p>
+      <button
+        type="button"
+        (click)="onOpenTeamGalleryDialog()"
+        class="buttonText wider secondaryButton"
+      >
+        Open Team Gallery Photos
+      </button>
+    </div>
+    <mat-divider></mat-divider>
     <p class="mat-body-1">Team Info</p>
     <form
       [formGroup]="TeamInfoForm"
@@ -86,7 +97,7 @@
       <button
         type="button"
         (click)="fileInputImage.click()"
-        class="buttonText secondaryButton"
+        class="buttonText secondaryButton wider"
       >
         Upload Team Photo
       </button>
@@ -102,7 +113,7 @@
       <button
         type="button"
         (click)="fileInputLogo.click()"
-        class="buttonText secondaryButton"
+        class="buttonText secondaryButton wider"
       >
         Upload Team Logo
       </button>
