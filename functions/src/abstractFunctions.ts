@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 let db = admin.firestore();
 import { firestore } from 'firebase-admin';

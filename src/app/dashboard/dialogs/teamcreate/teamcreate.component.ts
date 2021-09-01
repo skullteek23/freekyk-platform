@@ -166,10 +166,10 @@ export class TeamcreateComponent implements OnInit {
     this.file2Selected = true;
   }
   getDefaultTPhoto() {
-    return 'https://firebasestorage.googleapis.com/v0/b/freekyk7.appspot.com/o/fcp.png?alt=media&token=4b023705-d0d5-4685-96e8-21aed5121e40';
+    return 'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/fcp.png?alt=media&token=4b023705-d0d5-4685-96e8-21aed5121e40';
   }
   getDefaultTLogo() {
-    return 'https://firebasestorage.googleapis.com/v0/b/freekyk7.appspot.com/o/Logo%20Mark%20Color.png?alt=media&token=ee3beb32-f6b7-4ef8-a226-59d86705d9d4';
+    return 'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Logo%20Mark%20Color.png?alt=media&token=ee3beb32-f6b7-4ef8-a226-59d86705d9d4';
   }
   getPlayers() {
     const uid = localStorage.getItem('uid');

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 let db = admin.firestore();
 import { Invite } from '../../src/app/shared/interfaces/notification.model';

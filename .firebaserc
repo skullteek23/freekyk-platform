@@ -1,14 +1,5 @@
 {
-  "targets": {
-    "freekyk8": {
-      "hosting": {
-        "freekyk8": [
-          "freekyk8"
-        ]
-      }
-    }
-  },
   "projects": {
-    "default": "freekyk8"
+    "default": "football-platform-v1"
   }
 }

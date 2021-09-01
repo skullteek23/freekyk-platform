@@ -51,21 +51,11 @@ export class AuthService {
     this.mapError(error);
   }
   public onGoogleSignin() {
-    this.signinGoogle()
-      .then((user) => {
-        console.log('logged in from google!');
-        this.afterSignup();
-      })
-      .catch((error) => this.mapError(error.code));
+    return this.signinGoogle();
   }
 
   public onFacebookSignin() {
-    this.signinFB()
-      .then((user) => {
-        console.log('logged in from facebook!');
-        this.afterSignup();
-      })
-      .catch((error) => this.mapError(error.code));
+    return this.signinFB();
   }
   public onLogout() {
     this.logoutFromFirebase()

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 import { firestore } from 'firebase-admin';
 import { FsTrick } from '../../src/app/shared/interfaces/others.model';

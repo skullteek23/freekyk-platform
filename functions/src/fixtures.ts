@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { CloufFunctionFixtureData } from '../../src/app/shared/interfaces/others.model';
 import { tempFixtureData } from '../../src/app/shared/interfaces/match.model';
 import {

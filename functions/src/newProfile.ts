@@ -1,17 +1,19 @@
-/* eslint-disable no-alert, no-console */
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 import {
   BasicStats,
   FsStats,
 } from '../../src/app/shared/interfaces/user.model';
-let db = admin.firestore();
-let auth = admin.auth();
+const db = admin.firestore();
+const auth = admin.auth();
 export async function newProfile(
   data: { name: string; uid: string },
   context: any
 ) {
   try {
     //get
+    console.log(data);
+    console.log(context);
     //get
 
     // create

@@ -85,11 +85,47 @@ export class LoginUiComponent implements OnInit {
     this.authServ.onForgotPassword();
   }
   onGoogleLogin() {
-    this.authServ.onGoogleSignin();
+    this.authServ
+      .onGoogleSignin()
+      .then((user) => {
+        sessionStorage.setItem('name', user.user.displayName);
+        let cloudSnap = this.authServ.createProfileByClouddFn({
+          name: user.user.displayName,
+          uid: user.user.uid,
+        });
+        cloudSnap
+          .then(() => {
+            this.authServ.afterSignup(user.user.displayName);
+            this.isLoading = false;
+          })
+          .catch((error) => this.authServ.onError(error['code']));
+      })
+      .catch((error) => {
+        this.isLoading = false;
+        this.authServ.onError(error['code']);
+      });
     // alert('currently disabled');
   }
   onFacebookLogin() {
-    this.authServ.onFacebookSignin();
+    this.authServ
+      .onFacebookSignin()
+      .then((user) => {
+        sessionStorage.setItem('name', user.user.displayName);
+        let cloudSnap = this.authServ.createProfileByClouddFn({
+          name: user.user.displayName,
+          uid: user.user.uid,
+        });
+        cloudSnap
+          .then(() => {
+            this.authServ.afterSignup(user.user.displayName);
+            this.isLoading = false;
+          })
+          .catch((error) => this.authServ.onError(error['code']));
+      })
+      .catch((error) => {
+        this.isLoading = false;
+        this.authServ.onError(error['code']);
+      });
     // alert('currently disabled');
   }
 }

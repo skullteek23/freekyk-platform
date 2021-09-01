@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as admin from 'firebase-admin';
 import {
   Invite,
