@@ -206,7 +206,7 @@ mat-table {
 }
 .placeholder {
   height: 200px;
-  width: 350px;
+  width: 100%;
   background-color: white;
   border: 1px solid black;
   border-radius: 8px;
