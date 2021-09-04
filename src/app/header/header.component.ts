@@ -62,12 +62,9 @@ export class HeaderComponent implements OnInit {
     ];
     this.fsSublinks = ['home', 'freestylers', 'leaderboard', 'contests'];
     this.morelinks = [
-      { name: 'join premium', route: '/pricing' },
-      { name: 'video editing', route: '/veservices' },
       { name: 'about', route: '/about' },
 
       { name: 'support', route: '/support' },
-      { name: 'admin', route: '/admin/home' },
     ];
   }
   onToggleMenu() {

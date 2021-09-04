@@ -65,18 +65,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./support/support.module').then((m) => m.SupportModule),
   },
-  {
-    path: 'veservices',
-    loadChildren: () =>
-      import('./video-editing/video-editing.module').then(
-        (m) => m.VideoEditingModule
-      ),
-  },
-  {
-    path: 'admin',
-    loadChildren: () =>
-      import('./admin/admin.module').then((m) => m.AdminModule),
-  },
   { path: 'p/:playerid', component: PlayerProfileComponent },
   { path: 'f/:freestylerid', component: FreestylerProfileComponent },
   { path: 't/:teamid', component: TeamProfileComponent },
