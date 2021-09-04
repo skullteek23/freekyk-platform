@@ -1,0 +1,13 @@
+.mat-column-season {
+  width: 300px;
+  text-align: left;
+}
+.mat-column-confTeams,
+.mat-column-tmatches,
+.mat-column-fixt,
+.mat-column-gallery,
+.mat-column-stats,
+.mat-column-terminate,
+.mat-column-sno {
+  text-align: center;
+}

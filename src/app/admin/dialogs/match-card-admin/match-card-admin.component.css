@@ -1,0 +1,14 @@
+.spacy {
+  margin: 8px 0 16px 0;
+  width: 100%;
+}
+.mat-divider {
+  margin: 16px 0;
+}
+.ng-dirty .mat-input-element {
+  opacity: 1 !important;
+}
+.ng-untouched .mat-input-element,
+.ng-touched .mat-input-element {
+  opacity: 0.5;
+}
