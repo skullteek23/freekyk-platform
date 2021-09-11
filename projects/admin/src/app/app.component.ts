@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
-export class AdminComponent {
+export class AppComponent implements OnInit, OnDestroy {
+  title = 'admin';
   // UIDs = [
   //   '33KtAWVs6jbVzqSXVqsCebZyMLX2',
   //   'DPCp55uy3nNKYzu9SMyPsZ7rixx1',
@@ -40,27 +40,27 @@ export class AdminComponent {
   //   'Chintu Rohilla',
   //   'Dhruv Rathi',
   // ];
-  // cols: number;
-  // watcher: Subscription;
-  // constructor(private mediaObs: MediaObserver) {
-  //   this.watcher = this.mediaObs
-  //     .asObservable()
-  //     .pipe(
-  //       filter((changes: MediaChange[]) => changes.length > 0),
-  //       map((changes: MediaChange[]) => changes[0])
-  //     )
-  //     .subscribe((change: MediaChange) => {
-  //       if (change.mqAlias === 'xs') {
-  //         this.cols = 1;
-  //       } else if (change.mqAlias === 'sm') {
-  //         this.cols = 2;
-  //       } else {
-  //         this.cols = 3;
-  //       }
-  //     });
-  // }
-  // ngOnInit(): void {}
-  // ngOnDestroy() {
-  //   this.watcher.unsubscribe();
-  // }
+  cols: number;
+  watcher: Subscription;
+  constructor(private mediaObs: MediaObserver) {
+    this.watcher = this.mediaObs
+      .asObservable()
+      .pipe(
+        filter((changes: MediaChange[]) => changes.length > 0),
+        map((changes: MediaChange[]) => changes[0])
+      )
+      .subscribe((change: MediaChange) => {
+        if (change.mqAlias === 'xs') {
+          this.cols = 1;
+        } else if (change.mqAlias === 'sm') {
+          this.cols = 2;
+        } else {
+          this.cols = 3;
+        }
+      });
+  }
+  ngOnInit(): void {}
+  ngOnDestroy() {
+    this.watcher.unsubscribe();
+  }
 }

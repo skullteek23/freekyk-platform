@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { AboutComponent } from './others/about/about.component';
 import { PrivacyComponent } from './others/privacy/privacy.component';
 import { TermsComponent } from './others/terms/terms.component';
-import { PricingComponent } from './others/pricing/pricing.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorComponent } from './error/error.component';
@@ -41,6 +40,7 @@ import { CheckoutComponent } from './cart/checkout/checkout.component';
 import { FillAddressComponent } from './cart/checkout/fill-address/fill-address.component';
 import { CompletePaymentComponent } from './cart/checkout/complete-payment/complete-payment.component';
 import { SavedAddressListComponent } from './cart/checkout/saved-address-list/saved-address-list.component';
+import { PricingComponent } from './others/pricing/pricing.component';
 // export function initializeApp1(afa: AngularFireAuth): any {
 //   return () => {
 //     return new Promise<void>((resolve) => {

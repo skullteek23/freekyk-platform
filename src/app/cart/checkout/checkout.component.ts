@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { CheckoutService } from 'src/app/services/checkout.service';
+import { CheckoutService } from '../../../../src/app/services/checkout.service';
 import {
   OrderBasic,
   OrderAdditionalDetails,
