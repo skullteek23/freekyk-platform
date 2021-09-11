@@ -1,0 +1,2 @@
+To set up preview channel:
+firebase hosting:channel:deploy CHANNEL_ID
