@@ -350,7 +350,7 @@
 <mat-menu #fsMenu>
   <a
     mat-menu-item
-    [routerLink]="['/freestyle', sublink]"
+    [routerLink]="['/freestyle']"
     *ngFor="let sublink of fsSublinks"
   >
     <span class="mat-body-1">{{ sublink | titlecase }}</span>
@@ -373,9 +373,6 @@
   </a>
   <a mat-menu-item [routerLink]="['/dashboard', 'account', 'profile']">
     <span class="mat-body-1">{{ "Account & Settings" | titlecase }}</span>
-  </a>
-  <a mat-menu-item [routerLink]="['/dashboard', 'account', 'orders']">
-    <span class="mat-body-1">{{ "My Orders" | titlecase }}</span>
   </a>
   <a mat-menu-item (click)="onLogout()">
     <span class="mat-body-1">{{ "Logout" | titlecase }}</span>

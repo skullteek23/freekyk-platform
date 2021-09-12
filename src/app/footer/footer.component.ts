@@ -14,7 +14,6 @@ export class FooterComponent implements OnInit {
     { name: 'freestyle', route: 'freestyle/home' },
     { name: 'academies', route: 'academies' },
     { name: 'equipment', route: 'equipment' },
-    { name: 'video editing', route: 'veservices' },
   ];
   about_links = [
     { name: 'about us', route: 'about' },
