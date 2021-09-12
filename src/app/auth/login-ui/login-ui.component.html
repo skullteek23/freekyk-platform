@@ -44,7 +44,6 @@
   </div>
   <mat-divider></mat-divider>
   <form
-    [autocomplete]="isViewLogin()"
     [formGroup]="formData"
     (ngSubmit)="onSubmit()"
     fxLayout="column"
@@ -54,7 +53,13 @@
   >
     <mat-form-field *ngIf="!isViewLogin()" appearance="outline" color="primary">
       <mat-label>Enter full name</mat-label>
-      <input type="text" matInput name="name" formControlName="name" />
+      <input
+        type="text"
+        autocomplete="name"
+        matInput
+        name="name"
+        formControlName="name"
+      />
       <mat-error *ngIf="formData.get('name')?.hasError('pattern')">
         Invalid Name! Please try again
       </mat-error>
@@ -64,7 +69,13 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Enter email address</mat-label>
-      <input type="email" matInput name="email" formControlName="email" />
+      <input
+        type="email"
+        matInput
+        name="email"
+        autocomplete="email"
+        formControlName="email"
+      />
       <mat-error *ngIf="formData.get('email')?.hasError('pattern')">
         Invalid email! Please try again
       </mat-error>
@@ -74,7 +85,13 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Choose a password</mat-label>
-      <input type="password" matInput name="pass" formControlName="pass" />
+      <input
+        autocomplete="current-password"
+        type="password"
+        matInput
+        name="pass"
+        formControlName="pass"
+      />
       <mat-hint
         *ngIf="!isViewLogin() && formData.get('pass')?.value?.length < 8"
         align="end"
