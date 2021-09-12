@@ -56,12 +56,12 @@ export class AuthService {
     this.logoutFromFirebase()
       .then(() => {
         this.store.dispatch(new Logout());
+        this.resetCurrentUser();
         sessionStorage.clear();
         localStorage.removeItem('uid');
         console.log('logged out!');
         this.onSuccesslogOut();
         this.router.navigate(['/']);
-        this.resetCurrentUser();
       })
       .catch((error) => this.mapError(error.code));
   }
@@ -69,9 +69,6 @@ export class AuthService {
     this.forgotPassword()
       .then(() => {
         console.log('password reset link sent!');
-        // this.resetCurrentUser();
-        // this.onSuccesslogOut();
-        // this.router.navigate(['/']);
         this.snackServ.displayCustomMsgLong(
           'Password Reset link has been successfully sent! Please check your email'
         );
@@ -80,7 +77,7 @@ export class AuthService {
   }
   public onChangePassword(newPass: string) {
     this.changePassword(newPass)
-      ?.then(() => {
+      .then(() => {
         console.log('password changed!');
         this.snackServ.displayCustomMsg(
           'Password updated succesfully! Please login again'
@@ -106,13 +103,6 @@ export class AuthService {
       })
       .catch((error) => this.mapError(error));
   }
-  public createProfileByCloudFn(name: string, uid: string) {
-    const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_PROFILE);
-    return callable({ name: name, uid: uid }).toPromise();
-  }
-  public getProfilePhoto() {
-    return this.currentUser?.imgpath;
-  }
   public afterSignin() {
     this.router.navigate(['/dashboard', 'home']);
     this.onSuccesslogIn(this.currentUser?.name);
@@ -121,6 +111,13 @@ export class AuthService {
     const userName = name ? name : this.currentUser?.name;
     this.router.navigate(['/dashboard', 'home']);
     this.onSuccessSignup(userName);
+  }
+  public createProfileByCloudFn(name: string, uid: string) {
+    const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_PROFILE);
+    return callable({ name: name, uid: uid }).toPromise();
+  }
+  public getProfilePhoto() {
+    return this.currentUser?.imgpath;
   }
   public getUID() {
     if (this.currentUser?.uid) console.log('uid recieved from service!');
@@ -220,7 +217,6 @@ export class AuthService {
   private changePassword(newPass: string) {
     return firebase.auth().currentUser?.updatePassword(newPass);
   }
-
   //firebase functions
 
   //error mapper
