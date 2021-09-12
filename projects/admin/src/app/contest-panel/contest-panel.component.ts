@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  ContestBasicInfo,
-  ContestDescription,
-} from 'src/app/shared/interfaces/contest.model';
 import firebase from 'firebase/app';
 import {
   LOREM_IPSUM_LONG,
   LOREM_IPSUM_MEDIUM,
-} from 'src/app/shared/Constants/CONSTANTS';
+} from 'src/app/shared/Constants/LOREM_IPSUM';
+import {
+  ContestBasicInfo,
+  ContestDescription,
+} from 'src/app/shared/interfaces/contest.model';
 
 @Component({
   selector: 'app-contest-panel',

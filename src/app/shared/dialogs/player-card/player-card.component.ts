@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
 import { SocialShareService } from 'src/app/services/social-share.service';
-import { LOREM_IPSUM_SHORT } from '../../Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from '../../Constants/LOREM_IPSUM';
 import { ShareData, Stats } from '../../interfaces/others.model';
 import {
   PlayerMoreInfo,

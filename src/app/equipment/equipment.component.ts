@@ -4,7 +4,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { SocialShareService } from '../services/social-share.service';
-import { LOREM_IPSUM_SHORT } from '../shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from '../shared/Constants/LOREM_IPSUM';
 import { ShareData } from '../shared/interfaces/others.model';
 import { ProdBasicInfo } from '../shared/interfaces/product.model';
 

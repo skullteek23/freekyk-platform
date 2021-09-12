@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SocialShareService } from 'src/app/services/social-share.service';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { ContestInfoComponent } from 'src/app/shared/dialogs/contest-info/contest-info.component';
 import { ContestBasicInfo } from 'src/app/shared/interfaces/contest.model';
 import { ShareData } from 'src/app/shared/interfaces/others.model';

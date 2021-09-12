@@ -10,7 +10,7 @@ import { DashState } from '../../store/dash.reducer';
 import firebase from 'firebase/app';
 import { SocialShareService } from 'src/app/services/social-share.service';
 import { ShareData } from 'src/app/shared/interfaces/others.model';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 @Component({
   selector: 'app-da-ho-profile',

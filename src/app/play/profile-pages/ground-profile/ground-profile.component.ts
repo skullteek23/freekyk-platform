@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SocialShareService } from 'src/app/services/social-share.service';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import {
   GroundBasicInfo,
   GroundMoreInfo,

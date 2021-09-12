@@ -8,7 +8,7 @@ import { SocialShareService } from 'src/app/services/social-share.service';
 import {
   LOREM_IPSUM_LONG,
   LOREM_IPSUM_SHORT,
-} from 'src/app/shared/Constants/CONSTANTS';
+} from 'src/app/shared/Constants/LOREM_IPSUM';
 import { ShareData } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 

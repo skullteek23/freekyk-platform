@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { SocialShareService } from 'src/app/services/social-share.service';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { ShareData } from 'src/app/shared/interfaces/others.model';
 import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';

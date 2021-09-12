@@ -13,7 +13,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { LOREM_IPSUM_LONG } from 'src/app/shared/Constants/CONSTANTS';
+import { LOREM_IPSUM_LONG } from 'src/app/shared/Constants/LOREM_IPSUM';
 import {
   ProdBasicInfo,
   ProdMoreInfo,
