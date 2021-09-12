@@ -8,6 +8,7 @@
 <nav mat-tab-nav-bar>
   <div class="container">
     <a
+      [disabled]="link !== 'home'"
       mat-tab-link
       *ngFor="let link of fsLinks"
       (click)="activeLink = link"

@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
       'standings',
       'grounds',
     ];
-    this.fsSublinks = ['home', 'freestylers', 'leaderboard', 'contests'];
+    this.fsSublinks = ['home'];
     this.morelinks = [
       { name: 'about', route: '/about' },
 

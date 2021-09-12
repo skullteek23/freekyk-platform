@@ -22,7 +22,7 @@ export class AboutComponent implements OnInit {
         twitter: 'https://twitter.com/Hrdcre_Gamer023',
       },
       imgpath:
-        'https://firebasestorage.googleapis.com/v0/b/freekyk8.appspot.com/o/IMG_20191115_141200%20(1).jpg?alt=media&token=cf08c96f-f997-4095-ac0b-08d68e16bb40',
+        'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Freekyk_Team%20(2).jpg?alt=media&token=0968c838-7119-4372-be63-3ab9bf898fbb',
     };
     this.ankit = {
       name: 'Ankit Singh',
@@ -33,7 +33,7 @@ export class AboutComponent implements OnInit {
         instagram: 'https://www.instagram.com/ankit.singh.0.123/',
       },
       imgpath:
-        'https://firebasestorage.googleapis.com/v0/b/freekyk8.appspot.com/o/My%20Photo(1).JPG?alt=media&token=7235ea66-9288-417b-b962-b25f5dba70fb',
+        'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Freekyk_Team%20(1).JPG?alt=media&token=fb7a4acf-0856-46f4-a905-001c51ec0d6d',
     };
   }
 }

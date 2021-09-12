@@ -66,7 +66,6 @@ const routes: Routes = [
       import('./support/support.module').then((m) => m.SupportModule),
   },
   { path: 'p/:playerid', component: PlayerProfileComponent },
-  { path: 'f/:freestylerid', component: FreestylerProfileComponent },
   { path: 't/:teamid', component: TeamProfileComponent },
   { path: 's/:seasonid', component: SeasonProfileComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
@@ -77,7 +76,6 @@ const routes: Routes = [
     component: CartComponent,
   },
   { path: 'about', component: AboutComponent },
-  { path: 'pricing', component: PricingComponent },
   { path: 'privacypolicy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
 

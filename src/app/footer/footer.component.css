@@ -10,3 +10,8 @@ a div {
   margin-top: 32px;
   margin-bottom: 32px;
 }
+@media only screen and (max-width:959px) {
+  .gap-bottom{
+    margin-bottom: 32px;
+  }
+}
