@@ -104,6 +104,7 @@ export class LoginUiComponent implements OnInit {
 
   onGoogleLogin() {
     this.disableAllButtons = true;
+    this.isLoading = true;
     this.authServ
       .onGoogleSignin()
       .then((user) => {
@@ -122,6 +123,7 @@ export class LoginUiComponent implements OnInit {
 
   onFacebookLogin() {
     this.disableAllButtons = true;
+    this.isLoading = true;
     this.authServ
       .onFacebookSignin()
       .then((user) => {
