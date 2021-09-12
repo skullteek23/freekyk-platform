@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { Invite } from '../../../shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
 
@@ -88,7 +89,6 @@ export class TeamcreateComponent implements OnInit {
     this.error = false;
   }
   async createTeam(logo: string, image: string) {
-    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
     const uid = localStorage.getItem('uid');
 
     const FunctionData = {
@@ -100,7 +100,7 @@ export class TeamcreateComponent implements OnInit {
       },
       tcaptainId: uid,
     };
-    const callable = this.ngFunc.httpsCallable('createTeam');
+    const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_TEAM);
     return await callable(FunctionData).toPromise();
   }
   createInvites(selArray: { name: string; id: string }[]) {

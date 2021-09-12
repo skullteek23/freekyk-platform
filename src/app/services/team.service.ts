@@ -30,6 +30,7 @@ import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.compon
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { DashState } from '../dashboard/store/dash.reducer';
+import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 @Injectable()
 export class TeamService implements OnDestroy {
   public onOpenTeamSettingsDialog() {
@@ -270,8 +271,7 @@ export class TeamService implements OnDestroy {
   }
   onDeleteTeam() {
     const tid = sessionStorage.getItem('tid');
-    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
-    const callable = this.ngFunc.httpsCallable('deleteTeam');
+    const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.DELETE_TEAM);
     callable({ teamId: tid })
       .toPromise()
       .then(() => {

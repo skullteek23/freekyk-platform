@@ -7,6 +7,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 
 @Component({
@@ -53,8 +54,9 @@ export class TeamjoinComponent implements OnInit {
       name: playerName,
     };
     console.log(FunctionData);
-    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
-    const callable = this.ngFunc.httpsCallable('sendJoinRequest');
+    const callable = this.ngFunc.httpsCallable(
+      CLOUD_FUNCTIONS.SEND_JOIN_REQUEST_TO_TEAMS
+    );
     return await callable(FunctionData).toPromise();
   }
   getTeams() {
