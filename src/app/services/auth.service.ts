@@ -1,5 +1,3 @@
-import 'firebase/auth';
-import 'firebase/functions';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import firebase from 'firebase/app';
@@ -11,6 +9,7 @@ import { uData, logDetails } from '../shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { Logout } from '../store/clearState.reducer';
 import { AppState } from '../store/app.reducer';
+import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 @Injectable({
   providedIn: 'root',
 })
@@ -36,17 +35,13 @@ export class AuthService {
 
   // public accessible functions
   public onlogin(logData: logDetails) {
-    return this.loginOnFirebase(logData.email, logData.passw);
+    return this.loginOnFirebase(logData.email, logData.pass);
   }
 
-  public onSignup(data: logDetails) {
-    return this.signupOnFirebase(data.email, data.passw);
+  public onSignup(logData: logDetails) {
+    return this.signupOnFirebase(logData.email, logData.pass);
   }
-  public createProfileByClouddFn(cldData: { name: string; uid: string }) {
-    // this.ngFunc.useFunctionsEmulator('http://localhost:5001');
-    const callable = this.ngFunc.httpsCallable('createProfile');
-    return callable(cldData).toPromise();
-  }
+
   public onError(error: string) {
     this.mapError(error);
   }
@@ -111,17 +106,21 @@ export class AuthService {
       })
       .catch((error) => this.mapError(error));
   }
+  public createProfileByCloudFn(name: string, uid: string) {
+    const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_PROFILE);
+    return callable({ name: name, uid: uid }).toPromise();
+  }
   public getProfilePhoto() {
     return this.currentUser?.imgpath;
   }
   public afterSignin() {
-    this.onSuccesslogIn(this.currentUser?.name);
     this.router.navigate(['/dashboard', 'home']);
+    this.onSuccesslogIn(this.currentUser?.name);
   }
   public afterSignup(name?: string | null) {
-    if (name) this.onSuccessSignup(name);
-    else this.onSuccessSignup(this.currentUser?.name);
+    const userName = name ? name : this.currentUser?.name;
     this.router.navigate(['/dashboard', 'home']);
+    this.onSuccessSignup(userName);
   }
   public getUID() {
     if (this.currentUser?.uid) console.log('uid recieved from service!');
@@ -191,10 +190,11 @@ export class AuthService {
 
   //firebase functions
   private signupOnFirebase(newEmail: string, newPass: string) {
-    return this.ngAuth.createUserWithEmailAndPassword(newEmail, newPass);
+    if (newEmail || newPass)
+      return this.ngAuth.createUserWithEmailAndPassword(newEmail, newPass);
   }
   private loginOnFirebase(em: string, pass: string) {
-    return this.ngAuth.signInWithEmailAndPassword(em, pass);
+    if (em || pass) return this.ngAuth.signInWithEmailAndPassword(em, pass);
   }
   private signinGoogle() {
     return this.ngAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());

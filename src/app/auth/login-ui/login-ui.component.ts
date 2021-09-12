@@ -2,6 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import {
+  ALPHA_W_SPACE,
+  EMAIL,
+  PASS_STRONG,
+} from 'src/app/shared/Constants/REGEX';
+import { logDetails } from 'src/app/shared/interfaces/others.model';
 
 @Component({
   selector: 'app-login-ui',
@@ -10,122 +16,138 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 })
 export class LoginUiComponent implements OnInit {
   @Input('type') view: 'login' | 'signup' = 'login';
-  formData: FormGroup = new FormGroup({});
-  isLoading: boolean = false;
+  formData = new FormGroup({});
+  disableAllButtons = false;
+  isLoading = false;
   constructor(
     private authServ: AuthService,
     private snackServ: SnackbarService
   ) {}
   ngOnInit(): void {
-    if (this.checkView())
-      this.formData = new FormGroup({
-        email: new FormControl(null, Validators.required),
-        passw: new FormControl(null, Validators.required),
-      });
-    else
-      this.formData = new FormGroup({
-        name: new FormControl(null, Validators.required),
-        email: new FormControl(null, Validators.required),
-        passw: new FormControl(null, Validators.required),
-      });
+    this.initForm();
   }
-  checkView() {
+
+  isViewLogin() {
     return this.view == 'login';
   }
-  onSubmit() {
-    this.isLoading = true;
-    if (!this.formData.valid) {
-      this.snackServ.displayCustomMsg('Invalid Form! Please try again.');
-    }
-    if (this.checkView()) {
-      const userData = {
-        email: this.formData.get('email')?.value,
-        passw: this.formData.get('passw')?.value,
-        name: '',
-      };
-      let loginSnap = this.authServ.onlogin(userData);
-      loginSnap
-        .then(() => {
-          this.authServ.afterSignin();
-          this.isLoading = false;
-        })
-        .catch((error) => {
-          this.isLoading = false;
-          this.authServ.onError(error['code']);
-        });
+
+  initForm() {
+    if (this.isViewLogin()) {
+      this.formData = new FormGroup({
+        email: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(EMAIL),
+        ]),
+        pass: new FormControl(null, Validators.required),
+      });
     } else {
-      const userData = {
-        email: this.formData.get('email')?.value,
-        passw: this.formData.get('passw')?.value,
-        name: this.formData.get('name')?.value,
-      };
-      let signupSnap = this.authServ.onSignup(userData);
-      signupSnap
-        .then((user) => {
-          sessionStorage.setItem('name', userData.name);
-          let cloudSnap = this.authServ.createProfileByClouddFn({
-            name: userData.name,
-            uid: user.user.uid,
-          });
-          cloudSnap
-            .then(() => {
-              this.authServ.afterSignup(userData.name);
-              this.isLoading = false;
-            })
-            .catch((error) => this.authServ.onError(error['code']));
-        })
-        .catch((error) => {
-          this.isLoading = false;
-          this.authServ.onError(error['code']);
-        });
+      this.formData = new FormGroup({
+        name: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(ALPHA_W_SPACE),
+        ]),
+        email: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(EMAIL),
+        ]),
+        pass: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(PASS_STRONG),
+        ]),
+      });
     }
   }
 
   onForgotPassword() {
     this.authServ.onForgotPassword();
   }
+
+  onSubmit() {
+    this.disableAllButtons = true;
+    this.isLoading = true;
+    if (!this.formData.valid) {
+      this.snackServ.displayCustomMsg('Invalid Details! Please try again.');
+      this.disableAllButtons = false;
+      return;
+    }
+    if (this.isViewLogin()) {
+      const userData: logDetails = {
+        email: this.formData.get('email')?.value,
+        pass: this.formData.get('pass')?.value,
+      };
+      let loginSnap = this.authServ.onlogin(userData);
+      loginSnap
+        .then(() => this.authServ.afterSignin())
+        .catch((error) => this.onErrorAfterSignin(error))
+        .finally(this.cleanUpAfterSignin.bind(this));
+    } else {
+      const userData: logDetails = {
+        email: this.formData.get('email')?.value,
+        pass: this.formData.get('pass')?.value,
+        name: this.formData.get('name')?.value,
+      };
+      let signupSnap = this.authServ.onSignup(userData);
+      signupSnap
+        .then((user) => {
+          sessionStorage.setItem('name', userData.name);
+          let cloudSnap = this.authServ.createProfileByCloudFn(
+            userData.name,
+            user.user.uid
+          );
+          cloudSnap
+            .then(() => this.authServ.afterSignup(userData.name))
+            .catch((error) => this.onErrorAfterSignin(error))
+            .finally(this.cleanUpAfterSignin.bind(this));
+        })
+        .catch((error) => this.onErrorAfterSignin(error));
+    }
+  }
+
   onGoogleLogin() {
+    this.disableAllButtons = true;
     this.authServ
       .onGoogleSignin()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
-        let cloudSnap = this.authServ.createProfileByClouddFn({
-          name: user.user.displayName,
-          uid: user.user.uid,
-        });
+        let cloudSnap = this.authServ.createProfileByCloudFn(
+          user.user.displayName,
+          user.user.uid
+        );
         cloudSnap
-          .then(() => {
-            this.authServ.afterSignup(user.user.displayName);
-            this.isLoading = false;
-          })
-          .catch((error) => this.authServ.onError(error['code']));
+          .then(() => this.authServ.afterSignup(user.user.displayName))
+          .catch((error) => this.onErrorAfterSignin(error))
+          .finally(this.cleanUpAfterSignin.bind(this));
       })
-      .catch((error) => {
-        this.isLoading = false;
-        this.authServ.onError(error['code']);
-      });
-    // alert('currently disabled');
+      .catch((error) => this.onErrorAfterSignin(error));
   }
+
   onFacebookLogin() {
+    this.disableAllButtons = true;
     this.authServ
       .onFacebookSignin()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
-        let cloudSnap = this.authServ.createProfileByClouddFn({
-          name: user.user.displayName,
-          uid: user.user.uid,
-        });
+        let cloudSnap = this.authServ.createProfileByCloudFn(
+          user.user.displayName,
+          user.user.uid
+        );
         cloudSnap
-          .then(() => {
-            this.authServ.afterSignup(user.user.displayName);
-            this.isLoading = false;
-          })
-          .catch((error) => this.authServ.onError(error['code']));
+          .then(() => this.authServ.afterSignup(user.user.displayName))
+          .catch((error) => this.onErrorAfterSignin(error))
+          .finally(this.cleanUpAfterSignin.bind(this));
       })
-      .catch((error) => {
-        this.isLoading = false;
-        this.authServ.onError(error['code']);
-      });
-    // alert('currently disabled');
+      .catch((error) => this.onErrorAfterSignin(error));
+  }
+  cleanUpAfterSignin(hideLoading = false) {
+    this.formData.reset();
+    this.formData.markAsUntouched();
+    this.disableAllButtons = false;
+    if (hideLoading) {
+      this.isLoading = false;
+    }
+  }
+  onErrorAfterSignin(error) {
+    this.authServ.onError(error['code']);
+    this.cleanUpAfterSignin(true);
   }
 }

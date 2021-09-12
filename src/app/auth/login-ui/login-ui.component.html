@@ -1,16 +1,23 @@
 <article
+  *ngIf="!isLoading; else loading"
   class="container section-space-top section-space-bottom"
   fxLayout="column"
   fxLayoutGap="32px"
   fxLayoutGap.lt-md="20px"
-  fxLayoutAlign.gt-sm="stretch center"
+  fxLayoutAlign="stretch center"
 >
   <h2 class="mat-title center">
-    {{ checkView() ? "Log In" : "Get Started" }}
+    {{ isViewLogin() ? "Log In" : "Get Started" }}
   </h2>
-  <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="stretch center">
+  <div
+    class="signin-buttons"
+    fxLayout="column"
+    fxLayoutGap="8px"
+    fxLayoutAlign="stretch center"
+  >
     <button
       (click)="onGoogleLogin()"
+      [disabled]="disableAllButtons"
       class="buttonText secondaryButton wb"
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
@@ -21,37 +28,74 @@
     </button>
     <button
       (click)="onFacebookLogin()"
+      [disabled]="disableAllButtons"
       class="buttonText secondaryButton wb"
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
       fxLayout
     >
-      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Google" />
+      <img
+        class="iconSize"
+        src="../../assets/svgs/facebook.svg"
+        alt="Facebook"
+      />
       <span> Continue with Facebook </span>
     </button>
   </div>
   <mat-divider></mat-divider>
   <form
+    [autocomplete]="isViewLogin()"
     [formGroup]="formData"
     (ngSubmit)="onSubmit()"
     fxLayout="column"
     fxLayoutGap="8px"
-    fxLayoutAlign.gt-sm="stretch center"
+    fxLayoutAlign="stretch center"
+    class="auth-form"
   >
-    <mat-form-field *ngIf="!checkView()" appearance="outline" color="primary">
-      <mat-label>Enter your name</mat-label>
+    <mat-form-field *ngIf="!isViewLogin()" appearance="outline" color="primary">
+      <mat-label>Enter full name</mat-label>
       <input type="text" matInput name="name" formControlName="name" />
+      <mat-error *ngIf="formData.get('name')?.hasError('pattern')">
+        Invalid Name! Please try again
+      </mat-error>
+      <mat-error *ngIf="formData.get('name')?.hasError('required')">
+        Required Field!
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
-      <mat-label>Enter your email address</mat-label>
+      <mat-label>Enter email address</mat-label>
       <input type="email" matInput name="email" formControlName="email" />
+      <mat-error *ngIf="formData.get('email')?.hasError('pattern')">
+        Invalid email! Please try again
+      </mat-error>
+      <mat-error *ngIf="formData.get('email')?.hasError('required')">
+        Required Field!
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
-      <mat-label>Enter your password</mat-label>
-      <input type="password" matInput name="passw" formControlName="passw" />
+      <mat-label>Choose a password</mat-label>
+      <input type="password" matInput name="pass" formControlName="pass" />
+      <mat-hint
+        *ngIf="!isViewLogin() && formData.get('pass')?.value?.length < 8"
+        align="end"
+      >
+        {{
+          formData.get("pass")?.value?.length > 0
+            ? formData.get("pass")?.value?.length
+            : 0
+        }}
+        / 8
+      </mat-hint>
+      <mat-error *ngIf="formData.get('pass')?.hasError('pattern')">
+        Password should have atleast 1 lowercase letter, 1 uppercase letter, 1
+        number, 1 special character
+      </mat-error>
+      <mat-error *ngIf="formData.get('pass')?.hasError('required')">
+        Required Field!
+      </mat-error>
     </mat-form-field>
     <a
-      *ngIf="checkView()"
+      *ngIf="isViewLogin()"
       (click)="onForgotPassword()"
       class="forgot_password center"
     >
@@ -60,12 +104,12 @@
     <app-loading *ngIf="isLoading"></app-loading>
     <button
       type="submit"
-      [disabled]="!formData.valid || isLoading"
+      [disabled]="!formData.valid || isLoading || disableAllButtons"
       class="buttonText primaryButton wb"
     >
-      {{ checkView() ? "Login" : "Take me to Dashboard" }}
+      {{ isViewLogin() ? "Login" : "Take me to Dashboard" }}
     </button>
-    <span *ngIf="checkView(); else signinShortcut" class="mat-caption center">
+    <span *ngIf="isViewLogin(); else signinShortcut" class="mat-caption center">
       Don't have an account yet?
       <a [routerLink]="['/signup']">Sign up</a>
     </span>
@@ -79,10 +123,16 @@
   <p class="mat-caption center">
     {{
       "By clicking 'Continue with Google/Facebook' or '" +
-        (checkView() ? "Login" : "Take me to Dashboard") +
+        (isViewLogin() ? "Login" : "Take me to Dashboard") +
         "' above, you acknowledge that you have read and understood, and agree to"
     }}
     <a [routerLink]="['/terms']">Freekyk's Terms & Conditions</a> and
     <a [routerLink]="['/privacypolicy']">Privacy Policy</a> .
   </p>
 </article>
+<ng-template #loading>
+  <div class="loading-container" fxLayoutAlign="center center">
+    <app-loading></app-loading>
+    loading...
+  </div>
+</ng-template>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { JourneyService } from 'src/app/services/journey.service';
-import { YOUTUBE_REGEX } from 'src/app/shared/Constants/CONSTANTS';
+import { YOUTUBE_REGEX } from 'src/app/shared/Constants/REGEX';
 import { FsTrick, journeyVideo } from 'src/app/shared/interfaces/others.model';
 
 @Component({

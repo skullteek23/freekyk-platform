@@ -24,7 +24,7 @@ import {
 } from 'src/app/shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
 import { Timestamp } from '@firebase/firestore-types';
-import { YOUTUBE_REGEX } from 'src/app/shared/Constants/CONSTANTS';
+import { YOUTUBE_REGEX } from 'src/app/shared/Constants/REGEX';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',

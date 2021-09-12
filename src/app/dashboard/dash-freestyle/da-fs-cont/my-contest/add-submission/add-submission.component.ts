@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ContestService } from 'src/app/services/contest.service';
-import { YOUTUBE_REGEX } from 'src/app/shared/Constants/CONSTANTS';
+import { YOUTUBE_REGEX } from 'src/app/shared/Constants/REGEX';
 
 @Component({
   selector: 'app-add-submission',

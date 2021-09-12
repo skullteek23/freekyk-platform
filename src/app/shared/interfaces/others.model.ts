@@ -97,8 +97,8 @@ export interface uData {
 }
 export interface logDetails {
   email: string;
-  passw: string;
-  name: string;
+  pass: string;
+  name?: string;
 }
 export interface statsIcon {
   icon: string;

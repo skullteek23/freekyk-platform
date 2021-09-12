@@ -1,5 +1,3 @@
-export const YOUTUBE_REGEX: string =
-  '(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu.be/|/v=|^youtu.be/|watch%3Fv%3D)([a-zA-Z0-9_-]{11})+';
 export const LOREM_IPSUM_SHORT: string =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris.';
 export const LOREM_IPSUM_MEDIUM: string =

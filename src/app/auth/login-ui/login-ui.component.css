@@ -8,6 +8,26 @@
 .wb {
   max-width: 100% !important;
 }
+.mat-form-field {
+  width: 100%;
+}
+button {
+  width: 100%;
+}
+.auth-form {
+  width: 300px;
+}
+.mat-divider {
+  width: 360px;
+}
+.signin-buttons {
+  width: 300px;
+}
+.loading-container {
+  height: 80vh;
+  width: 80vw;
+  margin: 0 auto;
+}
 @media only screen and (min-width: 959px) {
   .mat-form-field {
     width: 360px;
@@ -15,8 +35,15 @@
   button {
     width: 360px;
   }
+}
+@media only screen and (max-width: 425px) {
+  .auth-form {
+    width: 100%;
+  }
+  .signin-buttons {
+    width: 100%;
+  }
   .mat-divider {
-    width: 360px;
-    min-width: 300px;
+    width: 100%;
   }
 }
