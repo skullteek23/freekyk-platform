@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 
 @Component({
   selector: 'app-play',
@@ -8,16 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./play.component.css'],
 })
 export class PlayComponent implements OnInit, OnDestroy {
-  playLinks: string[] = [
-    'home',
-    'seasons',
-    'players',
-    'teams',
-    'fixtures',
-    'results',
-    'standings',
-    'grounds',
-  ];
+  playLinks: string[] = RouteLinks.PLAY;
   routeSubscription: Subscription;
   activeLink: string = '';
   constructor(private router: Router) {

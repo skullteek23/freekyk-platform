@@ -350,7 +350,7 @@
 <mat-menu #fsMenu>
   <a
     mat-menu-item
-    [routerLink]="['/freestyle']"
+    [routerLink]="['/freestyle', sublink]"
     *ngFor="let sublink of fsSublinks"
   >
     <span class="mat-body-1">{{ sublink | titlecase }}</span>
