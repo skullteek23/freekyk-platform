@@ -11,48 +11,16 @@
 </mat-toolbar>
 <div class="container-2">
   <div class="dialogData">
-    <div fxLayout="column" fxLayoutGap="8px">
-      <p class="mat-body-1 left">Heading 1</p>
+    <div
+      fxLayout="column"
+      fxLayoutGap="8px"
+      *ngFor="let heading of [1, 2, 3, 4, 5]"
+    >
+      <p class="mat-body-1 left">Heading {{ heading }}</p>
 
       <div class="mat-body-2 left">
-        <p mat-line *ngFor="let line of [1, 2, 3]">
-          {{ "Line " + line }}
-        </p>
-      </div>
-    </div>
-    <div fxLayout="column" fxLayoutGap="8px">
-      <p class="mat-body-1 left">Heading 1</p>
-
-      <div class="mat-body-2 left">
-        <p mat-line *ngFor="let line of [1, 2, 3]">
-          {{ "Line " + line }}
-        </p>
-      </div>
-    </div>
-    <div fxLayout="column" fxLayoutGap="8px">
-      <p class="mat-body-1 left">Heading 1</p>
-
-      <div class="mat-body-2 left">
-        <p matLine *ngFor="let line of [1, 2, 3]">
-          {{ "Line " + line }}
-        </p>
-      </div>
-    </div>
-    <div fxLayout="column" fxLayoutGap="8px">
-      <p class="mat-body-1 left">Heading 1</p>
-
-      <div class="mat-body-2 left">
-        <p mat-line *ngFor="let line of [1, 2, 3]">
-          {{ "Line " + line }}
-        </p>
-      </div>
-    </div>
-    <div fxLayout="column" fxLayoutGap="8px">
-      <p class="mat-body-1 left">Heading 1</p>
-
-      <div class="mat-body-2 left">
-        <p mat-line *ngFor="let line of [1, 2, 3]">
-          {{ "Line " + line }}
+        <p mat-line>
+          {{ dummyParagraph }}
         </p>
       </div>
     </div>
