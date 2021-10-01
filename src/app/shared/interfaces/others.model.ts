@@ -215,3 +215,25 @@ export interface GroundTimings {
   5: [];
   6: [];
 }
+
+export interface FilterData {
+  defaultFilterPath: string;
+  filtersObj: {};
+  fetchablefiltersObj?: {};
+}
+export interface QueryInfo {
+  queryItem: string;
+  queryValue: string;
+  queryComparisonSymbol?:
+    | '<='
+    | '>='
+    | '>'
+    | '<'
+    | 'array-contains'
+    | 'in'
+    | '=='
+    | 'array-contains-any'
+    | 'in'
+    | 'not-in'
+    | '!=';
+}

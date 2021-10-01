@@ -23,7 +23,15 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import {
+  FilterHeadingMap,
+  FilterSymbolMap,
+  FilterValueMap,
+  PlayersFilters,
+} from 'src/app/shared/Constants/FILTERS';
 import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
+import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
 
 @Component({
@@ -32,12 +40,13 @@ import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
   styleUrls: ['./pl-players.component.css'],
 })
 export class PlPlayersComponent implements OnInit, OnDestroy {
+  filterTerm: string = null;
   selectedRowIndex;
   onMobile: boolean = false;
   players$: Observable<PlayerBasicInfo[]>;
   totLength: number = 0;
   pageSize: number = 10;
-  playersFilters = ['Location', 'Team', 'Gender'];
+  filterData: FilterData;
   cols = ['jersey', 'player', 'Team', 'Location', 'PlayingPos'];
   lastDoc: QueryDocumentSnapshot<PlayerBasicInfo> = null;
   watcher: Subscription;
@@ -57,6 +66,37 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
           this.onMobile = true;
         else this.onMobile = false;
       });
+    this.filterData = {
+      defaultFilterPath: 'players',
+      filtersObj: PlayersFilters,
+    };
+  }
+  onQueryData(queryInfo: QueryInfo): void {
+    queryInfo = {
+      queryItem: FilterHeadingMap[queryInfo.queryItem],
+      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+        ? FilterSymbolMap[queryInfo.queryItem]
+        : '==',
+      queryValue: FilterValueMap[queryInfo.queryValue],
+    };
+
+    this.players$ = this.ngFire
+      .collection('players', (query) =>
+        query.where(
+          queryInfo.queryItem,
+          queryInfo.queryComparisonSymbol,
+          queryInfo.queryValue
+        )
+      )
+      .get()
+      .pipe(
+        // tap((resp) => {
+        //   console.log(resp);
+        //   this.noSeasons = resp.empty;
+        //   this.isLoading = false;
+        // }),
+        map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo))
+      );
   }
   // ngAfterViewInit() {
 

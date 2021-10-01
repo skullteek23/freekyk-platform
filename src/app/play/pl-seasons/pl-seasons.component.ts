@@ -6,10 +6,12 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { SocialShareService } from 'src/app/services/social-share.service';
 import {
-  LOREM_IPSUM_LONG,
-  LOREM_IPSUM_SHORT,
-} from 'src/app/shared/Constants/LOREM_IPSUM';
-import { ShareData } from 'src/app/shared/interfaces/others.model';
+  FilterHeadingMap,
+  FilterSymbolMap,
+  FilterValueMap,
+  SeasonsFilters,
+} from 'src/app/shared/Constants/FILTERS';
+import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -18,10 +20,11 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./pl-seasons.component.css'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
-  isLoading: boolean = true;
-  noSeasons: boolean = false;
+  filterTerm: string = null;
+  isLoading = true;
+  noSeasons = false;
   seasons$: Observable<SeasonBasicInfo[]>;
-  seasonFilters = ['Premium', 'Location', 'Upcoming', 'Containing Tournaments'];
+  filterData: FilterData;
   watcher: Subscription;
   columns: any;
   constructor(
@@ -31,6 +34,10 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     private title: Title,
     private meta: Meta
   ) {
+    this.filterData = {
+      defaultFilterPath: 'seasons',
+      filtersObj: SeasonsFilters,
+    };
     this.watcher = this.mediaObs
       .asObservable()
       .pipe(
@@ -52,10 +59,10 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getSeasons();
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.watcher.unsubscribe();
   }
-  getSeasons() {
+  getSeasons(): void {
     this.seasons$ = this.ngFire
       .collection('seasons')
       .get()
@@ -64,16 +71,38 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
           this.noSeasons = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => resp.docs.map((doc) => <SeasonBasicInfo>doc.data()))
+        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
       );
   }
-  onShare(season: SeasonBasicInfo) {
-    const ShareData: ShareData = {
-      share_title: season.name,
-      share_desc: LOREM_IPSUM_SHORT,
-      share_url: 'https://freekyk8--h-qcd2k7n4.web.app/' + 's/' + season.name,
-      share_imgpath: season.imgpath,
+  onShare(season: SeasonBasicInfo): void {
+    // share logic here
+  }
+  onQueryData(queryInfo: QueryInfo): void {
+    this.isLoading = true;
+    queryInfo = {
+      queryItem: FilterHeadingMap[queryInfo.queryItem],
+      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+        ? FilterSymbolMap[queryInfo.queryItem]
+        : '==',
+      queryValue: FilterValueMap[queryInfo.queryValue],
     };
-    this.shareServ.onShare(ShareData);
+
+    this.seasons$ = this.ngFire
+      .collection('seasons', (query) =>
+        query.where(
+          queryInfo.queryItem,
+          queryInfo.queryComparisonSymbol,
+          queryInfo.queryValue
+        )
+      )
+      .get()
+      .pipe(
+        tap((resp) => {
+          console.log(resp);
+          this.noSeasons = resp.empty;
+          this.isLoading = false;
+        }),
+        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
+      );
   }
 }

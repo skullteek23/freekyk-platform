@@ -4,9 +4,10 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { SocialShareService } from 'src/app/services/social-share.service';
+import { GroundsFilters } from 'src/app/shared/Constants/FILTERS';
 import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { GroundBasicInfo } from 'src/app/shared/interfaces/ground.model';
-import { ShareData } from 'src/app/shared/interfaces/others.model';
+import { FilterData, ShareData } from 'src/app/shared/interfaces/others.model';
 
 @Component({
   selector: 'app-pl-grounds',
@@ -20,12 +21,16 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
   isLoading = true;
   noGrounds = false;
   grounds$: Observable<GroundBasicInfo[]>;
-  groundsFilters = ['Location', 'Owner', 'Field Type'];
+  filterData: FilterData;
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore,
     private shareServ: SocialShareService
   ) {
+    this.filterData = {
+      defaultFilterPath: 'grounds',
+      filtersObj: GroundsFilters,
+    };
     this.watcher = this.mediaObs
       .asObservable()
       .pipe(

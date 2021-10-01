@@ -19,7 +19,7 @@ export interface TeamBasicInfo {
 }
 export interface TeamMoreInfo {
   tdateCreated: Timestamp;
-  tageCat: number;
+  tageCat: 15 | 19 | 21 | 25 | 30;
   captainName: string;
   tslogan?: string;
   tdesc?: string;

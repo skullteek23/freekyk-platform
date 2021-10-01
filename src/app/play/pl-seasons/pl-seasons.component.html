@@ -1,17 +1,21 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
-    fxHide.gt-sm="true"
-    [filterArray]="seasonFilters"
-  ></app-filters-sm>
+  <!-- <app-filters-sm fxHide.gt-sm="true" [data]="filter"></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
   <app-filters-lg
+    (changeFilter)="onQueryData($event)"
     fxHide.lt-md="true"
-    [filterArray]="seasonFilters"
+    [data]="filterData"
   ></app-filters-lg>
   <!-- desktop filters -->
+
+  <app-search-lg
+    searchPlaceholder="Search seasons by name, location"
+    (searchItem)="filterTerm = $event"
+  >
+  </app-search-lg>
 
   <!-- loading -->
   <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
@@ -31,7 +35,14 @@
       [cols]="columns"
       gutterSize="20px"
     >
-      <mat-grid-tile appCardElevate *ngFor="let season of seasons$ | async">
+      <mat-grid-tile
+        appCardElevate
+        *ngFor="
+          let season of seasons$
+            | async
+            | filterList: 'locCity,locState,name':filterTerm
+        "
+      >
         <div class="seasonContainer">
           <img
             [routerLink]="['/s', season.name]"
@@ -52,7 +63,12 @@
                 {{ season.locCity + ", " + season.locState | slice: 0:50 }}
               </span>
             </div>
-            <button mat-icon-button color="primary" (click)="onShare(season)">
+            <button
+              disabled
+              mat-icon-button
+              color="primary"
+              (click)="onShare(season)"
+            >
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>

@@ -1,16 +1,13 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="resultFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    fxHide.lt-md="true"
-    [filterArray]="resultFilters"
-  ></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->
