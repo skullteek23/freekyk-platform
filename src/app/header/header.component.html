@@ -48,6 +48,7 @@
 
       <!-- cart icon - small -->
       <button
+        disabled
         *ngIf="isLogged && !isLoading"
         mat-icon-button
         color="primary"
@@ -160,6 +161,7 @@
         </button>
 
         <button
+          disabled
           *ngIf="isLogged && !isLoading"
           mat-icon-button
           color="primary"
