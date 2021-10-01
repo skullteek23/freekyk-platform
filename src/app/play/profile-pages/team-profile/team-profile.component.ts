@@ -167,7 +167,7 @@ export class TeamProfileComponent implements OnInit {
             senderName: team.hasTeam.name,
           };
           this.ngFire
-            .collection('players/${this.id}/Notifications')
+            .collection(`players/${this.id}/Notifications`)
             .add(notif)
             .then(() =>
               this.snackServ.displayCustomMsg(
