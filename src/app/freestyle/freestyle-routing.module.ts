@@ -11,13 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: FreestyleComponent,
-    children: [
-      { path: 'home', component: FsHomeComponent },
-      { path: 'freestylers', component: FsFreestylersComponent },
-      { path: 'leaderboard', component: FsLeaderboardComponent },
-      { path: 'contests', component: FsContestsComponent },
-      { path: 'f/:freestylerid', component: FreestylerProfileComponent },
-    ],
+    children: [{ path: 'home', component: FsHomeComponent }],
   },
 ];
 

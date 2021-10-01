@@ -11,12 +11,37 @@
     <!-- <mat-calendar *ngIf="calendar"></mat-calendar> -->
     <span
       style="cursor: pointer"
-      *ngFor="let filter of filters"
+      *ngFor="let filterHeading of filterData.filtersObj | keyvalue"
       [matMenuTriggerFor]="fl"
       fxLayoutAlign="center center"
     >
-      <span class="mat-body-1">{{ filter }}</span>
+      <span class="mat-body-1">{{
+        defaultQuery ? defaultQuery : filterHeading.key
+      }}</span>
       <mat-icon class="material-icons-round">keyboard_arrow_down</mat-icon>
+      <mat-menu #fl>
+        <span
+          (click)="onQueryDefault(filterHeading.key, filterValue)"
+          *ngFor="let filterValue of filterHeading.value"
+          mat-menu-item
+        >
+          {{ filterValue }}
+        </span>
+      </mat-menu>
+    </span>
+    <span
+      style="cursor: pointer"
+      *ngFor="let filterHeading of filterData.fetchablefiltersObj | keyvalue"
+      [matMenuTriggerFor]="fl"
+      fxLayoutAlign="center center"
+    >
+      <span class="mat-body-1">{{ filterHeading.key }}</span>
+      <mat-icon class="material-icons-round">keyboard_arrow_down</mat-icon>
+      <mat-menu #fl>
+        <span *ngFor="let filterValue of filterHeading.value" mat-menu-item>
+          {{ filterValue }}
+        </span>
+      </mat-menu>
     </span>
   </div>
   <div>
@@ -28,17 +53,8 @@
     >
       <mat-icon class="material-icons-round"> clear </mat-icon>
     </button>
-    <button matTooltip="Apply filter" mat-icon-button>
+    <button disabled matTooltip="Filters" mat-icon-button>
       <mat-icon class="material-icons-round"> filter_alt </mat-icon>
     </button>
   </div>
 </div>
-
-<mat-menu #fl>
-  <span
-    *ngFor="let item of [1, 2, 3, 4, 5, 5, 6, 6]; let i = index"
-    mat-menu-item
-  >
-    {{ "Value " + i }}
-  </span>
-</mat-menu>

@@ -1,25 +1,37 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="playersFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
   <app-filters-lg
+    (changeFilter)="onQueryData($event)"
     fxHide.lt-md="true"
-    [filterArray]="playersFilters"
+    [data]="filterData"
   ></app-filters-lg>
   <!-- desktop filters -->
 
+  <app-search-lg
+    searchPlaceholder="Search players by playing position, city"
+    (searchItem)="filterTerm = $event"
+  >
+  </app-search-lg>
+
   <!-- list -->
-  <div class="container section-space-bottom">
+  <div class="container min-height section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
       <mat-list-item
         (click)="onOpenPlayerProfile(player)"
-        *ngFor="let player of players$ | async; last as last"
+        *ngFor="
+          let player of players$
+            | async
+            | filterList: 'locCity,pl_pos':filterTerm;
+          last as last
+        "
       >
         <img
           matListAvatar
@@ -46,7 +58,9 @@
     <ng-template #lgScreen>
       <table
         mat-table
-        [dataSource]="players$ | async"
+        [dataSource]="
+          players$ | async | filterList: 'team.name,locCity,pl_pos':filterTerm
+        "
         class="full-width-table mat-elevation-z8"
       >
         <ng-container matColumnDef="jersey">

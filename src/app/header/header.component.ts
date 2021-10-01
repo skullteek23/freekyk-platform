@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { NotificationsService } from '../services/notifications.service';
+import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 
 @Component({
   selector: 'app-header',
@@ -49,22 +50,13 @@ export class HeaderComponent implements OnInit {
       this.isLoading = false;
     });
 
-    this.dashSublinks = ['home', 'team management', 'freestyle', 'premium'];
-    this.playSublinks = [
-      'home',
-      'seasons',
-      'players',
-      'teams',
-      'fixtures',
-      'results',
-      'standings',
-      'grounds',
-    ];
-    this.fsSublinks = ['home'];
+    this.dashSublinks = RouteLinks.DASHBOARD;
+    this.playSublinks = RouteLinks.PLAY;
+    this.fsSublinks = RouteLinks.FREESTYLE;
     this.morelinks = [
-      { name: 'about', route: '/about' },
+      { name: RouteLinks.OTHERS[0], route: `/${RouteLinks.OTHERS[0]}` },
 
-      { name: 'support', route: '/support' },
+      { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` },
     ];
   }
   onToggleMenu() {

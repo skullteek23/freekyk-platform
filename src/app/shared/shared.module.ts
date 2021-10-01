@@ -58,6 +58,8 @@ import { JerseyPipe } from './pipes/jersey.pipe';
 import { BioPipe } from './pipes/bio.pipe';
 import { ProfilePicPipe } from './pipes/profile-pic.pipe';
 import { ConfirmationBoxComponent } from './dialogs/confirmation-box/confirmation-box.component';
+import { SearchLgComponent } from './components/search-lg/search-lg.component';
+import { FilterListPipe } from './pipes/filter-list.pipe';
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
   exclude: ['tumblr', 'stumble', 'vk'],
@@ -116,6 +118,8 @@ const customConfig: ShareButtonsConfig = {
     BioPipe,
     ProfilePicPipe,
     ConfirmationBoxComponent,
+    SearchLgComponent,
+    FilterListPipe,
   ],
   imports: [
     CommonModule,
@@ -183,6 +187,8 @@ const customConfig: ShareButtonsConfig = {
     JerseyPipe,
     BioPipe,
     ProfilePicPipe,
+    SearchLgComponent,
+    FilterListPipe,
   ],
 })
 export class SharedModule {}

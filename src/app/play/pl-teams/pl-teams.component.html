@@ -1,17 +1,24 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="teFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
   <app-filters-lg
+    (changeFilter)="onQueryData($event)"
     fxHide.lt-md="true"
-    [filterArray]="teFilters"
+    [data]="filterData"
   ></app-filters-lg>
   <!-- desktop filters -->
+
+  <app-search-lg
+    searchPlaceholder="Search teams by name, location"
+    (searchItem)="filterTerm = $event"
+  >
+  </app-search-lg>
 
   <!-- loading -->
   <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
@@ -62,7 +69,11 @@
         <mat-grid-tile
           [routerLink]="['/t', team.tname]"
           appElevateOnHover
-          *ngFor="let team of teams$ | async"
+          *ngFor="
+            let team of teams$
+              | async
+              | filterList: 'tname,locState,locCity':filterTerm
+          "
         >
           <div class="teamContainer">
             <img class="box-image" [src]="team.imgpath" alt="Team Photo" />
