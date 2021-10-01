@@ -15,6 +15,9 @@ export class FreestyleComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
+        if (event.url === '/freestyle') {
+          this.router.navigate(['freestyle/home']);
+        }
         this.activeLink = event.url.slice('/freestyle/'.length);
       }
     });

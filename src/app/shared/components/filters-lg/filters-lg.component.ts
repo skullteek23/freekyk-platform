@@ -13,7 +13,10 @@ export class FiltersLgComponent implements OnInit {
   @Input('showCalendar') calendar = false;
   @Input('margin') addSpacing = true;
 
-  @Input('data') filterData: FilterData;
+  @Input('data') filterData: FilterData = {
+    defaultFilterPath: '',
+    filtersObj: {},
+  };
   @Output() changeFilter = new EventEmitter();
   defaultQuery = '';
 
