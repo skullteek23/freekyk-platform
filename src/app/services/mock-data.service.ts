@@ -30,6 +30,7 @@ import {
   TeamStats,
   Tmember,
 } from '../shared/interfaces/team.model';
+import { MatchFixture } from '../shared/interfaces/match.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -73,14 +74,14 @@ export class MockDataService {
     };
     return this.ngAuth
       .createUserWithEmailAndPassword(user.email, user.pass)
-      .then((user) => {
+      .then((User) => {
         // saving mock uids
         let mockIds: any[] = [];
         mockIds = JSON.parse(localStorage.getItem(this.MOCK_IDS)) as any[];
         if (!mockIds) {
           mockIds = [];
         }
-        mockIds.push(user.user.uid);
+        mockIds.push(User.user.uid);
         localStorage.setItem(this.MOCK_IDS, JSON.stringify(mockIds));
         // saving mock uids
 
@@ -88,7 +89,7 @@ export class MockDataService {
         const callable = this.ngFunc.httpsCallable(
           CLOUD_FUNCTIONS.CREATE_PROFILE
         );
-        return callable({ name, uid: user.user.uid }).toPromise();
+        return callable({ name, uid: User.user.uid }).toPromise();
         // generating mock profiles via cloud function
       });
   }
@@ -411,6 +412,83 @@ export class MockDataService {
 
     return Promise.all(allPromises);
   }
+  addFixturesInFirestore(): void {
+    const fixtures: MatchFixture[] = [];
+    const sid = this.ngFire.createId();
+    for (let i = 0; i < 8; i++) {
+      fixtures.push({
+        date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
+        concluded: false,
+        teams: [`${faker.lorem.word(6)} FC`, `${faker.lorem.word(6)} FC`],
+        logos: [faker.image.people(), faker.image.people()],
+        season: sid,
+        premium: true,
+        type: 'FKC',
+        locCity: faker.address.city(),
+        locState: faker.address.state(),
+        fkc_status: 'R16',
+      } as MatchFixture);
+    }
+
+    for (let i = 0; i < 4; i++) {
+      fixtures.push({
+        date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
+        concluded: false,
+        teams: [`${faker.lorem.word(6)} FC`, `${faker.lorem.word(6)} FC`],
+        logos: [faker.image.people(), faker.image.people()],
+        season: sid,
+        premium: true,
+        type: 'FKC',
+        locCity: faker.address.city(),
+        locState: faker.address.state(),
+        fkc_status: 'R8',
+      } as MatchFixture);
+    }
+
+    fixtures.push({
+      date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
+      concluded: false,
+      teams: [`${faker.lorem.word(6)} FC`, `${faker.lorem.word(6)} FC`],
+      logos: [faker.image.people(), faker.image.people()],
+      season: sid,
+      premium: true,
+      type: 'FKC',
+      locCity: faker.address.city(),
+      locState: faker.address.state(),
+      fkc_status: 'R4',
+    } as MatchFixture);
+
+    fixtures.push({
+      date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
+      concluded: false,
+      teams: [`${faker.lorem.word(6)} FC`, `${faker.lorem.word(6)} FC`],
+      logos: [faker.image.people(), faker.image.people()],
+      season: sid,
+      premium: true,
+      type: 'FKC',
+      locCity: faker.address.city(),
+      locState: faker.address.state(),
+      fkc_status: 'R4',
+    } as MatchFixture);
+
+    fixtures.push({
+      date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
+      concluded: false,
+      teams: [`${faker.lorem.word(6)} FC`, `${faker.lorem.word(6)} FC`],
+      logos: [faker.image.people(), faker.image.people()],
+      season: sid,
+      premium: true,
+      type: 'FKC',
+      locCity: faker.address.city(),
+      locState: faker.address.state(),
+      fkc_status: 'F',
+    } as MatchFixture);
+
+    for (const fixture of fixtures) {
+      const docid = this.ngFire.createId();
+      this.ngFire.collection('allMatches').doc(docid).set(fixture);
+    }
+  }
   private startFromAuth(): any {
     const id = setInterval(() => {
       this.addUsersInFireAuth(
@@ -475,6 +553,7 @@ export class MockDataService {
     // this.startFromSeasons();
     // this.startFromGrounds();
     // this.startFromTeams();
+    // this.addFixturesInFirestore();
   }
 
   // helper functions
