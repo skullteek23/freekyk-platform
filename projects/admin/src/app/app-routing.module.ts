@@ -1,30 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from 'src/app/admin/admin.component';
-import { AddCouponComponent } from 'src/app/admin/equipment-panel/add-coupon/add-coupon.component';
-import { AddProductComponent } from 'src/app/admin/equipment-panel/add-product/add-product.component';
-import { EquipmentPanelComponent } from 'src/app/admin/equipment-panel/equipment-panel.component';
-import { RegiSellerComponent } from 'src/app/admin/equipment-panel/regi-seller/regi-seller.component';
-import { AddSeasonComponent } from 'src/app/admin/season-panel/add-season/add-season.component';
-import { GenFixturesComponent } from 'src/app/admin/season-panel/gen-fixtures/gen-fixtures.component';
-import { SeasonPanelComponent } from 'src/app/admin/season-panel/season-panel.component';
-import { UpdateMrComponent } from 'src/app/admin/season-panel/update-mr/update-mr.component';
-import { ViewSeasonComponent } from 'src/app/admin/season-panel/view-season/view-season.component';
 import { AcademiesPanelComponent } from './academies-panel/academies-panel.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AppComponent } from './app.component';
 import { ContestPanelComponent } from './contest-panel/contest-panel.component';
+import { AddCouponComponent } from './equipment-panel/add-coupon/add-coupon.component';
+import { AddProductComponent } from './equipment-panel/add-product/add-product.component';
+import { EquipmentPanelComponent } from './equipment-panel/equipment-panel.component';
+import { RegiSellerComponent } from './equipment-panel/regi-seller/regi-seller.component';
+import { ErrorComponent } from './error/error.component';
 import { FreestylersPanelComponent } from './freestylers-panel/freestylers-panel.component';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { PlayersPanelComponent } from './players-panel/players-panel.component';
+import { AddSeasonComponent } from './season-panel/add-season/add-season.component';
+import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
+import { SeasonPanelComponent } from './season-panel/season-panel.component';
+import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
+import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
 import { TeamsPanelComponent } from './teams-panel/teams-panel.component';
 import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdminComponent,
+    component: AdminHomeComponent,
     children: [
-      { path: 'home', component: AdminHomeComponent },
       {
         path: 'seasons',
         component: SeasonPanelComponent,
@@ -53,6 +53,15 @@ const routes: Routes = [
       { path: 'contests', component: ContestPanelComponent },
     ],
   },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    data: {
+      message: 'We are sorry, but the page you requested was not found!',
+      code: '404',
+    },
+  },
+  { path: '**', redirectTo: 'error' },
 ];
 
 @NgModule({
