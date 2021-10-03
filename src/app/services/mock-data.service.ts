@@ -414,7 +414,7 @@ export class MockDataService {
   }
   addFixturesInFirestore(): void {
     const fixtures: MatchFixture[] = [];
-    const sid = this.ngFire.createId();
+    const sid = 'tempore Football Season';
     for (let i = 0; i < 8; i++) {
       fixtures.push({
         date: firebase.firestore.Timestamp.fromDate(faker.date.soon()),
