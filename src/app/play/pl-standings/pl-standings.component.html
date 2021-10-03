@@ -7,7 +7,11 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [data]="filterData"
+    (changeFilter)="onChooseSeason($event)"
+  ></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- tab groups -->
