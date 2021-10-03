@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import {
-  FilterHeadingMap,
-  FilterSymbolMap,
-  FilterValueMap,
-  MatchFilters,
-} from 'src/app/shared/Constants/FILTERS';
+import { QueryService } from 'src/app/services/query.service';
+import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
 
@@ -18,11 +13,14 @@ import { FilterData } from 'src/app/shared/interfaces/others.model';
   styleUrls: ['./pl-fixtures.component.css'],
 })
 export class PlFixturesComponent implements OnInit {
-  isLoading: boolean = true;
-  noFixtures: boolean = false;
+  isLoading = true;
+  noFixtures = false;
   fixtures$: Observable<MatchFixture[]>;
   filterData: FilterData;
-  constructor(private ngFire: AngularFirestore) {}
+  constructor(
+    private ngFire: AngularFirestore,
+    private queryServ: QueryService
+  ) {}
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'allMatches',
@@ -30,7 +28,7 @@ export class PlFixturesComponent implements OnInit {
     };
     this.getFixtures();
   }
-  getFixtures() {
+  getFixtures(): void {
     this.fixtures$ = this.ngFire
       .collection('allMatches', (query) =>
         query.where('concluded', '==', false)
@@ -41,30 +39,15 @@ export class PlFixturesComponent implements OnInit {
           this.noFixtures = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => <MatchFixture[]>resp.docs.map((doc) => doc.data()))
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture))
       );
   }
-  onQueryData(queryInfo) {
+  onQueryData(queryInfo): void {
     if (queryInfo === null) {
       return this.getFixtures();
     }
-    queryInfo = {
-      queryItem: FilterHeadingMap[queryInfo.queryItem],
-      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
-        ? FilterSymbolMap[queryInfo.queryItem]
-        : '==',
-      queryValue: FilterValueMap[queryInfo.queryValue],
-    };
-
-    this.fixtures$ = this.ngFire
-      .collection('allMatches', (query) =>
-        query.where(
-          queryInfo.queryItem,
-          queryInfo.queryComparisonSymbol,
-          queryInfo.queryValue
-        )
-      )
-      .get()
+    this.fixtures$ = this.queryServ
+      .onQueryMatches(queryInfo, 'allMatches', true)
       .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
   }
 }

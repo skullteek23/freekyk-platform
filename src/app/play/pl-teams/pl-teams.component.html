@@ -29,7 +29,12 @@
     <mat-list *ngIf="onMobile; else lgScreen">
       <mat-list-item
         [routerLink]="['/t', team.tname]"
-        *ngFor="let team of teams$ | async; last as last"
+        *ngFor="
+          let team of teams$
+            | async
+            | filterList: 'tname,locState,locCity':filterTerm;
+          last as last
+        "
       >
         <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" />
 
@@ -39,11 +44,7 @@
         </p>
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-caption">
-            {{
-              (team.locCity ? team.locCity : "NA") +
-                ", " +
-                (team.locState ? team.locState : "NA")
-            }}
+            {{ (team.locCity || "NA") + ", " + (team.locState || "NA") }}
           </span>
         </p>
 
@@ -89,11 +90,7 @@
               <div fxLayout="column">
                 <span class="mat-body-1 center">{{ team.tname }}</span>
                 <span class="mat-caption center">
-                  {{
-                    (team.locCity ? team.locCity : "NA") +
-                      ", " +
-                      (team.locState ? team.locState : "NA")
-                  }}
+                  {{ (team.locCity || "NA") + ", " + (team.locState || "NA") }}
                 </span>
               </div>
               <button

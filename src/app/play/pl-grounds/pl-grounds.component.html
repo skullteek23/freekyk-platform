@@ -50,7 +50,7 @@
               fxLayoutAlign="center start"
             >
               <span class="mat-body-1 left">
-                {{ ground.name | slice: 0:50 }}
+                {{ ground.name | textShorten: 50 }}
               </span>
               <div
                 fxLayout="row"

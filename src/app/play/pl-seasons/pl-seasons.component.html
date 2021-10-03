@@ -57,18 +57,13 @@
               fxLayoutAlign="center start"
             >
               <span class="mat-body-1 left">
-                {{ season.name | slice: 0:50 }}
+                {{ season.name | textShorten: 50 }}
               </span>
               <span class="mat-caption left">
-                {{ season.locCity + ", " + season.locState | slice: 0:50 }}
+                {{ season.locCity + ", " + season.locState | textShorten: 50 }}
               </span>
             </div>
-            <button
-              disabled
-              mat-icon-button
-              color="primary"
-              (click)="onShare(season)"
-            >
+            <button disabled mat-icon-button color="primary">
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>

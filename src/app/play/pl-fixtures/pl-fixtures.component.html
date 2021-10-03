@@ -23,7 +23,7 @@
     <ng-template #placeholder>
       <app-no-items-message items="fixtures"></app-no-items-message>
     </ng-template>
-    <ng-container *ngIf="noFixtures == false; else placeholder">
+    <ng-container *ngIf="noFixtures === false; else placeholder">
       <li *ngFor="let fixture of fixtures$ | async; last as last">
         <app-fixture-basic
           [resultMode]="false"

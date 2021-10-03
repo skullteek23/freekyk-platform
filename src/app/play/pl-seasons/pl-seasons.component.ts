@@ -1,17 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { Meta, Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { SocialShareService } from 'src/app/services/social-share.service';
-import {
-  FilterHeadingMap,
-  FilterSymbolMap,
-  FilterValueMap,
-  SeasonsFilters,
-} from 'src/app/shared/Constants/FILTERS';
-import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
+import { QueryService } from 'src/app/services/query.service';
+import { SeasonsFilters } from 'src/app/shared/Constants/FILTERS';
+import { FilterData } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -20,47 +14,46 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./pl-seasons.component.css'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
-  filterTerm: string = null;
   isLoading = true;
   noSeasons = false;
+  filterTerm: string = null;
   seasons$: Observable<SeasonBasicInfo[]>;
   filterData: FilterData;
-  watcher: Subscription;
-  columns: any;
+  subscriptions = new Subscription();
+  columns: number;
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private shareServ: SocialShareService,
-    private title: Title,
-    private meta: Meta
-  ) {
+    private queryServ: QueryService
+  ) {}
+  ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'seasons',
       filtersObj: SeasonsFilters,
     };
-    this.watcher = this.mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'xs') {
-          this.columns = 1;
-        } else if (change.mqAlias === 'sm') {
-          this.columns = 2;
-        } else if (change.mqAlias === 'md') {
-          this.columns = 3;
-        } else {
-          this.columns = 4;
-        }
-      });
-  }
-  ngOnInit(): void {
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'xs') {
+            this.columns = 1;
+          } else if (change.mqAlias === 'sm') {
+            this.columns = 2;
+          } else if (change.mqAlias === 'md') {
+            this.columns = 3;
+          } else {
+            this.columns = 4;
+          }
+        })
+    );
     this.getSeasons();
   }
   ngOnDestroy(): void {
-    this.watcher.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
   getSeasons(): void {
     this.seasons$ = this.ngFire
@@ -74,38 +67,17 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
         map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
       );
   }
-  onShare(season: SeasonBasicInfo): void {
-    // share logic here
-  }
-  onQueryData(queryInfo: QueryInfo): void {
+  onQueryData(queryInfo): void {
     this.isLoading = true;
     if (queryInfo === null) {
       return this.getSeasons();
     }
-    queryInfo = {
-      queryItem: FilterHeadingMap[queryInfo.queryItem],
-      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
-        ? FilterSymbolMap[queryInfo.queryItem]
-        : '==',
-      queryValue: FilterValueMap[queryInfo.queryValue],
-    };
-
-    this.seasons$ = this.ngFire
-      .collection('seasons', (query) =>
-        query.where(
-          queryInfo.queryItem,
-          queryInfo.queryComparisonSymbol,
-          queryInfo.queryValue
-        )
-      )
-      .get()
-      .pipe(
-        tap((resp) => {
-          console.log(resp);
-          this.noSeasons = resp.empty;
-          this.isLoading = false;
-        }),
-        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
-      );
+    this.seasons$ = this.queryServ.onQueryData(queryInfo, 'seasons').pipe(
+      tap((resp) => {
+        this.noSeasons = resp.empty;
+        this.isLoading = false;
+      }),
+      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
+    );
   }
 }
