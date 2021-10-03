@@ -1,0 +1,76 @@
+<div
+  (click)="openFixture()"
+  class="box"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+>
+  <div fxFlex="<grow>" fxLayout="column" fxLayoutGap="12px">
+    <div
+      class="box_inner-1"
+      fxLayout="row"
+      fxLayoutGap="8px"
+      fxLayoutlign="center center"
+    >
+      <img
+        [src]="match?.logos[0] || 'assets/images/dummy_player_sm.jpg'"
+        [alt]="match?.id"
+        class="teAvatar"
+      />
+      <span class="mat-caption" fxLayoutAlign="start center">
+        {{ match?.teams[0] | textShorten: 15 }}
+        <mat-icon
+          fxLayoutAlign="center center"
+          *ngIf="match?.concluded && match?.score[0] > match?.score[1]"
+          >sports_soccer</mat-icon
+        >
+      </span>
+      <span
+        class="score mat-body-2"
+        *ngIf="match?.concluded"
+        fxLayoutAlign="center center"
+        >{{ match?.score[0] }}</span
+      >
+    </div>
+
+    <div
+      class="box_inner-2"
+      fxLayout="row"
+      fxLayoutGap="8px"
+      fxLayoutlign="center center"
+    >
+      <img
+        [src]="match?.logos[0] || 'assets/images/dummy_player_sm.jpg'"
+        [alt]="match?.id"
+        class="teAvatar"
+      />
+      <span class="mat-caption" fxLayoutAlign="start center">
+        {{ match?.teams[1] | textShorten: 15 }}
+        <mat-icon
+          fxLayoutAlign="center center"
+          *ngIf="match?.concluded && match?.score[0] < match?.score[1]"
+          >sports_soccer</mat-icon
+        >
+      </span>
+      <span
+        class="score mat-body-2"
+        *ngIf="match?.concluded"
+        fxLayoutAlign="center center"
+        >{{ match?.score[1] }}</span
+      >
+    </div>
+  </div>
+  <div
+    *ngIf="!match?.concluded"
+    class="box_inner-v mat-body-1"
+    fxFlex="40%"
+    fxLayoutAlign="center center"
+    fxLayout="column"
+  >
+    <span>
+      {{ checkTBD(match?.date.toDate()) }}
+    </span>
+    <span>
+      {{ match?.date.toDate() | date: "mediumDate" }}
+    </span>
+  </div>
+</div>

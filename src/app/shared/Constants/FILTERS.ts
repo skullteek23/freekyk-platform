@@ -21,7 +21,7 @@ export const MatchFilters = {
   ],
 };
 export const StandingsFilters = {
-  ABC: [],
+  Season: [],
 };
 export const GroundsFilters = {
   Owner: ['Freekyk', 'Public', 'Private'],

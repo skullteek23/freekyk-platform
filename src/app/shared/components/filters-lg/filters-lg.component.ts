@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { FilterData } from '../../interfaces/others.model';
 
@@ -20,12 +21,13 @@ export class FiltersLgComponent implements OnInit {
   @Output() changeFilter = new EventEmitter();
   defaultQuery = '';
 
-  constructor() {}
+  constructor(private snackServ: SnackbarService) {}
   ngOnInit(): void {}
   onResetFilter(): void {
     this.changeFilter.emit(null);
   }
   onQueryDefault(queryItem: string, queryValue: string | boolean): void {
+    this.snackServ.displayApplied();
     this.changeFilter.emit({ queryItem, queryValue });
   }
 }
