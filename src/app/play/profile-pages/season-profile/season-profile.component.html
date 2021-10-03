@@ -59,23 +59,19 @@
         class="mat-body-1 align"
         [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }"
       >
-        {{ ((seasonMoreInfo$ | async)?.description | slice: 0:100) + "..." }}
+        {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p>
       <div
         fxLayout.lt-md="column"
         fxLayoutAlign="center start"
         fxLayoutGap="16px"
       >
-        <button
-          [disabled]="isLocked$ | async"
-          (click)="onParticipate()"
-          class="primaryButton buttonText"
-        >
+        <button (click)="onParticipate()" class="primaryButton buttonText">
           <div fxLayoutGap="8px" fxLayoutAlign="center center">
             <span>Participate</span>
-            <span *ngIf="isLocked$ | async" class="material-icons-round">
+            <!-- <span *ngIf="isLocked$ | async" class="material-icons-round">
               lock
-            </span>
+            </span> -->
           </div>
         </button>
         <button
@@ -86,7 +82,7 @@
           Go To standings
         </button>
       </div>
-      <div *ngIf="isLocked$ | async">
+      <!-- <div *ngIf="isLocked$ | async">
         <span class="mat-caption"> For Premium Members Only. </span>
         <a
           class="mat-caption"
@@ -95,7 +91,7 @@
         >
           Get Premium</a
         >
-      </div>
+      </div> -->
     </div>
   </section>
 </div>

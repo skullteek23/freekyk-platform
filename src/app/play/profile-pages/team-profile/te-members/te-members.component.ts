@@ -3,9 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
 import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
-import { TeamMembers, Tmember } from 'src/app/shared/interfaces/team.model';
+import { Tmember } from 'src/app/shared/interfaces/team.model';
 import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
-import { PlayerProfileComponent } from '../../player-profile/player-profile.component';
 
 @Component({
   selector: 'app-te-members',
@@ -13,27 +12,28 @@ import { PlayerProfileComponent } from '../../player-profile/player-profile.comp
   styleUrls: ['./te-members.component.css'],
 })
 export class TeMembersComponent implements OnInit {
-  @Input('members') teamMembers: Tmember[] = [];
+  @Input() members: Tmember[] = [];
   plFilters = ['Playing Position'];
   constructor(private dialog: MatDialog, private ngFire: AngularFirestore) {}
   ngOnInit(): void {}
-  async onOpenPlayerProfile(pid: string) {
-    let playersnap = await this.ngFire
+  onOpenPlayerProfile(pid: string): void {
+    this.ngFire
       .collection('players')
       .doc(pid)
       .get()
       .pipe(
         map((resp) => {
-          return <PlayerBasicInfo>{
+          return {
             id: pid,
-            ...(<PlayerBasicInfo>resp.data()),
-          };
+            ...(resp.data() as PlayerBasicInfo),
+          } as PlayerBasicInfo;
         })
       )
-      .toPromise();
-    const dialogRef = this.dialog.open(PlayerCardComponent, {
-      panelClass: 'fk-dialogs',
-      data: playersnap,
-    });
+      .subscribe((response) => {
+        const dialogRef = this.dialog.open(PlayerCardComponent, {
+          panelClass: 'fk-dialogs',
+          data: response,
+        });
+      });
   }
 }
