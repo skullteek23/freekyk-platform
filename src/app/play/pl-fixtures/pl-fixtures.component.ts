@@ -47,7 +47,7 @@ export class PlFixturesComponent implements OnInit {
       return this.getFixtures();
     }
     this.fixtures$ = this.queryServ
-      .onQueryMatches(queryInfo, 'allMatches', true)
+      .onQueryMatches(queryInfo, 'allMatches', false)
       .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
   }
 }

@@ -38,7 +38,7 @@ export class QueryService {
   onQueryMatches(
     queryInfo: QueryInfo,
     collectionName: string,
-    isFixtures: boolean
+    isConcluded: boolean
   ): Observable<QuerySnapshot<unknown>> {
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],
@@ -56,7 +56,7 @@ export class QueryService {
             queryInfo.queryComparisonSymbol,
             queryInfo.queryValue
           )
-          .where('concluded', '==', isFixtures)
+          .where('concluded', '==', isConcluded)
       )
       .get();
   }

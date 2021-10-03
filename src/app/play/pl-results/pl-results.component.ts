@@ -45,7 +45,7 @@ export class PlResultsComponent implements OnInit {
       return this.getResults();
     }
     this.results$ = this.queryServ
-      .onQueryMatches(queryInfo, 'allMatches', false)
+      .onQueryMatches(queryInfo, 'allMatches', true)
       .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
   }
 }
