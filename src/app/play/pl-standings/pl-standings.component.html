@@ -10,15 +10,12 @@
   <app-filters-lg
     fxHide.lt-md="true"
     [data]="filterData"
-    (changeFilter)="onChooseSeason($event)"
+    (changeFilter)="onQueryData($event)"
   ></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- tab groups -->
-  <mat-tab-group
-    (selectedTabChange)="onChangeTab($event)"
-    class="container section-space-bottom"
-  >
+  <mat-tab-group class="container section-space-bottom">
     <mat-tab [disabled]="!seasonChosen" label="Knockout Groups">
       <ng-template matTabContent>
         <!-- <app-knockout-sm *ngIf="onMobile; else lgScreen"></app-knockout-sm> -->

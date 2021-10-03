@@ -24,15 +24,14 @@ import { AppState } from 'src/app/store/app.reducer';
 })
 export class SeasonProfileComponent implements OnInit {
   isLoading = true;
-  isPremium: boolean = false;
+  isPremium = false;
+  noPhotos = false;
+  error = false;
   sid: string;
   seasonInfo$: Observable<SeasonBasicInfo>;
   seasonMoreInfo$: Observable<SeasonAbout>;
   photos$: Observable<string[]>;
   stats$: Observable<SeasonStats>;
-
-  noPhotos: boolean = false;
-  error: boolean = false;
   isLocked$: Observable<boolean>;
   seasonName: string;
   imgPath: string;
@@ -43,29 +42,12 @@ export class SeasonProfileComponent implements OnInit {
     private ngFire: AngularFirestore,
     private enlServ: EnlargeService,
     private router: Router
-  ) {
-    this.seasonName = route.snapshot.params['seasonid'];
+  ) {}
+  ngOnInit(): void {
+    this.seasonName = this.route.snapshot.params.seasonid;
     this.getSeasonInfo();
   }
-  ngOnInit(): void {
-    this.checkMembership();
-  }
-  checkMembership() {
-    const uid = localStorage.getItem('uid');
-    this.isLocked$ = this.ngFire
-      .collection('players/' + uid + '/additionalInfo')
-      .doc('membershipInfo')
-      .get()
-      .pipe(
-        map((resp) => {
-          if (resp.exists == false) return true;
-          this.isPremium = (<MembershipInfo>resp.data()).premium;
-          return !this.isPremium;
-        }),
-        share()
-      );
-  }
-  getSeasonInfo() {
+  getSeasonInfo(): void {
     this.seasonInfo$ = this.ngFire
       .collection('seasons', (query) =>
         query.where('name', '==', this.seasonName).limit(1)
@@ -86,7 +68,10 @@ export class SeasonProfileComponent implements OnInit {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              <SeasonBasicInfo>{ id: doc.id, ...(<SeasonBasicInfo>doc.data()) }
+              ({
+                id: doc.id,
+                ...(doc.data() as SeasonBasicInfo),
+              } as SeasonBasicInfo)
           )
         ),
         map((resp) => resp[0]),
@@ -94,7 +79,7 @@ export class SeasonProfileComponent implements OnInit {
         share()
       );
   }
-  getSeasonMoreInfo(sid: string) {
+  getSeasonMoreInfo(sid: string): void {
     this.seasonMoreInfo$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
       .doc('moreInfo')
@@ -102,22 +87,25 @@ export class SeasonProfileComponent implements OnInit {
       .pipe(
         tap((resp) => (this.isLoading = false)),
         map(
-          (resp) => <SeasonAbout>{ id: resp.id, ...(<SeasonAbout>resp.data()) }
+          (resp) =>
+            ({ id: resp.id, ...(resp.data() as SeasonAbout) } as SeasonAbout)
         ),
         share()
       );
   }
-  getPhotos(sid: string) {
+  getPhotos(sid: string): void {
     this.photos$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
       .doc('media')
       .get()
       .pipe(
         map((resp) => {
-          if (resp.exists) return <SeasonMedia>resp.data();
+          if (resp.exists) {
+            return resp.data() as SeasonMedia;
+          }
         }),
         map((media: SeasonMedia) => {
-          if (media)
+          if (media) {
             return [
               media.photo_1,
               media.photo_2,
@@ -125,57 +113,61 @@ export class SeasonProfileComponent implements OnInit {
               media.photo_4,
               media.photo_5,
             ];
+          }
           return [];
         })
       );
   }
-  getStats(sid: string) {
+  getStats(sid: string): void {
     this.stats$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
       .doc('statistics')
       .get()
       .pipe(
         map((resp) => {
-          if (resp.exists) return <SeasonStats>resp.data();
+          if (resp.exists) {
+            return resp.data() as SeasonStats;
+          }
         })
       );
   }
-  onParticipate() {
+  onParticipate(): void {
     const uid = localStorage.getItem('uid');
     this.store
       .select('dash')
       .pipe(map((resp) => resp.hasTeam))
       .subscribe(async (team) => {
-        if (team == null)
+        if (!uid) {
+          this.snackServ.displayCustomMsg('Please login to continue!');
+          this.router.navigate(['/login']);
+        } else if (team === null) {
           this.snackServ.displayCustomMsg(
-            'Join or create a team to perform this action!'
+            'Join/create a team to perform this action!'
           );
-        else if (team.capId != uid)
-          this.snackServ.displayCustomMsg(
-            'Only a Captain can perform this action!'
-          );
-        else if (this.isPremium) {
-          let teamSnap = await this.ngFire
+        } else if (team.capId !== uid) {
+          this.snackServ.displayCustomMsg('Please contact your team captain!');
+        } else {
+          const teamSnap = await this.ngFire
             .collection('teams')
             .doc(team.id)
             .get()
-            .pipe(map((resp) => (<TeamBasicInfo>resp.data()).imgpath))
+            .pipe(map((resp) => (resp.data() as TeamBasicInfo).imgpath))
             .toPromise();
           this.ngFire
             .collection('seasons/' + this.sid + '/participants')
             .doc(team.id)
-            .set(<SeasonParticipants>{
+            .set({
               tid: team.id,
               tname: team.name,
               timgpath: teamSnap,
-            })
+            } as SeasonParticipants)
             .then(() =>
               this.snackServ.displayCustomMsg('Participation successful!')
             );
         }
       });
   }
-  onEnlargePhoto() {
+  onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.imgPath);
   }
 }

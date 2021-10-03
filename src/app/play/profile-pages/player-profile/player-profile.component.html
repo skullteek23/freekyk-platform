@@ -39,7 +39,7 @@
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Team</span
               ><span class="mat-body-1 right">{{
-                (plInfo$ | async)?.team != null
+                (plInfo$ | async)?.team !== null
                   ? (plInfo$ | async)?.team.name
                   : "No Team"
               }}</span>
@@ -116,8 +116,8 @@
             <span class="dash-h5 align">{{ "other stats" | titlecase }}</span>
             <div fxLayoutAlign="start" fxLayout="column">
               <span class="mat-body-2">Professional teams played for</span>
-              <i *ngIf="user_teams.length == 0"> none </i>
-              <span class="mat-body-1" *ngFor="let team of user_teams">
+              <i *ngIf="userTeams.length == 0"> none </i>
+              <span class="mat-body-1" *ngFor="let team of userTeams">
                 {{ team }}
               </span>
             </div>
@@ -125,8 +125,8 @@
               <span class="mat-body-2">
                 Professional tournaments participated in
               </span>
-              <i *ngIf="user_tours.length == 0"> none </i>
-              <span class="mat-body-1" *ngFor="let tournas of user_tours">
+              <i *ngIf="userTours.length == 0"> none </i>
+              <span class="mat-body-1" *ngFor="let tournas of userTours">
                 {{ tournas }}
               </span>
             </div>

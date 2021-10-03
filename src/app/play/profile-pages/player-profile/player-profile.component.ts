@@ -22,19 +22,19 @@ export class PlayerProfileComponent implements OnInit {
   plInfo$: Observable<PlayerBasicInfo>;
   addiInfo$: Observable<PlayerMoreInfo>;
   plStats$: Observable<Stats>;
-  isLoading: boolean = true;
-  user_tours: string[] = [];
-  user_teams: string[] = [];
+  isLoading = true;
+  userTours: string[] = [];
+  userTeams: string[] = [];
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.playerId = this.route.snapshot.params['playerid'];
+    this.playerId = this.route.snapshot.params.playerid;
     this.getBasicInfo();
   }
-  getBasicInfo() {
+  getBasicInfo(): void {
     this.plInfo$ = this.ngFire
       .collection('players')
       .doc(this.playerId)
@@ -43,43 +43,45 @@ export class PlayerProfileComponent implements OnInit {
         tap((resp) => {
           if (resp.exists) {
             this.getAdditionalInfo();
-          } else this.router.navigate(['/error']);
+          } else {
+            this.router.navigate(['/error']);
+          }
         }),
-        map((resp) => <PlayerBasicInfo>resp.data()),
+        map((resp) => resp.data() as PlayerBasicInfo),
         share()
       );
   }
-  getAdditionalInfo() {
+  getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)
       .doc('otherInfo')
       .get()
       .pipe(
-        map((resp) => <PlayerMoreInfo>resp.data()),
+        map((resp) => resp.data() as PlayerMoreInfo),
         tap((resp) => {
           if (!!resp) {
-            this.user_teams = !!resp.prof_teams ? resp.prof_teams : [];
-            this.user_tours = !!resp.prof_tours ? resp.prof_tours : [];
+            this.userTeams = !!resp.prof_teams ? resp.prof_teams : [];
+            this.userTours = !!resp.prof_tours ? resp.prof_tours : [];
           }
         }),
         share()
       );
   }
-  onLoadStats() {
+  onLoadStats(): void {
     this.plStats$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)
       .doc('statistics')
       .get()
       .pipe(
-        map((resp) => <BasicStats>resp.data()),
+        map((resp) => resp.data() as BasicStats),
         map(
           (resp) =>
-            <Stats>{
+            ({
               Appearances: resp ? resp.apps : 0,
               Wins: resp ? resp.w : 0,
               Goals: resp ? resp.g : 0,
               Cards: resp ? resp.cards : 0,
-            }
+            } as Stats)
         )
       );
   }

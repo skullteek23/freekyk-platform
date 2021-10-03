@@ -11,14 +11,10 @@
 <!-- desktop filters -->
 
 <mat-list>
-  <mat-list-item *ngFor="let teamMember of teamMembers; last as last">
+  <mat-list-item *ngFor="let teamMember of members; last as last">
     <img
       matListAvatar
-      [src]="
-        teamMember.imgpath_sm
-          ? teamMember.imgpath_sm
-          : '../../../assets/images/dummy_player_sm.jpg'
-      "
+      [src]="teamMember.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
       [alt]="teamMember.name"
     />
     <p matLine fxLayoutAlign="space-between center">

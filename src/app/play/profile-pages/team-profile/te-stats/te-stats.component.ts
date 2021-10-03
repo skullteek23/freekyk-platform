@@ -12,7 +12,7 @@ import { TeamStats } from 'src/app/shared/interfaces/team.model';
 })
 export class TeStatsComponent implements OnInit {
   @Input() data: StatsTeam;
-  watcher: Subscription;
+  subscriptions = new Subscription();
   columns: any;
   height: string = '0';
   stats: string[] = [
@@ -29,23 +29,25 @@ export class TeStatsComponent implements OnInit {
   ];
   gutter: string = '0';
   constructor(private mediaObs: MediaObserver) {
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.columns = 1;
-          this.height = '24px';
-          this.gutter = '0px';
-        } else {
-          this.columns = 5;
-          this.height = '150px';
-          this.gutter = '20px';
-        }
-      });
+    this.subscriptions.add(
+      mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+            this.columns = 1;
+            this.height = '24px';
+            this.gutter = '0px';
+          } else {
+            this.columns = 5;
+            this.height = '150px';
+            this.gutter = '20px';
+          }
+        })
+    );
   }
   ngOnInit() {}
 }
