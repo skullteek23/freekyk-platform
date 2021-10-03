@@ -26,6 +26,7 @@ import { GroundProfileComponent } from './profile-pages/ground-profile/ground-pr
 import { PlayMaterialModule } from './play-material.module';
 import { SeGalleryComponent } from './profile-pages/season-profile/se-gallery/se-gallery.component';
 import { SeStatsComponent } from './profile-pages/season-profile/se-stats/se-stats.component';
+import { KnockoutStripComponent } from './pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { SeStatsComponent } from './profile-pages/season-profile/se-stats/se-sta
     GroundProfileComponent,
     SeGalleryComponent,
     SeStatsComponent,
+    KnockoutStripComponent,
   ],
   imports: [SharedModule, PlayMaterialModule, PlayRoutingModule],
   exports: [],

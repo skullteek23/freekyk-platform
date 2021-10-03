@@ -3,7 +3,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
+import {
+  FilterHeadingMap,
+  FilterSymbolMap,
+  FilterValueMap,
+  MatchFilters,
+} from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
 
@@ -15,7 +20,7 @@ import { FilterData } from 'src/app/shared/interfaces/others.model';
 export class PlFixturesComponent implements OnInit {
   isLoading: boolean = true;
   noFixtures: boolean = false;
-  Fixtures$: Observable<MatchFixture[]>;
+  fixtures$: Observable<MatchFixture[]>;
   filterData: FilterData;
   constructor(private ngFire: AngularFirestore) {}
   ngOnInit(): void {
@@ -26,7 +31,7 @@ export class PlFixturesComponent implements OnInit {
     this.getFixtures();
   }
   getFixtures() {
-    this.Fixtures$ = this.ngFire
+    this.fixtures$ = this.ngFire
       .collection('allMatches', (query) =>
         query.where('concluded', '==', false)
       )
@@ -38,5 +43,28 @@ export class PlFixturesComponent implements OnInit {
         }),
         map((resp) => <MatchFixture[]>resp.docs.map((doc) => doc.data()))
       );
+  }
+  onQueryData(queryInfo) {
+    if (queryInfo === null) {
+      return this.getFixtures();
+    }
+    queryInfo = {
+      queryItem: FilterHeadingMap[queryInfo.queryItem],
+      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+        ? FilterSymbolMap[queryInfo.queryItem]
+        : '==',
+      queryValue: FilterValueMap[queryInfo.queryValue],
+    };
+
+    this.fixtures$ = this.ngFire
+      .collection('allMatches', (query) =>
+        query.where(
+          queryInfo.queryItem,
+          queryInfo.queryComparisonSymbol,
+          queryInfo.queryValue
+        )
+      )
+      .get()
+      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
   }
 }

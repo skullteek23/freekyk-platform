@@ -1,4 +1,7 @@
 <!-- tournament stage headings -->
+<div class="section-space-top mat-subheading-1" fxLayoutAlign="center center">
+  {{ season | titlecase }}
+</div>
 <div class="section-space-top section-space-bottom">
   <span fxFlex="25%" class="mat-body-2 center">Round of 16</span>
   <span fxFlex="25%" class="mat-body-2 center">Quarter Finals</span>
@@ -9,9 +12,13 @@
   </div>
 </div>
 <!-- tournament stage headings -->
+<ng-template #noitem>
+  <app-no-items-message items="tournament"></app-no-items-message>
+</ng-template>
 
 <!-- tournament stages -->
 <div
+  *ngIf="!showEmptyTable; else noitem"
   class="section-space-top stage_container"
   fxLayout="row nowrap"
   fxLayoutGap="20px"
@@ -19,44 +26,11 @@
   <!-- round of 16 -->
   <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
     <div
-      (click)="onOpenFixture('fixture')"
-      *ngFor="let match of [1, 2, 3, 4, 5, 6, 7, 8]"
-      class="primary-bg whiteText match"
+      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
+      *ngFor="let match of r16Matches"
+      class="match"
     >
-      <mat-grid-list cols="3" rowHeight="48px" gutterSize="0px">
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="!result" rowspan="2">
-          <div fxLayout="column">
-            <span class="mat-caption right">
-              {{ getDate() | date: "shortTime" }}
-            </span>
-            <span class="mat-caption right">
-              {{ getDate() | date: "mediumDate" }}
-            </span>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-      </mat-grid-list>
+      <app-knockout-strip [match]="match"></app-knockout-strip>
     </div>
   </div>
   <!-- round of 16 -->
@@ -64,44 +38,11 @@
   <!-- Quarter Finals -->
   <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
     <div
-      (click)="onOpenFixture('fixture')"
-      *ngFor="let match of [1, 2, 3, 4]"
-      class="primary-bg whiteText match"
+      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
+      *ngFor="let match of r8Matches"
+      class="match"
     >
-      <mat-grid-list cols="3" rowHeight="48px" gutterSize="0px">
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="!result" rowspan="2">
-          <div fxLayout="column">
-            <span class="mat-caption right">
-              {{ getDate() | date: "shortTime" }}
-            </span>
-            <span class="mat-caption right">
-              {{ getDate() | date: "mediumDate" }}
-            </span>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-      </mat-grid-list>
+      <app-knockout-strip [match]="match"></app-knockout-strip>
     </div>
   </div>
   <!-- Quarter Finals -->
@@ -109,85 +50,19 @@
   <!-- Semi Finals -->
   <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
     <div
-      (click)="onOpenFixture('fixture')"
-      *ngFor="let match of [1, 2]"
-      class="primary-bg whiteText match"
+      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
+      *ngFor="let match of qFMatches"
+      class="match"
     >
-      <mat-grid-list cols="3" rowHeight="48px" gutterSize="0px">
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="!result" rowspan="2">
-          <div fxLayout="column">
-            <span class="mat-caption right">
-              {{ getDate() | date: "shortTime" }}
-            </span>
-            <span class="mat-caption right">
-              {{ getDate() | date: "mediumDate" }}
-            </span>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-      </mat-grid-list>
+      <app-knockout-strip [match]="match"></app-knockout-strip>
     </div>
   </div>
   <!-- Semi Finals -->
 
   <!-- Final -->
   <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-    <div (click)="onOpenFixture('fixture')" class="primary-bg whiteText match">
-      <mat-grid-list cols="3" rowHeight="48px" gutterSize="0px">
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="!result" rowspan="2">
-          <div fxLayout="column">
-            <span class="mat-caption right">
-              {{ getDate() | date: "shortTime" }}
-            </span>
-            <span class="mat-caption right">
-              {{ getDate() | date: "mediumDate" }}
-            </span>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2">
-          <img
-            src="https://images.unsplash.com/photo-1521731978332-9e9e714bdd20?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80"
-            alt="Team Logo"
-            class="teAvatar"
-          />
-          <span class="mat-body-1">Team Name</span>
-        </mat-grid-tile>
-        <mat-grid-tile *ngIf="result">
-          <span class="mat-body-1">0</span>
-        </mat-grid-tile>
-      </mat-grid-list>
+    <div class="match final">
+      <app-knockout-strip [match]="finalMatch"></app-knockout-strip>
     </div>
   </div>
   <!-- Final -->

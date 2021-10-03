@@ -72,6 +72,9 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     };
   }
   onQueryData(queryInfo: QueryInfo): void {
+    if (queryInfo === null) {
+      return this.getPlayers();
+    }
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],
       queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]

@@ -3,7 +3,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
+import {
+  FilterHeadingMap,
+  FilterSymbolMap,
+  FilterValueMap,
+  MatchFilters,
+} from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
 
@@ -41,5 +46,30 @@ export class PlResultsComponent implements OnInit {
           )
         )
       );
+  }
+  onQueryData(queryInfo) {
+    if (queryInfo === null) {
+      return this.getResults();
+    }
+    queryInfo = {
+      queryItem: FilterHeadingMap[queryInfo.queryItem],
+      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+        ? FilterSymbolMap[queryInfo.queryItem]
+        : '==',
+      queryValue: FilterValueMap[queryInfo.queryValue],
+    };
+
+    this.results$ = this.ngFire
+      .collection('allMatches', (query) =>
+        query
+          .where(
+            queryInfo.queryItem,
+            queryInfo.queryComparisonSymbol,
+            queryInfo.queryValue
+          )
+          .where('concluded', '==', true)
+      )
+      .get()
+      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
   }
 }

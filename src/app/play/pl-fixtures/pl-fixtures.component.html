@@ -7,7 +7,11 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
+  <app-filters-lg
+    fxHide.lt-md="true"
+    [data]="filterData"
+    (changeFilter)="onQueryData($event)"
+  ></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->
@@ -20,7 +24,7 @@
       <app-no-items-message items="fixtures"></app-no-items-message>
     </ng-template>
     <ng-container *ngIf="noFixtures == false; else placeholder">
-      <li *ngFor="let fixture of Fixtures$ | async; last as last">
+      <li *ngFor="let fixture of fixtures$ | async; last as last">
         <app-fixture-basic
           [resultMode]="false"
           [premium]="fixture.premium"

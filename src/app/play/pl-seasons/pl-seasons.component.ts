@@ -79,6 +79,9 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   }
   onQueryData(queryInfo: QueryInfo): void {
     this.isLoading = true;
+    if (queryInfo === null) {
+      return this.getSeasons();
+    }
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],
       queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
