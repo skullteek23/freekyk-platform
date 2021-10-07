@@ -7,6 +7,7 @@ export interface SeasonBasicInfo {
   start_date: Date;
   cont_tour: string[];
   id?: string;
+  participants?: number;
 }
 export interface SeasonAbout {
   description: string;

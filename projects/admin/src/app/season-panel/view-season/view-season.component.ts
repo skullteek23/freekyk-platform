@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { merge, Observable } from 'rxjs';
+import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -10,12 +10,11 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./view-season.component.css'],
 })
 export class ViewSeasonComponent implements OnInit {
-  seasons$: Observable<SeasonBasicInfo[]>;
+  seasons: any[] = [];
   cols = [
     'sno',
     'season',
     'confTeams',
-    'tmatches',
     'fixt',
     'gallery',
     'stats',
@@ -24,23 +23,36 @@ export class ViewSeasonComponent implements OnInit {
   constructor(private ngFire: AngularFirestore) {}
 
   ngOnInit(): void {
-    this.seasons$ = this.ngFire
+    this.ngFire
       .collection('seasons')
       .snapshotChanges()
       .pipe(
         map((docs) =>
           docs.map(
             (doc) =>
-              <SeasonBasicInfo>{
+              ({
                 id: doc.payload.doc.id,
-                ...(<SeasonBasicInfo>doc.payload.doc.data()),
-              }
+                participants: null,
+                ...(doc.payload.doc.data() as SeasonBasicInfo),
+              } as SeasonBasicInfo)
           )
         )
-      );
+      )
+      .subscribe((resp) => (this.seasons = resp));
   }
-  onSelectFixtures() {}
-  onSelectGallery() {}
-  onSelectStats() {}
-  onTerminateSeason() {}
+  onTerminateSeason(seasonid: string) {
+    // this.ngFire.collection('seasons').doc('')
+  }
+  onViewParticipants(seasonid: string): void {
+    console.log(seasonid);
+    this.ngFire
+      .collection(`seasons/${seasonid}/participants`)
+      .valueChanges()
+      .pipe(map((resp) => (resp ? resp.length : 0)))
+      .subscribe((response) => {
+        this.seasons[
+          this.seasons.findIndex((val: SeasonBasicInfo) => val.id === seasonid)
+        ].participants = response;
+      });
+  }
 }

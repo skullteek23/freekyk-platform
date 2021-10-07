@@ -29,10 +29,11 @@ const routes: Routes = [
     path: 'seasons',
     component: SeasonPanelComponent,
     children: [
-      { path: 'add', component: AddSeasonComponent },
       { path: 'view', component: ViewSeasonComponent },
+      { path: 'add', component: AddSeasonComponent },
       { path: 'update', component: UpdateMrComponent },
       { path: 'generate', component: GenFixturesComponent },
+      { path: 'gallery', component: GenFixturesComponent },
     ],
   },
   { path: 'grounds', component: GroundsPanelComponent },
