@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
+import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
 import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   isLogged: boolean = false;
   menuState: boolean;
   sidenavOpen: boolean;
-  profile_picture: string | null = null;
+  profile_picture$: Observable<string | null>;
   playSublinks: string[] = [];
   fsSublinks: string[] = [];
   dashSublinks: string[] = [];
@@ -29,15 +30,15 @@ export class HeaderComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private ngAuth: AngularFireAuth,
-    private notifServ: NotificationsService
+    private notifServ: NotificationsService,
+    private avatarServ: AccountAvatarService
   ) {}
   ngOnInit(): void {
     this.menuState = false;
     this.sidenavOpen = false;
-
+    this.profile_picture$ = this.avatarServ.getProfilePicture();
     this.ngAuth.user.subscribe((user) => {
       if (user !== null) {
-        this.profile_picture = user.photoURL;
         this.isLogged = true;
         this.notifCount$ = this.notifServ.notifsCountChanged.pipe(
           map((resp) => (!!resp ? resp : 0)),

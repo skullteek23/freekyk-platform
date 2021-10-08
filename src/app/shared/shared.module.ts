@@ -60,6 +60,7 @@ import { ProfilePicPipe } from './pipes/profile-pic.pipe';
 import { ConfirmationBoxComponent } from './dialogs/confirmation-box/confirmation-box.component';
 import { SearchLgComponent } from './components/search-lg/search-lg.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
+import { AccountAvatarComponent } from './components/account-avatar/account-avatar.component';
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
   exclude: ['tumblr', 'stumble', 'vk'],
@@ -120,6 +121,7 @@ const customConfig: ShareButtonsConfig = {
     ConfirmationBoxComponent,
     SearchLgComponent,
     FilterListPipe,
+    AccountAvatarComponent,
   ],
   imports: [
     CommonModule,
@@ -189,6 +191,7 @@ const customConfig: ShareButtonsConfig = {
     ProfilePicPipe,
     SearchLgComponent,
     FilterListPipe,
+    AccountAvatarComponent,
   ],
 })
 export class SharedModule {}

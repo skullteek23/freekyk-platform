@@ -3,15 +3,7 @@
   <mat-sidenav #sidenav [mode]="getMode()" position="start">
     <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
-        <img
-          class="prof_pic"
-          *ngIf="(dataImg$ | async) != null; else accountCircle"
-          [src]="dataImg$ | async"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round icon">account_circle</span>
-        </ng-template>
+        <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <span class="mat-body-2"> {{ displayName | titlecase }} </span>
         <a
           *ngIf="(dataPos$ | async) == null; else plPos"
@@ -119,15 +111,7 @@
       fxLayoutGap="20px"
     >
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
-        <img
-          class="prof_pic_small"
-          *ngIf="profile_picture; else accountCircle"
-          [src]="profile_picture"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round icon-small">account_circle</span>
-        </ng-template>
+        <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <button color="primary" mat-icon-button (click)="sidenav.open()">
           <mat-icon class="material-icons-round">
             keyboard_arrow_right

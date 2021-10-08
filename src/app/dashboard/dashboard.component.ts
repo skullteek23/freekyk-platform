@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
+import { AccountAvatarService } from '../services/account-avatar.service';
 import { AuthService } from '../services/auth.service';
 import { PlayerService } from '../services/player.service';
 import { TeamCommunicationService } from '../services/team-communication.service';
@@ -31,13 +32,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private authServ: AuthService,
     private plServ: PlayerService,
     private teServ: TeamService,
+    private avatarServ: AccountAvatarService,
     private store: Store<{
       dash: DashState;
     }>
   ) {
-    this.dataImg$ = this.store
-      .select('dash')
-      .pipe(map((resp) => resp.playerBasicInfo.imgpath_sm));
+    this.dataImg$ = this.avatarServ.getProfilePicture();
     this.dataPos$ = this.store
       .select('dash')
       .pipe(map((resp) => resp.playerBasicInfo.pl_pos));
@@ -61,9 +61,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.screen = 'xl';
         }
       });
-    authServ.userDataChanged.pipe(take(2)).subscribe((user) => {
+    this.authServ.userDataChanged.pipe(take(2)).subscribe((user) => {
       if (user != null) {
-        this.profile_picture = user?.imgpath;
         this.displayName = user?.name;
         if (!this.displayName)
           this.displayName = sessionStorage.getItem('name');

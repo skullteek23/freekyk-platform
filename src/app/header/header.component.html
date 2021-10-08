@@ -60,21 +60,19 @@
       <!-- cart icon - small -->
 
       <!-- account circle - small -->
-      <div
+      <!-- <div
         *ngIf="isLogged && !isLoading"
         [routerLink]="['/dashboard', 'account', 'profile']"
         class="avatarSize subCircle"
         fxLayoutAlign="center center"
-      >
-        <img
-          *ngIf="profile_picture; else accountCircle"
-          [src]="profile_picture"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round">account_circle</span>
-        </ng-template>
-      </div>
+      > -->
+      <app-account-avatar
+        *ngIf="isLogged && !isLoading"
+        [routerLink]="['/dashboard', 'account', 'profile']"
+        [dataImg]="profile_picture$ | async"
+        [margins]="false"
+      ></app-account-avatar>
+      <!-- </div> -->
       <!-- account circle - small -->
 
       <!-- ham menu - small -->
@@ -172,22 +170,20 @@
           >
         </button>
 
-        <button
+        <!-- <button
           *ngIf="isLogged && !isLoading"
           mat-icon-button
           [matMenuTriggerFor]="profileMenu"
           class="avatarSize subCircle"
           fxLayoutAlign="center center"
-        >
-          <img
-            *ngIf="profile_picture; else accountCircle"
-            [src]="profile_picture"
-            alt="Profile Picture"
-          />
-          <ng-template #accountCircle>
-            <span class="material-icons-round">account_circle</span>
-          </ng-template>
-        </button>
+        > -->
+        <app-account-avatar
+          *ngIf="isLogged && !isLoading"
+          [matMenuTriggerFor]="profileMenu"
+          [dataImg]="profile_picture$ | async"
+          [margins]="false"
+        ></app-account-avatar>
+        <!-- </button> -->
       </div>
     </div>
     <!-- menu - large -->
