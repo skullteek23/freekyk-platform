@@ -34,6 +34,7 @@ import { TeamsPanelComponent } from './teams-panel/teams-panel.component';
 import { TicketViewerComponent } from './ticket-viewer/ticket-viewer.component';
 import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
 import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
+import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.comp
     RegiSellerComponent,
     ErrorComponent,
     AddGalleryComponent,
+    GroundsPanelComponent,
   ],
   imports: [
     BrowserModule,

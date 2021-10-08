@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { GenFixtService } from './gen-fixt.service';
 
 @Component({
@@ -19,7 +18,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy {
       response ? this.Stepper.next() : this.Stepper.previous();
     });
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
   ngOnInit(): void {}

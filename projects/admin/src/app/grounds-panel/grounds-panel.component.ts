@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import {
   GroundBasicInfo,
@@ -6,84 +6,178 @@ import {
 } from 'src/app/shared/interfaces/ground.model';
 
 import firebase from 'firebase/app';
+import {
+  NgForm,
+  FormGroup,
+  FormArray,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 @Component({
   selector: 'app-grounds-panel',
   templateUrl: './grounds-panel.component.html',
   styleUrls: ['./grounds-panel.component.css'],
 })
 export class GroundsPanelComponent implements OnInit {
-  completed = false;
-  groundIds: string[] = [];
-  constructor(private ngFire: AngularFirestore) {}
+  @ViewChild('RegisterGroundForm') tForm: NgForm;
+  Rform: FormGroup;
+  totalHours: number;
+  doIt: boolean;
+  isSubmitted;
+  err;
+  groundAdded: boolean;
+  allTimingSlot_array: string[] = [
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+  ];
+  days_array = [
+    {
+      day_name: 'Sunday',
+      day_num: '0',
+    },
+    {
+      day_name: 'Monday',
+      day_num: '1',
+    },
+    {
+      day_name: 'Tuesday',
+      day_num: '2',
+    },
+    {
+      day_name: 'Wednesday',
+      day_num: '3',
+    },
+    {
+      day_name: 'Thursday',
+      day_num: '4',
+    },
+    {
+      day_name: 'Friday',
+      day_num: '5',
+    },
+    {
+      day_name: 'Saturday',
+      day_num: '6',
+    },
+  ];
+  statesInfo = [];
+  cityInfo = [];
+  constructor(private ngfirestore: AngularFirestore) {
+    this.Rform = new FormGroup({
+      0: new FormArray([]),
+      1: new FormArray([]),
+      2: new FormArray([]),
+      3: new FormArray([]),
+      4: new FormArray([]),
+      5: new FormArray([]),
+      6: new FormArray([]),
+    });
+  }
 
-  ngOnInit(): void {}
-  onAddGrounds() {
-    var batch1 = this.ngFire.firestore.batch();
-    var batch2 = this.ngFire.firestore.batch();
-    var grounds = this.getGrounds();
-    var grMoreInfo = this.getMoreGroundInfo();
-    for (let i = 0; i < grounds.length; i++) {
-      var docRef = this.ngFire.firestore
-        .collection('grounds')
-        .doc(this.groundIds[i]);
-      var docRef2 = this.ngFire.firestore
-        .collection('grounds')
-        .doc(this.groundIds[i])
-        .collection('additionalInfo')
-        .doc('moreInfo');
-      batch1.set(docRef, grounds[i]);
-      batch2.set(docRef2, grMoreInfo);
-    }
-    let allPromises = [];
-    allPromises.push(
-      new Promise((resolve, reject) => {
-        resolve((this.completed = true));
-      })
-    );
-    allPromises.push(batch1.commit().then(() => batch2.commit()));
-    return Promise.all(allPromises);
+  onAddPreference(day: string, timeSlot: string) {
+    const control = new FormControl(timeSlot, Validators.required);
+    const array_in_action = <FormArray>this.Rform.get(day);
+
+    array_in_action.push(control);
   }
-  getGrounds() {
-    var grounds: GroundBasicInfo[] = [];
-    for (let i = 0; i < 8; i++) {
-      grounds.push(<GroundBasicInfo>{
-        name: 'Football Ground ' + i,
-        imgpath:
-          i % 2 == 0
-            ? 'https://images.unsplash.com/photo-1508166041112-5a0a8b70ecc5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1936&q=80'
-            : i % 3 == 0
-            ? 'https://images.unsplash.com/photo-1466065665758-d473db752253?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80'
-            : 'https://images.unsplash.com/photo-1615417996592-615003487198?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80',
-        locCity: 'Ghaziabad',
-        locState: 'Uttar Pradesh',
-        fieldType: 'FG',
-        own_type: i % 2 == 0 ? 'PUBLIC' : i % 3 == 0 ? 'FK' : 'PRIVATE',
-        playLvl: i % 2 == 0 ? 'fair' : i % 3 == 0 ? 'best' : 'good',
-        id: this.getNewId(),
-      });
-    }
-    return grounds;
+  // onRemovePreference(day: string, timeSlot: string) {
+  //   (<FormArray>this.Rform.get(day)).removeAt;
+  // }
+  onClearPreferences(day: string) {
+    (<FormArray>this.Rform.get(day)).clear();
   }
-  getMoreGroundInfo() {
-    return <GroundMoreInfo>{
-      parking: true,
-      mainten: false,
-      goalp: true,
-      opmTimeStart: firebase.firestore.Timestamp.fromDate(
-        new Date(2021, 5, 5, 10)
-      ),
-      opmTimeEnd: firebase.firestore.Timestamp.fromDate(
-        new Date(2021, 5, 5, 12)
-      ),
-      washroom: true,
-      foodBev: false,
-      avgRating: 4.5,
+  onClearAllPreferences() {
+    this.days_array.forEach((day) => {
+      (<FormArray>this.Rform.get(day.day_num)).clear();
+    });
+  }
+  onSubmitForm(form: NgForm) {
+    const newGroundsId = this.ngfirestore.createId();
+    const newGroundData = {
+      groundId: newGroundsId,
+      groundName: form.value['groundName'],
+      groundLocationState: form.value['groundLocationState'],
+      groundLocationCity: form.value['groundLocationCity'],
+      groundAvailability: true,
+      groungType: form.value['groungType'],
+      groundImgpath: form.value['groundImgpath'],
+      groundCharges: form.value['groundCharges'],
+      signedContractFileLink: form.value['signedContractFileLink'],
+      contractstartdate: form.value['contractstartdate'],
+      contractenddate: form.value['contractenddate'],
+      groundRepresentative: {
+        name: form.value['gname'],
+        contactNumber: form.value['gcontactNumber'],
+        email: form.value['gemail'],
+        designation: form.value['gdesignation'],
+      },
+      freekykRepresentative: {
+        name: form.value['fname'],
+        contactNumber: form.value['fcontactNumber'],
+        email: form.value['femail'],
+        designation: form.value['fdesignation'],
+      },
+      timingsDetails: this.Rform.value,
+      totalAvailableHours: this.totalHours,
     };
+    // console.log(newGroundData);
+    this.ngfirestore
+      .collection('grounds')
+      .doc(newGroundsId)
+      .set(newGroundData)
+      .then(() => {
+        this.groundAdded = true;
+        this.err = false;
+        this.onClearForm();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.err = true;
+        this.groundAdded = false;
+        this.onClearForm();
+      });
   }
-
-  getNewId() {
-    const id = this.ngFire.createId();
-    this.groundIds.push(id);
-    return id;
+  getTimeSlot(timeSlot: string) {
+    if (+timeSlot == 12) return timeSlot + ':00 PM';
+    return +timeSlot > 12
+      ? (+timeSlot - 12).toString() + ':00 PM'
+      : timeSlot + ':00 AM';
+  }
+  onClearForm() {
+    this.tForm.resetForm();
+    this.Rform.reset();
+    this.onClearAllPreferences();
+  }
+  ngOnInit(): void {
+    this.statesInfo = ['Uttar Pradesh'];
+    this.groundAdded = false;
+  }
+  onChangeState(stateValue) {
+    this.cityInfo = ['Ghaziabad'];
+  }
+  getControls(day: string) {
+    return (<FormArray>this.Rform.get(day)).controls;
+  }
+  onSubmitPreferences() {
+    this.totalHours =
+      (<FormArray>this.Rform.get('0')).length +
+      (<FormArray>this.Rform.get('1')).length +
+      (<FormArray>this.Rform.get('2')).length +
+      (<FormArray>this.Rform.get('3')).length +
+      (<FormArray>this.Rform.get('4')).length +
+      (<FormArray>this.Rform.get('5')).length +
+      (<FormArray>this.Rform.get('6')).length;
   }
 }
