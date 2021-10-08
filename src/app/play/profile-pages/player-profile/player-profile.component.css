@@ -17,4 +17,5 @@
 }
 .min-height {
   min-height: 80vh;
+  max-width: 450px !important;
 }
