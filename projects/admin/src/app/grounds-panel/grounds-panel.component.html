@@ -1,25 +1,329 @@
 <div
   fxLayoutGap="20px"
   fxlayout="row wrap"
-  class="section-space-top section-space-bottom"
+  class="container section-space-top section-space-bottom"
 >
-  <button
-    class="buttonText primaryButton"
-    [disabled]="completed"
-    (click)="onAddGrounds()"
-  >
-    <ng-template #default>
-      <span> Add Grounds (Auto) </span>
-    </ng-template>
-
-    <span class="material-icons-round" *ngIf="completed; else default">
-      check_circle
+  <div class="admin-heading">
+    <span class="mat-h1" fxLayoutAlign="center center">
+      Enter Ground details
     </span>
-  </button>
-  <button class="buttonText primaryButton" disabled>
-    <span> Add Ground (Form) </span>
-  </button>
+  </div>
+  <div class="form-container">
+    <form
+      id="detailsForm"
+      autocomplete="off"
+      (ngSubmit)="onSubmitForm(RegisterGroundForm)"
+      #RegisterGroundForm="ngForm"
+    >
+      <div class="basic-details-container">
+        <div class="sub-heading">
+          <span class="mat-h3"> Ground Details </span>
+        </div>
+        <div class="form-part" fxLayout="column" fxLayoutGap="10px">
+          <div fxLayout>
+            <mat-label id="ground-type">Select Ground Type:</mat-label>
 
-  <button class="buttonText secondaryButton" disabled>soon</button>
-  <button class="buttonText secondaryButton" disabled>soon</button>
+            <mat-radio-group
+              aria-labelledby="ground-type"
+              ngModel
+              matInput
+              required
+              name="groungType"
+            >
+              <mat-radio-button
+                class="example-radio-button"
+                *ngFor="let season of ['Public', 'Private']"
+                [value]="season"
+              >
+                {{ season }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div fxLayoutGap="10px">
+            <mat-form-field appearance="outline">
+              <mat-label>Add Ground Name</mat-label>
+              <input type="text" matInput required ngModel name="groundName" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Select State</mat-label>
+              <mat-select
+                (selectionChange)="onChangeState($event.value)"
+                required
+                name="groundLocationState"
+                ngModel
+              >
+                <mat-option
+                  *ngFor="let state of statesInfo; let i = index"
+                  [value]="i"
+                >
+                  {{ state }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Select City</mat-label>
+              <mat-select required ngModel name="groundLocationCity">
+                <mat-option *ngFor="let city of cityInfo" [value]="city">
+                  {{ city }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Add Ground Image URL</mat-label>
+              <input
+                type="url"
+                matInput
+                required
+                ngModel
+                name="groundImgpath"
+              />
+              <mat-icon matSuffix>link</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="team-details-container">
+        <div class="sub-heading">
+          <span class="mat-h3"> Contract Details </span>
+        </div>
+        <div class="form-part" fxLayoutGap="10px">
+          <mat-form-field appearance="outline">
+            <mat-label>Add Signed Contract File URL</mat-label>
+            <input
+              type="url"
+              matInput
+              required
+              ngModel
+              name="signedContractFileLink"
+            />
+            <mat-icon matSuffix>link</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Choose Contract Start date</mat-label>
+            <input
+              matInput
+              ngModel
+              required
+              name="contractstartdate"
+              [matDatepicker]="startdatepicker"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startdatepicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startdatepicker></mat-datepicker>
+            <mat-hint> Contract Start Date </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Choose Contract End date</mat-label>
+            <input
+              matInput
+              ngModel
+              required
+              name="contractenddate"
+              [matDatepicker]="enddatepicker"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="enddatepicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #enddatepicker></mat-datepicker>
+            <mat-hint> Contract End Date </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ground Charges</mat-label>
+            <input
+              type="number"
+              required
+              matInput
+              ngModel
+              name="groundCharges"
+            />
+            <mat-icon matSuffix>local_atm</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        class="representative-details-container"
+        fxLayout="column"
+        fxLayoutGap="10px"
+      >
+        <div class="sub-heading">
+          <span class="mat-h3"> Representatives Details </span>
+        </div>
+        <div fxLayoutGap="40px" fxLayout>
+          <div fxFlex="50%" fxLayout="column">
+            <span class="mat-body"> Ground Rep details </span>
+            <div fxLayout="column">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput required ngModel name="gname" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Designation</mat-label>
+                <input type="text" matInput ngModel name="gdesignation" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Contact Number</mat-label>
+                <input
+                  type="tel"
+                  matInput
+                  required
+                  ngModel
+                  name="gcontactNumber"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput required ngModel name="gemail" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex="50%" fxLayout="column">
+            <span class="mat-body"> Freekyk Rep details </span>
+            <div fxLayout="column">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput required ngModel name="fname" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Designation</mat-label>
+                <input type="text" matInput ngModel name="fdesignation" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Contact Number</mat-label>
+                <input
+                  type="tel"
+                  matInput
+                  required
+                  ngModel
+                  name="fcontactNumber"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput required ngModel name="femail" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="availability-details-container">
+      <div class="sub-heading">
+        <span class="mat-h3"> Ground Availability Details </span>
+      </div>
+      <form [formGroup]="Rform" (ngSubmit)="onSubmitPreferences()">
+        <div class="form-part" fxLayout="column" fxLayoutGap="10px">
+          <div fxLayout="column">
+            <mat-label> Select Timings Availability for a week : </mat-label>
+            <div class="timings-day-container">
+              <div
+                class="day-timing"
+                fxLayout="column"
+                [formArrayName]="day.day_num"
+                *ngFor="let day of days_array"
+              >
+                <div fxLayout fxLayoutAlign="start center">
+                  <div class="heading">
+                    {{ day.day_name | slice: 3 | titlecase }}
+                  </div>
+                  <div
+                    class="timings"
+                    *ngFor="let timing of allTimingSlot_array"
+                  >
+                    <button
+                      type="button"
+                      mat-button
+                      color="primary"
+                      (click)="onAddPreference(day.day_num, timing)"
+                    >
+                      {{ timing }}
+                    </button>
+                  </div>
+
+                  <div>
+                    <button
+                      (click)="onClearPreferences(day.day_num)"
+                      mat-button
+                    >
+                      <mat-icon> close </mat-icon>
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+                <div fxLayoutAlign="start center">
+                  <span class="mat-body selection-subheading">
+                    Your Selection :
+                  </span>
+                  <div
+                    class="selected-pref"
+                    *ngFor="let dayControl of getControls(day.day_num)"
+                  >
+                    <mat-chip-list color="accent" selected>
+                      <mat-chip>
+                        {{ dayControl.value }}
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button type="submit" mat-raised-button color="accent">
+              Save Changes
+            </button>
+          </div>
+          <div>
+            Total Hours Allocated per week :
+            <span>{{ totalHours ? totalHours : "0" }}{{ " Hrs" }}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div fxLayoutAlign="center center" fxLayoutGap="10px">
+      <button
+        form="detailsForm"
+        class="reset-button"
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="onClearForm()"
+      >
+        Clear
+      </button>
+      <button
+        form="detailsForm"
+        class="submit-button"
+        type="submit"
+        mat-raised-button
+        color="accent"
+        [disabled]="!RegisterGroundForm.valid"
+      >
+        Submit & Add Ground
+      </button>
+    </div>
+  </div>
+
+  <mat-card class="success-card" *ngIf="groundAdded && !err">
+    <mat-card-content>
+      <span class="mat-body">
+        Success! The Ground has been successfully added!
+      </span>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="error-card" *ngIf="!groundAdded && err">
+    <mat-card-content>
+      <span class="mat-body"> Error! Please Try again later! </span>
+    </mat-card-content>
+  </mat-card>
 </div>

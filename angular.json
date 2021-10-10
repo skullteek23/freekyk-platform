@@ -47,14 +47,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "src/assets/favicon-32x32.png",
-              "src/assets"
-            ],
-            "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
-            ],
+            "assets": ["src/assets/favicon-32x32.png", "src/assets"],
+            "styles": ["src/custom-theme.scss", "src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -111,13 +105,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         },
@@ -129,9 +118,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -194,12 +181,14 @@
             "tsConfig": "projects/admin/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "projects/admin/src/favicon.ico",
+              "projects/admin/src/assets/favicon-32x32.png",
               "projects/admin/src/assets"
             ],
             "styles": [
+              "projects/admin/src/custom-theme.scss",
               "projects/admin/src/styles.css"
             ],
+
             "scripts": []
           },
           "configurations": {
@@ -261,6 +250,7 @@
               "projects/admin/src/assets"
             ],
             "styles": [
+              "projects/admin/src/custom-theme.scss",
               "projects/admin/src/styles.css"
             ],
             "scripts": []
@@ -274,9 +264,7 @@
               "projects/admin/tsconfig.spec.json",
               "projects/admin/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

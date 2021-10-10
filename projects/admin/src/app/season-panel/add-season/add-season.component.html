@@ -14,7 +14,8 @@
     </button>
     <button
       [disabled]="seasonForm.invalid"
-      type="submit"
+      type="button"
+      (click)="onSubmit()"
       class="primaryButton buttonText"
     >
       Submit

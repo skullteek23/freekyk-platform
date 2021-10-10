@@ -1,0 +1,22 @@
+.nofi {
+  height: 72px;
+  padding: 20px;
+  background-color: var(--grey4);
+  box-shadow: 0;
+  color: var(--grey1);
+  border-radius: var(--borderRadiusCard);
+  /* opacity: 0.75; */
+}
+.box {
+  min-height: 500px;
+}
+@media only screen and (max-width: 959px) {
+  .nofi {
+    height: 96px;
+    padding: 20px;
+    background-color: var(--grey4);
+    box-shadow: 0;
+    color: black;
+    border-radius: var(--borderRadiusCard);
+  }
+}
