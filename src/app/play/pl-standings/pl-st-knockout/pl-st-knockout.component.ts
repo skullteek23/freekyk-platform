@@ -13,7 +13,7 @@ export class PlStKnockoutComponent implements OnInit {
     this.qFMatches = values.filter((val) => val.fkc_status === 'R4');
     this.finalMatch = values.find((val) => val.fkc_status === 'F');
   }
-  @Input() season = 'Season';
+  @Input() season = 'Select a Season';
   showEmptyTable = true;
   r16Matches: MatchFixture[];
   r8Matches: MatchFixture[];

@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { MemberResponseNotification } from 'src/app/shared/interfaces/team.model';
 import { TeamCommState } from '../store/teamComm.reducer';
@@ -11,45 +11,49 @@ import { TeamCommState } from '../store/teamComm.reducer';
   templateUrl: './team-activity.component.html',
   styleUrls: ['./team-activity.component.css'],
 })
-export class TeamActivityComponent implements OnInit {
+export class TeamActivityComponent implements OnInit, OnDestroy {
   teamActivityListLogs$: Observable<MemberResponseNotification[]>;
-  noLogs: boolean = false;
+  noLogs = false;
+  subscriptions = new Subscription();
   constructor(
     private store: Store<{ teamComms: TeamCommState }>,
     private ngFireDb: AngularFireDatabase
-  ) {
-    store
-      .select('teamComms')
-      .pipe(
-        tap(
-          (resp) =>
-            (this.noLogs =
-              resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
-        ),
-        map((resp) => resp.currUpcomingMatchNo)
-      )
-      .subscribe((matchNo) => {
-        const tid = sessionStorage.getItem('tid');
-        this.teamActivityListLogs$ = this.ngFireDb
-          .list('teamActivity/' + tid + '/activity' + matchNo.toString())
-          .valueChanges()
-          .pipe(
-            tap((resp) => console.log(resp)),
-            map((resp: any[]) => resp.sort((a, b) => b.time - a.time)),
-            map((resp: MemberResponseNotification[]) =>
-              resp.map(
-                (r) =>
-                  <MemberResponseNotification>{
-                    content: r.content,
-                    time: new Date(r.time),
-                  }
+  ) {}
+
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.store
+        .select('teamComms')
+        .pipe(
+          tap(
+            (resp) =>
+              (this.noLogs =
+                resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
+          ),
+          map((resp) => resp.currUpcomingMatchNo)
+        )
+        .subscribe((matchNo) => {
+          const tid = sessionStorage.getItem('tid');
+          this.teamActivityListLogs$ = this.ngFireDb
+            .list(`teamActivity/${tid}/activity${matchNo.toString()}`)
+            .valueChanges()
+            .pipe(
+              tap((resp) => console.log(resp)),
+              map((resp: any[]) => resp.sort((a, b) => b.time - a.time)),
+              map((resp: MemberResponseNotification[]) =>
+                resp.map(
+                  (r) =>
+                    ({
+                      content: r.content,
+                      time: new Date(r.time),
+                    } as MemberResponseNotification)
+                )
               )
-            )
-
-            // map(resp => { content: resp.content, time: new Date(resp.time) })
-          );
-      });
+            );
+        })
+    );
   }
-
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 }

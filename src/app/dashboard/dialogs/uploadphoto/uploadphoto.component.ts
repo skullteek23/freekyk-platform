@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
@@ -12,38 +12,55 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 export class UploadphotoComponent implements OnInit {
   $file: File = null;
   selectedImage = null;
+  isLoading = false;
   constructor(
     public dialogRef: MatDialogRef<UploadphotoComponent>,
     private ngStorage: AngularFireStorage,
     private snackServ: SnackbarService,
-    private ngFire: AngularFirestore
-  ) {
-    // ngStorage.upload('')
-  }
+    private ngFire: AngularFirestore,
+    @Inject(MAT_DIALOG_DATA) public data: string
+  ) {}
 
-  ngOnInit(): void {}
-  onCloseDialog() {
+  ngOnInit(): void {
+    if (this.data) {
+      console.log(this.data);
+      this.selectedImage = this.data;
+    }
+  }
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onChooseImage(ev: any) {
+  onChooseImage(ev: any): void {
     this.$file = ev.target.files[0];
+    this.onShowPreview();
   }
-  async onUploadImage() {
-    if (this.$file == null) return;
-    let storageSnap = await this.ngStorage.upload(
+  onShowPreview(): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedImage = reader.result as string;
+    };
+    reader.readAsDataURL(this.$file);
+  }
+  async onUploadImage(): Promise<void> {
+    if (this.$file == null) {
+      return;
+    }
+    this.isLoading = true;
+    const storageSnap = await this.ngStorage.upload(
       '/profilePicturesLg' + Math.random() + this.$file.name,
       this.$file
     );
     this.selectedImage = await storageSnap.ref.getDownloadURL();
-    console.log(this.selectedImage);
-    if (this.updateProfilePhoto(this.selectedImage))
+    if (this.updateProfilePhoto(this.selectedImage)) {
       this.snackServ.displayCustomMsg('Image uploaded Successfully!');
-    this.onCloseDialog();
+      this.onCloseDialog();
+      this.isLoading = false;
+    }
   }
-  updateProfilePhoto(imgpath: string) {
+  updateProfilePhoto(imgpath: string): Promise<any[]> {
     const uid = localStorage.getItem('uid');
     console.log(uid);
-    let allPromises = [];
+    const allPromises = [];
     allPromises.push(
       this.ngFire.collection('players').doc(uid).update({
         imgpath_sm: imgpath,
@@ -68,18 +85,4 @@ export class UploadphotoComponent implements OnInit {
 
     return Promise.all(allPromises);
   }
-
-  // onFileSelected() {
-  //   const inputNode: any = document.querySelector('#file');
-
-  //   if (typeof (FileReader) !== 'undefined') {
-  //     const reader = new FileReader();
-
-  //     reader.onload = (e: any) => {
-  //       this.srcResult = e.target.result;
-  //     };
-
-  //     reader.readAsArrayBuffer(inputNode.files[0]);
-  //   }
-  // }
 }

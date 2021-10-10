@@ -1,17 +1,9 @@
 <!-- lg-screen-sidenav -->
 <mat-sidenav-container *ngIf="!onMobile">
   <mat-sidenav #sidenav [mode]="getMode()" position="start">
-    <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
+    <div fxLayoutAlign="center center" fxLayout="column">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
-        <img
-          class="prof_pic"
-          *ngIf="(dataImg$ | async) != null; else accountCircle"
-          [src]="dataImg$ | async"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round icon">account_circle</span>
-        </ng-template>
+        <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <span class="mat-body-2"> {{ displayName | titlecase }} </span>
         <a
           *ngIf="(dataPos$ | async) == null; else plPos"
@@ -53,24 +45,12 @@
           <span class="mat-body-1">Team Management</span>
         </a>
         <a
-          [routerLink]="['/dashboard', 'freestyle']"
+          [routerLink]="['/dashboard', 'participate']"
           routerLinkActive="active"
           mat-list-item
         >
           <span class="material-icons-round gap">sports_soccer</span>
-          <span class="mat-body-1">Freestyle</span>
-        </a>
-        <a
-          [routerLink]="['/dashboard', 'premium']"
-          routerLinkActive="active"
-          mat-list-item
-        >
-          <img
-            class="iconSize gap"
-            src="../../assets/svgs/premium.svg"
-            alt="Premium"
-          />
-          <span class="mat-body-1">Premium</span>
+          <span class="mat-body-1">Participate</span>
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
@@ -92,18 +72,13 @@
         </a>
       </mat-nav-list>
       <button
-        [routerLink]="['/dashboard', 'premium']"
+        [routerLink]="['/dashboard', 'participate']"
         class="buttonText primaryButton"
         fxLayout="row"
         fxLayoutAlign="center center"
         fxLayoutGap="16px"
       >
-        <img
-          class="iconSize"
-          src="../../assets/svgs/premium.svg"
-          alt="Premium"
-        />
-        <span>{{ "Join Premium" }}</span>
+        <span>{{ "Participate" }}</span>
       </button>
     </div>
   </mat-sidenav>
@@ -116,18 +91,9 @@
       fxLayoutAlign="start center"
       fxLayout="column"
       *ngIf="!sidenav.opened"
-      fxLayoutGap="20px"
     >
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
-        <img
-          class="prof_pic_small"
-          *ngIf="profile_picture; else accountCircle"
-          [src]="profile_picture"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round icon-small">account_circle</span>
-        </ng-template>
+        <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <button color="primary" mat-icon-button (click)="sidenav.open()">
           <mat-icon class="material-icons-round">
             keyboard_arrow_right
@@ -153,24 +119,12 @@
           <span class="material-icons-round">groups</span>
         </a>
         <a
-          [routerLink]="['/dashboard', 'freestyle']"
+          [routerLink]="['/dashboard', 'participate']"
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
         >
           <span class="material-icons-round">sports_soccer</span>
-        </a>
-        <a
-          [routerLink]="['/dashboard', 'premium']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-        >
-          <img
-            class="iconSize"
-            src="../../assets/svgs/premium.svg"
-            alt="Premium"
-          />
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
@@ -247,23 +201,13 @@
     <span class="mat-caption">Team</span>
   </a>
   <a
-    [routerLink]="['/dashboard', 'freestyle']"
+    [routerLink]="['/dashboard', 'participate']"
     routerLinkActive="router-link-active"
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
   >
-    <span class="material-icons-round"> sports_soccer </span>
-    <span class="mat-caption">Freestyle</span>
-  </a>
-  <a
-    [routerLink]="['/dashboard', 'premium']"
-    routerLinkActive="router-link-active"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0"
-  >
-    <img class="iconSize" src="../../assets/svgs/premium.svg" alt="Premium" />
+    <span class="material-icons-round">sports_soccer</span>
     <span class="mat-caption">Premium</span>
   </a>
   <a

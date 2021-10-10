@@ -15,7 +15,7 @@
   <!-- desktop filters -->
 
   <app-search-lg
-    searchPlaceholder="Search players by playing position, city"
+    searchPlaceholder="Search players by name, playing position, city"
     (searchItem)="filterTerm = $event"
   >
   </app-search-lg>
@@ -29,7 +29,7 @@
         *ngFor="
           let player of players$
             | async
-            | filterList: 'locCity,pl_pos':filterTerm;
+            | filterList: 'name,locCity,pl_pos':filterTerm;
           last as last
         "
       >
@@ -55,7 +55,7 @@
       <table
         mat-table
         [dataSource]="
-          players$ | async | filterList: 'locCity,pl_pos':filterTerm
+          players$ | async | filterList: 'name,locCity,pl_pos':filterTerm
         "
         class="full-width-table mat-elevation-z8"
       >

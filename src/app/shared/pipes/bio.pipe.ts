@@ -5,7 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class BioPipe implements PipeTransform {
   transform(value: string): string {
-    if (!!value) return value;
+    if (!!value) {
+      return value;
+    }
     return 'Not available';
   }
 }

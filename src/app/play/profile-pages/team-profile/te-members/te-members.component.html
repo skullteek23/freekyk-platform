@@ -1,17 +1,23 @@
 <!-- mobile filter -->
-<app-filters-sm fxHide.gt-sm="true" [filterArray]="plFilters"></app-filters-sm>
+<!-- <app-filters-sm fxHide.gt-sm="true" [filterArray]="[]"></app-filters-sm> -->
 <!-- mobile filter -->
 
 <!-- desktop filters -->
 <app-filters-lg
   [margin]="true"
   fxHide.lt-md="true"
-  [filterArray]="plFilters"
+  [data]="filterData"
+  (changeFilter)="onChangeFilter($event)"
 ></app-filters-lg>
 <!-- desktop filters -->
-
+<app-no-items-message
+  items="members"
+  *ngIf="(members | filterList: 'pl_pos':term)?.length === 0"
+></app-no-items-message>
 <mat-list>
-  <mat-list-item *ngFor="let teamMember of members; last as last">
+  <mat-list-item
+    *ngFor="let teamMember of members | filterList: 'pl_pos':term; last as last"
+  >
     <img
       matListAvatar
       [src]="teamMember.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"

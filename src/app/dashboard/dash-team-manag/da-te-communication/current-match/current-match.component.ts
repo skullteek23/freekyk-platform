@@ -11,10 +11,9 @@ import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 export class CurrentMatchComponent {
   @Input() data: MatchFixture;
   constructor(private dialog: MatDialog) {}
-  onOpenFixture() {
+  onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
-
       data: this.data,
     });
   }

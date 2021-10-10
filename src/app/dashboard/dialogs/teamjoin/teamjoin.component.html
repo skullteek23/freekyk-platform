@@ -12,17 +12,21 @@
 <div class="container-2">
   <div ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata">
     <mat-vertical-stepper #stepper [linear]="true">
-      <mat-step label="Send Join Request to Teams" [state]="state">
+      <mat-step
+        label="Send Join Request to Teams"
+        [completed]="
+          te_sel.selectedOptions.selected.length < 5 &&
+          te_sel.selectedOptions.selected.length > 1 &&
+          !error
+        "
+        [state]="state"
+      >
         <div class="content_container" fxLayout="column" fxLayoutGap="16px">
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label>Search for a team</mat-label>
-            <input
-              type="text"
-              matInput
-              name="search"
-              [(ngModel)]="search_team"
-            />
-          </mat-form-field>
+          <app-search-lg
+            searchPlaceholder="Search teams by name, location"
+            (searchItem)="filterTerm = $event"
+          >
+          </app-search-lg>
           <mat-hint
             *ngIf="
               te_sel.selectedOptions.selected.length > 5 ||
@@ -37,7 +41,11 @@
             </i>
             <mat-list-option
               [value]="team.captainId"
-              *ngFor="let team of teamsList$ | async"
+              *ngFor="
+                let team of teamsList$
+                  | async
+                  | filterList: 'tname,locState,locCity':filterTerm
+              "
             >
               <div fxLayoutAlign="space-between center">
                 <div fxLayoutAlign="start center" fxLayoutGap="8px">
@@ -80,7 +88,12 @@
         </div>
       </mat-step>
       <mat-step label="Done">
-        <div class="fin_cont" fxLayout="column" fxLayoutGap="16px">
+        <div
+          class="fin_cont"
+          fxLayout="column"
+          fxLayoutGap="16px"
+          *ngIf="isStepOneComplete"
+        >
           <ng-template #spinner>
             <app-loading></app-loading>
           </ng-template>

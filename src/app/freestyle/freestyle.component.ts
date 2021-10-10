@@ -11,7 +11,7 @@ import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 export class FreestyleComponent implements OnInit, OnDestroy {
   fsLinks: string[] = RouteLinks.FREESTYLE;
   routeSubscription: Subscription;
-  activeLink: string = 'home';
+  activeLink = 'home';
   constructor(private router: Router) {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -23,7 +23,7 @@ export class FreestyleComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {}
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }
 }

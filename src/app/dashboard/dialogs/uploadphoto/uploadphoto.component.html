@@ -7,10 +7,11 @@
   <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
-  <span class="mat-body-1">Add Profile Photo</span>
+  <span class="mat-body-1">Add/Edit Profile Photo</span>
 </mat-toolbar>
 <div class="container-2">
   <div
+    *ngIf="!isLoading; else loading"
     ngClass.lt-md="dialogData"
     ngClass.gt-sm="stepdata"
     fxLayoutAlign="center center"
@@ -27,19 +28,36 @@
       (change)="onChooseImage($event)"
       id="file"
     />
+    <div>
+      <img
+        [src]="selectedImage || 'assets/images/placeholder_product.png'"
+        class="preview"
+        alt="Image"
+      />
+    </div>
     <p class="file">
       {{ this.$file?.name }}
     </p>
     <div fxLayoutGap="20px">
       <button (click)="fileInput.click()" class="buttonText secondaryButton">
-        Choose Image
+        Choose New Image
       </button>
-      <button (click)="onUploadImage()" class="buttonText primaryButton">
+      <button
+        [disabled]="!$file"
+        (click)="onUploadImage()"
+        class="buttonText primaryButton"
+      >
         Upload
       </button>
     </div>
-    <div *ngIf="selectedImage != null">
-      <img [src]="selectedImage" class="preview" alt="Image" />
-    </div>
   </div>
+  <ng-template #loading>
+    <div
+      ngClass.lt-md="dialogData"
+      ngClass.gt-sm="stepdata"
+      fxLayoutAlign="center center"
+    >
+      <app-loading></app-loading>
+    </div>
+  </ng-template>
 </div>

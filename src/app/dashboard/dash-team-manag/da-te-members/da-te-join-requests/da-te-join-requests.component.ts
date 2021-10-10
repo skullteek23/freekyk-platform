@@ -14,21 +14,21 @@ export class DaTeJoinRequestsComponent implements OnInit {
   constructor(
     private teamServ: TeamService,
     private notifServ: NotificationsService
-  ) {
+  ) {}
+  ngOnInit(): void {
     this.getInvitesForTeam();
   }
-  ngOnInit(): void {}
-  getInvitesForTeam() {
+  getInvitesForTeam(): void {
     const tid = sessionStorage.getItem('tid');
     this.teamInvites$ = this.teamServ.getTeamInvites(tid);
   }
-  onSendAgain(invite: Invite) {
+  onSendAgain(invite: Invite): void {
     this.notifServ.callUpdateTeamInvite('wait', invite.id);
   }
-  onDelete(invId: string) {
+  onDelete(invId: string): void {
     this.notifServ.deleteInvite(invId);
   }
-  onInviteMore() {
+  onInviteMore(): void {
     this.notifServ.onOpenInvitePlayersDialog();
   }
 }

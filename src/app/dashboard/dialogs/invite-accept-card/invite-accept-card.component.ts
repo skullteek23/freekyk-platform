@@ -13,7 +13,7 @@ export class InviteAcceptCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-  onCloseDialog(response: 'accept' | 'reject') {
+  onCloseDialog(response: 'accept' | 'reject'): void {
     this.dialogRef.close(response);
   }
 }

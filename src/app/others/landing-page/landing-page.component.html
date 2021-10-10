@@ -47,47 +47,6 @@
   <app-covid-section></app-covid-section>
   <!-- covid-19 -->
 
-  <!-- other services -->
-  <section
-    class="container section-space-top section-space-bottom"
-    fxLayoutAlign.lt-md="center center"
-    fxLayout="column"
-    fxLayoutGap="20px"
-  >
-    <h4 class="mat-subheading-1 align">What else do we offer...</h4>
-    <div
-      fxLayout.gt-sm="row"
-      fxLayout="column"
-      fxLayoutGap.gt-sm="20px"
-      fxLayoutGap.lt-md="20px"
-    >
-      <div
-        *ngFor="let otherService of otherServices"
-        fxLayoutAlign.lt-md="center center"
-        fxLayout="column"
-        fxLayoutGap.gt-sm="8px"
-      >
-        <span class="placeholder-2"></span>
-        <span class="mat-body-1 center">
-          {{ otherService.name | titlecase }}</span
-        >
-
-        <button
-          color="primary"
-          mat-button
-          [routerLink]="[otherService.route]"
-          fxLayout="column"
-          fxLayoutAlign="center center"
-          fxLayoutGap="8px"
-        >
-          <span>{{ " Explore " + (otherService.name | titlecase) }}</span>
-          <span class="material-icons-round"> keyboard_arrow_right </span>
-        </button>
-      </div>
-    </div>
-  </section>
-  <!-- other services -->
-
   <!-- community proof -->
   <section
     class="container section-space-top section-space-bottom"

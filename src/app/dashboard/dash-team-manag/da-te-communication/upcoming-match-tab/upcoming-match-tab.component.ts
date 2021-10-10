@@ -10,8 +10,7 @@ import { AskPlayerSelectorComponent } from '../ask-player-selector/ask-player-se
   styleUrls: ['./upcoming-match-tab.component.css'],
 })
 export class UpcomingMatchTabComponent implements OnInit {
-  // @Input('upcMatchNumber') matchNumb: number;
-  @Input('captain') isCaptain: boolean;
+  @Input() captain: boolean;
   memberNames$: Observable<{ id: string; name: string }[]>;
   disableButton: boolean;
   disableCheck: boolean;
@@ -19,28 +18,14 @@ export class UpcomingMatchTabComponent implements OnInit {
     private dialog: MatDialog,
     private commServ: TeamCommunicationService
   ) {}
-
-  ngOnInit(): void {
-    // this.memberNames$ = this.store.select('team').pipe(
-    //   map(
-    //     (resp) => <{ id: string; name: string }[]>(<Tmember[]>(
-    //         resp.teamMembers.members
-    //       )).map((m) => ({
-    //         name: m.name,
-    //         id: m.id,
-    //       }))
-    //   )
-    // );
-  }
-  onOpenAskPlayersDialog() {
-    // this.disableCheck = true;
-    // console.log(this.matchNumb);
+  ngOnInit(): void {}
+  onOpenAskPlayersDialog(): void {
     this.dialog.open(AskPlayerSelectorComponent, {
       panelClass: 'large-dialogs',
     });
   }
 
-  onRespond(resp: boolean) {
+  onRespond(resp: boolean): void {
     this.disableButton = true;
     this.commServ.updateResponseByMember(resp);
   }

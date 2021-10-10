@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import {
   MatchFixtureOverview,
   MatchFixture,
@@ -18,7 +18,7 @@ import {
 })
 export class MatchCardComponent implements OnInit {
   overViewData$: Observable<MatchFixtureOverview>;
-  currIndex: number = 0;
+  currIndex = 0;
   lineups$: Observable<MatchLineup>;
   stats$: Observable<MatchStats>;
   matchHeaderData: {
@@ -34,69 +34,71 @@ export class MatchCardComponent implements OnInit {
     public data: MatchFixture,
     // private shareServ: ShareLinkService,
     private ngFirestore: AngularFirestore
-  ) {
+  ) {}
+  ngOnInit(): void {
     this.lineups$ = this.ngFirestore
       .collection('allMatches/' + this.data?.id + '/additionalInfo')
       .doc('matchLineup')
       .get()
-      .pipe(map((resp) => <MatchLineup>resp.data()));
+      .pipe(map((resp) => resp.data() as MatchLineup));
     this.stats$ = this.ngFirestore
       .collection('allMatches/' + this.data?.id + '/additionalInfo')
       .doc('matchReport')
       .get()
       .pipe(
-        map((resp) => <MatchStats>resp.data()),
+        map((resp) => resp.data() as MatchStats),
         share()
       );
-    if (!!data.concluded && data.concluded) {
+    if (!!this.data.concluded && this.data.concluded) {
       this.currIndex = 2;
       this.matchHeaderData = {
-        concluded: data.concluded,
-        date: data?.date,
+        concluded: this.data.concluded,
+        date: this.data?.date,
         home: {
-          name: data?.teams[0],
-          imgpathLogo: data?.logos[0],
+          name: this.data?.teams[0],
+          imgpathLogo: this.data?.logos[0],
         },
         away: {
-          name: data?.teams[1],
-          imgpathLogo: data?.logos[1],
+          name: this.data?.teams[1],
+          imgpathLogo: this.data?.logos[1],
         },
-        score: { home: data?.score[0], away: data?.score[1] },
+        score: { home: this.data?.score[0], away: this.data?.score[1] },
       };
     } else {
       this.matchHeaderData = {
-        concluded: data.concluded,
-        date: data?.date,
+        concluded: this.data.concluded,
+        date: this.data?.date,
         home: {
-          name: data?.teams[0],
-          imgpathLogo: data?.logos[0],
+          name: this.data?.teams[0],
+          imgpathLogo: this.data?.logos[0],
         },
         away: {
-          name: data?.teams[1],
-          imgpathLogo: data?.logos[1],
+          name: this.data?.teams[1],
+          imgpathLogo: this.data?.logos[1],
         },
       };
     }
 
-    this.overViewData$ = ngFirestore
-      .collection('allMatches/' + data?.id + '/additionalInfo')
+    this.overViewData$ = this.ngFirestore
+      .collection('allMatches/' + this.data?.id + '/additionalInfo')
       .doc('matchOverview')
       .get()
-      .pipe(map((resp) => <MatchFixtureOverview>resp.data()));
-    // .toPromise()
-    // .then((doc) => ( = <MatchFixtureOverview>doc.data()));
+      .pipe(map((resp) => resp.data() as MatchFixtureOverview));
   }
-  ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  getType(typeCode: string) {
-    if (typeCode == 'FPL') return 'League Match';
-    else if (typeCode == 'FCP') return 'Community Play Match';
-    else return 'Knockout Match';
+  getType(typeCode: string): string {
+    if (typeCode === 'FPL') {
+      return 'League Match';
+    } else if (typeCode === 'FCP') {
+      return 'Community Play Match';
+    } else {
+      return 'Knockout Match';
+    }
   }
 
-  getDate() {
+  getDate(): Date {
     return new Date();
   }
   // getStats;

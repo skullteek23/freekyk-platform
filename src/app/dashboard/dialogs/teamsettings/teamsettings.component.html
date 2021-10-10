@@ -61,18 +61,22 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Team Location City</mat-label>
-        <mat-select formControlName="t_LocCity">
-          <mat-option *ngFor="let city of cities" [value]="city">
-            {{ city }}
+        <mat-label>Select Team Location State</mat-label>
+        <mat-select
+          (opened)="onOpenStateList()"
+          (selectionChange)="onSelectState($event)"
+          formControlName="t_LocState"
+        >
+          <mat-option *ngFor="let state of states$ | async" [value]="state">
+            {{ state }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Team Location State</mat-label>
-        <mat-select formControlName="t_LocState">
-          <mat-option *ngFor="let state of states" [value]="state">
-            {{ state }}
+        <mat-label>Select Team Location City</mat-label>
+        <mat-select formControlName="t_LocCity">
+          <mat-option *ngFor="let city of cities$ | async" [value]="city">
+            {{ city }}
           </mat-option>
         </mat-select>
       </mat-form-field>

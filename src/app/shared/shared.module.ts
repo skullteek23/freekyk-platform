@@ -24,8 +24,6 @@ import { NoItemsMessageComponent } from './components/no-items-message/no-items-
 import { FixtureBasicComponent } from './components/fixture-basic/fixture-basic.component';
 import { BarLoadingShimmerComponent } from './components/bar-loading-shimmer/bar-loading-shimmer.component';
 import { MatchCardComponent } from './dialogs/match-card/match-card.component';
-import { ContestInfoComponent } from './dialogs/contest-info/contest-info.component';
-import { PricingTemplateComponent } from './components/pricing-template/pricing-template.component';
 import { TeamCommsMobileComponent } from './components/team-comms-mobile/team-comms-mobile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateInfoComponent } from './components/update-info/update-info.component';
@@ -37,7 +35,6 @@ import { NamePositionComboPipe } from './pipes/name-position-combo.pipe';
 import { NameComboPipe } from './pipes/name-combo.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
 import { PlayerCardComponent } from './dialogs/player-card/player-card.component';
-import { FreestylerCardComponent } from './dialogs/freestyler-card/freestyler-card.component';
 import { MatchDetailHeaderComponent } from './components/match-detail-header/match-detail-header.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { TickAnimationComponent } from './components/tick-animation/tick-animation.component';
@@ -60,6 +57,7 @@ import { ProfilePicPipe } from './pipes/profile-pic.pipe';
 import { ConfirmationBoxComponent } from './dialogs/confirmation-box/confirmation-box.component';
 import { SearchLgComponent } from './components/search-lg/search-lg.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
+import { AccountAvatarComponent } from './components/account-avatar/account-avatar.component';
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
   exclude: ['tumblr', 'stumble', 'vk'],
@@ -88,8 +86,6 @@ const customConfig: ShareButtonsConfig = {
     FixtureBasicComponent,
     BarLoadingShimmerComponent,
     MatchCardComponent,
-    ContestInfoComponent,
-    PricingTemplateComponent,
     TeamCommsMobileComponent,
     UpdateInfoComponent,
     ContestMobileComponent,
@@ -100,7 +96,6 @@ const customConfig: ShareButtonsConfig = {
     NameComboPipe,
     LoadingComponent,
     PlayerCardComponent,
-    FreestylerCardComponent,
     MatchDetailHeaderComponent,
     TickAnimationComponent,
     TextShortenPipe,
@@ -120,6 +115,7 @@ const customConfig: ShareButtonsConfig = {
     ConfirmationBoxComponent,
     SearchLgComponent,
     FilterListPipe,
+    AccountAvatarComponent,
   ],
   imports: [
     CommonModule,
@@ -154,8 +150,6 @@ const customConfig: ShareButtonsConfig = {
     FixtureBasicComponent,
     BarLoadingShimmerComponent,
     MatchCardComponent,
-    ContestInfoComponent,
-    PricingTemplateComponent,
     NamePositionComboPipe,
     NameComboPipe,
     TeamCommsMobileComponent,
@@ -169,7 +163,6 @@ const customConfig: ShareButtonsConfig = {
     LoadingComponent,
     MatchDetailHeaderComponent,
     PlayerCardComponent,
-    FreestylerCardComponent,
     YouTubePlayerModule,
     MatchDetailHeaderComponent,
     TickAnimationComponent,
@@ -189,6 +182,7 @@ const customConfig: ShareButtonsConfig = {
     ProfilePicPipe,
     SearchLgComponent,
     FilterListPipe,
+    AccountAvatarComponent,
   ],
 })
 export class SharedModule {}
