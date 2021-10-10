@@ -11,7 +11,6 @@ import { DashPremiumComponent } from './dash-premium/dash-premium.component';
 import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
-import { AccOrdersComponent } from './dash-account/acc-orders/acc-orders.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
 import { DashboardMaterialModule } from './dashboard-material.module';
 import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
@@ -54,8 +53,9 @@ import { AskPlayerSelectorComponent } from './dash-team-manag/da-te-communicatio
 import { UpcomingMatchTabComponent } from './dash-team-manag/da-te-communication/upcoming-match-tab/upcoming-match-tab.component';
 import { DaTeMangPlayersComponent } from './dash-team-manag/da-te-members/da-te-mang-players/da-te-mang-players.component';
 import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.component';
-import { TeamCommunicationService } from '../services/team-communication.service';
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LocationCitiesService } from '../services/location-cities.service';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -68,7 +68,6 @@ import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.componen
     AccProfileComponent,
     AccNotifsComponent,
     AccAddressesComponent,
-    AccOrdersComponent,
     AccTicketsComponent,
     DaHoProfileComponent,
     DaHoAllFixturesComponent,
@@ -116,7 +115,9 @@ import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.componen
     DashboardMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
   ],
   exports: [],
+  providers: [LocationCitiesService],
 })
 export class DashboardModule {}

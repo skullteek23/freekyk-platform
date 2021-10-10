@@ -4,16 +4,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { ExitDashGuard } from '../shared/guards/exit-dash.guard';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
-import { AccOrdersComponent } from './dash-account/acc-orders/acc-orders.component';
 import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
 import { DashAccountComponent } from './dash-account/dash-account.component';
-import { DashFreestyleComponent } from './dash-freestyle/dash-freestyle.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
 import { DashPremiumComponent } from './dash-premium/dash-premium.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
 import { DashboardComponent } from './dashboard.component';
-
+import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   {
@@ -22,19 +20,29 @@ const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin),
     canDeactivate: [ExitDashGuard],
     children: [
-      { path: 'home', component: DashHomeComponent },
-      { path: 'team-management', component: DashTeamManagComponent },
-      { path: 'freestyle', component: DashFreestyleComponent },
-      { path: 'premium', component: DashPremiumComponent },
+      { path: RouteLinks.DASHBOARD[0], component: DashHomeComponent },
+      { path: RouteLinks.DASHBOARD[1], component: DashTeamManagComponent },
+      { path: RouteLinks.DASHBOARD[2], component: DashPremiumComponent },
       {
-        path: 'account',
+        path: RouteLinks.DASHBOARD[3],
         component: DashAccountComponent,
         children: [
-          { path: 'profile', component: AccProfileComponent },
-          { path: 'notifications', component: AccNotifsComponent },
-          { path: 'addresses', component: AccAddressesComponent },
-          { path: 'orders', component: AccOrdersComponent },
-          { path: 'tickets', component: AccTicketsComponent },
+          {
+            path: RouteLinks.DASHBOARD_ACCOUNT[0],
+            component: AccProfileComponent,
+          },
+          {
+            path: RouteLinks.DASHBOARD_ACCOUNT[1],
+            component: AccNotifsComponent,
+          },
+          {
+            path: RouteLinks.DASHBOARD_ACCOUNT[2],
+            component: AccAddressesComponent,
+          },
+          {
+            path: RouteLinks.DASHBOARD_ACCOUNT[3],
+            component: AccTicketsComponent,
+          },
         ],
       },
     ],

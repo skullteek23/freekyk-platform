@@ -1,33 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, pairwise, tap } from 'rxjs/operators';
-
+import { filter } from 'rxjs/operators';
+import { RouteLinks } from 'src/app/shared/Constants/ROUTE_LINKS';
 @Component({
   selector: 'app-dash-account',
   templateUrl: './dash-account.component.html',
   styleUrls: ['./dash-account.component.css'],
 })
 export class DashAccountComponent implements OnInit, OnDestroy {
-  activeLink: string = '';
+  activeLink = '';
   accountLinks: string[] = [];
-  routeSubscription: Subscription;
+  subscriptions = new Subscription();
   constructor(private router: Router) {}
   ngOnInit(): void {
-    this.accountLinks = [
-      'profile',
-      'notifications',
-      'addresses',
-      'orders',
-      'tickets',
-    ];
-    this.routeSubscription = this.router.events
-      .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.activeLink = event.url.slice('/dashboard/account/'.length);
-      });
+    this.accountLinks = RouteLinks.DASHBOARD_ACCOUNT;
+    this.subscriptions.add(
+      this.router.events
+        .pipe(filter((e) => e instanceof NavigationEnd))
+        .subscribe((event: any) => {
+          this.activeLink = event.url.slice('/dashboard/account/'.length);
+        })
+    );
   }
-  ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

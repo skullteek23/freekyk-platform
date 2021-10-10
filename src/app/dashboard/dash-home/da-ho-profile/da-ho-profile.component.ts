@@ -8,9 +8,6 @@ import { SocialMediaLinks } from 'src/app/shared/interfaces/user.model';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
 import firebase from 'firebase/app';
-import { SocialShareService } from 'src/app/services/social-share.service';
-import { ShareData } from 'src/app/shared/interfaces/others.model';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 @Component({
   selector: 'app-da-ho-profile',
@@ -18,10 +15,10 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
   styleUrls: ['./da-ho-profile.component.css'],
 })
 export class DaHoProfileComponent implements OnInit {
-  @Input('profile') profileType: 'player' | 'freestyler' = 'player';
-  playerName: string = 'Your Name';
-  isLoading: boolean = true;
-  defaultString = 'Add this info';
+  @Input() profile: 'player' | 'freestyler' = 'player';
+  playerName = 'Your Name';
+  isLoading = true;
+  defaultString = '-';
   mainProperties: {};
   smLinks: SocialMediaLinks;
   profilePhoto: string;
@@ -34,23 +31,16 @@ export class DaHoProfileComponent implements OnInit {
     private router: Router,
     private store: Store<{
       dash: DashState;
-    }>,
-    private shareServ: SocialShareService
+    }>
   ) {}
   ngOnInit(): void {
     this.store
       .select('dash')
       .pipe(
         tap((val) => {
-          if (
-            val.playerBasicInfo.name != null &&
-            this.profileType == 'player'
-          ) {
+          if (val.playerBasicInfo.name != null && this.profile === 'player') {
             this.isLoading = false;
-          } else if (
-            val.fsInfo.name != null &&
-            this.profileType == 'freestyler'
-          ) {
+          } else if (val.fsInfo.name != null && this.profile === 'freestyler') {
             this.isLoading = false;
           }
         }),
@@ -59,7 +49,7 @@ export class DaHoProfileComponent implements OnInit {
           this.profilePhoto = info.playerMoreInfo.imgpath_lg;
           this.nickname = info.playerMoreInfo.nickname;
           this.smLinks = info.socials;
-          if (this.profileType == 'player') {
+          if (this.profile === 'player') {
             return {
               Age: this.getAge(info.playerMoreInfo.born),
               Gender: this.getGender(info.playerBasicInfo.gen),
@@ -87,66 +77,64 @@ export class DaHoProfileComponent implements OnInit {
       });
   }
 
-  getTeam(team: { name: string; id: string; capId: string } | null) {
-    if (team == null) return 'No Team';
-    return team.name;
+  getTeam(team: { name: string; id: string; capId: string } | null): string {
+    return team ? team.name : 'No Team';
   }
-  getAge(birthdate: firebase.firestore.Timestamp | null) {
-    if (birthdate == null) return null;
-    var diff_ms = Date.now() - birthdate.seconds * 1000;
-    var age_dt = new Date(diff_ms);
-    return Math.abs(age_dt.getUTCFullYear() - 1970).toString() + ' yrs';
+  getAge(birthdate: firebase.firestore.Timestamp | null): any {
+    if (birthdate === null) {
+      return birthdate;
+    }
+    const diffInMilliseconds = Date.now() - birthdate.seconds * 1000;
+    const ageDate = new Date(diffInMilliseconds);
+    return Math.abs(ageDate.getUTCFullYear() - 1970).toString() + ' yrs';
   }
-  getGender(g: 'M' | 'F') {
-    if (!g) return null;
-    return g == 'M' ? 'Male' : 'Female';
+  getGender(g: 'M' | 'F'): string {
+    if (!g) {
+      return null;
+    }
+    return g === 'M' ? 'Male' : 'Female';
   }
-  getStrongFoot(Str: 'L' | 'R') {
-    if (!Str) return null;
-    return Str == 'L' ? 'Left' : 'Right';
+  getStrongFoot(Str: 'L' | 'R'): string {
+    if (!Str) {
+      return null;
+    }
+    return Str === 'L' ? 'Left' : 'Right';
   }
   getLocation(
     city: string | null | undefined,
     state: string | null | undefined
-  ): undefined | string {
-    if (city == null) return state;
-    else if (state == null) return city;
-    else return city + ', ' + state;
+  ): string {
+    if (city == null) {
+      return state;
+    } else if (state == null) {
+      return city;
+    } else {
+      return `${city}, ${state}`;
+    }
   }
   getHeight(height: number): string | undefined {
-    if (height) return height.toString() + ' cms';
-    return null;
+    return height ? `${height.toString()} cms` : null;
   }
   getWeight(weight: number): string | undefined {
-    if (weight) return weight.toString() + ' kgs';
-    return null;
+    return weight ? `${weight.toString()} kgs` : null;
   }
-  onEnlargePhoto(imageUrl: string) {
+  onEnlargePhoto(imageUrl: string): any {
     this.enlServ.onOpenPhoto(imageUrl);
   }
-  getHeading() {
-    if (this.profileType == 'player') return 'basic info';
-    return 'freestyler info';
+  getHeading(): string {
+    return this.profile === 'player' ? 'basic info' : 'freestyler info';
   }
-  onOpenAccountSettings() {
+  onOpenAccountSettings(): void {
     this.router.navigate(['/dashboard', 'account', 'profile']);
   }
-  onUploadPhoto() {
+  onUploadPhoto(): void {
     const dialogRef = this.dialog.open(UploadphotoComponent, {
       panelClass: 'large-dialogs',
+      data: this.profilePhoto,
+      disableClose: true,
     });
   }
-  onShareProfile() {
-    const shareData: ShareData = {
-      share_imgpath: this.playerName,
-      share_desc: LOREM_IPSUM_SHORT,
-      share_title: this.profilePhoto,
-      share_url:
-        `https://freekyk8--h-qcd2k7n4.web.app/${
-          this.profileType == 'freestyler' ? 'f/' : 'p/'
-        }` + localStorage.getItem('uid'),
-    };
-
-    this.shareServ.onShare(shareData);
+  onShareProfile(): void {
+    console.log('working');
   }
 }

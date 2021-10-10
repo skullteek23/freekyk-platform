@@ -20,6 +20,14 @@
   margin-bottom: 0 !important;
   padding-bottom: 0px !important;
 }
+.overlay-button {
+  opacity: 0.3;
+  height: 100%;
+  width: 100%;
+}
+.overlay-button:hover {
+  opacity: 1;
+}
 .addInfo {
   color: var(--grey1);
 }
@@ -140,5 +148,11 @@
   }
   .cards-l {
     max-width: 100%;
+  }
+}
+@media only screen and (max-width: 1279px) {
+  .overlay-button {
+    max-height: 32px !important;
+    max-height: 24px !important;
   }
 }

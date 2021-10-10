@@ -1,6 +1,6 @@
 <div class="fullpad-20" fxLayout="column" fxLayoutGap="48px">
   <!-- personal info form -->
-  <div class="form">
+  <div class="form-p form" id="personal">
     <div
       class="form"
       fxLayout.gt-sm="row"
@@ -110,7 +110,7 @@
   </span>
 
   <!-- player info form -->
-  <div class="form">
+  <div class="form-pl form" id="player">
     <p class="dash-h5 align">Player Info</p>
     <form
       [formGroup]="playingInfoForm"
@@ -184,28 +184,37 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select City</mat-label>
-        <mat-select formControlName="loc_city">
-          <mat-option *ngFor="let city of cities" [value]="city">
-            {{ city }}
+        <mat-label>Select Country</mat-label>
+        <mat-select
+          (selectionChange)="onSelectCountry($event)"
+          formControlName="loc_country"
+        >
+          <mat-option
+            *ngFor="let country of countries$ | async"
+            [value]="country"
+          >
+            {{ country }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Select State</mat-label>
-        <mat-select formControlName="loc_state">
-          <mat-option *ngFor="let state of states" [value]="state">
+        <mat-select
+          (selectionChange)="onSelectState($event)"
+          formControlName="loc_state"
+        >
+          <mat-option *ngFor="let state of states$ | async" [value]="state">
             {{ state }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Country</mat-label>
-        <mat-select formControlName="loc_country">
-          <mat-option *ngFor="let country of countries" [value]="country">
-            {{ country }}
+        <mat-label>Select City</mat-label>
+        <mat-select formControlName="loc_city">
+          <mat-option *ngFor="let city of cities$ | async" [value]="city">
+            {{ city }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -316,7 +325,7 @@
   </span>
 
   <!-- freestyle info form -->
-  <div class="form">
+  <div class="form-fr form" id="freestyle">
     <p class="dash-h5 align">Freestyler Info</p>
     <form
       [formGroup]="FreestylingInfoForm"
@@ -455,7 +464,7 @@
   </span>
 
   <!-- social info form -->
-  <div class="form">
+  <div class="form-sm form" id="social-media">
     <p class="dash-h5 align">Social Media Links</p>
     <form
       [formGroup]="socialInfoForm"

@@ -1,6 +1,6 @@
 <mat-card
   class="mat-elevation-z8"
-  [ngClass]="{ 'cards-l': profileType == 'player' }"
+  [ngClass]="{ 'cards-l': profile == 'player' }"
 >
   <ng-template #profileLoading>
     <div
@@ -38,22 +38,22 @@
     fxLayoutAlign.gt-sm="center center"
   >
     <!-- Photo -->
-    <div
+    <a
       fxFlexOrder="0"
       fxFlexFill.lt-md
       fxFlex.gt-sm="50%"
       fxFlexOrder.gt-sm="0"
       class="photo_container"
-      fxLayoutAlign="center center"
+      fxLayoutAlign="space-evenly center"
     >
       <img
-        (click)="onEnlargePhoto(profilePhoto)"
+        (click)="onUploadPhoto()"
         *ngIf="profilePhoto; else photoPlaceholder"
         [src]="profilePhoto"
         alt="Photo"
         class="profile-photo-large"
       />
-    </div>
+    </a>
     <!-- Photo -->
 
     <!-- data -->
@@ -115,7 +115,7 @@
           </a>
         </div>
         <app-social-media-links
-          [mode]="profileType"
+          [mode]="profile"
           [links]="smLinks"
           (shareProfile)="onShareProfile()"
           (addLink)="onOpenAccountSettings()"
