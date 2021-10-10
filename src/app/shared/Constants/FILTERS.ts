@@ -1,3 +1,5 @@
+import { PLAYING_POSITIONS_LIST } from './PLAYING_POSITIONS';
+
 export const SeasonsFilters: {} = {
   Premium: ['Yes', 'No'],
   'Containing Tournaments': [
@@ -12,6 +14,9 @@ export const PlayersFilters = {
 export const TeamsFilters = {
   Verified: ['Yes', 'No'],
 };
+export const TeamMemberListFilter = {
+  'Playing Position': PLAYING_POSITIONS_LIST,
+};
 export const MatchFilters = {
   Premium: ['Yes', 'No'],
   'Tournament Type': [
@@ -21,7 +26,7 @@ export const MatchFilters = {
   ],
 };
 export const StandingsFilters = {
-  ABC: [],
+  Season: [],
 };
 export const GroundsFilters = {
   Owner: ['Freekyk', 'Public', 'Private'],
@@ -46,6 +51,7 @@ export const FilterHeadingMap = {
   Season: 'season',
   Owner: 'own_type',
   'Field Type': 'fieldType',
+  'Playing Position': 'pl_pos',
 };
 export const FilterValueMap = {
   Yes: true,

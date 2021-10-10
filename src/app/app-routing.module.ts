@@ -7,13 +7,10 @@ import {
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { CartComponent } from './cart/cart.component';
 import { ProductProfileComponent } from './equipment/profile-pages/product-profile/product-profile.component';
 import { ErrorComponent } from './error/error.component';
-import { FreestylerProfileComponent } from './freestyle/profile-pages/freestyler-profile/freestyler-profile.component';
 import { AboutComponent } from './others/about/about.component';
 import { LandingPageComponent } from './others/landing-page/landing-page.component';
-import { PricingComponent } from './others/pricing/pricing.component';
 import { PrivacyComponent } from './others/privacy/privacy.component';
 import { TermsComponent } from './others/terms/terms.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
@@ -70,11 +67,6 @@ const routes: Routes = [
   { path: 's/:seasonid', component: SeasonProfileComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
   { path: 'product/:productid', component: ProductProfileComponent },
-  {
-    path: 'cart',
-    ...canActivate(redirectUnauthorizedToLogin),
-    component: CartComponent,
-  },
   { path: 'about', component: AboutComponent },
   { path: 'privacypolicy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },

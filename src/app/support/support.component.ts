@@ -36,23 +36,25 @@ export class SupportComponent implements OnInit {
       ]),
     });
   }
-  onSubmitTicket() {
+  onSubmitTicket(): void {
     if (this.ticketForm.valid) {
       this.ngFire
         .collection('tickets')
-        .add(<BasicTicket>{
+        .add({
           ...this.ticketForm.value,
           ticket_UID: (
             this.ngFire.createId() + Date.now().toString().slice(0, 5)
           ).toUpperCase(),
           tkt_date: new Date(),
           tkt_status: 'Recieved',
-        })
+        } as BasicTicket)
         .then(() => {
           this.snackServ.displaySent();
           this.ticketForm.reset();
         });
-    } else this.snackServ.displayError();
+    } else {
+      this.snackServ.displayError();
+    }
     window.scrollTo(0, 0);
   }
 }

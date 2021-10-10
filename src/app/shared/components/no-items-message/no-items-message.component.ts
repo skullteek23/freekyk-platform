@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./no-items-message.component.css'],
 })
 export class NoItemsMessageComponent implements OnInit {
-  @Input('items') items = 'items';
+  @Input() items = 'items';
   constructor() {}
   ngOnInit(): void {}
 }

@@ -3,11 +3,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { SocialShareService } from 'src/app/services/social-share.service';
+import { QueryService } from 'src/app/services/query.service';
 import { GroundsFilters } from 'src/app/shared/Constants/FILTERS';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
 import { GroundBasicInfo } from 'src/app/shared/interfaces/ground.model';
-import { FilterData, ShareData } from 'src/app/shared/interfaces/others.model';
+import { FilterData } from 'src/app/shared/interfaces/others.model';
 
 @Component({
   selector: 'app-pl-grounds',
@@ -15,9 +14,8 @@ import { FilterData, ShareData } from 'src/app/shared/interfaces/others.model';
   styleUrls: ['./pl-grounds.component.css'],
 })
 export class PlGroundsComponent implements OnInit, OnDestroy {
-  watcher: Subscription;
+  subscriptions = new Subscription();
   columns: any;
-  cardHeight: string = '';
   isLoading = true;
   noGrounds = false;
   grounds$: Observable<GroundBasicInfo[]>;
@@ -25,38 +23,38 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore,
-    private shareServ: SocialShareService
-  ) {
+    private queryServ: QueryService
+  ) {}
+  ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'grounds',
       filtersObj: GroundsFilters,
     };
-    this.watcher = this.mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'xs') {
-          this.columns = 1;
-        } else if (change.mqAlias === 'sm') {
-          this.columns = 2;
-        } else if (change.mqAlias === 'md') {
-          this.columns = 3;
-        } else {
-          this.columns = 4;
-        }
-      });
-  }
-
-  ngOnInit(): void {
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'xs') {
+            this.columns = 1;
+          } else if (change.mqAlias === 'sm') {
+            this.columns = 2;
+          } else if (change.mqAlias === 'md') {
+            this.columns = 3;
+          } else {
+            this.columns = 4;
+          }
+        })
+    );
     this.getGrounds();
   }
-  ngOnDestroy() {
-    this.watcher.unsubscribe();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
-  getGrounds() {
+  getGrounds(): void {
     this.grounds$ = this.ngFire
       .collection('grounds')
       .get()
@@ -68,18 +66,22 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              <GroundBasicInfo>{ id: doc.id, ...(<GroundBasicInfo>doc.data()) }
+              ({
+                id: doc.id,
+                ...(doc.data() as GroundBasicInfo),
+              } as GroundBasicInfo)
           )
         )
       );
   }
-  onShare(gr: GroundBasicInfo) {
-    const shareData: ShareData = {
-      share_title: gr.name,
-      share_desc: LOREM_IPSUM_SHORT,
-      share_imgpath: gr.imgpath,
-      share_url: 'https://freekyk8--h-qcd2k7n4.web.app/ground/' + gr.id,
-    };
-    this.shareServ.onShare(shareData);
+  onQueryData(queryInfo): void {
+    if (queryInfo == null) {
+      return this.getGrounds();
+    }
+    this.grounds$ = this.queryServ
+      .onQueryData(queryInfo, 'grounds')
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo))
+      );
   }
 }

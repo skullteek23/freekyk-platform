@@ -1,4 +1,4 @@
-<mat-toolbar class="white-bg" appStickyTopBar>
+<mat-toolbar class="white-bg" appStickyNav>
   <div
     class="container"
     ngClass.lt-md="nogap"
@@ -48,6 +48,7 @@
 
       <!-- cart icon - small -->
       <button
+        disabled
         *ngIf="isLogged && !isLoading"
         mat-icon-button
         color="primary"
@@ -59,21 +60,19 @@
       <!-- cart icon - small -->
 
       <!-- account circle - small -->
-      <div
+      <!-- <div
         *ngIf="isLogged && !isLoading"
         [routerLink]="['/dashboard', 'account', 'profile']"
         class="avatarSize subCircle"
         fxLayoutAlign="center center"
-      >
-        <img
-          *ngIf="profile_picture; else accountCircle"
-          [src]="profile_picture"
-          alt="Profile Picture"
-        />
-        <ng-template #accountCircle>
-          <span class="material-icons-round">account_circle</span>
-        </ng-template>
-      </div>
+      > -->
+      <app-account-avatar
+        *ngIf="isLogged && !isLoading"
+        [routerLink]="['/dashboard', 'account', 'profile']"
+        [dataImg]="profilePicture$ | async"
+        [margins]="false"
+      ></app-account-avatar>
+      <!-- </div> -->
       <!-- account circle - small -->
 
       <!-- ham menu - small -->
@@ -160,6 +159,7 @@
         </button>
 
         <button
+          disabled
           *ngIf="isLogged && !isLoading"
           mat-icon-button
           color="primary"
@@ -170,22 +170,20 @@
           >
         </button>
 
-        <button
+        <!-- <button
           *ngIf="isLogged && !isLoading"
           mat-icon-button
           [matMenuTriggerFor]="profileMenu"
           class="avatarSize subCircle"
           fxLayoutAlign="center center"
-        >
-          <img
-            *ngIf="profile_picture; else accountCircle"
-            [src]="profile_picture"
-            alt="Profile Picture"
-          />
-          <ng-template #accountCircle>
-            <span class="material-icons-round">account_circle</span>
-          </ng-template>
-        </button>
+        > -->
+        <app-account-avatar
+          *ngIf="isLogged && !isLoading"
+          [matMenuTriggerFor]="profileMenu"
+          [dataImg]="profilePicture$ | async"
+          [margins]="false"
+        ></app-account-avatar>
+        <!-- </button> -->
       </div>
     </div>
     <!-- menu - large -->
@@ -243,7 +241,7 @@
           mat-list-item
           (click)="onToggleMenu(); assignSelected(null)"
           [routerLink]="[selected, sublink]"
-          *ngFor="let sublink of curr_sublinks"
+          *ngFor="let sublink of selectedSubLinks"
         >
           <span class="mat-body-1">
             {{ sublink | titlecase }}

@@ -11,7 +11,7 @@ import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 export class PlayComponent implements OnInit, OnDestroy {
   playLinks: string[] = RouteLinks.PLAY;
   routeSubscription: Subscription;
-  activeLink: string = '';
+  activeLink = '';
   constructor(private router: Router) {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -20,7 +20,7 @@ export class PlayComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {}
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }
 }

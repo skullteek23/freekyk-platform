@@ -2,75 +2,42 @@
   <mat-card class="_stats">
     <div class="_inside" fxLayoutGap="16px" fxLayout="column">
       <div class="_space shine"></div>
-      <!-- <div fxLayout="row wrap" fxLayoutGap="16px">
-
-      </div> -->
       <mat-grid-list gutterSize="16px" cols="2" rowHeight="72px">
-        <mat-grid-tile class="shine" *ngFor="let stat of [1, 2, 3, 4, 5]">
+        <mat-grid-tile class="shine" *ngFor="let stat of [1, 2, 3, 4]">
         </mat-grid-tile>
       </mat-grid-list>
     </div>
   </mat-card>
 </ng-template>
 <mat-card class="mat-elevation-z8" *ngIf="!isLoading; else statsLoading">
-  <mat-tab-group>
-    <mat-tab label="Player Stats">
-      <ng-template matTabContent>
-        <div class="fullpad-20">
-          <mat-grid-list cols="2" rowHeight="64px" gutterSize="8px">
-            <mat-grid-tile *ngFor="let stat of plStats$ | async">
-              <div
-                class="full-width-table"
-                fxLayoutAlign="start center"
-                fxLayoutGap="8px"
-              >
-                <mat-icon
-                  class="material-icons-round"
-                  [ngClass]="{
-                    red: stat.name == 'Red cards',
-                    yellow: stat.name == 'Yellow cards'
-                  }"
-                >
-                  {{ stat.icon }}
-                </mat-icon>
+  <span mat-card-title class="dash-h5 align">Your Stats</span>
 
-                <div fxLayout="column" fxLayoutAlign="center start">
-                  <span class="mat-body-1">
-                    {{ stat.value ? stat.value : "0" }}
-                  </span>
-                  <span class="mat-caption"> {{ stat.name }}</span>
-                </div>
-              </div>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </div>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Freestyle Stats">
-      <ng-template matTabContent>
-        <div class="fullpad-20">
-          <mat-grid-list cols="2" rowHeight="64px" gutterSize="8px">
-            <mat-grid-tile *ngFor="let stats of fsStats$ | async">
-              <div
-                class="full-width-table"
-                fxLayoutAlign="start center"
-                fxLayoutGap="8px"
-              >
-                <mat-icon class="material-icons-round">
-                  {{ stats.icon }}
-                </mat-icon>
+  <div *ngIf="!isLoading; else statsLoading">
+    <mat-grid-list cols="2" rowHeight="64px" gutterSize="8px">
+      <mat-grid-tile *ngFor="let stat of plStats$ | async">
+        <div
+          class="full-width-table"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+        >
+          <mat-icon
+            class="material-icons-round"
+            [ngClass]="{
+              red: stat.name == 'Red cards',
+              yellow: stat.name == 'Yellow cards'
+            }"
+          >
+            {{ stat.icon }}
+          </mat-icon>
 
-                <div fxLayout="column" fxLayoutAlign="center start">
-                  <span class="mat-body-1 primaryColor">
-                    {{ stats.value ? stats.value : "0" }}
-                  </span>
-                  <span class="mat-caption"> {{ stats.name }}</span>
-                </div>
-              </div>
-            </mat-grid-tile>
-          </mat-grid-list>
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <span class="mat-body-1">
+              {{ stat.value ? stat.value : "0" }}
+            </span>
+            <span class="mat-caption"> {{ stat.name }}</span>
+          </div>
         </div>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
 </mat-card>

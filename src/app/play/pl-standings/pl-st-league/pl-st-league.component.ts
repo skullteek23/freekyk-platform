@@ -13,45 +13,47 @@ export class PlStLeagueComponent implements OnInit {
   timgpath =
     'https://images.unsplash.com/photo-1599446740719-23f3414840ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=742&q=80';
   LeagueDataSource: LeagueTableModel[] = [];
-  watcher: Subscription;
+  subscriptions = new Subscription();
   cols: string[] = [];
-  constructor(private mediaObs: MediaObserver) {
+  constructor(private mediaObs: MediaObserver) {}
+  ngOnInit() {
     // this.initLeagueData();
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.cols = [
-            'pos',
-            'Team',
-            'W',
-            'D',
-            'L',
-            'Pts',
-            'P',
-            'GF',
-            'GA',
-            'GD',
-          ];
-        } else {
-          this.cols = [
-            'pos',
-            'Team',
-            'P',
-            'W',
-            'D',
-            'L',
-            'GF',
-            'GA',
-            'GD',
-            'Pts',
-          ];
-        }
-      });
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+            this.cols = [
+              'pos',
+              'Team',
+              'W',
+              'D',
+              'L',
+              'Pts',
+              'P',
+              'GF',
+              'GA',
+              'GD',
+            ];
+          } else {
+            this.cols = [
+              'pos',
+              'Team',
+              'P',
+              'W',
+              'D',
+              'L',
+              'GF',
+              'GA',
+              'GD',
+              'Pts',
+            ];
+          }
+        })
+    );
   }
-  ngOnInit() {}
 }

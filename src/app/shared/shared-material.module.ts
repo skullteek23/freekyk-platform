@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-//angular material
+// angular material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -29,7 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginatorModule } from '@angular/material/paginator';
-//angular material
+// angular material
 
 @NgModule({
   declarations: [],

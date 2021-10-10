@@ -24,7 +24,6 @@ export class DaHoStatsCardComponent implements OnInit {
       this.plStats$ = this.plServ.fetchPlayerStats(uid).pipe(
         map((stats) => {
           let newArray: statsIcon[] = [];
-          let i = 0;
           newArray = [
             {
               icon: 'sports_soccer',
@@ -41,7 +40,7 @@ export class DaHoStatsCardComponent implements OnInit {
       );
       this.fsStats$ = this.plServ.fetchFsStats(uid).pipe(
         map((stats) => {
-          let newArray: statsIcon[] = [
+          const newArray: statsIcon[] = [
             { icon: 'stars', name: 'Skill Level', value: stats.sk_lvl },
             {
               icon: 'group_work',

@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ALPHA_W_SPACE, NUM, QUERY } from 'src/app/shared/Constants/REGEX';
 import { BasicTicket } from 'src/app/shared/interfaces/ticket.model';
 
 @Component({
@@ -17,7 +18,7 @@ export class AccTicketsComponent implements OnInit {
   additionAvailable = true;
   showForm = false;
   myTickets$: Observable<BasicTicket[]>;
-  noTickets: boolean = false;
+  noTickets = false;
   constructor(
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore
@@ -25,24 +26,24 @@ export class AccTicketsComponent implements OnInit {
   ngOnInit(): void {
     this.getTickets();
   }
-  getTickets() {
+  getTickets(): void {
     this.myTickets$ = this.ngFire
       .collection('tickets')
       .snapshotChanges()
       .pipe(
-        tap((resp) => (this.noTickets = resp.length == 0)),
-        map(
-          (resp) => <BasicTicket[]>resp.map(
-              (doc) =>
-                <BasicTicket>{
-                  id: doc.payload.doc.id,
-                  ...(<BasicTicket>doc.payload.doc.data()),
-                }
-            )
+        tap((resp) => (this.noTickets = resp.length === 0)),
+        map((resp) =>
+          resp.map(
+            (doc) =>
+              ({
+                id: doc.payload.doc.id,
+                ...(doc.payload.doc.data() as BasicTicket),
+              } as BasicTicket)
+          )
         )
       );
   }
-  getColor(status: 'Complete' | 'Processing' | 'Recieved') {
+  getColor(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
         return 'var(--primaryColor)';
@@ -52,7 +53,7 @@ export class AccTicketsComponent implements OnInit {
         return 'grey';
     }
   }
-  getIcon(status: 'Complete' | 'Processing' | 'Recieved') {
+  getIcon(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
         return 'check_circle';
@@ -62,7 +63,7 @@ export class AccTicketsComponent implements OnInit {
         return 'inventory';
     }
   }
-  getStatus(status: 'Complete' | 'Processing' | 'Recieved') {
+  getStatus(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
         return 'resolved';
@@ -72,17 +73,17 @@ export class AccTicketsComponent implements OnInit {
         return 'request recieved';
     }
   }
-  onOpenTicketForm() {
+  onOpenTicketForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
     this.newTicketForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[a-zA-Z ]*$'),
+        Validators.pattern(ALPHA_W_SPACE),
       ]),
       ph_number: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[0-9]*$'),
+        Validators.pattern(NUM),
         Validators.minLength(10),
         Validators.maxLength(10),
       ]),
@@ -90,38 +91,38 @@ export class AccTicketsComponent implements OnInit {
       query: new FormControl(null, [
         Validators.required,
         Validators.maxLength(300),
-        Validators.pattern('^[a-zA-Z"0-9 ,:!.?\'/]*$'),
+        Validators.pattern(QUERY),
       ]),
     });
   }
-  onDeleteTicket(ticket_ID: string) {
+  onDeleteTicket(ticketID: string): void {
     // backend code goes here
     this.ngFire
       .collection('tickets')
-      .doc(ticket_ID)
+      .doc(ticketID)
       .delete()
       .then(() => this.snackServ.displayDelete());
   }
-  resetAll() {
+  resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
-  onSubmitTicket() {
+  onSubmitTicket(): void {
     // backend code goes here
     console.log(this.newTicketForm);
     this.ngFire
       .collection('tickets')
-      .add(<BasicTicket>{
+      .add({
         ...this.newTicketForm.value,
         ticket_UID: (
           this.ngFire.createId() + Date.now().toString().slice(0, 5)
         ).toUpperCase(),
         tkt_date: new Date(),
         tkt_status: 'Recieved',
-      })
+      } as BasicTicket)
       .then(this.finishSubmission.bind(this));
   }
-  finishSubmission() {
+  finishSubmission(): void {
     this.resetAll();
     this.snackServ.displayCustomMsg('Ticket submitted successfully!');
   }

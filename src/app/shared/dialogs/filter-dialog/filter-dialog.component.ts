@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-filter-dialog',
   templateUrl: './filter-dialog.component.html',
-  styleUrls: ['./filter-dialog.component.css']
+  styleUrls: ['./filter-dialog.component.css'],
 })
-export class FilterDialogComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class FilterDialogComponent {
+  constructor() {}
 }

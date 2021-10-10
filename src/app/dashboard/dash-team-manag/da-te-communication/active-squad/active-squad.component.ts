@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ActiveSquadMember } from 'src/app/shared/interfaces/team.model';
 import { TeamCommState } from '../store/teamComm.reducer';
 
@@ -13,10 +13,10 @@ import { TeamCommState } from '../store/teamComm.reducer';
 export class ActiveSquadComponent implements OnInit {
   // @Input('data') sqNumber: number;
   sqData$: Observable<ActiveSquadMember[]>;
-  constructor(private store: Store<{ teamComms: TeamCommState }>) {
-    this.sqData$ = store
+  constructor(private store: Store<{ teamComms: TeamCommState }>) {}
+  ngOnInit(): void {
+    this.sqData$ = this.store
       .select('teamComms')
-      .pipe(map((resp) => <ActiveSquadMember[]>resp.activeSquad));
+      .pipe(map((resp) => resp.activeSquad as ActiveSquadMember[]));
   }
-  ngOnInit(): void {}
 }

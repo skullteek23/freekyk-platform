@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-//angular material
+// angular material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -27,7 +27,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-//angular material
+// angular material
 
 @NgModule({
   declarations: [],

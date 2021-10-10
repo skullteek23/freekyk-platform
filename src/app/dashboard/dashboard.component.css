@@ -4,24 +4,11 @@
 .gap {
   margin: 0 16px;
 }
-.prof_pic_small {
-  height: 32px !important;
-  width: 32px !important;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
 .icon {
   font-size: 48px;
 }
 .icon-small {
   font-size: 32px;
-}
-.prof_pic {
-  height: 100%;
-  width: auto;
-  border-radius: 50%;
-  overflow: hidden;
 }
 .second_divider {
   width: 100%;
@@ -67,8 +54,9 @@
   margin-top: 8px;
 }
 .box {
-  height: 200px;
+  height: 150px;
   width: 100%;
+  margin-top: 20px;
 }
 .red {
   color: var(--secondaryColor);

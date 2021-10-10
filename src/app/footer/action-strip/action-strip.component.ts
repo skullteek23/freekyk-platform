@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./action-strip.component.css'],
 })
 export class ActionStripComponent implements OnInit {
-  @Input('compact') isCompact: boolean = false;
-  @Input('heading') hText: string = 'ready to play football?';
+  // tslint:disable: no-input-rename
+  @Input('compact') isCompact = false;
+  @Input('heading') headingText = 'ready to play football?';
   constructor(private router: Router) {}
   ngOnInit(): void {}
-  onNavigate(route: string) {
+  onNavigate(route: string): void {
     this.router.navigate([route]);
   }
 }

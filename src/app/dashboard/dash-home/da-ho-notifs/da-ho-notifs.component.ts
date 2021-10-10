@@ -16,7 +16,7 @@ export class DaHoNotifsComponent implements OnInit {
   constructor(private notifServ: NotificationsService) {
     this.notifications$ = this.notifServ.notifsChanged;
     this.noNotif$ = this.notifServ.notifsCountChanged.pipe(
-      map((resp) => resp == 0)
+      map((resp) => resp === 0)
     );
   }
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class DaHoNotifsComponent implements OnInit {
       this.isLoading = false;
     }, 1000);
   }
-  async getNotifications() {
+  getNotifications(): void {
     this.notifServ.getNotifications();
   }
 }

@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  SeasonAbout,
-  SeasonBasicInfo,
-} from 'src/app/shared/interfaces/season.model';
+import { SeasonAbout } from 'src/app/shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-overview',
@@ -13,6 +10,5 @@ export class SeOverviewComponent implements OnInit {
   @Input() data: SeasonAbout;
   @Input() venue: { city: string; state: string };
   constructor() {}
-
   ngOnInit(): void {}
 }

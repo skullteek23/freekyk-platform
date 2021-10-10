@@ -5,11 +5,11 @@
   "targets": {
     "football-platform-v1": {
       "hosting": {
-        "admin": [
-          "football-platform-admin"
-        ],
         "user": [
           "football-platform-v1"
+        ],
+        "admin": [
+          "football-platform-admin"
         ]
       }
     }

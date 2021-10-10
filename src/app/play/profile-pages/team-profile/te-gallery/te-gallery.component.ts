@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
@@ -11,37 +11,39 @@ import { TeamMedia } from 'src/app/shared/interfaces/team.model';
   templateUrl: './te-gallery.component.html',
   styleUrls: ['./te-gallery.component.css'],
 })
-export class TeGalleryComponent implements OnInit {
+export class TeGalleryComponent implements OnInit, OnDestroy {
   @Input() photos: string[] = [];
-  watcher: Subscription;
+  subscriptions = new Subscription();
   columns: any;
   photos$: Observable<TeamMedia>;
   constructor(
     private mediaObs: MediaObserver,
     private enServ: EnlargeService,
     private ngFire: AngularFirestore
-  ) {
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'xs') {
-          this.columns = 1;
-        } else if (change.mqAlias === 'sm') {
-          this.columns = 2;
-        } else {
-          this.columns = 3;
-        }
-      });
+  ) {}
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'xs') {
+            this.columns = 1;
+          } else if (change.mqAlias === 'sm') {
+            this.columns = 2;
+          } else {
+            this.columns = 3;
+          }
+        })
+    );
   }
-  ngOnInit(): void {}
-  ngOnDestroy() {
-    this.watcher.unsubscribe();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
-  onEnlargeView(imagePath: string) {
+  onEnlargeView(imagePath: string): void {
     this.enServ.onOpenPhoto(imagePath);
   }
 }

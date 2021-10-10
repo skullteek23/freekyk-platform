@@ -5,7 +5,7 @@ import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 })
 export class StickyNavDirective {
   @HostListener('window:scroll', ['$event'])
-  addSticky() {
+  addSticky(): void {
     if (window.pageYOffset >= 112) {
       this.renderer.addClass(this.elRef.nativeElement, 'sticky');
       this.renderer.addClass(this.elRef.nativeElement, 'mat-elevation-z4');

@@ -15,7 +15,7 @@
   </button>
 </div>
 <mat-list>
-  <mat-list-item *ngFor="let teamMember of teamMembers; last as last">
+  <mat-list-item *ngFor="let teamMember of membersArray; last as last">
     <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">

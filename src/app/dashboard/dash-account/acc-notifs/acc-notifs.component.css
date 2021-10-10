@@ -1,6 +1,8 @@
 .cont {
-  padding: 20px;
   min-height: 100vh;
+}
+.no-items {
+  padding: 20px;
 }
 .nofi {
   height: 700px;

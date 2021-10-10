@@ -10,11 +10,9 @@
 </ng-template>
 
 <ng-template #noNotif>
-  <ul>
-    <li class="nofi">
-      <p class="mat-body-1 grey-bg line">No notifications!</p>
-    </li>
-  </ul>
+  <div class="no-items">
+    <app-no-items-message items="notifications"></app-no-items-message>
+  </div>
 </ng-template>
 <div class="cont" *ngIf="!isLoading; else loading" fxLayout="column">
   <!-- list -->

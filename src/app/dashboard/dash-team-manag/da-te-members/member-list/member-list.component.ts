@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
+import { TeamMemberListFilter } from 'src/app/shared/Constants/FILTERS';
 import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
+import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
 import { Tmember } from 'src/app/shared/interfaces/team.model';
 import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
 
@@ -12,23 +14,29 @@ import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
   styleUrls: ['./member-list.component.css'],
 })
 export class MemberListComponent implements OnInit {
-  @Input() margin: boolean = false;
-  @Input('membersArray') teamMembers: Tmember[] = [];
+  @Input() margin = false;
+  @Input() membersArray: Tmember[] = [];
   @Input() capId: string;
-  plFilters = ['Playing Position'];
+  filterData: FilterData;
+  term: string = null;
   constructor(private dialog: MatDialog, private ngFire: AngularFirestore) {}
-  ngOnInit(): void {}
-  async onOpenPlayerProfile(pid: string) {
-    let playersnap = await this.ngFire
+  ngOnInit(): void {
+    this.filterData = {
+      defaultFilterPath: '',
+      filtersObj: TeamMemberListFilter,
+    };
+  }
+  async onOpenPlayerProfile(pid: string): Promise<any> {
+    const playersnap = await this.ngFire
       .collection('players')
       .doc(pid)
       .get()
       .pipe(
         map((resp) => {
-          return <PlayerBasicInfo>{
+          return {
             id: pid,
-            ...(<PlayerBasicInfo>resp.data()),
-          };
+            ...(resp.data() as PlayerBasicInfo),
+          } as PlayerBasicInfo;
         })
       )
       .toPromise();
@@ -36,5 +44,12 @@ export class MemberListComponent implements OnInit {
       panelClass: 'fk-dialogs',
       data: playersnap,
     });
+  }
+  onChangeFilter(queryInfo: QueryInfo): void {
+    if (queryInfo) {
+      this.term = queryInfo.queryValue;
+    } else {
+      this.term = null;
+    }
   }
 }

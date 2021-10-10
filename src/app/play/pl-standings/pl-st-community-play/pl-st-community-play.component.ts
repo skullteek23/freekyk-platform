@@ -12,7 +12,7 @@ import { CommunityLeaderboard } from 'src/app/shared/interfaces/others.model';
 })
 export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
   cols: string[] = [];
-  watcher: Subscription;
+  subscriptions = new Subscription();
   timgpath =
     'https://images.unsplash.com/photo-1599446740719-23f3414840ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=742&q=80';
   CommPlayDataSource: CommunityLeaderboard[] = [
@@ -78,22 +78,24 @@ export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
     },
   ];
   constructor(private dialog: MatDialog, private mediaObs: MediaObserver) {
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.cols = ['home', 'away', 'winner'];
-        } else {
-          this.cols = ['home', 'away', 'stadium', 'winner'];
-        }
-      });
+    this.subscriptions.add(
+      mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+            this.cols = ['home', 'away', 'winner'];
+          } else {
+            this.cols = ['home', 'away', 'stadium', 'winner'];
+          }
+        })
+    );
   }
   ngOnInit(): void {}
-  ngOnDestroy() {
-    this.watcher.unsubscribe();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

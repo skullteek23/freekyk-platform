@@ -13,7 +13,7 @@ export class SendinviteComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-  onCloseDialog(response = false) {
+  onCloseDialog(response = false): void {
     this.dialogRef.close(response);
   }
 }
