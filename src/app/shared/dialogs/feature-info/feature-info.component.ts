@@ -12,7 +12,7 @@ export class FeatureInfoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
   ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
 }

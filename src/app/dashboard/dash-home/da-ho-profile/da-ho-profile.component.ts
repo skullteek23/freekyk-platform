@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
   templateUrl: './da-ho-profile.component.html',
   styleUrls: ['./da-ho-profile.component.css'],
 })
-export class DaHoProfileComponent implements OnInit {
+export class DaHoProfileComponent implements OnInit, OnDestroy {
   @Input() profile: 'player' | 'freestyler' = 'player';
   playerName = 'Your Name';
   isLoading = true;
@@ -23,8 +23,7 @@ export class DaHoProfileComponent implements OnInit {
   smLinks: SocialMediaLinks;
   profilePhoto: string;
   nickname: string;
-  subs: Subscription;
-  subs2: Subscription;
+  subscriptions = new Subscription();
   constructor(
     private enlServ: EnlargeService,
     private dialog: MatDialog,
@@ -34,47 +33,55 @@ export class DaHoProfileComponent implements OnInit {
     }>
   ) {}
   ngOnInit(): void {
-    this.store
-      .select('dash')
-      .pipe(
-        tap((val) => {
-          if (val.playerBasicInfo.name != null && this.profile === 'player') {
-            this.isLoading = false;
-          } else if (val.fsInfo.name != null && this.profile === 'freestyler') {
-            this.isLoading = false;
-          }
-        }),
-        map((info) => {
-          this.playerName = info.playerBasicInfo.name;
-          this.profilePhoto = info.playerMoreInfo.imgpath_lg;
-          this.nickname = info.playerMoreInfo.nickname;
-          this.smLinks = info.socials;
-          if (this.profile === 'player') {
-            return {
-              Age: this.getAge(info.playerMoreInfo.born),
-              Gender: this.getGender(info.playerBasicInfo.gen),
-              Height: this.getHeight(info.playerMoreInfo.height),
-              Team: this.getTeam(info.playerBasicInfo.team),
-              Weight: this.getWeight(info.playerMoreInfo.weight),
-              'Playing Position': info.playerBasicInfo.pl_pos,
-              'Lives in': this.getLocation(
-                info.playerBasicInfo.locCity,
-                info.playerMoreInfo.locState
-              ),
-              'Strong Foot': this.getStrongFoot(info.playerMoreInfo.str_ft),
-            };
-          } else {
-            return {
-              Age: this.getAge(info.playerMoreInfo.born),
-              Country: info.fsInfo.locCountry,
-              bio: info.fsInfo.bio?.slice(0, 30).concat('...'),
-            };
-          }
+    this.subscriptions.add(
+      this.store
+        .select('dash')
+        .pipe(
+          tap((val) => {
+            if (val.playerBasicInfo.name != null && this.profile === 'player') {
+              this.isLoading = false;
+            } else if (
+              val.fsInfo.name != null &&
+              this.profile === 'freestyler'
+            ) {
+              this.isLoading = false;
+            }
+          }),
+          map((info) => {
+            this.playerName = info.playerBasicInfo.name;
+            this.profilePhoto = info.playerMoreInfo.imgpath_lg;
+            this.nickname = info.playerMoreInfo.nickname;
+            this.smLinks = info.socials;
+            if (this.profile === 'player') {
+              return {
+                Age: this.getAge(info.playerMoreInfo.born),
+                Gender: this.getGender(info.playerBasicInfo.gen),
+                Height: this.getHeight(info.playerMoreInfo.height),
+                Team: this.getTeam(info.playerBasicInfo.team),
+                Weight: this.getWeight(info.playerMoreInfo.weight),
+                'Playing Position': info.playerBasicInfo.pl_pos,
+                'Lives in': this.getLocation(
+                  info.playerBasicInfo.locCity,
+                  info.playerMoreInfo.locState
+                ),
+                'Strong Foot': this.getStrongFoot(info.playerMoreInfo.str_ft),
+              };
+            } else {
+              return {
+                Age: this.getAge(info.playerMoreInfo.born),
+                Country: info.fsInfo.locCountry,
+                bio: info.fsInfo.bio?.slice(0, 30).concat('...'),
+              };
+            }
+          })
+        )
+        .subscribe((data) => {
+          this.mainProperties = data;
         })
-      )
-      .subscribe((data) => {
-        this.mainProperties = data;
-      });
+    );
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   getTeam(team: { name: string; id: string; capId: string } | null): string {

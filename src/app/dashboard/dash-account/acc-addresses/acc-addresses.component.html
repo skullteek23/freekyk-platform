@@ -22,7 +22,7 @@
     fxLayout="column"
   >
     <mat-form-field appearance="outline" color="primary">
-      <mat-label>Add Address Name</mat-label>
+      <mat-label>Choose Address Name</mat-label>
       <input
         type="text"
         matInput
@@ -68,25 +68,27 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" color="primary">
-      <mat-label>Select City</mat-label>
-      <mat-select formControlName="city">
-        <mat-option *ngFor="let city of cities" [value]="city">
-          {{ city }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="this.newAddressForm.get('city')?.hasError('required')">
-        This field cannot be empty!
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" color="primary">
       <mat-label>Select State</mat-label>
-      <mat-select formControlName="state">
-        <mat-option *ngFor="let state of states" [value]="state">
+      <mat-select
+        (selectionChange)="onSelectState($event)"
+        formControlName="state"
+      >
+        <mat-option *ngFor="let state of states$ | async" [value]="state">
           {{ state }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="this.newAddressForm.get('state')?.hasError('required')">
+        This field cannot be empty!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select City</mat-label>
+      <mat-select formControlName="city">
+        <mat-option *ngFor="let city of cities$ | async" [value]="city">
+          {{ city }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="this.newAddressForm.get('city')?.hasError('required')">
         This field cannot be empty!
       </mat-error>
     </mat-form-field>

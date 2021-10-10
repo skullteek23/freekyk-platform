@@ -16,15 +16,16 @@ export class DaHoInvitesListComponent implements OnInit {
     this.getInvites();
   }
   ngOnInit(): void {}
-  getInvites() {
+  getInvites(): void {
     this.emptyInvites$ = this.notifServ.emptyInvites;
     const uid = localStorage.getItem('uid');
-    if (!!uid)
+    if (!!uid) {
       this.invites$ = this.notifServ
         .fetchInvites(uid)
         .pipe(tap(() => console.log('sub made')));
+    }
   }
-  onViewInvite(inv: Invite) {
+  onViewInvite(inv: Invite): void {
     this.notifServ.openTeamOffer(inv.id, inv.teamName);
   }
 }

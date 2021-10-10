@@ -23,13 +23,6 @@ import * as fromApp from './store/app.reducer';
 import { clearState } from './store/clearState.reducer';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginUiComponent } from './auth/login-ui/login-ui.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CartComponent } from './cart/cart.component';
-import { CheckoutComponent } from './cart/checkout/checkout.component';
-import { FillAddressComponent } from './cart/checkout/fill-address/fill-address.component';
-import { CompletePaymentComponent } from './cart/checkout/complete-payment/complete-payment.component';
-import { SavedAddressListComponent } from './cart/checkout/saved-address-list/saved-address-list.component';
-import { PricingComponent } from './others/pricing/pricing.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { PlayerProfileComponent } from './play/profile-pages/player-profile/player-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
@@ -56,7 +49,6 @@ import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-
     AboutComponent,
     PrivacyComponent,
     TermsComponent,
-    PricingComponent,
     HeaderComponent,
     FooterComponent,
     ErrorComponent,
@@ -65,11 +57,6 @@ import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-
     LandingPageComponent,
     SignupComponent,
     LoginUiComponent,
-    CartComponent,
-    CheckoutComponent,
-    FillAddressComponent,
-    CompletePaymentComponent,
-    SavedAddressListComponent,
     GroundProfileComponent,
     PlayerProfileComponent,
     SeasonProfileComponent,
@@ -95,7 +82,6 @@ import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-
       logOnly: environment.production,
       maxAge: 5,
     }),
-    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

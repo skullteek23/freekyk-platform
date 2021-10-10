@@ -8,15 +8,12 @@ import { filter, map, take } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { AuthService } from '../services/auth.service';
-import { PlayerService } from '../services/player.service';
-import { TeamService } from '../services/team.service';
 import { DashState } from './store/dash.reducer';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [TeamService, PlayerService],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   watcher: Subscription;

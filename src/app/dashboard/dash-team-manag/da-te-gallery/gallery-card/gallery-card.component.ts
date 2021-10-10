@@ -10,7 +10,7 @@ export class GalleryCardComponent implements OnInit {
   @Input() photos: string[] = [];
   constructor(private teServ: TeamService) {}
   ngOnInit(): void {}
-  onOpenTeamSettings() {
+  onOpenTeamSettings(): void {
     this.teServ.onOpenTeamSettingsDialog();
   }
 }

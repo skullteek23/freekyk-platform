@@ -96,7 +96,8 @@
         <button
           class="primaryButton buttonText"
           [disabled]="!personalInfoForm.valid || !personalInfoForm.dirty"
-          type="submit"
+          type="button"
+          (click)="onSavePersonalInfo()"
         >
           Save Changes
         </button>
@@ -309,9 +310,10 @@
 
       <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column">
         <button
+          (click)="onSavePlayerInfo()"
           class="primaryButton buttonText"
           [disabled]="!playingInfoForm.valid || !playingInfoForm.dirty"
-          type="submit"
+          type="button"
         >
           Save Changes
         </button>
@@ -450,7 +452,8 @@
         <button
           class="primaryButton buttonText"
           [disabled]="!FreestylingInfoForm.valid || !FreestylingInfoForm.dirty"
-          type="submit"
+          (click)="onSaveFsInfo()"
+          type="button"
         >
           Save Changes
         </button>
@@ -494,7 +497,8 @@
         <button
           [disabled]="!socialInfoForm.valid || !socialInfoForm.dirty"
           class="primaryButton buttonText"
-          type="submit"
+          type="button"
+          (click)="onSaveSMInfo()"
         >
           Save Changes
         </button>

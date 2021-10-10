@@ -7,9 +7,5 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashPremiumComponent implements OnInit {
   constructor() {}
-
   ngOnInit(): void {}
-  getDate() {
-    return new Date();
-  }
 }

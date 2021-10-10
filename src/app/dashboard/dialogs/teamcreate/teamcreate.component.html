@@ -108,15 +108,11 @@
         [state]="state2"
       >
         <div class="content_container" fxLayout="column" fxLayoutGap="16px">
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label>Search for a player</mat-label>
-            <input
-              type="text"
-              matInput
-              name="search"
-              [(ngModel)]="search_player"
-            />
-          </mat-form-field>
+          <app-search-lg
+            searchPlaceholder="Search players by name, playing position, city"
+            (searchItem)="filterTerm = $event"
+          >
+          </app-search-lg>
 
           <mat-hint
             *ngIf="
@@ -134,12 +130,18 @@
 
             <mat-list-option
               [value]="{ name: player.name, id: player.id }"
-              *ngFor="let player of players$ | async"
+              *ngFor="
+                let player of players$
+                  | async
+                  | filterList: 'name,locCity,pl_pos':filterTerm
+              "
             >
               <div fxLayoutAlign="space-between center" fxLayoutGap="4px">
                 <span ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption">
                   {{
-                    player.name | slice: 0:15 | namePositionCombo: player.pl_pos
+                    player.name
+                      | textShorten: 15
+                      | namePositionCombo: player.pl_pos
                   }}
                 </span>
                 <a

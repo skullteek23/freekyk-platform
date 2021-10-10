@@ -50,7 +50,6 @@ export async function teamCreation(
       l: 0,
       rcards: 0,
       ycards: 0,
-      cl_sheet: 0,
       g_conceded: 0,
       pr_tour_wins: 0,
     };
@@ -103,7 +102,7 @@ export async function teamCreation(
         .doc('members')
         .set(tMembers)
     );
-    //update
+    // update
 
     console.log('Team created');
     return await Promise.all(allPromises);

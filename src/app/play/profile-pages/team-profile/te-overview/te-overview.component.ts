@@ -13,7 +13,7 @@ export class TeOverviewComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
-  onRedirectSocialMedia(loc: string) {
+  onRedirectSocialMedia(loc: string): void {
     if (loc != null) {
       window.location.href = loc;
     }

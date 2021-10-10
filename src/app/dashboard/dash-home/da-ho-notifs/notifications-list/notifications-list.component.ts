@@ -9,11 +9,12 @@ import { NotificationBasic } from 'src/app/shared/interfaces/notification.model'
   styleUrls: ['./notifications-list.component.css'],
 })
 export class NotificationsListComponent implements OnInit {
+  // tslint:disable-next-line: no-input-rename
   @Input('data') notifications: NotificationBasic[];
   noNotif$: Observable<boolean>;
   constructor(private notifServ: NotificationsService) {}
   ngOnInit(): void {}
-  onSelNotif(selectedNotif: NotificationBasic) {
+  onSelNotif(selectedNotif: NotificationBasic): void {
     this.notifServ.onSelNotif(selectedNotif);
   }
 }

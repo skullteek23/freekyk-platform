@@ -51,7 +51,7 @@ export const initialState = {
 export function teamReducer(
   state: TeamState = initialState,
   action: TeamActions.TeamActionsType
-) {
+): TeamState {
   switch (action.type) {
     case TeamActions.ADD_BASIC_INFO:
       return {

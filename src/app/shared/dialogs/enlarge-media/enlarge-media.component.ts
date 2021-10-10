@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-enlarge-media',
@@ -15,7 +14,7 @@ export class EnlargeMediaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
 }

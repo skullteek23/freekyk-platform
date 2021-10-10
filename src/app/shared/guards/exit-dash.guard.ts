@@ -23,10 +23,12 @@ export class ExitDashGuard implements CanDeactivate<unknown> {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (localStorage.getItem('uid') == null) return true;
+    if (localStorage.getItem('uid') === null) {
+      return true;
+    }
     return this.getResponse();
   }
-  async getResponse() {
+  async getResponse(): Promise<any> {
     return this.dialog.open(ExitDashboardComponent).afterClosed().toPromise();
   }
   constructor(private dialog: MatDialog) {}

@@ -1,15 +1,9 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { map, share, shareReplay, take, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { RouteLinks } from 'src/app/shared/Constants/ROUTE_LINKS';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';

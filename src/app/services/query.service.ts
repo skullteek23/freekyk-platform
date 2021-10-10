@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '../shared/Constants/DEFAULTS';
 import {
   FilterHeadingMap,
   FilterSymbolMap,
@@ -23,16 +24,22 @@ export class QueryService {
         : '==',
       queryValue: FilterValueMap[queryInfo.queryValue],
     };
-
-    return this.ngFire
-      .collection(collectionName, (query) =>
-        query.where(
-          queryInfo.queryItem,
-          queryInfo.queryComparisonSymbol,
-          queryInfo.queryValue
+    if (
+      collectionName &&
+      queryInfo.queryItem &&
+      queryInfo.queryComparisonSymbol &&
+      queryInfo.queryValue
+    ) {
+      return this.ngFire
+        .collection(collectionName, (query) =>
+          query.where(
+            queryInfo.queryItem,
+            queryInfo.queryComparisonSymbol,
+            queryInfo.queryValue
+          )
         )
-      )
-      .get();
+        .get();
+    }
   }
 
   onQueryMatches(
@@ -57,6 +64,32 @@ export class QueryService {
             queryInfo.queryValue
           )
           .where('concluded', '==', isConcluded)
+      )
+      .get();
+  }
+  onQueryMatchesForDashboard(
+    queryInfo: QueryInfo,
+    collectionName: string,
+    isConcluded: boolean
+  ): Observable<QuerySnapshot<unknown>> {
+    queryInfo = {
+      queryItem: FilterHeadingMap[queryInfo.queryItem],
+      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+        ? FilterSymbolMap[queryInfo.queryItem]
+        : '==',
+      queryValue: FilterValueMap[queryInfo.queryValue],
+    };
+
+    return this.ngFire
+      .collection(collectionName, (query) =>
+        query
+          .where(
+            queryInfo.queryItem,
+            queryInfo.queryComparisonSymbol,
+            queryInfo.queryValue
+          )
+          .where('concluded', '==', isConcluded)
+          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get();
   }

@@ -6,18 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-  products_links = [
+  productLinks = [
     { name: 'play', route: 'play/home' },
     { name: 'freestyle', route: 'freestyle/home' },
     { name: 'academies', route: 'academies' },
     { name: 'equipment', route: 'equipment' },
   ];
-  about_links = [
+  aboutLinks = [
     { name: 'about us', route: 'about' },
     { name: 'raise a ticket', route: 'support' },
     { name: 'help & support', route: 'support' },
   ];
+  constructor() {}
+  ngOnInit(): void {}
 }

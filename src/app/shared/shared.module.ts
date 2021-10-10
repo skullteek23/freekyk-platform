@@ -24,8 +24,6 @@ import { NoItemsMessageComponent } from './components/no-items-message/no-items-
 import { FixtureBasicComponent } from './components/fixture-basic/fixture-basic.component';
 import { BarLoadingShimmerComponent } from './components/bar-loading-shimmer/bar-loading-shimmer.component';
 import { MatchCardComponent } from './dialogs/match-card/match-card.component';
-import { ContestInfoComponent } from './dialogs/contest-info/contest-info.component';
-import { PricingTemplateComponent } from './components/pricing-template/pricing-template.component';
 import { TeamCommsMobileComponent } from './components/team-comms-mobile/team-comms-mobile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateInfoComponent } from './components/update-info/update-info.component';
@@ -37,7 +35,6 @@ import { NamePositionComboPipe } from './pipes/name-position-combo.pipe';
 import { NameComboPipe } from './pipes/name-combo.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
 import { PlayerCardComponent } from './dialogs/player-card/player-card.component';
-import { FreestylerCardComponent } from './dialogs/freestyler-card/freestyler-card.component';
 import { MatchDetailHeaderComponent } from './components/match-detail-header/match-detail-header.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { TickAnimationComponent } from './components/tick-animation/tick-animation.component';
@@ -89,8 +86,6 @@ const customConfig: ShareButtonsConfig = {
     FixtureBasicComponent,
     BarLoadingShimmerComponent,
     MatchCardComponent,
-    ContestInfoComponent,
-    PricingTemplateComponent,
     TeamCommsMobileComponent,
     UpdateInfoComponent,
     ContestMobileComponent,
@@ -101,7 +96,6 @@ const customConfig: ShareButtonsConfig = {
     NameComboPipe,
     LoadingComponent,
     PlayerCardComponent,
-    FreestylerCardComponent,
     MatchDetailHeaderComponent,
     TickAnimationComponent,
     TextShortenPipe,
@@ -156,8 +150,6 @@ const customConfig: ShareButtonsConfig = {
     FixtureBasicComponent,
     BarLoadingShimmerComponent,
     MatchCardComponent,
-    ContestInfoComponent,
-    PricingTemplateComponent,
     NamePositionComboPipe,
     NameComboPipe,
     TeamCommsMobileComponent,
@@ -171,7 +163,6 @@ const customConfig: ShareButtonsConfig = {
     LoadingComponent,
     MatchDetailHeaderComponent,
     PlayerCardComponent,
-    FreestylerCardComponent,
     YouTubePlayerModule,
     MatchDetailHeaderComponent,
     TickAnimationComponent,

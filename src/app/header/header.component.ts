@@ -2,7 +2,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
@@ -14,17 +14,17 @@ import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  @Output('menOpen') onChangeMenuState = new Subject<boolean>();
-  isLoading: boolean = true;
-  isLogged: boolean = false;
+  @Output() menOpen = new Subject<boolean>();
+  isLoading = true;
+  isLogged = false;
   menuState: boolean;
   sidenavOpen: boolean;
-  profile_picture$: Observable<string | null>;
+  profilePicture$: Observable<string | null>;
   playSublinks: string[] = [];
   fsSublinks: string[] = [];
   dashSublinks: string[] = [];
   morelinks: { name: string; route: string }[] = [];
-  curr_sublinks: string[] = [];
+  selectedSubLinks: string[] = [];
   selected: 'dashboard' | 'play' | 'freestyle' | null = null;
   notifCount$: Observable<number | string>;
   constructor(
@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.menuState = false;
     this.sidenavOpen = false;
-    this.profile_picture$ = this.avatarServ.getProfilePicture();
+    this.profilePicture$ = this.avatarServ.getProfilePicture();
     this.ngAuth.user.subscribe((user) => {
       if (user !== null) {
         this.isLogged = true;
@@ -60,41 +60,41 @@ export class HeaderComponent implements OnInit {
       { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` },
     ];
   }
-  onToggleMenu() {
+  onToggleMenu(): void {
     this.sidenavOpen = false;
     this.menuState = !this.menuState;
-    this.onChangeMenuState.next(this.menuState);
+    this.menOpen.next(this.menuState);
   }
-  onCloseMenu() {
+  onCloseMenu(): void {
     this.sidenavOpen = false;
     this.menuState = false;
-    this.onChangeMenuState.next(this.menuState);
+    this.menOpen.next(this.menuState);
   }
-  onLogout() {
+  onLogout(): void {
     this.sidenavOpen = false;
     this.assignSelected(null);
     this.dialog.open(LogoutComponent);
   }
 
-  onUpdateSubLinks(linkName: 'dashboard' | 'play' | 'freestyle') {
+  onUpdateSubLinks(linkName: 'dashboard' | 'play' | 'freestyle'): void {
     this.assignSelected(linkName);
     switch (linkName) {
       case 'dashboard':
-        this.curr_sublinks = this.dashSublinks;
+        this.selectedSubLinks = this.dashSublinks;
         break;
       case 'play':
-        this.curr_sublinks = this.playSublinks;
+        this.selectedSubLinks = this.playSublinks;
         break;
       case 'freestyle':
-        this.curr_sublinks = this.fsSublinks;
+        this.selectedSubLinks = this.fsSublinks;
         break;
       default:
-        this.curr_sublinks = [];
+        this.selectedSubLinks = [];
     }
     this.sidenavOpen = true;
   }
 
-  assignSelected(value: 'dashboard' | 'play' | 'freestyle' | null) {
+  assignSelected(value: 'dashboard' | 'play' | 'freestyle' | null): void {
     this.selected = value;
   }
 }

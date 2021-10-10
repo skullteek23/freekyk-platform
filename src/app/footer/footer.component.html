@@ -9,7 +9,7 @@
   <ul fxFlexOrder="1">
     <h4 matSubheader>Products</h4>
     <a
-      *ngFor="let link of products_links"
+      *ngFor="let link of productLinks"
       [routerLink]="[link.route]"
       fxLayoutAlign="start center"
     >
@@ -22,7 +22,7 @@
   <ul fxFlexOrder="2">
     <h4 matSubheader>About</h4>
     <a
-      *ngFor="let link of about_links"
+      *ngFor="let link of aboutLinks"
       [routerLink]="[link.route]"
       fxLayoutAlign="start center"
     >

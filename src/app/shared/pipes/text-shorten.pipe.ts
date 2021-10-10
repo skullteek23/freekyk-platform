@@ -5,10 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TextShortenPipe implements PipeTransform {
   transform(value: string, maxLength: number): string {
-    if (!!value)
+    if (!!value) {
       return value.length > maxLength
         ? value.slice(0, maxLength).concat('...')
         : value;
+    }
     return value;
   }
 }

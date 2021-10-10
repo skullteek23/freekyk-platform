@@ -69,7 +69,7 @@
       <app-account-avatar
         *ngIf="isLogged && !isLoading"
         [routerLink]="['/dashboard', 'account', 'profile']"
-        [dataImg]="profile_picture$ | async"
+        [dataImg]="profilePicture$ | async"
         [margins]="false"
       ></app-account-avatar>
       <!-- </div> -->
@@ -180,7 +180,7 @@
         <app-account-avatar
           *ngIf="isLogged && !isLoading"
           [matMenuTriggerFor]="profileMenu"
-          [dataImg]="profile_picture$ | async"
+          [dataImg]="profilePicture$ | async"
           [margins]="false"
         ></app-account-avatar>
         <!-- </button> -->
@@ -241,7 +241,7 @@
           mat-list-item
           (click)="onToggleMenu(); assignSelected(null)"
           [routerLink]="[selected, sublink]"
-          *ngFor="let sublink of curr_sublinks"
+          *ngFor="let sublink of selectedSubLinks"
         >
           <span class="mat-body-1">
             {{ sublink | titlecase }}

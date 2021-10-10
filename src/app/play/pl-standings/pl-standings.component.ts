@@ -16,7 +16,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   onMobile = false;
   subscriptions = new Subscription();
   knockoutFixtures: MatchFixture[] = [];
-  seasonChosen = '';
+  seasonChosen = null;
   filterData: FilterData = {
     defaultFilterPath: '',
     filtersObj: {},
@@ -56,7 +56,11 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     }
   }
   onQueryData(queryInfo): void {
-    this.onChooseSeason(queryInfo.queryValue);
+    if (queryInfo) {
+      this.onChooseSeason(queryInfo.queryValue);
+    } else {
+      this.seasonChosen = null;
+    }
   }
   onChooseSeason(seasonName: string): void {
     this.seasonChosen = seasonName;

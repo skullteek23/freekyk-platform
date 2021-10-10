@@ -23,66 +23,57 @@ export class PlayerCardComponent implements OnInit {
   defaultvalue = 0;
   addiInfo$: Observable<PlayerMoreInfo>;
   plStats$: Observable<Stats>;
-  isLoading: boolean = true;
-  user_tours: string[] = [];
-  user_teams: string[] = [];
+  isLoading = true;
+  userTours: string[] = [];
+  userTeams: string[] = [];
   constructor(
     public dialogRef: MatDialogRef<PlayerCardComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: PlayerBasicInfo,
-    private ngFire: AngularFirestore,
-    private shareServ: SocialShareService
-  ) {
+    private ngFire: AngularFirestore
+  ) {}
+  ngOnInit(): void {
     this.getAdditionalInfo();
   }
-  ngOnInit(): void {}
-  getAdditionalInfo() {
+  getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
-      .collection('players/' + this.data.id + '/additionalInfo')
+      .collection(`players/${this.data.id}/additionalInfo`)
       .doc('otherInfo')
       .get()
       .pipe(
         tap((val) => {
           this.isLoading = false;
         }),
-        map((resp) => <PlayerMoreInfo>resp.data()),
+        map((resp) => resp.data() as PlayerMoreInfo),
         tap((resp) => {
           if (!!resp) {
-            this.user_teams = !!resp.prof_teams ? resp.prof_teams : [];
-            this.user_tours = !!resp.prof_tours ? resp.prof_tours : [];
+            this.userTours = !!resp.prof_teams ? resp.prof_teams : [];
+            this.userTours = !!resp.prof_tours ? resp.prof_tours : [];
           }
         }),
         share()
       );
   }
-  onLoadStats() {
+  onLoadStats(): void {
     this.plStats$ = this.ngFire
-      .collection('players/' + this.data.id + '/additionalInfo')
+      .collection(`players/${this.data.id}/additionalInfo`)
       .doc('statistics')
       .get()
       .pipe(
-        map((resp) => <BasicStats>resp.data()),
+        map((resp) => resp.data() as BasicStats),
         map(
           (resp) =>
-            <Stats>{
+            ({
               Appearances: resp ? resp.apps : 0,
               Wins: resp ? resp.w : 0,
               Goals: resp ? resp.g : 0,
               Cards: resp ? resp.cards : 0,
-            }
+            } as Stats)
         )
       );
   }
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onShare(pl: PlayerBasicInfo) {
-    const ShareData: ShareData = {
-      share_title: pl.name,
-      share_desc: LOREM_IPSUM_SHORT,
-      share_url: 'https://freekyk8--h-qcd2k7n4.web.app/' + 'p/' + pl.id,
-      share_imgpath: pl.imgpath_sm,
-    };
-    this.shareServ.onShare(ShareData);
-  }
+  onShare(pl: PlayerBasicInfo): void {}
 }

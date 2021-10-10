@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-
 import { FilterData } from '../../interfaces/others.model';
 
 @Component({
@@ -11,7 +10,6 @@ import { FilterData } from '../../interfaces/others.model';
 export class FiltersLgComponent implements OnInit {
   // tslint:disable: no-input-rename
   @Input('filterArray') filters: string[] = [];
-  @Input('showCalendar') calendar = false;
   @Input('margin') addSpacing = true;
 
   @Input('data') filterData: FilterData = {

@@ -10,21 +10,20 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UpdateInfoComponent } from 'src/app/shared/components/update-info/update-info.component';
 import { positionGroup } from 'src/app/shared/interfaces/others.model';
 import {
-  BrandCollabInfo,
   FsProfileVideos,
-  PlayerBasicInfo,
   PlayerMoreInfo,
   SocialMediaLinks,
 } from 'src/app/shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
-import { YOUTUBE_REGEX } from 'src/app/shared/Constants/REGEX';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ALPHA_W_SPACE,
+  BIO,
+  YOUTUBE_REGEX,
+} from 'src/app/shared/Constants/REGEX';
 import { PLAYING_POSITIONS } from 'src/app/shared/Constants/PLAYING_POSITIONS';
 import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -38,14 +37,17 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   playingInfoForm: FormGroup;
   FreestylingInfoForm: FormGroup;
   socialInfoForm: FormGroup;
-  cities = ['Ghaziabad'];
-  states = ['Uttar Pradesh'];
-  countries = ['India'];
   filteredOptions: positionGroup[] = PLAYING_POSITIONS;
-  countries$: Observable<string[]>;
-  states$: Observable<string[]>;
-  cities$: Observable<string[]>;
+  countries$: Observable<string[]> = of(['']);
+  states$: Observable<string[]> = of(['']);
+  cities$: Observable<string[]> = of(['']);
   subscriptions = new Subscription();
+  teamsArray: FormArray = new FormArray([]);
+  toursArray: FormArray = new FormArray([]);
+  emptyControlArray = new FormControl(null, [
+    Validators.required,
+    Validators.pattern(ALPHA_W_SPACE),
+  ]);
 
   constructor(
     private dialog: MatDialog,
@@ -54,28 +56,11 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     }>,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService,
-    private route: ActivatedRoute,
-    private router: Router,
     private locationServ: LocationCitiesService
   ) {}
   ngOnInit(): void {
     this.initForm();
     this.countries$ = this.locationServ.getCountry();
-    this.subscriptions.add(
-      this.route.fragment.subscribe((frag) => {
-        if (
-          frag &&
-          ['personal', 'freestyle', 'player', 'social-media'].includes(frag)
-        ) {
-          console.log(frag);
-          this.scrollToElement(frag);
-        } else {
-          this.router.navigate(['/dashboard', 'account', 'profile'], {
-            fragment: 'personal',
-          });
-        }
-      })
-    );
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -89,6 +74,34 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   initForm(): void {
     this.subscriptions.add(
       this.store.select('dash').subscribe((data) => {
+        if (data.playerMoreInfo.locState && data.playerMoreInfo.locCountry) {
+          this.states$ = this.locationServ.getStateByCountry(
+            data.playerMoreInfo.locCountry
+          );
+          this.cities$ = this.locationServ.getCityByState(
+            data.playerMoreInfo.locState
+          );
+        }
+        if (
+          data.playerMoreInfo.prof_teams.length !== 0 &&
+          this.teamsArray.length === 0
+        ) {
+          data.playerMoreInfo.prof_teams.forEach((team) => {
+            const newControl = new FormControl(team);
+            this.teamsArray.push(newControl);
+          });
+          this.teamsArray.push(this.emptyControlArray);
+        }
+        if (
+          data.playerMoreInfo.prof_tours.length !== 0 &&
+          this.toursArray.length === 0
+        ) {
+          data.playerMoreInfo.prof_tours.forEach((tournament) => {
+            const newControl = new FormControl(tournament);
+            this.toursArray.push(newControl);
+          });
+          this.toursArray.push(this.emptyControlArray);
+        }
         this.personalInfoForm = new FormGroup({
           name: new FormControl(
             data.playerBasicInfo.name,
@@ -103,7 +116,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             Validators.required
           ),
           birthdate: new FormControl(
-            null,
+            data.playerMoreInfo.born ? data.playerMoreInfo.born.toDate() : null,
             Validators.required,
             this.minimumAge.bind(this)
           ),
@@ -141,14 +154,13 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             Validators.pattern('^[0-9]*$'),
             Validators.required,
           ]),
-          prof_teams: new FormArray([new FormControl(null)]),
-          prof_tourns: new FormArray([new FormControl(null)]),
+          prof_teams: this.teamsArray,
+          prof_tourns: this.toursArray,
         });
         this.FreestylingInfoForm = new FormGroup({
           bio: new FormControl(data.fsInfo.bio, [
             Validators.maxLength(129),
-            // tslint:disable-next-line: quotemark
-            Validators.pattern("^[a-zA-Z0-9.!' ]*$"),
+            Validators.pattern(BIO),
           ]),
           top_vids: new FormArray([
             new FormControl(null, [Validators.pattern(YOUTUBE_REGEX)]),
@@ -164,13 +176,11 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       })
     );
   }
-  scrollToElement(elementId: string): void {
-    document.getElementById(elementId).scrollIntoView({
-      behavior: 'smooth',
-    });
-  }
   onAddControl(controlName: string, formName: 'player' | 'fs'): void {
-    let fmCtrl = new FormControl(null, Validators.required);
+    let fmCtrl = new FormControl(null, [
+      Validators.required,
+      Validators.pattern(ALPHA_W_SPACE),
+    ]);
     if (controlName === 'top_vids' && formName === 'fs') {
       fmCtrl = new FormControl(null, [
         Validators.required,
@@ -259,12 +269,11 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       );
       return Promise.all(allPromises);
     }
+    this.personalInfoForm.reset();
 
     // backend code here
   }
   onSavePlayerInfo(): Promise<any[]> {
-    console.log(this.playingInfoForm);
-    console.log(this.playingInfoForm.get('prof_teams').value);
     if (this.playingInfoForm.dirty && this.playingInfoForm.valid) {
       const newDetails: PlayerMoreInfo = {
         locState: this.playingInfoForm.get('loc_state').value,
@@ -327,6 +336,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
 
       // .then(() => this.snackServ.displayCustomMsg('Update Successfully!'));
     }
+    this.playingInfoForm.reset();
     // backend code here
   }
   onSaveFsInfo(): Promise<any[]> {
@@ -383,6 +393,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       );
       return Promise.all(allPromises);
     }
+    this.FreestylingInfoForm.reset();
     // backend code here
   }
   onSaveSMInfo(): Promise<any[]> {
@@ -413,6 +424,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     );
 
     allPromises.push(this.snackServ.displayCustomMsg('Updated Successfully!'));
+    this.socialInfoForm.reset();
     return Promise.all(allPromises);
     // backend code here
   }

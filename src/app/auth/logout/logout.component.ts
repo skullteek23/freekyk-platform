@@ -13,13 +13,13 @@ export class LogoutComponent implements OnInit {
     public dialogRef: MatDialogRef<LogoutComponent>
   ) {}
   ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onCancel() {
+  onCancel(): void {
     this.onCloseDialog();
   }
-  onLogout() {
+  onLogout(): void {
     this.authServ.onLogout();
     this.onCloseDialog();
   }

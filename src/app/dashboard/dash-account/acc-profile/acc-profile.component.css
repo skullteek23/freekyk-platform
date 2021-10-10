@@ -6,18 +6,6 @@
 .form {
   margin: 20px 0;
 }
-.form-p {
-  height: 459px;
-}
-.form-pl {
-  height: 1149px;
-}
-.form-fr {
-  height: 600px;
-}
-.form-sm {
-  height: 400px;
-}
 .red {
   color: var(--red);
 }

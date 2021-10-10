@@ -100,7 +100,8 @@
                 <div fxLayout="column" fxLayoutAlign="center center">
                   <button
                     [disabled]="!ticketForm.valid"
-                    type="submit"
+                    type="button"
+                    (click)="onSubmitTicket()"
                     class="buttonText primaryButton"
                   >
                     Submit

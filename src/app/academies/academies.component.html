@@ -56,7 +56,12 @@
                 {{ academy.locCity + ", " + academy.locState | slice: 0:50 }}
               </span>
             </div>
-            <button mat-icon-button color="primary" (click)="onShare(academy)">
+            <button
+              disabled
+              mat-icon-button
+              color="primary"
+              (click)="onShare(academy)"
+            >
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>
