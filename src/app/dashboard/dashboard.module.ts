@@ -6,7 +6,7 @@ import { DashHomeComponent } from './dash-home/dash-home.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
 import { DashAccountComponent } from './dash-account/dash-account.component';
 import { DashFooterComponent } from './dash-footer/dash-footer.component';
-import { DashPremiumComponent } from './dash-premium/dash-premium.component';
+import { DashParticipateComponent } from './dash-participate/dash-participate.component';
 import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
@@ -55,7 +55,7 @@ import { LocationCitiesService } from '../services/location-cities.service';
     DashTeamManagComponent,
     DashAccountComponent,
     DashFooterComponent,
-    DashPremiumComponent,
+    DashParticipateComponent,
     AccProfileComponent,
     AccNotifsComponent,
     AccAddressesComponent,

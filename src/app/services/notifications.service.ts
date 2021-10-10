@@ -45,7 +45,7 @@ export class NotificationsService implements OnDestroy {
         this.openTeamOffer(notif.id, notif.senderName);
         break;
       case 'team challenge':
-        this.router.navigate(['/dashboard', 'premium']);
+        this.router.navigate(['/dashboard', 'participate']);
         break;
 
       default:

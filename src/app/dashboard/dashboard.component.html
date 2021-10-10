@@ -45,16 +45,12 @@
           <span class="mat-body-1">Team Management</span>
         </a>
         <a
-          [routerLink]="['/dashboard', 'premium']"
+          [routerLink]="['/dashboard', 'participate']"
           routerLinkActive="active"
           mat-list-item
         >
-          <img
-            class="iconSize gap"
-            src="assets/svgs/premium.svg"
-            alt="Premium"
-          />
-          <span class="mat-body-1">Premium</span>
+          <span class="material-icons-round gap">sports_soccer</span>
+          <span class="mat-body-1">Participate</span>
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
@@ -76,14 +72,13 @@
         </a>
       </mat-nav-list>
       <button
-        [routerLink]="['/dashboard', 'premium']"
+        [routerLink]="['/dashboard', 'participate']"
         class="buttonText primaryButton"
         fxLayout="row"
         fxLayoutAlign="center center"
         fxLayoutGap="16px"
       >
-        <img class="iconSize" src="assets/svgs/premium.svg" alt="Premium" />
-        <span>{{ "Join Premium" }}</span>
+        <span>{{ "Participate" }}</span>
       </button>
     </div>
   </mat-sidenav>
@@ -124,12 +119,12 @@
           <span class="material-icons-round">groups</span>
         </a>
         <a
-          [routerLink]="['/dashboard', 'premium']"
+          [routerLink]="['/dashboard', 'participate']"
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
         >
-          <img class="iconSize" src="assets/svgs/premium.svg" alt="Premium" />
+          <span class="material-icons-round">sports_soccer</span>
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
@@ -206,13 +201,13 @@
     <span class="mat-caption">Team</span>
   </a>
   <a
-    [routerLink]="['/dashboard', 'premium']"
+    [routerLink]="['/dashboard', 'participate']"
     routerLinkActive="router-link-active"
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
   >
-    <img class="iconSize" src="assets/svgs/premium.svg" alt="Premium" />
+    <span class="material-icons-round">sports_soccer</span>
     <span class="mat-caption">Premium</span>
   </a>
   <a

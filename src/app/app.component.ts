@@ -21,8 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.dashOpen = [
           '/dashboard/home',
           '/dashboard/team-management',
-          '/dashboard/freestyle',
-          '/dashboard/premium',
+          '/dashboard/participate',
           '/dashboard/account',
         ]
           .includes(event.url)

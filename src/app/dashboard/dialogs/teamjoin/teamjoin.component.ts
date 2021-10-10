@@ -18,27 +18,27 @@ import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 export class TeamjoinComponent implements OnInit {
   @ViewChild('stepper') private myStepper: MatStepper;
   teamsList$: Observable<TeamBasicInfo[]>;
-  noTeams: boolean = false;
-  moreSel: boolean = true;
+  noTeams = false;
+  moreSel = true;
   error = false;
   state = 'requests';
   success = false;
-  search_team: string = '';
+  filterTerm = '';
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
     private snackServ: SnackbarService
-  ) {
+  ) {}
+  ngOnInit(): void {
     this.getTeams();
   }
-  ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onSubmit(plSelected: MatListOption[]) {
+  onSubmit(plSelected: MatListOption[]): void {
     this.myStepper.next();
-    let capIds: string[] = plSelected.map((sel) => sel.value);
+    const capIds: string[] = plSelected.map((sel) => sel.value);
     console.log(capIds);
     const userName = sessionStorage.getItem('name');
     if (this.sendRequests(capIds, userName)) {
@@ -48,7 +48,7 @@ export class TeamjoinComponent implements OnInit {
       this.snackServ.displayCustomMsg('Requests sent successfully!');
     }
   }
-  async sendRequests(capIds: string[], playerName: string) {
+  async sendRequests(capIds: string[], playerName: string): Promise<any> {
     const FunctionData = {
       capId: capIds,
       name: playerName,
@@ -59,25 +59,24 @@ export class TeamjoinComponent implements OnInit {
     );
     return await callable(FunctionData).toPromise();
   }
-  getTeams() {
+  getTeams(): void {
     this.teamsList$ = this.ngFire
       .collection('teams')
       .snapshotChanges()
       .pipe(
         map((responseData) => {
-          if (responseData.length == 0) {
+          if (responseData.length === 0) {
             this.noTeams = true;
             return null;
           }
           this.noTeams = false;
-          let newTeams: TeamBasicInfo[] = [];
-          responseData.forEach((team) => {
-            newTeams.push({
-              id: team.payload.doc.id,
-              ...(<TeamBasicInfo>team.payload.doc.data()),
-            });
-          });
-          return newTeams;
+          return responseData.map(
+            (data) =>
+              ({
+                id: data.payload.doc.id,
+                ...(data.payload.doc.data() as TeamBasicInfo),
+              } as TeamBasicInfo)
+          );
         })
       );
   }

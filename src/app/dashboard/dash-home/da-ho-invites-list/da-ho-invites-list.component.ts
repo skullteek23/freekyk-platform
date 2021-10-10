@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { Invite } from 'src/app/shared/interfaces/notification.model';
 
@@ -20,9 +19,7 @@ export class DaHoInvitesListComponent implements OnInit {
     this.emptyInvites$ = this.notifServ.emptyInvites;
     const uid = localStorage.getItem('uid');
     if (!!uid) {
-      this.invites$ = this.notifServ
-        .fetchInvites(uid)
-        .pipe(tap(() => console.log('sub made')));
+      this.invites$ = this.notifServ.fetchInvites(uid);
     }
   }
   onViewInvite(inv: Invite): void {

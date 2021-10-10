@@ -3,6 +3,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
+import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
 import { AppState } from 'src/app/store/app.reducer';
 
@@ -20,6 +21,7 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
   constructor(
     private mediaObs: MediaObserver,
     private teServ: TeamService,
+    private plServ: PlayerService,
     private store: Store<AppState>
   ) {}
   ngOnInit(): void {

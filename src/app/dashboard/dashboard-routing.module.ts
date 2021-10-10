@@ -8,7 +8,7 @@ import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.comp
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
 import { DashAccountComponent } from './dash-account/dash-account.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
-import { DashPremiumComponent } from './dash-premium/dash-premium.component';
+import { DashParticipateComponent } from './dash-participate/dash-participate.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
 import { DashboardComponent } from './dashboard.component';
 import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
@@ -22,7 +22,7 @@ const routes: Routes = [
     children: [
       { path: RouteLinks.DASHBOARD[0], component: DashHomeComponent },
       { path: RouteLinks.DASHBOARD[1], component: DashTeamManagComponent },
-      { path: RouteLinks.DASHBOARD[2], component: DashPremiumComponent },
+      { path: RouteLinks.DASHBOARD[2], component: DashParticipateComponent },
       {
         path: RouteLinks.DASHBOARD[3],
         component: DashAccountComponent,
