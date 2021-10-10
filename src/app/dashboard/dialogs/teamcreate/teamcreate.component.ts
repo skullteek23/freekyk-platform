@@ -32,6 +32,8 @@ import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
 })
 export class TeamcreateComponent implements OnInit {
   @ViewChild('stepper') myStepper: MatStepper;
+  isStepOneComplete = false;
+  isStepTwoComplete = false;
   teamBasicinfoForm: FormGroup;
   newTeamId: string;
   invitesList: Invite[];
@@ -75,12 +77,9 @@ export class TeamcreateComponent implements OnInit {
     this.dialogRef.close();
   }
   onSubmitOne(): void {
-    this.myStepper.next();
-    if (
-      this.teamBasicinfoForm.valid &&
-      this.$teamPhoto != null &&
-      this.$teamLogo != null
-    ) {
+    if (this.teamBasicinfoForm.valid) {
+      this.isStepOneComplete = true;
+      this.myStepper.next();
       this.error = false;
       this.state1 = 'complete';
       this.getPlayers();
@@ -97,6 +96,7 @@ export class TeamcreateComponent implements OnInit {
     this.sendInvites();
     this.state2 = 'complete';
     this.error = false;
+    this.isStepTwoComplete = true;
   }
   async createTeam(logo: string, image: string): Promise<any> {
     const uid = localStorage.getItem('uid');

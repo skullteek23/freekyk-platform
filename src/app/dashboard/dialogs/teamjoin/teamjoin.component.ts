@@ -24,6 +24,7 @@ export class TeamjoinComponent implements OnInit {
   state = 'requests';
   success = false;
   filterTerm = '';
+  isStepOneComplete = false;
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
@@ -38,6 +39,7 @@ export class TeamjoinComponent implements OnInit {
   }
   onSubmit(plSelected: MatListOption[]): void {
     this.myStepper.next();
+    this.isStepOneComplete = true;
     const capIds: string[] = plSelected.map((sel) => sel.value);
     console.log(capIds);
     const userName = sessionStorage.getItem('name');

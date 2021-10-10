@@ -16,7 +16,7 @@
         [stepControl]="teamBasicinfoForm"
         label="Fill Basic Details"
         [state]="state1"
-        [completed]="state1 == 'complete'"
+        [completed]="teamBasicinfoForm.valid && isStepOneComplete"
         [hasError]="error"
       >
         <form
@@ -106,8 +106,14 @@
         [editable]="false"
         label="Invite Players to your team"
         [state]="state2"
+        [completed]="isStepTwoComplete"
       >
-        <div class="content_container" fxLayout="column" fxLayoutGap="16px">
+        <div
+          *ngIf="isStepOneComplete"
+          class="content_container"
+          fxLayout="column"
+          fxLayoutGap="16px"
+        >
           <app-search-lg
             searchPlaceholder="Search players by name, playing position, city"
             (searchItem)="filterTerm = $event"
@@ -170,7 +176,12 @@
         </div>
       </mat-step>
       <mat-step label="Done">
-        <div class="fin_cont" fxLayout="column" fxLayoutGap="16px">
+        <div
+          *ngIf="isStepOneComplete && isStepTwoComplete"
+          class="fin_cont"
+          fxLayout="column"
+          fxLayoutGap="16px"
+        >
           <ng-template #spinner>
             <app-loading></app-loading>
           </ng-template>

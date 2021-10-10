@@ -17,6 +17,7 @@ export class DaHoCompleteProfileComponent implements OnInit {
   data$: Observable<{ photo: boolean; profile: boolean; team: boolean }>;
   profileProgress = 20;
   isLoading = true;
+  profileShared: boolean;
   constructor(
     private store: Store<{ dash: DashState }>,
     private dialog: MatDialog,
@@ -24,6 +25,8 @@ export class DaHoCompleteProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.profileShared = JSON.parse(localStorage.getItem('profileShared'));
+    console.log(this.profileShared);
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
@@ -41,6 +44,9 @@ export class DaHoCompleteProfileComponent implements OnInit {
           this.profileProgress += resp.photo ? 20 : 0;
           this.profileProgress += resp.profile ? 20 : 0;
           this.profileProgress += resp.team ? 20 : 0;
+          if (this.profileProgress < 100) {
+            this.profileProgress += this.profileShared ? 20 : 0;
+          }
         }
       })
     );
@@ -57,6 +63,7 @@ export class DaHoCompleteProfileComponent implements OnInit {
     if (this.profileProgress >= 80) {
       this.profileProgress += 20;
     }
+    localStorage.setItem('profileShared', JSON.stringify(true));
     const uid = localStorage.getItem('uid');
     this.router.navigate(['/p', uid]);
   }
