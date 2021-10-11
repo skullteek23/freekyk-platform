@@ -11,7 +11,7 @@ import { ProdBasicInfo } from '../shared/interfaces/product.model';
   styleUrls: ['./equipment.component.css'],
 })
 export class EquipmentComponent implements OnInit, OnDestroy {
-  subscriptions: Subscription;
+  subscriptions = new Subscription();
   columns: any;
   cardHeight = '';
   isLoading = true;
