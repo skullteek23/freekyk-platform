@@ -1,1 +1,23 @@
-<div class="container min-height">template soon</div>
+<mat-card>
+  <span mat-card-title class="mat-subheading-2">Ongoing Tournaments</span>
+  <div mat-card-content>
+    <ul>
+      <li
+        class="tournament"
+        *ngFor="let season of seasons$ | async"
+        fxLayoutAlign="space-between center"
+      >
+        <span class="mat-subheading-1">
+          {{ season.name }}
+          (FKC{{ season.cont_tour.length > 1 ? " & more..." : "" }})</span
+        >
+        <button
+          (click)="onPayNow(season.id)"
+          class="buttonText secondaryButtonInv"
+        >
+          Pay Now
+        </button>
+      </li>
+    </ul>
+  </div>
+</mat-card>

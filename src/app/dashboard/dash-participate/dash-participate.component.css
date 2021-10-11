@@ -2,7 +2,21 @@
   padding: 20px;
   border-radius: var(--borderRadiusCard);
   overflow: hidden;
+  min-height: 100vh;
 }
 .min-height {
   height: 100vh;
+}
+.tournament {
+  width: 100%;
+  /* background-color: var(--primaryColor); */
+  color: white;
+  height: 150px;
+  border-radius: var(--borderRadiusCard);
+  padding: 20px;
+  margin: 20px 0;
+  background-image: url("/assets/images/fkc_background.jpg");
+  background-repeat: no-repeat, repeat;
+  background-size: cover;
+  background-color: #cccccc3b;
 }
