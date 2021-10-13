@@ -16,8 +16,8 @@ export const environment = {
     measurementId: 'G-DVFLJVY2LP',
   },
   razorPay: {
-    key_id: 'rzp_test_LSdBGlAyude8YE',
-    key_secret: 'yN2TYg2VWzuzozdGWRmrX0Ma',
+    key_id: 'rzp_live_8BB9gOfLpWDtAG',
+    key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',
   },
 };
 
