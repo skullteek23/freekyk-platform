@@ -12,9 +12,9 @@ export class AccountAvatarService {
   getProfilePicture(): Observable<any> {
     return this.authServ.userDataChanged.pipe(
       map((user) => user?.imgpath),
-      mergeMap((user) => {
-        if (user) {
-          return of(user);
+      mergeMap((userImage) => {
+        if (userImage) {
+          return of(userImage);
         } else {
           return this.store
             .select('dash')
