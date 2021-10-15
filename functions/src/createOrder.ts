@@ -3,7 +3,6 @@ export async function createOrder(
   data: { options: any; useLive: boolean },
   context: any
 ): Promise<any> {
-  console.log(data);
   const LIVE_API_KEY = {
     key_id: 'rzp_live_8BB9gOfLpWDtAG',
     key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',

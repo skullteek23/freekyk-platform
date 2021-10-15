@@ -4,7 +4,6 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { map, tap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 import { CREATE_ORDER_API, RazorPayAPI } from '../shared/Constants/RAZORPAY';
-
 declare var Razorpay: any;
 @Injectable({
   providedIn: 'root',
@@ -39,7 +38,7 @@ export class PaymentService {
       name: 'Acme Corp',
       description: 'Test Transaction',
       image: 'https://example.com/your_logo',
-      order_id: 'order_9A33XWu170gUtm', // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      order_id: orderId, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: this.redirectAfterPayment,
       prefill: {
         name: 'Gaurav Kumar',
@@ -54,6 +53,7 @@ export class PaymentService {
       },
     };
     const rzp1 = new Razorpay(options);
+    rzp1.open();
   }
   redirectAfterPayment(response): void {
     console.log(response);
