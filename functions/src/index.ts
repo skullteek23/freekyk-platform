@@ -13,6 +13,7 @@ import {
   inviteUpdationTrigger,
 } from './triggerFunctions';
 import { teamDeleter } from './deleteTeam';
+import { createOrder } from './createOrder';
 
 //callable functions
 export const createProfile = functions.https.onCall(newProfile);
@@ -21,6 +22,7 @@ export const sendJoinRequest = functions.https.onCall(joinRequests);
 export const createTeam = functions.https.onCall(teamCreation);
 export const generateFixtures = functions.https.onCall(getFixtures);
 export const deleteTeam = functions.https.onCall(teamDeleter);
+export const createRazorpayOrder = functions.https.onCall(createOrder);
 //callable functions
 
 //trigger functions

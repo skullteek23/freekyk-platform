@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { PaymentService } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TOURNAMENT_FEES } from 'src/app/shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import * as fromDash from '../store/dash.reducer';
 @Component({
@@ -49,10 +50,17 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
           .select('hasTeam')
           .pipe(take(1))
           .subscribe((hasTeam) => {
+            this.paymentServ.onInitiatePayment({
+              amount: TOURNAMENT_FEES,
+              receiptId: 'abcu123j',
+            });
             if (hasTeam) {
               const uid = localStorage.getItem('uid');
               if (uid === hasTeam.capId) {
-                this.paymentServ.onInitiatePayment();
+                this.paymentServ.onInitiatePayment({
+                  amount: '3000',
+                  receiptId: 'abcu123j',
+                });
               } else {
                 this.snackServ.displayCustomMsg(
                   'Please contact your team captain!'
