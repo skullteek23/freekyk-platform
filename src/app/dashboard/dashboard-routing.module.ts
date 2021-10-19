@@ -11,7 +11,6 @@ import { DashHomeComponent } from './dash-home/dash-home.component';
 import { DashParticipateComponent } from './dash-participate/dash-participate.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
 import { DashboardComponent } from './dashboard.component';
-import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 import { ErrorComponent } from '../error/error.component';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
@@ -21,27 +20,27 @@ const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin),
     canDeactivate: [ExitDashGuard],
     children: [
-      { path: RouteLinks.DASHBOARD[0], component: DashHomeComponent },
-      { path: RouteLinks.DASHBOARD[1], component: DashTeamManagComponent },
-      { path: RouteLinks.DASHBOARD[2], component: DashParticipateComponent },
+      { path: 'home', component: DashHomeComponent },
+      { path: 'team-management', component: DashTeamManagComponent },
+      { path: 'participate', component: DashParticipateComponent },
       {
-        path: RouteLinks.DASHBOARD[3],
+        path: 'account',
         component: DashAccountComponent,
         children: [
           {
-            path: RouteLinks.DASHBOARD_ACCOUNT[0],
+            path: 'profile',
             component: AccProfileComponent,
           },
           {
-            path: RouteLinks.DASHBOARD_ACCOUNT[1],
+            path: 'notifications',
             component: AccNotifsComponent,
           },
           {
-            path: RouteLinks.DASHBOARD_ACCOUNT[2],
+            path: 'addresses',
             component: AccAddressesComponent,
           },
           {
-            path: RouteLinks.DASHBOARD_ACCOUNT[3],
+            path: 'tickets',
             component: AccTicketsComponent,
           },
         ],

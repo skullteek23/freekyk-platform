@@ -102,6 +102,7 @@
   <mat-tab label="Overview">
     <ng-template matTabContent>
       <app-se-overview
+        [participants]="participants$ | async"
         [venue]="{
           city: (seasonInfo$ | async)?.locCity,
           state: (seasonInfo$ | async)?.locState

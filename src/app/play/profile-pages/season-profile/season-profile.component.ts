@@ -29,6 +29,7 @@ export class SeasonProfileComponent implements OnInit {
   sid: string;
   seasonInfo$: Observable<SeasonBasicInfo>;
   seasonMoreInfo$: Observable<SeasonAbout>;
+  participants$: Observable<SeasonParticipants[]>;
   photos$: Observable<string[]>;
   stats$: Observable<SeasonStats>;
   isLocked$: Observable<boolean>;
@@ -59,6 +60,7 @@ export class SeasonProfileComponent implements OnInit {
             this.getSeasonMoreInfo(this.sid);
             this.getPhotos(this.sid);
             this.getStats(this.sid);
+            this.getSeasonParticipants(this.sid);
           } else {
             this.error = resp.empty;
             this.router.navigate(['error']);
@@ -76,6 +78,14 @@ export class SeasonProfileComponent implements OnInit {
         map((resp) => resp[0]),
         tap((resp) => (this.imgPath = resp?.imgpath)),
         share()
+      );
+  }
+  getSeasonParticipants(sid: string): void {
+    this.participants$ = this.ngFire
+      .collection(`seasons/${sid}/participants`)
+      .get()
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data() as SeasonParticipants))
       );
   }
   getSeasonMoreInfo(sid: string): void {
