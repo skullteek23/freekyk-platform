@@ -38,18 +38,32 @@
         class="tournament"
         *ngFor="let season of seasons$ | async"
         fxLayoutAlign="space-between center"
+        fxLayout.lt-md="column"
       >
         <span class="mat-subheading-1">
-          {{ season.name }}
+          {{ season.name | textShorten: 30 }}
           (FKC{{ season.cont_tour.length > 1 ? " & more..." : "" }})</span
         >
-        <button
-          [disabled]="isParticipated(season.id)"
-          (click)="onPayNow(season)"
-          class="buttonText secondaryButtonInv"
-        >
-          {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
-        </button>
+        <div fxLayoutGap="8px" fxLayout.lt-md="column">
+          <button
+            fxFlexOrder.lt-md="1"
+            fxFlexOrder.gt-sm="0"
+            (click)="onExitScreen()"
+            [routerLink]="['/s', season.name]"
+            class="primaryButton buttonText"
+          >
+            View Season
+          </button>
+          <button
+            fxFlexOrder.lt-md="0"
+            fxFlexOrder.gt-sm="1"
+            [disabled]="isParticipated(season.id)"
+            (click)="onPayNow(season)"
+            class="buttonText secondaryButtonInv"
+          >
+            {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
+          </button>
+        </div>
       </li>
     </ul>
   </div>

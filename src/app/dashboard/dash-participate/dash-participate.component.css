@@ -9,7 +9,7 @@
 }
 .tournament {
   width: 100%;
-  /* background-color: var(--primaryColor); */
+  border: 2px solid white;
   color: white;
   height: 150px;
   border-radius: var(--borderRadiusCard);
@@ -25,4 +25,20 @@
 }
 .margin-top {
   margin-top: 20px;
+}
+@media only screen and (max-width: 959px) {
+  .tournament {
+    text-align: center;
+    width: 100%;
+    border: 2px solid white;
+    color: white;
+    height: 230px;
+    border-radius: var(--borderRadiusCard);
+    padding: 20px;
+    margin: 20px 0;
+    background-image: url("/assets/images/fkc_background.jpg");
+    background-repeat: no-repeat, repeat;
+    background-size: cover;
+    background-color: #cccccc3b;
+  }
 }
