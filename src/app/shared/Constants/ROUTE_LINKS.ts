@@ -10,7 +10,7 @@ export const RouteLinks = {
     'grounds',
   ],
   FREESTYLE: ['home'],
-  DASHBOARD: ['home', 'team-management', 'participate', 'account'],
+  DASHBOARD: ['home', 'team management', 'participate', 'account'],
   DASHBOARD_ACCOUNT: ['profile', 'notifications', 'addresses', 'tickets'],
   OTHERS: ['about', 'support'],
 };

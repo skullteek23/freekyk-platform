@@ -117,7 +117,7 @@
             <span class="dash-h5 align">{{ "other stats" | titlecase }}</span>
             <div fxLayoutAlign="start" fxLayout="column">
               <span class="mat-body-2">Professional teams played for</span>
-              <i *ngIf="userTeams.length == 0"> none </i>
+              <i *ngIf="userTeams.length === 0"> none </i>
               <span class="mat-body-1" *ngFor="let team of userTeams">
                 {{ team }}
               </span>

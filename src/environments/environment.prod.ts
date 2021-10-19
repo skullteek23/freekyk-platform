@@ -22,4 +22,9 @@ export const environment = {
     appId: '1:581569985509:web:fea62348969bd618dc8d0c',
     measurementId: 'G-DVFLJVY2LP',
   },
+  // live api keys
+  razorPay: {
+    key_id: 'rzp_live_8BB9gOfLpWDtAG',
+    key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',
+  },
 };

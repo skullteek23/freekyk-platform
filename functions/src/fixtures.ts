@@ -38,7 +38,7 @@ export async function getFixtures(
             new Date(i.getFullYear(), i.getMonth(), i.getDate(), timeslot[k])
           ),
           teams: [participants[0].tname, participants[1].tname],
-          logos: [participants[0].timgpath, participants[1].timgpath],
+          logos: [participants[0].tlogo, participants[1].tlogo],
           season: data.sname,
           type: data.tour_type,
           locCity: data.grounds[j].locCity,

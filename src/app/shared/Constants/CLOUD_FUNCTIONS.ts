@@ -5,4 +5,5 @@ export const CLOUD_FUNCTIONS = {
   CREATE_TEAM: 'createTeam',
   GENERATE_FITURES: 'generateFixtures',
   DELETE_TEAM: 'deleteTeam',
+  CREATE_RAZORPAY_ORDER: 'createRazorpayOrder',
 };

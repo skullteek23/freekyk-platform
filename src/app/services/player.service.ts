@@ -91,7 +91,6 @@ export class PlayerService implements OnDestroy {
       .doc(uid)
       .valueChanges()
       .subscribe((data: PlayerBasicInfo) => {
-        console.log(data);
         this.store.dispatch(new dashActions.AddBasicInfo(data));
         if (data.team != null) {
           this.store.dispatch(new dashActions.CheckPlayerHasTeam(data.team));
