@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { map, share, startWith, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, share, take, tap } from 'rxjs/operators';
+import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import {
@@ -14,8 +15,6 @@ import {
   SeasonStats,
 } from 'src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
-import { MembershipInfo } from 'src/app/shared/interfaces/user.model';
-import { AppState } from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-season-profile',
@@ -37,7 +36,7 @@ export class SeasonProfileComponent implements OnInit {
   imgPath: string;
   constructor(
     private snackServ: SnackbarService,
-    private store: Store<AppState>,
+    private store: Store<DashState>,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private enlServ: EnlargeService,
@@ -133,37 +132,16 @@ export class SeasonProfileComponent implements OnInit {
   }
   onParticipate(): void {
     const uid = localStorage.getItem('uid');
+    this.router.navigate(['/dashboard/participate']);
     this.store
-      .select('dash')
-      .pipe(map((resp) => resp.hasTeam))
-      .subscribe(async (team) => {
+      .select('hasTeam')
+      .pipe(take(1))
+      .subscribe((team) => {
         if (!uid) {
           this.snackServ.displayCustomMsg('Please login to continue!');
           this.router.navigate(['/login']);
         } else if (team === null) {
-          this.snackServ.displayCustomMsg(
-            'Join/create a team to perform this action!'
-          );
-        } else if (team.capId !== uid) {
-          this.snackServ.displayCustomMsg('Please contact your team captain!');
-        } else {
-          const teamSnap = await this.ngFire
-            .collection('teams')
-            .doc(team.id)
-            .get()
-            .pipe(map((resp) => (resp.data() as TeamBasicInfo).imgpath))
-            .toPromise();
-          this.ngFire
-            .collection('seasons/' + this.sid + '/participants')
-            .doc(team.id)
-            .set({
-              tid: team.id,
-              tname: team.name,
-              timgpath: teamSnap,
-            } as SeasonParticipants)
-            .then(() =>
-              this.snackServ.displayCustomMsg('Participation successful!')
-            );
+          this.router.navigate(['/dashboard/participate']);
         }
       });
   }

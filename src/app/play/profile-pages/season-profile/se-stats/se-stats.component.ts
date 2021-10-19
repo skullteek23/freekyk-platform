@@ -13,7 +13,6 @@ export class SeStatsComponent implements OnInit, OnDestroy {
   @Input() stats: SeasonStats = {
     FKC_winner: 'NA',
     FPL_winner: 'NA',
-    totParticipants: 0,
     totGoals: 0,
     awards: 'NA',
   };

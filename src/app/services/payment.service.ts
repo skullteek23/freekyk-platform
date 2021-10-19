@@ -1,66 +1,83 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { map, tap } from 'rxjs/operators';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
-import { CREATE_ORDER_API, RazorPayAPI } from '../shared/Constants/RAZORPAY';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import {
+  T_HOME,
+  T_LOADING,
+  T_FAILURE,
+  T_SUCCESS,
+  HOME,
+} from '../dashboard/constants/constants';
+import { UNIVERSAL_OPTIONS, RazorPayAPI } from '../shared/Constants/RAZORPAY';
 declare var Razorpay: any;
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
-  onInitiatePayment(options: { amount: string; receiptId: string }): void {
-    this.callCloudFunctionForOrderId(options.amount, options.receiptId).then(
-      (response) => {
-        console.log(response);
-        this.openCheckoutPage(response.id);
-      }
-    );
+  private loadingStatusChanged = new BehaviorSubject<
+    T_HOME | T_LOADING | T_SUCCESS | T_FAILURE
+  >(HOME);
+  generateOrder(amount: number): Promise<any> {
+    const generatorFunc = this.ngFunc.httpsCallable('generateRazorpayOrder');
+    return generatorFunc({ amount }).toPromise();
   }
-  callCloudFunctionForOrderId(amount: string, receiptId: string): Promise<any> {
+  openCheckoutPage(
+    orderId: string,
+    amount: number,
+    season,
+    teamId: string
+  ): void {
     const options = {
-      amount, // amount in the smallest currency unit
-      currency: 'INR',
-      receipt: receiptId,
+      ...UNIVERSAL_OPTIONS,
+      handler: this.redirectAfterPaymentSuccess.bind(this, season, teamId),
+      amount: amount.toString(),
+      order_id: orderId,
     };
-    const orderCallable = this.ngFunc.httpsCallable(
-      CLOUD_FUNCTIONS.CREATE_RAZORPAY_ORDER
-    );
-    return orderCallable({ options, useLive: false })
-      .pipe(tap((resp) => console.log(resp)))
-      .toPromise();
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+    razorpayInstance.on('payment.failed', this.redirectAfterPaymentFailure);
   }
-  openCheckoutPage(orderId: string): void {
-    const options = {
-      key: this.RAZORPAY_SECRET.key_id, // Enter the Key ID generated from the Dashboard
-      amount: '50000', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: 'INR',
-      name: 'Acme Corp',
-      description: 'Test Transaction',
-      image: 'https://example.com/your_logo',
-      order_id: orderId, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      handler: this.redirectAfterPayment,
-      prefill: {
-        name: 'Gaurav Kumar',
-        email: 'gaurav.kumar@example.com',
-        contact: '9999999999',
-      },
-      notes: {
-        address: 'Razorpay Corporate Office',
-      },
-      theme: {
-        color: '#00810f',
-      },
-    };
-    const rzp1 = new Razorpay(options);
-    rzp1.open();
+  redirectAfterPaymentSuccess(season, tid, response): void {
+    this.onLoadingStatusChange('loading');
+    const uid = localStorage.getItem('uid');
+    const verifyPaymentFunc = this.ngFunc.httpsCallable('verifyPayment');
+    verifyPaymentFunc({ ...response, uid, season, tid })
+      .toPromise()
+      .then(() => this.onLoadingStatusChange('success'))
+      .catch(() => this.onLoadingStatusChange('home'))
+      .catch((err) =>
+        err == null
+          ? this.redirectAfterPaymentFailure({
+              description: 'Payment Failed! Unauthorized payment source.',
+              code: '501',
+            })
+          : this.redirectAfterPaymentFailure({
+              description: 'Payment Failed! Try again later',
+              code: '401',
+            })
+      );
   }
-  redirectAfterPayment(response): void {
-    console.log(response);
+  redirectAfterPaymentFailure(error): void {
+    this.onLoadingStatusChange('home');
+    alert(error.description);
+    this.router.navigate(['/dashboard/error'], {
+      state: { message: error.description, code: error.code },
+    });
+  }
+  onLoadingStatusChange(
+    status: T_HOME | T_LOADING | T_SUCCESS | T_FAILURE
+  ): void {
+    this.loadingStatusChanged.next(status);
+  }
+  getLoadingStatus(): BehaviorSubject<
+    T_HOME | T_LOADING | T_SUCCESS | T_FAILURE
+  > {
+    return this.loadingStatusChanged;
   }
   constructor(
-    private http: HttpClient,
     private ngFunc: AngularFireFunctions,
+    private router: Router,
     @Inject(RazorPayAPI)
     public RAZORPAY_SECRET: { key_id: string; key_secret: string }
   ) {}

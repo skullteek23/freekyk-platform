@@ -16,7 +16,7 @@
         label="Send Join Request to Teams"
         [completed]="
           te_sel.selectedOptions.selected.length < 5 &&
-          te_sel.selectedOptions.selected.length > 1 &&
+          te_sel.selectedOptions.selected.length >= 1 &&
           !error
         "
         [state]="state"

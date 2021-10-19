@@ -47,7 +47,7 @@ export class PlayerCardComponent implements OnInit {
         map((resp) => resp.data() as PlayerMoreInfo),
         tap((resp) => {
           if (!!resp) {
-            this.userTours = !!resp.prof_teams ? resp.prof_teams : [];
+            this.userTeams = !!resp.prof_teams ? resp.prof_teams : [];
             this.userTours = !!resp.prof_tours ? resp.prof_tours : [];
           }
         }),

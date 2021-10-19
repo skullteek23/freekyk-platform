@@ -12,6 +12,7 @@ import { DashParticipateComponent } from './dash-participate/dash-participate.co
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
 import { DashboardComponent } from './dashboard.component';
 import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
+import { ErrorComponent } from '../error/error.component';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   {
@@ -45,6 +46,7 @@ const routes: Routes = [
           },
         ],
       },
+      { path: 'error', component: ErrorComponent },
     ],
   },
 ];
