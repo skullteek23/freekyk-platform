@@ -6,11 +6,9 @@
   fxLayoutGap.lt-md="20px"
 >
   <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="8px">
-    <h4 class="mat-subheading-1 align">A Powerful Community</h4>
+    <h4 class="mat-subheading-1 align">{{ content.heading | titlecase }}</h4>
     <span class="mat-body-1 align">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      {{ content.desc }}
     </span>
   </div>
   <div fxFlex.gt-sm="30%">

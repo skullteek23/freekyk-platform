@@ -14,8 +14,7 @@
         <h4 class="mat-subheading-1 left">Our Editing Process</h4>
       </ng-template>
       <span class="mat-body-1 left">
-        pretium interdum est, id bibendum arcu vehicula non. Etiam ut diam
-        rutrum.
+        {{ content.subHeading }}
       </span>
     </div>
     <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px">
@@ -23,30 +22,26 @@
         fxFlex="100%"
         fxFlex.gt-sm="50%"
         fxLayoutGap="16px"
-        *ngFor="let point of [1, 2, 3, 4]"
-        fxLayoutAlign="start start"
+        *ngFor="let point of content.listPoints; let i = index"
+        fxLayoutAlign="start center"
       >
         <div
           fxFlex="40px"
           class="step_number mat-body-1"
           fxLayoutAlign="center center"
         >
-          {{ point }}
+          {{ i + 1 }}
         </div>
         <div
           fxLayout="column"
           fxLayoutAlign="start start"
           fxLayoutGap.lt-md="8px"
         >
-          <span *ngIf="!isVeSteps; else steps" class="mat-body-1">
-            Heading
+          <span *ngIf="isVeSteps" class="mat-body-1">
+            {{ "Step " + point }}
           </span>
-          <ng-template #steps>
-            <span class="mat-body-1"> {{ "Step " + point }} </span>
-          </ng-template>
           <span class="left mat-body-2">
-            consectetur adipiscing elit, sed do eiusmod sed do eiusmod tempor
-            incididunt ut labore
+            {{ point }}
           </span>
         </div>
       </li>

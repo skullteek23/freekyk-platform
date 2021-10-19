@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./community-numbers-section.component.css'],
 })
 export class CommunityNumbersSectionComponent implements OnInit {
+  @Input() content: { heading: string; desc: string };
   @Input('data') commNumbers: { name: string; number: string }[] = [];
   constructor() {}
 

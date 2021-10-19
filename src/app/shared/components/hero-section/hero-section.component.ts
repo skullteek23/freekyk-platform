@@ -17,6 +17,8 @@ export class HeroSectionComponent implements OnInit {
     route: '/signup',
   };
   @Input('landingPage') largeBanner: boolean = false;
+  @Input() imageSource: string;
+  @Input() description: string;
   constructor(private router: Router, private dialog: MatDialog) {}
   ngOnInit(): void {}
   onNavigate(nav: string) {

@@ -34,6 +34,7 @@ import { TeGalleryComponent } from './play/profile-pages/team-profile/te-gallery
 import { TeMembersComponent } from './play/profile-pages/team-profile/te-members/te-members.component';
 import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
+import { NgImageSliderModule } from 'ng-image-slider';
 // export function initializeApp1(afa: AngularFireAuth): any {
 //   return () => {
 //     return new Promise<void>((resolve) => {
@@ -82,6 +83,7 @@ import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-
       logOnly: environment.production,
       maxAge: 5,
     }),
+    NgImageSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

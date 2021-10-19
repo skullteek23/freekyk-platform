@@ -9,6 +9,7 @@
   fxLayoutGap="20px"
 >
   <app-illustration-hero-section
+    [svgSrc]="imageSource"
     fxFlexOrder.gt-sm="2"
     fxFlexOrder="1"
   ></app-illustration-hero-section>
@@ -40,11 +41,7 @@
       <span *ngIf="title" class="mat-title align">{{ title | titlecase }}</span>
     </div>
 
-    <p class="mat-body-1 align">
-      For football players & freestylers, Freekyk is India's first online
-      platform that provides end-to-end football solutions so they can
-      experience organized football at a local level.
-    </p>
+    <p class="mat-body-1 align" [innerHTML]="description"></p>
     <button
       *ngIf="button"
       (click)="onNavigate(button['route'])"

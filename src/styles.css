@@ -44,6 +44,15 @@ ul {
   margin: 0;
   list-style: none;
 }
+p > ul {
+  list-style: disc !important;
+  padding-left: 16px !important;
+}
+@media only screen and (max-width: 959px) {
+  p > ul {
+    display: none;
+  }
+}
 img {
   height: 100%;
   width: auto;

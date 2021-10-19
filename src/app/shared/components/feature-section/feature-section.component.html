@@ -21,18 +21,7 @@
     ngClass.gt-sm="content"
   >
     <h4 class="mat-subheading-1 align">{{ content.head | titlecase }}</h4>
-    <span class="mat-body-1 align">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      magna aliqua.
-    </span>
-    <ul fxHide.lt-md="true">
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-    </ul>
+    <p class="mat-body-1 align" [innerHTML]="content.desc"></p>
     <button
       *ngIf="isDialog == false; else dialogOpener"
       color="primary"
@@ -42,7 +31,7 @@
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
     >
-      <span> {{ "Explore " + (content.head | titlecase) }} </span>
+      <span> Explore More </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
     <ng-template #dialogOpener>

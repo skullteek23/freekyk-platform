@@ -8,7 +8,7 @@
     fxLayout="column"
     fxLayout.gt-sm="row"
     fxLayoutAlign="center stretch"
-    fxLayoutAlign.gt-sm="space-between center"
+    [fxLayoutAlign.gt-sm]="elementSpacing"
     fxLayoutGap="20px"
   >
     <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="0">
@@ -41,6 +41,7 @@
         Contact us
       </button>
       <button
+        *ngIf="!enablePartnerForm"
         (click)="onNavigate('/signup')"
         class="buttonText"
         [ngClass]="{
@@ -49,6 +50,17 @@
         }"
       >
         Get Started
+      </button>
+      <button
+        *ngIf="enablePartnerForm"
+        (click)="onNavigateToPartnerForm()"
+        class="buttonText"
+        [ngClass]="{
+          primaryButton: isCompact,
+          secondaryButton: !isCompact
+        }"
+      >
+        Partner with us
       </button>
     </div>
   </div>

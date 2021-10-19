@@ -5,10 +5,15 @@
     [overline]="false"
     [title]="false"
     [landingPage]="true"
+    imageSource="assets/svgs/Banner/main_banner.svg"
+    [description]="descMain"
   ></app-hero-section>
   <!-- banner-section -->
 
   <!-- features -->
+  <div class="what-we-offer" fxLayoutAlign="center start">
+    <h4 class="mat-subheading-1">{{ "What we offer?" | titlecase }}</h4>
+  </div>
   <div
     class="container section-space-bottom"
     ngClass.lt-md="section-space-top"
@@ -17,30 +22,57 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [featureContent]="{ head: 'freekyk play', route: '/play/home' }"
+      [featureContent]="{
+        head: 'freekyk play',
+        route: '/play/home',
+        desc: descFkPlay
+      }"
     ></app-feature-section>
     <app-feature-section
-      [featureContent]="{ head: 'freekyk freestyle', route: '/freestyle/home' }"
-      [invert]="true"
-    ></app-feature-section>
-    <app-feature-section
-      [featureContent]="{ head: 'freekyk academies', route: '/academies' }"
-    ></app-feature-section>
-    <app-feature-section
-      [featureContent]="{ head: 'freekyk equipment', route: '/equipment' }"
+      [featureContent]="{
+        head: 'freekyk freestyle',
+        route: '/freestyle/home',
+        desc: descFkFreestyle
+      }"
       [invert]="true"
     ></app-feature-section>
   </div>
+  <app-action-strip
+    elementSpacing="space-evenly center"
+    [compact]="true"
+  ></app-action-strip>
+  <div
+    class="container section-space-bottom section-space-top"
+    fxLayout="column"
+    fxLayoutGap="48px"
+    fxLayoutGap.gt-sm="120px"
+  >
+    <app-feature-section
+      [featureContent]="{
+        head: 'freekyk academies',
+        route: '/academies',
+        desc: descFkAcademies
+      }"
+    ></app-feature-section>
+    <app-feature-section
+      [featureContent]="{
+        head: 'freekyk equipment',
+        route: '/equipment',
+        desc: descFkEquipment
+      }"
+      [invert]="true"
+    ></app-feature-section>
+  </div>
+  <app-action-strip
+    heading="Ready to join us as a partner?"
+    elementSpacing="space-evenly center"
+    [enablePartnerForm]="true"
+    [compact]="true"
+  ></app-action-strip>
   <!-- features -->
 
-  <!-- action-strip-mini -->
-  <div class="section-space-top">
-    <app-action-strip [compact]="true"></app-action-strip>
-  </div>
-  <!-- action-strip-mini -->
-
   <!-- why choose fk -->
-  <app-why-choose-section></app-why-choose-section>
+  <app-why-choose-section [content]="whyChoose"></app-why-choose-section>
   <!-- why choose fk -->
 
   <!-- covid-19 -->
@@ -54,17 +86,23 @@
     fxLayoutGap="8px"
     fxLayoutAlign.lt-md="center center"
   >
-    <div>
-      <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
-      <p class="mat-body-1 align">Lorem ipsum dolor sit amet, consectetur</p>
+    <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
+    <div class="margin-top">
+      <ng-image-slider
+        [infinite]="true"
+        [imageSize]="{ width: 350, height: 300, space: 16 }"
+        [videoAutoPlay]="true"
+        [lazyLoading]="true"
+        [images]="sliderContent"
+      ></ng-image-slider>
     </div>
-    <span class="screenshot"></span>
   </section>
   <!-- community proof -->
 
   <!-- community numbers -->
 
   <app-community-numbers-section
+    [content]="communityNumbersContent"
     [data]="communityNumbers"
   ></app-community-numbers-section>
   <!-- community numbers -->
