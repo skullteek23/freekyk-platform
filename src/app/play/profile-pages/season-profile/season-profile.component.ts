@@ -14,7 +14,6 @@ import {
   SeasonParticipants,
   SeasonStats,
 } from 'src/app/shared/interfaces/season.model';
-import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
 
 @Component({
   selector: 'app-season-profile',
@@ -60,7 +59,6 @@ export class SeasonProfileComponent implements OnInit {
             this.getSeasonMoreInfo(this.sid);
             this.getPhotos(this.sid);
             this.getStats(this.sid);
-            this.getSeasonParticipants(this.sid);
           } else {
             this.error = resp.empty;
             this.router.navigate(['error']);
@@ -78,14 +76,6 @@ export class SeasonProfileComponent implements OnInit {
         map((resp) => resp[0]),
         tap((resp) => (this.imgPath = resp?.imgpath)),
         share()
-      );
-  }
-  getSeasonParticipants(sid: string): void {
-    this.participants$ = this.ngFire
-      .collection(`seasons/${sid}/participants`)
-      .get()
-      .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as SeasonParticipants))
       );
   }
   getSeasonMoreInfo(sid: string): void {

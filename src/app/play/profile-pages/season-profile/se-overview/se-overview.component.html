@@ -30,17 +30,23 @@
       </p>
     </div>
   </div>
-  <div *ngIf="participants.length !== 0" fxLayout="column" fxFlex.gt-sm="50%">
+  <div fxLayout="column" fxFlex.gt-sm="50%">
     <h4>{{ "teams participant list" | titlecase }}</h4>
-    <mat-list>
+    <span *ngIf="(participants$ | async)?.length === 0" class="mat-caption">
+      No Participants yet!
+    </span>
+    <mat-list *ngIf="(participants$ | async)?.length !== 0">
       <a
         [routerLink]="['/t', participant.tname]"
         mat-list-item
-        *ngFor="let participant of participants"
+        *ngFor="let participant of participants$ | async"
       >
         <img matListAvatar [src]="participant.tlogo" alt="Team Image" />
-        <p matLine fxLayoutAlign="space-between center">
-          {{ participant.tname }}
+        <p matLine fxLayoutAlign="start center" fxLayoutGap="8px">
+          <span>{{ participant.tname }}</span>
+          <mat-chip-list>
+            <mat-chip selected>Paid</mat-chip>
+          </mat-chip-list>
         </p>
       </a>
     </mat-list>

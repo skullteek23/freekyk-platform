@@ -50,7 +50,7 @@
             fxFlexOrder.gt-sm="0"
             (click)="onExitScreen()"
             [routerLink]="['/s', season.name]"
-            class="primaryButton buttonText"
+            class="secondaryButton buttonText"
           >
             View Season
           </button>
@@ -59,7 +59,7 @@
             fxFlexOrder.gt-sm="1"
             [disabled]="isParticipated(season.id)"
             (click)="onPayNow(season)"
-            class="buttonText secondaryButtonInv"
+            class="buttonText primaryButton"
           >
             {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
           </button>
