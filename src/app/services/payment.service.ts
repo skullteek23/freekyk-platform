@@ -9,6 +9,7 @@ import {
   T_SUCCESS,
   HOME,
 } from '../dashboard/constants/constants';
+import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS, RazorPayAPI } from '../shared/Constants/RAZORPAY';
 declare var Razorpay: any;
 @Injectable({
@@ -19,7 +20,9 @@ export class PaymentService {
     T_HOME | T_LOADING | T_SUCCESS | T_FAILURE
   >(HOME);
   generateOrder(amount: number): Promise<any> {
-    const generatorFunc = this.ngFunc.httpsCallable('generateRazorpayOrder');
+    const generatorFunc = this.ngFunc.httpsCallable(
+      CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER
+    );
     return generatorFunc({ amount }).toPromise();
   }
   openCheckoutPage(
@@ -41,7 +44,9 @@ export class PaymentService {
   redirectAfterPaymentSuccess(season, tid, response): void {
     this.onLoadingStatusChange('loading');
     const uid = localStorage.getItem('uid');
-    const verifyPaymentFunc = this.ngFunc.httpsCallable('verifyPayment');
+    const verifyPaymentFunc = this.ngFunc.httpsCallable(
+      CLOUD_FUNCTIONS.VERIFY_PAYMENT
+    );
     verifyPaymentFunc({ ...response, uid, season, tid })
       .toPromise()
       .then(() => this.onLoadingStatusChange('success'))

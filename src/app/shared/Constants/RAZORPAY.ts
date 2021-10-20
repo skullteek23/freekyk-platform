@@ -7,7 +7,7 @@ export const UNIVERSAL_OPTIONS = {
   key: environment.razorPay.key_id,
   currency: 'INR',
   name: 'FREEKYK INDIA',
-  description: 'Tournament Entry Fees',
+  description: 'Freekyk Tournament Entry Fees',
   image:
     'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Logo_JPG%20(1).jpg?alt=media&token=1102514a-5518-4091-bcc7-574e4a468722',
   theme: {

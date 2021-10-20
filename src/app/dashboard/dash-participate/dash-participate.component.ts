@@ -89,11 +89,6 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
           .pipe(
             take(1),
             tap((hasTeam) => {
-              hasTeam = {
-                name: 'soluta FC',
-                id: 'f5xGblVJWNvXtvJE9FkR',
-                capId: localStorage.getItem('uid'),
-              };
               if (hasTeam) {
                 const uid = localStorage.getItem('uid');
                 if (uid === hasTeam.capId) {

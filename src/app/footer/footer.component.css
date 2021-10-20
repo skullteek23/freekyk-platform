@@ -10,8 +10,13 @@ a div {
   margin-top: 32px;
   margin-bottom: 32px;
 }
-@media only screen and (max-width:959px) {
-  .gap-bottom{
+@media only screen and (max-width: 959px) {
+  .gap-bottom {
     margin-bottom: 32px;
   }
+}
+.mat-subheading-1 {
+  margin: 0 !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
 }
