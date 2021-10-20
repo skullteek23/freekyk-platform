@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { LOREM_IPSUM_SHORT } from '../../Constants/WEBSITE_CONTENT';
 import { heroCallToAction } from '../../interfaces/others.model';
 
 @Component({
@@ -18,10 +19,14 @@ export class HeroSectionComponent implements OnInit {
   };
   @Input('landingPage') largeBanner: boolean = false;
   @Input() imageSource: string;
-  @Input() description: string;
+  @Input() description: string = LOREM_IPSUM_SHORT;
+  @Input() useAltLayout = false;
   constructor(private router: Router, private dialog: MatDialog) {}
   ngOnInit(): void {}
-  onNavigate(nav: string) {
+  onNavigate(nav: string): void {
     this.router.navigate([nav]);
+  }
+  isFloatText(): string {
+    return this.useAltLayout ? 'absolute' : 'block';
   }
 }

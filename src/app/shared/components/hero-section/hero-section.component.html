@@ -4,17 +4,28 @@
   fxLayout="column"
   fxLayout.gt-sm="row"
   [ngClass]="{ 'hero-big': largeBanner, hero: !largeBanner }"
-  fxLayoutAlign="center center"
+  fxLayoutAlign="end center"
   fxLayoutAlign.gt-sm="space-between center"
   fxLayoutGap="20px"
 >
   <app-illustration-hero-section
+    [isEnlarge]="largeBanner"
+    *ngIf="!useAltLayout; else alt"
     [svgSrc]="imageSource"
     fxFlexOrder.gt-sm="2"
     fxFlexOrder="1"
   ></app-illustration-hero-section>
+  <ng-template #alt>
+    <app-illustration-hero-section-alternate
+      [svgSrc]="imageSource"
+      fxFlexOrder.gt-sm="2"
+      fxFlexOrder="1"
+    >
+    </app-illustration-hero-section-alternate>
+  </ng-template>
 
   <div
+    [ngStyle]="{ position: isFloatText() }"
     fxFlexOrder.gt-sm="1"
     fxFlexOrder="2"
     fxLayout="column"

@@ -1,5 +1,5 @@
 .hero {
-  height: 400px;
+  height: 500px;
 }
 .hero-big {
   height: 600px;
@@ -11,4 +11,7 @@
   .hero-text {
     max-width: 450px;
   }
+}
+.float {
+  position: absolute;
 }

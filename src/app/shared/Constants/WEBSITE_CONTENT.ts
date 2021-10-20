@@ -1,5 +1,9 @@
 export const LOREM_IPSUM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut magna aliqua.<br/><ul><br/><li>Benefit of Feature</li><li>Benefit of Feature</li><li>Benefit of Feature</li></ul>`;
+export const LOREM_IPSUM_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris.`;
+export const LOREM_IPSUM_MEDIUM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, efficitur lobortis nunc. Aenean interdum consequat nunc a dignissim. Nulla dictum et metus id consequat. Integer dictum dapibus quam id volutpat. Morbi sed mollis est. Praesent convallis eros eu tellus lobortis, ac accumsan tellus feugiat. Nunc consectetur tempor mi a maximus. Vivamus metus libero, accumsan eu semper ut, finibus nec purus. Vestibulum mattis, erat vitae iaculis suscipit, magna augue auctor diam, ac imperdiet est purus ut eros. Proin faucibus lorem lectus, in malesuada nunc tincidunt nec. Donec nunc enim, rutrum eget volutpat eget, fringilla quis mi. Donec fermentum.`;
+export const LOREM_IPSUM_LONG = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, efficitur lobortis nunc. Aenean interdum consequat nunc a dignissim. Nulla dictum et metus id consequat. Integer dictum dapibus quam id volutpat. Sed interdum augue ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris mattis efficitur ac at augue. Pellentesque quis nibh lacinia dui consectetur blandit vel eget erat. Nulla facilisi. Praesent pretium vitae lectus posuere posuere. Quisque odio lectus, varius et tellus vitae, tempus ornare ipsum. Morbi sed mollis est. Praesent convallis eros eu tellus lobortis, ac accumsan tellus feugiat. Nunc consectetur tempor mi a maximus. Vivamus metus libero, accumsan eu semper ut, finibus nec purus. Vestibulum mattis, erat vitae iaculis suscipit, magna augue auctor diam, ac imperdiet est purus ut eros. Proin faucibus lorem lectus, in malesuada nunc tincidunt nec. Donec nunc enim, rutrum eget volutpat eget, fringilla quis mi. Donec fermentum tincidunt felis ac pharetra. Praesent quis faucibus nulla. Aliquam tortor mauris, tempus quis lorem ac, euismod lobortis velit. Nullam et ante quis purus vestibulum faucibus. Mauris eu lobortis magna. Nulla facilisi. Proin placerat ligula ut neque tristique cursus. Mauris in pharetra elit, ut vulputate diam.`;
 const EXPLORE_MORE = 'Explore More';
+
 export const COVID_PRECAUTIONS = {
   heading: `Redefining Safety Standards`,
   desc: `Our football grounds have pivoted to adjust to the needs of today. We’re focussed on ensuring the utmost safety and protection of all our members. From following guidelines to implementing strict protocols, we’re welcoming you back to resume playing, entrusting us with the responsibility to maintain top-quality hygiene standards.`,
@@ -10,7 +14,7 @@ export const LANDING_PAGE = {
     subHeading: `Freekyk Play`,
     CTA: {
       text: EXPLORE_MORE,
-      link: '/play',
+      link: '/play/home',
     },
     desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.<br/><ul><br/><li>Build or join your perfect team</li><li>Play leagues, knockouts and community matches</li><li>Get personalized footballing experience</li></ul>`,
   },
@@ -18,7 +22,7 @@ export const LANDING_PAGE = {
     subHeading: `Freekyk Freestyle`,
     CTA: {
       text: EXPLORE_MORE,
-      link: '/freestyle',
+      link: '/freestyle/home',
     },
     desc: `As Idowu Koyenikan wrote, ”All you need is a ball” ;)<br/>Are you a football freestyler, but not getting enough contests to prove your talent?<br/>Get access to World’s first football freestyler’s profile management platform where you can<br/><ul><br/><li>Maintain video list of freestyling skills you can perform</li><li>Add all brand collaborations to your profile</li><li>Participate in exciting local and global contests</li></ul>`,
   },
