@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
+import { heroCallToAction } from '../shared/interfaces/others.model';
 import { BasicTicket } from '../shared/interfaces/ticket.model';
 
 @Component({
@@ -12,11 +15,36 @@ import { BasicTicket } from '../shared/interfaces/ticket.model';
 export class SupportComponent implements OnInit {
   ticketForm: FormGroup;
   activeIndex = 0;
-  ngOnInit(): void {}
+  activePage: {
+    svg: string;
+    title: string;
+    CTA: heroCallToAction | false;
+  };
   constructor(
     private snackServ: SnackbarService,
-    private ngFire: AngularFirestore
-  ) {
+    private ngFire: AngularFirestore,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+  ngOnInit(): void {
+    if (this.router.url.includes('faqs')) {
+      this.activeIndex = 1;
+      this.activePage = {
+        svg: 'assets/svgs/Banner/faqs.svg',
+        title: 'FAQs',
+        CTA: false,
+      };
+    } else {
+      this.activeIndex = 0;
+      this.activePage = {
+        svg: 'assets/svgs/Banner/support.svg',
+        title: 'help & support',
+        CTA: { name: 'raise a ticket', route: '/support' },
+      };
+    }
+    this.initForm();
+  }
+  initForm(): void {
     this.ticketForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
@@ -56,5 +84,12 @@ export class SupportComponent implements OnInit {
       this.snackServ.displayError();
     }
     window.scrollTo(0, 0);
+  }
+  onChangeTab(ev: MatTabChangeEvent): void {
+    if (ev.index === 1) {
+      this.router.navigate(['/support', 'faqs']);
+    } else {
+      this.router.navigate(['/support']);
+    }
   }
 }

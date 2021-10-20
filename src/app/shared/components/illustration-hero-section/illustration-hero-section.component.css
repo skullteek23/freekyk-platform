@@ -1,25 +1,31 @@
 .banner {
-  height: 100%;
   width: 100%;
-  max-width: 450px;
-  max-height: 523px;
+  height: 630px;
   overflow: hidden;
 }
-@media only screen and (max-width: 599px) {
+.banner > img {
+  height: 93%;
+  width: 125%;
+}
+
+@media only screen and (max-width: 320px) {
+  .banner > img {
+    width: 150%;
+  }
+}
+@media only screen and (max-width: 598px) {
   .banner {
-    height: 100%;
-    width: 100%;
-    max-height: 300px;
-    margin: 20px 0 0 0;
+    height: 365px;
+    margin: -29px 0 -66px 0;
     overflow: hidden;
   }
 }
 @media only screen and (min-width: 599px) and (max-width: 959px) {
   .banner {
-    height: 100%;
     width: 100%;
-    max-height: 450px;
-    margin: 20px 0 0 0;
+    height: 461px;
+    margin: -39px 0 -29px 0;
+    overflow: hidden;
     overflow: hidden;
   }
 }

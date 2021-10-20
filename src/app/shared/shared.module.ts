@@ -58,6 +58,7 @@ import { ConfirmationBoxComponent } from './dialogs/confirmation-box/confirmatio
 import { SearchLgComponent } from './components/search-lg/search-lg.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
 import { AccountAvatarComponent } from './components/account-avatar/account-avatar.component';
+import { IllustrationHeroSectionAlternateComponent } from './components/illustration-hero-section-alternate/illustration-hero-section-alternate.component';
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
   exclude: ['tumblr', 'stumble', 'vk'],
@@ -116,6 +117,7 @@ const customConfig: ShareButtonsConfig = {
     SearchLgComponent,
     FilterListPipe,
     AccountAvatarComponent,
+    IllustrationHeroSectionAlternateComponent,
   ],
   imports: [
     CommonModule,

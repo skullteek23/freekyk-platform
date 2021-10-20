@@ -28,9 +28,6 @@ export const verifyPayment = functions.https.onCall(paymentVerification);
 export const onCreateInvite = functions.firestore
   .document('invites/{inviteId}')
   .onCreate(inviteCreationTrigger);
-// export const onCreateOrder = functions.firestore
-//   .document('seasonOrders/{seasonOrderId}')
-//   .onCreate(orderCreationTrigger);
 export const onUpdateInvite = functions.firestore
   .document('invites/{inviteId}')
   .onUpdate(inviteUpdationTrigger);

@@ -1,18 +1,7 @@
-<div class="banner" fxLayoutGap="16px" fxLayout fxLayoutAlign="center end">
-  <object
-    data="assets/svgs/Banner/01.svg"
-    height="100%"
-    width="30%"
-    type="image/svg+xml"
-  ></object>
-  <object
-    data="assets/svgs/Banner/02.svg"
-    width="30%"
-    type="image/svg+xml"
-  ></object>
-  <object
-    data="assets/svgs/Banner/03.svg"
-    width="30%"
-    type="image/svg+xml"
-  ></object>
+<div
+  class="banner"
+  [ngStyle.gt-sm]="{ height: !isEnlarge ? '500px' : '630px' }"
+  fxLayoutAlign="center center"
+>
+  <img [src]="svgSrc" alt="Scene SVG" />
 </div>

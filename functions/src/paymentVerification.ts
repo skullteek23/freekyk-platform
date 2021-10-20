@@ -5,7 +5,7 @@ import {
   SeasonParticipants,
 } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { RAZORPAY_API_KEYˍSECRET_TEST } from './constants';
+import { RAZORPAY_API_KEYˍSECRET_LIVE } from './constants';
 const crypto = require('crypto');
 const db = admin.firestore();
 export async function paymentVerification(
@@ -13,7 +13,7 @@ export async function paymentVerification(
   context: any
 ): Promise<any> {
   try {
-    const KEY_SECRET = RAZORPAY_API_KEYˍSECRET_TEST;
+    const KEY_SECRET = RAZORPAY_API_KEYˍSECRET_LIVE;
     const generatedSignature = crypto
       .createHmac('sha256', KEY_SECRET)
       .update(data.razorpay_order_id + '|' + data.razorpay_payment_id)
