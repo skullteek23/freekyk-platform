@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FOUNDERS_INFO } from 'src/app/shared/Constants/DEFAULTS';
+import { ABOUT_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
 import { profile } from 'src/app/shared/interfaces/others.model';
 
 @Component({
@@ -13,7 +13,7 @@ export class AboutComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.prateek = FOUNDERS_INFO.prateek;
-    this.ankit = FOUNDERS_INFO.ankit;
+    this.prateek = ABOUT_PAGE.prateek;
+    this.ankit = ABOUT_PAGE.ankit;
   }
 }

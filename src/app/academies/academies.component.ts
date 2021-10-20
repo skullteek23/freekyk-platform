@@ -35,15 +35,19 @@ export class AcademiesComponent implements OnInit, OnDestroy {
           if (change.mqAlias === 'xs') {
             this.columns = 1;
             this.cardHeight = '280px';
+            this.activeSvg = 'assets/svgs/Banner/academy_banner_mobile.svg';
           } else if (change.mqAlias === 'sm') {
             this.columns = 2;
             this.cardHeight = '360px';
+            this.activeSvg = 'assets/svgs/Banner/academy_banner_mobile.svg';
           } else if (change.mqAlias === 'md') {
             this.columns = 3;
             this.cardHeight = '320px';
+            this.activeSvg = 'assets/svgs/Banner/academy_banner.svg';
           } else {
             this.columns = 4;
             this.cardHeight = '320px';
+            this.activeSvg = 'assets/svgs/Banner/academy_banner.svg';
           }
         })
     );
@@ -52,13 +56,6 @@ export class AcademiesComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-  onResizeWindow(): void {
-    if (window.outerWidth > 959) {
-      this.activeSvg = 'assets/svgs/Banner/academy_banner.svg';
-    } else {
-      this.activeSvg = 'assets/svgs/Banner/academy_banner_mobile.svg';
-    }
   }
   getAcademies(): void {
     this.academies$ = this.ngFire

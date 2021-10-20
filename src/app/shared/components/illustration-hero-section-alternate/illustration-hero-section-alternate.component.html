@@ -1,3 +1,11 @@
-<div class="banner" fxLayoutAlign="center center">
-  <img [src]="svgSrc" alt="Scene SVG" />
+<div
+  class="banner"
+  [ngClass.gt-sm]="{ shiftSvg: svgSrc.includes('play') }"
+  fxLayoutAlign="center center"
+>
+  <img
+    [ngStyle.gt-sm]="{ height: svgSrc.includes('academy') ? '69%' : '93%' }"
+    [src]="svgSrc"
+    alt="Scene SVG"
+  />
 </div>
