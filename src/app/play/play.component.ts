@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
+import { PLAY_PAGE } from '../shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-play',
@@ -9,6 +10,7 @@ import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
   styleUrls: ['./play.component.css'],
 })
 export class PlayComponent implements OnInit, OnDestroy {
+  readonly mainContent = PLAY_PAGE.banner;
   playLinks: string[] = RouteLinks.PLAY;
   routeSubscription: Subscription;
   activeLink = '';

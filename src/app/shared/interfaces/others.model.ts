@@ -238,3 +238,11 @@ export interface QueryInfo {
     | 'not-in'
     | '!=';
 }
+export interface FeatureSectionContent {
+  subHeading: string;
+  CTA: {
+    text: string;
+    link: string;
+  };
+  desc: string;
+}

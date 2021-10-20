@@ -6,7 +6,7 @@
     [title]="false"
     [landingPage]="true"
     imageSource="assets/svgs/Banner/main_banner.svg"
-    [description]="descMain"
+    [description]="mainContent"
   ></app-hero-section>
   <!-- banner-section -->
 
@@ -22,18 +22,12 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [featureContent]="{
-        head: 'freekyk play',
-        route: '/play/home',
-        desc: descFkPlay
-      }"
+      svg="assets/svgs/Banner/play_banner_small.svg"
+      [featureContent]="fkPlayContent"
     ></app-feature-section>
     <app-feature-section
-      [featureContent]="{
-        head: 'freekyk freestyle',
-        route: '/freestyle/home',
-        desc: descFkFreestyle
-      }"
+      svg="assets/svgs/Banner/freestyle_banner_small.svg"
+      [featureContent]="fkFreestyleContent"
       [invert]="true"
     ></app-feature-section>
   </div>
@@ -48,18 +42,12 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [featureContent]="{
-        head: 'freekyk academies',
-        route: '/academies',
-        desc: descFkAcademies
-      }"
+      svg="assets/svgs/Banner/academy_banner_small.svg"
+      [featureContent]="fkAcademiesContent"
     ></app-feature-section>
     <app-feature-section
-      [featureContent]="{
-        head: 'freekyk equipment',
-        route: '/equipment',
-        desc: descFkEquipment
-      }"
+      svg="assets/svgs/Banner/equipment_banner_small.svg"
+      [featureContent]="fkEquipmentContent"
       [invert]="true"
     ></app-feature-section>
   </div>
@@ -87,10 +75,10 @@
     fxLayoutAlign.lt-md="center center"
   >
     <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
-    <div class="margin-top">
+    <div class="slider-container" (window:resize)="onResizeSlider($event)">
       <ng-image-slider
         [infinite]="true"
-        [imageSize]="{ width: 350, height: 300, space: 16 }"
+        [imageSize]="responsiveSize"
         [videoAutoPlay]="true"
         [lazyLoading]="true"
         [images]="sliderContent"
