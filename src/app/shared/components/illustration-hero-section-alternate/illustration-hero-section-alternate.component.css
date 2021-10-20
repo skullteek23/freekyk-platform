@@ -1,0 +1,32 @@
+.banner {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  margin-left: 20px;
+}
+.banner > img {
+  height: 93%;
+  width: 125%;
+}
+
+@media only screen and (max-width: 320px) {
+  .banner > img {
+    width: 150%;
+  }
+}
+@media only screen and (max-width: 598px) {
+  .banner {
+    height: 365px;
+    margin: -29px 0 -66px 0;
+    overflow: hidden;
+  }
+}
+@media only screen and (min-width: 599px) and (max-width: 959px) {
+  .banner {
+    width: 100%;
+    height: 461px;
+    margin: -39px 0 -29px 0;
+    overflow: hidden;
+    overflow: hidden;
+  }
+}
