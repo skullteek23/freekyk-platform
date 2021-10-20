@@ -1,13 +1,16 @@
 <div>
   <app-hero-section
-    imageSource="assets/svgs/Banner/support.svg"
-    title="help & support"
+    [imageSource]="activePage.svg"
+    [title]="activePage.title"
     [overline]="false"
-    [CTA]="{ name: 'raise a ticket', route: '/support' }"
+    [CTA]="activePage.CTA"
   ></app-hero-section>
 </div>
 <div style="margin-top: 20px" class="container section-space-bottom">
-  <mat-tab-group [(selectedIndex)]="activeIndex">
+  <mat-tab-group
+    (selectedTabChange)="onChangeTab($event)"
+    [(selectedIndex)]="activeIndex"
+  >
     <mat-tab label="Help & Support">
       <ng-template matTabContent>
         <div
