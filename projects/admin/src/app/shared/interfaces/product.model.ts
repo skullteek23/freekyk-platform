@@ -3,7 +3,7 @@ export type EQUIPMENT = 'equipment';
 export type CONTEST = 'freestyle contest';
 export type DISCOUNT_ON_CART = 'discount in percentage';
 export type DISCOUNT_OFF = 'discount in exact amount';
-
+export type SEASON = 'season';
 export interface ProdBasicInfo {
   pUID: string;
   name: string;
@@ -36,6 +36,7 @@ export interface cartItem {
   prodImgpath: string;
   prodPrice: string;
   prodId: string;
+  prodType?: SEASON | EQUIPMENT;
 }
 export interface coupon {
   code: string;
