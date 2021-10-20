@@ -4,7 +4,7 @@
   fxLayoutAlign="center center"
 >
   <img
-    [ngStyle.gt-sm]="{ height: svgSrc.includes('academy') ? '69%' : '93%' }"
+    [ngStyle.lt-md]="{ height: svgSrc.includes('academy') ? '69%' : '93%' }"
     [src]="svgSrc"
     alt="Scene SVG"
   />
