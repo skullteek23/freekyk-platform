@@ -18,6 +18,7 @@ export class AcademiesComponent implements OnInit, OnDestroy {
   noAcademies = false;
   academies$: Observable<AcadBasicInfo[]>;
   acFilter = ['Location'];
+  activeSvg = 'assets/svgs/Banner/academy_banner.svg';
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore
@@ -51,6 +52,13 @@ export class AcademiesComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+  onResizeWindow(): void {
+    if (window.outerWidth > 959) {
+      this.activeSvg = 'assets/svgs/Banner/academy_banner.svg';
+    } else {
+      this.activeSvg = 'assets/svgs/Banner/academy_banner_mobile.svg';
+    }
   }
   getAcademies(): void {
     this.academies$ = this.ngFire

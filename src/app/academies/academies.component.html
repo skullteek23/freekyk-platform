@@ -1,7 +1,8 @@
 <div>
   <app-hero-section
+    (window:resize)="onResizeWindow()"
     [useAltLayout]="true"
-    imageSource="assets/svgs/Banner/academy_banner.svg"
+    [imageSource]="activeSvg"
     title="freekyk academies"
     overline="learn"
     [CTA]="{ name: 'start learning', route: '/signup' }"
