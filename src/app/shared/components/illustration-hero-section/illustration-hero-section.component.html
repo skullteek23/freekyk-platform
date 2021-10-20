@@ -1,6 +1,6 @@
 <div
   class="banner"
-  [ngStyle]="{ height: !isEnlarge ? '500px' : '630px' }"
+  [ngStyle.gt-sm]="{ height: !isEnlarge ? '500px' : '630px' }"
   fxLayoutAlign="center center"
 >
   <img [src]="svgSrc" alt="Scene SVG" />
