@@ -25,7 +25,7 @@ export class LandingPageComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.responsiveSize = { width: 250, height: 200, space: 12 };
+    this.onResizeSlider();
   }
   onResizeSlider(): void {
     if (window.outerWidth > 599) {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { LINK_NOT_ADDED } from '../../Constants/DEFAULTS';
 import { SocialMediaLinks } from '../../interfaces/user.model';
 
 @Component({
@@ -17,6 +18,7 @@ export class SocialMediaLinksComponent implements OnInit {
   InstaUrl = 'https://www.instagram.com/';
   TwitterUrl = 'https://www.twitter.com/';
   youtubeUrl = 'https://www.youtube.com/c/';
+  readonly ADD_THIS_LINK = LINK_NOT_ADDED;
   constructor(private snackServ: SnackbarService) {}
 
   ngOnInit(): void {}

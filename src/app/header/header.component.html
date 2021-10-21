@@ -29,6 +29,7 @@
 
       <!-- notif icon - small -->
       <button
+        matTooltip="Notifications"
         *ngIf="isLogged && !isLoading"
         mat-icon-button
         color="primary"
@@ -49,6 +50,7 @@
       <!-- cart icon - small -->
       <button
         disabled
+        matTooltip="Cart"
         *ngIf="isLogged && !isLoading"
         mat-icon-button
         color="primary"
@@ -67,6 +69,7 @@
         fxLayoutAlign="center center"
       > -->
       <app-account-avatar
+        matTooltip="User Settings"
         *ngIf="isLogged && !isLoading"
         [routerLink]="['/dashboard', 'account', 'profile']"
         [dataImg]="profilePicture$ | async"
@@ -143,6 +146,7 @@
       </div>
       <div fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
         <button
+          matTooltip="Notifications"
           *ngIf="isLogged && !isLoading"
           mat-icon-button
           color="primary"
@@ -159,6 +163,7 @@
         </button>
 
         <button
+          matTooltip="Cart"
           disabled
           *ngIf="isLogged && !isLoading"
           mat-icon-button
@@ -178,6 +183,7 @@
           fxLayoutAlign="center center"
         > -->
         <app-account-avatar
+          matTooltip="User Settings"
           *ngIf="isLogged && !isLoading"
           [matMenuTriggerFor]="profileMenu"
           [dataImg]="profilePicture$ | async"

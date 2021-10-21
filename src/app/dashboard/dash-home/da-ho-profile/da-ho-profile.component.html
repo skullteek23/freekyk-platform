@@ -96,6 +96,7 @@
             [routerLink]="['/dashboard', 'account', 'profile']"
             fxHide.lt-md="true"
             mat-icon-button
+            matTooltip="Edit Profile"
           >
             <span class="material-icons-round">edit</span>
           </button>
@@ -128,7 +129,12 @@
 </mat-card>
 
 <ng-template #photoPlaceholder>
-  <button (click)="onUploadPhoto()" mat-icon-button color="primary">
+  <button
+    matTooltip="Upload Photo"
+    (click)="onUploadPhoto()"
+    mat-icon-button
+    color="primary"
+  >
     <span class="material-icons-round" style="font-size: 48px"
       >add_photo_alternate</span
     >

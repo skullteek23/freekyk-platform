@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchCardComponent } from 'src/app/shared/dialogs/match-card/match-card.component';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
-import * as fromApp from '../../../store/app.reducer';
+import { TeamState } from '../../dash-team-manag/store/team.reducer';
 
 @Component({
   selector: 'app-da-ho-upcoming-match',
@@ -18,20 +18,19 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   constructor(
     private dialog: MatDialog,
-    private store: Store<fromApp.AppState>
+    private store: Store<{
+      team: TeamState;
+    }>
   ) {}
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
         .select('team')
-        .pipe(map((data) => data.upcomingMatches[1]))
-        .subscribe((match) => {
-          if (match === undefined) {
-            this.noUpcomingMatch = true;
-          } else {
-            this.upFixture = match;
-            this.noUpcomingMatch = false;
-          }
+        .pipe(map((resp) => resp.upcomingMatches))
+        .subscribe((match: MatchFixture[]) => {
+          console.log(match);
+          this.upFixture = match && match.length !== 0 ? match[0] : undefined;
+          this.noUpcomingMatch = match && match.length === 0;
         })
     );
   }

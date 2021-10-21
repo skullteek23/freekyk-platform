@@ -18,14 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         // Hide loading indicator
-        this.dashOpen = [
-          '/dashboard/home',
-          '/dashboard/team-management',
-          '/dashboard/participate',
-          '/dashboard/account',
-        ]
-          .includes(event.url)
-          .valueOf();
+        this.dashOpen = event.url.includes('dashboard');
       }
     });
   }

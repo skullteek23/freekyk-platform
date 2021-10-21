@@ -166,3 +166,17 @@ export const ABOUT_PAGE = {
       'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Freekyk_Team%20(1).JPG?alt=media&token=fb7a4acf-0856-46f4-a905-001c51ec0d6d',
   },
 };
+export const FOOTER = {
+  product: [
+    { name: 'play', route: 'play/home' },
+    { name: 'freestyle', route: 'freestyle/home' },
+    { name: 'academies', route: 'academies' },
+    { name: 'equipment', route: 'equipment' },
+  ],
+  about: [
+    { name: 'about us', route: 'about' },
+    { name: 'raise a ticket', route: 'support' },
+    { name: 'help & support', route: 'support' },
+  ],
+  copyright: `Copyright © 2021. Freekyk. All rights reserved.`,
+};
