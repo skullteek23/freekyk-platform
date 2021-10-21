@@ -18,3 +18,5 @@ export const PAGE_VIEWS_MAIN = {
   TERMS_PAGE: 'LANDING_PAGE',
   PRIVACY_PAGE: 'LANDING_PAGE',
 };
+export const CLOUD_STORAGE_ADDRESS_LARGE = `/images/players/`;
+export const CLOUD_STORAGE_ADDRESS_SMALL = `/thumbnails/players/`;

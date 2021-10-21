@@ -52,9 +52,12 @@ export class DaHoCompleteProfileComponent implements OnInit {
     );
   }
   onUploadProfilePhoto(): void {
-    this.dialog.open(UploadphotoComponent, {
-      panelClass: 'large-dialogs',
-    });
+    this.dialog
+      .open(UploadphotoComponent, {
+        panelClass: 'large-dialogs',
+      })
+      .afterClosed()
+      .subscribe(() => location.reload());
   }
   onOpenTeamBox(): void {
     this.router.navigate(['/dashboard', RouteLinks.DASHBOARD[1]]);

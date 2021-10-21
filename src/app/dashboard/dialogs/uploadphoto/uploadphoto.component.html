@@ -40,7 +40,7 @@
     </p>
     <div fxLayoutGap="20px">
       <button (click)="fileInput.click()" class="buttonText secondaryButton">
-        Choose New Image
+        Choose New Photo
       </button>
       <button
         [disabled]="!$file"
@@ -48,6 +48,13 @@
         class="buttonText primaryButton"
       >
         Upload
+      </button>
+      <button
+        [disabled]="$file || !selectedImage"
+        (click)="onRemovePhoto()"
+        class="buttonText noResponseButton"
+      >
+        Remove Photo
       </button>
     </div>
   </div>
