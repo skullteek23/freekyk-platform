@@ -1,7 +1,16 @@
 <!-- lg-screen-sidenav -->
 <mat-sidenav-container *ngIf="!onMobile">
-  <mat-sidenav #sidenav [mode]="getMode()" position="start">
-    <div fxLayoutAlign="center center" fxLayout="column">
+  <mat-sidenav
+    #sidenav
+    [(opened)]="sidenavOpenState"
+    [mode]="getMode()"
+    position="start"
+  >
+    <div
+      (window:resize)="onResizeScreen()"
+      fxLayoutAlign="center center"
+      fxLayout="column"
+    >
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
         <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <span class="mat-body-2"> {{ displayName | titlecase }} </span>
