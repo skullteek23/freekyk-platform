@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
-import { ExitDashGuard } from '../shared/guards/exit-dash.guard';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
 import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
@@ -18,7 +17,6 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
     ...canActivate(redirectUnauthorizedToLogin),
-    canDeactivate: [ExitDashGuard],
     children: [
       { path: 'home', component: DashHomeComponent },
       { path: 'team-management', component: DashTeamManagComponent },

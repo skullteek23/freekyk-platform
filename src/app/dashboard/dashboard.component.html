@@ -107,6 +107,7 @@
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
+          matTooltip="Dashboard"
         >
           <span class="material-icons-round">dashboard</span>
         </a>
@@ -115,6 +116,7 @@
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
+          matTooltip="Team Management"
         >
           <span class="material-icons-round">groups</span>
         </a>
@@ -123,6 +125,7 @@
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
+          matTooltip="Participate"
         >
           <span class="material-icons-round">sports_soccer</span>
         </a>
@@ -133,6 +136,7 @@
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
+          matTooltip="Account & Settings"
         >
           <span class="material-icons-round">settings</span>
         </a>
@@ -141,10 +145,16 @@
           routerLinkActive="router-link-active-md"
           mat-list-item
           fxLayoutAlign="center center"
+          matTooltip="Support"
         >
           <span class="material-icons-round">help_center</span>
         </a>
-        <a (click)="onLogout()" mat-list-item fxLayoutAlign="center center">
+        <a
+          matTooltip="Logout"
+          (click)="onLogout()"
+          mat-list-item
+          fxLayoutAlign="center center"
+        >
           <span class="material-icons-round red">exit_to_app</span>
         </a>
       </mat-nav-list>
@@ -186,6 +196,7 @@
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
+    matTooltip="Dashboard"
   >
     <span class="material-icons-round"> dashboard </span>
     <span class="mat-caption">Dashboard</span>
@@ -196,6 +207,7 @@
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
+    matTooltip="Team Management"
   >
     <span class="material-icons-round"> groups </span>
     <span class="mat-caption">Team</span>
@@ -206,6 +218,7 @@
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
+    matTooltip="Participate"
   >
     <span class="material-icons-round">sports_soccer</span>
     <span class="mat-caption">Participate</span>
@@ -216,6 +229,7 @@
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0"
+    matTooltip="Support"
   >
     <span class="material-icons-round"> help_outline </span>
     <span class="mat-caption">Support</span>
