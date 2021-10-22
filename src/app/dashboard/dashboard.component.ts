@@ -76,7 +76,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
   onResizeScreen(): void {
-    console.log(window.innerWidth);
     this.sidenavOpenState = window.innerWidth >= 1489;
   }
   getMode(): MatDrawerMode {

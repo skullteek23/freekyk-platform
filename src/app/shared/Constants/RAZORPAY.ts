@@ -9,7 +9,7 @@ export const UNIVERSAL_OPTIONS = {
   name: 'FREEKYK INDIA',
   description: 'Freekyk Tournament Entry Fees',
   image:
-    'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Logo_JPG%20(1).jpg?alt=media&token=1102514a-5518-4091-bcc7-574e4a468722',
+    'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/logo.png?alt=media&token=f81c67d1-fb00-4500-a286-faa94d1bf9a5',
   theme: {
     color: '#00810f',
   },
