@@ -12,6 +12,7 @@ import { inviteCreationTrigger } from './trigger_functions/createInvite';
 import { inviteDeletionTrigger } from './trigger_functions/inviteDelete';
 import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
+import { generateThumbnail } from './trigger_functions/generateThumbnail';
 
 // callable functions
 export const createProfile = functions.https.onCall(newProfile);
@@ -34,4 +35,8 @@ export const onUpdateInvite = functions.firestore
 export const onDeleteInvite = functions.firestore
   .document('invites/{inviteId}')
   .onDelete(inviteDeletionTrigger);
+export const onUploadProfilePhoto = functions.storage
+  .bucket('football-platform-v1.appspot.com')
+  .object()
+  .onFinalize(generateThumbnail);
 // trigger functions
