@@ -1,14 +1,14 @@
 import { Storage } from '@google-cloud/storage';
 const gcs = new Storage();
-import * as admin from 'firebase-admin';
-const db = admin.firestore();
-const storage = admin.storage();
 import * as functions from 'firebase-functions';
 import { tmpdir } from 'os';
 import { join, dirname } from 'path';
+import * as admin from 'firebase-admin';
+const db = admin.firestore();
 
 import * as sharp from 'sharp';
 import * as fs from 'fs-extra';
+import { PlayerBasicInfo } from '../../../src/app/shared/interfaces/user.model';
 
 export async function generateThumbnail(
   object: functions.storage.ObjectMetadata,
@@ -25,7 +25,7 @@ export async function generateThumbnail(
   const thumbnailBucket = gcs.bucket('gs://football-platform-v1-thumbnails');
   const filePath = object.name;
   const fileName = filePath.split('/')[2];
-  const bucketDir = dirname(filePath);
+  const newbucketDir = dirname(`thumbnails/players`);
 
   const workingDir = join(tmpdir(), 'thumbs');
   const tmpFilePath = join(workingDir, 'source.png');
@@ -49,34 +49,44 @@ export async function generateThumbnail(
   await sharp(tmpFilePath).resize(newSize, newSize).toFile(thumbPath);
 
   // Upload to GCS
-  uploadPromises.push(
-    thumbnailBucket.upload(thumbPath, {
-      destination: join(bucketDir, thumbName),
+  const urlSnap = await thumbnailBucket
+    .upload(thumbPath, {
+      destination: join(newbucketDir, thumbName),
     })
-    // .then((data) => {
-    //   const file = data[0];
-    //   db.collection('players')
-    //     .doc(fileName)
-    //     .update({
-    //       imgpath_sm:
-    //         'https://firebasestorage.googleapis.com/v0/b/' +
-    //         thumbnailBucket.name +
-    //         '/o/' +
-    //         encodeURIComponent(file.name) +
-    //         '?alt=media&token=' +
-    //         uuid,
-    //     });
-    // })
-  );
-  // await admin.storage().bucket(thumbnailBucket.name).getSignedUrl()
-  gcs
-    .bucket(thumbnailBucket.name)
-    .getMetadata()
-    .then((res) => res[0]);
+    .then(() => {
+      const file = thumbnailBucket.file(thumbPath);
+      return file.getSignedUrl({
+        action: 'read',
+        expires: new Date('31 December 2199'),
+      });
+    });
 
-  // 4. Run the upload operations
-  await Promise.all(uploadPromises);
+  const isImgExists = (
+    (await (
+      await db.collection('players').doc().get()
+    ).data()) as PlayerBasicInfo
+  ).imgpath_sm;
+  // Save thumbnail in Database
+  if (!isImgExists) {
+    uploadPromises.push(
+      db.collection('players').doc(fileName).set(
+        {
+          imgpath_sm: urlSnap[0],
+        },
+        { merge: true }
+      )
+    );
+  } else {
+    uploadPromises.push(
+      db.collection('players').doc(fileName).update({
+        imgpath_sm: urlSnap[0],
+      })
+    );
+  }
 
-  // 5. Cleanup remove the tmp/thumbs from the filesystem
-  return fs.remove(workingDir);
+  // 4. Cleanup remove the tmp/thumbs from the filesystem
+  uploadPromises.push(fs.remove(workingDir));
+
+  // 5. Run the upload operations
+  return Promise.all(uploadPromises);
 }
