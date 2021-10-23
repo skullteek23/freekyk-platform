@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { uData, logDetails } from '../shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
-import { Logout } from '../store/clearState.reducer';
 import { AppState } from '../store/app.reducer';
 import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 @Injectable({
@@ -55,13 +54,12 @@ export class AuthService {
   public onLogout() {
     this.logoutFromFirebase()
       .then(() => {
-        this.store.dispatch(new Logout());
         this.resetCurrentUser();
         sessionStorage.clear();
         localStorage.removeItem('uid');
         console.log('logged out!');
         this.onSuccesslogOut();
-        this.router.navigate(['/']);
+        location.href = '/';
       })
       .catch((error) => this.mapError(error.code));
   }

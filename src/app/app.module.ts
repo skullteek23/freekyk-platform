@@ -20,7 +20,6 @@ import { environment } from 'src/environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromApp from './store/app.reducer';
-import { clearState } from './store/clearState.reducer';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginUiComponent } from './auth/login-ui/login-ui.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
@@ -78,7 +77,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     SharedModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    StoreModule.forRoot(fromApp.appReducer, { metaReducers: [clearState] }),
+    StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
       maxAge: 5,
