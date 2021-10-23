@@ -104,10 +104,8 @@ export async function teamCreation(
     );
     // update
 
-    console.log('Team created');
     return await Promise.all(allPromises);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

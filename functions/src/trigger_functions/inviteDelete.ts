@@ -10,7 +10,6 @@ export async function inviteDeletionTrigger(
     const delInvite: Invite = snap.data();
     DeleteNotifById(inviteId, delInvite.inviteeId);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

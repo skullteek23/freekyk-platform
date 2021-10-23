@@ -69,10 +69,8 @@ export async function onJoinTeam(
     allPromises.push(DeleteInviteById(inviteId));
     // update
 
-    console.log('Team Joined');
     return await Promise.all(allPromises);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

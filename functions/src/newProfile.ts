@@ -11,11 +11,6 @@ export async function newProfile(
   context: any
 ) {
   try {
-    //get
-    console.log(data);
-    console.log(context);
-    //get
-
     // create
     const newPlayerStats: BasicStats = {
       apps: 0,
@@ -67,7 +62,6 @@ export async function newProfile(
     );
     return await Promise.all(twoPromises);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

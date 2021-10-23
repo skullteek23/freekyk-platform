@@ -13,9 +13,6 @@ export async function joinRequests(
     //get
 
     //create
-    console.log(data.capId);
-    console.log(data.name);
-    console.log(context.auth?.uid);
     data.capId.forEach((captainId) => {
       const newNotif: NotificationBasic = {
         type: 'request',
@@ -36,7 +33,6 @@ export async function joinRequests(
     return batch.commit();
     //update
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

@@ -13,7 +13,6 @@ export async function fsTrick(
   context: any
 ) {
   try {
-    console.log(data);
     // get
     const playerId = context.auth?.uid ? context.auth.uid : '';
 
@@ -59,7 +58,6 @@ export async function fsTrick(
     // update
     return Promise.all(allPromises);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }
