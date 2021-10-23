@@ -9,6 +9,7 @@ const db = admin.firestore();
 import * as sharp from 'sharp';
 import * as fs from 'fs-extra';
 import { PlayerBasicInfo } from '../../../src/app/shared/interfaces/user.model';
+import { IMAGES_BUCKET, THUMBNAILS_BUCKET } from '../constants';
 
 export async function generateThumbnail(
   object: functions.storage.ObjectMetadata,
@@ -21,8 +22,8 @@ export async function generateThumbnail(
     console.log('exiting function');
     return false;
   }
-  const bucket = gcs.bucket(object.bucket);
-  const thumbnailBucket = gcs.bucket('gs://football-platform-v1-thumbnails');
+  const bucket = gcs.bucket(IMAGES_BUCKET);
+  const thumbnailBucket = gcs.bucket(THUMBNAILS_BUCKET);
   const filePath = object.name;
   const fileName = filePath.split('/')[2];
   const newbucketDir = dirname(`thumbnails/players`);
@@ -42,7 +43,7 @@ export async function generateThumbnail(
   const newSize = 64;
   const uploadPromises = [];
 
-  const thumbName = `thumb@${fileName}`;
+  const thumbName = `thumb_${fileName}`;
   const thumbPath = join(workingDir, thumbName);
 
   // Resize source image
@@ -52,6 +53,7 @@ export async function generateThumbnail(
   const urlSnap = await thumbnailBucket
     .upload(thumbPath, {
       destination: join(newbucketDir, thumbName),
+      contentType: object.contentType,
     })
     .then(() => {
       const file = thumbnailBucket.file(thumbPath);
@@ -60,7 +62,7 @@ export async function generateThumbnail(
         expires: new Date('31 December 2199'),
       });
     });
-
+  console.log(urlSnap[0]);
   const isImgExists = (
     (await (
       await db.collection('players').doc().get()

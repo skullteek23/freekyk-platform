@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import firebase from 'firebase/app';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { CLOUD_STORAGE_ADDRESS_LARGE } from '../../constants/constants';
 
@@ -45,17 +46,32 @@ export class UploadphotoComponent implements OnInit {
     if (!this.selectedImage) {
       return;
     }
-    this.ngStorage
-      .refFromURL(this.selectedImage)
-      .delete()
-      .toPromise()
-      .then(() => {
-        this.snackServ.displayCustomMsg('Image removed Successfully!');
-        this.onSuccessOperation();
-      })
-      .catch((err) => {
-        console.log(err);
-        this.snackServ.displayCustomMsg(err);
+    this.isLoading = true;
+    const uid = localStorage.getItem('uid');
+    const allPromises = [];
+    allPromises.push(
+      this.ngStorage.refFromURL(this.selectedImage).delete().toPromise()
+    );
+    allPromises.push(
+      this.ngFire
+        .collection(`players/${uid}/additionalInfo`)
+        .doc('otherInfo')
+        .update({ imgpath_lg: firebase.firestore.FieldValue.delete() })
+    );
+    allPromises.push(
+      this.ngFire
+        .collection('players')
+        .doc(uid)
+        .update({ imgpath_sm: firebase.firestore.FieldValue.delete() })
+    );
+    Promise.all(allPromises)
+      .then(() =>
+        this.snackServ.displayCustomMsg('Photo removed Successfully!')
+      )
+      .catch((err) => this.snackServ.displayCustomMsg(err))
+      .finally(() => {
+        this.onCloseDialog();
+        this.isLoading = false;
       });
   }
   async onUploadImage(): Promise<void> {
@@ -70,7 +86,7 @@ export class UploadphotoComponent implements OnInit {
     );
     this.selectedImage = await storageSnap.ref.getDownloadURL();
     if (this.updateProfilePhoto(this.selectedImage)) {
-      this.snackServ.displayCustomMsg('Image uploaded Successfully!');
+      this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
       this.onSuccessOperation();
     }
   }
