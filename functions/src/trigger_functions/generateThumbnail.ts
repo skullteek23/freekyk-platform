@@ -1,14 +1,21 @@
 import { Storage } from '@google-cloud/storage';
 import { join, dirname } from 'path';
 import { tmpdir } from 'os';
-import { IMAGES_BUCKET, THUMBNAILS_BUCKET } from '../constants';
+import {
+  IMAGES_BUCKET,
+  IMAGES_STORAGE_PATH,
+  THUMBNAILS_BUCKET,
+  THUMBNAILS_STORAGE_PATH,
+} from '../constants';
 import * as sharp from 'sharp';
 import * as fs from 'fs-extra';
+import * as admin from 'firebase-admin';
 const gcs = new Storage();
+const db = admin.firestore();
 
 export async function generateThumbnail(object, context): Promise<any> {
   if (
-    !object.name.startsWith('images/players') ||
+    !object.name.startsWith(IMAGES_STORAGE_PATH.player) ||
     !object.contentType.includes('image')
   ) {
     console.log('exiting function');
@@ -18,7 +25,7 @@ export async function generateThumbnail(object, context): Promise<any> {
   const thumbnailBucket = gcs.bucket(THUMBNAILS_BUCKET);
   const filePath = object.name;
   const fileName = filePath.split('/')[2];
-  const newbucketDir = dirname(`thumbnails/players`);
+  const newbucketDir = dirname(THUMBNAILS_STORAGE_PATH.player);
 
   const workingDir = join(tmpdir(), 'thumbs');
   const tmpFilePath = join(workingDir, 'source.png');
@@ -36,7 +43,7 @@ export async function generateThumbnail(object, context): Promise<any> {
   const uploadPromises = [];
 
   const thumbName = `thumbnail_${fileName}`;
-  const thumbPath = join(workingDir, thumbName);
+  const thumbPath = thumbName;
 
   // Resize source image
   await sharp(tmpFilePath).resize(newSize, newSize).toFile(thumbPath);
@@ -55,23 +62,20 @@ export async function generateThumbnail(object, context): Promise<any> {
       });
     });
   uploadPromises.push(
-    this.ngFire.collection('players').doc(fileName).update({
+    db.collection('players').doc(fileName).update({
       imgpath_sm: urlSnap[0],
     })
   );
   uploadPromises.push(
-    this.ngFire
-      .collection(`players/${fileName}/additionalInfo`)
-      .doc('otherInfo')
-      .set(
-        {
-          imgpath_lg: urlSnap[0],
-        },
-        { merge: true }
-      )
+    db.collection(`players/${fileName}/additionalInfo`).doc('otherInfo').set(
+      {
+        imgpath_lg: urlSnap[0],
+      },
+      { merge: true }
+    )
   );
   uploadPromises.push(
-    this.ngFire.collection('freestylers').doc(fileName).update({
+    db.collection('freestylers').doc(fileName).update({
       imgpath_lg: urlSnap[0],
     })
   );
