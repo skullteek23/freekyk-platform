@@ -4,7 +4,6 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import firebase from 'firebase/app';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { CLOUD_STORAGE_ADDRESS_LARGE } from '../../constants/constants';
 
 @Component({
   selector: 'app-uploadphoto',
@@ -81,10 +80,15 @@ export class UploadphotoComponent implements OnInit {
     this.isLoading = true;
     const uid = localStorage.getItem('uid');
     this.ngStorage
-      .upload(CLOUD_STORAGE_ADDRESS_LARGE + uid, this.$file)
-      .then(() => {
-        this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
-        this.onSuccessOperation();
+      .upload('image_' + uid, this.$file)
+      .percentageChanges()
+      .toPromise()
+      .then((res) => {
+        console.log(res);
+        if (res === 100) {
+          this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
+          this.onSuccessOperation();
+        }
       });
   }
   onSuccessOperation(): void {
