@@ -82,8 +82,7 @@ export class UploadphotoComponent implements OnInit {
     this.ngStorage
       .upload('image_' + uid, this.$file)
       .percentageChanges()
-      .toPromise()
-      .then((res) => {
+      .subscribe((res) => {
         console.log(res);
         if (res === 100) {
           this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
