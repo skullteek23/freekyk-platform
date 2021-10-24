@@ -74,19 +74,18 @@ export class UploadphotoComponent implements OnInit {
         this.isLoading = false;
       });
   }
-  async onUploadImage(): Promise<void> {
+  onUploadImage(): void {
     if (this.$file == null) {
       return;
     }
     this.isLoading = true;
     const uid = localStorage.getItem('uid');
-    const storageSnap = await this.ngStorage.upload(
-      CLOUD_STORAGE_ADDRESS_LARGE + uid,
-      this.$file
-    );
-    this.selectedImage = await storageSnap.ref.getDownloadURL();
-    this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
-    this.onSuccessOperation();
+    this.ngStorage
+      .upload(CLOUD_STORAGE_ADDRESS_LARGE + uid, this.$file)
+      .then(() => {
+        this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
+        this.onSuccessOperation();
+      });
   }
   onSuccessOperation(): void {
     this.onCloseDialog();
