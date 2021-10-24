@@ -85,41 +85,11 @@ export class UploadphotoComponent implements OnInit {
       this.$file
     );
     this.selectedImage = await storageSnap.ref.getDownloadURL();
-    if (this.updateProfilePhoto(this.selectedImage)) {
-      this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
-      this.onSuccessOperation();
-    }
+    this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
+    this.onSuccessOperation();
   }
   onSuccessOperation(): void {
     this.onCloseDialog();
     this.isLoading = false;
-  }
-  updateProfilePhoto(imgpath: string): Promise<any[]> {
-    const uid = localStorage.getItem('uid');
-    console.log(uid);
-    const allPromises = [];
-    allPromises.push(
-      this.ngFire.collection('players').doc(uid).update({
-        imgpath_sm: imgpath,
-      })
-    );
-    allPromises.push(
-      this.ngFire
-        .collection('players/' + uid + '/additionalInfo')
-        .doc('otherInfo')
-        .set(
-          {
-            imgpath_lg: imgpath,
-          },
-          { merge: true }
-        )
-    );
-    allPromises.push(
-      this.ngFire.collection('freestylers').doc(uid).update({
-        imgpath_lg: imgpath,
-      })
-    );
-
-    return Promise.all(allPromises);
   }
 }
