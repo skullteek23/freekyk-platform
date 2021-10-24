@@ -11,6 +11,7 @@ export async function generateThumbnail(object, context): Promise<any> {
   const bucket = gcs.bucket(object.bucket);
   const filePath = object.name;
   const fileName = filePath.split('/').pop();
+  const uid = fileName.split('_')[1];
   const bucketDir = dirname(filePath);
 
   const workingDir = join(tmpdir(), 'thumbs');
@@ -32,7 +33,7 @@ export async function generateThumbnail(object, context): Promise<any> {
   // 3. Resize the images and define an array of upload promises
   const sizes = [64];
   const uploadPromises = [];
-  const thumbName = `thumb_${fileName.split('_')[1]}`;
+  const thumbName = `thumb_${uid}`;
   const thumbPath = join(workingDir, thumbName);
 
   // Resize source image
@@ -53,12 +54,12 @@ export async function generateThumbnail(object, context): Promise<any> {
   uploadPromises.push();
 
   uploadPromises.push(
-    db.collection('players').doc(fileName).update({
+    db.collection('players').doc(uid).update({
       imgpath_sm: urlSnap[0],
     })
   );
   uploadPromises.push(
-    db.collection(`players/${fileName}/additionalInfo`).doc('otherInfo').set(
+    db.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(
       {
         imgpath_lg: urlSnap[0],
       },
@@ -66,7 +67,7 @@ export async function generateThumbnail(object, context): Promise<any> {
     )
   );
   uploadPromises.push(
-    db.collection('freestylers').doc(fileName).update({
+    db.collection('freestylers').doc(uid).update({
       imgpath_lg: urlSnap[0],
     })
   );
