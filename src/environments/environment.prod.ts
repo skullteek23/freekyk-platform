@@ -3,6 +3,8 @@ export const environment = {
   firebase: {
     apiKey: 'AIzaSyAzXC-p7kWnDxku9SR_6okiIn7Ri6Tv67w',
     authDomain: 'football-platform-beta.firebaseapp.com',
+    databaseURL:
+      'https://football-platform-beta-default-rtdb.asia-southeast1.firebasedatabase.app',
     projectId: 'football-platform-beta',
     storageBucket: 'football-platform-beta.appspot.com',
     messagingSenderId: '1098285494743',
