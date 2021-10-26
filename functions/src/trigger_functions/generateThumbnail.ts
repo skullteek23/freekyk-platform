@@ -6,21 +6,28 @@ import * as fs from 'fs-extra';
 import * as admin from 'firebase-admin';
 const gcs = new Storage();
 const db = admin.firestore();
+import * as functions from 'firebase-functions';
 
 export async function generateThumbnail(
-  object: any,
+  object: functions.storage.ObjectMetadata,
   context: any
 ): Promise<any> {
+  if (!object || !object.name) {
+    console.log('exiting function');
+    return false;
+  }
   const bucket = gcs.bucket(object.bucket);
+  const contentType = object.contentType || '';
   const filePath = object.name;
-  const fileName = filePath.split('/').pop();
-  const uid = fileName.split('_')[1];
+  const fileNameTemp = filePath.split('/').pop();
+  const fileName = fileNameTemp || '';
+  const uid = fileName ? fileName.split('_')[1] : '';
   const bucketDir = dirname(filePath);
 
   const workingDir = join(tmpdir(), 'thumbs');
   const tmpFilePath = join(workingDir, 'source.png');
 
-  if (fileName.includes('thumb') || !object.contentType.includes('image')) {
+  if (fileName.includes('thumb') || !contentType.includes('image')) {
     console.log('exiting function');
     return false;
   }
@@ -46,7 +53,7 @@ export async function generateThumbnail(
   const urlSnap = await bucket
     .upload(thumbPath, {
       destination: join(bucketDir, thumbName),
-      contentType: object.contentType,
+      contentType,
     })
     .then((res) => {
       return res[0].getSignedUrl({
@@ -60,6 +67,14 @@ export async function generateThumbnail(
     db.collection('players').doc(uid).update({
       imgpath_sm: urlSnap[0],
     })
+  );
+  uploadPromises.push(
+    db.collection(`players/${fileName}/additionalInfo`).doc('otherInfo').set(
+      {
+        imgpath_lg: urlSnap[0],
+      },
+      { merge: true }
+    )
   );
   uploadPromises.push(
     db.collection('freestylers').doc(uid).update({
