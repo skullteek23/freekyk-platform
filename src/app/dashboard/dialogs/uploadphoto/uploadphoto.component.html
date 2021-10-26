@@ -11,7 +11,7 @@
 </mat-toolbar>
 <div class="container-2">
   <div
-    *ngIf="!isLoading; else loading"
+    *ngIf="!isLoading && !isUploadComplete"
     ngClass.lt-md="dialogData"
     ngClass.gt-sm="stepdata"
     fxLayoutAlign="center center"
@@ -59,29 +59,23 @@
     </div>
   </div>
   <div
-    *ngIf="!isLoading && uploadProgress && !isUploadComplete"
-    ngClass.lt-md="dialogData"
-    ngClass.gt-sm="stepdata"
-    fxLayoutAlign="center center"
-  >
-    <app-progress-bar [progress]="+uploadProgress"></app-progress-bar>
-  </div>
-  <div
     *ngIf="!isLoading && isUploadComplete"
     ngClass.lt-md="dialogData"
     ngClass.gt-sm="stepdata"
     fxLayoutAlign="center center"
+    fxLayout="column"
+    fxLayoutGap="8px"
   >
     <app-tick-animation></app-tick-animation>
+    <span class="mat-body-1"> Upload Complete! </span>
   </div>
-  <ng-template #loading>
-    <div
-      ngClass.lt-md="dialogData"
-      ngClass.gt-sm="stepdata"
-      fxLayoutAlign="center center"
-      fxLayout="column"
-    >
-      <app-loading></app-loading>
-    </div>
-  </ng-template>
+  <div
+    *ngIf="isLoading && !isUploadComplete"
+    ngClass.lt-md="dialogData"
+    ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center"
+    fxLayout="column"
+  >
+    <app-loading></app-loading>
+  </div>
 </div>

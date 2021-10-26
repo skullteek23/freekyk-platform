@@ -19,7 +19,6 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
   selectedImage = null;
   isLoading = false;
   isUploadComplete = false;
-  uploadProgress = 0;
   uploadImageTask: AngularFireUploadTask;
   subscriptions = new Subscription();
   constructor(
@@ -68,7 +67,12 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
         this.snackServ.displayCustomMsg('Photo removed Successfully!')
       )
       .catch(() => this.snackServ.displayError())
-      .finally(() => (this.isLoading = false));
+      .finally(() => {
+        this.isLoading = false;
+        setTimeout(() => {
+          this.onCloseDialog();
+        }, 4000);
+      });
   }
   async onUploadImage(): Promise<any> {
     this.isLoading = true;
@@ -92,19 +96,14 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
         { merge: true }
       )
       .then(() => {
-        this.isLoading = false;
         this.isUploadComplete = true;
+      })
+      .catch(() => this.snackServ.displayError())
+      .finally(() => {
+        this.isLoading = false;
         setTimeout(() => {
           this.onCloseDialog();
-        }, 3000);
+        }, 4000);
       });
-  }
-  onCancelRunningUpload(): void {
-    if (this.uploadImageTask.cancel()) {
-      this.isLoading = false;
-      this.uploadProgress = 0;
-      this.isUploadComplete = false;
-      this.snackServ.displayCustomMsg('Upload cancelled!');
-    }
   }
 }
