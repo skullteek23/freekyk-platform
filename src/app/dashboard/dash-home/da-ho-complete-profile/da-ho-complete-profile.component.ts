@@ -25,8 +25,9 @@ export class DaHoCompleteProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.profileShared = JSON.parse(localStorage.getItem('profileShared'));
-    console.log(this.profileShared);
+    const uid = localStorage.getItem('uid');
+    const shareStatus = JSON.parse(localStorage.getItem(uid));
+    this.profileShared = shareStatus ? shareStatus.isProfileShared : false;
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
@@ -66,8 +67,8 @@ export class DaHoCompleteProfileComponent implements OnInit {
     if (this.profileProgress >= 80) {
       this.profileProgress += 20;
     }
-    localStorage.setItem('profileShared', JSON.stringify(true));
     const uid = localStorage.getItem('uid');
+    localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
     this.router.navigate(['/p', uid]);
   }
 }
