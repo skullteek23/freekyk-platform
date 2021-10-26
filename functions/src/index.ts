@@ -13,6 +13,7 @@ import { inviteDeletionTrigger } from './trigger_functions/inviteDelete';
 import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
+import { removeThumbnail } from './trigger_functions/removeThumbnail';
 import { IMAGES_BUCKET } from './constants';
 
 // callable functions
@@ -40,4 +41,8 @@ export const onUploadProfilePhoto = functions.storage
   .bucket(IMAGES_BUCKET)
   .object()
   .onFinalize(generateThumbnail);
+export const onDeleteProfilePhoto = functions.storage
+  .bucket(IMAGES_BUCKET)
+  .object()
+  .onDelete(removeThumbnail);
 // trigger functions

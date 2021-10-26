@@ -11,7 +11,7 @@ export interface PlayerBasicInfo {
 }
 export interface PlayerMoreInfo {
   imgpath_lg?: string;
-  profile: true;
+  profile: boolean;
   born?: Timestamp;
   locState?: string;
   locCountry?: string;

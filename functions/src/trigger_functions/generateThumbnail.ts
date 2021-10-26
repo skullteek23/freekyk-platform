@@ -42,7 +42,7 @@ export async function generateThumbnail(
 
   // 3. Resize the images and define an array of upload promises
   const sizes = [64];
-  const uploadPromises = [];
+  const uploadPromises: any[] = [];
   const thumbName = `thumb_${uid}`;
   const thumbPath = join(workingDir, thumbName);
 
@@ -61,7 +61,6 @@ export async function generateThumbnail(
         expires: new Date('31 December 2199'),
       });
     });
-  uploadPromises.push();
 
   uploadPromises.push(
     db.collection('players').doc(uid).update({
@@ -69,22 +68,12 @@ export async function generateThumbnail(
     })
   );
   uploadPromises.push(
-    db.collection(`players/${fileName}/additionalInfo`).doc('otherInfo').set(
-      {
-        imgpath_lg: urlSnap[0],
-      },
-      { merge: true }
-    )
-  );
-  uploadPromises.push(
     db.collection('freestylers').doc(uid).update({
       imgpath_lg: urlSnap[0],
     })
   );
+  uploadPromises.push(fs.remove(workingDir));
 
   // 4. Run the upload operations
-  await Promise.all(uploadPromises);
-
-  // 5. Cleanup remove the tmp/thumbs from the filesystem
-  return fs.remove(workingDir);
+  return Promise.all(uploadPromises);
 }

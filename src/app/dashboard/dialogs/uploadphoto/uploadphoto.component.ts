@@ -54,63 +54,50 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     };
     reader.readAsDataURL(this.$file);
   }
-  onRemovePhoto(): void {
+  onRemovePhoto(): Promise<any> {
     if (!this.selectedImage) {
       return;
     }
     this.isLoading = true;
     const uid = localStorage.getItem('uid');
-    const allPromises = [];
-    allPromises.push(
-      this.ngStorage.refFromURL(this.selectedImage).delete().toPromise()
-    );
-    allPromises.push(
-      this.ngFire
-        .collection(`players/${uid}/additionalInfo`)
-        .doc('otherInfo')
-        .update({ imgpath_lg: firebase.firestore.FieldValue.delete() })
-    );
-    allPromises.push(
-      this.ngFire
-        .collection('players')
-        .doc(uid)
-        .update({ imgpath_sm: firebase.firestore.FieldValue.delete() })
-    );
-    allPromises.push(
-      this.ngFire
-        .collection('freestylers')
-        .doc(uid)
-        .update({ imgpath_sm: firebase.firestore.FieldValue.delete() })
-    );
-    Promise.all(allPromises)
+    return this.ngStorage
+      .refFromURL(this.selectedImage)
+      .delete()
+      .toPromise()
       .then(() =>
         this.snackServ.displayCustomMsg('Photo removed Successfully!')
       )
-      .catch((err) => this.snackServ.displayCustomMsg(err))
-      .finally(() => {
-        this.onCloseDialog();
-        this.isLoading = false;
-      });
+      .catch(() => this.snackServ.displayError())
+      .finally(() => (this.isLoading = false));
   }
-  onUploadImage(): void {
-    if (this.$file == null) {
-      return;
-    }
+  async onUploadImage(): Promise<any> {
     this.isLoading = true;
+    if (this.$file == null) {
+      this.isLoading = false;
+      this.snackServ.displayError();
+      return this.onCloseDialog();
+    }
     const uid = localStorage.getItem('uid');
     this.uploadImageTask = this.ngStorage.upload('image_' + uid, this.$file);
-    this.subscriptions.add(
-      this.uploadImageTask.percentageChanges().subscribe((res) => {
-        this.uploadProgress = res;
-        if (res === 100) {
-          this.isLoading = false;
-          this.uploadProgress = null;
-          this.isUploadComplete = true;
-          this.snackServ.displayCustomMsg('Photo uploaded Successfully!');
-          this.onCloseDialog();
-        }
-      })
+    const downloadURL: string = await this.uploadImageTask.then((res) =>
+      res.ref.getDownloadURL()
     );
+    return this.ngFire
+      .collection(`players/${uid}/additionalInfo`)
+      .doc('otherInfo')
+      .set(
+        {
+          imgpath_lg: downloadURL || null,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        this.isLoading = false;
+        this.isUploadComplete = true;
+        setTimeout(() => {
+          this.onCloseDialog();
+        }, 3000);
+      });
   }
   onCancelRunningUpload(): void {
     if (this.uploadImageTask.cancel()) {
