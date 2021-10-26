@@ -25,13 +25,13 @@ export async function paymentVerification(
       razorpay_signature: data.razorpay_signature,
       status: 'SUCCESS',
       by: data.uid,
-      payableTotal: season.feesPerTeam,
+      payableTotal: season.feesPerTeam || 1,
       placedOn: admin.firestore.Timestamp.fromDate(new Date()),
       itemsDescSnap: {
         prodName: season.name,
         prodImgpath: season.imgpath,
         prodPrice: season.feesPerTeam ? season.feesPerTeam.toString() : '0',
-        prodId: season.id,
+        prodId: season.id || 'id',
         prodType: 'season',
       },
     };
@@ -55,7 +55,7 @@ export async function paymentVerification(
 
       const seasonSnap = await db
         .collection('seasons')
-        .doc(season.id)
+        .doc(season.id || 'id')
         .collection('participants')
         .add(newParticipant);
 

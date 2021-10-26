@@ -1,0 +1,11 @@
+.bar {
+  height: calc(56px / 2);
+  border-radius: var(--borderRadiusCard);
+  background-color: white;
+  border: 2px solid var(--primaryColor);
+  overflow: hidden;
+}
+.progress {
+  height: 100%;
+  background-color: var(--primaryColor);
+}

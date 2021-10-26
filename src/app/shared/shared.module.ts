@@ -59,6 +59,7 @@ import { SearchLgComponent } from './components/search-lg/search-lg.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
 import { AccountAvatarComponent } from './components/account-avatar/account-avatar.component';
 import { IllustrationHeroSectionAlternateComponent } from './components/illustration-hero-section-alternate/illustration-hero-section-alternate.component';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
   exclude: ['tumblr', 'stumble', 'vk'],
@@ -118,6 +119,7 @@ const customConfig: ShareButtonsConfig = {
     FilterListPipe,
     AccountAvatarComponent,
     IllustrationHeroSectionAlternateComponent,
+    ProgressBarComponent,
   ],
   imports: [
     CommonModule,
@@ -185,6 +187,7 @@ const customConfig: ShareButtonsConfig = {
     SearchLgComponent,
     FilterListPipe,
     AccountAvatarComponent,
+    ProgressBarComponent,
   ],
 })
 export class SharedModule {}

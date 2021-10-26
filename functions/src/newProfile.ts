@@ -9,7 +9,7 @@ const auth = admin.auth();
 export async function newProfile(
   data: { name: string; uid: string },
   context: any
-) {
+): Promise<any> {
   try {
     // create
     const newPlayerStats: BasicStats = {
@@ -31,7 +31,7 @@ export async function newProfile(
 
     // update
     // update
-    let twoPromises: any[] = [];
+    const twoPromises: any[] = [];
     twoPromises.push(
       auth.updateUser(data.uid, {
         displayName: data.name,

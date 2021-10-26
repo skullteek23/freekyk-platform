@@ -7,7 +7,10 @@ import * as admin from 'firebase-admin';
 const gcs = new Storage();
 const db = admin.firestore();
 
-export async function generateThumbnail(object, context): Promise<any> {
+export async function generateThumbnail(
+  object: any,
+  context: any
+): Promise<any> {
   const bucket = gcs.bucket(object.bucket);
   const filePath = object.name;
   const fileName = filePath.split('/').pop();
@@ -57,14 +60,6 @@ export async function generateThumbnail(object, context): Promise<any> {
     db.collection('players').doc(uid).update({
       imgpath_sm: urlSnap[0],
     })
-  );
-  uploadPromises.push(
-    db.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(
-      {
-        imgpath_lg: urlSnap[0],
-      },
-      { merge: true }
-    )
   );
   uploadPromises.push(
     db.collection('freestylers').doc(uid).update({
