@@ -63,9 +63,10 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .refFromURL(this.selectedImage)
       .delete()
       .toPromise()
-      .then(() =>
-        this.snackServ.displayCustomMsg('Photo removed Successfully!')
-      )
+      .then(() => {
+        this.selectedImage = null;
+        this.snackServ.displayCustomMsg('Photo removed Successfully!');
+      })
       .catch(() => this.snackServ.displayError())
       .finally(() => {
         this.isLoading = false;
