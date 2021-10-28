@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
-import {
-  canActivate,
-  redirectLoggedInTo,
-  redirectUnauthorizedTo,
-} from '@angular/fire/auth-guard';
+import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -19,7 +15,6 @@ import { SeasonProfileComponent } from './play/profile-pages/season-profile/seas
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
 const redirectLoggedInToDashboard = () =>
   redirectLoggedInTo(['/dashboard/home']);
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },

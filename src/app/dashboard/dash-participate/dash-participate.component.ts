@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, share, take, tap } from 'rxjs/operators';
 import { PaymentService } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UNIVERSAL_TOURNAMENT_FEES } from 'src/app/shared/Constants/RAZORPAY';
@@ -30,7 +30,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   selectedSeason: string = null;
   seasons$: Observable<SeasonBasicInfo[]>;
   subscriptions = new Subscription();
-  loadingStatus: T_HOME | T_LOADING | T_SUCCESS | T_FAILURE = 'home';
+  loadingStatus: T_HOME | T_LOADING | T_SUCCESS | T_FAILURE = HOME;
   participatedTournaments: string[];
   constructor(
     private ngFire: AngularFirestore,
@@ -73,7 +73,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
                 ...(doc.data() as SeasonBasicInfo),
               } as SeasonBasicInfo)
           )
-        )
+        ),
+        share()
       );
   }
   ngOnDestroy(): void {

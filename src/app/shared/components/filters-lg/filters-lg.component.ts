@@ -25,7 +25,7 @@ export class FiltersLgComponent implements OnInit {
     this.changeFilter.emit(null);
   }
   onQueryDefault(queryItem: string, queryValue: string | boolean): void {
-    this.snackServ.displayApplied();
+    this.snackServ.displayCustomMsg('Filter Applied!');
     this.changeFilter.emit({ queryItem, queryValue });
   }
 }

@@ -48,6 +48,9 @@ p > ul {
   list-style: disc !important;
   padding-left: 16px !important;
 }
+button:disabled {
+  cursor: not-allowed !important;
+}
 @media only screen and (max-width: 959px) {
   p > ul {
     display: none;

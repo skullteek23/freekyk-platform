@@ -34,6 +34,11 @@
       </div>
     </div>
     <ul *ngIf="loadingStatus === HOME">
+      <li *ngIf="(seasons$ | async)?.length === 0">
+        <app-no-items-message
+          items="ongoing tournaments"
+        ></app-no-items-message>
+      </li>
       <li
         class="tournament"
         *ngFor="let season of seasons$ | async"
