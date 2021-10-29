@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamsFilters } from 'src/app/shared/Constants/FILTERS';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
@@ -74,7 +74,8 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
                 ...(doc.data() as TeamBasicInfo),
               } as TeamBasicInfo)
           )
-        )
+        ),
+        share()
       );
   }
   onQueryData(queryInfo): void {

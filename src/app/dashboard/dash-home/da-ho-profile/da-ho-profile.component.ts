@@ -145,6 +145,11 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
       .subscribe(() => location.reload());
   }
   onShareProfile(): void {
-    console.log('working');
+    const uid = localStorage.getItem('uid');
+    const shareStatus = JSON.parse(localStorage.getItem(uid));
+    if (!shareStatus) {
+      localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
+    }
+    this.router.navigate(['/p', uid]);
   }
 }

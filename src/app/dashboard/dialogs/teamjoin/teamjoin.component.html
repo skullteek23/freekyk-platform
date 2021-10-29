@@ -23,6 +23,7 @@
       >
         <div class="content_container" fxLayout="column" fxLayoutGap="16px">
           <app-search-lg
+            [isDisabled]="noTeams"
             searchPlaceholder="Search teams by name, location"
             (searchItem)="filterTerm = $event"
           >

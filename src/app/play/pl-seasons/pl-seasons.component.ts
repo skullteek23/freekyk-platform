@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { SeasonsFilters } from 'src/app/shared/Constants/FILTERS';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
@@ -64,7 +64,8 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
           this.noSeasons = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
+        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
+        share()
       );
   }
   onQueryData(queryInfo): void {

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { RouteLinks } from 'src/app/shared/Constants/ROUTE_LINKS';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
 @Component({
@@ -61,13 +60,17 @@ export class DaHoCompleteProfileComponent implements OnInit {
       .subscribe(() => location.reload());
   }
   onOpenTeamBox(): void {
-    this.router.navigate(['/dashboard', RouteLinks.DASHBOARD[1]]);
+    this.router.navigate(['/dashboard', 'team-management']);
   }
   onShareProfile(): void {
+    const uid = localStorage.getItem('uid');
+    if (this.profileShared) {
+      this.router.navigate(['/p', uid]);
+      return;
+    }
     if (this.profileProgress >= 80) {
       this.profileProgress += 20;
     }
-    const uid = localStorage.getItem('uid');
     localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
     this.router.navigate(['/p', uid]);
   }

@@ -12,6 +12,7 @@
   <!-- desktop filters -->
 
   <app-search-lg
+    [isDisabled]="(seasons$ | async)?.length === 0"
     searchPlaceholder="Search seasons by name, location"
     (searchItem)="filterTerm = $event"
   >
