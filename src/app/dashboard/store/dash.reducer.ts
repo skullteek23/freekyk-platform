@@ -27,7 +27,7 @@ export const initialState: DashState = {
     id: null,
   },
   playerMoreInfo: {
-    profile: null,
+    profile: false,
     imgpath_lg: null,
     born: null,
     locState: null,

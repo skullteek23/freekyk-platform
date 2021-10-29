@@ -6,7 +6,7 @@ import {
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, share } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { PlayersFilters } from 'src/app/shared/Constants/FILTERS';
 import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
@@ -71,7 +71,8 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
                 ...(doc.data() as PlayerBasicInfo),
               } as PlayerBasicInfo)
           )
-        )
+        ),
+        share()
       );
   }
   onQueryData(queryInfo): void {

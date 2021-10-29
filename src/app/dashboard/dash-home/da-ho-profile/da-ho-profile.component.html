@@ -88,17 +88,26 @@
           fxLayout="row"
           fxLayoutAlign="start center"
           fxLayoutAlign.lt-md="center center"
+          fxLayoutGap="8px"
         >
           <span class="dash-h5 align">
             {{ getHeading() | titlecase }}
           </span>
-          <button
+          <a
             [routerLink]="['/dashboard', 'account', 'profile']"
             fxHide.lt-md="true"
-            mat-icon-button
+            matTooltip="Edit Profile"
+            class="material-icons-round"
           >
-            <span class="material-icons-round">edit</span>
-          </button>
+            edit
+          </a>
+          <a
+            matTooltip="Share Profile"
+            (click)="onShareProfile()"
+            class="material-icons-round"
+          >
+            share
+          </a>
         </div>
 
         <div
@@ -117,7 +126,6 @@
         <app-social-media-links
           [mode]="profile"
           [links]="smLinks"
-          (shareProfile)="onShareProfile()"
           (addLink)="onOpenAccountSettings()"
         ></app-social-media-links>
       </div>
@@ -128,7 +136,12 @@
 </mat-card>
 
 <ng-template #photoPlaceholder>
-  <button (click)="onUploadPhoto()" mat-icon-button color="primary">
+  <button
+    matTooltip="Upload Photo"
+    (click)="onUploadPhoto()"
+    mat-icon-button
+    color="primary"
+  >
     <span class="material-icons-round" style="font-size: 48px"
       >add_photo_alternate</span
     >

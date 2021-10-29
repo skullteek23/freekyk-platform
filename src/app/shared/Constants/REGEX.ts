@@ -1,6 +1,7 @@
 export const YOUTUBE_REGEX =
   '(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu.be/|/v=|^youtu.be/|watch%3Fv%3D)([a-zA-Z0-9_-]{11})+';
 export const ALPHA: RegExp = /^[a-zA-Z]*$/;
+export const ALPHA_LINK: RegExp = /^[a-zA-Z0-9_-]*$/;
 export const ALPHA_W_SPACE: RegExp = /^[a-zA-Z ]*$/;
 export const NUM: RegExp = /^[0-9]*$/;
 export const QUERY: RegExp = /^[a-zA-Z"0-9 ,:!.?\'/]*$/;

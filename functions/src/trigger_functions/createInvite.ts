@@ -21,7 +21,6 @@ export async function inviteCreationTrigger(
 
     return SendJoinNotification(newNotif, snapData.inviteeId, snap.id);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

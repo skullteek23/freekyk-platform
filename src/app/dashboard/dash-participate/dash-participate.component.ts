@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, share, take, tap } from 'rxjs/operators';
 import { PaymentService } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UNIVERSAL_TOURNAMENT_FEES } from 'src/app/shared/Constants/RAZORPAY';
@@ -17,7 +17,7 @@ import {
   LOADING,
   SUCCESS,
 } from '../constants/constants';
-import * as fromDash from '../store/dash.reducer';
+import * as fromApp from '../../store/app.reducer';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',
@@ -30,11 +30,11 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   selectedSeason: string = null;
   seasons$: Observable<SeasonBasicInfo[]>;
   subscriptions = new Subscription();
-  loadingStatus: T_HOME | T_LOADING | T_SUCCESS | T_FAILURE = 'home';
+  loadingStatus: T_HOME | T_LOADING | T_SUCCESS | T_FAILURE = HOME;
   participatedTournaments: string[];
   constructor(
     private ngFire: AngularFirestore,
-    private store: Store<fromDash.DashState>,
+    private store: Store<fromApp.AppState>,
     private paymentServ: PaymentService,
     private snackServ: SnackbarService
   ) {}
@@ -73,7 +73,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
                 ...(doc.data() as SeasonBasicInfo),
               } as SeasonBasicInfo)
           )
-        )
+        ),
+        share()
       );
   }
   ngOnDestroy(): void {
@@ -85,14 +86,24 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     if (season.id) {
       this.subscriptions.add(
         this.store
-          .select('hasTeam')
+          .select('team')
           .pipe(
             take(1),
-            tap((hasTeam) => {
-              if (hasTeam) {
+            tap((team) => {
+              if (team.basicInfo) {
                 const uid = localStorage.getItem('uid');
-                if (uid === hasTeam.capId) {
-                  this.initPayment(season, season.feesPerTeam, hasTeam.id);
+                if (uid === team.basicInfo.captainId) {
+                  if (team.teamMembers.memCount !== 8) {
+                    this.snackServ.displayCustomMsg(
+                      'Not enough players in Team!'
+                    );
+                  } else {
+                    this.initPayment(
+                      season,
+                      season.feesPerTeam,
+                      team.basicInfo.id
+                    );
+                  }
                 } else {
                   this.snackServ.displayCustomMsg(
                     'Please contact your team captain!'

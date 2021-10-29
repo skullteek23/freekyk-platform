@@ -5,15 +5,15 @@
 export const environment = {
   production: false,
   firebase: {
+    apiKey: 'AIzaSyAzXC-p7kWnDxku9SR_6okiIn7Ri6Tv67w',
+    authDomain: 'football-platform-beta.firebaseapp.com',
     databaseURL:
-      'https://football-platform-v1-default-rtdb.asia-southeast1.firebasedatabase.app',
-    apiKey: 'AIzaSyBk-AFz7HhA0Htt9WICkVPYWYG4v3jbnmM',
-    authDomain: 'football-platform-v1.firebaseapp.com',
-    projectId: 'football-platform-v1',
-    storageBucket: 'football-platform-v1.appspot.com',
-    messagingSenderId: '581569985509',
-    appId: '1:581569985509:web:fea62348969bd618dc8d0c',
-    measurementId: 'G-DVFLJVY2LP',
+      'https://football-platform-beta-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'football-platform-beta',
+    storageBucket: 'football-platform-beta.appspot.com',
+    messagingSenderId: '1098285494743',
+    appId: '1:1098285494743:web:22561dab1063e23f2b5b92',
+    measurementId: 'G-BDJ5TQ82BE',
   },
   // test api keys
   razorPay: {

@@ -24,7 +24,9 @@ import {
 export class SearchLgComponent implements OnInit {
   @Output() searchItem = new EventEmitter<string>();
   @ViewChild('searchInput', { static: true }) searchInputEvent: ElementRef;
+  // tslint:disable-next-line: no-input-rename
   @Input('searchPlaceholder') placeholder = 'Search any item...';
+  @Input() isDisabled = false;
   constructor() {}
 
   ngOnInit(): void {

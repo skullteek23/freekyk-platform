@@ -11,27 +11,30 @@ import * as admin from 'firebase-admin';
 export async function getFixtures(
   data: CloufFunctionFixtureData,
   context: any
-) {
-  let fixtures: tempFixtureData[] = [];
-  let grTimings: any[] = data.grounds.map((gr) => gr.timings);
+): Promise<any> {
+  const fixtures: tempFixtureData[] = [];
+  const grTimings: any[] = data.grounds.map((gr) => gr.timings);
 
   let participants: SeasonParticipants[] = await getParticipants(data.sid);
-  if (data.tour_type == 'FPL') {
+  if (data.tour_type === 'FPL') {
     participants = getRotatedTeams(participants);
   }
   // main loop for iterating over dates start from season launch date
   for (
-    let i = new Date(data.startDate);
+    const i = new Date(data.startDate);
     data.matches > 0;
     i.setDate(i.getDate() + 1)
   ) {
     // loop for multiple grounds
     for (let j = 0; j < data.grounds.length; j++) {
-      let timeslot = getTimeslots(grTimings[j][i.getDay()], data.oneMatchDur);
+      const timeslot = getTimeslots(grTimings[j][i.getDay()], data.oneMatchDur);
 
       // loop for assigning timeslots hours
+      // tslint:disable-next-line: prefer-for-of
       for (let k = 0; k < timeslot.length; k++) {
-        if (data.matches <= 0) break;
+        if (data.matches <= 0) {
+          break;
+        }
         data.matches--;
         fixtures.push({
           date: admin.firestore.Timestamp.fromDate(

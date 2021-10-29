@@ -135,13 +135,21 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard', 'account', 'profile']);
   }
   onUploadPhoto(): void {
-    const dialogRef = this.dialog.open(UploadphotoComponent, {
-      panelClass: 'large-dialogs',
-      data: this.profilePhoto,
-      disableClose: true,
-    });
+    const dialogRef = this.dialog
+      .open(UploadphotoComponent, {
+        panelClass: 'large-dialogs',
+        data: this.profilePhoto,
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(() => location.reload());
   }
   onShareProfile(): void {
-    console.log('working');
+    const uid = localStorage.getItem('uid');
+    const shareStatus = JSON.parse(localStorage.getItem(uid));
+    if (!shareStatus) {
+      localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
+    }
+    this.router.navigate(['/p', uid]);
   }
 }

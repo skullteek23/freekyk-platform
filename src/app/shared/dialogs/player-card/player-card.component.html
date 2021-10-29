@@ -4,7 +4,12 @@
   fxLayoutAlign="space-between center"
   fxLayoutGap="16px"
 >
-  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+  <button
+    matTooltip="Close"
+    mat-icon-button
+    mat-dialog-close
+    (click)="onCloseDialog()"
+  >
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
   <span class="mat-body-1">Player Profile</span>
@@ -16,7 +21,10 @@
 <div class="container-2">
   <div class="name" fxLayout="row" fxLayoutGap="20px">
     <div class="profile-image">
-      <img [src]="data?.imgpath_sm | profilePic" [alt]="data.name" />
+      <img
+        [src]="(addiInfo$ | async)?.imgpath_lg | profilePic"
+        [alt]="data.name"
+      />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">

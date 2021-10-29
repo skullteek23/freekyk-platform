@@ -14,7 +14,7 @@ import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import {
@@ -194,7 +194,8 @@ export class TeamcreateComponent implements OnInit {
               } as PlayerBasicInfo)
           )
         ),
-        map((docs) => docs.filter((doc) => doc.id !== uid))
+        map((docs) => docs.filter((doc) => doc.id !== uid)),
+        share()
       );
   }
 }

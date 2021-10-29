@@ -37,7 +37,6 @@ export async function inviteUpdationTrigger(
       return true;
     }
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

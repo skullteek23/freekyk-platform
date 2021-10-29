@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
@@ -79,7 +79,8 @@ export class TeamjoinComponent implements OnInit {
                 ...(data.payload.doc.data() as TeamBasicInfo),
               } as TeamBasicInfo)
           );
-        })
+        }),
+        share()
       );
   }
 }

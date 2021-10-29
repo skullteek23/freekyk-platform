@@ -103,15 +103,25 @@
           fxLayout="row"
           fxLayoutAlign="start center"
           fxLayoutAlign.lt-md="center center"
+          fxLayoutGap="8px"
         >
           <span class="dash-h5 align"> About Team </span>
-          <button
+          <a
             (click)="onOpenTeamSettings()"
             fxHide.lt-md="true"
-            mat-icon-button
+            matTooltip="Edit Team Profile"
+            class="material-icons-round"
           >
-            <span class="material-icons-round">edit</span>
-          </button>
+            edit
+          </a>
+          <a
+            (click)="onNavigateToTeamPage()"
+            fxHide.lt-md="true"
+            matTooltip="Share Team Profile"
+            class="material-icons-round"
+          >
+            share
+          </a>
         </div>
 
         <div
@@ -132,7 +142,6 @@
         <app-social-media-links
           [links]="smLinks"
           mode="team"
-          [showShare]="false"
           (addLink)="onOpenTeamSettings()"
         ></app-social-media-links>
       </div>
@@ -143,14 +152,24 @@
 </mat-card>
 
 <ng-template #logoPlaceholder>
-  <button (click)="onOpenTeamSettings()" mat-icon-button color="primary">
+  <button
+    matTooltip="Upload Logo"
+    (click)="onOpenTeamSettings()"
+    mat-icon-button
+    color="primary"
+  >
     <span class="material-icons-round" style="font-size: 32px"
       >add_photo_alternate</span
     >
   </button>
 </ng-template>
 <ng-template #photoPlaceholder>
-  <button (click)="onOpenTeamSettings()" mat-icon-button color="primary">
+  <button
+    matTooltip="Upload Photo"
+    (click)="onOpenTeamSettings()"
+    mat-icon-button
+    color="primary"
+  >
     <span class="material-icons-round" style="font-size: 48px"
       >add_photo_alternate</span
     >

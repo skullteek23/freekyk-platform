@@ -15,6 +15,7 @@
   <!-- desktop filters -->
 
   <app-search-lg
+    [isDisabled]="(players$ | async)?.length === 0"
     searchPlaceholder="Search players by name, playing position, city"
     (searchItem)="filterTerm = $event"
   >

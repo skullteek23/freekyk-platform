@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { MatTabGroup } from '@angular/material/tabs';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
+import { DashState } from '../store/dash.reducer';
 
 @Component({
   selector: 'app-dash-home',
@@ -10,6 +13,7 @@ import { TeamService } from 'src/app/services/team.service';
   styleUrls: ['./dash-home.component.css'],
 })
 export class DashHomeComponent implements OnInit, OnDestroy {
+  @ViewChild(MatTabGroup) tabs: MatTabGroup;
   isLoading = true;
   yourTeamIndex = 0;
   subscriptions = new Subscription();
@@ -18,7 +22,13 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   order2: string;
   order3: string;
 
-  constructor(private mediaObs: MediaObserver, private teServ: TeamService) {}
+  constructor(
+    private mediaObs: MediaObserver,
+    private teServ: TeamService,
+    private store: Store<{
+      dash: DashState;
+    }>
+  ) {}
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -35,6 +45,12 @@ export class DashHomeComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
         })
+    );
+    this.subscriptions.add(
+      this.store
+        .select('dash')
+        .pipe(map((resp) => resp.hasTeam))
+        .subscribe((hasTeam) => (this.yourTeamIndex = hasTeam ? 1 : 0))
     );
     this.order1 = '0';
     this.order2 = '1';

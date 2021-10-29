@@ -2,16 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import {
+  URL_AUTH,
+  URL_COUNTRIES,
+  URL_STATES,
+  URL_CITIES,
+  API_TOKEN,
+  USER_EMAIL,
+} from '../shared/Constants/UNIVERSAL_TUTORIAL';
 
 @Injectable()
 export class LocationCitiesService implements OnDestroy {
-  private URL_AUTH = 'https://www.universal-tutorial.com/api/getaccesstoken';
-  private URL_COUNTRIES = 'https://www.universal-tutorial.com/api/countries/';
-  private URL_STATES = 'https://www.universal-tutorial.com/api/states/';
-  private URL_CITIES = 'https://www.universal-tutorial.com/api/cities/';
-  private API_TOKEN =
-    'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo';
-  private USER_EMAIL = 'pgoel681@gmail.com';
+  private URL_AUTH = URL_AUTH;
+  private URL_COUNTRIES = URL_COUNTRIES;
+  private URL_STATES = URL_STATES;
+  private URL_CITIES = URL_CITIES;
+  private API_TOKEN = API_TOKEN;
+  private USER_EMAIL = USER_EMAIL;
   subscriptions = new Subscription();
 
   getAuthToken(): Observable<any> {

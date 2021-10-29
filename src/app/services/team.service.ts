@@ -239,15 +239,11 @@ export class TeamService implements OnDestroy {
       .toPromise();
   }
   private async getSixUpcomingMatches(tName: string): Promise<any> {
-    const thisTime = new firebase.firestore.Timestamp(
-      new Date().getTime() / 1000,
-      0
-    );
     const upmSnap = await this.ngFire
       .collection('allMatches', (query) =>
         query
           .where('teams', 'array-contains', tName)
-          .where('date', '>', thisTime)
+          .where('concluded', '==', false)
           .orderBy('date', 'asc')
           .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
@@ -258,7 +254,8 @@ export class TeamService implements OnDestroy {
             (doc) =>
               ({ id: doc.id, ...(doc.data() as MatchFixture) } as MatchFixture)
           )
-        )
+        ),
+        map((resp) => (resp.length === 0 ? [] : resp))
       )
       .toPromise();
     this.store.dispatch(new TeamActions.AddUpcomingMatches(upmSnap));

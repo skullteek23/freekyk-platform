@@ -44,7 +44,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private enlServ: EnlargeService
   ) {}
   ngOnInit(): void {
-    const teamName = this.route.snapshot.params.teamid;
+    const teamName = this.route.snapshot.params.teamName;
     this.getTeamInfo(teamName);
   }
   ngOnDestroy(): void {

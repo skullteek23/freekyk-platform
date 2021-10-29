@@ -1,7 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
+import {
+  AngularFireStorage,
+  AngularFireUploadTask,
+} from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import firebase from 'firebase/app';
+import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
@@ -9,10 +14,13 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
   templateUrl: './uploadphoto.component.html',
   styleUrls: ['./uploadphoto.component.css'],
 })
-export class UploadphotoComponent implements OnInit {
+export class UploadphotoComponent implements OnInit, OnDestroy {
   $file: File = null;
   selectedImage = null;
   isLoading = false;
+  isUploadComplete = false;
+  uploadImageTask: AngularFireUploadTask;
+  subscriptions = new Subscription();
   constructor(
     public dialogRef: MatDialogRef<UploadphotoComponent>,
     private ngStorage: AngularFireStorage,
@@ -23,8 +31,12 @@ export class UploadphotoComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      console.log(this.data);
       this.selectedImage = this.data;
+    }
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
   onCloseDialog(): void {
@@ -41,48 +53,58 @@ export class UploadphotoComponent implements OnInit {
     };
     reader.readAsDataURL(this.$file);
   }
-  async onUploadImage(): Promise<void> {
-    if (this.$file == null) {
+  onRemovePhoto(): Promise<any> {
+    if (!this.selectedImage) {
       return;
     }
     this.isLoading = true;
-    const storageSnap = await this.ngStorage.upload(
-      '/profilePicturesLg' + Math.random() + this.$file.name,
-      this.$file
-    );
-    this.selectedImage = await storageSnap.ref.getDownloadURL();
-    if (this.updateProfilePhoto(this.selectedImage)) {
-      this.snackServ.displayCustomMsg('Image uploaded Successfully!');
-      this.onCloseDialog();
-      this.isLoading = false;
-    }
-  }
-  updateProfilePhoto(imgpath: string): Promise<any[]> {
     const uid = localStorage.getItem('uid');
-    console.log(uid);
-    const allPromises = [];
-    allPromises.push(
-      this.ngFire.collection('players').doc(uid).update({
-        imgpath_sm: imgpath,
+    return this.ngStorage
+      .refFromURL(this.selectedImage)
+      .delete()
+      .toPromise()
+      .then(() => {
+        this.selectedImage = null;
+        this.snackServ.displayCustomMsg('Photo removed Successfully!');
       })
+      .catch(() => this.snackServ.displayError())
+      .finally(() => {
+        this.isLoading = false;
+        setTimeout(() => {
+          this.onCloseDialog();
+        }, 4000);
+      });
+  }
+  async onUploadImage(): Promise<any> {
+    this.isLoading = true;
+    if (this.$file == null) {
+      this.isLoading = false;
+      this.snackServ.displayError();
+      return this.onCloseDialog();
+    }
+    const uid = localStorage.getItem('uid');
+    this.uploadImageTask = this.ngStorage.upload('image_' + uid, this.$file);
+    const downloadURL: string = await this.uploadImageTask.then((res) =>
+      res.ref.getDownloadURL()
     );
-    allPromises.push(
-      this.ngFire
-        .collection('players/' + uid + '/additionalInfo')
-        .doc('otherInfo')
-        .set(
-          {
-            imgpath_lg: imgpath,
-          },
-          { merge: true }
-        )
-    );
-    allPromises.push(
-      this.ngFire.collection('freestylers').doc(uid).update({
-        imgpath_lg: imgpath,
+    return this.ngFire
+      .collection(`players/${uid}/additionalInfo`)
+      .doc('otherInfo')
+      .set(
+        {
+          imgpath_lg: downloadURL || null,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        this.isUploadComplete = true;
       })
-    );
-
-    return Promise.all(allPromises);
+      .catch(() => this.snackServ.displayError())
+      .finally(() => {
+        this.isLoading = false;
+        setTimeout(() => {
+          this.onCloseDialog();
+        }, 4000);
+      });
   }
 }

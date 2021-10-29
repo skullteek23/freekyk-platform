@@ -4,7 +4,12 @@
   fxLayoutAlign="start center"
   fxLayoutGap="16px"
 >
-  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+  <button
+    matTooltip="Close"
+    mat-icon-button
+    mat-dialog-close
+    (click)="onCloseDialog()"
+  >
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
   <span *ngIf="data?.mode == 'fixture'" class="mat-body-1">

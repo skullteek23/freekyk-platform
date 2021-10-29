@@ -51,6 +51,7 @@ import { LocationCitiesService } from '../services/location-cities.service';
 import { environment } from 'src/environments/environment';
 import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
+import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { PaymentService } from '../services/payment.service';
     DaTeMangPlayersComponent,
     InvitePlayersComponent,
     TeamgalleryComponent,
+    DeactivateAccountComponent,
   ],
   imports: [
     SharedModule,

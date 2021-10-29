@@ -18,3 +18,5 @@ export const PAGE_VIEWS_MAIN = {
   TERMS_PAGE: 'LANDING_PAGE',
   PRIVACY_PAGE: 'LANDING_PAGE',
 };
+export const BIO_MAX_LIMIT = 129;
+export const TEAM_DESC_MAX_LIMIT = 300;

@@ -220,7 +220,6 @@ mat-table {
 }
 .placeholder-rectangle {
   height: 300px;
-  width: 100%;
   background-color: white;
   border: 0px solid black;
   border-radius: var(--borderRadiusCard);

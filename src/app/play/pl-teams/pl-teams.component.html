@@ -15,6 +15,7 @@
   <!-- desktop filters -->
 
   <app-search-lg
+    [isDisabled]="(teams$ | async)?.length === 0"
     searchPlaceholder="Search teams by name, location"
     (searchItem)="filterTerm = $event"
   >

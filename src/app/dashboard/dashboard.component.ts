@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dataImg$: Observable<string>;
   dataPos$: Observable<string>;
   subscriptions = new Subscription();
+  sidenavOpenState: boolean;
   constructor(
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
@@ -33,6 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }>
   ) {}
   ngOnInit(): void {
+    this.onResizeScreen();
     this.dataImg$ = this.avatarServ.getProfilePicture();
     this.dataPos$ = this.store
       .select('dash')
@@ -72,6 +74,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+  onResizeScreen(): void {
+    this.sidenavOpenState = window.innerWidth >= 1489;
   }
   getMode(): MatDrawerMode {
     return this.screen === 'md' ? 'over' : 'side';
