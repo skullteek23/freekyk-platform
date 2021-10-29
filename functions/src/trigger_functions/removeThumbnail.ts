@@ -18,7 +18,6 @@ export async function removeThumbnail(
   const thumbObjName = 'thumb_' + uid;
   const allPromises: any[] = [];
   const FieldValue = admin.firestore.FieldValue;
-  console.log(uid);
   allPromises.push(
     db
       .collection(`players/${uid}/additionalInfo`)
