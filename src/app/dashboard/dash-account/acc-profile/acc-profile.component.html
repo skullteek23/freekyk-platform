@@ -1,4 +1,9 @@
-<div class="fullpad-20" fxLayout="column" fxLayoutGap="48px">
+<div
+  class="fullpad-20"
+  fxLayout="column"
+  fxLayoutGap="48px"
+  fxLayoutGap.lt-md="24px"
+>
   <!-- personal info form -->
   <div class="form-p form" id="personal">
     <div
@@ -11,14 +16,14 @@
       <button
         class="buttonText secondaryButton"
         type="button"
-        (click)="onChange('password')"
+        (click)="onChangeCredentials('password')"
       >
         Change Password
       </button>
       <button
         class="primaryButton buttonText"
         type="button"
-        (click)="onChange('email')"
+        (click)="onChangeCredentials('email')"
       >
         Change Email
       </button>
@@ -33,8 +38,10 @@
       [formGroup]="personalInfoForm"
       (ngSubmit)="onSavePersonalInfo()"
       fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap.gt-sm="20px"
     >
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add your full name</mat-label>
         <input type="text" matInput name="name" formControlName="name" />
         <mat-error
@@ -43,8 +50,7 @@
           Only letters are allowed!
         </mat-error>
       </mat-form-field>
-
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add a nickname</mat-label>
         <input
           type="text"
@@ -58,26 +64,7 @@
           Only letters are allowed!
         </mat-error>
       </mat-form-field>
-
-      <div
-        class="form"
-        fxLayout
-        fxLayoutGap="16px"
-        fxLayoutAlign.lt-md="center center"
-      >
-        <span> Your Gender </span>
-        <mat-radio-group
-          formControlName="gender"
-          color="primary"
-          aria-label="Select gender"
-          fxLayoutGap="8px"
-        >
-          <mat-radio-button value="M">Male</mat-radio-button>
-          <mat-radio-button value="F">Female</mat-radio-button>
-        </mat-radio-group>
-      </div>
-
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select birthdate</mat-label>
         <input
           matInput
@@ -91,6 +78,24 @@
           Minimum Age must be 6 years!
         </mat-error>
       </mat-form-field>
+      <div
+        fxFlex.gt-sm="100%"
+        class="form"
+        fxLayout
+        fxLayoutGap="16px"
+        fxLayoutAlign.lt-md="center center"
+      >
+        <span> Your Gender: </span>
+        <mat-radio-group
+          formControlName="gender"
+          color="primary"
+          aria-label="Select gender"
+          fxLayoutGap="8px"
+        >
+          <mat-radio-button value="M">Male</mat-radio-button>
+          <mat-radio-button value="F">Female</mat-radio-button>
+        </mat-radio-group>
+      </div>
 
       <div fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center">
         <button
@@ -111,14 +116,30 @@
   </span>
 
   <!-- player info form -->
-  <div class="form-pl form" id="player">
-    <p class="dash-h5 align">Player Info</p>
+  <div class="form" id="player">
+    <p class="dash-h5 align">Playing Info</p>
     <form
       [formGroup]="playingInfoForm"
       (ngSubmit)="onSavePlayerInfo()"
       fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap.gt-sm="20px"
     >
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
+        <mat-label>Select Playing Position</mat-label>
+        <mat-select formControlName="p_pos">
+          <mat-optgroup
+            *ngFor="let group of filteredOptions"
+            [label]="group.position"
+          >
+            <mat-option *ngFor="let name of group.pos_name" [value]="name">
+              {{ name }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
       <div
+        fxFlex.gt-sm="60%"
         class="form"
         fxLayout
         fxLayoutGap="16px"
@@ -136,21 +157,7 @@
         </mat-radio-group>
       </div>
 
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Playing Position</mat-label>
-        <mat-select formControlName="p_pos">
-          <mat-optgroup
-            *ngFor="let group of filteredOptions"
-            [label]="group.position"
-          >
-            <mat-option *ngFor="let name of group.pos_name" [value]="name">
-              {{ name }}
-            </mat-option>
-          </mat-optgroup>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add Jersey Number</mat-label>
         <input type="tel" matInput name="j_num" formControlName="j_num" />
         <mat-error
@@ -160,7 +167,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add Height</mat-label>
         <input type="tel" matInput name="height" formControlName="height" />
 
@@ -173,7 +180,7 @@
         <!-- <mat-hint> One Foot equals 12 inches</mat-hint> -->
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add Weight</mat-label>
         <input type="tel" matInput name="weight" formControlName="weight" />
         <mat-error
@@ -184,12 +191,13 @@
         <span matSuffix>kg</span>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select Country</mat-label>
         <mat-select
           (selectionChange)="onSelectCountry($event)"
           formControlName="loc_country"
         >
+          <mat-option>Select City</mat-option>
           <mat-option
             *ngFor="let country of countries$ | async"
             [value]="country"
@@ -199,116 +207,55 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select State</mat-label>
         <mat-select
           (selectionChange)="onSelectState($event)"
           formControlName="loc_state"
         >
+          <mat-option>Select State</mat-option>
           <mat-option *ngFor="let state of states$ | async" [value]="state">
             {{ state }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select City</mat-label>
         <mat-select formControlName="loc_city">
+          <mat-option>Select Country</mat-option>
           <mat-option *ngFor="let city of cities$ | async" [value]="city">
             {{ city }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <div class="form" fxLayout="column" fxLayoutGap="16px">
-        <p class="mat-caption align">Professional Teams you have played for</p>
-        <div formArrayName="prof_teams" fxLayout="column">
-          <div
-            *ngFor="
-              let prof_team of getFormArray('prof_teams', 'player');
-              let i = index
-            "
-            fxLayout="row"
-            fxLayoutGap="20px"
-          >
-            <mat-form-field
-              fxFlex="<grow>"
-              appearance="outline"
-              color="primary"
-            >
-              <mat-label>Add Team Name</mat-label>
-              <input type="text" matInput [formControlName]="i" />
-            </mat-form-field>
-            <button
-              fxFlexAlign="center"
-              *ngIf="this.playingInfoForm.get('prof_teams')?.value.length > 1"
-              fxLayoutAlign="center center"
-              (click)="onRemoveControl('prof_teams', 'player', i)"
-              mat-icon-button
-              class="red"
-            >
-              <mat-icon class="material-icons-round">remove_circle</mat-icon>
-            </button>
-          </div>
-        </div>
-        <div fxLayoutAlign="center center" fxLayoutAlign.gt-sm="start center">
-          <button
-            type="button"
-            class="secondaryButton buttonText"
-            [disabled]="!playingInfoForm.get('prof_teams')?.valid"
-            (click)="onAddControl('prof_teams', 'player')"
-          >
-            + Add more
-          </button>
-        </div>
-      </div>
+      <mat-form-field fxFlex.gt-sm="100%" appearance="outline" color="primary">
+        <mat-label>Add Bio</mat-label>
+        <textarea matInput name="bio" formControlName="bio"></textarea>
+        <mat-hint [align]="'end'">
+          {{
+            playingInfoForm.get("bio")?.value?.length > 0
+              ? playingInfoForm.get("bio")?.value?.length
+              : 0
+          }}
+          / {{ BIO_MAX_LIMIT }}
+        </mat-hint>
+        <mat-error
+          *ngIf="this.playingInfoForm.get('bio')?.hasError('maxlength')"
+        >
+          Only {{ BIO_MAX_LIMIT }} Characters are allowed!
+        </mat-error>
+        <mat-error *ngIf="this.playingInfoForm.get('bio')?.hasError('pattern')">
+          Only letters, spaces and numbers are allowed!
+        </mat-error>
+      </mat-form-field>
 
-      <div class="form" fxLayout="column" fxLayoutGap="16px">
-        <p class="mat-caption align">
-          Professional Tournaments you have played in
-        </p>
-        <div formArrayName="prof_tourns" fxLayout="column">
-          <div
-            *ngFor="
-              let prof_tourn of getFormArray('prof_tourns', 'player');
-              let i = index
-            "
-            fxLayout="row"
-            fxLayoutGap="20px"
-          >
-            <mat-form-field
-              fxFlex="<grow>"
-              appearance="outline"
-              color="primary"
-            >
-              <mat-label>Add Tournament Name</mat-label>
-              <input type="text" matInput [formControlName]="i" />
-            </mat-form-field>
-            <button
-              fxFlexAlign="center"
-              *ngIf="this.playingInfoForm.get('prof_tourns')?.value.length > 1"
-              fxLayoutAlign="center center"
-              (click)="onRemoveControl('prof_tourns', 'player', i)"
-              mat-icon-button
-              class="red"
-            >
-              <mat-icon class="material-icons-round">remove_circle</mat-icon>
-            </button>
-          </div>
-        </div>
-        <div fxLayoutAlign="center center" fxLayoutAlign.gt-sm="start center">
-          <button
-            type="button"
-            class="secondaryButton buttonText"
-            [disabled]="!playingInfoForm.get('prof_tourns')?.valid"
-            (click)="onAddControl('prof_tourns', 'player')"
-          >
-            + Add more
-          </button>
-        </div>
-      </div>
-
-      <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column">
+      <div
+        fxFlex.gt-sm="100%"
+        fxLayoutAlign.gt-sm="start center"
+        fxLayout.lt-md="column"
+      >
         <button
           (click)="onSavePlayerInfo()"
           class="primaryButton buttonText"
@@ -326,133 +273,83 @@
     <mat-divider></mat-divider>
   </span>
 
-  <!-- freestyle info form -->
-  <div class="form-fr form" id="freestyle">
-    <p class="dash-h5 align">Freestyler Info</p>
+  <!-- fs array form -->
+  <div class="form" id="freestyle-array">
+    <p class="dash-h5 align">Showcase your Freestyle Videos</p>
     <form
-      [formGroup]="FreestylingInfoForm"
-      (ngSubmit)="onSaveFsInfo()"
+      [formGroup]="fsArrayForm"
+      (ngSubmit)="onSaveFreestylerArrayInfo()"
       fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap.gt-sm="20px"
     >
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Bio</mat-label>
-        <input type="text" matInput name="bio" formControlName="bio" />
-        <mat-hint>Only 130 Characters are allowed!</mat-hint>
-        <mat-error
-          *ngIf="this.FreestylingInfoForm.get('bio')?.hasError('maxlength')"
-        >
-          Only 130 Characters are allowed!
-        </mat-error>
-        <mat-error
-          *ngIf="this.FreestylingInfoForm.get('bio')?.hasError('pattern')"
-        >
-          Only letters, spaces and numbers are allowed!
-        </mat-error>
-      </mat-form-field>
-
-      <div class="form" fxLayout="column" fxLayoutGap="16px">
-        <p class="mat-caption align">
-          Add links to logos of brand you have collaborated with
+      <div
+        fxFlex.gt-sm="100%"
+        class="form"
+        fxLayout="column"
+        fxLayoutGap="16px"
+      >
+        <p class="mat-caption align" fxLayoutAlign="start center">
+          Add your top freestyle videos uploaded on
+          <img class="yt" src="assets/svgs/youtube.svg" alt="Youtube" />
         </p>
-        <div formArrayName="br_collabs" fxLayout="column">
-          <div
-            *ngFor="
-              let collabs of getFormArray('br_collabs', 'fs');
-              let i = index
-            "
-            fxLayout="row"
-            fxLayoutGap="20px"
-          >
-            <mat-form-field
-              fxFlex="<grow>"
-              appearance="outline"
-              color="primary"
-            >
-              <mat-label>Add Brand Logo/Image URL</mat-label>
-              <input type="text" matInput [formControlName]="i" />
-            </mat-form-field>
-            <button
-              fxFlexAlign="center"
-              *ngIf="FreestylingInfoForm.get('br_collabs')?.value.length > 1"
-              fxLayoutAlign="center center"
-              (click)="onRemoveControl('br_collabs', 'fs', i)"
-              mat-icon-button
-              class="red"
-            >
-              <mat-icon class="material-icons-round">remove_circle</mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <div fxLayoutAlign="center center" fxLayoutAlign.gt-sm="start center">
-          <button
-            type="button"
-            [disabled]="!FreestylingInfoForm.get('br_collabs')?.valid"
-            class="secondaryButton buttonText"
-            (click)="onAddControl('br_collabs', 'fs')"
-          >
-            + Add more
-          </button>
-        </div>
-      </div>
-
-      <div class="form" fxLayout="column" fxLayoutGap="16px">
-        <p class="mat-caption align">Add links to your top freesyle videos</p>
+        <p
+          class="smaller-caption mat-caption align"
+          *ngIf="getFormArray('top_vids', 'fs').length === 0"
+        >
+          (No video link added,
+          <a (click)="onAddControl('top_vids', 'fs')">add one</a>)
+        </p>
         <div formArrayName="top_vids" fxLayout="column">
           <div
             *ngFor="
-              let collabs of getFormArray('top_vids', 'fs');
-              let i = index
+              let prof_team of getFormArray('top_vids', 'fs');
+              let i = index;
+              last as last
             "
             fxLayout="row"
-            fxLayoutGap="20px"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
           >
-            <mat-form-field
-              fxFlex="<grow>"
-              appearance="outline"
-              color="primary"
-            >
-              <mat-label>Add Video URL</mat-label>
+            <mat-form-field fxFlex="70%" appearance="outline" color="primary">
+              <mat-label>Paste URL here</mat-label>
               <input type="url" matInput [formControlName]="i" />
-              <mat-error
-                *ngIf="
-                  FreestylingInfoForm.get('top_vids.' + [i])?.hasError(
-                    'pattern'
-                  )
-                "
-              >
-                Please provide a valid Youtube Video URL!
-              </mat-error>
             </mat-form-field>
             <button
               fxFlexAlign="center"
-              *ngIf="this.FreestylingInfoForm.get('top_vids')?.value.length > 1"
+              *ngIf="last"
               fxLayoutAlign="center center"
-              (click)="onRemoveControl('top_vids', 'fs', i)"
+              (click)="onRemoveControl('top_vids', 'fs')"
               mat-icon-button
-              class="red"
+              type="button"
+              class="red center-button"
             >
-              <mat-icon class="material-icons-round">remove_circle</mat-icon>
+              <mat-icon class="material-icons-round">delete</mat-icon>
+            </button>
+            <button
+              type="button"
+              fxLayoutAlign="center center"
+              *ngIf="last"
+              mat-icon-button
+              class="center-button green"
+              [disabled]="!fsArrayForm.get('top_vids')?.valid"
+              (click)="onAddControl('top_vids', 'fs')"
+            >
+              <mat-icon class="material-icons-round">add_circle</mat-icon>
             </button>
           </div>
         </div>
-        <div fxLayoutAlign="center center" fxLayoutAlign.gt-sm="start center">
-          <button
-            type="button"
-            [disabled]="!FreestylingInfoForm.get('top_vids')?.valid"
-            class="secondaryButton buttonText"
-            (click)="onAddControl('top_vids', 'fs')"
-          >
-            + Add more
-          </button>
-        </div>
       </div>
 
-      <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column">
+      <div
+        fxFlex.gt-sm="100%"
+        fxLayoutAlign.gt-sm="start center"
+        fxLayout.lt-md="column"
+      >
         <button
+          (click)="onSaveFreestylerArrayInfo()"
           class="primaryButton buttonText"
-          [disabled]="!FreestylingInfoForm.valid || !FreestylingInfoForm.dirty"
-          (click)="onSaveFsInfo()"
+          [disabled]="!fsArrayForm.valid"
           type="button"
         >
           Save Changes
@@ -460,7 +357,7 @@
       </div>
     </form>
   </div>
-  <!-- freestyle info form -->
+  <!-- fs array form -->
 
   <span>
     <mat-divider></mat-divider>
@@ -468,32 +365,38 @@
 
   <!-- social info form -->
   <div class="form-sm form" id="social-media">
-    <p class="dash-h5 align">Social Media Links</p>
+    <p class="dash-h5 align">Social Media Info</p>
     <form
       [formGroup]="socialInfoForm"
       (ngSubmit)="onSaveSMInfo()"
       fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap.gt-sm="20px"
     >
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Facebook Profile Link</mat-label>
-        <input type="url" matInput name="fb" formControlName="fb" />
+      <mat-form-field fxFlex.gt-sm="40%" color="primary">
+        <span matPrefix>{{ ig }}</span>
+        <input type="text" matInput name="ig" formControlName="ig" />
       </mat-form-field>
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Instagram Profile Link</mat-label>
-        <input type="url" matInput name="ig" formControlName="ig" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Twitter Profile Link</mat-label>
-        <input type="url" matInput name="tw" formControlName="tw" />
+      <mat-form-field fxFlex.gt-sm="40%" color="primary">
+        <span matPrefix>{{ fb }}</span>
+        <input type="text" matInput name="fb" formControlName="fb" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Youtube Profile Link</mat-label>
-        <input type="url" matInput name="yt" formControlName="yt" />
+      <mat-form-field fxFlex.gt-sm="40%" color="primary">
+        <span matPrefix>{{ tw }}</span>
+        <input type="text" matInput name="tw" formControlName="tw" />
       </mat-form-field>
 
-      <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column">
+      <mat-form-field fxFlex.gt-sm="40%" color="primary">
+        <span matPrefix>{{ yt }}</span>
+        <input type="text" matInput name="yt" formControlName="yt" />
+      </mat-form-field>
+
+      <div
+        fxFlex="100%"
+        fxLayoutAlign.gt-sm="start center"
+        fxLayout.lt-md="column"
+      >
         <button
           [disabled]="!socialInfoForm.valid || !socialInfoForm.dirty"
           class="primaryButton buttonText"
@@ -506,4 +409,170 @@
     </form>
   </div>
   <!-- social info form -->
+
+  <span>
+    <mat-divider></mat-divider>
+  </span>
+
+  <!-- player array form -->
+  <div class="form" id="player-array">
+    <p class="dash-h5 align">Previous Teams & Tournaments Info</p>
+    <form
+      [formGroup]="playerArrayForm"
+      (ngSubmit)="onSavePlayerArrayInfo()"
+      fxLayout="column"
+      fxLayout.gt-sm="row wrap"
+      fxLayoutGap.gt-sm="20px"
+    >
+      <div
+        fxFlex.gt-sm="100%"
+        class="form"
+        fxLayout="column"
+        fxLayoutGap="16px"
+      >
+        <p class="mat-caption align">Professional Teams you have played for</p>
+        <p
+          class="smaller-caption mat-caption align"
+          *ngIf="getFormArray('prof_teams', 'player').length === 0"
+        >
+          (No team added,
+          <a (click)="onAddControl('prof_teams', 'player')">add one</a>)
+        </p>
+        <div formArrayName="prof_teams" fxLayout="column">
+          <div
+            *ngFor="
+              let prof_team of getFormArray('prof_teams', 'player');
+              let i = index;
+              last as last
+            "
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+          >
+            <mat-form-field fxFlex="70%" appearance="outline" color="primary">
+              <mat-label>Add Team Name</mat-label>
+              <input type="text" matInput [formControlName]="i" />
+            </mat-form-field>
+            <button
+              fxFlexAlign="center"
+              *ngIf="last"
+              fxLayoutAlign="center center"
+              (click)="onRemoveControl('prof_teams', 'player')"
+              mat-icon-button
+              type="button"
+              class="red center-button"
+            >
+              <mat-icon class="material-icons-round">delete</mat-icon>
+            </button>
+            <button
+              type="button"
+              fxLayoutAlign="center center"
+              *ngIf="last"
+              mat-icon-button
+              class="center-button green"
+              [disabled]="!playerArrayForm.get('prof_teams')?.valid"
+              (click)="onAddControl('prof_teams', 'player')"
+            >
+              <mat-icon class="material-icons-round">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        fxFlex.gt-sm="100%"
+        class="form"
+        fxLayout="column"
+        fxLayoutGap="16px"
+      >
+        <p class="mat-caption align">
+          Professional Tournaments you have played in
+        </p>
+        <p
+          class="smaller-caption mat-caption align"
+          *ngIf="getFormArray('prof_tourns', 'player').length === 0"
+        >
+          (No tournament added,
+          <a (click)="onAddControl('prof_tourns', 'player')">add one</a>)
+        </p>
+        <div formArrayName="prof_tourns" fxLayout="column">
+          <div
+            *ngFor="
+              let prof_tourn of getFormArray('prof_tourns', 'player');
+              let i = index;
+              last as last
+            "
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+          >
+            <mat-form-field fxFlex="70%" appearance="outline" color="primary">
+              <mat-label>Add Tournament Name</mat-label>
+              <input type="text" matInput [formControlName]="i" />
+            </mat-form-field>
+
+            <button
+              fxLayoutAlign="center center"
+              *ngIf="last"
+              (click)="onRemoveControl('prof_tourns', 'player')"
+              mat-icon-button
+              class="red center-button"
+              type="button"
+            >
+              <mat-icon class="material-icons-round">delete</mat-icon></button
+            ><button
+              *ngIf="last"
+              class="center-button green"
+              type="button"
+              mat-icon-button
+              fxLayoutAlign="center center"
+              [disabled]="!playerArrayForm.get('prof_tourns')?.valid"
+              (click)="onAddControl('prof_tourns', 'player')"
+            >
+              <mat-icon class="material-icons-round">add_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        fxFlex.gt-sm="100%"
+        fxLayoutAlign.gt-sm="start center"
+        fxLayout.lt-md="column"
+      >
+        <button
+          (click)="onSavePlayerArrayInfo()"
+          class="primaryButton buttonText"
+          [disabled]="!playerArrayForm.valid || isDisableArrayButton"
+          type="button"
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- player array form -->
+
+  <span>
+    <mat-divider></mat-divider>
+  </span>
+
+  <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
+    <button
+      type="button"
+      routerLink="/support"
+      class="buttonText secondaryButtonInv"
+      color="primary"
+    >
+      Need Help?
+    </button>
+    <button
+      type="button"
+      (click)="onDeactivateAccount()"
+      mat-button
+      color="warn"
+    >
+      Deactivate Account
+    </button>
+  </div>
 </div>

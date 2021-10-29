@@ -94,7 +94,8 @@
         <button
           class="primaryButton buttonText"
           [disabled]="!TeamInfoForm.valid || !TeamInfoForm.dirty"
-          type="submit"
+          type="button"
+          (click)="onSubmitTeamInfo()"
         >
           Save Changes
         </button>
@@ -139,7 +140,7 @@
         [disabled]="!file1Selected || !file2Selected"
         (click)="onSaveImages()"
         class="primaryButton buttonText"
-        type="submit"
+        type="button"
       >
         Save Changes
       </button>
@@ -152,29 +153,30 @@
       (ngSubmit)="onSubmitTeamSocial()"
       fxLayout="column"
     >
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Facebook Profile Link</mat-label>
-        <input type="text" matInput name="fb" formControlName="fb" />
-      </mat-form-field>
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Instagram Profile Link</mat-label>
+      <mat-form-field color="primary">
+        <span matPrefix>{{ ig }}</span>
         <input type="text" matInput name="ig" formControlName="ig" />
       </mat-form-field>
+      <mat-form-field color="primary">
+        <span matPrefix>{{ fb }}</span>
+        <input type="text" matInput name="fb" formControlName="fb" />
+      </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Twitter Profile Link</mat-label>
+      <mat-form-field color="primary">
+        <span matPrefix>{{ tw }}</span>
         <input type="text" matInput name="tw" formControlName="tw" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Add Youtube Profile Link</mat-label>
+      <mat-form-field color="primary">
+        <span matPrefix>{{ yt }}</span>
         <input type="text" matInput name="yt" formControlName="yt" />
       </mat-form-field>
       <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column">
         <button
           [disabled]="!socialInfoForm.valid && !socialInfoForm.dirty"
           class="primaryButton buttonText"
-          type="submit"
+          type="button"
+          (click)="onSubmitTeamSocial()"
         >
           Save Changes
         </button>

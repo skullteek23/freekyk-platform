@@ -58,7 +58,7 @@ const routes: Routes = [
       import('./support/support.module').then((m) => m.SupportModule),
   },
   { path: 'p/:playerid', component: PlayerProfileComponent },
-  { path: 't/:teamid', component: TeamProfileComponent },
+  { path: 't/:teamName', component: TeamProfileComponent },
   { path: 's/:seasonid', component: SeasonProfileComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
   { path: 'product/:productid', component: ProductProfileComponent },

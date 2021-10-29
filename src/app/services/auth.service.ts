@@ -9,6 +9,7 @@ import { uData, logDetails } from '../shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { AppState } from '../store/app.reducer';
 import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
+import { EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI } from '../shared/Constants/DEFAULTS';
 @Injectable({
   providedIn: 'root',
 })
@@ -74,32 +75,47 @@ export class AuthService {
       .catch((error) => this.mapError(error.code));
   }
   public onChangePassword(newPass: string): void {
-    this.changePassword(newPass)
-      .then(() => {
-        console.log('password changed!');
-        this.snackServ.displayCustomMsg(
-          'Password updated succesfully! Please login again'
-        );
-        setTimeout(() => {
-          this.onLogout();
-          location.reload();
-        }, 2000);
-      })
-      .catch((error) => this.mapError(error));
+    this.ngAuth.currentUser.then((user) => {
+      const lastSigninTime = new Date(user.metadata.lastSignInTime);
+      if (
+        new Date().getMilliseconds() - lastSigninTime.getMilliseconds() <=
+        EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI
+      ) {
+        this.changePassword(newPass)
+          .then(() => {
+            console.log('password changed!');
+            this.snackServ.displayCustomMsg(
+              'Password updated succesfully! Please login again'
+            );
+            this.onLogout();
+          })
+          .catch((error) => this.mapError(error));
+      } else {
+        this.snackServ.displayCustomMsg('Please login again to verify!');
+      }
+    });
   }
+
   public onChangeEmail(newEmail: string): void {
-    this.changeEmail(newEmail)
-      ?.then(() => {
-        console.log('email changed!');
-        this.snackServ.displayCustomMsg(
-          'Email updated succesfully! Please login again'
-        );
-        setTimeout(() => {
-          this.onLogout();
-          location.reload();
-        }, 2000);
-      })
-      .catch((error) => this.mapError(error));
+    this.ngAuth.currentUser.then((user) => {
+      const lastSigninTime = new Date(user.metadata.lastSignInTime);
+      if (
+        new Date().getMilliseconds() - lastSigninTime.getMilliseconds() <=
+        EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI
+      ) {
+        this.changeEmail(newEmail)
+          ?.then(() => {
+            console.log('email changed!');
+            this.snackServ.displayCustomMsg(
+              'Email updated succesfully! Please login again'
+            );
+            this.onLogout();
+          })
+          .catch((error) => this.mapError(error));
+      } else {
+        this.snackServ.displayCustomMsg('Please login again to verify!');
+      }
+    });
   }
   public afterSignin(): void {
     this.router.navigate(['/dashboard', 'home']);

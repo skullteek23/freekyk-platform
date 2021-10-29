@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -27,7 +28,8 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     private enlServ: EnlargeService,
     private teServ: TeamService,
     private datePipe: DatePipe,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.subscriptions.add(
@@ -89,6 +91,11 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
   }
   onEnlargePhoto(imageUrl: string): void {
     this.enlServ.onOpenPhoto(imageUrl);
+  }
+  onNavigateToTeamPage(): void {
+    if (this.tName) {
+      this.router.navigate(['/t', this.tName]);
+    }
   }
   onOpenTeamSettings(): void {
     this.teServ.onOpenTeamSettingsDialog();
