@@ -14,13 +14,8 @@ export class PlHomeComponent implements OnInit {
   readonly fplContent = PLAY_PAGE.fpl;
   readonly customizeContent = PLAY_PAGE.customize;
   readonly whyChooseContent = PLAY_PAGE.whyChoosePlay;
+  readonly communityNumbers = PLAY_PAGE.communityNumbers;
 
   constructor() {}
   ngOnInit(): void {}
-  communityNumbers = [
-    { name: 'Players', number: '400+' },
-    { name: 'Tournaments', number: '5+' },
-    { name: 'Teams', number: '20+' },
-    { name: 'Matches', number: '150+' },
-  ];
 }

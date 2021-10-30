@@ -246,3 +246,8 @@ export interface FeatureSectionContent {
   };
   desc: string;
 }
+export interface CommunityNumbersContent {
+  heading: string;
+  desc: string;
+  numbers: {};
+}

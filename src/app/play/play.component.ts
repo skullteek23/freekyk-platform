@@ -15,6 +15,9 @@ export class PlayComponent implements OnInit, OnDestroy {
   routeSubscription: Subscription;
   activeLink = '';
   constructor(private router: Router) {
+    if (window.location.href.endsWith('play')) {
+      this.router.navigate(['/play/home']);
+    }
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.activeLink = event.url.slice('/play/'.length);

@@ -26,7 +26,6 @@
     <h4 class="mat-subheading-1 align">{{ content.subHeading | titlecase }}</h4>
     <p class="mat-body-1 align" [innerHTML]="content.desc"></p>
     <button
-      *ngIf="isDialog == false; else dialogOpener"
       color="primary"
       mat-button
       (click)="onNavigate(content.CTA.link)"
@@ -37,18 +36,5 @@
       <span> {{ content.CTA.text }} </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <ng-template #dialogOpener>
-      <button
-        color="primary"
-        mat-button
-        (click)="onLearnMore()"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-        fxLayoutGap="8px"
-      >
-        <span> {{ content.CTA.text }}</span>
-        <span class="material-icons-round"> keyboard_arrow_right </span>
-      </button>
-    </ng-template>
   </div>
 </section>

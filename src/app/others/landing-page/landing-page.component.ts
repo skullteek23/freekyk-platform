@@ -15,12 +15,6 @@ export class LandingPageComponent implements OnInit {
   readonly whyChoose = LANDING_PAGE.whyChooseFreekyk;
   readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   readonly sliderContent = LANDING_PAGE.communityMedia;
-  communityNumbers = [
-    { name: 'Players', number: '400+' },
-    { name: 'Freestylers', number: '200+' },
-    { name: 'Teams', number: '20+' },
-    { name: 'Matches', number: '150+' },
-  ];
   responsiveSize;
   constructor() {}
 

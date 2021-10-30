@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
 import {
   LOREM_IPSUM_LONG,
   LOREM_IPSUM_MEDIUM,
-} from 'src/app/shared/Constants/LOREM_IPSUM';
+} from 'src/app/shared/Constants/WEBSITE_CONTENT';
 import {
   ContestBasicInfo,
   ContestDescription,

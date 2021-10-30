@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
+import { ACADEMIES_PAGE } from '../shared/Constants/WEBSITE_CONTENT';
 import { AcadBasicInfo } from '../shared/interfaces/academy.model';
 
 @Component({
@@ -11,6 +12,7 @@ import { AcadBasicInfo } from '../shared/interfaces/academy.model';
   styleUrls: ['./academies.component.css'],
 })
 export class AcademiesComponent implements OnInit, OnDestroy {
+  readonly academiesBanner = ACADEMIES_PAGE.banner;
   subscriptions = new Subscription();
   columns: any;
   cardHeight = '';
