@@ -7,41 +7,30 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [openDialog]="false"
       DialogData="perfect team"
       svg="assets/svgs/Banner/find_your_team.svg"
       [featureContent]="findTeamContent"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/be_part_of_seasons.svg"
-      [openDialog]="false"
-      DialogData="season"
       [featureContent]="seasonsContent"
       [invert]="true"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/fpl.svg"
-      [openDialog]="false"
-      DialogData="fpl"
       [featureContent]="fplContent"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/fkc.svg"
-      [openDialog]="false"
-      DialogData="fkc"
       [featureContent]="fkcContent"
       [invert]="true"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/fcp.svg"
-      [openDialog]="false"
-      DialogData="fcp"
       [featureContent]="fcpContent"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/customise_your_experience.svg"
-      [openDialog]="false"
-      DialogData="cust"
       [featureContent]="customizeContent"
       [invert]="true"
     ></app-feature-section>
@@ -67,7 +56,7 @@
 
   <!-- community numbers -->
   <app-community-numbers-section
-    [data]="communityNumbers"
+    [content]="communityNumbers"
   ></app-community-numbers-section>
   <!-- community numbers -->
 </div>

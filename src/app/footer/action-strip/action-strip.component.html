@@ -53,14 +53,14 @@
       </button>
       <button
         *ngIf="enablePartnerForm"
-        (click)="onNavigateToPartnerForm()"
+        (click)="onNavigateToForms()"
         class="buttonText"
         [ngClass]="{
           primaryButton: isCompact,
           secondaryButton: !isCompact
         }"
       >
-        Partner with us
+        {{ formCTA }}
       </button>
     </div>
   </div>

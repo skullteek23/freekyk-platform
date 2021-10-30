@@ -56,6 +56,12 @@ export const LANDING_PAGE = {
   communityNumbers: {
     heading: `A powerful football community`,
     desc: `A vast community of football lovers, academies, ground / Futsal owners, referees, coaches and freestylers. Join us to get the best footballing experience!`,
+    numbers: {
+      Players: '400+',
+      Freestylers: '200+',
+      Teams: '20+',
+      Matches: '150+',
+    },
   },
   communityMedia: [
     {
@@ -137,9 +143,66 @@ export const PLAY_PAGE = {
     ],
   },
   communityNumbers: {
-    heading: ``,
-    desc: ``,
+    heading: `A powerful football lovers community`,
+    desc: `A vast community of football lovers, academies, ground / Futsal owners, referees, coaches and freestylers . Join us to get the best footballing experience`,
+    numbers: {
+      Players: '400+',
+      Tournaments: '5+',
+      Teams: '20+',
+      Matches: '150+',
+    },
   },
+};
+export const FREESTYLE_PAGE = {
+  banner: `Love freestyling?<br/>Join India’s first professional freestyler’s network and get chances to collaborate with various brands, participate in contests and express your freestyling skills though your video profiles
+  `,
+  journey: {
+    subHeading: `Freekyk Freestyling Journey`,
+    desc: `Ever thought how many freestyling skills exist in the world?<br/>Be an awesome professional  freestyler by completing various stages of Freekyk  Freestyler Journey, a journey which has no end but only new beginnings and new stages.<br/><br/></ul><li>Get a validated freestyling profile for brand collaborations</li><li>Access to new freestyling skills unlocked by professionals</li><li>Connect with other freestylers in your locality</li></ul>`,
+    CTA: {
+      text: EXPLORE_MORE,
+      link: `/dashboard/freestyle`,
+    },
+  },
+  leaderboard: {
+    subHeading: `Freekyk Freestyling Leaderboard`,
+    desc: `Be the best freestyler by competing with other freestlyers.  Get points for higher engagement, better performance and video submissions.<br/><br/><ul><li>Exciting prizes and offers for the people with higher points</li><li>Recognition in the freestyler’s community</li><li>Higher chances for more brand collaborations</li></ul>`,
+    CTA: {
+      text: `See Leaderboard`,
+      link: `/freestyle/leaderboard`,
+    },
+  },
+  contests: {
+    subHeading: `Freekyk Freestyling Contests`,
+    desc: `Don’t find enough freestyling contests and competitions to express your talent? We organize both offline and online events. Join us and get ready for the real juggling!<br/><br/><ul><li>Quick participation in various contests</li><li>Win contest and get recognized by the India’s largest freestylers’ community</li><li>Easy video uploads in all contests’ 4 stages submissions</li></ul>`,
+    CTA: {
+      text: `See Upcoming Contests`,
+      link: `/freestyle/contests`,
+    },
+  },
+  whyChooseFreestyle: {
+    subHeading: `Even though, freestyling in India is at a very nascent stage, Freekyk Freestyling is a professional platform for all freestlyers who can nurture their talent and love for freestyling.`,
+    listPoints: [
+      `Get  professional at global level`,
+      `Easy to use and access to India’s largest freestylers community`,
+      `Boost your brand collaboration`,
+      `The most organized freestlyer’s platform in the world`,
+    ],
+  },
+  trainingFormLink: `https://docs.google.com/forms/d/e/1FAIpQLSc3fyIEjHjN4ivkaYt-ZDe4ejR2TmTCY07IedCtbReJH7KioA/viewform`,
+  communityNumbers: {
+    heading: `A powerful football lovers community`,
+    desc: `A vast community of football lovers, academies, ground / Futsal owners, referees, coaches and freestylers . Join us to get the best footballing experience`,
+    numbers: {
+      Freestylers: '200+',
+      Contests: '20+',
+      Levels: '5',
+      Tricks: '50+',
+    },
+  },
+};
+export const ACADEMIES_PAGE = {
+  banner: `Looking for a right academy to nurture your football skills?<br/>Join this exciting football network and get immediate access to amazing academies, professional coaches in no time and their training sessions.`,
 };
 export const ABOUT_PAGE = {
   prateek: {

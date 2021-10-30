@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawerMode } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
@@ -28,12 +29,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
     private authServ: AuthService,
+    private router: Router,
     private avatarServ: AccountAvatarService,
     private store: Store<{
       dash: DashState;
     }>
   ) {}
   ngOnInit(): void {
+    if (window.location.href.endsWith('dashboard')) {
+      this.router.navigate(['/dashboard/home']);
+    }
     this.onResizeScreen();
     this.dataImg$ = this.avatarServ.getProfilePicture();
     this.dataPos$ = this.store

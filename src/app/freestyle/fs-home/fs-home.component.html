@@ -8,30 +8,28 @@
   >
     <app-feature-section
       svg="assets/svgs/Banner/freestyle_journey.svg"
-      [openDialog]="true"
-      DialogData="journey"
+      [featureContent]="journey"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/freestyle_contests.svg"
-      [openDialog]="true"
-      DialogData="contest"
+      [featureContent]="leaderboard"
       [invert]="true"
     ></app-feature-section>
     <app-feature-section
       svg="assets/svgs/Banner/freestyle_leaderboard.svg"
-      [openDialog]="true"
-      DialogData="leaderboard"
+      [featureContent]="contests"
     ></app-feature-section>
   </div>
   <!-- features -->
 
   <!-- action-strip-mini -->
-  <div class="section-space-top">
-    <app-action-strip
-      heading="ready to top the leaderboard?"
-      [compact]="true"
-    ></app-action-strip>
-  </div>
+  <app-action-strip
+    formCTA="Contact Us"
+    heading="Want to conduct your freestyling training sessions?"
+    elementSpacing="space-between center"
+    [enableFreestyleTrainingForm]="true"
+    [compact]="true"
+  ></app-action-strip>
   <!-- action-strip-mini -->
 
   <!-- why choose fk -->
@@ -40,7 +38,7 @@
 
   <!-- community numbers -->
   <app-community-numbers-section
-    [data]="communityNumbers"
+    [content]="communityNumbers"
   ></app-community-numbers-section>
   <!-- community numbers -->
 </div>
