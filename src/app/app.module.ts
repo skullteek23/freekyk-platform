@@ -16,7 +16,6 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AppMaterialModule } from './app-material.module';
 import { SharedModule } from './shared/shared.module';
 import { AngularFireModule } from '@angular/fire';
-import { environment } from 'src/environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromApp from './store/app.reducer';
@@ -34,6 +33,7 @@ import { TeMembersComponent } from './play/profile-pages/team-profile/te-members
 import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { environment } from 'src/environments/environment.dev';
 // export function initializeApp1(afa: AngularFireAuth): any {
 //   return () => {
 //     return new Promise<void>((resolve) => {
@@ -76,7 +76,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     AppMaterialModule,
     SharedModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment),
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
