@@ -14,12 +14,8 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "dist/football-platform",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "dist/football-platform-v1",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
