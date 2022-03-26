@@ -76,7 +76,7 @@ import { environment } from 'src/environments/environment.prod';
     AppMaterialModule,
     SharedModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment),
+    AngularFireModule.initializeApp(environment.firebase),
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
