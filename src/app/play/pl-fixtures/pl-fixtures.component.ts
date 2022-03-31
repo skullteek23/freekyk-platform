@@ -6,6 +6,7 @@ import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
+import { SortMatchesByLatest } from 'src/app/shared/utils/ArraySorting';
 
 @Component({
   selector: 'app-pl-fixtures',
@@ -39,7 +40,8 @@ export class PlFixturesComponent implements OnInit {
           this.noFixtures = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture))
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
+        map((resp) => resp.sort(SortMatchesByLatest))
       );
   }
   onQueryData(queryInfo): void {
