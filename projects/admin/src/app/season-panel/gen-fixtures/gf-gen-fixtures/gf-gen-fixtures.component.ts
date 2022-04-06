@@ -67,11 +67,14 @@ export class GfGenFixturesComponent implements OnInit {
     this.genServ.onPreviousStep();
   }
   onNext() {
-    this.genServ
-      .onCreateFixtures(this.fixtures, this.addiInfos, this.lineups)
-      .then(() => {
-        this.snackServ.displayCustomMsg('Fixtures generated successfully!');
-        this.router.navigate(['/admin/home']);
-      });
+    const allPromises = [];
+    allPromises.push(
+      this.genServ.onCreateFixtures(this.fixtures, this.addiInfos, this.lineups)
+    );
+    allPromises.push(this.genServ.initLeagueTable());
+    Promise.all(allPromises).then(() => {
+      this.snackServ.displayCustomMsg('Fixtures generated successfully!');
+      this.router.navigate(['/admin/home']);
+    });
   }
 }

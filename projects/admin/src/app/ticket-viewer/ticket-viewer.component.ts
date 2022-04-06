@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { BasicTicket } from 'src/app/shared/interfaces/ticket.model';
+import { BasicTicket } from '../shared/interfaces/ticket.model';
 
 @Component({
   selector: 'app-ticket-viewer',

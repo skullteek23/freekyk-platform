@@ -196,7 +196,6 @@ export interface tempTour {
   perTeamPlaying: number;
   tour_type: 'FKC' | 'FPL' | 'FCP';
   startDate: Date;
-  isFixturesEmpty?: boolean;
 }
 export interface CloufFunctionFixtureData {
   sid: string;
@@ -237,12 +236,4 @@ export interface QueryInfo {
     | 'in'
     | 'not-in'
     | '!=';
-}
-export interface FeatureSectionContent {
-  subHeading: string;
-  CTA: {
-    text: string;
-    link: string;
-  };
-  desc: string;
 }

@@ -14,7 +14,6 @@ export interface MatchFixture {
   tie_breaker?: string;
   stadium?: string;
   mode?: 'fixture' | 'result';
-  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
 }
 export interface MatchFixtureOverview {
   ref: string;

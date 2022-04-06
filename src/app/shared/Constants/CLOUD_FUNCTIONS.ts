@@ -7,4 +7,5 @@ export const CLOUD_FUNCTIONS = {
   DELETE_TEAM: 'deleteTeam',
   GENERATE_RAZORPAY_ORDER: 'generateRazorpayOrder',
   VERIFY_PAYMENT: 'verifyPayment',
+  INIT_LEAGUE_TABLE: 'initLeagueTable',
 };

@@ -107,6 +107,16 @@ export class GenFixtService implements OnDestroy {
     // return CALCULATE_MIN_DURATION(grTimings, this.hours, this.perMatchHr);
     return 1;
   }
+  initLeagueTable() {
+    const initLeagueTableFunc = this.ngFunc.httpsCallable(
+      CLOUD_FUNCTIONS.INIT_LEAGUE_TABLE
+    );
+    const data = {
+      sid: this.selSeason.id,
+      sname: this.selSeason.name,
+    };
+    return initLeagueTableFunc(data);
+  }
   onGenFixtures() {
     const fixtureFunc = this.ngFunc.httpsCallable(
       CLOUD_FUNCTIONS.GENERATE_FITURES

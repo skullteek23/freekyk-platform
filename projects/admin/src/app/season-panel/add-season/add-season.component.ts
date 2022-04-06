@@ -6,7 +6,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import {
   SeasonAbout,
   SeasonBasicInfo,
-} from 'src/app/shared/interfaces/season.model';
+} from '../../shared/interfaces/season.model';
 
 @Component({
   selector: 'app-add-season',

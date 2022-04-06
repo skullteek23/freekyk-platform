@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from 'projects/admin/src/app/app-material.module';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.prod';
 import { AcademiesPanelComponent } from './academies-panel/academies-panel.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AppRoutingModule } from './app-routing.module';

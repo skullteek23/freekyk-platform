@@ -37,6 +37,7 @@ export interface TeamStats {
   l: string | number;
   rcards: string | number;
   ycards: string | number;
+  cl_sheet: string | number;
   g_conceded: string | number;
   pr_tour_wins?: string | number;
 }

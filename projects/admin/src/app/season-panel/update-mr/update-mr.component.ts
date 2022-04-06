@@ -15,11 +15,9 @@ import {
   MatchFixture,
   MatchStats,
 } from 'src/app/shared/interfaces/match.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
-import firebase from 'firebase/app';
-import { MatInput } from '@angular/material/input';
 import { MatRadioChange } from '@angular/material/radio';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SeasonBasicInfo } from '../../shared/interfaces/season.model';
 
 @Component({
   selector: 'app-update-mr',

@@ -7,8 +7,6 @@ export interface SeasonBasicInfo {
   start_date: Date;
   cont_tour: string[];
   id?: string;
-  participants?: number;
-  feesPerTeam?: number;
 }
 export interface SeasonAbout {
   description: string;
@@ -25,11 +23,12 @@ export interface SeasonMedia {
 export interface SeasonStats {
   FKC_winner?: string;
   FPL_winner?: string;
+  totParticipants: number;
   totGoals: number;
   awards: string;
 }
 export interface SeasonParticipants {
   tid: string;
   tname: string;
-  tlogo: string;
+  timgpath: string;
 }
