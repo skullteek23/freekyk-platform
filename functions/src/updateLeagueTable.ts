@@ -19,12 +19,6 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
         const gfor: number = statsBefore + data.score[0];
         const gagainst: number = statsBefore + data.score[1];
         const isDraw = data.score[0] === data.score[1];
-        const pts =
-          data.score[0] > data.score[1]
-            ? statsBefore.pts + 3
-            : isDraw
-            ? statsBefore.pts + 1
-            : statsBefore.pts;
         leagueTable[entry] = {
           ...leagueTable[entry],
           w: data.score[0] > data.score[1] ? statsBefore.w++ : statsBefore.w,
@@ -32,7 +26,6 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
           l: data.score[0] < data.score[1] ? statsBefore.l++ : statsBefore.l,
           gf: gfor,
           ga: gagainst,
-          pts: pts,
         };
       }
       if (
@@ -42,12 +35,6 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
         const gfor: number = statsBefore + data.score[1];
         const gagainst: number = statsBefore + data.score[0];
         const isDraw = data.score[0] === data.score[1];
-        const pts =
-          data.score[1] > data.score[0]
-            ? statsBefore.pts + 3
-            : isDraw
-            ? statsBefore.pts + 1
-            : statsBefore.pts;
         leagueTable[entry] = {
           ...leagueTable[entry],
           w: data.score[1] > data.score[0] ? statsBefore.w++ : statsBefore.w,
@@ -55,7 +42,6 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
           l: data.score[1] < data.score[0] ? statsBefore.l++ : statsBefore.l,
           gf: gfor,
           ga: gagainst,
-          pts: pts,
         };
       }
     }

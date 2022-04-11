@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 export const RazorPayAPI = new InjectionToken<any>('razorPay');
 export const UNIVERSAL_TOURNAMENT_FEES = 8000;

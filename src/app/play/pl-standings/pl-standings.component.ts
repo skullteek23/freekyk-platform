@@ -17,6 +17,8 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   knockoutFixtures: MatchFixture[] = [];
   seasonChosen = null;
+  isNoSeasonKnockout = true;
+  isNoSeasonLeague = true;
   filterData: FilterData = {
     defaultFilterPath: '',
     filtersObj: {},
@@ -72,6 +74,26 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       .pipe(map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]))
       .subscribe((res) => {
         this.knockoutFixtures = res;
+      });
+    this.ngFire
+      .collection('seasons', (query) => query.where('name', '==', seasonName))
+      .get()
+      .pipe(
+        map((res) => {
+          if (!res.empty) return res.docs[0].id;
+          else return null;
+        })
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.ngFire
+            .collection('leagues')
+            .doc(res)
+            .get()
+            .subscribe((response) => {
+              console.log('response is => ', response);
+            });
+        }
       });
   }
 }

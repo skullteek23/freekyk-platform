@@ -52,10 +52,10 @@ export interface LeagueTableModel {
   l: number;
   gf: number;
   ga: number;
-  pts: number;
   p?: number;
   gd?: number;
   rank?: number;
+  pts?: number;
 }
 export interface CommunityPlayTableModel {
   rank: number;

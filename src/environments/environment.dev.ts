@@ -10,4 +10,9 @@ export const environment = {
     messagingSenderId: '954435558889',
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
   },
+  // live api keys
+  razorPay: {
+    key_id: 'rzp_live_8BB9gOfLpWDtAG',
+    key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',
+  },
 };

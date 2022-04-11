@@ -17,7 +17,6 @@ export async function initLeagueTable(data: any, context: any): Promise<any> {
         l: 0,
         gf: 0,
         ga: 0,
-        pts: 0,
       });
     });
     return db

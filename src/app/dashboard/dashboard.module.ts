@@ -48,7 +48,7 @@ import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationCitiesService } from '../services/location-cities.service';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';

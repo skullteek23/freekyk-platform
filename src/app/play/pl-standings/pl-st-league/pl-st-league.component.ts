@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LeagueTableModel } from 'src/app/shared/interfaces/others.model';
@@ -15,9 +16,11 @@ export class PlStLeagueComponent implements OnInit {
   LeagueDataSource: LeagueTableModel[] = [];
   subscriptions = new Subscription();
   cols: string[] = [];
-  constructor(private mediaObs: MediaObserver) {}
+  constructor(private mediaObs: MediaObserver, private route: ActivatedRoute) {}
   ngOnInit() {
-    // this.initLeagueData();
+    this.route.params.subscribe((params) => {
+      console.log(params);
+    });
     this.subscriptions.add(
       this.mediaObs
         .asObservable()

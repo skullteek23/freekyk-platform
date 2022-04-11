@@ -16,7 +16,7 @@
 
   <!-- tab groups -->
   <mat-tab-group class="container section-space-bottom">
-    <mat-tab [disabled]="!seasonChosen" label="Knockout Groups">
+    <mat-tab label="Knockout Groups">
       <ng-template matTabContent>
         <!-- <app-knockout-sm *ngIf="onMobile; else lgScreen"></app-knockout-sm> -->
         <!-- <ng-template #lgScreen> -->
@@ -27,7 +27,7 @@
         <!-- </ng-template> -->
       </ng-template>
     </mat-tab>
-    <mat-tab [disabled]="true" label="League Tables">
+    <mat-tab label="League Tables">
       <ng-template matTabContent>
         <app-pl-st-league></app-pl-st-league>
       </ng-template>

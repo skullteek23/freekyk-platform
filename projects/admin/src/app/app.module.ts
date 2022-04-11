@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from 'projects/admin/src/app/app-material.module';
-import { environment } from '../environments/environment.prod';
 import { AcademiesPanelComponent } from './academies-panel/academies-panel.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +34,7 @@ import { TicketViewerComponent } from './ticket-viewer/ticket-viewer.component';
 import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
 import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
