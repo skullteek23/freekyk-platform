@@ -48,7 +48,7 @@ export async function paymentVerification(
         tlogo: teamSnap.imgpath_logo,
       };
 
-      const orderSnap = db
+      const orderSnap = await db
         .collection('seasonOrders')
         .doc(data.razorpay_order_id)
         .set(newOrder);

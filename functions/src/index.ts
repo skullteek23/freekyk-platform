@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 admin.initializeApp();
+import { IMAGES_BUCKET } from './constants';
 import { getFixtures } from './fixtures';
 import { fsTrick } from './fsTrick';
 import { joinRequests } from './JoinRequestToTeams';
@@ -8,13 +9,14 @@ import { newProfile } from './newProfile';
 import { teamCreation } from './teamCreation';
 import { teamDeleter } from './deleteTeam';
 import { paymentVerification } from './paymentVerification';
+import { initLeagueTable } from './initLeaguetable';
+import { updateLeagueTable } from './updateLeagueTable';
 import { inviteCreationTrigger } from './trigger_functions/createInvite';
 import { inviteDeletionTrigger } from './trigger_functions/inviteDelete';
 import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
 import { removeThumbnail } from './trigger_functions/removeThumbnail';
-import { IMAGES_BUCKET } from './constants';
 
 // callable functions
 export const createProfile = functions.https.onCall(newProfile);
@@ -25,6 +27,8 @@ export const generateFixtures = functions.https.onCall(getFixtures);
 export const deleteTeam = functions.https.onCall(teamDeleter);
 export const generateRazorpayOrder = functions.https.onCall(generateOrder);
 export const verifyPayment = functions.https.onCall(paymentVerification);
+export const initTable = functions.https.onCall(initLeagueTable);
+export const updateTable = functions.https.onCall(updateLeagueTable);
 // callable functions
 
 // trigger functions

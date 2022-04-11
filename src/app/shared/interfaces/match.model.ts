@@ -38,11 +38,12 @@ export interface MatchStats {
   awayScore: number;
   penalties: boolean;
   matchEndDate: Timestamp;
+  sname: string;
+  mid: string;
   pen_resultHome?: number;
   pen_resultAway?: number;
   scorersHome?: string[];
   scorersAway?: string[];
-  mid?: string;
 }
 
 export interface tempFixtureData {

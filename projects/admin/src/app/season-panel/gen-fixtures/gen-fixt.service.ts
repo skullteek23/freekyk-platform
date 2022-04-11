@@ -111,11 +111,9 @@ export class GenFixtService implements OnDestroy {
     const initLeagueTableFunc = this.ngFunc.httpsCallable(
       CLOUD_FUNCTIONS.INIT_LEAGUE_TABLE
     );
-    const data = {
-      sid: this.selSeason.id,
-      sname: this.selSeason.name,
-    };
-    return initLeagueTableFunc(data);
+    if (this.selSeason && this.selSeason.id) {
+      return initLeagueTableFunc(this.selSeason.id);
+    }
   }
   onGenFixtures() {
     const fixtureFunc = this.ngFunc.httpsCallable(

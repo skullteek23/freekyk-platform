@@ -46,16 +46,16 @@ export interface VEProject {
   photos: string[];
 }
 export interface LeagueTableModel {
-  rank: number;
   tData: { timgpath: string; tName: string };
-  p: number;
   w: number;
   d: number;
   l: number;
   gf: number;
   ga: number;
-  gd: number;
   pts: number;
+  p?: number;
+  gd?: number;
+  rank?: number;
 }
 export interface CommunityPlayTableModel {
   rank: number;
