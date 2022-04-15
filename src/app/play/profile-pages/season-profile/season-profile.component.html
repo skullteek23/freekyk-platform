@@ -66,9 +66,20 @@
         fxLayoutAlign="center start"
         fxLayoutGap="16px"
       >
-        <button (click)="onParticipate()" class="primaryButton buttonText">
+        <button
+          (click)="onParticipate()"
+          class="primaryButton buttonText"
+          [disabled]="(seasonInfo$ | async)?.isParticipationClosed"
+        >
           <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span>Participate</span>
+            <span
+              [matTooltip]="
+                (seasonInfo$ | async)?.isParticipationClosed
+                  ? 'Participation closed'
+                  : 'Participate in season'
+              "
+              >Participate</span
+            >
             <!-- <span *ngIf="isLocked$ | async" class="material-icons-round">
               lock
             </span> -->

@@ -6,6 +6,7 @@ export interface SeasonBasicInfo {
   premium: boolean;
   start_date: Date;
   cont_tour: string[];
+  isParticipationClosed: boolean;
   id?: string;
   participants?: number;
   feesPerTeam?: number;
