@@ -10,10 +10,14 @@ import { profile } from 'src/app/shared/interfaces/others.model';
 export class AboutComponent implements OnInit {
   prateek: profile;
   ankit: profile;
+  aboutFreekyk: string;
+  ourJourney: string;
   constructor() {}
 
   ngOnInit(): void {
     this.prateek = ABOUT_PAGE.prateek;
     this.ankit = ABOUT_PAGE.ankit;
+    this.aboutFreekyk = ABOUT_PAGE.about_us;
+    this.ourJourney = ABOUT_PAGE.journey;
   }
 }
