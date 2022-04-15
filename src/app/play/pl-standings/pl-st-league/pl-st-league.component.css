@@ -42,9 +42,12 @@
     width: 20px;
     text-align: center;
   }
-
+  img {
+    min-width: 32px;
+  }
   .mat-column-pos {
     width: 25px;
+    padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
@@ -84,6 +87,7 @@
 
   .mat-column-pos {
     width: 25px;
+    padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
@@ -117,6 +121,7 @@
 
   .mat-column-pos {
     width: 60px;
+    padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
@@ -145,6 +150,7 @@
 
   .mat-column-pos {
     width: 70px;
+    padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {

@@ -29,7 +29,7 @@
     </mat-tab>
     <mat-tab label="League Tables">
       <ng-template matTabContent>
-        <app-pl-st-league></app-pl-st-league>
+        <app-pl-st-league [data]="tableData"></app-pl-st-league>
       </ng-template>
     </mat-tab>
     <mat-tab [disabled]="true" label="Community Play Leaderboard">

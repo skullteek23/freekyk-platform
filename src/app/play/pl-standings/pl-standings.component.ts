@@ -4,7 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
+import {
+  FilterData,
+  LeagueTableModel,
+} from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -23,6 +26,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     defaultFilterPath: '',
     filtersObj: {},
   };
+  tableData: LeagueTableModel[] = [];
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute
@@ -91,7 +95,12 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
             .doc(res)
             .get()
             .subscribe((response) => {
-              console.log('response is => ', response);
+              this.tableData = [];
+              if (response.exists) {
+                this.tableData = Object.values(
+                  response.data()
+                ) as LeagueTableModel[];
+              }
             });
         }
       });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,12 @@ export class PlStLeagueComponent implements OnInit {
   LeagueDataSource: LeagueTableModel[] = [];
   subscriptions = new Subscription();
   cols: string[] = [];
+  isNoData = false;
+  @Input() set data(value: LeagueTableModel[]) {
+    if (value) {
+      this.setDataSource(value);
+    }
+  }
   constructor(private mediaObs: MediaObserver, private route: ActivatedRoute) {}
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -58,5 +64,19 @@ export class PlStLeagueComponent implements OnInit {
           }
         })
     );
+  }
+
+  setDataSource(value: LeagueTableModel[]) {
+    const tableData = value
+      .map((val) => {
+        return {
+          ...val,
+          p: val.w + val.d + val.l,
+          pts: 3 * val.w + val.d,
+          gd: val.gf - val.ga,
+        } as LeagueTableModel;
+      })
+      .sort((a, b) => b.pts - a.pts);
+    this.LeagueDataSource = tableData;
   }
 }
