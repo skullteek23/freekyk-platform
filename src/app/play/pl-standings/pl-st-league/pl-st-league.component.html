@@ -18,13 +18,15 @@
       <td mat-cell *matCellDef="let team" [matTooltip]="team.tData.tName">
         <div fxLayoutAlign="start center" fxLayoutGap="8px">
           <img
+            [fxShow.gt-sm]="true"
+            fxHide
             class="teAvatar hideAvatar"
             [src]="team.tData.timgpath"
             alt="Team Logo"
           />
 
-          <span class="mat-body-1 left">
-            {{ team.tData.tName | textShorten: 15 }}
+          <span class="mat-body-1 left team-name">
+            {{ team.tData.tName }}
           </span>
         </div>
       </td>

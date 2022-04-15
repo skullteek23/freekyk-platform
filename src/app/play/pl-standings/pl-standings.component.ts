@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     filtersObj: {},
   };
   tableData: LeagueTableModel[] = [];
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute
@@ -78,14 +80,17 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       .pipe(map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]))
       .subscribe((res) => {
         this.knockoutFixtures = res;
+        this.tabGroup.selectedIndex = this.knockoutFixtures.length ? 0 : 1;
       });
     this.ngFire
       .collection('seasons', (query) => query.where('name', '==', seasonName))
       .get()
       .pipe(
         map((res) => {
-          if (!res.empty) return res.docs[0].id;
-          else return null;
+          if (!res.empty) {
+            return res.docs[0].id;
+          }
+          return null;
         })
       )
       .subscribe((res) => {

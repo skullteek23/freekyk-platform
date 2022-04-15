@@ -14,7 +14,16 @@
   font-family: "Open Sans";
   font-size: 15px;
 }
-
+.team-name {
+  width: 100px;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mat-column-Team {
+  padding-right: 10px;
+}
 @media only screen and (max-width: 359px) {
   .extra-width-table {
     width: 400px;
@@ -24,14 +33,10 @@
     display: none;
   }
   .mat-column-Team {
-    width: 100px;
-    overflow: hidden;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 100px;
+    width: 15%;
     text-align: left;
   }
+
   .mat-column-P,
   .mat-column-W,
   .mat-column-D,
@@ -39,19 +44,19 @@
   .mat-column-GF,
   .mat-column-GD,
   .mat-column-L {
-    width: 20px;
+    width: 5%;
     text-align: center;
   }
   img {
     min-width: 32px;
   }
   .mat-column-pos {
-    width: 25px;
+    width: 10%;
     padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
-    width: 25px;
+    width: 10%;
     text-align: center;
   }
   .points {
@@ -66,12 +71,7 @@
     max-width: 600px;
   }
   .mat-column-Team {
-    width: 125px;
-    overflow: hidden;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 125px;
+    width: 15%;
     text-align: left;
   }
   .mat-column-P,
@@ -81,17 +81,17 @@
   .mat-column-GF,
   .mat-column-GD,
   .mat-column-L {
-    width: 20px;
+    width: 5%;
     text-align: center;
   }
 
   .mat-column-pos {
-    width: 25px;
+    width: 10%;
     padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
-    width: 25px;
+    width: 9%;
     text-align: center;
   }
   .points {
@@ -106,6 +106,7 @@
     max-width: 100%;
   }
   .mat-column-Team {
+    width: 40%;
     text-align: left;
   }
   .mat-column-P,
@@ -115,17 +116,21 @@
   .mat-column-GF,
   .mat-column-GD,
   .mat-column-L {
-    width: 45px;
+    width: 7%;
     text-align: center;
   }
 
+  .team-name {
+    width: 200px;
+    max-width: 200px;
+  }
   .mat-column-pos {
-    width: 60px;
+    width: 10%;
     padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
-    width: 45px;
+    width: 7%;
     text-align: center;
   }
 }
@@ -135,6 +140,7 @@
     max-width: 100%;
   }
   .mat-column-Team {
+    width: 36%;
     text-align: left;
   }
   .mat-column-P,
@@ -144,17 +150,21 @@
   .mat-column-GF,
   .mat-column-GD,
   .mat-column-L {
-    width: 45px;
+    width: 7%;
     text-align: center;
   }
 
+  .team-name {
+    width: 400px;
+    max-width: 400px;
+  }
   .mat-column-pos {
-    width: 70px;
+    width: 8%;
     padding-right: 10px;
     text-align: center;
   }
   .mat-column-Pts {
-    width: 45px;
+    width: 7%;
     text-align: center;
   }
 }
