@@ -70,9 +70,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .catch(() => this.snackServ.displayError())
       .finally(() => {
         this.isLoading = false;
-        setTimeout(() => {
-          this.onCloseDialog();
-        }, 4000);
+        this.onCloseDialog();
       });
   }
   async onUploadImage(): Promise<any> {
@@ -102,9 +100,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .catch(() => this.snackServ.displayError())
       .finally(() => {
         this.isLoading = false;
-        setTimeout(() => {
-          this.onCloseDialog();
-        }, 4000);
+        this.onCloseDialog();
       });
   }
 }
