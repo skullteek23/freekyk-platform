@@ -21,7 +21,7 @@ export class LoginUiComponent implements OnInit {
   constructor(
     private authServ: AuthService,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.initForm();
   }
@@ -94,7 +94,7 @@ export class LoginUiComponent implements OnInit {
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup(userData.name))
+            .then(() => this.authServ.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         })
@@ -115,11 +115,11 @@ export class LoginUiComponent implements OnInit {
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup(user.user.displayName))
+            .then(() => this.authServ.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         } else {
-          this.authServ.afterSignup(user.user.displayName);
+          this.authServ.afterSignup();
         }
       })
       .catch((error) => this.onErrorAfterSignin(error));
@@ -138,11 +138,11 @@ export class LoginUiComponent implements OnInit {
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup(user.user.displayName))
+            .then(() => this.authServ.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         } else {
-          this.authServ.afterSignup(user.user.displayName);
+          this.authServ.afterSignup();
         }
       })
       .catch((error) => this.onErrorAfterSignin(error));

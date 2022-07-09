@@ -121,7 +121,8 @@ export class AuthService {
     this.router.navigate(['/dashboard', 'home']);
     this.onSuccesslogIn(this.currentUser?.name);
   }
-  public afterSignup(name?: string | null): void {
+  public afterSignup(): void {
+    const name = sessionStorage.getItem('name');
     const userName = name ? name : this.currentUser?.name;
     this.router.navigate(['/dashboard', 'home']);
     this.onSuccessSignup(userName);
