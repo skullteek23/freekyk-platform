@@ -76,7 +76,7 @@ export class UpdateMrComponent implements OnInit {
       : this.matchReport.get('pen_resultAway').disable();
   }
   onSubmit() {
-    console.log(this.matchReport.value);
+    // console.log(this.matchReport.value);
     const mid = this.matchReport.value['mid'];
     const sname = this.selectedSeason || null;
     const tie_breaker = this.matchReport.value['penalties'] == true;

@@ -22,17 +22,19 @@ export class AskPlayerSelectorComponent implements OnInit, OnDestroy {
     private store2: Store<{ team: TeamState }>,
     private store3: Store<{ teamComms: TeamCommState }>,
     private commServ: TeamCommunicationService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.members$ = this.store2.select('team').pipe(
-      tap((resp) => console.log(resp)),
+      // tap((resp) => console.log(resp)),
       map((resp) => resp?.teamMembers.members as Tmember[]),
       map((resp) =>
         resp.filter((respDoc) => respDoc.id !== localStorage.getItem('uid'))
       )
     );
     this.subscriptions.add(
-      this.store3.select('teamComms').subscribe((data) => console.log(data))
+      this.store3.select('teamComms').subscribe((data) => {
+        // console.log(data)
+      })
     );
   }
   ngOnDestroy(): void {

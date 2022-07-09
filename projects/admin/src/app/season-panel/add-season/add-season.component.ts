@@ -25,7 +25,7 @@ export class AddSeasonComponent implements OnInit {
     private ngStorage: AngularFireStorage,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.seasonForm = new FormGroup({
@@ -51,7 +51,7 @@ export class AddSeasonComponent implements OnInit {
     });
   }
   async onSubmit() {
-    console.log(this.seasonForm);
+    // console.log(this.seasonForm);
     let uploadSnap = await this.ngStorage.upload(
       '/seasonImages' + Math.random() + this.imgUpload.name,
       this.imgUpload
@@ -64,7 +64,7 @@ export class AddSeasonComponent implements OnInit {
     });
   }
   saveFormToServer(formData: {}) {
-    console.log(this.seasonForm);
+    // console.log(this.seasonForm);
     const newSeasonId = this.ngFire.createId();
     const newSeason: SeasonBasicInfo = {
       name: formData['name'],

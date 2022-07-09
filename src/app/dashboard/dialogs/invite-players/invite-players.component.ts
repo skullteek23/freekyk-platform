@@ -22,7 +22,7 @@ export class InvitePlayersComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: string,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getPlayers();
@@ -42,10 +42,10 @@ export class InvitePlayersComponent implements OnInit {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as PlayerBasicInfo),
-              } as PlayerBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as PlayerBasicInfo),
+            } as PlayerBasicInfo)
           )
         ),
         map((docs) => docs.filter((doc) => doc.id !== uid))
@@ -81,7 +81,7 @@ export class InvitePlayersComponent implements OnInit {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         })
-        .catch((error) => console.log(error));
+      // .catch((error) => console.log(error));
     } else {
       this.ngFire.firestore
         .collection('invites')
@@ -90,7 +90,7 @@ export class InvitePlayersComponent implements OnInit {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         })
-        .catch((error) => console.log(error));
+      // .catch((error) => console.log(error));
     }
   }
 }

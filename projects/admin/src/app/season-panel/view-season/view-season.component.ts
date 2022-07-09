@@ -20,7 +20,7 @@ export class ViewSeasonComponent implements OnInit {
     'stats',
     'terminate',
   ];
-  constructor(private ngFire: AngularFirestore) {}
+  constructor(private ngFire: AngularFirestore) { }
 
   ngOnInit(): void {
     this.ngFire
@@ -30,11 +30,11 @@ export class ViewSeasonComponent implements OnInit {
         map((docs) =>
           docs.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                participants: null,
-                ...(doc.payload.doc.data() as SeasonBasicInfo),
-              } as SeasonBasicInfo)
+            ({
+              id: doc.payload.doc.id,
+              participants: null,
+              ...(doc.payload.doc.data() as SeasonBasicInfo),
+            } as SeasonBasicInfo)
           )
         )
       )
@@ -44,7 +44,7 @@ export class ViewSeasonComponent implements OnInit {
     // this.ngFire.collection('seasons').doc('')
   }
   onViewParticipants(seasonid: string): void {
-    console.log(seasonid);
+    // console.log(seasonid);
     this.ngFire
       .collection(`seasons/${seasonid}/participants`)
       .valueChanges()

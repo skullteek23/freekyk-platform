@@ -27,7 +27,7 @@ export class SearchLgComponent implements OnInit {
   // tslint:disable-next-line: no-input-rename
   @Input('searchPlaceholder') placeholder = 'Search any item...';
   @Input() isDisabled = false;
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     fromEvent(this.searchInputEvent.nativeElement, 'keyup')
@@ -45,7 +45,7 @@ export class SearchLgComponent implements OnInit {
         // If previous query is diffent from current
         distinctUntilChanged(),
 
-        tap((resp) => console.log(resp))
+        // tap((resp) => console.log(resp))
         // subscription for response
       )
       .subscribe((searchValue: string) => this.searchItem.emit(searchValue));

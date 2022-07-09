@@ -21,7 +21,7 @@ export class PlResultsComponent implements OnInit {
   constructor(
     private ngFire: AngularFirestore,
     private queryServ: QueryService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'allMatches',
@@ -37,7 +37,7 @@ export class PlResultsComponent implements OnInit {
         tap((val) => {
           this.noResults = val.empty;
           this.isLoading = false;
-          console.log(val);
+          // console.log(val);
         }),
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         map((resp) => resp.sort(SortMatchesByLatest))

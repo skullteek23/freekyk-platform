@@ -22,10 +22,10 @@ export class PlStLeagueComponent implements OnInit {
       this.setDataSource(value);
     }
   }
-  constructor(private mediaObs: MediaObserver, private route: ActivatedRoute) {}
+  constructor(private mediaObs: MediaObserver, private route: ActivatedRoute) { }
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      console.log(params);
+      // console.log(params);
     });
     this.subscriptions.add(
       this.mediaObs

@@ -143,7 +143,7 @@ export class GroundsPanelComponent implements OnInit {
         this.onClearForm();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         this.err = true;
         this.groundAdded = false;
         this.onClearForm();

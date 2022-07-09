@@ -8,11 +8,11 @@ import { PAGE_VIEWS_MAIN } from 'src/app/dashboard/constants/constants';
 })
 export class IllustrationHeroSectionAlternateComponent implements OnInit {
   @Input() svgSrc: string;
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   checkSvg(): boolean {
-    console.log(this.svgSrc.includes('equipment'));
+    // console.log(this.svgSrc.includes('equipment'));
     return this.svgSrc.includes('academy') || this.svgSrc.includes('equipment');
   }
 }

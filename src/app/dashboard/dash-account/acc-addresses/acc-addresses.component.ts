@@ -32,7 +32,7 @@ export class AccAddressesComponent implements OnInit {
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore,
     private locationServ: LocationCitiesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid');
@@ -54,10 +54,10 @@ export class AccAddressesComponent implements OnInit {
         map((resp) =>
           resp.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as userAddress),
-              } as userAddress)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as userAddress),
+            } as userAddress)
           )
         )
       );
@@ -109,7 +109,7 @@ export class AccAddressesComponent implements OnInit {
     this.showForm = false;
   }
   onSaveAddress(): void {
-    console.log(this.newAddressForm);
+    // console.log(this.newAddressForm);
     this.ngFire
       .collection(`players/${this.uid}/Addresses`)
       .add(this.newAddressForm.value)

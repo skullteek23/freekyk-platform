@@ -21,14 +21,14 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
     private store: Store<{
       team: TeamState;
     }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
         .select('team')
         .pipe(map((resp) => resp.upcomingMatches))
         .subscribe((match: MatchFixture[]) => {
-          console.log(match);
+          // console.log(match);
           this.upFixture = match && match.length !== 0 ? match[0] : undefined;
           this.noUpcomingMatch = match && match.length === 0;
         })

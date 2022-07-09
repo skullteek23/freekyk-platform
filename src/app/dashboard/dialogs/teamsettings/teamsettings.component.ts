@@ -55,7 +55,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       team: TeamState;
     }>,
     private dialog: MatDialog
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -63,10 +63,10 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
         .pipe(
           map(
             (resp) =>
-              ({
-                main: resp.basicInfo,
-                more: resp.moreInfo,
-              } as { main: TeamBasicInfo; more: TeamMoreInfo })
+            ({
+              main: resp.basicInfo,
+              more: resp.moreInfo,
+            } as { main: TeamBasicInfo; more: TeamMoreInfo })
           )
         )
         .subscribe((info) => {
@@ -216,7 +216,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       );
       return Promise.all(allPromises).then(this.onFinishOp.bind(this));
     } else {
-      console.log('nothing changed');
+      // console.log('nothing changed');
     }
   }
   onFinishOp(): void {
@@ -225,7 +225,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
   }
   onSubmitTeamSocial(): void {
     // do something
-    console.log(this.socialInfoForm);
+    // console.log(this.socialInfoForm);
     const tid = sessionStorage.getItem('tid');
     this.ngFire
       .collection('teams')

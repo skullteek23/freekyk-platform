@@ -344,25 +344,25 @@ export class AccProfileComponent implements OnInit, OnDestroy {
               { merge: true }
             )
         );
-        if (Object.keys(newBasicDetails).length) {
-          allPromises.push(
-            this.ngFire
-              .collection('freestylers')
-              .doc(uid)
-              .update({
-                ...newDetails,
-                ...newBasicDetails
-              })
-          );
-          allPromises.push(
-            this.ngFire
-              .collection('players')
-              .doc(uid)
-              .update({
-                ...newBasicDetails,
-              })
-          );
-        }
+      }
+      if (Object.keys(newBasicDetails).length) {
+        allPromises.push(
+          this.ngFire
+            .collection('freestylers')
+            .doc(uid)
+            .update({
+              ...newDetails,
+              ...newBasicDetails
+            })
+        );
+        allPromises.push(
+          this.ngFire
+            .collection('players')
+            .doc(uid)
+            .update({
+              ...newBasicDetails,
+            })
+        );
       }
       if (allPromises.length) {
         return Promise.all(allPromises).then(() =>
@@ -394,7 +394,6 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         locCountry: this.playingInfoForm.get('loc_country').value,
         bio: this.playingInfoForm.get('bio').value,
       };
-      console.log(newDetails);
       const uid = localStorage.getItem('uid');
       const allPromises = [];
 
@@ -433,7 +432,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     // backend code here
   }
   onSavePlayerArrayInfo(): Promise<any> {
-    console.log(this.playerArrayForm.value);
+    // console.log(this.playerArrayForm.value);
     const newArrayDetails = {
       prof_teams: this.playerArrayForm.get('prof_teams').value,
       prof_tours: this.playerArrayForm.get('prof_tourns').value,
@@ -463,7 +462,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     this.playerArrayForm.reset();
   }
   onSaveFreestylerArrayInfo(): Promise<any> {
-    console.log(this.fsArrayForm.value);
+    // console.log(this.fsArrayForm.value);
     if (
       !this.fsArrayForm.value ||
       this.fsArrayForm.value.top_vids.length === 0
@@ -496,7 +495,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     this.fsArrayForm.reset();
   }
   onSaveSMInfo(): Promise<any> {
-    console.log(this.socialInfoForm);
+    // console.log(this.socialInfoForm);
     const newSocials: SocialMediaLinks = {
       ig: this.socialInfoForm.value.ig,
       yt: this.socialInfoForm.value.yt,

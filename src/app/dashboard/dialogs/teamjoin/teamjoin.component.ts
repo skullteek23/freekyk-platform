@@ -30,7 +30,7 @@ export class TeamjoinComponent implements OnInit {
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.getTeams();
   }
@@ -41,7 +41,7 @@ export class TeamjoinComponent implements OnInit {
     this.myStepper.next();
     this.isStepOneComplete = true;
     const capIds: string[] = plSelected.map((sel) => sel.value);
-    console.log(capIds);
+    // console.log(capIds);
     const userName = sessionStorage.getItem('name');
     if (this.sendRequests(capIds, userName)) {
       this.state = 'complete';
@@ -55,7 +55,7 @@ export class TeamjoinComponent implements OnInit {
       capId: capIds,
       name: playerName,
     };
-    console.log(FunctionData);
+    // console.log(FunctionData);
     const callable = this.ngFunc.httpsCallable(
       CLOUD_FUNCTIONS.SEND_JOIN_REQUEST_TO_TEAMS
     );
@@ -74,10 +74,10 @@ export class TeamjoinComponent implements OnInit {
           this.noTeams = false;
           return responseData.map(
             (data) =>
-              ({
-                id: data.payload.doc.id,
-                ...(data.payload.doc.data() as TeamBasicInfo),
-              } as TeamBasicInfo)
+            ({
+              id: data.payload.doc.id,
+              ...(data.payload.doc.data() as TeamBasicInfo),
+            } as TeamBasicInfo)
           );
         }),
         share()

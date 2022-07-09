@@ -58,7 +58,7 @@ export class TeamcreateComponent implements OnInit {
     private snackServ: SnackbarService,
     private ngStorage: AngularFireStorage,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.newTeamId = this.ngFire.createId();
     this.teamBasicinfoForm = new FormGroup({
@@ -137,7 +137,7 @@ export class TeamcreateComponent implements OnInit {
         this.success = true;
         this.snackServ.displayCustomMsg('Invites sent successfully!');
       })
-      .catch((error) => console.log(error));
+    // .catch((error) => console.log(error));
   }
   validateTNameNotTaken(
     control: AbstractControl
@@ -188,10 +188,10 @@ export class TeamcreateComponent implements OnInit {
         map((docs) =>
           docs.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as PlayerBasicInfo),
-              } as PlayerBasicInfo)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as PlayerBasicInfo),
+            } as PlayerBasicInfo)
           )
         ),
         map((docs) => docs.filter((doc) => doc.id !== uid)),

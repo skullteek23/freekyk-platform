@@ -18,7 +18,7 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<{ teamComms: TeamCommState }>,
     private ngFireDb: AngularFireDatabase
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -27,8 +27,8 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
         .pipe(
           tap(
             (resp) =>
-              (this.noLogs =
-                resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
+            (this.noLogs =
+              resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
           ),
           map((resp) => resp.currUpcomingMatchNo)
         )
@@ -38,15 +38,15 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
             .list(`teamActivity/${tid}/activity${matchNo.toString()}`)
             .valueChanges()
             .pipe(
-              tap((resp) => console.log(resp)),
+              // tap((resp) => console.log(resp)),
               map((resp: any[]) => resp.sort((a, b) => b.time - a.time)),
               map((resp: MemberResponseNotification[]) =>
                 resp.map(
                   (r) =>
-                    ({
-                      content: r.content,
-                      time: new Date(r.time),
-                    } as MemberResponseNotification)
+                  ({
+                    content: r.content,
+                    time: new Date(r.time),
+                  } as MemberResponseNotification)
                 )
               )
             );

@@ -29,7 +29,7 @@ export class GfGenFixturesComponent implements OnInit {
     private genServ: GenFixtService,
     private snackServ: SnackbarService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.Fixtures$ = this.genServ
@@ -58,7 +58,7 @@ export class GfGenFixturesComponent implements OnInit {
     return this.genServ.getTourData().startDate;
   }
   onUpdate(data: tempFullFixtureData) {
-    console.log(data);
+    // console.log(data);
     this.fixtures.push(data.fixture);
     this.addiInfos.push(data.overview);
     this.lineups.push(data.lineup);

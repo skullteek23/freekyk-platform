@@ -22,7 +22,7 @@ export class AccTicketsComponent implements OnInit {
   constructor(
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.getTickets();
   }
@@ -35,10 +35,10 @@ export class AccTicketsComponent implements OnInit {
         map((resp) =>
           resp.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as BasicTicket),
-              } as BasicTicket)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as BasicTicket),
+            } as BasicTicket)
           )
         )
       );
@@ -109,7 +109,7 @@ export class AccTicketsComponent implements OnInit {
   }
   onSubmitTicket(): void {
     // backend code goes here
-    console.log(this.newTicketForm);
+    // console.log(this.newTicketForm);
     this.ngFire
       .collection('tickets')
       .add({
