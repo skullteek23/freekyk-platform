@@ -1,15 +1,5 @@
-<mat-toolbar
-  color="primary"
-  class="mat-elevation-z4"
-  fxLayoutAlign="start center"
-  fxLayoutGap="16px"
->
-  <button
-    matTooltip="Close"
-    mat-icon-button
-    mat-dialog-close
-    (click)="onCloseDialog()"
-  >
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
   <span class="mat-body-1">Team Settings</span>
@@ -18,36 +8,22 @@
   <div class="dialogData seperator">
     <div fxLayout="column">
       <p class="mat-body-1 top_padding">Team Gallery</p>
-      <button
-        type="button"
-        (click)="onOpenTeamGalleryDialog()"
-        class="buttonText wider secondaryButton"
-      >
+      <button type="button" (click)="onOpenTeamGalleryDialog()" class="buttonText wider secondaryButton">
         Open Team Gallery Photos
       </button>
     </div>
     <mat-divider></mat-divider>
     <p class="mat-body-1">Team Info</p>
-    <form
-      [formGroup]="TeamInfoForm"
-      (ngSubmit)="onSubmitTeamInfo()"
-      fxLayout="column"
-    >
+    <form [formGroup]="TeamInfoForm" (ngSubmit)="onSubmitTeamInfo()" fxLayout="column">
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Name</mat-label>
         <input type="text" matInput name="t_name" formControlName="t_name" />
-        <mat-error *ngIf="TeamInfoForm.get('t_name').hasError('pattern')"
-          >Only letters and numebrs are allowed!</mat-error
-        >
+        <mat-error *ngIf="TeamInfoForm.get('t_name').hasError('pattern')">Only letters and numebrs are allowed!
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Slogan</mat-label>
-        <input
-          type="text"
-          matInput
-          name="t_slogan"
-          formControlName="t_slogan"
-        />
+        <input type="text" matInput name="t_slogan" formControlName="t_slogan" />
         <mat-error *ngIf="TeamInfoForm.get('t_slogan').hasError('pattern')">
           Certain characters aren't allowed!
         </mat-error>
@@ -67,11 +43,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Select Team Location State</mat-label>
-        <mat-select
-          (opened)="onOpenStateList()"
-          (selectionChange)="onSelectState($event)"
-          formControlName="t_LocState"
-        >
+        <mat-select (selectionChange)="onSelectState($event)" formControlName="t_LocState">
           <mat-option *ngFor="let state of states$ | async" [value]="state">
             {{ state }}
           </mat-option>
@@ -86,17 +58,9 @@
         </mat-select>
       </mat-form-field>
 
-      <div
-        fxLayout="column"
-        fxLayoutGap="8px"
-        fxLayoutAlign.gt-sm="center center"
-      >
-        <button
-          class="primaryButton buttonText"
-          [disabled]="!TeamInfoForm.valid || !TeamInfoForm.dirty"
-          type="button"
-          (click)="onSubmitTeamInfo()"
-        >
+      <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center center">
+        <button class="primaryButton buttonText" [disabled]="!TeamInfoForm.valid || !TeamInfoForm.dirty" type="button"
+          (click)="onSubmitTeamInfo()">
           Save Changes
         </button>
       </div>
@@ -104,55 +68,25 @@
 
     <mat-divider></mat-divider>
     <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
-      <button
-        type="button"
-        (click)="fileInputImage.click()"
-        class="buttonText secondaryButton wider"
-      >
+      <button type="button" (click)="fileInputImage.click()" class="buttonText secondaryButton wider">
         Upload Team Photo
       </button>
-      <input
-        hidden
-        type="file"
-        name="fileInput1"
-        accept="image/*"
-        #fileInputImage
-        (change)="onChooseTeamImage($event)"
-        id="file1"
-      />
-      <button
-        type="button"
-        (click)="fileInputLogo.click()"
-        class="buttonText secondaryButton wider"
-      >
+      <input hidden type="file" name="fileInput1" accept="image/*" #fileInputImage (change)="onChooseTeamImage($event)"
+        id="file1" />
+      <button type="button" (click)="fileInputLogo.click()" class="buttonText secondaryButton wider">
         Upload Team Logo
       </button>
-      <input
-        hidden
-        type="file"
-        name="fileInput2"
-        accept="image/*"
-        #fileInputLogo
-        (change)="onChooseTeamLogoImage($event)"
-        id="file2"
-      />
-      <button
-        [disabled]="!file1Selected || !file2Selected"
-        (click)="onSaveImages()"
-        class="primaryButton buttonText"
-        type="button"
-      >
+      <input hidden type="file" name="fileInput2" accept="image/*" #fileInputLogo
+        (change)="onChooseTeamLogoImage($event)" id="file2" />
+      <button [disabled]="!file1Selected || !file2Selected" (click)="onSaveImages()" class="primaryButton buttonText"
+        type="button">
         Save Changes
       </button>
     </div>
     <mat-divider></mat-divider>
 
     <p class="mat-body-1 top_padding">Team Social Media Links</p>
-    <form
-      [formGroup]="socialInfoForm"
-      (ngSubmit)="onSubmitTeamSocial()"
-      fxLayout="column"
-    >
+    <form [formGroup]="socialInfoForm" (ngSubmit)="onSubmitTeamSocial()" fxLayout="column">
       <mat-form-field color="primary">
         <span matPrefix>{{ ig }}</span>
         <input type="text" matInput name="ig" formControlName="ig" />
@@ -172,12 +106,8 @@
         <input type="text" matInput name="yt" formControlName="yt" />
       </mat-form-field>
       <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column">
-        <button
-          [disabled]="!socialInfoForm.valid && !socialInfoForm.dirty"
-          class="primaryButton buttonText"
-          type="button"
-          (click)="onSubmitTeamSocial()"
-        >
+        <button [disabled]="!socialInfoForm.valid && !socialInfoForm.dirty" class="primaryButton buttonText"
+          type="button" (click)="onSubmitTeamSocial()">
           Save Changes
         </button>
       </div>

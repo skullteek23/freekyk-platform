@@ -112,14 +112,15 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           });
         })
     );
+    this.initStatesList();
   }
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
-  onOpenStateList(): void {
-    this.states$ = this.locationServ.getStateByCountry('India');
+  initStatesList(): void {
+    this.states$ = this.locationServ.getStateByCountry();
   }
   onSelectState(selection: MatSelectChange): void {
     this.cities$ = this.locationServ.getCityByState(selection.value);
