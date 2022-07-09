@@ -58,7 +58,7 @@ export class AuthService {
         this.resetCurrentUser();
         sessionStorage.clear();
         localStorage.removeItem('uid');
-        console.log('logged out!');
+        // console.log('logged out!');
         this.onSuccesslogOut();
         location.href = '/';
       })
@@ -67,7 +67,7 @@ export class AuthService {
   public onForgotPassword(): void {
     this.forgotPassword()
       .then(() => {
-        console.log('password reset link sent!');
+        // console.log('password reset link sent!');
         this.snackServ.displayCustomMsgLong(
           'Password Reset link has been successfully sent! Please check your email'
         );
@@ -83,7 +83,7 @@ export class AuthService {
       ) {
         this.changePassword(newPass)
           .then(() => {
-            console.log('password changed!');
+            // console.log('password changed!');
             this.snackServ.displayCustomMsg(
               'Password updated succesfully! Please login again'
             );
@@ -105,7 +105,7 @@ export class AuthService {
       ) {
         this.changeEmail(newEmail)
           ?.then(() => {
-            console.log('email changed!');
+            // console.log('email changed!');
             this.snackServ.displayCustomMsg(
               'Email updated succesfully! Please login again'
             );
@@ -136,19 +136,19 @@ export class AuthService {
   }
   public getUID(): void {
     if (this.currentUser?.uid) {
-      console.log('uid recieved from service!');
+      // console.log('uid recieved from service!');
     }
     return this.currentUser?.uid;
   }
   public getEmail(): void {
     if (this.currentUser?.email) {
-      console.log('email recieved from service!');
+      // console.log('email recieved from service!');
     }
     return this.currentUser?.email;
   }
   public getName(): void {
     if (this.currentUser?.name) {
-      console.log('name recieved from service!');
+      // console.log('name recieved from service!');
     }
     return this.currentUser?.name;
   }

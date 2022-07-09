@@ -29,6 +29,6 @@ export class AccountAvatarService {
       dash: DashState;
     }>
   ) {
-    console.log('avatar service started');
+    // console.log('avatar service started');
   }
 }

@@ -76,7 +76,7 @@ export class LocationCitiesService implements OnDestroy {
     );
   }
   constructor(private http: HttpClient) {
-    console.log('location service started');
+    // console.log('location service started');
   }
   ngOnDestroy(): void {
     if (this.subscriptions) {

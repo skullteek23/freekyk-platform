@@ -51,9 +51,9 @@ export class TeamCommunicationService implements OnDestroy {
         const respSnap = this.ngFire
           .collection(
             'teamCommunications/' +
-              tid +
-              '/activeSquad' +
-              resp.currUpcomingMatchNo.toString()
+            tid +
+            '/activeSquad' +
+            resp.currUpcomingMatchNo.toString()
           )
           .doc(uid)
           .update({
@@ -69,12 +69,12 @@ export class TeamCommunicationService implements OnDestroy {
               content: pname + (response ? accept : deny),
               time: new Date().getTime(),
             };
-            console.log(log);
+            // console.log(log);
             this.updateTeamActivity(log, resp.currUpcomingMatchNo);
           })
           .then(() => this.snackServ.displaySent())
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             this.snackServ.displayError();
           });
       });
@@ -138,7 +138,7 @@ export class TeamCommunicationService implements OnDestroy {
       .valueChanges()
       .pipe(
         tap((resp: ActiveSquadMember[]) => {
-          console.log(resp);
+          // console.log(resp);
           this.setActiveSquad(resp);
         }),
         map((resp) => (resp ? true : false))
@@ -153,11 +153,11 @@ export class TeamCommunicationService implements OnDestroy {
     this.ngFireDb
       .list('teamActivity/' + tid + '/activity' + matchNo.toString())
       .push(content);
-    console.log(content);
+    // console.log(content);
   }
 
   ngOnDestroy(): void {
-    console.log('Comms service ended');
+    // console.log('Comms service ended');
   }
   constructor(
     private ngFire: AngularFirestore,
@@ -167,7 +167,7 @@ export class TeamCommunicationService implements OnDestroy {
     private store: Store<{ teamComms: TeamCommState }>,
     private store2: Store<{ team: TeamState }>
   ) {
-    console.log('Comms service started');
+    // console.log('Comms service started');
     const tid = sessionStorage.getItem('tid');
     if (!!tid) {
       this.getActiveSquad(0);

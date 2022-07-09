@@ -158,7 +158,7 @@ export class GenFixtService implements OnDestroy {
     overviews: MatchFixtureOverview[],
     lineups: MatchLineup[]
   ) {
-    console.log(fixtures);
+    // console.log(fixtures);
     var batch = this.ngFire.firestore.batch();
     for (let i = 0; i < fixtures.length; i++) {
       const colRef = this.ngFire
@@ -203,12 +203,12 @@ export class GenFixtService implements OnDestroy {
   }
   // private genFixtures(startdate: Date) {}
   ngOnDestroy() {
-    console.log('gen fixtures service ended');
+    // console.log('gen fixtures service ended');
   }
   constructor(
     private ngFunc: AngularFireFunctions,
     private ngFire: AngularFirestore
   ) {
-    console.log('gen fixtures service started');
+    // console.log('gen fixtures service started');
   }
 }

@@ -163,10 +163,10 @@ export class TeamService implements OnDestroy {
         map((docs) =>
           docs.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as Invite),
-              } as Invite)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as Invite),
+            } as Invite)
           )
         )
       );
@@ -356,7 +356,7 @@ export class TeamService implements OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    console.log('Team service ended');
+    // console.log('Team service ended');
   }
   constructor(
     private ngFire: AngularFirestore,
@@ -366,7 +366,7 @@ export class TeamService implements OnDestroy {
     private ngFunc: AngularFireFunctions,
     private router: Router
   ) {
-    console.log('Team service started');
+    // console.log('Team service started');
     store.select('dash').subscribe((val) => {
       if (val.hasTeam !== null) {
         sessionStorage.setItem('tid', val.hasTeam.id);
