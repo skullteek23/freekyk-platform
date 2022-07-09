@@ -119,7 +119,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     }
   }
   onOpenStateList(): void {
-    this.states$ = this.locationServ.getCityByState('India');
+    this.states$ = this.locationServ.getStateByCountry('India');
   }
   onSelectState(selection: MatSelectChange): void {
     this.cities$ = this.locationServ.getCityByState(selection.value);
