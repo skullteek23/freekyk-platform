@@ -1,80 +1,39 @@
 <!-- intro-section -->
 <div class="grey-bg">
-  <section
-    class="container product"
-    ngClass.lt-md="section-space-bottom"
-    fxLayout="column"
-    fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner"
-    fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="space-between center"
-    fxLayoutGap="20px"
-  >
-    <div
-      (click)="onEnlargePhoto()"
-      fxFlexOrder.gt-sm="2"
-      fxFlexOrder="1"
-      class="bannerPhoto"
-    >
-      <img
-        [src]="(teamInfo$ | async)?.imgpath"
-        [alt]="(teamInfo$ | async)?.tname"
-      />
+  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
+    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
+    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
+      <img [src]="(teamInfo$ | async)?.imgpath" [alt]="(teamInfo$ | async)?.tname" />
     </div>
 
-    <div
-      fxFlexOrder.gt-sm="1"
-      fxFlexOrder="2"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start"
-      ngClass.gt-sm="banner-text"
-    >
+    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
       <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
       Freekyk - India's No.1 Football Network
     </span> -->
-      <button
-        fxHide.lt-md="true"
-        [routerLink]="['/play', 'teams']"
-        mat-mini-fab
-        color="primary"
-        class="back-button"
-      >
+      <button fxHide.lt-md="true" [routerLink]="['/play', 'teams']" mat-mini-fab color="primary" class="back-button">
         <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
       </button>
-      <div
-        fxLayoutAlign.lt-md="center center"
-        fxLayoutAlign.gt-sm="center start"
-        fxLayout="column"
-      >
+      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
         <span class="overline align">Freekyk Team</span>
-        <div
-          fxLayoutGap="20px"
-          fxLayout.gt-sm="row"
-          fxLayout.lt-md="column"
-          fxLayoutAlign="center center"
-        >
+        <div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
           <div class="circle" fxLayoutAlign="center center">
             <img [src]="(teamInfo$ | async)?.imgpath_logo" alt="Logo" />
           </div>
-          <span
-            [ngClass]="{
+          <span [ngClass]="{
               shine: isLoading,
               _bar: isLoading,
               hideText: isLoading
-            }"
-            class="mat-title align"
-          >
+            }" class="mat-title align">
             {{ (teamInfo$ | async)?.tname }}
           </span>
         </div>
       </div>
 
-      <p
-        [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }"
-        class="mat-body-1 align"
-      >
-        {{ ((teamMoreInfo$ | async)?.tdesc | slice: 0:100) + "..." }}
+      <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">
+        {{
+        ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100
+        }}
       </p>
       <button (click)="onChallengeTeam()" class="primaryButton buttonText">
         Challenge Team
@@ -88,13 +47,10 @@
 <mat-tab-group class="container section-space-bottom">
   <mat-tab label="Overview">
     <ng-template matTabContent>
-      <app-te-overview
-        [data]="teamMoreInfo$ | async"
-        [loc]="{
+      <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{
           city: (teamInfo$ | async)?.locCity,
           state: (teamInfo$ | async)?.locState
-        }"
-      ></app-te-overview>
+        }"></app-te-overview>
     </ng-template>
   </mat-tab>
   <mat-tab label="Members">
