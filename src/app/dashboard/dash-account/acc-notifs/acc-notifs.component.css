@@ -1,5 +1,6 @@
 .cont {
   min-height: 100vh;
+  padding: 16px 20px;
 }
 .no-items {
   padding: 20px;
