@@ -12,15 +12,15 @@ export class AccountAvatarService {
   getProfilePicture(): Observable<any> {
     return this.store.select('dash').pipe(
       map((resp) => resp.playerBasicInfo.imgpath_sm),
-      mergeMap((val) => {
-        if (val) {
-          return of(val);
-        } else {
-          return this.authServ.userDataChanged.pipe(
-            map((user) => user?.imgpath)
-          );
-        }
-      })
+      // mergeMap((val) => {
+      //   if (val) {
+      //     return of(val);
+      //   } else {
+      //     return this.authServ.userDataChanged.pipe(
+      //       map((user) => user?.imgpath)
+      //     );
+      //   }
+      // })
     );
   }
   constructor(
