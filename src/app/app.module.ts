@@ -34,6 +34,7 @@ import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overvi
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { environment } from 'src/environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 // export function initializeApp1(afa: AngularFireAuth): any {
 //   return () => {
 //     return new Promise<void>((resolve) => {
@@ -73,6 +74,7 @@ import { environment } from 'src/environments/environment';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppMaterialModule,
     SharedModule,
     ReactiveFormsModule,
@@ -87,4 +89,4 @@ import { environment } from 'src/environments/environment';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

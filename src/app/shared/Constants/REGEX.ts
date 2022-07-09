@@ -23,4 +23,4 @@ export const URL: RegExp =
 
 export const PINCODE_INDIA = 'd{6}';
 
-export const BIO = '^[a-zA-Z0-9.! ]*$';
+export const BIO = '^[a-zA-Z0-9.!-,&()@* ]*$';

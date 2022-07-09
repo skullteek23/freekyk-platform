@@ -11,7 +11,9 @@ import {
   USER_EMAIL,
 } from '../shared/Constants/UNIVERSAL_TUTORIAL';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LocationCitiesService implements OnDestroy {
   private URL_AUTH = URL_AUTH;
   private URL_COUNTRIES = URL_COUNTRIES;
