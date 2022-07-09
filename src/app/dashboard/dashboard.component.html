@@ -1,35 +1,18 @@
 <!-- lg-screen-sidenav -->
 <mat-sidenav-container *ngIf="!onMobile">
-  <mat-sidenav
-    #sidenav
-    [(opened)]="sidenavOpenState"
-    [mode]="getMode()"
-    position="start"
-  >
-    <div
-      (window:resize)="onResizeScreen()"
-      fxLayoutAlign="center center"
-      fxLayout="column"
-    >
+  <mat-sidenav #sidenav [(opened)]="sidenavOpenState" [mode]="getMode()" position="start">
+    <div (window:resize)="onResizeScreen()" fxLayoutAlign="center center" fxLayout="column">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
         <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
-        <span class="mat-body-2"> {{ displayName | titlecase }} </span>
-        <a
-          *ngIf="(dataPos$ | async) == null; else plPos"
-          [routerLink]="['/dashboard', 'account', 'profile']"
-          class="mat-caption"
-        >
+        <span class="mat-body-2"> {{ dataName$ | async | titlecase }} </span>
+        <a *ngIf="(dataPos$ | async) == null; else plPos" [routerLink]="['/dashboard', 'account', 'profile']"
+          class="mat-caption">
           Add Playing Position
         </a>
         <ng-template #plPos>
           {{ dataPos$ | async }}
         </ng-template>
-        <button
-          class="sidenavCloseButton"
-          color="primary"
-          mat-icon-button
-          (click)="sidenav.close()"
-        >
+        <button class="sidenavCloseButton" color="primary" mat-icon-button (click)="sidenav.close()">
           <mat-icon class="material-icons-round">
             keyboard_arrow_left
           </mat-icon>
@@ -37,37 +20,21 @@
       </div>
       <mat-divider></mat-divider>
       <mat-nav-list>
-        <a
-          [routerLink]="['/dashboard', 'home']"
-          routerLinkActive="active"
-          mat-list-item
-        >
+        <a [routerLink]="['/dashboard', 'home']" routerLinkActive="active" mat-list-item>
           <span class="material-icons-round gap">dashboard</span>
           <span class="mat-body-1">Dashboard</span>
         </a>
-        <a
-          [routerLink]="['/dashboard', 'team-management']"
-          routerLinkActive="active"
-          mat-list-item
-        >
+        <a [routerLink]="['/dashboard', 'team-management']" routerLinkActive="active" mat-list-item>
           <span class="material-icons-round gap">groups</span>
           <span class="mat-body-1">Team Management</span>
         </a>
-        <a
-          [routerLink]="['/dashboard', 'participate']"
-          routerLinkActive="active"
-          mat-list-item
-        >
+        <a [routerLink]="['/dashboard', 'participate']" routerLinkActive="active" mat-list-item>
           <span class="material-icons-round gap">sports_soccer</span>
           <span class="mat-body-1">Participate</span>
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
-        <a
-          [routerLink]="['/dashboard', 'account', 'profile']"
-          routerLinkActive="active"
-          mat-list-item
-        >
+        <a [routerLink]="['/dashboard', 'account', 'profile']" routerLinkActive="active" mat-list-item>
           <span class="material-icons-round gap">settings</span>
           <span class="mat-body-1">Account & Settings</span>
         </a>
@@ -80,13 +47,8 @@
           <span class="mat-body-1 red">Logout</span>
         </a>
       </mat-nav-list>
-      <button
-        [routerLink]="['/dashboard', 'participate']"
-        class="buttonText primaryButton"
-        fxLayout="row"
-        fxLayoutAlign="center center"
-        fxLayoutGap="16px"
-      >
+      <button [routerLink]="['/dashboard', 'participate']" class="buttonText primaryButton" fxLayout="row"
+        fxLayoutAlign="center center" fxLayoutGap="16px">
         <span>{{ "Participate" }}</span>
       </button>
     </div>
@@ -94,13 +56,8 @@
 
   <mat-sidenav-content>
     <!-- small-sidepanel -->
-    <aside
-      fxFlex="56px"
-      class="sidepanel mat-elevation-z4"
-      fxLayoutAlign="start center"
-      fxLayout="column"
-      *ngIf="!sidenav.opened"
-    >
+    <aside fxFlex="56px" class="sidepanel mat-elevation-z4" fxLayoutAlign="start center" fxLayout="column"
+      *ngIf="!sidenav.opened">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
         <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <button color="primary" mat-icon-button (click)="sidenav.open()">
@@ -111,59 +68,29 @@
       </div>
       <mat-divider></mat-divider>
       <mat-nav-list>
-        <a
-          [routerLink]="['/dashboard', 'home']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-          matTooltip="Dashboard"
-        >
+        <a [routerLink]="['/dashboard', 'home']" routerLinkActive="router-link-active-md" mat-list-item
+          fxLayoutAlign="center center" matTooltip="Dashboard">
           <span class="material-icons-round">dashboard</span>
         </a>
-        <a
-          [routerLink]="['/dashboard', 'team-management']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-          matTooltip="Team Management"
-        >
+        <a [routerLink]="['/dashboard', 'team-management']" routerLinkActive="router-link-active-md" mat-list-item
+          fxLayoutAlign="center center" matTooltip="Team Management">
           <span class="material-icons-round">groups</span>
         </a>
-        <a
-          [routerLink]="['/dashboard', 'participate']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-          matTooltip="Participate"
-        >
+        <a [routerLink]="['/dashboard', 'participate']" routerLinkActive="router-link-active-md" mat-list-item
+          fxLayoutAlign="center center" matTooltip="Participate">
           <span class="material-icons-round">sports_soccer</span>
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
-        <a
-          [routerLink]="['/dashboard', 'account', 'profile']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-          matTooltip="Account & Settings"
-        >
+        <a [routerLink]="['/dashboard', 'account', 'profile']" routerLinkActive="router-link-active-md" mat-list-item
+          fxLayoutAlign="center center" matTooltip="Account & Settings">
           <span class="material-icons-round">settings</span>
         </a>
-        <a
-          [routerLink]="['/support']"
-          routerLinkActive="router-link-active-md"
-          mat-list-item
-          fxLayoutAlign="center center"
-          matTooltip="Support"
-        >
+        <a [routerLink]="['/support']" routerLinkActive="router-link-active-md" mat-list-item
+          fxLayoutAlign="center center" matTooltip="Support">
           <span class="material-icons-round">help_center</span>
         </a>
-        <a
-          matTooltip="Logout"
-          (click)="onLogout()"
-          mat-list-item
-          fxLayoutAlign="center center"
-        >
+        <a matTooltip="Logout" (click)="onLogout()" mat-list-item fxLayoutAlign="center center">
           <span class="material-icons-round red">exit_to_app</span>
         </a>
       </mat-nav-list>
@@ -192,54 +119,24 @@
 <!-- dashboard content outlet - 2 -->
 
 <!-- bottom-nav-xs-screen -->
-<mat-toolbar
-  *ngIf="onMobile"
-  fxHide.gt-sm="true"
-  class="bottom-nav"
-  color="primary"
-  fxLayoutAlign="space-evenly"
->
-  <a
-    [routerLink]="['/dashboard', 'home']"
-    routerLinkActive="router-link-active"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0"
-    matTooltip="Dashboard"
-  >
+<mat-toolbar *ngIf="onMobile" fxHide.gt-sm="true" class="bottom-nav" color="primary" fxLayoutAlign="space-evenly">
+  <a [routerLink]="['/dashboard', 'home']" routerLinkActive="router-link-active" fxLayout="column"
+    fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Dashboard">
     <span class="material-icons-round"> dashboard </span>
     <span class="mat-caption">Dashboard</span>
   </a>
-  <a
-    [routerLink]="['/dashboard', 'team-management']"
-    routerLinkActive="router-link-active"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0"
-    matTooltip="Team Management"
-  >
+  <a [routerLink]="['/dashboard', 'team-management']" routerLinkActive="router-link-active" fxLayout="column"
+    fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Team Management">
     <span class="material-icons-round"> groups </span>
     <span class="mat-caption">Team</span>
   </a>
-  <a
-    [routerLink]="['/dashboard', 'participate']"
-    routerLinkActive="router-link-active"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0"
-    matTooltip="Participate"
-  >
+  <a [routerLink]="['/dashboard', 'participate']" routerLinkActive="router-link-active" fxLayout="column"
+    fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Participate">
     <span class="material-icons-round">sports_soccer</span>
     <span class="mat-caption">Participate</span>
   </a>
-  <a
-    [routerLink]="['/support']"
-    routerLinkActive="router-link-active"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0"
-    matTooltip="Support"
-  >
+  <a [routerLink]="['/support']" routerLinkActive="router-link-active" fxLayout="column" fxLayoutAlign="center center"
+    fxLayoutGap="0" matTooltip="Support">
     <span class="material-icons-round"> help_outline </span>
     <span class="mat-caption">Support</span>
   </a>

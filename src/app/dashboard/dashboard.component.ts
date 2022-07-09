@@ -20,9 +20,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   watcher: Subscription;
   onMobile = false;
   screen = '';
-  displayName: string | null | undefined = null;
   dataImg$: Observable<string>;
   dataPos$: Observable<string>;
+  dataName$: Observable<string>;
   subscriptions = new Subscription();
   sidenavOpenState: boolean;
   constructor(
@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private store: Store<{
       dash: DashState;
     }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     if (window.location.href.endsWith('dashboard')) {
       this.router.navigate(['/dashboard/home']);
@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dataPos$ = this.store
       .select('dash')
       .pipe(map((resp) => resp.playerBasicInfo.pl_pos));
+    this.dataName$ = this.store
+      .select('dash')
+      .pipe(map((resp) => resp.playerBasicInfo.name || 'No Name'));
     this.subscriptions.add(
       this.mediaObs
         .asObservable()
@@ -66,16 +69,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
     );
-    this.subscriptions.add(
-      this.authServ.userDataChanged.pipe(take(2)).subscribe((user) => {
-        if (user != null) {
-          this.displayName = user?.name;
-          if (!this.displayName) {
-            this.displayName = sessionStorage.getItem('name');
-          }
-        }
-      })
-    );
+    // this.subscriptions.add(
+    //   this.authServ.userDataChanged.pipe(take(2)).subscribe((user) => {
+    //     console.log(user, 'user')
+    //     if (user != null) {
+    //       this.displayName = user?.name;
+    //       if (!this.displayName) {
+    //         this.displayName = sessionStorage.getItem('name');
+    //       }
+    //     }
+    //   })
+    // );
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
