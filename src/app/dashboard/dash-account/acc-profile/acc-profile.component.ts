@@ -73,7 +73,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService,
     private locationServ: LocationCitiesService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.initFormWithValues();
     this.countries$ = this.locationServ.getCountry();
@@ -141,7 +141,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.personalInfoForm = new FormGroup({
           name: new FormControl(
             data.playerBasicInfo.name,
-            Validators.pattern('^[a-zA-Z ]*$')
+            Validators.pattern('^[a-zA-Z0-9- ]*$')
           ),
           nickname: new FormControl(data.playerMoreInfo.nickname, [
             Validators.pattern('^[a-zA-Z ]*$'),
@@ -314,48 +314,61 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
   onSavePersonalInfo(): Promise<any> {
     if (this.personalInfoForm.dirty) {
-      const newDetails: {} = {
-        born: this.personalInfoForm.get('birthdate').value,
-        nickname: this.personalInfoForm.get('nickname').value,
-      };
-      const newBasicDetails: {} = {
-        gen: this.personalInfoForm.get('gender').value,
-      };
+      const newDetails: any = {};
+      if (this.personalInfoForm.get('birthdate').dirty && this.personalInfoForm.get('birthdate').value) {
+        newDetails.born = this.personalInfoForm.get('birthdate').value;
+      }
+      if (this.personalInfoForm.get('nickname').dirty && this.personalInfoForm.get('nickname').value) {
+        newDetails.nickname = this.personalInfoForm.get('nickname').value;
+      }
+      const newBasicDetails: any = {};
+      if (this.personalInfoForm.get('gender').dirty && this.personalInfoForm.get('gender').value) {
+        newBasicDetails.gen = this.personalInfoForm.get('gender').value;
+      }
+      if (this.personalInfoForm.get('name').dirty && this.personalInfoForm.get('name').value) {
+        newBasicDetails.name = this.personalInfoForm.get('name').value;
+      }
+
       const uid = localStorage.getItem('uid');
       const allPromises = [];
 
-      allPromises.push(
-        this.ngFire
-          .collection('players/' + uid + '/additionalInfo')
-          .doc('otherInfo')
-          .set(
-            {
-              ...newDetails,
-            },
-            { merge: true }
-          )
-      );
-      allPromises.push(
-        this.ngFire
-          .collection('players')
-          .doc(uid)
-          .update({
-            ...newBasicDetails,
-          })
-      );
-      allPromises.push(
-        this.ngFire
-          .collection('freestylers')
-          .doc(uid)
-          .update({
-            born: this.personalInfoForm.get('birthdate').value,
-            nickname: this.personalInfoForm.get('nickname').value,
-            gen: this.personalInfoForm.get('gender').value,
-          })
-      );
-      return Promise.all(allPromises).then(() =>
-        this.snackServ.displayCustomMsg('Updated Successfully!')
-      );
+      if (Object.keys(newDetails).length) {
+        allPromises.push(
+          this.ngFire
+            .collection('players/' + uid + '/additionalInfo')
+            .doc('otherInfo')
+            .set(
+              {
+                ...newDetails,
+              },
+              { merge: true }
+            )
+        );
+        if (Object.keys(newBasicDetails).length) {
+          allPromises.push(
+            this.ngFire
+              .collection('freestylers')
+              .doc(uid)
+              .update({
+                ...newDetails,
+                ...newBasicDetails
+              })
+          );
+          allPromises.push(
+            this.ngFire
+              .collection('players')
+              .doc(uid)
+              .update({
+                ...newBasicDetails,
+              })
+          );
+        }
+      }
+      if (allPromises.length) {
+        return Promise.all(allPromises).then(() =>
+          this.snackServ.displayCustomMsg('Updated Successfully!')
+        );
+      }
     }
     this.personalInfoForm.reset();
 
