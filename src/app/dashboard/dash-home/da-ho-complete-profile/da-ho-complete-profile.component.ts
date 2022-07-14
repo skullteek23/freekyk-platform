@@ -21,7 +21,7 @@ export class DaHoCompleteProfileComponent implements OnInit {
     private store: Store<{ dash: DashState }>,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const uid = localStorage.getItem('uid');
@@ -33,11 +33,11 @@ export class DaHoCompleteProfileComponent implements OnInit {
     this.data$ = this.store.select('dash').pipe(
       map(
         (resp) =>
-          ({
-            photo: !!resp.playerBasicInfo.imgpath_sm,
-            profile: !!resp.playerMoreInfo.profile,
-            team: !!resp.hasTeam,
-          } as { photo: boolean; profile: boolean; team: boolean })
+        ({
+          photo: !!resp.playerBasicInfo.imgpath_sm,
+          profile: !!resp.playerMoreInfo.profile,
+          team: !!resp.hasTeam,
+        } as { photo: boolean; profile: boolean; team: boolean })
       ),
       tap((resp) => {
         if (this.profileProgress <= 20) {
@@ -48,7 +48,10 @@ export class DaHoCompleteProfileComponent implements OnInit {
             this.profileProgress += this.profileShared ? 20 : 0;
           }
         }
-      })
+        if (this.profileProgress === 100) {
+          this.profileComplete.next(true);
+        }
+      }),
     );
   }
   onUploadProfilePhoto(): void {

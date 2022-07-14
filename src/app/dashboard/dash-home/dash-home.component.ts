@@ -21,6 +21,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   order1: string;
   order2: string;
   order3: string;
+  order4: string;
 
   constructor(
     private mediaObs: MediaObserver,
@@ -28,7 +29,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     private store: Store<{
       dash: DashState;
     }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -55,6 +56,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     this.order1 = '0';
     this.order2 = '1';
     this.order3 = '2';
+    this.order4 = '3';
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -62,8 +64,9 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   onComplete(ev: any): void {
     if (ev) {
       this.order1 = '1';
-      this.order2 = '2';
+      this.order2 = '3';
       this.order3 = '0';
+      this.order4 = '2';
     }
   }
   joinTeam(): void {
