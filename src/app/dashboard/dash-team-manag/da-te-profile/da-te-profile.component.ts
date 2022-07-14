@@ -30,7 +30,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private store: Store<AppState>,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -55,7 +55,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
               ),
               'team slogan': info.moreInfo.tslogan,
               description: info.moreInfo?.tdesc
-                ? info.moreInfo?.tdesc?.slice(0, 30) + '...'
+                ? info.moreInfo?.tdesc
                 : null,
             };
           })

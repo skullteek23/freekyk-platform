@@ -189,13 +189,13 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       // console.log(logo);
       // console.log(image);
       const newDetails: {} = {
-        tname: this.TeamInfoForm.value.name,
-        locState: this.TeamInfoForm.value.LocCity,
-        locCity: this.TeamInfoForm.value.LocState,
+        tname: this.TeamInfoForm.value.t_name,
+        locState: this.TeamInfoForm.value.t_LocCity,
+        locCity: this.TeamInfoForm.value.t_LocState,
       };
       const newMoreDetails: {} = {
-        tslogan: this.TeamInfoForm.value.slogan,
-        tdesc: this.TeamInfoForm.value.desc,
+        tslogan: this.TeamInfoForm.value.t_slogan,
+        tdesc: this.TeamInfoForm.value.t_desc,
       };
       const tid = sessionStorage.getItem('tid');
       const allPromises: any = [];
@@ -221,8 +221,8 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     }
   }
   onFinishOp(): void {
-    this.onCloseDialog();
     this.snackServ.displayCustomMsg('Updated Successfully!');
+    location.reload();
   }
   onSubmitTeamSocial(): void {
     // do something
