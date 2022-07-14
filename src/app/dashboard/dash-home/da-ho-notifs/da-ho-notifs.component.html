@@ -16,18 +16,10 @@
 </ng-template>
 
 <div class="cards-r" *ngIf="!isLoading; else loading" fxLayout="column">
-  <div
-    fxLayout
-    fxLayoutAlign="space-between center"
-    fxLayoutAlign.lt-md="center center"
-  >
+  <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Notification</span>
-    <a
-      [routerLink]="['/dashboard', 'account', 'notifications']"
-      fxHide.lt-md="true"
-      class="mat-caption sec-menu"
-      >All Feed</a
-    >
+    <a [routerLink]="['/dashboard', 'account', 'notifications']" fxHide.lt-md="true" class="mat-caption sec-menu">All
+      Feed</a>
   </div>
   <!-- list -->
   <ng-template #nonotif>
@@ -37,10 +29,8 @@
       </li>
     </ul>
   </ng-template>
-  <app-notifications-list
-    [data]="notifications$ | async"
-    *ngIf="!(noNotif$ | async) as val; else nonotif"
-  ></app-notifications-list>
+  <app-notifications-list [data]="notifications$ | async | slice:0:5" *ngIf="!(noNotif$ | async) as val; else nonotif">
+  </app-notifications-list>
   <!-- list -->
 </div>
 <!-- notifications section -->
