@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "freekyk-prod"
+  },
+  "targets": {
+    "freekyk-prod": {
+      "hosting": {
+        "football-platform-admin": [
+          "admin-freekyk"
+        ],
+        "football-platform": [
+          "freekyk-prod"
+        ]
+      }
+    }
   }
 }
