@@ -16,7 +16,7 @@ import { TeamMedia } from 'src/app/shared/interfaces/team.model';
 })
 export class TeamgalleryComponent implements OnInit {
   noGallery = false;
-  isLoading = true;
+  isLoading = false;
   teamGallery$: Observable<TeamMedia>;
   showEditButtons = false;
   newSub: Subscription;
@@ -26,7 +26,7 @@ export class TeamgalleryComponent implements OnInit {
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getGalleryPhotos();
@@ -35,6 +35,7 @@ export class TeamgalleryComponent implements OnInit {
     this.dialogRef.close();
   }
   async onChoosePhoto(ev: any): Promise<any> {
+    this.isLoading = true;
     const teamPhoto = ev.target.files[0];
     const tid = sessionStorage.getItem('tid');
     if (!!teamPhoto) {
@@ -59,11 +60,14 @@ export class TeamgalleryComponent implements OnInit {
               media: [url],
             });
         }
-        photoSnap.then(() => this.cleanUp('Photo uploaded successfully!'));
+        photoSnap
+          .then(() => this.cleanUp('Photo uploaded successfully!'))
+          .catch((err => this.snackServ.displayError()));
       });
     }
   }
   cleanUp(message: string): void {
+    this.isLoading = false;
     this.snackServ.displayCustomMsg(message);
     this.onCloseDialog();
   }
