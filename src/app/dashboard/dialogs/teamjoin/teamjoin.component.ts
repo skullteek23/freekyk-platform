@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 
@@ -17,7 +17,8 @@ import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 })
 export class TeamjoinComponent implements OnInit {
   @ViewChild('stepper') private myStepper: MatStepper;
-  teamsList$: Observable<TeamBasicInfo[]>;
+  teamsList$: Observable<ListOption[]>;
+  selectedTeams: ListOption[] = [];
   noTeams = false;
   moreSel = true;
   error = false;
@@ -37,11 +38,10 @@ export class TeamjoinComponent implements OnInit {
   onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onSubmit(plSelected: MatListOption[]): void {
+  onSubmit(plSelected: ListOption[]): void {
     this.myStepper.next();
     this.isStepOneComplete = true;
-    const capIds: string[] = plSelected.map((sel) => sel.value);
-    // console.log(capIds);
+    const capIds: string[] = plSelected.map((sel) => (sel.data as TeamBasicInfo).captainId);
     const userName = sessionStorage.getItem('name');
     if (this.sendRequests(capIds, userName)) {
       this.state = 'complete';
@@ -66,21 +66,28 @@ export class TeamjoinComponent implements OnInit {
       .collection('teams')
       .snapshotChanges()
       .pipe(
-        map((responseData) => {
-          if (responseData.length === 0) {
-            this.noTeams = true;
-            return null;
-          }
-          this.noTeams = false;
-          return responseData.map(
-            (data) =>
-            ({
-              id: data.payload.doc.id,
-              ...(data.payload.doc.data() as TeamBasicInfo),
-            } as TeamBasicInfo)
-          );
-        }),
-        share()
+        tap((resp) => (this.noTeams = resp.length === 0)),
+        map((docs) => {
+          const listOptions: ListOption[] = [];
+          docs.forEach(doc => {
+            const teamData = doc.payload.doc.data() as TeamBasicInfo;
+            const id = doc.payload.doc.id;
+            listOptions.push({
+              viewValue: teamData.tname,
+              data: ({ id, ...teamData } as TeamBasicInfo)
+            });
+          });
+          return listOptions;
+        })
       );
+  }
+
+  onAddSelection(value: ListOption): void {
+    if (this.selectedTeams.findIndex(team => team.viewValue === value.viewValue) === -1) {
+      this.selectedTeams.push(value);
+    }
+  }
+  onRemoveSelection(delIndex: number): void {
+    this.selectedTeams.splice(delIndex, 1);
   }
 }

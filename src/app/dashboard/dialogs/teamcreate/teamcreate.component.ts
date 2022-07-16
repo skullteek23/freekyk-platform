@@ -10,12 +10,12 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import {
   DEFAULT_TEAM_LOGO,
@@ -42,7 +42,8 @@ export class TeamcreateComponent implements OnInit {
   state2 = 'invites';
   searchPlayer = '';
   success = false;
-  players$: Observable<PlayerBasicInfo[]>;
+  players$: Observable<ListOption[]>;
+  selectedPlayers: ListOption[] = [];
   noPlayers = false;
   $teamPhoto: File;
   $teamLogo: File;
@@ -87,12 +88,12 @@ export class TeamcreateComponent implements OnInit {
       this.error = true;
     }
   }
-  onSubmitTwo(plSelected: MatListOption[]): void {
+  onSubmitTwo(plSelected: ListOption[]): void {
     this.myStepper.next();
     !this.file1Selected || !this.file2Selected
       ? this.createTeam(this.getDefaultTLogo(), this.getDefaultTPhoto())
       : this.createTeam(this.logoPath, this.imgPath);
-    this.createInvites(plSelected.map((sel) => sel.value));
+    this.createInvites(plSelected.map((sel: ListOption) => ({ name: sel.data.name, id: sel.data.id })));
     this.sendInvites();
     this.state2 = 'complete';
     this.error = false;
@@ -136,7 +137,7 @@ export class TeamcreateComponent implements OnInit {
       .then(() => {
         this.success = true;
         this.snackServ.displayCustomMsg('Invites sent successfully!');
-      })
+      });
     // .catch((error) => console.log(error));
   }
   validateTNameNotTaken(
@@ -185,17 +186,31 @@ export class TeamcreateComponent implements OnInit {
       .snapshotChanges()
       .pipe(
         tap((resp) => (this.noPlayers = resp.length === 0)),
-        map((docs) =>
-          docs.map(
-            (doc) =>
-            ({
-              id: doc.payload.doc.id,
-              ...(doc.payload.doc.data() as PlayerBasicInfo),
-            } as PlayerBasicInfo)
-          )
-        ),
-        map((docs) => docs.filter((doc) => doc.id !== uid)),
+        map((docs) => {
+          const listOptions: ListOption[] = [];
+          docs.forEach(doc => {
+            const playerData = doc.payload.doc.data() as PlayerBasicInfo;
+            const id = doc.payload.doc.id;
+            if (id !== uid) {
+              listOptions.push({
+                viewValue: `${playerData.name} | ${playerData.pl_pos || 'NA'}`,
+                data: ({ id, ...playerData } as PlayerBasicInfo)
+              });
+            }
+          });
+          return listOptions;
+        }),
         share()
       );
   }
+
+  onAddSelection(value: ListOption): void {
+    if (this.selectedPlayers.findIndex(player => player.viewValue === value.viewValue) === -1) {
+      this.selectedPlayers.push(value);
+    }
+  }
+  onRemoveSelection(delIndex: number): void {
+    this.selectedPlayers.splice(delIndex, 1);
+  }
+
 }
