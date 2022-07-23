@@ -34,6 +34,7 @@ export class GenFixtService implements OnDestroy {
     imgpath: null,
     locCity: null,
     locState: null,
+    p_teams: null,
     isParticipationClosed: false,
     premium: null,
     start_date: null,

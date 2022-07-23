@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
@@ -12,7 +13,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'admin';
   cols: number;
   watcher: Subscription;
-  constructor(private mediaObs: MediaObserver) {
+  constructor(private mediaObs: MediaObserver, private location: Location) {
     this.watcher = this.mediaObs
       .asObservable()
       .pipe(
@@ -29,7 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.location.go('/seasons');
+  }
   ngOnDestroy(): void {
     this.watcher.unsubscribe();
   }

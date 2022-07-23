@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { coupon } from '../../shared/interfaces/product.model';
+import { coupon } from 'src/app/shared/interfaces/product.model';
 
 @Component({
   selector: 'app-add-coupon',
@@ -29,7 +29,7 @@ export class AddCouponComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onSubmit() {
     this.saveFormToServer(this.coupForm.value);
   }

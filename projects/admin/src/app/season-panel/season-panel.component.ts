@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./season-panel.component.css'],
 })
 export class SeasonPanelComponent implements OnInit {
-  constructor() {}
-  ngOnInit() {}
+  constructor() { }
+  ngOnInit() {
+  }
 }

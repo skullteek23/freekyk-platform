@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { merge, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { forkJoin, merge, Observable } from 'rxjs';
 import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -14,13 +16,13 @@ export class ViewSeasonComponent implements OnInit {
   cols = [
     'sno',
     'season',
-    'confTeams',
-    'fixt',
-    'gallery',
-    'stats',
-    'terminate',
+    'actions',
+    // 'fixt',
+    // 'gallery',
+    // 'stats',
+    // 'terminate',
   ];
-  constructor(private ngFire: AngularFirestore) { }
+  constructor(private ngFire: AngularFirestore, private router: Router, private snackService: SnackbarService) { }
 
   ngOnInit(): void {
     this.ngFire
@@ -32,7 +34,6 @@ export class ViewSeasonComponent implements OnInit {
             (doc) =>
             ({
               id: doc.payload.doc.id,
-              participants: null,
               ...(doc.payload.doc.data() as SeasonBasicInfo),
             } as SeasonBasicInfo)
           )
@@ -40,19 +41,14 @@ export class ViewSeasonComponent implements OnInit {
       )
       .subscribe((resp) => (this.seasons = resp));
   }
-  onTerminateSeason(seasonid: string) {
-    // this.ngFire.collection('seasons').doc('')
+  onEditSeason(sid: string): void {
+    this.router.navigate(['/seasons', 'edit', sid]);
   }
-  onViewParticipants(seasonid: string): void {
-    // console.log(seasonid);
-    this.ngFire
-      .collection(`seasons/${seasonid}/participants`)
-      .valueChanges()
-      .pipe(map((resp) => (resp ? resp.length : 0)))
-      .subscribe((response) => {
-        this.seasons[
-          this.seasons.findIndex((val: SeasonBasicInfo) => val.id === seasonid)
-        ].participants = response;
-      });
+  onTerminateSeasons(sid: string): void {
+    forkJoin([this.ngFire.collection('seasons').doc(sid).delete(), this.ngFire.collection(`seasons/${sid}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
+      if (resp) {
+        this.snackService.displayCustomMsg('Season deleted successfully!');
+      }
+    })
   }
 }

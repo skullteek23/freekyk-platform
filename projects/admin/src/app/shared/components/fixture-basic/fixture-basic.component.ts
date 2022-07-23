@@ -2,11 +2,8 @@ import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
+import { MatchFixture, tempFullFixtureData } from 'src/app/shared/interfaces/match.model';
 import { MatchCardAdminComponent } from '../../../dialogs/match-card-admin/match-card-admin.component';
-import {
-  MatchFixture,
-  tempFullFixtureData,
-} from '../../interfaces/match.model';
 
 @Component({
   selector: 'app-fixture-basic',
@@ -21,8 +18,8 @@ export class FixtureBasicComponent implements OnInit, OnDestroy {
   @Output() adminData = new Subject<tempFullFixtureData>();
   adminSub: Subscription;
   todaysDate = new Date();
-  constructor(private dialog: MatDialog) {}
-  ngOnInit(): void {}
+  constructor(private dialog: MatDialog) { }
+  ngOnInit(): void { }
   ngOnDestroy() {
     if (this.adminSub) this.adminSub.unsubscribe();
   }

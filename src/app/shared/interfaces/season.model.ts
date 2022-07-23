@@ -4,6 +4,7 @@ export interface SeasonBasicInfo {
   locCity: string;
   locState: string;
   premium: boolean;
+  p_teams: number;
   start_date: Date;
   cont_tour: string[];
   isParticipationClosed: boolean;

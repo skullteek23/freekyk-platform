@@ -17,9 +17,9 @@ import {
 } from 'src/app/shared/interfaces/match.model';
 import { MatRadioChange } from '@angular/material/radio';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { SeasonBasicInfo } from '../../shared/interfaces/season.model';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
   selector: 'app-update-mr',

@@ -1,12 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import {
-  GroundBasicInfo,
-  GroundMoreInfo,
-} from 'src/app/shared/interfaces/ground.model';
-
-import firebase from 'firebase/app';
-import {
   NgForm,
   FormGroup,
   FormArray,

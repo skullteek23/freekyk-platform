@@ -6,6 +6,7 @@ import { MatchCardAdminComponent } from '../dialogs/match-card-admin/match-card-
 import { FixtureBasicComponent } from './components/fixture-basic/fixture-basic.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { NoItemsMessageComponent } from './components/no-items-message/no-items-message.component';
+import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { NoItemsMessageComponent } from './components/no-items-message/no-items-
     MatchCardAdminComponent,
     LoadingComponent,
     FixtureBasicComponent,
+    PhotoUploaderComponent
   ],
   imports: [CommonModule, AppMaterialModule, ReactiveFormsModule],
   exports: [
@@ -20,6 +22,7 @@ import { NoItemsMessageComponent } from './components/no-items-message/no-items-
     MatchCardAdminComponent,
     LoadingComponent,
     FixtureBasicComponent,
+    PhotoUploaderComponent
   ],
 })
-export class SharedAdminModule {}
+export class SharedAdminModule { }

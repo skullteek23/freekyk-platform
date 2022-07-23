@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { sellerInfo } from '../../shared/interfaces/product.model';
+import { sellerInfo } from 'src/app/shared/interfaces/product.model';
 
 @Component({
   selector: 'app-regi-seller',
@@ -46,7 +46,7 @@ export class RegiSellerComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onSubmit() {
     this.saveFormToServer(this.sellerForm.value);
   }

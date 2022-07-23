@@ -8,18 +8,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from 'projects/admin/src/app/app-material.module';
-import { AcademiesPanelComponent } from './academies-panel/academies-panel.component';
+// import { AcademiesPanelComponent } from './academies-panel/academies-panel.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ContestPanelComponent } from './contest-panel/contest-panel.component';
-import { AddCouponComponent } from './equipment-panel/add-coupon/add-coupon.component';
-import { AddProductComponent } from './equipment-panel/add-product/add-product.component';
-import { EquipmentPanelComponent } from './equipment-panel/equipment-panel.component';
-import { RegiSellerComponent } from './equipment-panel/regi-seller/regi-seller.component';
+// import { ContestPanelComponent } from './contest-panel/contest-panel.component';
+// import { AddCouponComponent } from './equipment-panel/add-coupon/add-coupon.component';
+// import { AddProductComponent } from './equipment-panel/add-product/add-product.component';
+// import { EquipmentPanelComponent } from './equipment-panel/equipment-panel.component';
+// import { RegiSellerComponent } from './equipment-panel/regi-seller/regi-seller.component';
 import { ErrorComponent } from './error/error.component';
-import { FreestylersPanelComponent } from './freestylers-panel/freestylers-panel.component';
-import { PlayersPanelComponent } from './players-panel/players-panel.component';
+// import { FreestylersPanelComponent } from './freestylers-panel/freestylers-panel.component';
+// import { PlayersPanelComponent } from './players-panel/players-panel.component';
 import { AddSeasonComponent } from './season-panel/add-season/add-season.component';
 import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
 import { GfGenFixturesComponent } from './season-panel/gen-fixtures/gf-gen-fixtures/gf-gen-fixtures.component';
@@ -29,25 +29,25 @@ import { SeasonPanelComponent } from './season-panel/season-panel.component';
 import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
 import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
 import { SharedAdminModule } from './shared/shared-admin.module';
-import { TeamsPanelComponent } from './teams-panel/teams-panel.component';
-import { TicketViewerComponent } from './ticket-viewer/ticket-viewer.component';
-import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
-import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
-import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
+// import { TeamsPanelComponent } from './teams-panel/teams-panel.component';
+// import { TicketViewerComponent } from './ticket-viewer/ticket-viewer.component';
+// import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
+// import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
+// import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AcademiesPanelComponent,
+    // AcademiesPanelComponent,
     AdminHomeComponent,
-    ContestPanelComponent,
-    EquipmentPanelComponent,
-    FreestylersPanelComponent,
-    PlayersPanelComponent,
-    TicketsPanelComponent,
-    TicketViewerComponent,
-    TeamsPanelComponent,
+    // ContestPanelComponent,
+    // EquipmentPanelComponent,
+    // FreestylersPanelComponent,
+    // PlayersPanelComponent,
+    // TicketsPanelComponent,
+    // TicketViewerComponent,
+    // TeamsPanelComponent,
     SeasonPanelComponent,
     AddSeasonComponent,
     GenFixturesComponent,
@@ -56,12 +56,12 @@ import { environment } from 'src/environments/environment';
     GfGenFixturesComponent,
     GfSelGroundComponent,
     GfSelSeasonComponent,
-    AddCouponComponent,
-    AddProductComponent,
-    RegiSellerComponent,
+    // AddCouponComponent,
+    // AddProductComponent,
+    // RegiSellerComponent,
     ErrorComponent,
-    AddGalleryComponent,
-    GroundsPanelComponent,
+    // AddGalleryComponent,
+    // GroundsPanelComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,4 +80,4 @@ import { environment } from 'src/environments/environment';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
