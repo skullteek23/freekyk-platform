@@ -141,7 +141,7 @@ export class AddSeasonComponent implements OnInit {
       premium: formData['premium'],
       p_teams: formData['p_teams'],
       start_date: formData['start_date'],
-      isParticipationClosed: false,
+      isSeasonStarted: false,
       cont_tour: formData['cont_tour'],
       id: newSeasonId,
     };
@@ -177,7 +177,7 @@ export class AddSeasonComponent implements OnInit {
     const formData = form.value;
     const newSeasonId = this.newSeasonId;
     const newSeason = {
-      isParticipationClosed: false,
+      isSeasonStarted: false,
       id: newSeasonId,
     }
     const newSeasonMore = {};

@@ -35,7 +35,7 @@ export class GenFixtService implements OnDestroy {
     locCity: null,
     locState: null,
     p_teams: null,
-    isParticipationClosed: false,
+    isSeasonStarted: false,
     premium: null,
     start_date: null,
     cont_tour: null,

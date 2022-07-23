@@ -7,3 +7,8 @@
 .mat-column-sno {
   text-align: center;
 }
+
+a.disabled {
+  cursor: not-allowed !important;
+  color: grey !important;
+}

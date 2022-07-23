@@ -1,95 +1,44 @@
 <!-- intro-section -->
 <div class="grey-bg">
-  <section
-    class="container product"
-    ngClass.lt-md="section-space-bottom"
-    fxLayout="column"
-    fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner"
-    fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="space-between center"
-    fxLayoutGap="20px"
-  >
-    <div
-      (click)="onEnlargePhoto()"
-      fxFlexOrder.gt-sm="2"
-      fxFlexOrder="1"
-      class="bannerPhoto"
-    >
-      <img
-        [src]="(seasonInfo$ | async)?.imgpath"
-        [alt]="(seasonInfo$ | async)?.name"
-      />
+  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
+    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
+    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
+      <img [src]="(seasonInfo$ | async)?.imgpath" [alt]="(seasonInfo$ | async)?.name" />
     </div>
 
-    <div
-      fxFlexOrder.gt-sm="1"
-      fxFlexOrder="2"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start"
-      ngClass.gt-sm="banner-text"
-    >
+    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
       <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
       Freekyk - India's No.1 Football Network
     </span> -->
-      <button
-        fxHide.lt-md="true"
-        [routerLink]="['/play', 'seasons']"
-        mat-mini-fab
-        color="primary"
-        class="back-button"
-      >
+      <button fxHide.lt-md="true" [routerLink]="['/play', 'seasons']" mat-mini-fab color="primary" class="back-button">
         <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
       </button>
-      <div
-        fxLayoutAlign.lt-md="center center"
-        fxLayoutAlign.gt-sm="center start"
-        fxLayout="column"
-      >
+      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
         <span class="overline align">Freekyk Season</span>
-        <span
-          class="mat-title align"
-          [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }"
-          >{{ (seasonInfo$ | async)?.name }}</span
-        >
+        <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
+          (seasonInfo$ | async)?.name }}</span>
       </div>
 
-      <p
-        class="mat-body-1 align"
-        [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }"
-      >
+      <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p>
-      <div
-        fxLayout.lt-md="column"
-        fxLayoutAlign="center start"
-        fxLayoutGap="16px"
-      >
-        <button
-          (click)="onParticipate()"
-          class="primaryButton buttonText"
-          [disabled]="(seasonInfo$ | async)?.isParticipationClosed"
-        >
+      <div fxLayout.lt-md="column" fxLayoutAlign="center start" fxLayoutGap="16px">
+        <button (click)="onParticipate()" class="primaryButton buttonText"
+          [disabled]="(seasonInfo$ | async)?.isSeasonStarted">
           <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span
-              [matTooltip]="
-                (seasonInfo$ | async)?.isParticipationClosed
+            <span [matTooltip]="
+                (seasonInfo$ | async)?.isSeasonStarted
                   ? 'Participation closed'
                   : 'Participate in season'
-              "
-              >Participate</span
-            >
+              ">Participate</span>
             <!-- <span *ngIf="isLocked$ | async" class="material-icons-round">
               lock
             </span> -->
           </div>
         </button>
-        <button
-          [routerLink]="['/play', 'standings']"
-          [queryParams]="{ s: seasonName }"
-          class="primaryButton buttonText"
-        >
+        <button [routerLink]="['/play', 'standings']" [queryParams]="{ s: seasonName }"
+          class="primaryButton buttonText">
           Go to standings
         </button>
       </div>
@@ -112,14 +61,10 @@
 <mat-tab-group class="container section-space-bottom">
   <mat-tab label="Overview">
     <ng-template matTabContent>
-      <app-se-overview
-        [seasonId]="sid"
-        [venue]="{
+      <app-se-overview [seasonId]="sid" [venue]="{
           city: (seasonInfo$ | async)?.locCity,
           state: (seasonInfo$ | async)?.locState
-        }"
-        [data]="seasonMoreInfo$ | async"
-      ></app-se-overview>
+        }" [data]="seasonMoreInfo$ | async"></app-se-overview>
     </ng-template>
   </mat-tab>
   <mat-tab label="Gallery">

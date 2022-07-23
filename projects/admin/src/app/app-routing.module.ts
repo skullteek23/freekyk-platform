@@ -30,7 +30,7 @@ const routes: Routes = [
           { path: '', component: ViewSeasonComponent },
           { path: 'add', component: AddSeasonComponent },
           { path: 'edit/:sid', component: AddSeasonComponent },
-          { path: 'update', component: UpdateMrComponent },
+          { path: 'update/:sid', component: UpdateMrComponent },
           { path: 'generate', component: GenFixturesComponent },
           { path: 'gallery', component: GenFixturesComponent },
         ],

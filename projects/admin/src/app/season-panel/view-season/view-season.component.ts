@@ -17,7 +17,7 @@ export class ViewSeasonComponent implements OnInit {
     'sno',
     'season',
     'actions',
-    // 'fixt',
+    // 'fixtures',
     // 'gallery',
     // 'stats',
     // 'terminate',
@@ -41,14 +41,32 @@ export class ViewSeasonComponent implements OnInit {
       )
       .subscribe((resp) => (this.seasons = resp));
   }
-  onEditSeason(sid: string): void {
-    this.router.navigate(['/seasons', 'edit', sid]);
+  onEditSeason(season: SeasonBasicInfo): void {
+    if (!season.isSeasonStarted) {
+      this.router.navigate(['/seasons', 'edit', season.id]);
+    }
   }
-  onTerminateSeasons(sid: string): void {
-    forkJoin([this.ngFire.collection('seasons').doc(sid).delete(), this.ngFire.collection(`seasons/${sid}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
-      if (resp) {
-        this.snackService.displayCustomMsg('Season deleted successfully!');
-      }
-    })
+  onTerminateSeasons(season: SeasonBasicInfo): void {
+    if (!season.isSeasonStarted) {
+      forkJoin([this.ngFire.collection('seasons').doc(season.id).delete(), this.ngFire.collection(`seasons/${season.id}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
+        if (resp) {
+          this.snackService.displayCustomMsg('Season deleted successfully!');
+        }
+      })
+    }
+  }
+
+  onSetFixtures(season: SeasonBasicInfo) {
+    if (!season.isSeasonStarted) {
+      this.router.navigate(['/seasons', 'fixtures', season.id]);
+    }
+  }
+  onAddGallery(sid: string) {
+    this.router.navigate(['/seasons', 'gallery', sid]);
+  }
+  onUpdateMatchReport(season: SeasonBasicInfo) {
+    if (season.isSeasonStarted) {
+      this.router.navigate(['/seasons', 'update-match', season.id]);
+    }
   }
 }
