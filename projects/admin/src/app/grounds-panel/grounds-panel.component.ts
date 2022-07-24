@@ -127,6 +127,8 @@ export class GroundsPanelComponent implements OnInit {
       signedContractFileLink: this.groundForm.value['contractFilePath'],
       locState: this.groundForm.value['locState'],
       locCity: this.groundForm.value['locCity'],
+      contractStartDate: this.groundForm.value['contractStartDate'],
+      contractEndDate: this.groundForm.value['contractEndDate'],
       timings: this.timingsPreferences
     }
     let AllPromises = [];

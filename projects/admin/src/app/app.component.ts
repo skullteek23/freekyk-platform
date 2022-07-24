@@ -35,11 +35,11 @@ export class AppComponent implements OnInit, OnDestroy {
           this.cols = 3;
         }
       }));
-    this.watcher.add(this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationEnd) {
-        this.activeLink = event.url.slice('/'.length);
-      }
-    }))
+    // this.watcher.add(this.router.events.subscribe((event: any) => {
+    //   if (event instanceof NavigationEnd) {
+    //     this.activeLink = event.url.slice('/'.length);
+    //   }
+    // }))
   }
   ngOnInit(): void {
     this.router.navigate(['/seasons']);

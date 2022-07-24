@@ -3,7 +3,7 @@
   </span></div>
 <mat-horizontal-stepper #stepper [linear]="true">
   <mat-step label="Add Season" #first [completed]="true"></mat-step>
-  <mat-step label="Select Ground" #second [stepControl]="groundsForm">
+  <mat-step label="Select Ground" #second>
     <ng-container *ngIf="stepper.selected == second">
       <div class="container">
         <ul class="info-container">
@@ -12,9 +12,9 @@
               <span class="mat-body"> Tournaments & Matches to be held</span>
               <span class="mat-body-2">
                 <ul class="matches-container">
-                  <li class="mat-body-2">{{'0'}} FKC</li>
-                  <li class="mat-body-2">{{'0'}} FCP</li>
-                  <li class="mat-body-2">{{'0'}} FPL</li>
+                  <li class="mat-body-2">{{totalMatches.fkc}} FKC</li>
+                  <li class="mat-body-2">{{totalMatches.fpl}} FCP</li>
+                  <li class="mat-body-2">{{totalMatches.fcp}} FPL</li>
                 </ul>
               </span>
             </div>
@@ -36,8 +36,8 @@
                 <span class="mat-body">
                   {{ ground.name }}
                 </span>
-                <span class="mat-body grey" [matTooltip]="getAvDays(ground.timings)">
-                  {{ " | " + "available on " + getAvDays(ground.timings) }}
+                <span class="mat-body grey" [matTooltip]="getAvailableDays(ground.timings)">
+                  {{ " | " + "available on " + getAvailableDays(ground.timings) }}
                 </span>
               </div>
             </mat-list-option>
