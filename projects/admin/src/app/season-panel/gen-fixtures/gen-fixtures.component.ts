@@ -6,7 +6,7 @@ import { Observable, } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
-import { GenFixtService } from './gen-fixt.service';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -44,27 +44,46 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
           start_date: new Date(this.seasonData.start_date['seconds'] * 1000)
         }
         this.isLoading = false;
-        this.getGrounds(this.seasonData.locState, this.seasonData.locCity);
+        this.calculateTournaments(this.seasonData.p_teams);
+        this.getGrounds();
       }))
     }
   }
 
   ngOnDestroy(): void { }
 
-  ngOnInit(): void {
-    this.totalMatches = {
-      fkc: 0, fcp: 0, fpl: 0
-    }
-  }
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.Stepper.next();
   }
 
-  getGrounds(state: string, city: string) {
+  calculateTournaments(participatingTeams: number) {
+    if (participatingTeams === 2) {
+      this.totalMatches = {
+        fkc: 0,
+        fcp: 1,
+        fpl: 0
+      }
+    } else if (participatingTeams % 4 === 0) {
+      this.totalMatches = {
+        fkc: 1,
+        fcp: participatingTeams / 2,
+        fpl: 1
+      }
+    } else {
+      this.totalMatches = {
+        fkc: 0,
+        fcp: participatingTeams / 2,
+        fpl: 1
+      }
+    }
+  }
+
+  getGrounds() {
     this.grInfo$ = this.ngFire
       .collection('groundsPvt', (query) =>
-        query.where('locState', '==', state).where('locCity', '==', city).where('contractStartDate', '>=', this.seasonData.start_date)
+        query.where('locState', '==', this.seasonData.locState).where('locCity', '==', this.seasonData.locCity).where('contractStartDate', '<', this.seasonData.start_date)
       )
       .get()
       .pipe(
@@ -75,8 +94,12 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   getAvailableDays(timings: {}) {
     const availDays: string[] = [];
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    for (let i = 0; i < days.length; i++)
-      if (timings.hasOwnProperty(i)) availDays.push(days[i]);
-    return availDays.join(', ');
+    for (let i = 0; i < days.length; i++) {
+      if (timings.hasOwnProperty(i)) {
+        availDays.push(days[i]);
+      }
+    }
+    const lastElement = availDays.splice(availDays.length - 1, 1)
+    return availDays.slice().join(', ').concat(' & ').concat(lastElement[0]);
   }
 }

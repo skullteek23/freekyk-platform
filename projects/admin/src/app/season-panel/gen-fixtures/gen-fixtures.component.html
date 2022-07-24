@@ -13,8 +13,8 @@
               <span class="mat-body-2">
                 <ul class="matches-container">
                   <li class="mat-body-2">{{totalMatches.fkc}} FKC</li>
-                  <li class="mat-body-2">{{totalMatches.fpl}} FCP</li>
-                  <li class="mat-body-2">{{totalMatches.fcp}} FPL</li>
+                  <li class="mat-body-2">{{totalMatches.fcp}} FCP</li>
+                  <li class="mat-body-2">{{totalMatches.fpl}} FPL</li>
                 </ul>
               </span>
             </div>
@@ -37,7 +37,7 @@
                   {{ ground.name }}
                 </span>
                 <span class="mat-body grey" [matTooltip]="getAvailableDays(ground.timings)">
-                  {{ " | " + "available on " + getAvailableDays(ground.timings) }}
+                  {{ " | " + "Available on " + getAvailableDays(ground.timings) }}
                 </span>
               </div>
             </mat-list-option>
@@ -49,7 +49,6 @@
           </div>
         </div>
       </div>
-      <!-- <app-gf-sel-ground></app-gf-sel-ground> -->
     </ng-container>
   </mat-step>
   <mat-step label="Generate Fixtures" #third>
