@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  NgForm,
-  FormGroup,
-  FormArray,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { NgForm, FormGroup, FormControl, Validators, } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { GroundBasicInfo, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { DAYS_LIST, GROUND_HOURS } from '../shared/constants/constants';
 @Component({
   selector: 'app-grounds-panel',
   templateUrl: './grounds-panel.component.html',
@@ -14,164 +13,149 @@ import {
 })
 export class GroundsPanelComponent implements OnInit {
   @ViewChild('RegisterGroundForm') tForm: NgForm;
+  days = DAYS_LIST;
+  startDateValue: Date;
   Rform: FormGroup;
+  defaultImage =
+    'https://images.unsplash.com/photo-1516676324900-a8c0c01caa33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
   totalHours: number;
   doIt: boolean;
   isSubmitted;
   err;
   groundAdded: boolean;
-  allTimingSlot_array: string[] = [
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-  ];
-  days_array = [
-    {
-      day_name: 'Sunday',
-      day_num: '0',
-    },
-    {
-      day_name: 'Monday',
-      day_num: '1',
-    },
-    {
-      day_name: 'Tuesday',
-      day_num: '2',
-    },
-    {
-      day_name: 'Wednesday',
-      day_num: '3',
-    },
-    {
-      day_name: 'Thursday',
-      day_num: '4',
-    },
-    {
-      day_name: 'Friday',
-      day_num: '5',
-    },
-    {
-      day_name: 'Saturday',
-      day_num: '6',
-    },
-  ];
-  statesInfo = [];
-  cityInfo = [];
-  constructor(private ngfirestore: AngularFirestore) {
-    this.Rform = new FormGroup({
-      0: new FormArray([]),
-      1: new FormArray([]),
-      2: new FormArray([]),
-      3: new FormArray([]),
-      4: new FormArray([]),
-      5: new FormArray([]),
-      6: new FormArray([]),
-    });
+  isLoading = false;
+  groundTypes = ['public', 'private']
+  timingsPreferences = {};
+  hours: number[] = GROUND_HOURS;
+  dayArrayMap = new Map<string, number>();
+  groundForm: FormGroup = new FormGroup({});
+  timingsForm: FormGroup = new FormGroup({});
+  cities = ['Ghaziabad'];
+  states = ['Uttar Pradesh'];
+  todayDate = new Date();
+  contractFileName: any;
+  imgUploadFile$: File = null;
+  contractFile$: File = null;
+  timingsArray: any[] = [];
+  constructor(
+    private ngStorage: AngularFireStorage,
+    private ngFire: AngularFirestore,
+    private snackServ: SnackbarService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.groundForm = new FormGroup({
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[A-Za-z0-9 _-]*$'),
+        Validators.maxLength(50),
+      ]),
+      imgpath: new FormControl(this.defaultImage),
+      type: new FormControl('public', Validators.required),
+      locState: new FormControl(null, Validators.required),
+      locCity: new FormControl(null, Validators.required),
+      contractFilePath: new FormControl(null),
+      contractStartDate: new FormControl(null, Validators.required),
+      contractEndDate: new FormControl(null, Validators.required),
+    })
+    this.dayArrayMap.set('Sun', 0);
+    this.dayArrayMap.set('Mon', 1);
+    this.dayArrayMap.set('Tues', 2);
+    this.dayArrayMap.set('Wed', 3);
+    this.dayArrayMap.set('Thurs', 4);
+    this.dayArrayMap.set('Fri', 5);
+    this.dayArrayMap.set('Sat', 6);
+    this.timingsPreferences = {
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: [],
+      6: [],
+    }
   }
-
-  onAddPreference(day: string, timeSlot: string) {
-    const control = new FormControl(timeSlot, Validators.required);
-    const array_in_action = <FormArray>this.Rform.get(day);
-
-    array_in_action.push(control);
+  ngOnInit(): void { }
+  onSelectImageUpload($event: File) {
+    this.imgUploadFile$ = $event;
   }
-  // onRemovePreference(day: string, timeSlot: string) {
-  //   (<FormArray>this.Rform.get(day)).removeAt;
-  // }
-  onClearPreferences(day: string) {
-    (<FormArray>this.Rform.get(day)).clear();
+  onSelectFileUpload(ev: File) {
+    this.contractFileName = ev.name;
+    this.contractFile$ = ev;
   }
-  onClearAllPreferences() {
-    this.days_array.forEach((day) => {
-      (<FormArray>this.Rform.get(day.day_num)).clear();
-    });
-  }
-  onSubmitForm(form: NgForm) {
-    const newGroundsId = this.ngfirestore.createId();
-    const newGroundData = {
-      groundId: newGroundsId,
-      groundName: form.value['groundName'],
-      groundLocationState: form.value['groundLocationState'],
-      groundLocationCity: form.value['groundLocationCity'],
-      groundAvailability: true,
-      groungType: form.value['groungType'],
-      groundImgpath: form.value['groundImgpath'],
-      groundCharges: form.value['groundCharges'],
-      signedContractFileLink: form.value['signedContractFileLink'],
-      contractstartdate: form.value['contractstartdate'],
-      contractenddate: form.value['contractenddate'],
-      groundRepresentative: {
-        name: form.value['gname'],
-        contactNumber: form.value['gcontactNumber'],
-        email: form.value['gemail'],
-        designation: form.value['gdesignation'],
-      },
-      freekykRepresentative: {
-        name: form.value['fname'],
-        contactNumber: form.value['fcontactNumber'],
-        email: form.value['femail'],
-        designation: form.value['fdesignation'],
-      },
-      timingsDetails: this.Rform.value,
-      totalAvailableHours: this.totalHours,
-    };
-    // console.log(newGroundData);
-    this.ngfirestore
-      .collection('grounds')
-      .doc(newGroundsId)
-      .set(newGroundData)
-      .then(() => {
-        this.groundAdded = true;
-        this.err = false;
-        this.onClearForm();
-      })
-      .catch((error) => {
-        // console.log(error);
-        this.err = true;
-        this.groundAdded = false;
-        this.onClearForm();
+  async onSubmitDetails() {
+    if (this.isSubmitDisabled) {
+      return;
+    }
+    this.isLoading = true;
+    const uploadSnap1 = (await this.ngStorage.upload(
+      '/groundImages/' + Math.random() + this.imgUploadFile$.name,
+      this.imgUploadFile$
+    )).ref.getDownloadURL();
+    const uploadSnap2 = (await this.ngStorage.upload(
+      '/groundContracts/' + Math.random() + this.contractFile$.name,
+      this.contractFile$
+    )).ref.getDownloadURL();
+    const AllPromises = [uploadSnap1, uploadSnap2];
+    Promise.all(AllPromises).then(paths => {
+      this.groundForm.patchValue({
+        imgpath: paths[0],
+        contractFilePath: paths[1],
       });
+      this.saveFormToServer();
+    })
   }
-  getTimeSlot(timeSlot: string) {
-    if (+timeSlot == 12) return timeSlot + ':00 PM';
-    return +timeSlot > 12
-      ? (+timeSlot - 12).toString() + ':00 PM'
-      : timeSlot + ':00 AM';
+
+  saveFormToServer() {
+    for (const key in this.timingsPreferences) {
+      if ((this.timingsPreferences[key] as any[]).length === 0) {
+        delete this.timingsPreferences[key];
+      }
+    }
+    const newGroundId = this.ngFire.createId();
+    const newGround: GroundBasicInfo = {
+      name: this.groundForm.value['name'],
+      imgpath: this.groundForm.value['imgpath'],
+      locState: this.groundForm.value['locState'],
+      locCity: this.groundForm.value['locCity'],
+      fieldType: 'TURF',
+      own_type: this.groundForm.value['type'] === 'public' ? 'PUBLIC' : 'PRIVATE',
+      playLvl: 'best',
+    }
+    const privateInfo: GroundPrivateInfo = {
+      name: this.groundForm.value['name'],
+      signedContractFileLink: this.groundForm.value['contractFilePath'],
+      locState: this.groundForm.value['locState'],
+      locCity: this.groundForm.value['locCity'],
+      timings: this.timingsPreferences
+    }
+    let AllPromises = [];
+    AllPromises.push(this.ngFire.collection('grounds').doc(newGroundId).set(newGround))
+    AllPromises.push(this.ngFire.collection('groundsPvt').doc(newGroundId).set(privateInfo))
+    Promise.all(AllPromises).then(() => {
+      this.isLoading = false;
+      this.snackServ.displayCustomMsg('Ground added successfully!');
+      this.imgUploadFile$ = null;
+      this.contractFile$ = null;
+      // this.router.navigate(['/grounds', 'more', newGroundId])
+      this.router.navigate(['/seasons'])
+    })
   }
-  onClearForm() {
-    this.tForm.resetForm();
-    this.Rform.reset();
-    this.onClearAllPreferences();
+
+  isSelected(day: string, hour: number): boolean {
+    const dayStr = this.dayArrayMap.get(day);
+    return (this.timingsPreferences[dayStr] && (this.timingsPreferences[dayStr].findIndex(val => val === hour) > -1))
   }
-  ngOnInit(): void {
-    this.statesInfo = ['Uttar Pradesh'];
-    this.groundAdded = false;
+  onSelectBox(day: string, hour: number): void {
+    const dayStr = this.dayArrayMap.get(day);
+    const Index = (this.timingsPreferences[dayStr] as any[]).findIndex(val => val === hour)
+    if (this.timingsPreferences[dayStr] && Index === -1) {
+      (this.timingsPreferences[dayStr] as any[]).push(hour);
+    } else {
+      (this.timingsPreferences[dayStr] as any[]).splice(Index, 1)
+    }
   }
-  onChangeState(stateValue) {
-    this.cityInfo = ['Ghaziabad'];
-  }
-  getControls(day: string) {
-    return (<FormArray>this.Rform.get(day)).controls;
-  }
-  onSubmitPreferences() {
-    this.totalHours =
-      (<FormArray>this.Rform.get('0')).length +
-      (<FormArray>this.Rform.get('1')).length +
-      (<FormArray>this.Rform.get('2')).length +
-      (<FormArray>this.Rform.get('3')).length +
-      (<FormArray>this.Rform.get('4')).length +
-      (<FormArray>this.Rform.get('5')).length +
-      (<FormArray>this.Rform.get('6')).length;
+  get isSubmitDisabled(): boolean {
+    return (!this.groundForm.valid || !this.groundForm.dirty || this.isLoading || !(Object.values(this.timingsPreferences).some((val: any[]) => val.length)) || !this.imgUploadFile$ || !this.contractFile$);
   }
 }

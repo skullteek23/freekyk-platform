@@ -43,7 +43,7 @@ export class ViewSeasonComponent implements OnInit {
   }
   onEditSeason(season: SeasonBasicInfo): void {
     if (!season.isSeasonStarted) {
-      this.router.navigate(['/seasons', 'edit', season.id]);
+      this.router.navigate(['/seasons', 'edit', season.id], { queryParams: { 'name': season.name } });
     }
   }
   onTerminateSeasons(season: SeasonBasicInfo): void {
@@ -58,15 +58,15 @@ export class ViewSeasonComponent implements OnInit {
 
   onSetFixtures(season: SeasonBasicInfo) {
     if (!season.isSeasonStarted) {
-      this.router.navigate(['/seasons', 'fixtures', season.id]);
+      this.router.navigate(['/seasons', 'fixtures', season.id], { queryParams: { 'name': season.name } });
     }
   }
-  onAddGallery(sid: string) {
-    this.router.navigate(['/seasons', 'gallery', sid]);
+  onAddGallery(season: SeasonBasicInfo) {
+    this.router.navigate(['/seasons', 'gallery', season.id], { queryParams: { 'name': season.name } });
   }
   onUpdateMatchReport(season: SeasonBasicInfo) {
     if (season.isSeasonStarted) {
-      this.router.navigate(['/seasons', 'update-match', season.id]);
+      this.router.navigate(['/seasons', 'update-match', season.id], { queryParams: { 'name': season.name } });
     }
   }
 }

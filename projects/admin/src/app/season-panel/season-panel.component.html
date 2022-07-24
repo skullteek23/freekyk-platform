@@ -1,5 +1,5 @@
 <div class="container" fxLayoutGap="20px" fxLayout="column">
-  <div fxLayoutAlign="end center" class="button-container">
+  <div fxLayoutAlign="end center" class="button-container" *ngIf="isShowButton">
     <button [routerLink]="['/seasons/add']" class="primaryButton buttonText">
       Add a Season
     </button>

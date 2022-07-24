@@ -19,7 +19,7 @@
     <th mat-header-cell *matHeaderCellDef>Actions</th>
     <td mat-cell *matCellDef="let data">
       <div class="action-container" fxLayoutAlign="center center" fxLayoutGap="16px">
-        <a class="material-icons-round" (click)="onAddGallery(data.id)" matTooltip="Add Photos">
+        <a class="material-icons-round" (click)="onAddGallery(data)" matTooltip="Add Photos">
           collections
         </a>
         <a class="material-icons-round" [ngClass]="{disabled: !data.isSeasonStarted}"

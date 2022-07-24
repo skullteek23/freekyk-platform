@@ -33,7 +33,7 @@ import { SharedAdminModule } from './shared/shared-admin.module';
 // import { TicketViewerComponent } from './ticket-viewer/ticket-viewer.component';
 // import { TicketsPanelComponent } from './tickets-panel/tickets-panel.component';
 // import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
-// import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
+import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
@@ -61,7 +61,7 @@ import { environment } from 'src/environments/environment';
     // RegiSellerComponent,
     ErrorComponent,
     // AddGalleryComponent,
-    // GroundsPanelComponent,
+    GroundsPanelComponent,
   ],
   imports: [
     BrowserModule,

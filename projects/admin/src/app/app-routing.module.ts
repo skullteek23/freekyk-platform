@@ -9,6 +9,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 // import { EquipmentPanelComponent } from './equipment-panel/equipment-panel.component';
 // import { RegiSellerComponent } from './equipment-panel/regi-seller/regi-seller.component';
 import { ErrorComponent } from './error/error.component';
+import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 // import { FreestylersPanelComponent } from './freestylers-panel/freestylers-panel.component';
 // import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 // import { PlayersPanelComponent } from './players-panel/players-panel.component';
@@ -30,12 +31,13 @@ const routes: Routes = [
           { path: '', component: ViewSeasonComponent },
           { path: 'add', component: AddSeasonComponent },
           { path: 'edit/:sid', component: AddSeasonComponent },
-          { path: 'update/:sid', component: UpdateMrComponent },
-          { path: 'generate', component: GenFixturesComponent },
-          { path: 'gallery', component: GenFixturesComponent },
+          { path: 'fixtures/:sid', component: GenFixturesComponent },
+          // { path: 'update/:sid', component: UpdateMrComponent },
+          // { path: 'generate', component: GenFixturesComponent },
+          // { path: 'gallery', component: GenFixturesComponent },
         ],
       },
-      // { path: 'grounds', component: GroundsPanelComponent },
+      { path: 'grounds', component: GroundsPanelComponent },
     ]
   },
 
@@ -66,7 +68,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule { }

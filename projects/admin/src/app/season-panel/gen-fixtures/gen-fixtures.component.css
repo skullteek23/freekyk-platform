@@ -1,0 +1,34 @@
+ul.matches-container li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+ul.matches-container li:last-child {
+  display: inline-block;
+  margin-right: 0px !important;
+}
+
+ul.info-container li {
+  margin-bottom: 10px;
+}
+
+mat-selection-list {
+  min-height: 500px;
+  border: 1px solid var(--grey1);
+  border-radius: 20px;
+  margin: 16px 0;
+}
+
+.heading {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.grey {
+  color: var(--grey1);
+}
+
+.season-heading {
+  text-align: center;
+  margin-top: 16px;
+}

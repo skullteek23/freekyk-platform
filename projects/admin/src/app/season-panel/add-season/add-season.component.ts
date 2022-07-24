@@ -15,6 +15,7 @@ import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/p
 })
 export class AddSeasonComponent implements OnInit {
   seasonForm: FormGroup = new FormGroup({});
+  seasonName = '';
   defaultImage =
     'https://images.unsplash.com/photo-1516676324900-a8c0c01caa33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
   cities = ['Ghaziabad'];
@@ -26,6 +27,7 @@ export class AddSeasonComponent implements OnInit {
   todayDate = new Date();
   isLoading = false;
   newSeasonId: string = null;
+  isEditMode = false;
   @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
   constructor(
     private ngStorage: AngularFireStorage,
@@ -35,9 +37,15 @@ export class AddSeasonComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     const params = this.route.snapshot.params;
+    const qParams = this.route.snapshot.queryParams;
+    if (qParams && qParams.hasOwnProperty('name')) {
+      this.seasonName = qParams.name;
+    }
     if (params.hasOwnProperty('sid') && window.location.href.includes('edit') && params.sid) {
+      this.isEditMode = true;
       this.isLoading = true;
       this.newSeasonId = params.sid;
+
       forkJoin([ngFire.collection('seasons').doc(this.newSeasonId).get(), ngFire.collection(`seasons/${this.newSeasonId}/additionalInfo`).doc('moreInfo').get()]).subscribe((response => {
         const data = response[0].data() as SeasonBasicInfo;
         const moreData = response[1].data() as SeasonAbout;
@@ -45,6 +53,7 @@ export class AddSeasonComponent implements OnInit {
         this.isLoading = false;
       }))
     } else {
+      this.isEditMode = false;
       this.newSeasonId = null;
       this.initForm();
     }
@@ -81,7 +90,6 @@ export class AddSeasonComponent implements OnInit {
 
   initFormWithValues(data: SeasonBasicInfo, moreData: SeasonAbout) {
     data['start_date_toDate'] = new Date(data.start_date['seconds'] * 1000)
-    // data['startDate'] = data.start_date.seconds
     this.seasonForm = new FormGroup({
       name: new FormControl(data.name, [
         Validators.required,
@@ -116,7 +124,7 @@ export class AddSeasonComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    if (this.newSeasonId) {
+    if (this.newSeasonId && this.isEditMode) {
       this.updateInfo(this.seasonForm)
       return;
     }
@@ -170,7 +178,7 @@ export class AddSeasonComponent implements OnInit {
       if (this.photoUploaderComponent) {
         this.photoUploaderComponent.resetImage();
       }
-      this.router.navigate(['/seasons'])
+      this.router.navigate(['/seasons', 'fixtures', newSeasonId], { queryParams: { name: newSeason.name } })
     });
   }
   updateInfo(form: FormGroup) {

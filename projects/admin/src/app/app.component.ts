@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -12,9 +13,14 @@ import { filter, map } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'admin';
   cols: number;
-  watcher: Subscription;
-  constructor(private mediaObs: MediaObserver, private location: Location) {
-    this.watcher = this.mediaObs
+  watcher = new Subscription();
+  links: any[] = [
+    { name: 'seasons', route: 'seasons' },
+    { name: 'grounds', route: 'grounds' }
+  ];
+  activeLink = 'seasons';
+  constructor(private mediaObs: MediaObserver, private router: Router) {
+    this.watcher.add(this.mediaObs
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
@@ -28,12 +34,19 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           this.cols = 3;
         }
-      });
+      }));
+    this.watcher.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.activeLink = event.url.slice('/'.length);
+      }
+    }))
   }
   ngOnInit(): void {
-    this.location.go('/seasons');
+    this.router.navigate(['/seasons']);
   }
   ngOnDestroy(): void {
-    this.watcher.unsubscribe();
+    if (this.watcher) {
+      this.watcher.unsubscribe();
+    }
   }
 }

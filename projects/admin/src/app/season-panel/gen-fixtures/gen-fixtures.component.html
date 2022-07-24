@@ -1,17 +1,60 @@
-<mat-horizontal-stepper #stepper>
-  <mat-step label="Select Season" #first>
-    <ng-container *ngIf="stepper.selected == first || stepper.selected == null">
-      <app-gf-sel-season></app-gf-sel-season>
-    </ng-container>
-  </mat-step>
-  <mat-step label="Select Ground" #second>
+<div class="season-heading"><span class="mat-subheading-2">
+    {{seasonName}}
+  </span></div>
+<mat-horizontal-stepper #stepper [linear]="true">
+  <mat-step label="Add Season" #first [completed]="true"></mat-step>
+  <mat-step label="Select Ground" #second [stepControl]="groundsForm">
     <ng-container *ngIf="stepper.selected == second">
-      <app-gf-sel-ground></app-gf-sel-ground>
+      <div class="container">
+        <ul class="info-container">
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Tournaments & Matches to be held</span>
+              <span class="mat-body-2">
+                <ul class="matches-container">
+                  <li class="mat-body-2">{{'0'}} FKC</li>
+                  <li class="mat-body-2">{{'0'}} FCP</li>
+                  <li class="mat-body-2">{{'0'}} FPL</li>
+                </ul>
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Tournaments Start Date</span>
+              <span class="mat-body-2">
+                {{seasonData ? (seasonData.start_date | date:'fullDate') : 'NA'}}
+              </span>
+            </div>
+          </li>
+        </ul>
+        <div class="grounds-container">
+          <div class="heading"><span class="mat-body-2">Select venue ground(s) for the season: </span></div>
+          <mat-selection-list #list class="list" color="primary">
+            <mat-list-option [value]="ground" *ngFor="let ground of grInfo$ | async">
+              <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+                <span class="mat-body">
+                  {{ ground.name }}
+                </span>
+                <span class="mat-body grey" [matTooltip]="getAvDays(ground.timings)">
+                  {{ " | " + "available on " + getAvDays(ground.timings) }}
+                </span>
+              </div>
+            </mat-list-option>
+          </mat-selection-list>
+
+          <div fxLayoutAlign="center center">
+            <i>Ground not listed here?&nbsp;</i>
+            <a routerLink="/grounds"> Add here</a>
+          </div>
+        </div>
+      </div>
+      <!-- <app-gf-sel-ground></app-gf-sel-ground> -->
     </ng-container>
   </mat-step>
   <mat-step label="Generate Fixtures" #third>
     <ng-container *ngIf="stepper.selected == third">
-      <app-gf-gen-fixtures></app-gf-gen-fixtures>
+      <!-- <app-gf-gen-fixtures></app-gf-gen-fixtures> -->
     </ng-container>
   </mat-step>
 </mat-horizontal-stepper>
