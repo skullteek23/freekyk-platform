@@ -23,8 +23,6 @@ import { ErrorComponent } from './error/error.component';
 import { AddSeasonComponent } from './season-panel/add-season/add-season.component';
 import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
 import { GfGenFixturesComponent } from './season-panel/gen-fixtures/gf-gen-fixtures/gf-gen-fixtures.component';
-import { GfSelGroundComponent } from './season-panel/gen-fixtures/gf-sel-ground/gf-sel-ground.component';
-import { GfSelSeasonComponent } from './season-panel/gen-fixtures/gf-sel-season/gf-sel-season.component';
 import { SeasonPanelComponent } from './season-panel/season-panel.component';
 import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
 import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
@@ -54,8 +52,6 @@ import { environment } from 'src/environments/environment';
     UpdateMrComponent,
     ViewSeasonComponent,
     GfGenFixturesComponent,
-    GfSelGroundComponent,
-    GfSelSeasonComponent,
     // AddCouponComponent,
     // AddProductComponent,
     // RegiSellerComponent,

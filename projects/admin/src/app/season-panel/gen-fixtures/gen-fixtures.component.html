@@ -2,7 +2,11 @@
     {{seasonName}}
   </span></div>
 <mat-horizontal-stepper #stepper [linear]="true">
-  <mat-step label="Add Season" #first [completed]="true"></mat-step>
+  <mat-step label="Add Season" #first [completed]="true">
+    <!-- <ng-container *ngIf="stepper.selected == first">
+      <app-add-season (stepChange)="stepper.next()"></app-add-season>
+    </ng-container> -->
+  </mat-step>
   <mat-step label="Select Ground" #second>
     <ng-container *ngIf="stepper.selected == second">
       <div class="container">
@@ -29,8 +33,12 @@
           </li>
         </ul>
         <div class="grounds-container">
+          <div fxLayoutAlign="center center" class="heading">
+            <i>Ground not listed here?&nbsp;</i>
+            <a routerLink="/grounds"> Add here</a>
+          </div>
           <div class="heading"><span class="mat-body-2">Select venue ground(s) for the season: </span></div>
-          <mat-selection-list #list class="list" color="primary">
+          <mat-selection-list #groundsList class="list" color="primary">
             <mat-list-option [value]="ground" *ngFor="let ground of grInfo$ | async">
               <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
                 <span class="mat-body">
@@ -42,11 +50,10 @@
               </div>
             </mat-list-option>
           </mat-selection-list>
-
-          <div fxLayoutAlign="center center">
-            <i>Ground not listed here?&nbsp;</i>
-            <a routerLink="/grounds"> Add here</a>
-          </div>
+          <div fxLayoutAlign="end center"><button class="primaryButton buttonText"
+              [disabled]="!groundsList.selectedOptions.selected.length" (click)="stepper.next()">
+              Next
+            </button></div>
         </div>
       </div>
     </ng-container>

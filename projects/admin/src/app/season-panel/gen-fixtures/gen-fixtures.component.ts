@@ -44,7 +44,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
           start_date: new Date(this.seasonData.start_date['seconds'] * 1000)
         }
         this.isLoading = false;
-        this.calculateTournaments(this.seasonData.p_teams);
+        this.calculateTournaments(this.seasonData.p_teams, this.seasonData.cont_tour);
         this.getGrounds();
       }))
     }
@@ -58,26 +58,20 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.Stepper.next();
   }
 
-  calculateTournaments(participatingTeams: number) {
-    if (participatingTeams === 2) {
-      this.totalMatches = {
-        fkc: 0,
-        fcp: 1,
-        fpl: 0
-      }
-    } else if (participatingTeams % 4 === 0) {
-      this.totalMatches = {
-        fkc: 1,
-        fcp: participatingTeams / 2,
-        fpl: 1
-      }
-    } else {
-      this.totalMatches = {
-        fkc: 0,
-        fcp: participatingTeams / 2,
-        fpl: 1
-      }
+  calculateTournaments(participatingTeams: number, containingTournaments: string[]) {
+    let fkc = 0;
+    let fcp = 0;
+    let fpl = 0;
+    if (containingTournaments.includes('FCP')) {
+      fcp = participatingTeams === 2 ? 1 : participatingTeams / 2;
     }
+    if (containingTournaments.includes('FKC') && participatingTeams % 4 === 0) {
+      fkc = 1;
+    }
+    if (containingTournaments.includes('FPL') && participatingTeams > 2) {
+      fpl = 1;
+    }
+    this.totalMatches = { fkc, fcp, fpl };
   }
 
   getGrounds() {
