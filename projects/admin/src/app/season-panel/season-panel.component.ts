@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from "rxjs";
 import { filter } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './season-panel.component.html',
   styleUrls: ['./season-panel.component.css'],
 })
-export class SeasonPanelComponent implements OnInit, OnDestroy {
+export class SeasonPanelComponent implements OnDestroy {
   isShowButton = true;
   routeSubscription: Subscription;
   constructor(private router: Router) {
@@ -19,8 +19,6 @@ export class SeasonPanelComponent implements OnInit, OnDestroy {
       }
     });
 
-  }
-  ngOnInit() {
   }
   ngOnDestroy(): void {
     if (this.routeSubscription) {

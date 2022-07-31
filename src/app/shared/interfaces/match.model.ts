@@ -61,3 +61,15 @@ export interface tempFullFixtureData {
   overview: MatchFixtureOverview;
   lineup: MatchLineup;
 }
+export interface dummyFixture {
+  date: Date;
+  concluded: boolean;
+  season: string;
+  premium: boolean;
+  type: 'FKC' | 'FCP' | 'FPL';
+  locCity: string;
+  locState: string;
+  id?: string;
+  stadium?: string;
+  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
+}

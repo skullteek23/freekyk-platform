@@ -5,7 +5,7 @@ import { NgForm, FormGroup, FormControl, Validators, } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundBasicInfo, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
-import { DAYS_LIST, GROUND_HOURS } from '../shared/constants/constants';
+import { MatchConstants } from '../shared/constants/constants';
 @Component({
   selector: 'app-grounds-panel',
   templateUrl: './grounds-panel.component.html',
@@ -13,7 +13,7 @@ import { DAYS_LIST, GROUND_HOURS } from '../shared/constants/constants';
 })
 export class GroundsPanelComponent implements OnInit {
   @ViewChild('RegisterGroundForm') tForm: NgForm;
-  days = DAYS_LIST;
+  days = MatchConstants.DAYS_LIST;
   startDateValue: Date;
   Rform: FormGroup;
   defaultImage =
@@ -26,7 +26,7 @@ export class GroundsPanelComponent implements OnInit {
   isLoading = false;
   groundTypes = ['public', 'private']
   timingsPreferences = {};
-  hours: number[] = GROUND_HOURS;
+  hours: number[] = MatchConstants.GROUND_HOURS;
   dayArrayMap = new Map<string, number>();
   groundForm: FormGroup = new FormGroup({});
   timingsForm: FormGroup = new FormGroup({});
@@ -108,8 +108,11 @@ export class GroundsPanelComponent implements OnInit {
 
   saveFormToServer() {
     for (const key in this.timingsPreferences) {
-      if ((this.timingsPreferences[key] as any[]).length === 0) {
+      const dayTimings = this.timingsPreferences[key] as number[];
+      if (dayTimings.length === 0) {
         delete this.timingsPreferences[key];
+      } else {
+        this.timingsPreferences[key] = dayTimings.sort((a, b) => a - b);
       }
     }
     const newGroundId = this.ngFire.createId();

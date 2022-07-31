@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { MatSelectChange } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
+import { MatchConstants } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-add-season',
@@ -21,14 +23,16 @@ export class AddSeasonComponent implements OnInit {
   cities = ['Ghaziabad'];
   states = ['Uttar Pradesh'];
   $imgUpload: File = null;
-  teamsList = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
-  tourTypes = ['FKC', 'FPL', 'FCP'];
-  tourTypesFiltered = ['FKC', 'FPL', 'FCP'];
+  teamsList = MatchConstants.ALLOWED_PARTICIPATION_COUNT;
+  tourTypes = MatchConstants.MATCH_TYPES;
+  tourTypesFiltered = MatchConstants.MATCH_TYPES;
   todayDate = new Date();
   isLoading = false;
   newSeasonId: string = null;
   isEditMode = false;
+
   @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
+
   constructor(
     private ngStorage: AngularFireStorage,
     private ngFire: AngularFirestore,
@@ -138,6 +142,17 @@ export class AddSeasonComponent implements OnInit {
       });
       this.saveFormToServer(this.seasonForm.value);
     });
+  }
+  onRestrictTournamentTypes(event: MatSelectChange) {
+    this.tourTypesFiltered = [];
+    this.seasonForm.get('cont_tour').reset();
+    this.tourTypesFiltered.push('FCP');
+    if (event.value % 4 === 0) {
+      this.tourTypesFiltered.push('FKC');
+    }
+    if (event.value > 2) {
+      this.tourTypesFiltered.push('FPL');
+    }
   }
   saveFormToServer(formData) {
     const newSeasonId = this.ngFire.createId();

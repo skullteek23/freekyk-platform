@@ -52,7 +52,7 @@
       <div fxLayoutAlign="center center" fxLayout fxLayout.lt-md="column" class="team-selection" fxLayoutGap="20px">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select Participating Teams</mat-label>
-          <mat-select formControlName="p_teams">
+          <mat-select formControlName="p_teams" (selectionChange)="onRestrictTournamentTypes($event)">
             <mat-option *ngFor="let team of teamsList" [value]="team">
               {{ team }} teams
             </mat-option>

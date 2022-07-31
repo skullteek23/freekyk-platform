@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { forkJoin, merge, Observable } from 'rxjs';
-import { map, mergeAll, mergeMap, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 

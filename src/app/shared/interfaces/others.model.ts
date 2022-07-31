@@ -198,14 +198,15 @@ export interface tempTour {
   startDate: Date;
   isFixturesEmpty?: boolean;
 }
-export interface CloufFunctionFixtureData {
+export interface CloudFunctionFixtureData {
   sid: string;
-  sname: string;
+  sName: string;
   grounds: GroundPrivateInfo[];
-  matches: number;
+  matches: any;
   startDate: Date;
   oneMatchDur: number;
-  tour_type: 'FKC' | 'FPL' | 'FCP';
+  tour_type: string | string[];
+  teamParticipating: number;
 }
 export interface GroundTimings {
   0: [];
@@ -226,17 +227,17 @@ export interface QueryInfo {
   queryItem: string;
   queryValue: string;
   queryComparisonSymbol?:
-    | '<='
-    | '>='
-    | '>'
-    | '<'
-    | 'array-contains'
-    | 'in'
-    | '=='
-    | 'array-contains-any'
-    | 'in'
-    | 'not-in'
-    | '!=';
+  | '<='
+  | '>='
+  | '>'
+  | '<'
+  | 'array-contains'
+  | 'in'
+  | '=='
+  | 'array-contains-any'
+  | 'in'
+  | 'not-in'
+  | '!=';
 }
 export interface FeatureSectionContent {
   subHeading: string;

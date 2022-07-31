@@ -28,6 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSortModule } from '@angular/material/sort';
 //angular material
 
 @NgModule({
@@ -81,6 +82,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSidenavModule,
     MatSnackBarModule,
     MatStepperModule,
+    MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
@@ -93,4 +95,4 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatAutocompleteModule,
   ],
 })
-export class AppMaterialModule {}
+export class AppMaterialModule { }

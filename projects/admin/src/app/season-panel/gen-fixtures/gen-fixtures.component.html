@@ -13,19 +13,19 @@
         <ul class="info-container">
           <li>
             <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
-              <span class="mat-body"> Tournaments & Matches to be held</span>
+              <span class="mat-body"> Tournaments to be held</span>
               <span class="mat-body-2">
                 <ul class="matches-container">
-                  <li class="mat-body-2">{{totalMatches.fkc}} FKC</li>
-                  <li class="mat-body-2">{{totalMatches.fcp}} FCP</li>
-                  <li class="mat-body-2">{{totalMatches.fpl}} FPL</li>
+                  <li class="mat-body-2">{{matches.fkc}} FKC</li>
+                  <li class="mat-body-2">{{matches.fcp}} FCP</li>
+                  <li class="mat-body-2">{{matches.fpl}} FPL</li>
                 </ul>
               </span>
             </div>
           </li>
           <li>
             <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
-              <span class="mat-body"> Tournaments Start Date</span>
+              <span class="mat-body"> Start Date</span>
               <span class="mat-body-2">
                 {{seasonData ? (seasonData.start_date | date:'fullDate') : 'NA'}}
               </span>
@@ -50,17 +50,114 @@
               </div>
             </mat-list-option>
           </mat-selection-list>
-          <div fxLayoutAlign="end center"><button class="primaryButton buttonText"
-              [disabled]="!groundsList.selectedOptions.selected.length" (click)="stepper.next()">
+
+          <div fxLayoutAlign="end center">
+            <button class="primaryButton buttonText" [disabled]="!groundsList.selectedOptions.selected.length"
+              (click)="onSaveGrounds(groundsList.selectedOptions.selected); stepper.next()">
               Next
-            </button></div>
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>
   </mat-step>
   <mat-step label="Generate Fixtures" #third>
     <ng-container *ngIf="stepper.selected == third">
-      <!-- <app-gf-gen-fixtures></app-gf-gen-fixtures> -->
+      <div class="container">
+        <ul class="info-container third-step" *ngIf="!isLoading">
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Tournaments to be held</span>
+              <span class="mat-body-2">
+                <ul class="matches-container">
+                  <li class="mat-body-2">{{matches.fkc}} FKC</li>
+                  <li class="mat-body-2">{{matches.fcp}} FCP</li>
+                  <li class="mat-body-2">{{matches.fpl}} FPL</li>
+                </ul>
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Start Date</span>
+              <span class="mat-body-2">
+                {{seasonData ? (seasonData.start_date | date:'fullDate') : 'NA'}}
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Grounds</span>
+              <span class="mat-body-2">
+                {{ selectedGrounds }}
+              </span>
+            </div>
+          </li>
+        </ul>
+        <div class="fixtures">
+          <div *ngIf="!dummyFixtures.length" fxLayoutAlign="center center" fxLayoutGap="16px"
+            class="buttons-container-generate">
+            <button class="primaryButton buttonText" (click)="onGenerateFixtures()">
+              Generate Fixtures
+            </button>
+            <button class="secondaryButton buttonText" (click)="stepper.previous()">
+              Cancel
+            </button>
+          </div>
+          <div class="table-container" *ngIf="dummyFixtures.length">
+            <table mat-table [dataSource]="fixtureDataSource" matSort>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.MATCH_ID" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.MATCH_ID }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.MATCH_ID] }} </td>
+                <td mat-footer-cell *matFooterCellDef> Total {{ this.dummyFixtures.length }} Matches </td>
+              </ng-container>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.HOME" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.HOME }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.HOME] }} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.AWAY" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.AWAY }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.AWAY] }} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.DATE" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.DATE }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.DATE] | date: 'medium'}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.LOCATION" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.LOCATION }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.LOCATION] }} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <ng-container [matColumnDef]="TABLE_COLUMNS.GROUND" sticky>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.GROUND }}</th>
+                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.GROUND] }} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="dummyFixtures.length" fxLayoutAlign="end center" fxLayoutGap="16px">
+          <button class="primaryButton buttonText" (click)="onSaveFixtures()">
+            Confirm & Finish
+          </button>
+          <button class="secondaryButton buttonText" (click)="stepper.previous()">
+            Cancel
+          </button>
+        </div>
+      </div>
     </ng-container>
   </mat-step>
 </mat-horizontal-stepper>

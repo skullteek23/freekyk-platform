@@ -1,2 +1,31 @@
-export const GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-export const DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+export class MatchConstants {
+  public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+  public static DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+  // match duration and on-field operations should finish within 1 hour
+  public static ONE_MATCH_DURATION = 1;
+  public static MATCH_TYPES = ['FCP', 'FKC', 'FPL'];
+  public static UNIQUE_MATCH_TYPE_CODES = {
+    FKC: 'FK-FKC',
+    FCP: 'FK-FCP',
+    FPL: 'FK-FPL'
+  }
+  public static TO_BE_DECIDED: 'TBD';
+  public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
+}
+
+export const DUMMY_FIXTURE_TABLE_COLUMNS = {
+  MATCH_ID: 'mid',
+  HOME: 'home',
+  AWAY: 'away',
+  DATE: 'date',
+  LOCATION: 'location',
+  GROUND: 'ground',
+}
+export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
+  MATCH_ID: 'Unique Match ID',
+  HOME: 'Home Team',
+  AWAY: 'Away Team',
+  DATE: 'Date & Time',
+  LOCATION: 'Location',
+  GROUND: 'Ground',
+}
