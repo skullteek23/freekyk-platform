@@ -94,6 +94,14 @@
             </div>
           </li>
         </ul>
+        <div *ngIf="tableData.length" class="" fxLayoutAlign="center center" fxLayoutGap="16px">
+          <button class="primaryButton buttonText" (click)="onSaveFixtures()">
+            Confirm & Finish
+          </button>
+          <button class="secondaryButton buttonText" (click)="stepper.previous()">
+            Cancel
+          </button>
+        </div>
         <div class="fixtures">
           <div *ngIf="!tableData.length" fxLayoutAlign="center center" fxLayoutGap="16px"
             class="buttons-container-generate">
@@ -106,15 +114,29 @@
           </div>
           <app-fixture-table [data]="tableData" *ngIf="tableData.length"></app-fixture-table>
         </div>
-        <div *ngIf="tableData.length" fxLayoutAlign="end center" fxLayoutGap="16px">
-          <button class="primaryButton buttonText" (click)="onSaveFixtures()">
-            Confirm & Finish
-          </button>
-          <button class="secondaryButton buttonText" (click)="stepper.previous()">
-            Cancel
-          </button>
-        </div>
       </div>
+    </ng-container>
+  </mat-step>
+  <mat-step label="Done" #fourth>
+    <ng-container *ngIf="stepper.selected === fourth">
+      <app-tick-animation></app-tick-animation>
+      <p class="mat-body-1 center">
+        Wohoo!!! Your Season has been published
+      </p>
+      <p class="mat-caption center">
+        You can now edit only your Season name, Description and Season Image
+      </p>
+      <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="16px" class="section-space-top">
+        <button (click)="goToURL()" class="primaryButton buttonText">
+          View your season
+        </button>
+        <button routerLink="/seasons" class="secondaryButton buttonText">
+          Go to Admin Home
+        </button>
+      </div>
+      <p class="mat-caption center section-space-top">
+        Please contact freekyk123@gmail.com in case of any queries.
+      </p>
     </ng-container>
   </mat-step>
 </mat-horizontal-stepper>

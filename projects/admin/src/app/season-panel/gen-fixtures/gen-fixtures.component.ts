@@ -32,7 +32,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   seasonName = '';
   selectedGroundsList: GroundPrivateInfo[] = []
 
-  @ViewChild('stepper') Stepper: MatStepper;
+  @ViewChild('stepper') stepper: MatStepper;
   tableData: dummyFixture[] = [];
 
   constructor(private route: ActivatedRoute, private ngFire: AngularFirestore, private genFixtService: GenFixtService) {
@@ -62,7 +62,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.Stepper.next();
+    this.stepper.next();
   }
 
   calculateTournaments(participatingTeams: number, containingTournaments: string[]) {
@@ -126,5 +126,10 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tableData = this.genFixtService.onGenerateDummyFixtures(data);
     this.isLoading = false;
   }
-  onSaveFixtures() { }
+  onSaveFixtures() {
+    this.stepper.next();
+  }
+  goToURL() {
+    window.open(`https://freekyk-prod.web.app/s/${this.seasonName}`, "_blank");
+  }
 }

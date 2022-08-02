@@ -8,6 +8,7 @@ import { FixtureBasicComponent } from './components/fixture-basic/fixture-basic.
 import { LoadingComponent } from './components/loading/loading.component';
 import { NoItemsMessageComponent } from './components/no-items-message/no-items-message.component';
 import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
+import { TickAnimationComponent } from './components/tick-animation/tick-animation.component';
 import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
     FixtureBasicComponent,
     PhotoUploaderComponent,
     FileUploaderComponent,
-    NumberToAMPMPipe
+    NumberToAMPMPipe,
+    TickAnimationComponent
   ],
   imports: [CommonModule, AppMaterialModule, ReactiveFormsModule],
   exports: [
@@ -28,7 +30,8 @@ import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
     FixtureBasicComponent,
     PhotoUploaderComponent,
     FileUploaderComponent,
-    NumberToAMPMPipe
+    NumberToAMPMPipe,
+    TickAnimationComponent
   ],
 })
 export class SharedAdminModule { }
