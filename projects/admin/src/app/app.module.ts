@@ -32,6 +32,7 @@ import { SharedAdminModule } from './shared/shared-admin.module';
 // import { AddGalleryComponent } from './season-panel/add-gallery/add-gallery.component';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { environment } from 'src/environments/environment';
+import { FixtureTableComponent } from './season-panel/fixture-table/fixture-table.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { environment } from 'src/environments/environment';
     ErrorComponent,
     // AddGalleryComponent,
     GroundsPanelComponent,
+    FixtureTableComponent,
   ],
   imports: [
     BrowserModule,

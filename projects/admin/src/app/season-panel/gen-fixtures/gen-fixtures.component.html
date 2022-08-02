@@ -95,7 +95,7 @@
           </li>
         </ul>
         <div class="fixtures">
-          <div *ngIf="!dummyFixtures.length" fxLayoutAlign="center center" fxLayoutGap="16px"
+          <div *ngIf="!tableData.length" fxLayoutAlign="center center" fxLayoutGap="16px"
             class="buttons-container-generate">
             <button class="primaryButton buttonText" (click)="onGenerateFixtures()">
               Generate Fixtures
@@ -104,52 +104,9 @@
               Cancel
             </button>
           </div>
-          <div class="table-container" *ngIf="dummyFixtures.length">
-            <table mat-table [dataSource]="fixtureDataSource" matSort>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.MATCH_ID" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.MATCH_ID }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.MATCH_ID] }} </td>
-                <td mat-footer-cell *matFooterCellDef> Total {{ this.dummyFixtures.length }} Matches </td>
-              </ng-container>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.HOME" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.HOME }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.HOME] }} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.AWAY" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.AWAY }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.AWAY] }} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.DATE" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.DATE }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.DATE] | date: 'medium'}} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.LOCATION" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.LOCATION }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.LOCATION] }} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
-
-              <ng-container [matColumnDef]="TABLE_COLUMNS.GROUND" sticky>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.GROUND }}</th>
-                <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.GROUND] }} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
-            </table>
-          </div>
+          <app-fixture-table [data]="tableData" *ngIf="tableData.length"></app-fixture-table>
         </div>
-        <div *ngIf="dummyFixtures.length" fxLayoutAlign="end center" fxLayoutGap="16px">
+        <div *ngIf="tableData.length" fxLayoutAlign="end center" fxLayoutGap="16px">
           <button class="primaryButton buttonText" (click)="onSaveFixtures()">
             Confirm & Finish
           </button>

@@ -9,9 +9,8 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { MatListOption } from '@angular/material/list';
 import { GenFixtService } from './gen-fixt.service';
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
-import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, MatchConstants } from '../../shared/constants/constants';
+import { MatchConstants } from '../../shared/constants/constants';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -20,20 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  readonly TABLE_UI_COLUMNS = DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS;
-  readonly TABLE_COLUMNS = DUMMY_FIXTURE_TABLE_COLUMNS;
-  readonly TBD = 'TBD';
-
-  displayedColumns = [
-    DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
-    DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
-    DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
-    DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
-    DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
-    DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
-  ]
   dummyFixtures: dummyFixture[] = [];
-  fixtureDataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   grInfo$: Observable<GroundPrivateInfo[]>;
   isLoading = false;
   matches: { fkc: number, fcp: number, fpl: number } = {
@@ -47,6 +33,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedGroundsList: GroundPrivateInfo[] = []
 
   @ViewChild('stepper') Stepper: MatStepper;
+  tableData: dummyFixture[] = [];
 
   constructor(private route: ActivatedRoute, private ngFire: AngularFirestore, private genFixtService: GenFixtService) {
     const params = this.route.snapshot.params;
@@ -136,32 +123,8 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
       tour_type: this.seasonData.cont_tour
     }
-    this.dummyFixtures = this.genFixtService.onGenerateDummyFixtures(data);
-    const tableData = [];
-    this.dummyFixtures.forEach((value, index) => {
-      const count = index + 1;
-      const data = {
-        [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: this.getMID(value.type, count),
-        [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: this.TBD,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: this.TBD,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: value.date,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${value.locCity}, ${value.locState}`,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: value.stadium,
-      }
-      tableData.push(data);
-    }, this);
-    this.fixtureDataSource = new MatTableDataSource(tableData);
-    this.fixtureDataSource.sortingDataAccessor = (data, sortHeaderId) => {
-      return data[sortHeaderId].toLowerCase();
-    }
+    this.tableData = this.genFixtService.onGenerateDummyFixtures(data);
     this.isLoading = false;
-  }
-  getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
-    switch (type) {
-      case 'FKC': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
-      case 'FPL': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FPL}-${index}`;
-      case 'FCP': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
-    }
   }
   onSaveFixtures() { }
 }

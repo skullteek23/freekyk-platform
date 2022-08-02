@@ -72,4 +72,5 @@ export interface dummyFixture {
   id?: string;
   stadium?: string;
   fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
+  timestamp?: number;
 }
