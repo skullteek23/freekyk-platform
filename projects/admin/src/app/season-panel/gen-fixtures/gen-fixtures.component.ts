@@ -10,7 +10,7 @@ import { MatListOption } from '@angular/material/list';
 import { GenFixtService } from './gen-fixt.service';
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
 import { MatchConstants } from '../../shared/constants/constants';
-import { dummyFixture } from 'src/app/shared/interfaces/match.model';
+import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -127,7 +127,10 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = false;
   }
   onSaveFixtures() {
-    this.stepper.next();
+    const fixtures: MatchFixture[] = this.genFixtService.parseDummyFixtures(this.tableData);
+    this.genFixtService.onCreateFixtures(fixtures).then(() => {
+      this.stepper.next();
+    })
   }
   goToURL() {
     window.open(`https://freekyk-prod.web.app/s/${this.seasonName}`, "_blank");

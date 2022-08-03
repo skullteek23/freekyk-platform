@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
 import { AngularFirestore } from '@angular/fire/firestore';
+import firebase from "firebase/app";
+import { MatchConstants } from '../../shared/constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -71,10 +73,28 @@ export class GenFixtService {
     }
     return (fixtures);
   }
+
+  parseDummyFixtures(data: dummyFixture[]) {
+    return data.map(val => {
+      return {
+        date: firebase.firestore.Timestamp.fromDate(val.date),
+        concluded: false,
+        teams: [MatchConstants.TO_BE_DECIDED, MatchConstants.TO_BE_DECIDED],
+        logos: [MatchConstants.DEFAULT_LOGO, MatchConstants.DEFAULT_LOGO],
+        season: val.season,
+        premium: val.premium,
+        type: val.type,
+        locCity: val.locCity,
+        locState: val.locState,
+        stadium: val.stadium,
+      } as MatchFixture;
+    })
+  }
+
   onCreateFixtures(
     fixtures: MatchFixture[],
-    overviews: MatchFixtureOverview[],
-    lineups: MatchLineup[]
+    overviews: MatchFixtureOverview[] = [],
+    lineups: MatchLineup[] = []
   ) {
     var batch = this.ngFire.firestore.batch();
     for (let i = 0; i < fixtures.length; i++) {
