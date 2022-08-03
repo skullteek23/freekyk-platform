@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants } from '../../shared/constants/constants';
-import { ArraySorting } from '../../shared/utils/array-sorting';
 
 @Component({
   selector: 'app-fixture-table',
