@@ -40,7 +40,7 @@ export class PlResultsComponent implements OnInit {
           // console.log(val);
         }),
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date')))
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc')))
       );
   }
   onQueryData(queryInfo): void {
