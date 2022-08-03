@@ -100,45 +100,8 @@ export async function SendJoinNotification(
     .doc(notifId)
     .set(notif);
 }
-export function getTimeslots(arr: number[], gap: number): number[] {
-  for (let i = 0; i < arr.length; i++) {
-    const el = arr[i] + gap;
-    if (arr.includes(el)) {
-      const elIndex = arr.findIndex((a) => {
-        return a === el;
-      });
-      const diff = Math.abs(i - elIndex);
-      if (diff > 1) {
-        arr.splice(i + 1, diff - 1);
-      }
-    } else {
-      if (arr[i + 1] === arr[i] + 1 && arr[i + 2] === arr[i] + 2) {
-        arr.splice(i + 1, 2);
-      } else if (arr[i + 1] === arr[i] + 1 || arr[i + 1] === arr[i] + 2) {
-        arr.splice(i + 1, 1);
-      }
-    }
-  }
-  // can be optimised further here
-  return arr;
-}
 export async function getParticipants(sid: string): Promise<any> {
   return (
     await db.collection('seasons').doc(sid).collection('participants').get()
   ).docs.map((doc) => doc.data() as SeasonParticipants);
-}
-export function getRotatedTeams(
-  ar: SeasonParticipants[]
-): SeasonParticipants[] {
-  const newParticipants: SeasonParticipants[] = [];
-  newParticipants.push(...ar);
-  for (let i = 0; i < ar.length - 2; i++) {
-    const second = ar[1];
-    for (let j = 1; j < ar.length; j++) {
-      ar[j] = ar[j + 1];
-    }
-    ar.splice(ar.length - 1, 1, second);
-    newParticipants.push(...ar);
-  }
-  return newParticipants;
 }
