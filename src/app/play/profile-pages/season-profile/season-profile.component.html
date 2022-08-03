@@ -8,9 +8,6 @@
 
     <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
       fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
-      <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
-      Freekyk - India's No.1 Football Network
-    </span> -->
       <button fxHide.lt-md="true" [routerLink]="['/play', 'seasons']" mat-mini-fab color="primary" class="back-button">
         <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
       </button>
@@ -24,17 +21,10 @@
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p>
       <div fxLayout.lt-md="column" fxLayoutAlign="center start" fxLayoutGap="16px">
-        <button (click)="onParticipate()" class="primaryButton buttonText"
-          [disabled]="(seasonInfo$ | async)?.isSeasonStarted">
+        <button *ngIf="(seasonInfo$ | async)?.isSeasonStarted" (click)="onParticipate()"
+          class="primaryButton buttonText">
           <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span [matTooltip]="
-                (seasonInfo$ | async)?.isSeasonStarted
-                  ? 'Participation closed'
-                  : 'Participate in season'
-              ">Participate</span>
-            <!-- <span *ngIf="isLocked$ | async" class="material-icons-round">
-              lock
-            </span> -->
+            <span matTooltip="Participate in season">Participate</span>
           </div>
         </button>
         <button *ngIf="(seasonInfo$ | async)?.isSeasonStarted === true" [routerLink]="['/play', 'standings']"
@@ -47,16 +37,6 @@
           View fixtures
         </button>
       </div>
-      <!-- <div *ngIf="isLocked$ | async">
-        <span class="mat-caption"> For Premium Members Only. </span>
-        <a
-          class="mat-caption"
-          style="margin-top: 8px"
-          [routerLink]="['/pricing']"
-        >
-          Get Premium</a
-        >
-      </div> -->
     </div>
   </section>
 </div>
