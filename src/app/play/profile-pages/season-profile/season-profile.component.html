@@ -37,9 +37,14 @@
             </span> -->
           </div>
         </button>
-        <button [routerLink]="['/play', 'standings']" [queryParams]="{ s: seasonName }"
-          class="primaryButton buttonText">
-          Go to standings
+        <button *ngIf="(seasonInfo$ | async)?.isSeasonStarted === true" [routerLink]="['/play', 'standings']"
+          [queryParams]="{ s: seasonName }" class="primaryButton buttonText">
+          View standings
+        </button>
+
+        <button *ngIf="(seasonInfo$ | async)?.isSeasonStarted === false" [routerLink]="['/play', 'standings']"
+          [queryParams]="{ s: seasonName }" class="primaryButton buttonText">
+          View fixtures
         </button>
       </div>
       <!-- <div *ngIf="isLocked$ | async">
