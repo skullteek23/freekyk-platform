@@ -27,7 +27,7 @@ export class AddSeasonComponent implements OnInit {
     }
   }
   @Input() seasonID = null;
-  @Output() stepChange = new Subject();
+  @Output() seasonDataChange = new Subject<SeasonBasicInfo>();
 
   cities = ['Ghaziabad'];
   currentDateTemp1 = new Date();
@@ -86,7 +86,7 @@ export class AddSeasonComponent implements OnInit {
       return;
     }
     if (this.seasonID) {
-      this.stepChange.next();
+      this.seasonDataChange.next(null);
       return;
     }
     this.isLoading = true;
@@ -158,7 +158,7 @@ export class AddSeasonComponent implements OnInit {
       if (Object.keys(newSeasonMore).length) {
         newSeasonMore.paymentMethod = 'Online';
       }
-      this.addSeasonInfo(newSeason, newSeasonMore, sid);
+      this.addSeasonInfo(newSeason, newSeasonMore, newSeason.id);
     }
   }
 
@@ -176,7 +176,7 @@ export class AddSeasonComponent implements OnInit {
           this.snackServ.displayCustomMsg('Info saved successfully!');
           this.reset();
           this.seasonForm.reset();
-          this.stepChange.next();
+          this.seasonDataChange.next(newSeason as any);
         })
         .catch(() => this.snackServ.displayError());
     } else {

@@ -12,6 +12,7 @@ import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model
 import { MatchConstants } from '../../shared/constants/constants';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FormGroup } from '@angular/forms';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -68,14 +69,19 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void { }
 
-  ngAfterViewInit(): void {
-    if (this.stepper) {
-      this.stepper.selectionChange.subscribe(change => {
-        if (change.selectedIndex === 1 && this.seasonData) {
-          this.getGrounds();
-          this.calculateTournaments(this.seasonData.p_teams, this.seasonData.cont_tour);
-        }
-      })
+  ngAfterViewInit(): void { }
+
+  onChangeStep(ev: StepperSelectionEvent) {
+    if (ev.selectedIndex === 1 && this.formData) {
+      this.getGrounds();
+      this.calculateTournaments(this.formData.p_teams, this.formData.cont_tour);
+    }
+  }
+
+  onSetSeasonData(data: any) {
+    if (data) {
+      this.formData = { ...data };
+      this.stepper.next();
     }
   }
 
@@ -99,7 +105,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.grInfo$ = this.ngFire
       .collection('groundsPvt', (query) =>
-        query.where('locState', '==', this.seasonData.locState).where('locCity', '==', this.seasonData.locCity).where('contractStartDate', '<', this.seasonData.start_date)
+        query.where('locState', '==', this.formData.locState).where('locCity', '==', this.formData.locCity).where('contractStartDate', '<', this.formData.start_date)
       )
       .get()
       .pipe(
