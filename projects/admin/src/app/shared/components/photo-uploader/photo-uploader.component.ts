@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatchConstantsSecondary } from '../../constants/constants';
 
 @Component({
   selector: 'app-photo-uploader',
@@ -8,6 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class PhotoUploaderComponent implements OnInit {
   preview = null;
   $uploadedImageFile: File = null;
+  @Input() defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
   @Output() changeUpload = new EventEmitter<File>();
   constructor() { }
 

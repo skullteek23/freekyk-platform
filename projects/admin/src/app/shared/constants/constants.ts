@@ -12,10 +12,20 @@ export class MatchConstants {
   public static TO_BE_DECIDED: 'TBD';
   public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
   public static DEFAULT_LOGO: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102'
+  public static SEASON_PRICE = {
+    MIN: 500,
+    MAX: 20000,
+  }
+  public static START_DATE_DIFF = {
+    MIN: 1,
+    MAX: 365,
+  }
 }
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',
-  DEFAULT_LOGO: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102'
+  DEFAULT_LOGO: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102',
+  DEFAULT_PLACEHOLDER: 'assets/placeholder_product.png',
+  DEFAULT_IMAGE_URL: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102'
 }
 
 export const DUMMY_FIXTURE_TABLE_COLUMNS = {

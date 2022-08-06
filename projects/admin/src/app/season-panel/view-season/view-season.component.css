@@ -12,3 +12,16 @@ a.disabled {
   cursor: not-allowed !important;
   color: grey !important;
 }
+
+.row {
+  cursor: pointer;
+}
+
+.row:hover span,
+.row:hover div .material-icons-round {
+  color: var(--primaryDarkColor);
+}
+
+.red {
+  color: var(--red);
+}

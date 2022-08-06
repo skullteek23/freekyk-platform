@@ -2,12 +2,13 @@
     {{seasonName}}
   </span></div>
 <mat-horizontal-stepper #stepper [linear]="true">
-  <mat-step label="Add Season" #first [completed]="true">
-    <!-- <ng-container *ngIf="stepper.selected == first">
-      <app-add-season (stepChange)="stepper.next()"></app-add-season>
-    </ng-container> -->
+  <mat-step [label]="newSeasonId ? 'Edit Season' : 'Add Season'" #first [optional]="(!!newSeasonId)">
+    <ng-container *ngIf="stepper.selected == first">
+      <app-add-season [seasonID]="newSeasonId ? newSeasonId : ''" [data]="formData" (stepChange)="stepper.next()">
+      </app-add-season>
+    </ng-container>
   </mat-step>
-  <mat-step label="Select Ground" #second>
+  <mat-step label="Select Ground" #second [optional]="false">
     <ng-container *ngIf="stepper.selected == second">
       <div class="container">
         <ul class="info-container">
@@ -61,7 +62,7 @@
       </div>
     </ng-container>
   </mat-step>
-  <mat-step label="Generate Fixtures" #third>
+  <mat-step label="Generate Fixtures" #third [optional]="false">
     <ng-container *ngIf="stepper.selected == third">
       <div class="container">
         <ul class="info-container third-step" *ngIf="!isLoading">
@@ -117,7 +118,7 @@
       </div>
     </ng-container>
   </mat-step>
-  <mat-step label="Done" #fourth>
+  <mat-step label="Done" #fourth [optional]="false">
     <ng-container *ngIf="stepper.selected === fourth">
       <app-tick-animation></app-tick-animation>
       <p class="mat-body-1 center">

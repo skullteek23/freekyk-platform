@@ -1,10 +1,7 @@
-<form [formGroup]="seasonForm" (ngSubmit)="onSubmit()">
-  <div class="season-heading"><span class="mat-subheading-2">
-      {{seasonName}}
-    </span></div>
+<form [formGroup]="seasonForm">
   <div *ngIf="!isLoading" class="form-container" fxLayout="column">
     <section class="section-container" fxLayoutGap="20px" fxLayout fxLayout.lt-md="column"
-      fxLayoutAlign="space-between start">
+      fxLayoutAlign="space-between center">
       <div class="field-container" fxLayout="column">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Season Name</mat-label>
@@ -13,7 +10,7 @@
         <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Select State</mat-label>
-            <mat-select formControlName="locState">
+            <mat-select [disabled]="isDisableSelection" formControlName="locState">
               <mat-option *ngFor="let state of states" [value]="state">
                 {{ state }}
               </mat-option>
@@ -21,7 +18,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Select City</mat-label>
-            <mat-select formControlName="locCity">
+            <mat-select [disabled]="isDisableSelection" formControlName="locCity">
               <mat-option *ngFor="let city of cities" [value]="city">
                 {{ city }}
               </mat-option>
@@ -37,22 +34,27 @@
           <mat-label> Enter Season Rules</mat-label>
           <textarea matInput formControlName="rules" placeholder="Mention season rules in 300 words"></textarea>
         </mat-form-field>
+        <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Tournament Start Date</mat-label>
+            <input matInput [min]="minDate" [max]="maxDate" formControlName="start_date" [matDatepicker]="startDate" />
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Enter Season Fees (per team)</mat-label>
+            <input type="number" matInput formControlName="feesPerTeam" />
+          </mat-form-field>
+        </div>
       </div>
-      <div fxLayout="column" fxLayoutGap="20px">
-        <app-photo-uploader (changeUpload)="onGetImage($event)"></app-photo-uploader>
-        <mat-form-field appearance="outline" color="primary">
-          <mat-label>Tournament Start Date</mat-label>
-          <input matInput [min]="todayDate" formControlName="start_date" [matDatepicker]="startDate" />
-          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-          <mat-datepicker #startDate></mat-datepicker>
-        </mat-form-field>
-      </div>
+      <app-photo-uploader [defaultImgUrl]="seasonImageUrl" (changeUpload)="onGetImage($event)"></app-photo-uploader>
     </section>
     <section class="section-container" fxLayoutAlign="center center">
       <div fxLayoutAlign="center center" fxLayout fxLayout.lt-md="column" class="team-selection" fxLayoutGap="20px">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select Participating Teams</mat-label>
-          <mat-select formControlName="p_teams" (selectionChange)="onRestrictTournamentTypes($event)">
+          <mat-select [disabled]="isDisableSelection" formControlName="p_teams"
+            (selectionChange)="onRestrictTournamentTypes($event)">
             <mat-option *ngFor="let team of teamsList" [value]="team">
               {{ team }} teams
             </mat-option>
@@ -60,7 +62,8 @@
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select Containing Tournaments</mat-label>
-          <mat-select [disabled]="!seasonForm.get('p_teams').value" formControlName="cont_tour" multiple>
+          <mat-select [disabled]="!seasonForm.get('p_teams').value || isDisableSelection" formControlName="cont_tour"
+            multiple>
             <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
               {{ type }}
             </mat-option>
@@ -69,9 +72,11 @@
       </div>
     </section>
   </div>
-  <div *ngIf="!isLoading" class="buttons-container" fxLayoutAlign="center center" fxLayout>
-    <button [disabled]="!seasonForm.dirty || seasonForm.invalid" type="submit"
-      class="primaryButton buttonText">{{newSeasonId ? 'Save' : 'Next'}}</button>
+  <div *ngIf="!isLoading" class="buttons-container" fxLayoutAlign="end center" fxLayout fxLayoutGap="20px">
+    <button *ngIf="seasonID" [disabled]="isSaveChangesDisabled" (click)="onSaveChanges()" type="button"
+      class="primaryButton buttonText">Save Changes</button>
+    <button [disabled]="isSubmitDisabled" (click)="onNext()" type="button"
+      class="primaryButton buttonText">Next</button>
   </div>
   <app-loading *ngIf="isLoading"></app-loading>
 </form>

@@ -16,11 +16,8 @@ export class ViewSeasonComponent implements OnInit {
   cols = [
     'sno',
     'season',
+    'startDate',
     'actions',
-    // 'fixtures',
-    // 'gallery',
-    // 'stats',
-    // 'terminate',
   ];
   constructor(private ngFire: AngularFirestore, private router: Router, private snackService: SnackbarService) { }
 
@@ -35,38 +32,37 @@ export class ViewSeasonComponent implements OnInit {
             ({
               id: doc.payload.doc.id,
               ...(doc.payload.doc.data() as SeasonBasicInfo),
+              start_date: new Date((doc.payload.doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000),
+              isSeasonLive: new Date((doc.payload.doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000).getTime() < new Date().getTime(),
             } as SeasonBasicInfo)
           )
         )
       )
       .subscribe((resp) => (this.seasons = resp));
   }
-  onEditSeason(season: SeasonBasicInfo): void {
-    if (!season.isSeasonStarted) {
-      this.router.navigate(['/seasons', 'edit', season.id], { queryParams: { 'name': season.name } });
-    }
-  }
   onTerminateSeasons(season: SeasonBasicInfo): void {
-    if (!season.isSeasonStarted) {
-      forkJoin([this.ngFire.collection('seasons').doc(season.id).delete(), this.ngFire.collection(`seasons/${season.id}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
-        if (resp) {
-          this.snackService.displayCustomMsg('Season deleted successfully!');
-        }
-      })
+    if (this.isSeasonStarted(season) || season.isFixturesCreated) {
+      return;
     }
-  }
-
-  onSetFixtures(season: SeasonBasicInfo) {
-    if (!season.isSeasonStarted) {
-      this.router.navigate(['/seasons', 'fixtures', season.id], { queryParams: { 'name': season.name } });
-    }
+    forkJoin([this.ngFire.collection('seasons').doc(season.id).delete(), this.ngFire.collection(`seasons/${season.id}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
+      if (resp) {
+        this.snackService.displayCustomMsg('Season deleted successfully!');
+      }
+    })
   }
   onAddGallery(season: SeasonBasicInfo) {
+    return;
     this.router.navigate(['/seasons', 'gallery', season.id], { queryParams: { 'name': season.name } });
   }
   onUpdateMatchReport(season: SeasonBasicInfo) {
-    if (season.isSeasonStarted) {
+    return;
+    if (this.isSeasonStarted(season)) {
       this.router.navigate(['/seasons', 'update-match', season.id], { queryParams: { 'name': season.name } });
     }
+  }
+
+  isSeasonStarted(data): boolean {
+    const currentTimestamp = new Date().getTime();
+    return data && (data.start_date.getTime() < currentTimestamp);
   }
 }

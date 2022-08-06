@@ -1,4 +1,4 @@
 <div class="photo-container" (click)="photoInput.click()" fxFlex.lt-md="250px" fxLayout fxLayoutAlign="center center">
-  <img [src]="preview || 'assets/placeholder_product.png'" class="preview" alt="Image" id="preview-image" />
+  <img [src]="preview || defaultImgUrl" class="preview" alt="Image" id="preview-image" />
 </div>
 <input hidden type="file" name="photoInput" accept="image/*" #photoInput (change)="onBrowsePhoto($event)" id="file" />

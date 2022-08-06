@@ -2,15 +2,16 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, Observable, } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { MatListOption } from '@angular/material/list';
 import { GenFixtService } from './gen-fixt.service';
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
 import { MatchConstants } from '../../shared/constants/constants';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -29,11 +30,14 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   newSeasonId: string = null;
   seasonData: SeasonBasicInfo;
+  formData: any = {};
+  seasonMoreData: SeasonAbout;
   seasonName = '';
+  seasonForm = new FormGroup({});
   selectedGroundsList: GroundPrivateInfo[] = []
+  tableData: dummyFixture[] = [];
 
   @ViewChild('stepper') stepper: MatStepper;
-  tableData: dummyFixture[] = [];
 
   constructor(private route: ActivatedRoute, private ngFire: AngularFirestore, private genFixtService: GenFixtService) {
     const params = this.route.snapshot.params;
@@ -41,18 +45,21 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     if (qParams && qParams.hasOwnProperty('name')) {
       this.seasonName = qParams.name;
     }
-    if (params.hasOwnProperty('sid') && window.location.href.includes('fixtures') && params.sid) {
+    if (params.hasOwnProperty('sid') && window.location.href.includes('season') && params.sid) {
       this.isLoading = true;
       this.newSeasonId = params.sid;
-      this.ngFire.collection('seasons').doc(this.newSeasonId).get().subscribe((response => {
-        this.seasonData = response.data() as SeasonBasicInfo;
+      forkJoin([ngFire.collection('seasons').doc(this.newSeasonId).get(), ngFire.collection(`seasons/${this.newSeasonId}/additionalInfo`).doc('moreInfo').get()]).subscribe((response => {
+        this.seasonData = response[0].data() as SeasonBasicInfo;
         this.seasonData = {
           ...this.seasonData,
           start_date: new Date(this.seasonData.start_date['seconds'] * 1000)
         }
+        this.seasonMoreData = response[1].data() as SeasonAbout;
+        this.formData = {
+          ...this.seasonData,
+          ...this.seasonMoreData
+        }
         this.isLoading = false;
-        this.calculateTournaments(this.seasonData.p_teams, this.seasonData.cont_tour);
-        this.getGrounds();
       }))
     }
   }
@@ -62,7 +69,14 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.stepper.next();
+    if (this.stepper) {
+      this.stepper.selectionChange.subscribe(change => {
+        if (change.selectedIndex === 1 && this.seasonData) {
+          this.getGrounds();
+          this.calculateTournaments(this.seasonData.p_teams, this.seasonData.cont_tour);
+        }
+      })
+    }
   }
 
   calculateTournaments(participatingTeams: number, containingTournaments: string[]) {
@@ -82,13 +96,17 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getGrounds() {
+    this.isLoading = true;
     this.grInfo$ = this.ngFire
       .collection('groundsPvt', (query) =>
         query.where('locState', '==', this.seasonData.locState).where('locCity', '==', this.seasonData.locCity).where('contractStartDate', '<', this.seasonData.start_date)
       )
       .get()
       .pipe(
-        map((resp) => resp.docs.map((doc) => <GroundPrivateInfo>doc.data()))
+        map((resp) => resp.docs.map((doc) => <GroundPrivateInfo>doc.data())),
+        tap(() => {
+          this.isLoading = false;
+        })
       );
   }
 
@@ -127,8 +145,13 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = false;
   }
   onSaveFixtures() {
+    this.isLoading = true;
     const fixtures: MatchFixture[] = this.genFixtService.parseDummyFixtures(this.tableData);
-    this.genFixtService.onCreateFixtures(fixtures).then(() => {
+    let allPromises = [];
+    allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
+    allPromises.push(this.genFixtService.updateSeason(this.newSeasonId));
+    Promise.all(allPromises).then(() => {
+      this.isLoading = false;
       this.stepper.next();
     })
   }

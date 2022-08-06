@@ -119,6 +119,15 @@ export class GenFixtService {
     }
     return batch.commit();
   }
+  updateSeason(sid: string) {
+    if (!sid) {
+      return;
+    }
+    return this.ngFire.collection('seasons').doc(sid).update({
+      isFixturesCreated: true
+    })
+
+  }
   private calculateTotalLeagueMatches(teams: number): number {
     return !teams ? 0 : (teams * (teams - 1)) / 2;
   }
