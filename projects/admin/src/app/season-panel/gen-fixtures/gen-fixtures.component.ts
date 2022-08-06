@@ -30,9 +30,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     fpl: 0,
   };
   newSeasonId: string = null;
-  seasonData: SeasonBasicInfo;
   formData: any = {};
-  seasonMoreData: SeasonAbout;
   seasonName = '';
   seasonForm = new FormGroup({});
   selectedGroundsList: GroundPrivateInfo[] = []
@@ -50,15 +48,15 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       this.isLoading = true;
       this.newSeasonId = params.sid;
       forkJoin([ngFire.collection('seasons').doc(this.newSeasonId).get(), ngFire.collection(`seasons/${this.newSeasonId}/additionalInfo`).doc('moreInfo').get()]).subscribe((response => {
-        this.seasonData = response[0].data() as SeasonBasicInfo;
-        this.seasonData = {
-          ...this.seasonData,
-          start_date: new Date(this.seasonData.start_date['seconds'] * 1000)
+        let seasonData = response[0].data() as SeasonBasicInfo;
+        seasonData = {
+          ...seasonData,
+          start_date: new Date(seasonData.start_date['seconds'] * 1000)
         }
-        this.seasonMoreData = response[1].data() as SeasonAbout;
+        let seasonMoreData = response[1].data() as SeasonAbout;
         this.formData = {
-          ...this.seasonData,
-          ...this.seasonMoreData
+          ...seasonData,
+          ...seasonMoreData
         }
         this.isLoading = false;
       }))
@@ -138,14 +136,14 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   onGenerateFixtures() {
     this.isLoading = true;
     const data: CloudFunctionFixtureData = {
-      sName: this.seasonName || this.seasonData.name,
-      sid: this.newSeasonId || this.seasonData.id,
+      sName: this.seasonName || this.formData.name,
+      sid: this.newSeasonId || this.formData.id,
       grounds: this.selectedGroundsList,
-      teamParticipating: this.seasonData.p_teams,
+      teamParticipating: this.formData.p_teams,
       matches: this.matches,
-      startDate: new Date(this.seasonData.start_date),
+      startDate: new Date(this.formData.start_date),
       oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
-      tour_type: this.seasonData.cont_tour
+      tour_type: this.formData.cont_tour
     }
     this.tableData = this.genFixtService.onGenerateDummyFixtures(data);
     this.isLoading = false;
