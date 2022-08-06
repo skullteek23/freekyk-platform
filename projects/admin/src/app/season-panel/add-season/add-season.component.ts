@@ -228,15 +228,13 @@ export class AddSeasonComponent implements OnInit {
   }
 
   enterPartialLockedMode() {
-    if (this.seasonData.isFixtureCreated) {
-      this.seasonForm.get('name').disable();
-      this.seasonForm.get('locCity').disable();
-      this.seasonForm.get('locState').disable();
-      this.seasonForm.get('p_teams').disable();
-      this.seasonForm.get('start_date').disable();
-      this.seasonForm.get('cont_tour').disable();
-      this.isDisableSelection = true;
-    }
+    this.seasonForm.get('name').disable();
+    this.seasonForm.get('locCity').disable();
+    this.seasonForm.get('locState').disable();
+    this.seasonForm.get('p_teams').disable();
+    this.seasonForm.get('start_date').disable();
+    this.seasonForm.get('cont_tour').disable();
+    this.isDisableSelection = true;
   }
 
   setSeasonImage(fileURL?: string) {
