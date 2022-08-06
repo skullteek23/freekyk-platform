@@ -21,8 +21,9 @@ export class AddSeasonComponent implements OnInit {
       this.setDates();
       this.seasonData = value;
       this.initForm(value);
-      this.seasonImageUrl = this.seasonForm.get('imgpath').value;
-      this.enterPartialLockedMode();
+      if (Object.keys(value).length) {
+        this.enterPartialLockedMode();
+      }
     }
   }
   @Input() seasonID = null;
@@ -77,6 +78,7 @@ export class AddSeasonComponent implements OnInit {
         Validators.maxLength(300),
       ]),
     });
+    this.seasonImageUrl = this.seasonForm.get('imgpath').value;
   }
 
   async onNext() {
