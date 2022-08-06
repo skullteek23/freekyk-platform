@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
@@ -50,8 +49,7 @@ export class AddSeasonComponent implements OnInit {
   constructor(
     private ngStorage: AngularFireStorage,
     private ngFire: AngularFirestore,
-    private snackServ: SnackbarService,
-    private router: Router,
+    private snackServ: SnackbarService
   ) { }
 
   ngOnInit(): void { }
