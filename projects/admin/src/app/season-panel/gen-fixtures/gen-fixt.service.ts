@@ -132,7 +132,7 @@ export class GenFixtService {
     return !teams ? 0 : (teams * (teams - 1)) / 2;
   }
   private calculateTotalKnockoutMatches(teams: number): number {
-    return !teams ? 0 : teams / 2;
+    return !teams ? 0 : teams - 1;
   }
   private getDifference(a: number, b: number): number {
     return a - b;
