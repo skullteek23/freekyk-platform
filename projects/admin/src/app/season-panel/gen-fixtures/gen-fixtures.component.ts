@@ -81,8 +81,8 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   onSetSeasonData(data: any) {
     if (data) {
       this.formData = { ...data };
-      this.stepper.next();
     }
+    this.stepper.next();
   }
 
   calculateTournaments(participatingTeams: number, containingTournaments: string[]) {
