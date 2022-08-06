@@ -17,6 +17,8 @@
           {{ data.name }}
         </span>
         <span *ngIf="data.isSeasonLive" matTooltip="Live Season" class="material-icons-round red">sensors</span>
+        <span *ngIf="data.isSeasonEnded" matTooltip="Finished Season"
+          class="material-icons-round red">assignment_turned_in</span>
       </div>
     </td>
   </ng-container>
@@ -48,5 +50,5 @@
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="cols"></tr>
-  <tr mat-row *matRowDef="let myRowData; columns: cols"></tr>
+  <tr mat-row *matRowDef="let myRowData; columns: cols" [ngClass]="{'season-ended': myRowData.isSeasonEnded}"></tr>
 </table>

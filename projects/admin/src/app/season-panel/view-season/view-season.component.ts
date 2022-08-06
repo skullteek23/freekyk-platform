@@ -32,11 +32,16 @@ export class ViewSeasonComponent implements OnInit {
             ({
               id: doc.payload.doc.id,
               ...(doc.payload.doc.data() as SeasonBasicInfo),
-              start_date: new Date((doc.payload.doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000),
-              isSeasonLive: new Date((doc.payload.doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000).getTime() < new Date().getTime(),
             } as SeasonBasicInfo)
           )
-        )
+        ),
+        map(data => data.map(el =>
+        ({
+          ...el,
+          start_date: new Date(el.start_date['seconds'] * 1000),
+          isSeasonLive: (new Date(el.start_date['seconds'] * 1000).getTime() < new Date().getTime()) && !el['isSeasonEnded']
+        })
+        ))
       )
       .subscribe((resp) => (this.seasons = resp));
   }

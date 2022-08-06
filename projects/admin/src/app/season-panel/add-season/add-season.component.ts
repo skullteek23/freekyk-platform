@@ -153,6 +153,7 @@ export class AddSeasonComponent implements OnInit {
         newSeason.id = id;
         newSeason.premium = true;
         newSeason.isFixturesCreated = false;
+        newSeason.isSeasonEnded = false;
       }
       if (Object.keys(newSeasonMore).length) {
         newSeasonMore.paymentMethod = 'Online';

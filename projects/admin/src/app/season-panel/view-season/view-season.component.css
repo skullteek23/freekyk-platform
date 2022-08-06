@@ -25,3 +25,10 @@ a.disabled {
 .red {
   color: var(--red);
 }
+
+.season-ended .row:hover span,
+.season-ended .row:hover div .material-icons-round,
+.season-ended span,
+.season-ended div .material-icons-round {
+  opacity: 0.5;
+}
