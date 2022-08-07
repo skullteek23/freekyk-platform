@@ -24,6 +24,7 @@ export const MatchFilters = {
     'Freekyk Premier League',
     'Freekyk Community Play',
   ],
+  Season: [],
 };
 export const StandingsFilters = {
   Season: [],

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -15,68 +15,7 @@ export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   timgpath =
     'https://images.unsplash.com/photo-1599446740719-23f3414840ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=742&q=80';
-  CommPlayDataSource: CommunityLeaderboard[] = [
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-    {
-      home: { timgpath: this.timgpath, tName: 'Team A' },
-      away: { timgpath: this.timgpath, tName: 'Team B' },
-      stadium: 'Ghaziabad, Uttar Pradesh',
-      winner: 'Team A',
-    },
-  ];
+  @Input('data') CommPlayDataSource: CommunityLeaderboard[] = [];
   constructor(private dialog: MatDialog, private mediaObs: MediaObserver) {
     this.subscriptions.add(
       mediaObs
@@ -94,7 +33,7 @@ export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
         })
     );
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

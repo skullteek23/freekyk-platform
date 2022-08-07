@@ -27,12 +27,16 @@
             <span matTooltip="Participate in season">Participate</span>
           </div>
         </button>
-        <button [routerLink]="['/play', 'standings']" [queryParams]="{ s: seasonName }"
+        <!-- <button [routerLink]="['/play', 'standings']" [queryParams]="{ s: seasonName }"
           class="primaryButton buttonText">
+          View standings
+        </button> -->
+        <button class="primaryButton buttonText" *ngIf="(seasonInfo$ | async)?.start_date < currentDate">
           View standings
         </button>
 
-        <button [routerLink]="['/play', 'fixtures']" [queryParams]="{ s: seasonName }" class="primaryButton buttonText">
+        <button *ngIf="(seasonInfo$ | async)?.isFixturesCreated" [routerLink]="['/play', 'fixtures']"
+          [queryParams]="{ s: seasonName }" class="primaryButton buttonText">
           View fixtures
         </button>
       </div>

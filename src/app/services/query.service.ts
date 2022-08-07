@@ -52,7 +52,7 @@ export class QueryService {
       queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
         ? FilterSymbolMap[queryInfo.queryItem]
         : '==',
-      queryValue: FilterValueMap[queryInfo.queryValue],
+      queryValue: FilterValueMap[queryInfo.queryValue] || queryInfo.queryValue,
     };
 
     return this.ngFire
@@ -93,5 +93,5 @@ export class QueryService {
       )
       .get();
   }
-  constructor(private ngFire: AngularFirestore) {}
+  constructor(private ngFire: AngularFirestore) { }
 }

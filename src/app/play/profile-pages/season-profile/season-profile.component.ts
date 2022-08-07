@@ -14,6 +14,7 @@ import {
   SeasonParticipants,
   SeasonStats,
 } from 'src/app/shared/interfaces/season.model';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-season-profile',
@@ -34,6 +35,7 @@ export class SeasonProfileComponent implements OnInit {
   isLocked$: Observable<boolean>;
   seasonName: string;
   imgPath: string;
+  currentDate = new Date();
   constructor(
     private snackServ: SnackbarService,
     private store: Store<DashState>,
@@ -41,7 +43,7 @@ export class SeasonProfileComponent implements OnInit {
     private ngFire: AngularFirestore,
     private enlServ: EnlargeService,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.seasonName = this.route.snapshot.params.seasonid;
     this.getSeasonInfo();
@@ -67,10 +69,11 @@ export class SeasonProfileComponent implements OnInit {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as SeasonBasicInfo),
-              } as SeasonBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as SeasonBasicInfo),
+              start_date: new Date((doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000),
+            } as SeasonBasicInfo)
           )
         ),
         map((resp) => resp[0]),

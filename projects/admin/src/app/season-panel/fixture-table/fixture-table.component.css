@@ -7,13 +7,12 @@
   overflow-y: auto;
 }
 
-.table {
-  height: 100%;
+table {
   width: 100%;
 }
 
 .mat-column-mid {
-  width: 12%;
+  width: 15%;
 }
 
 .mat-column-home {

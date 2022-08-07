@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants } from '../../shared/constants/constants';
+import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-fixture-table',
@@ -12,11 +12,9 @@ export class FixtureTableComponent implements OnInit {
 
   @Input() set data(value: any) {
     let dummyFixturesTemp = value;
-    dummyFixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
-    dummyFixturesTemp = dummyFixturesTemp.map((val, index) => {
-      const count = index + 1;
+    dummyFixturesTemp = dummyFixturesTemp.map(val => {
       return {
-        [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: this.getMID(val.type, count),
+        [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
         [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: this.TBD,
         [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: this.TBD,
         [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
@@ -34,7 +32,7 @@ export class FixtureTableComponent implements OnInit {
 
   readonly TABLE_UI_COLUMNS = DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS;
   readonly TABLE_COLUMNS = DUMMY_FIXTURE_TABLE_COLUMNS;
-  readonly TBD = 'TBD';
+  readonly TBD = MatchConstantsSecondary.TO_BE_DECIDED;
 
   displayedColumns = [
     DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
@@ -50,14 +48,6 @@ export class FixtureTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
-    switch (type) {
-      case 'FKC': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
-      case 'FPL': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FPL}-${index}`;
-      case 'FCP': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
-    }
   }
 
 }

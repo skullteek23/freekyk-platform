@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
+import { MatchConstants, MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants/constants';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import {
+  CommunityLeaderboard,
   FilterData,
   LeagueTableModel,
 } from 'src/app/shared/interfaces/others.model';
@@ -28,11 +30,12 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     filtersObj: {},
   };
   tableData: LeagueTableModel[] = [];
+  cpStandings: CommunityLeaderboard[] = [];
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
@@ -64,6 +67,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     }
   }
   onQueryData(queryInfo): void {
+    return;
     if (queryInfo) {
       this.onChooseSeason(queryInfo.queryValue);
     } else {
@@ -81,6 +85,51 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.knockoutFixtures = res;
         this.tabGroup.selectedIndex = this.knockoutFixtures.length ? 0 : 1;
+      });
+    this.ngFire
+      .collection('allMatches', (query) => query.where('season', '==', seasonName).where('type', '==', 'FCP'))
+      .get()
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]),
+        map(docs => docs.map(doc => {
+          const homeDetails = {
+            name: doc.teams[0] || MatchConstantsSecondary.TO_BE_DECIDED,
+            logo: doc.logos[0] || MatchConstantsSecondary.DEFAULT_LOGO,
+            score: doc.score[0] || null
+          }
+          const awayDetails = {
+            name: doc.teams[1] || MatchConstantsSecondary.TO_BE_DECIDED,
+            logo: doc.logos[1] || MatchConstantsSecondary.DEFAULT_LOGO,
+            score: doc.score[1] || null
+          }
+          let winner = MatchConstantsSecondary.TO_BE_DECIDED;
+          if (homeDetails.score !== awayDetails.score) {
+            winner = homeDetails.score > awayDetails.score ? homeDetails.name : awayDetails.name;
+          }
+          return {
+            home: {
+              'timgpath': homeDetails.logo,
+              'tName': homeDetails.name
+            },
+            away: {
+              'timgpath': awayDetails.logo,
+              'tName': awayDetails.name
+            },
+            stadium: doc.stadium,
+            winner
+          } as CommunityLeaderboard
+        }))
+      )
+      .subscribe((res: CommunityLeaderboard[]) => {
+        console.log(res)
+        this.cpStandings = res;
+        if (this.knockoutFixtures.length) {
+          this.tabGroup.selectedIndex = 0;
+        } else if (this.tableData.length) {
+          this.tabGroup.selectedIndex = 1;
+        } else {
+          this.tabGroup.selectedIndex = 2;
+        }
       });
     this.ngFire
       .collection('seasons', (query) => query.where('name', '==', seasonName))

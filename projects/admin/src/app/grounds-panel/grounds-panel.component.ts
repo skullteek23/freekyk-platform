@@ -131,6 +131,7 @@ export class GroundsPanelComponent implements OnInit {
       locState: this.groundForm.value['locState'],
       locCity: this.groundForm.value['locCity'],
       contractStartDate: this.groundForm.value['contractStartDate'],
+      availableDate: this.groundForm.value['contractStartDate'],
       contractEndDate: this.groundForm.value['contractEndDate'],
       timings: this.timingsPreferences
     }

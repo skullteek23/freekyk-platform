@@ -4,7 +4,7 @@
     <ng-container [matColumnDef]="TABLE_COLUMNS.MATCH_ID" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.MATCH_ID }}</th>
       <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.MATCH_ID] }} </td>
-      <td mat-footer-cell *matFooterCellDef> Total {{ tableLength }} Matches </td>
+      <td mat-footer-cell *matFooterCellDef> Total {{ tableLength }} {{tableLength > 1 ? 'Matches' : 'Match'}} </td>
     </ng-container>
 
     <ng-container [matColumnDef]="TABLE_COLUMNS.HOME" sticky>

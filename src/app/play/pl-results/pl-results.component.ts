@@ -6,6 +6,7 @@ import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 
 @Component({
@@ -23,9 +24,24 @@ export class PlResultsComponent implements OnInit {
     private queryServ: QueryService
   ) { }
   ngOnInit(): void {
+    this.ngFire
+      .collection('seasons')
+      .get()
+      .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+      .subscribe((resp) => {
+        this.filterData = {
+          defaultFilterPath: 'allMatches',
+          filtersObj: {
+            ...MatchFilters,
+            Season: resp,
+          },
+        };
+      });
     this.filterData = {
       defaultFilterPath: 'allMatches',
-      filtersObj: MatchFilters,
+      filtersObj: {
+        ...MatchFilters
+      },
     };
     this.getResults();
   }
@@ -37,7 +53,6 @@ export class PlResultsComponent implements OnInit {
         tap((val) => {
           this.noResults = val.empty;
           this.isLoading = false;
-          // console.log(val);
         }),
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc')))
@@ -49,6 +64,12 @@ export class PlResultsComponent implements OnInit {
     }
     this.results$ = this.queryServ
       .onQueryMatches(queryInfo, 'allMatches', true)
-      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)));
+      .pipe(
+        tap((val) => {
+          this.noResults = val.empty;
+          this.isLoading = false;
+        }),
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture))
+      );
   }
 }

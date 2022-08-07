@@ -3,7 +3,9 @@ import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 's
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from "firebase/app";
-import { MatchConstantsSecondary } from '../../shared/constants/constants';
+import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { element } from 'protractor';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +13,14 @@ import { MatchConstantsSecondary } from '../../shared/constants/constants';
 
 export class GenFixtService {
   onGenerateDummyFixtures(data: CloudFunctionFixtureData) {
-    const fixtures: dummyFixture[] = [];
     let fcpMatches = data.matches.fcp;
     let fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
     let fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
     const totalMatches: number = fcpMatches + fkcMatches + fplMatches;
     const grounds = data.grounds;
-    const datesAvailable: { date: Date, groundName: string, locCity: string, locState: string }[] = [];
+    const availableSlotList: { date: Date, groundName: string, locCity: string, locState: string }[] = [];
     let initialDate = new Date(data.startDate);
-    while (datesAvailable.length < totalMatches) {
+    while (availableSlotList.length < totalMatches) {
       const day = initialDate.getDay();
       for (let k = 0; k < grounds.length; k++) {
         const grTimings = grounds[k].timings;
@@ -29,56 +30,73 @@ export class GenFixtService {
         if (grTimings.hasOwnProperty(day)) {
           const grTimingsByDay = grTimings[day] as number[];
           for (let i = 0; i < grTimingsByDay.length; i++) {
-            if (!datesAvailable.length) {
+            if (!availableSlotList.length) {
               const date = new Date(JSON.parse(JSON.stringify(initialDate)));
               date.setHours(grTimingsByDay[i]);
-              datesAvailable.push({ date, groundName, locCity, locState });
+              if (availableSlotList.length < totalMatches) {
+                availableSlotList.push({ date, groundName, locCity, locState });
+              }
               continue;
             }
             const currentHour = grTimingsByDay[i];
-            const lastDateHour = datesAvailable[datesAvailable.length - 1].date.getHours();
+            const lastDateHour = availableSlotList[availableSlotList.length - 1].date.getHours();
             const currentDay = day;
-            const lastDateDay = datesAvailable[datesAvailable.length - 1].date.getDay();
+            const lastDateDay = availableSlotList[availableSlotList.length - 1].date.getDay();
             const currentGround = groundName;
-            const lastGround = datesAvailable[datesAvailable.length - 1].groundName;
+            const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
             if (this.getDifference(currentHour, lastDateHour) >= data.oneMatchDur && currentDay === lastDateDay ||
               this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay !== lastDateDay ||
               this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay === lastDateDay && lastGround !== currentGround) {
               const date = new Date(JSON.parse(JSON.stringify(initialDate)));
               date.setHours(grTimingsByDay[i]);
-              datesAvailable.push({ date, groundName, locCity, locState });
+              if (availableSlotList.length < totalMatches) {
+                availableSlotList.push({ date, groundName, locCity, locState });
+              }
             }
           }
         }
       };
       initialDate.setDate(initialDate.getDate() + 1);
     }
-    for (let index = 0; index < totalMatches; index++) {
-      let matchType: 'FKC' | 'FCP' | 'FPL' = 'FCP';
+    availableSlotList.sort(ArraySorting.sortObjectByKey('date'));
+    const fixturesTemp: dummyFixture[] = [];
+    for (let index = 0; index < availableSlotList.length; index++) {
+      let matchType: "FKC" | "FCP" | "FPL" = 'FCP';
+      if (fcpMatches && index < fcpMatches) {
+        matchType = 'FCP';
+      }
       if (fkcMatches && index >= fcpMatches) {
         matchType = 'FKC';
-      } else if (fplMatches && index >= (fcpMatches + fkcMatches)) {
+      }
+      if (fplMatches && index >= (fkcMatches + fcpMatches)) {
         matchType = 'FPL';
       }
-      fixtures.push({
-        date: datesAvailable[index].date,
+      fixturesTemp.push({
+        date: availableSlotList[index].date,
         concluded: false,
         premium: true,
         season: data.sName,
         type: matchType,
-        locCity: datesAvailable[index].locCity,
-        locState: datesAvailable[index].locState,
-        stadium: datesAvailable[index].groundName,
+        locCity: availableSlotList[index].locCity,
+        locState: availableSlotList[index].locState,
+        stadium: availableSlotList[index].groundName,
       });
     }
+    fixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
+    const fixtures = fixturesTemp.map((element, index) => {
+      const i = index + 1;
+      return {
+        ...element,
+        id: this.getMID(element.type, i)
+      }
+    })
     return (fixtures);
   }
 
   parseDummyFixtures(data: dummyFixture[]) {
     return data.map(val => {
-      const fixtureId = this.ngFire.createId();
       return {
-        id: fixtureId,
+        id: val.id,
         date: firebase.firestore.Timestamp.fromDate(val.date),
         concluded: false,
         teams: [MatchConstantsSecondary.TO_BE_DECIDED, MatchConstantsSecondary.TO_BE_DECIDED],
@@ -91,6 +109,18 @@ export class GenFixtService {
         stadium: val.stadium,
       } as MatchFixture;
     })
+  }
+
+  updateGroundAvailability(grounds: string[] = [], lastUnavailableDate: Date) {
+    let allGroundIds: string[] = [];
+    grounds.forEach(async element => {
+      allGroundIds.push(await (await this.ngFire.collection('groundsPvt', query => query.where('name', '==', element)).get().toPromise()).docs[0].id)
+    });
+    let allAsyncPromises = [];
+    allGroundIds.forEach(el => {
+      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(el).update({ availableDate: lastUnavailableDate }));
+    })
+    return Promise.all(allAsyncPromises);
   }
 
   onCreateFixtures(
@@ -127,6 +157,16 @@ export class GenFixtService {
       isFixturesCreated: true
     })
 
+  }
+  calculateTotalTournamentMatches(teams: number): number {
+    return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);
+  }
+  private getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
+    switch (type) {
+      case 'FKC': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
+      case 'FPL': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FPL}-${index}`;
+      case 'FCP': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
+    }
   }
   private calculateTotalLeagueMatches(teams: number): number {
     return !teams ? 0 : (teams * (teams - 1)) / 2;

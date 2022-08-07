@@ -40,7 +40,7 @@
             <a routerLink="/grounds"> Add here</a>
           </div>
           <div class="heading"><span class="mat-body-2">Select venue ground(s) for the season: </span></div>
-          <mat-selection-list #groundsList class="list" color="primary">
+          <mat-selection-list #groundsList class="list" color="primary" [multiple]="totalMatches > 1">
             <mat-list-option [value]="ground" *ngFor="let ground of grInfo$ | async">
               <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
                 <span class="mat-body">
@@ -69,6 +69,14 @@
         <ul class="info-container third-step" *ngIf="!isLoading">
           <li>
             <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
+              <span class="mat-body"> Participating Teams</span>
+              <span class="mat-body-2">
+                {{formData ? (formData.p_teams) : 'NA'}}
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
               <span class="mat-body"> Tournaments to be held</span>
               <span class="mat-body-2">
                 <ul class="matches-container">
@@ -91,7 +99,7 @@
             <div class="info" fxLayout fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between center">
               <span class="mat-body"> Grounds</span>
               <span class="mat-body-2">
-                {{ selectedGrounds }}
+                {{ selectedGroundsString }}
               </span>
             </div>
           </li>

@@ -16,15 +16,11 @@
 
   <!-- fixtures list -->
   <ul class="container section-space-bottom fixture-container">
-    <ng-template #placeholder>
-      <app-no-items-message items="fixtures"></app-no-items-message>
-    </ng-template>
-    <ng-container *ngIf="noFixtures === false; else placeholder">
-      <li *ngFor="let fixture of fixtures$ | async; last as last">
-        <app-fixture-basic [resultMode]="false" [premium]="fixture.premium" [matchData]="fixture"></app-fixture-basic>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </li>
-    </ng-container>
+    <app-no-items-message *ngIf="noFixtures" items="fixtures"></app-no-items-message>
+    <li *ngFor="let fixture of fixtures$ | async; last as last">
+      <app-fixture-basic [resultMode]="false" [premium]="fixture.premium" [matchData]="fixture"></app-fixture-basic>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </li>
   </ul>
   <!-- fixtures list -->
 </div>

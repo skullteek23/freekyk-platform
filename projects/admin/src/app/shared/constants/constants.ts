@@ -21,6 +21,7 @@ export class MatchConstants {
     MAX: 365,
   }
 }
+export const SEASON_PROD_URL = 'https://freekyk-prod.web.app/s/';
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',
   DEFAULT_LOGO: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102',

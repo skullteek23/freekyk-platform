@@ -16,15 +16,11 @@
 
   <!-- results list -->
   <ul class="container section-space-bottom fixture-container">
-    <ng-template #placeholder>
-      <app-no-items-message items="results"></app-no-items-message>
-    </ng-template>
-    <ng-container *ngIf="noResults == false; else placeholder">
-      <li *ngFor="let result of results$ | async; last as last">
-        <app-fixture-basic [resultMode]="true" [premium]="result.premium" [matchData]="result"></app-fixture-basic>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </li>
-    </ng-container>
+    <app-no-items-message *ngIf="noResults" items="results"></app-no-items-message>
+    <li *ngFor="let result of results$ | async; last as last">
+      <app-fixture-basic [resultMode]="true" [premium]="result.premium" [matchData]="result"></app-fixture-basic>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </li>
   </ul>
   <!-- results list -->
 </div>

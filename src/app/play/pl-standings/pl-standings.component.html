@@ -7,34 +7,24 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    fxHide.lt-md="true"
-    [data]="filterData"
-    (changeFilter)="onQueryData($event)"
-  ></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- tab groups -->
   <mat-tab-group class="container section-space-bottom">
-    <mat-tab label="Knockout Groups">
+    <mat-tab disabled label="Knockout Groups">
       <ng-template matTabContent>
-        <!-- <app-knockout-sm *ngIf="onMobile; else lgScreen"></app-knockout-sm> -->
-        <!-- <ng-template #lgScreen> -->
-        <app-pl-st-knockout
-          [season]="seasonChosen"
-          [fixtures]="knockoutFixtures"
-        ></app-pl-st-knockout>
-        <!-- </ng-template> -->
+        <app-pl-st-knockout [season]="seasonChosen" [fixtures]="knockoutFixtures"></app-pl-st-knockout>
       </ng-template>
     </mat-tab>
-    <mat-tab label="League Tables">
+    <mat-tab disabled label="League Tables">
       <ng-template matTabContent>
         <app-pl-st-league [data]="tableData"></app-pl-st-league>
       </ng-template>
-    </mat-tab>
-    <mat-tab [disabled]="true" label="Community Play Leaderboard">
+    </mat-tab> -->
+    <mat-tab disabled label="Community Play Leaderboard">
       <ng-template matTabContent>
-        <app-pl-st-community-play></app-pl-st-community-play>
+        <app-pl-st-community-play [data]="cpStandings"></app-pl-st-community-play>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

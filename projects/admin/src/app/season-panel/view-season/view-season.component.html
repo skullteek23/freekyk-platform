@@ -16,7 +16,7 @@
         <span class="mat-body-2">
           {{ data.name }}
         </span>
-        <span *ngIf="data.isSeasonLive" matTooltip="Live Season" class="material-icons-round red">sensors</span>
+        <span *ngIf="data.isFixturesCreated" matTooltip=" Live Season" class="material-icons-round red">sensors</span>
         <span *ngIf="data.isSeasonEnded" matTooltip="Finished Season"
           class="material-icons-round red">assignment_turned_in</span>
       </div>

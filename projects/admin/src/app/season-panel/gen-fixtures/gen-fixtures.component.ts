@@ -9,7 +9,7 @@ import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.m
 import { MatListOption } from '@angular/material/list';
 import { GenFixtService } from './gen-fixt.service';
 import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
-import { MatchConstants } from '../../shared/constants/constants';
+import { MatchConstants, SEASON_PROD_URL } from '../../shared/constants/constants';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FormGroup } from '@angular/forms';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -80,7 +80,9 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     if (data) {
       this.formData = { ...data };
     }
-    this.stepper.next();
+    if (!this.formData.isFixturesCreated) {
+      this.stepper.next();
+    }
   }
 
   calculateTournaments(participatingTeams: number, containingTournaments: string[]) {
@@ -105,9 +107,9 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       .collection('groundsPvt', (query) =>
         query.where('locState', '==', this.formData.locState).where('locCity', '==', this.formData.locCity).where('contractStartDate', '<', this.formData.start_date)
       )
-      .get()
+      .valueChanges()
       .pipe(
-        map((resp) => resp.docs.map((doc) => <GroundPrivateInfo>doc.data())),
+        map((resp) => resp.map((doc) => <GroundPrivateInfo>doc)),
         tap(() => {
           this.isLoading = false;
         })
@@ -130,8 +132,8 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectedGroundsList = selection.map(sel => (sel.value as GroundPrivateInfo));
   }
 
-  get selectedGrounds() {
-    return this.selectedGroundsList.map(sel => sel.name).join(', ');
+  get selectedGroundsString() {
+    return this.selectedGroundsList.map(sel => sel.name).sort().join(', ');
   }
   onGenerateFixtures() {
     this.isLoading = true;
@@ -146,20 +148,40 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       tour_type: this.formData.cont_tour
     }
     this.tableData = this.genFixtService.onGenerateDummyFixtures(data);
+    const UniqueGroundMap = new Map<any, string>();
+    this.tableData.forEach(value => UniqueGroundMap.set(value.stadium, value.stadium));
+    const tempGrounds: string[] = [...UniqueGroundMap.values()];
+    const usedGrounds = [];
+    const selectedGroundsListCopy = [];
+    this.selectedGroundsList.forEach(element => {
+      selectedGroundsListCopy.push(element.name);
+      if (tempGrounds.includes(element.name)) {
+        usedGrounds.push(element);
+      }
+    });
+    if (JSON.parse(JSON.stringify(selectedGroundsListCopy.sort())) !== JSON.parse(JSON.stringify(usedGrounds.sort()))) {
+      this.selectedGroundsList = usedGrounds.sort();
+    }
     this.isLoading = false;
   }
   onSaveFixtures() {
-    this.isLoading = true;
     const fixtures: MatchFixture[] = this.genFixtService.parseDummyFixtures(this.tableData);
+    this.isLoading = true;
+    const lastFixture: MatchFixture = fixtures[fixtures.length - 1];
     let allPromises = [];
     allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
     allPromises.push(this.genFixtService.updateSeason(this.newSeasonId));
+    allPromises.push(this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.name), new Date(lastFixture.date['seconds'] * 1000)));
     Promise.all(allPromises).then(() => {
       this.isLoading = false;
       this.stepper.next();
     })
   }
   goToURL() {
-    window.open(`https://freekyk-prod.web.app/s/${this.seasonName}`, "_blank");
+    window.open(`${SEASON_PROD_URL}${this.seasonName}`, "_blank");
+  }
+
+  get totalMatches(): number {
+    return (this.matches.fcp + this.genFixtService.calculateTotalTournamentMatches(this.formData.p_teams));
   }
 }
