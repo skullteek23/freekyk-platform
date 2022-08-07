@@ -11,6 +11,7 @@ export interface MatchFixture {
   locState: string;
   score?: number[];
   id?: string;
+  mid?: string;
   tie_breaker?: string;
   stadium?: string;
   mode?: 'fixture' | 'result';
@@ -69,7 +70,7 @@ export interface dummyFixture {
   type: 'FKC' | 'FCP' | 'FPL';
   locCity: string;
   locState: string;
-  id?: string;
+  mid?: string;
   stadium?: string;
   fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
   timestamp?: number;

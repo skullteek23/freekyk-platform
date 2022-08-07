@@ -87,16 +87,18 @@ export class GenFixtService {
       const i = index + 1;
       return {
         ...element,
-        id: this.getMID(element.type, i)
+        mid: this.getMID(element.type, i)
       }
     })
     return (fixtures);
   }
 
-  parseDummyFixtures(data: dummyFixture[]) {
+  getPublishableFixture(data: dummyFixture[]) {
     return data.map(val => {
+      const newId = this.ngFire.createId();
       return {
-        id: val.id,
+        id: newId,
+        mid: val.mid,
         date: firebase.firestore.Timestamp.fromDate(val.date),
         concluded: false,
         teams: [MatchConstantsSecondary.TO_BE_DECIDED, MatchConstantsSecondary.TO_BE_DECIDED],
@@ -111,14 +113,14 @@ export class GenFixtService {
     })
   }
 
-  updateGroundAvailability(grounds: string[] = [], lastUnavailableDate: Date) {
-    let allGroundIds: string[] = [];
-    grounds.forEach(async element => {
-      allGroundIds.push(await (await this.ngFire.collection('groundsPvt', query => query.where('name', '==', element)).get().toPromise()).docs[0].id)
-    });
+  updateGroundAvailability(groundIds: string[] = [], lastUnavailableDate: Date) {
     let allAsyncPromises = [];
-    allGroundIds.forEach(el => {
-      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(el).update({ availableDate: lastUnavailableDate }));
+    lastUnavailableDate.setDate(lastUnavailableDate.getDate() + 1);
+    lastUnavailableDate.setHours(0);
+    lastUnavailableDate.setMinutes(0);
+    const lastAvailableDate = new Date(JSON.parse(JSON.stringify(lastUnavailableDate)));
+    groundIds.forEach(groundId => {
+      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(groundId).update({ availableDate: lastAvailableDate }));
     })
     return Promise.all(allAsyncPromises);
   }

@@ -29,4 +29,5 @@ export interface GroundPrivateInfo {
   contractEndDate: Timestamp;
   timings: {};
   availableDate: Timestamp;
+  id?: string;
 }

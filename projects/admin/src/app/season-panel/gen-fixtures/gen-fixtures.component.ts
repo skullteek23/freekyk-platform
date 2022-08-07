@@ -13,6 +13,7 @@ import { MatchConstants, SEASON_PROD_URL } from '../../shared/constants/constant
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FormGroup } from '@angular/forms';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 
 @Component({
   selector: 'app-gen-fixtures',
@@ -107,9 +108,14 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       .collection('groundsPvt', (query) =>
         query.where('locState', '==', this.formData.locState).where('locCity', '==', this.formData.locCity).where('contractStartDate', '<', this.formData.start_date)
       )
-      .valueChanges()
+      .snapshotChanges()
       .pipe(
-        map((resp) => resp.map((doc) => <GroundPrivateInfo>doc)),
+        map(resp => resp.map(re => {
+          return {
+            ...re.payload.doc.data() as GroundPrivateInfo,
+            id: re.payload.doc.id
+          } as GroundPrivateInfo
+        })),
         tap(() => {
           this.isLoading = false;
         })
@@ -129,7 +135,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSaveGrounds(selection: MatListOption[]) {
-    this.selectedGroundsList = selection.map(sel => (sel.value as GroundPrivateInfo));
+    this.selectedGroundsList = selection.map(sel => (sel.value as GroundPrivateInfo)).sort(ArraySorting.sortObjectByKey('name'));
   }
 
   get selectedGroundsString() {
@@ -148,7 +154,7 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
       tour_type: this.formData.cont_tour
     }
     this.tableData = this.genFixtService.onGenerateDummyFixtures(data);
-    const UniqueGroundMap = new Map<any, string>();
+    const UniqueGroundMap = new Map<string, string>();
     this.tableData.forEach(value => UniqueGroundMap.set(value.stadium, value.stadium));
     const tempGrounds: string[] = [...UniqueGroundMap.values()];
     const usedGrounds = [];
@@ -165,13 +171,13 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = false;
   }
   onSaveFixtures() {
-    const fixtures: MatchFixture[] = this.genFixtService.parseDummyFixtures(this.tableData);
+    const fixtures: MatchFixture[] = this.genFixtService.getPublishableFixture(this.tableData);
     this.isLoading = true;
     const lastFixture: MatchFixture = fixtures[fixtures.length - 1];
     let allPromises = [];
     allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
     allPromises.push(this.genFixtService.updateSeason(this.newSeasonId));
-    allPromises.push(this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.name), new Date(lastFixture.date['seconds'] * 1000)));
+    this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.id), new Date(lastFixture.date['seconds'] * 1000));
     Promise.all(allPromises).then(() => {
       this.isLoading = false;
       this.stepper.next();
