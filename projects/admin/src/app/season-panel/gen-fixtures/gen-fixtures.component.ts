@@ -187,6 +187,10 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     window.open(`${SEASON_PROD_URL}${this.seasonName}`, "_blank");
   }
 
+  isGroundUnavailable(date: Date): boolean {
+    return date.getTime() > new Date(this.formData.start_date).getTime();
+  }
+
   get totalMatches(): number {
     return (this.matches.fcp + this.genFixtService.calculateTotalTournamentMatches(this.formData.p_teams));
   }
