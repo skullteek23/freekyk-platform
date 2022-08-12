@@ -90,7 +90,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     const currentTimeInMillis = new Date().getTime();
     if (seasonTimeInMillis > currentTimeInMillis) {
       return this.UPCOMING;
-    } else if (isFixturesCreated && !isSeasonEnded) {
+    } else if (isFixturesCreated && !isSeasonEnded && seasonTimeInMillis <= currentTimeInMillis) {
       return this.LIVE;
     } else if (isSeasonEnded) {
       return PlayConstants.SEASON_STATUS_ENDED;
