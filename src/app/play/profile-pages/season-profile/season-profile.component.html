@@ -20,26 +20,11 @@
       <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p>
-      <div fxLayout.lt-md="column" fxLayoutAlign="center start" fxLayoutGap="16px">
-        <button *ngIf="(seasonInfo$ | async)?.isFixturesCreated" (click)="onParticipate()"
-          class="primaryButton buttonText">
-          <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span matTooltip="Participate in season">Participate</span>
-          </div>
-        </button>
-        <!-- <button [routerLink]="['/play', 'standings']" [queryParams]="{ s: seasonName }"
-          class="primaryButton buttonText">
-          View standings
-        </button> -->
-        <button class="primaryButton buttonText" *ngIf="(seasonInfo$ | async)?.start_date < currentDate">
-          View standings
-        </button>
-
-        <button *ngIf="(seasonInfo$ | async)?.isFixturesCreated" [routerLink]="['/play', 'fixtures']"
-          [queryParams]="{ s: seasonName }" class="primaryButton buttonText">
-          View fixtures
-        </button>
-      </div>
+      <button (click)="onClickActionButton()" class="primaryButton buttonText">
+        <div fxLayoutGap="8px" fxLayoutAlign="center center">
+          <span [matTooltip]="actionText">{{ actionText }}</span>
+        </div>
+      </button>
     </div>
   </section>
 </div>
