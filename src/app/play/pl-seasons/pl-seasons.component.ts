@@ -94,6 +94,8 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
       return this.LIVE;
     } else if (isSeasonEnded) {
       return PlayConstants.SEASON_STATUS_ENDED;
+    } else {
+      return 'No Status';
     }
   }
 }
