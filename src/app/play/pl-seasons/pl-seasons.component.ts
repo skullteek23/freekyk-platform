@@ -7,6 +7,7 @@ import { QueryService } from 'src/app/services/query.service';
 import { SeasonsFilters } from 'src/app/shared/Constants/FILTERS';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { PlayConstants } from '../play.constants';
 
 @Component({
   selector: 'app-pl-seasons',
@@ -14,6 +15,8 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./pl-seasons.component.css'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
+  readonly LIVE = PlayConstants.SEASON_STATUS_LIVE;
+  readonly UPCOMING = PlayConstants.SEASON_STATUS_UPCOMING;
   isLoading = true;
   noSeasons = false;
   filterTerm: string = null;
@@ -25,7 +28,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
     private queryServ: QueryService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'seasons',
@@ -58,13 +61,13 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   getSeasons(): void {
     this.seasons$ = this.ngFire
       .collection('seasons')
-      .get()
+      .valueChanges()
       .pipe(
         tap((val) => {
-          this.noSeasons = val.empty;
+          this.noSeasons = val.length === 0;
           this.isLoading = false;
         }),
-        map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
+        map((resp) => resp.map((doc) => doc as SeasonBasicInfo)),
         share()
       );
   }
@@ -80,5 +83,17 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
       }),
       map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
     );
+  }
+
+  getSeasonStatus(start_date?, isFixturesCreated?: boolean, isSeasonEnded?: boolean): string {
+    const seasonTimeInMillis = (start_date as any).toMillis();
+    const currentTimeInMillis = new Date().getTime();
+    if (seasonTimeInMillis > currentTimeInMillis) {
+      return this.UPCOMING;
+    } else if (isFixturesCreated && !isSeasonEnded) {
+      return this.LIVE;
+    } else if (isSeasonEnded) {
+      return PlayConstants.SEASON_STATUS_ENDED;
+    }
   }
 }
