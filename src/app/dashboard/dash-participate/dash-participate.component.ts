@@ -8,15 +8,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UNIVERSAL_TOURNAMENT_FEES } from 'src/app/shared/Constants/RAZORPAY';
 import { OrderBasic } from 'src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
-import {
-  T_LOADING,
-  T_HOME,
-  T_SUCCESS,
-  T_FAILURE,
-  HOME,
-  LOADING,
-  SUCCESS,
-} from '../constants/constants';
+import { T_LOADING, T_HOME, T_SUCCESS, T_FAILURE, HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 @Component({
   selector: 'app-dash-participate',
@@ -37,7 +29,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>,
     private paymentServ: PaymentService,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.paymentServ.getLoadingStatus().subscribe((status) => {
@@ -60,18 +52,16 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         })
     );
     this.seasons$ = this.ngFire
-      .collection('seasons', (query) =>
-        query.where('cont_tour', 'array-contains', 'FKC')
-      )
-      .get()
+      .collection('seasons')
+      .snapshotChanges()
       .pipe(
         map((resp) =>
-          resp.docs.map(
+          resp.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as SeasonBasicInfo),
-              } as SeasonBasicInfo)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as SeasonBasicInfo),
+            } as SeasonBasicInfo)
           )
         ),
         share()

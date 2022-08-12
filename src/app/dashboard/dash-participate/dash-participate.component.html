@@ -1,71 +1,37 @@
 <mat-card>
   <span mat-card-title class="mat-subheading-2">Ongoing Tournaments</span>
   <div mat-card-content>
-    <div
-      *ngIf="loadingStatus === SUCCESS"
-      class="loading-container"
-      fxLayoutAlign="center center"
-    >
-      <div
-        class="loading-container"
-        fxLayout="column"
-        fxLayoutGap="8px"
-        fxLayoutAlign="center center"
-      >
+    <div *ngIf="loadingStatus === SUCCESS" class="loading-container" fxLayoutAlign="center center">
+      <div class="loading-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
         <app-tick-animation></app-tick-animation>
         <span class="mat-body-1"> Payment Completed! Enjoy your Season. </span>
-        <button
-          *ngIf="selectedSeason"
-          (click)="onExitScreen()"
-          [routerLink]="['/s', selectedSeason]"
-          class="primaryButton margin-top buttonText"
-        >
+        <button *ngIf="selectedSeason" (click)="onExitScreen()" [routerLink]="['/s', selectedSeason]"
+          class="primaryButton margin-top buttonText">
           View Season
         </button>
       </div>
     </div>
-    <div
-      *ngIf="loadingStatus === LOADING"
-      class="loading-container"
-      fxLayoutAlign="center center"
-    >
+    <div *ngIf="loadingStatus === LOADING" class="loading-container" fxLayoutAlign="center center">
       <div class="loading-container" fxLayoutAlign="center center">
         <app-loading></app-loading>
       </div>
     </div>
     <ul *ngIf="loadingStatus === HOME">
       <li *ngIf="(seasons$ | async)?.length === 0">
-        <app-no-items-message
-          items="ongoing tournaments"
-        ></app-no-items-message>
+        <app-no-items-message items="ongoing tournaments"></app-no-items-message>
       </li>
-      <li
-        class="tournament"
-        *ngFor="let season of seasons$ | async"
-        fxLayoutAlign="space-between center"
-        fxLayout.lt-md="column"
-      >
+      <li class="tournament" *ngFor="let season of seasons$ | async" fxLayoutAlign="space-between center"
+        fxLayout.lt-md="column">
         <span class="mat-subheading-1">
           {{ season.name | textShorten: 30 }}
-          (FKC{{ season.cont_tour.length > 1 ? " & more..." : "" }})</span
-        >
+          (FKC{{ season.cont_tour.length > 1 ? " & more..." : "" }})</span>
         <div fxLayoutGap="8px" fxLayout.lt-md="column">
-          <button
-            fxFlexOrder.lt-md="1"
-            fxFlexOrder.gt-sm="0"
-            (click)="onExitScreen()"
-            [routerLink]="['/s', season.name]"
-            class="secondaryButton buttonText"
-          >
+          <button fxFlexOrder.lt-md="1" fxFlexOrder.gt-sm="0" (click)="onExitScreen()"
+            [routerLink]="['/s', season.name]" class="secondaryButton buttonText">
             View Season
           </button>
-          <button
-            fxFlexOrder.lt-md="0"
-            fxFlexOrder.gt-sm="1"
-            [disabled]="isParticipated(season.id)"
-            (click)="onPayNow(season)"
-            class="buttonText primaryButton"
-          >
+          <button fxFlexOrder.lt-md="0" fxFlexOrder.gt-sm="1" [disabled]="isParticipated(season.id)"
+            (click)="onPayNow(season)" class="buttonText primaryButton">
             {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
           </button>
         </div>
