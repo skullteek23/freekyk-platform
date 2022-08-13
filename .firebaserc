@@ -12,6 +12,16 @@
           "freekyk-prod"
         ]
       }
+    },
+    "freekyk-development": {
+      "hosting": {
+        "football-platform-admin": [
+          "admin-freekyk-dev"
+        ],
+        "football-platform": [
+          "freekyk-development"
+        ]
+      }
     }
   }
 }

@@ -1,5 +1,7 @@
-export const RAZORPAY_API_KEYˍID_TEST = 'rzp_test_LSdBGlAyude8YE';
-export const RAZORPAY_API_KEYˍSECRET_TEST = 'yN2TYg2VWzuzozdGWRmrX0Ma';
-export const RAZORPAY_API_KEYˍID_LIVE = 'rzp_live_8BB9gOfLpWDtAG';
-export const RAZORPAY_API_KEYˍSECRET_LIVE = 'padz8nMQYYaD7XRZLAY7uZ2Y';
-export const IMAGES_BUCKET = 'freekyk-prod.appspot.com';
+import { environment } from '../../src/environments/environment.dev';
+// import { environment } from '../../src/environments/environment.prod';
+export const RAZORPAY_API_KEYˍID_TEST = environment.razorPay.key_id;
+export const RAZORPAY_API_KEYˍSECRET_TEST = environment.razorPay.key_secret;
+export const RAZORPAY_API_KEYˍID_LIVE = environment.razorPay.key_id;
+export const RAZORPAY_API_KEYˍSECRET_LIVE = environment.razorPay.key_secret;
+export const IMAGES_BUCKET = environment.firebase.storageBucket;
