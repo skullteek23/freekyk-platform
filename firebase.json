@@ -1,9 +1,5 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  },
   "firestore": {
-    "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "functions": {
@@ -17,7 +13,11 @@
     {
       "target": "football-platform",
       "public": "dist/football-platform-v1",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "**",
@@ -28,7 +28,11 @@
     {
       "target": "football-platform-admin",
       "public": "dist/admin",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "rewrites": [
         {
           "source": "**",
@@ -37,9 +41,6 @@
       ]
     }
   ],
-  "storage": {
-    "rules": "storage.rules"
-  },
   "emulators": {
     "auth": {
       "port": 9099
