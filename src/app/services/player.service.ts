@@ -115,7 +115,7 @@ export class PlayerService implements OnDestroy {
     private ngfire: AngularFirestore,
     private store: Store<fromApp.AppState>
   ) {
-    console.log('Player service started');
+    // console.log('Player service started');
     this.initPlayerData();
   }
   ngOnDestroy(): void {
