@@ -1,5 +1,10 @@
 <mat-card>
-  <span mat-card-title class="mat-subheading-2">Ongoing Tournaments</span>
+  <div mat-card-title class="mat-subheading-2" fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span>
+      Live Seasons
+    </span>
+    <span class="material-icons-round">sensors</span>
+  </div>
   <div mat-card-content>
     <div *ngIf="loadingStatus === SUCCESS" class="loading-container" fxLayoutAlign="center center">
       <div class="loading-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
@@ -22,16 +27,13 @@
       </li>
       <li class="tournament" *ngFor="let season of seasons$ | async" fxLayoutAlign="space-between center"
         fxLayout.lt-md="column">
-        <span class="mat-subheading-1">
+        <span (click)="onExitScreen(season.name)" class="mat-subheading-1 name">
           {{ season.name | textShorten: 30 }}
-          (FKC{{ season.cont_tour.length > 1 ? " & more..." : "" }})</span>
-        <div fxLayoutGap="8px" fxLayout.lt-md="column">
-          <button fxFlexOrder.lt-md="1" fxFlexOrder.gt-sm="0" (click)="onExitScreen()"
-            [routerLink]="['/s', season.name]" class="secondaryButton buttonText">
-            View Season
-          </button>
-          <button fxFlexOrder.lt-md="0" fxFlexOrder.gt-sm="1" [disabled]="isParticipated(season.id)"
-            (click)="onPayNow(season)" class="buttonText primaryButton">
+          ( Includes {{ getContainingTournaments(season.cont_tour) }} )
+        </span>
+        <div fxLayoutGap="8px" fxLayout.lt-md="column" [matTooltip]="tooltipText">
+          <button fxFlexOrder.lt-md="0" fxFlexOrder.gt-sm="1" [disabled]="isParticipated(season.id) || !hasTeam"
+            (click)="onPayNow(season)" class="buttonText secondaryButtonInv">
             {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
           </button>
         </div>

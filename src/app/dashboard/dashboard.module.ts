@@ -52,6 +52,7 @@ import { environment } from 'src/environments/environment';
 import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
+import { PlayerService } from '../services/player.service';
 
 @NgModule({
   declarations: [
@@ -114,4 +115,6 @@ import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactiv
     PaymentService,
   ],
 })
-export class DashboardModule {}
+export class DashboardModule {
+  constructor(plServ: PlayerService) { }
+}

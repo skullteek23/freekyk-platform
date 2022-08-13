@@ -4,7 +4,7 @@
     <div (window:resize)="onResizeScreen()" fxLayoutAlign="center center" fxLayout="column">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
         <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
-        <span class="mat-body-2"> {{ dataName$ | async | titlecase }} </span>
+        <span class="mat-body-2"> {{ playerName | titlecase }} </span>
         <a *ngIf="(dataPos$ | async) == null; else plPos" [routerLink]="['/dashboard', 'account', 'profile']"
           class="mat-caption">
           Add Playing Position

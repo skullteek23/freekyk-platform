@@ -5,10 +5,9 @@ import { MatDrawerMode } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
-import { AuthService } from '../services/auth.service';
 import { DashState } from './store/dash.reducer';
 
 @Component({
@@ -22,13 +21,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   screen = '';
   dataImg$: Observable<string>;
   dataPos$: Observable<string>;
-  dataName$: Observable<string>;
+  playerName: string = 'NA';
   subscriptions = new Subscription();
   sidenavOpenState: boolean;
   constructor(
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
-    private authServ: AuthService,
     private router: Router,
     private avatarServ: AccountAvatarService,
     private store: Store<{
@@ -44,9 +42,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dataPos$ = this.store
       .select('dash')
       .pipe(map((resp) => resp.playerBasicInfo.pl_pos));
-    this.dataName$ = this.store
+    this.subscriptions.add(this.store
       .select('dash')
-      .pipe(map((resp) => resp.playerBasicInfo.name || 'No Name'));
+      .pipe(map((resp) => resp.playerBasicInfo.name))
+      .subscribe(data => {
+        console.log(data)
+        this.playerName = data;
+      }));
     this.subscriptions.add(
       this.mediaObs
         .asObservable()
