@@ -58,7 +58,7 @@
             "scripts": []
           },
           "configurations": {
-            "prod": {
+            "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -85,7 +85,7 @@
                 }
               ]
             },
-            "dev": {
+            "development": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -231,7 +231,7 @@
             "scripts": []
           },
           "configurations": {
-            "prod": {
+            "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -258,7 +258,7 @@
                 }
               ]
             },
-            "dev": {
+            "development": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
