@@ -47,6 +47,9 @@ export class PlayerService implements OnDestroy {
   }
   initPlayerData(): void {
     const uid = localStorage.getItem('uid');
+    if (!uid) {
+      return;
+    }
     this.fetchPlayerBasicInfo(uid);
     this.fetchPlayerMoreInfo(uid);
     this.fetchSMLinks(uid);
