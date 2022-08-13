@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port=4200",
-    "start-admin": "ng serve admin --port=4400",
+    "start": "ng serve -o --port=4200",
+    "start-admin": "ng serve -o admin --port=4400",
     "build": "ng build admin --prod && ng build --prod && firebase deploy --only hosting",
     "deploy": "firebase deploy --only hosting",
     "test": "ng test",
