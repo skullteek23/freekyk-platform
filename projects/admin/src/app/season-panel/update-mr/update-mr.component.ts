@@ -15,11 +15,11 @@ import {
   MatchFixture,
   MatchStats,
 } from 'src/app/shared/interfaces/match.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
-import firebase from 'firebase/app';
-import { MatInput } from '@angular/material/input';
 import { MatRadioChange } from '@angular/material/radio';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
   selector: 'app-update-mr',
@@ -30,8 +30,11 @@ export class UpdateMrComponent implements OnInit {
   matchReport: FormGroup;
   existingSeasons$: Observable<SeasonBasicInfo[]>;
   matches$: Observable<MatchFixture[]>;
+  selectedSeason: string;
+  selectedMatch: MatchFixture;
   constructor(
     private ngFire: AngularFirestore,
+    private ngFunc: AngularFireFunctions,
     private snackServ: SnackbarService
   ) {
     this.getSeasons();
@@ -73,8 +76,9 @@ export class UpdateMrComponent implements OnInit {
       : this.matchReport.get('pen_resultAway').disable();
   }
   onSubmit() {
-    console.log(this.matchReport.value);
+    // console.log(this.matchReport.value);
     const mid = this.matchReport.value['mid'];
+    const sname = this.selectedSeason || null;
     const tie_breaker = this.matchReport.value['penalties'] == true;
     let allPromises = [];
     allPromises.push(
@@ -83,6 +87,7 @@ export class UpdateMrComponent implements OnInit {
         .doc('matchReport')
         .set(<MatchStats>{
           ...this.matchReport.value,
+          sname,
           matchEndDate: new Date(this.matchReport.value['matchEndDate']),
         })
     );
@@ -99,6 +104,19 @@ export class UpdateMrComponent implements OnInit {
           concluded: true,
         })
     );
+    if (this.selectedMatch.type === 'FPL') {
+      const data = {
+        mid: this.selectedMatch.id,
+        sid: this.selectedSeason,
+        homeTeam: this.selectedMatch.teams[0],
+        awayTeam: this.selectedMatch.teams[1],
+        score: this.selectedMatch.score,
+      };
+      const callable = this.ngFunc.httpsCallable(
+        CLOUD_FUNCTIONS.UPDATE_LEAGUE_TABLE
+      );
+      allPromises.push(callable(data));
+    }
 
     Promise.all(allPromises).then(() => {
       this.snackServ.displayCustomMsg('Match updated successfully!');
@@ -119,10 +137,11 @@ export class UpdateMrComponent implements OnInit {
       );
   }
   getMatches(season: MatSelectChange) {
+    this.selectedSeason = season.value.id;
     this.matches$ = this.ngFire
       .collection('allMatches', (query) =>
         query
-          .where('season', '==', season.value)
+          .where('season', '==', season.value.name)
           .where('concluded', '==', false)
       )
       .get()
@@ -135,6 +154,7 @@ export class UpdateMrComponent implements OnInit {
       );
   }
   onSelectMatch(match: MatSelectChange) {
+    this.selectedMatch = match.value;
     this.matchReport.patchValue({ mid: match.value });
   }
   onAddControl(side: 'home' | 'away') {

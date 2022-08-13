@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
-import { SocialShareService } from 'src/app/services/social-share.service';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
-import { ShareData } from 'src/app/shared/interfaces/others.model';
+import { filter, map, share, tap } from 'rxjs/operators';
+import { QueryService } from 'src/app/services/query.service';
+import { TeamsFilters } from 'src/app/shared/Constants/FILTERS';
+import { FilterData } from 'src/app/shared/interfaces/others.model';
 import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
 
 @Component({
@@ -15,44 +13,51 @@ import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
   templateUrl: './pl-teams.component.html',
   styleUrls: ['./pl-teams.component.css'],
 })
-export class PlTeamsComponent implements OnInit {
-  isLoading: boolean = true;
-  noTeams: boolean = false;
-  onMobile: boolean = false;
+export class PlTeamsComponent implements OnInit, OnDestroy {
+  filterTerm: string = null;
+  isLoading = true;
+  noTeams = false;
+  onMobile = false;
   teams$: Observable<TeamBasicInfo[]>;
-  teFilters = ['Location', 'Verified', 'Age Group'];
-  cols: number = 1;
-  watcher: Subscription;
+  filterData: FilterData;
+  cols = 1;
+  subscriptions = new Subscription();
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private dialog: MatDialog,
-    private shareServ: SocialShareService
-  ) {
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.onMobile = true;
-        } else if (change.mqAlias === 'md') {
-          this.onMobile = false;
-          this.cols = 3;
-        } else {
-          this.onMobile = false;
-          this.cols = 4;
-        }
-      });
-  }
+    private queryServ: QueryService
+  ) {}
 
   ngOnInit(): void {
+    this.filterData = {
+      defaultFilterPath: 'teams',
+      filtersObj: TeamsFilters,
+    };
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+            this.onMobile = true;
+          } else if (change.mqAlias === 'md') {
+            this.onMobile = false;
+            this.cols = 3;
+          } else {
+            this.onMobile = false;
+            this.cols = 4;
+          }
+        })
+    );
     this.getTeams();
   }
-
-  getTeams() {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+  getTeams(): void {
     this.teams$ = this.ngFire
       .collection('teams', (ref) => ref.orderBy('tname'))
       .get()
@@ -60,23 +65,25 @@ export class PlTeamsComponent implements OnInit {
         tap((val) => {
           this.noTeams = val.empty;
           this.isLoading = false;
-          console.log('here');
         }),
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              <TeamBasicInfo>{ id: doc.id, ...(<TeamBasicInfo>doc.data()) }
+              ({
+                id: doc.id,
+                ...(doc.data() as TeamBasicInfo),
+              } as TeamBasicInfo)
           )
-        )
+        ),
+        share()
       );
   }
-  onShare(team: TeamBasicInfo) {
-    const ShareData: ShareData = {
-      share_title: team.tname,
-      share_desc: LOREM_IPSUM_SHORT,
-      share_url: 'https://freekyk8--h-qcd2k7n4.web.app/' + 's/' + team.tname,
-      share_imgpath: team.imgpath,
-    };
-    this.shareServ.onShare(ShareData);
+  onQueryData(queryInfo): void {
+    if (queryInfo === null) {
+      return this.getTeams();
+    }
+    this.teams$ = this.queryServ
+      .onQueryData(queryInfo, 'teams')
+      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)));
   }
 }

@@ -100,9 +100,13 @@
     <div fxLayoutAlign="start center" fxLayoutGap="8px">
       <span
         class="material-icons-round"
-        [ngClass]="{ filled: profileProgress >= 100 }"
+        [ngClass]="{ filled: profileProgress >= 100 || profileShared }"
       >
-        {{ profileProgress >= 100 ? "check_circle" : "radio_button_unchecked" }}
+        {{
+          profileProgress >= 100 || profileShared
+            ? "check_circle"
+            : "radio_button_unchecked"
+        }}
       </span>
       <a (click)="onShareProfile()" class="mat-body-1"> Share your Profile </a>
     </div>
@@ -110,7 +114,7 @@
     <!-- step -->
 
     <!-- progress bar -->
-    <div class="progress-bar seperate">
+    <div class="seperate">
       <span class="overline">{{
         profileProgress.toString() + "% Completed"
       }}</span>

@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  FREESTYLE_PAGE,
+  LANDING_PAGE,
+} from 'src/app/shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-action-strip',
@@ -7,11 +11,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./action-strip.component.css'],
 })
 export class ActionStripComponent implements OnInit {
-  @Input('compact') isCompact: boolean = false;
-  @Input('heading') hText: string = 'ready to play football?';
+  // tslint:disable: no-input-rename
+  @Input() elementSpacing = 'space-between center';
+  @Input('compact') isCompact = false;
+  @Input('heading') headingText = 'ready to play football?';
+  @Input() formCTA = 'Get Started';
+  @Input() enablePartnerForm = false;
+  @Input() enableFreestyleTrainingForm = false;
+  private partnerForm = LANDING_PAGE.partnerWithUsFormLink;
+  private trainingForm = FREESTYLE_PAGE.trainingFormLink;
   constructor(private router: Router) {}
   ngOnInit(): void {}
-  onNavigate(route: string) {
+  onNavigate(route: string): void {
     this.router.navigate([route]);
+  }
+  onNavigateToForms(): void {
+    if (this.enablePartnerForm) {
+      this.onNavigateToPartnerForm();
+    } else if (this.enableFreestyleTrainingForm) {
+      this.onNavigateToTrainingForm();
+    }
+  }
+  onNavigateToPartnerForm(): void {
+    window.open(this.partnerForm, '_blank');
+  }
+  onNavigateToTrainingForm(): void {
+    window.open(this.trainingForm, '_blank');
   }
 }

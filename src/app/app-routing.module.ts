@@ -1,19 +1,12 @@
 import { NgModule } from '@angular/core';
-import {
-  canActivate,
-  redirectLoggedInTo,
-  redirectUnauthorizedTo,
-} from '@angular/fire/auth-guard';
+import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { CartComponent } from './cart/cart.component';
 import { ProductProfileComponent } from './equipment/profile-pages/product-profile/product-profile.component';
 import { ErrorComponent } from './error/error.component';
-import { FreestylerProfileComponent } from './freestyle/profile-pages/freestyler-profile/freestyler-profile.component';
 import { AboutComponent } from './others/about/about.component';
 import { LandingPageComponent } from './others/landing-page/landing-page.component';
-import { PricingComponent } from './others/pricing/pricing.component';
 import { PrivacyComponent } from './others/privacy/privacy.component';
 import { TermsComponent } from './others/terms/terms.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
@@ -22,7 +15,6 @@ import { SeasonProfileComponent } from './play/profile-pages/season-profile/seas
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
 const redirectLoggedInToDashboard = () =>
   redirectLoggedInTo(['/dashboard/home']);
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -66,15 +58,10 @@ const routes: Routes = [
       import('./support/support.module').then((m) => m.SupportModule),
   },
   { path: 'p/:playerid', component: PlayerProfileComponent },
-  { path: 't/:teamid', component: TeamProfileComponent },
+  { path: 't/:teamName', component: TeamProfileComponent },
   { path: 's/:seasonid', component: SeasonProfileComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
   { path: 'product/:productid', component: ProductProfileComponent },
-  {
-    path: 'cart',
-    ...canActivate(redirectUnauthorizedToLogin),
-    component: CartComponent,
-  },
   { path: 'about', component: AboutComponent },
   { path: 'privacypolicy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
@@ -93,7 +80,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      scrollPositionRestoration: 'enabled',
+      // scrollPositionRestoration: 'enabled',
       onSameUrlNavigation: 'reload',
     }),
   ],

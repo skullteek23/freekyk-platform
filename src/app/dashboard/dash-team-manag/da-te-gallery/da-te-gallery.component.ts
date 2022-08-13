@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
 import { AppState } from 'src/app/store/app.reducer';
@@ -10,21 +10,28 @@ import { AppState } from 'src/app/store/app.reducer';
   templateUrl: './da-te-gallery.component.html',
   styleUrls: ['./da-te-gallery.component.css'],
 })
-export class DaTeGalleryComponent implements OnInit {
+export class DaTeGalleryComponent implements OnInit, OnDestroy {
   noImages: boolean;
   galleryImages$: Observable<string[]>;
-  constructor(private teServ: TeamService, store: Store<AppState>) {
-    store
-      .select('dash')
-      .pipe(map((data) => data.hasTeam))
-      .subscribe((data) => {
-        this.noImages = data == null;
-        if (data != null)
-          this.galleryImages$ = this.teServ.getTeamGallery(data.id);
-      });
+  subscriptions = new Subscription();
+  constructor(private teServ: TeamService, private store: Store<AppState>) {}
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.store
+        .select('dash')
+        .pipe(map((data) => data.hasTeam))
+        .subscribe((data) => {
+          this.noImages = data === null;
+          if (data) {
+            this.galleryImages$ = this.teServ.getTeamGallery(data.id);
+          }
+        })
+    );
   }
-  ngOnInit(): void {}
-  onOpenTeamSettings() {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+  onOpenTeamSettings(): void {
     this.teServ.onOpenTeamSettingsDialog();
   }
 }

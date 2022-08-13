@@ -6,8 +6,10 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { userAddress } from 'src/app/shared/interfaces/others.model';
 
@@ -17,43 +19,50 @@ import { userAddress } from 'src/app/shared/interfaces/others.model';
   styleUrls: ['./acc-addresses.component.css'],
 })
 export class AccAddressesComponent implements OnInit {
-  noSavedAddress: boolean = false;
+  noSavedAddress = false;
   newAddressForm: FormGroup = new FormGroup({});
   addr$: Observable<userAddress[]>;
   additionAvailable = true;
   showForm = false;
-  cities = ['Ghaziabad'];
-  states = ['Uttar Pradesh'];
-  countries = ['India'];
+  cities$: Observable<string[]>;
+  states$: Observable<string[]>;
+  uid: string;
 
   constructor(
     private snackServ: SnackbarService,
-    private ngFire: AngularFirestore
-  ) {}
+    private ngFire: AngularFirestore,
+    private locationServ: LocationCitiesService
+  ) { }
 
   ngOnInit(): void {
-    const uid = localStorage.getItem('uid');
+    this.uid = localStorage.getItem('uid');
     this.getAddresses();
+    this.onGetStates();
   }
-  getAddresses() {
-    const uid = localStorage.getItem('uid');
+  onGetStates(): void {
+    this.states$ = this.locationServ.getStateByCountry('India');
+  }
+  onSelectState(state: MatSelectChange): void {
+    this.cities$ = this.locationServ.getCityByState(state.value);
+  }
+  getAddresses(): void {
     this.addr$ = this.ngFire
-      .collection('players/' + uid + '/Addresses')
+      .collection(`players/${this.uid}/Addresses`)
       .snapshotChanges()
       .pipe(
-        tap((resp) => (this.noSavedAddress = resp.length == 0)),
+        tap((resp) => (this.noSavedAddress = resp.length === 0)),
         map((resp) =>
           resp.map(
             (doc) =>
-              <userAddress>{
-                id: doc.payload.doc.id,
-                ...(<userAddress>doc.payload.doc.data()),
-              }
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as userAddress),
+            } as userAddress)
           )
         )
       );
   }
-  onOpenAddressForm() {
+  onOpenAddressForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
     this.newAddressForm = new FormGroup({
@@ -88,34 +97,30 @@ export class AccAddressesComponent implements OnInit {
       ),
     });
   }
-  onDeleteAddress(formid: string) {
-    // backend code goes here
-    const uid = localStorage.getItem('uid');
+  onDeleteAddress(formid: string): void {
     this.ngFire
-      .collection('players/' + uid + '/Addresses')
+      .collection(`players/${this.uid}/Addresses`)
       .doc(formid)
       .delete()
       .then(() => this.snackServ.displayDelete());
   }
-  resetAll() {
+  resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
-  onSaveAddress() {
-    // backend code goes here
-    console.log(this.newAddressForm);
-    const uid = localStorage.getItem('uid');
+  onSaveAddress(): void {
+    // console.log(this.newAddressForm);
     this.ngFire
-      .collection('players/' + uid + '/Addresses')
+      .collection(`players/${this.uid}/Addresses`)
       .add(this.newAddressForm.value)
       .then(this.finishSubmit.bind(this));
   }
-  finishSubmit() {
+  finishSubmit(): void {
     this.snackServ.displayCustomMsg('Address saved successfully!');
     this.resetAll();
   }
-  FirstDigitNotZero(control: AbstractControl) {
-    return (<string>control.value).charAt(0) == '0'
+  FirstDigitNotZero(control: AbstractControl): Observable<any> {
+    return (control.value as string).charAt(0) === '0'
       ? of({ invalidCode: true })
       : of(null);
   }

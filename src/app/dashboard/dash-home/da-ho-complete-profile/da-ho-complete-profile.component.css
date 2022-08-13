@@ -18,6 +18,7 @@
 .progress {
   height: 100%;
   background-color: var(--primaryColor);
+  transition: width 0.8s ease-in-out;
 }
 .maxh-cards-r {
   height: 350px;

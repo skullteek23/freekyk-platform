@@ -27,7 +27,7 @@ export const initialState: DashState = {
     id: null,
   },
   playerMoreInfo: {
-    profile: null,
+    profile: false,
     imgpath_lg: null,
     born: null,
     locState: null,
@@ -60,7 +60,7 @@ export const initialState: DashState = {
 export function dashReducer(
   state: DashState = initialState,
   action: DashActions.DashActionsType
-) {
+): DashState {
   switch (action.type) {
     case DashActions.ADD_BASIC_INFO:
       return {

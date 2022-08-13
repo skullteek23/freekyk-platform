@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -10,40 +12,15 @@ import { filter, map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'admin';
-  // UIDs = [
-  //   '33KtAWVs6jbVzqSXVqsCebZyMLX2',
-  //   'DPCp55uy3nNKYzu9SMyPsZ7rixx1',
-  //   'VAtAEBdJpTSLyr5e5hbm1rhVWqx2',
-  //   'XBjH43uyeTfifDBJPjc0SJy8hbV2',
-  //   'p2Jcv9mhG3O9uwDybpXVnlumlWg2',
-  //   's2XM1E5zmVejceL4sOYnKx2asyE3',
-  //   'u4871F6Pq6SZ0h0BSFLNHcjZ19i2',
-  // ];
-  // teams = [
-  //   'Blasters FC',
-  //   'Annihilation FC',
-  //   'Fusers FC',
-  //   'Real Madrid FC',
-  //   'Gardenia FC',
-  //   'Lone Wolf FC',
-  //   'Oscar Delta FC',
-  // ];
-  // players = [
-  //   'Paras Jam',
-  //   'Naman Pandey',
-  //   'Oshu Ghul',
-  //   'Sirhud Kalra',
-  //   'Chinu Srivastav',
-  //   'Vishal Tomar',
-  //   'Shubham Kashyap',
-  //   'Mintu Pandey',
-  //   'Chintu Rohilla',
-  //   'Dhruv Rathi',
-  // ];
   cols: number;
-  watcher: Subscription;
-  constructor(private mediaObs: MediaObserver) {
-    this.watcher = this.mediaObs
+  watcher = new Subscription();
+  links: any[] = [
+    { name: 'seasons', route: 'seasons' },
+    { name: 'grounds', route: 'grounds' }
+  ];
+  activeLink = 'seasons';
+  constructor(private mediaObs: MediaObserver, private router: Router) {
+    this.watcher.add(this.mediaObs
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
@@ -57,10 +34,19 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           this.cols = 3;
         }
-      });
+      }));
+    // this.watcher.add(this.router.events.subscribe((event: any) => {
+    //   if (event instanceof NavigationEnd) {
+    //     this.activeLink = event.url.slice('/'.length);
+    //   }
+    // }))
   }
-  ngOnInit(): void {}
-  ngOnDestroy() {
-    this.watcher.unsubscribe();
+  ngOnInit(): void {
+    this.router.navigate(['/seasons']);
+  }
+  ngOnDestroy(): void {
+    if (this.watcher) {
+      this.watcher.unsubscribe();
+    }
   }
 }

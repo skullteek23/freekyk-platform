@@ -46,16 +46,16 @@ export interface VEProject {
   photos: string[];
 }
 export interface LeagueTableModel {
-  rank: number;
   tData: { timgpath: string; tName: string };
-  p: number;
   w: number;
   d: number;
   l: number;
   gf: number;
   ga: number;
-  gd: number;
-  pts: number;
+  p?: number;
+  gd?: number;
+  rank?: number;
+  pts?: number;
 }
 export interface CommunityPlayTableModel {
   rank: number;
@@ -196,15 +196,17 @@ export interface tempTour {
   perTeamPlaying: number;
   tour_type: 'FKC' | 'FPL' | 'FCP';
   startDate: Date;
+  isFixturesEmpty?: boolean;
 }
-export interface CloufFunctionFixtureData {
+export interface CloudFunctionFixtureData {
   sid: string;
-  sname: string;
+  sName: string;
   grounds: GroundPrivateInfo[];
-  matches: number;
+  matches: any;
   startDate: Date;
   oneMatchDur: number;
-  tour_type: 'FKC' | 'FPL' | 'FCP';
+  tour_type: string | string[];
+  teamParticipating: number;
 }
 export interface GroundTimings {
   0: [];
@@ -214,4 +216,39 @@ export interface GroundTimings {
   4: [];
   5: [];
   6: [];
+}
+
+export interface FilterData {
+  defaultFilterPath: string;
+  filtersObj: {};
+  fetchablefiltersObj?: {};
+}
+export interface QueryInfo {
+  queryItem: string;
+  queryValue: string;
+  queryComparisonSymbol?:
+  | '<='
+  | '>='
+  | '>'
+  | '<'
+  | 'array-contains'
+  | 'in'
+  | '=='
+  | 'array-contains-any'
+  | 'in'
+  | 'not-in'
+  | '!=';
+}
+export interface FeatureSectionContent {
+  subHeading: string;
+  CTA: {
+    text: string;
+    link: string;
+  };
+  desc: string;
+}
+export interface CommunityNumbersContent {
+  heading: string;
+  desc: string;
+  numbers: {};
 }

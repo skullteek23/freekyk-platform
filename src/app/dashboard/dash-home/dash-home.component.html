@@ -1,16 +1,6 @@
-<div
-  fxLayoutGap="20px"
-  fxLayout.gt-sm="row"
-  fxLayout="column"
-  fxLayoutAlign.gt-md="center"
->
+<div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout="column" fxLayoutAlign.gt-md="center">
   <!-- button laoding -->
-  <div
-    *ngIf="showMobile && isLoading"
-    class="_fixture"
-    fxLayout="column"
-    fxLayoutGap="16px"
-  >
+  <div *ngIf="showMobile && isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
     <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
   </div>
   <!-- button laoding -->
@@ -18,12 +8,8 @@
   <!-- mobile buttons -->
   <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
     <!-- complete your profile button -->
-    <button
-      [routerLink]="['/dashboard', 'account', 'profile']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button [routerLink]="['/dashboard', 'account', 'profile']" class="wide-button" fxLayout
+      fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">account_box</span>
         <span class="mat-body-1"> Complete your profile </span>
@@ -34,12 +20,7 @@
     <!-- complete your profile button -->
 
     <!-- visit store button -->
-    <button
-      [routerLink]="['/equipment']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button [routerLink]="['/equipment']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">store</span>
         <span class="mat-body-1"> Visit equipment store </span>
@@ -50,19 +31,8 @@
     <!-- visit store button -->
 
     <!-- find academies button -->
-    <button
-      [routerLink]="['/academies']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
-      <div
-        class="b-name"
-        fxLayout
-        fxLayoutGap="20px"
-        fxLayoutAlign="start center"
-        fxLayoutGap.lt-sm="4px"
-      >
+    <button [routerLink]="['/academies']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">school</span>
         <span class="mat-body-1 left"> Find top academies near you </span>
       </div>
@@ -72,12 +42,7 @@
     <!-- find academies button -->
 
     <!-- raise a ticket button -->
-    <button
-      [routerLink]="['/support']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">live_help</span>
         <span class="mat-body-1"> Need help? Raise a ticket </span>
@@ -104,10 +69,8 @@
     <!-- your stats -->
 
     <!-- complete your profile section -->
-    <app-da-ho-complete-profile
-      (profileComplete)="onComplete($event)"
-      [fxFlexOrder]="order2"
-    ></app-da-ho-complete-profile>
+    <app-da-ho-complete-profile (profileComplete)="onComplete($event)" [fxFlexOrder]="order2">
+    </app-da-ho-complete-profile>
     <!-- complete your profile section -->
 
     <!-- your team card -->
@@ -157,6 +120,6 @@
       </mat-tab-group>
     </mat-card>
     <!-- your team card -->
-    <app-da-ho-notifs fxFlexOrder="3"></app-da-ho-notifs>
+    <app-da-ho-notifs [fxFlexOrder]="order4"></app-da-ho-notifs>
   </div>
 </div>

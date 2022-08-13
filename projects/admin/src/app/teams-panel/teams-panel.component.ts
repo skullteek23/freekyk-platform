@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/WEBSITE_CONTENT';
 import {
   TeamBasicInfo,
   TeamMembers,

@@ -11,9 +11,11 @@ export interface MatchFixture {
   locState: string;
   score?: number[];
   id?: string;
+  mid?: string;
   tie_breaker?: string;
   stadium?: string;
   mode?: 'fixture' | 'result';
+  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
 }
 export interface MatchFixtureOverview {
   ref: string;
@@ -37,11 +39,12 @@ export interface MatchStats {
   awayScore: number;
   penalties: boolean;
   matchEndDate: Timestamp;
+  sname: string;
+  mid: string;
   pen_resultHome?: number;
   pen_resultAway?: number;
   scorersHome?: string[];
   scorersAway?: string[];
-  mid?: string;
 }
 
 export interface tempFixtureData {
@@ -58,4 +61,17 @@ export interface tempFullFixtureData {
   fixture: MatchFixture;
   overview: MatchFixtureOverview;
   lineup: MatchLineup;
+}
+export interface dummyFixture {
+  date: Date;
+  concluded: boolean;
+  season: string;
+  premium: boolean;
+  type: 'FKC' | 'FCP' | 'FPL';
+  locCity: string;
+  locState: string;
+  mid?: string;
+  stadium?: string;
+  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
+  timestamp?: number;
 }

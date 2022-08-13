@@ -1,18 +1,21 @@
 /* eslint-disable */
 import * as admin from 'firebase-admin';
-let db = admin.firestore();
+const db = admin.firestore();
 import { Invite } from '../../src/app/shared/interfaces/notification.model';
 import {
   ActiveSquadMember,
   TeamMembers,
 } from '../../src/app/shared/interfaces/team.model';
-export async function teamDeleter(data: { teamId: string }, context: any) {
+export async function teamDeleter(
+  data: { teamId: string },
+  context: any
+): Promise<any> {
   // initiating the main batch for deletion and updation
-  var batch = db.batch();
+  const batch = db.batch();
   // initiating the main batch for deletion and updation
 
   // updating team members individual profile
-  let memSnap: string[] = (<TeamMembers>(
+  const memSnap: string[] = (
     (
       await db
         .collection('teams')
@@ -20,8 +23,9 @@ export async function teamDeleter(data: { teamId: string }, context: any) {
         .collection('additionalInfo')
         .doc('members')
         .get()
-    ).data()
-  )).members.map((mem) => mem.id);
+    ).data() as TeamMembers
+  ).members.map((mem) => mem.id);
+  // tslint:disable: prefer-for-of
   for (let i = 0; i < memSnap.length; i++) {
     const plRef = db.collection('players').doc(memSnap[i]);
     batch.update(plRef, { team: null });
@@ -68,11 +72,11 @@ export async function teamDeleter(data: { teamId: string }, context: any) {
       .get()
   ).empty;
   if (!isTCAEmpty) {
-    let commsA = (
+    const commsA = (
       await db
         .collection('teamCommunications/' + data.teamId + '/activeSquad0')
         .get()
-    ).docs.map((resp) => <ActiveSquadMember>resp.data());
+    ).docs.map((resp) => resp.data() as ActiveSquadMember);
     for (let i = 0; i < commsA.length; i++) {
       const plRef = db
         .collection('teamCommunications/' + data.teamId + '/activeSquad0')
@@ -89,11 +93,11 @@ export async function teamDeleter(data: { teamId: string }, context: any) {
       .get()
   ).empty;
   if (!isTCBEmpty) {
-    let commsB = (
+    const commsB = (
       await db
         .collection('teamCommunications/' + data.teamId + '/activeSquad1')
         .get()
-    ).docs.map((resp) => <ActiveSquadMember>resp.data());
+    ).docs.map((resp) => resp.data() as ActiveSquadMember);
     for (let i = 0; i < commsB.length; i++) {
       const plRef = db
         .collection('teamCommunications/' + data.teamId + '/activeSquad1')
@@ -110,11 +114,11 @@ export async function teamDeleter(data: { teamId: string }, context: any) {
       .get()
   ).empty;
   if (!isTCCEmpty) {
-    let commsC = (
+    const commsC = (
       await db
         .collection('teamCommunications/' + data.teamId + '/activeSquad2')
         .get()
-    ).docs.map((resp) => <ActiveSquadMember>resp.data());
+    ).docs.map((resp) => resp.data() as ActiveSquadMember);
     for (let i = 0; i < commsC.length; i++) {
       const plRef = db
         .collection('teamCommunications/' + data.teamId + '/activeSquad2')
@@ -129,9 +133,9 @@ export async function teamDeleter(data: { teamId: string }, context: any) {
     await db.collection('invites').where('teamId', '==', data.teamId).get()
   ).empty;
   if (!isInvitesEmpty) {
-    let invites: Invite[] = (
+    const invites: Invite[] = (
       await db.collection('invites').where('teamId', '==', data.teamId).get()
-    ).docs.map((doc) => <Invite>{ id: doc.id, ...(<Invite>doc.data()) });
+    ).docs.map((doc) => ({ id: doc.id, ...(doc.data() as Invite) } as Invite));
     for (let i = 0; i < invites.length; i++) {
       const invRef = db.collection('invites').doc(String(invites[i].id));
       batch.delete(invRef);

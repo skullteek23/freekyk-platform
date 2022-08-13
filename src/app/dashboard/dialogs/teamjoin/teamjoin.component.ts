@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 
@@ -17,29 +17,31 @@ import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
 })
 export class TeamjoinComponent implements OnInit {
   @ViewChild('stepper') private myStepper: MatStepper;
-  teamsList$: Observable<TeamBasicInfo[]>;
-  noTeams: boolean = false;
-  moreSel: boolean = true;
+  teamsList$: Observable<ListOption[]>;
+  selectedTeams: ListOption[] = [];
+  noTeams = false;
+  moreSel = true;
   error = false;
   state = 'requests';
   success = false;
-  search_team: string = '';
+  filterTerm = '';
+  isStepOneComplete = false;
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
     private snackServ: SnackbarService
-  ) {
+  ) { }
+  ngOnInit(): void {
     this.getTeams();
   }
-  ngOnInit(): void {}
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onSubmit(plSelected: MatListOption[]) {
+  onSubmit(plSelected: ListOption[]): void {
     this.myStepper.next();
-    let capIds: string[] = plSelected.map((sel) => sel.value);
-    console.log(capIds);
+    this.isStepOneComplete = true;
+    const capIds: string[] = plSelected.map((sel) => (sel.data as TeamBasicInfo).captainId);
     const userName = sessionStorage.getItem('name');
     if (this.sendRequests(capIds, userName)) {
       this.state = 'complete';
@@ -48,37 +50,44 @@ export class TeamjoinComponent implements OnInit {
       this.snackServ.displayCustomMsg('Requests sent successfully!');
     }
   }
-  async sendRequests(capIds: string[], playerName: string) {
+  async sendRequests(capIds: string[], playerName: string): Promise<any> {
     const FunctionData = {
       capId: capIds,
       name: playerName,
     };
-    console.log(FunctionData);
+    // console.log(FunctionData);
     const callable = this.ngFunc.httpsCallable(
       CLOUD_FUNCTIONS.SEND_JOIN_REQUEST_TO_TEAMS
     );
     return await callable(FunctionData).toPromise();
   }
-  getTeams() {
+  getTeams(): void {
     this.teamsList$ = this.ngFire
       .collection('teams')
       .snapshotChanges()
       .pipe(
-        map((responseData) => {
-          if (responseData.length == 0) {
-            this.noTeams = true;
-            return null;
-          }
-          this.noTeams = false;
-          let newTeams: TeamBasicInfo[] = [];
-          responseData.forEach((team) => {
-            newTeams.push({
-              id: team.payload.doc.id,
-              ...(<TeamBasicInfo>team.payload.doc.data()),
+        tap((resp) => (this.noTeams = resp.length === 0)),
+        map((docs) => {
+          const listOptions: ListOption[] = [];
+          docs.forEach(doc => {
+            const teamData = doc.payload.doc.data() as TeamBasicInfo;
+            const id = doc.payload.doc.id;
+            listOptions.push({
+              viewValue: teamData.tname,
+              data: ({ id, ...teamData } as TeamBasicInfo)
             });
           });
-          return newTeams;
+          return listOptions;
         })
       );
+  }
+
+  onAddSelection(value: ListOption): void {
+    if (this.selectedTeams.findIndex(team => team.viewValue === value.viewValue) === -1) {
+      this.selectedTeams.push(value);
+    }
+  }
+  onRemoveSelection(delIndex: number): void {
+    this.selectedTeams.splice(delIndex, 1);
   }
 }

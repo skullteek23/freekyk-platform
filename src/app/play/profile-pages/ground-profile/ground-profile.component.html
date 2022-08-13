@@ -51,9 +51,7 @@
           >{{ (groundInfo$ | async)?.name }}</span
         >
       </div>
-      <button (click)="onShare()" class="primaryButton buttonText">
-        Share
-      </button>
+      <button disabled class="primaryButton buttonText">Share</button>
     </div>
   </section>
 </div>
@@ -76,19 +74,19 @@
   <div>
     <h4>Parking Facility</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.parking == true ? "Yes" : "No" }}
+      {{ (groundMoreInfo$ | async)?.parking ? "Yes" : "No" }}
     </p>
   </div>
   <div>
     <h4>Food and Beverages Facility</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.foodBev == true ? "Yes" : "No" }}
+      {{ (groundMoreInfo$ | async)?.foodBev ? "Yes" : "No" }}
     </p>
   </div>
   <div>
     <h4>Washroom Facility</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.washroom == true ? "Yes" : "No" }}
+      {{ (groundMoreInfo$ | async)?.washroom ? "Yes" : "No" }}
     </p>
   </div>
   <div>
@@ -101,7 +99,7 @@
   <div>
     <h4>Maintenance Facility</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.mainten == true ? "Yes" : "No" }}
+      {{ (groundMoreInfo$ | async)?.mainten ? "Yes" : "No" }}
     </p>
   </div>
   <div>
@@ -113,7 +111,7 @@
   <div>
     <h4>Goalpost Available</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.goalp == true ? "Yes" : "No" }}
+      {{ (groundMoreInfo$ | async)?.goalp ? "Yes" : "No" }}
     </p>
   </div>
   <div>

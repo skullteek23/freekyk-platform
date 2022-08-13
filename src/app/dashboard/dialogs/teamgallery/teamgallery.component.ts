@@ -15,8 +15,8 @@ import { TeamMedia } from 'src/app/shared/interfaces/team.model';
   styleUrls: ['./teamgallery.component.css'],
 })
 export class TeamgalleryComponent implements OnInit {
-  noGallery: boolean = false;
-  isLoading: boolean = true;
+  noGallery = false;
+  isLoading = false;
   teamGallery$: Observable<TeamMedia>;
   showEditButtons = false;
   newSub: Subscription;
@@ -26,15 +26,16 @@ export class TeamgalleryComponent implements OnInit {
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getGalleryPhotos();
   }
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  async onChoosePhoto(ev: any) {
+  async onChoosePhoto(ev: any): Promise<any> {
+    this.isLoading = true;
     const teamPhoto = ev.target.files[0];
     const tid = sessionStorage.getItem('tid');
     if (!!teamPhoto) {
@@ -59,18 +60,21 @@ export class TeamgalleryComponent implements OnInit {
               media: [url],
             });
         }
-        photoSnap.then(() => this.cleanUp('Photo uploaded successfully!'));
+        photoSnap
+          .then(() => this.cleanUp('Photo uploaded successfully!'))
+          .catch((err => this.snackServ.displayError()));
       });
     }
   }
-  cleanUp(message: string) {
+  cleanUp(message: string): void {
+    this.isLoading = false;
     this.snackServ.displayCustomMsg(message);
     this.onCloseDialog();
   }
-  onHover(state: boolean) {
+  onHover(state: boolean): void {
     this.showEditButtons = state;
   }
-  onRemovePhoto(photoUrl: string) {
+  onRemovePhoto(photoUrl: string): void {
     const tid = sessionStorage.getItem('tid');
     this.deleteInProgress$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -78,9 +82,9 @@ export class TeamgalleryComponent implements OnInit {
       .get()
       .pipe(
         switchMap((val) => {
-          let mediaLocal = (<TeamMedia>val.data()).media;
+          const mediaLocal = (val.data() as TeamMedia).media;
           mediaLocal.splice(
-            mediaLocal.findIndex((media) => media == photoUrl),
+            mediaLocal.findIndex((media) => media === photoUrl),
             1
           );
           return this.ngFire
@@ -94,7 +98,7 @@ export class TeamgalleryComponent implements OnInit {
         map(() => true)
       );
   }
-  getGalleryPhotos() {
+  getGalleryPhotos(): void {
     const tid = sessionStorage.getItem('tid');
     this.teamGallery$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -102,10 +106,10 @@ export class TeamgalleryComponent implements OnInit {
       .get()
       .pipe(
         tap((resp) => {
-          this.noGallery = resp.exists == false;
+          this.noGallery = resp.exists === false;
           this.isLoading = false;
         }),
-        map((resp) => <TeamMedia>resp.data())
+        map((resp) => resp.data() as TeamMedia)
       );
   }
 }

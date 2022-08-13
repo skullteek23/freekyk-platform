@@ -1,8 +1,11 @@
-<div class="grey-bg">
+<div>
   <app-hero-section
+    [description]="fsBannerContent"
+    [useAltLayout]="true"
+    imageSource="assets/svgs/Banner/freestyle_banner.svg"
     overline="freestyle"
     title="freekyk freestyle"
-    [CTA]="{ name: 'start freestyling', route: '/signup' }"
+    [CTA]="{ name: 'get started', route: '/dashboard/home' }"
   ></app-hero-section>
 </div>
 <nav mat-tab-nav-bar>

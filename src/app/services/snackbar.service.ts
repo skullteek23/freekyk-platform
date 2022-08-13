@@ -11,55 +11,53 @@ export class SnackbarService {
   sent = 'Successfully sent!';
   error = 'Error occured! Please try again later.';
   wait = 'Please wait..';
-  displayComplete() {
+  displayComplete(): void {
     this.matSnack.open(this.complete, 'OK', {
       duration: 2000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displayDelete() {
+  displayDelete(): void {
     this.matSnack.open(this.delete, 'OK', {
       duration: 2000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displaySent() {
+  displaySent(): void {
     this.matSnack.open(this.sent, 'OK', {
       duration: 2000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displayApplied() {
+  displayApplied(): void {
     this.matSnack.open(this.applied, 'OK', {
       duration: 2000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displayError() {
+  displayError(): void {
     this.matSnack.open(this.error, 'OK', {
       duration: 2000,
       panelClass: ['warn-snackbar'],
     });
   }
-  displayWait() {
+  displayWait(): void {
     this.matSnack.open(this.wait, 'OK', {
       duration: 1000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displayCustomMsg(msg: string) {
+  displayCustomMsg(msg: string): void {
     this.matSnack.open(msg, 'OK', {
       duration: 2000,
       panelClass: ['primary-snackbar'],
     });
   }
-  displayCustomMsgLong(msg: string) {
+  displayCustomMsgLong(msg: string): void {
     this.matSnack.open(msg, 'OK', {
       duration: 4000,
       panelClass: ['primary-snackbar'],
     });
   }
-  constructor(private matSnack: MatSnackBar) {
-    // this.displayCustomMsgLong('Welcome To Freekyk!');
-  }
+  constructor(private matSnack: MatSnackBar) {}
 }

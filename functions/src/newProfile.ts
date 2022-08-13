@@ -9,13 +9,8 @@ const auth = admin.auth();
 export async function newProfile(
   data: { name: string; uid: string },
   context: any
-) {
+): Promise<any> {
   try {
-    //get
-    console.log(data);
-    console.log(context);
-    //get
-
     // create
     const newPlayerStats: BasicStats = {
       apps: 0,
@@ -36,7 +31,7 @@ export async function newProfile(
 
     // update
     // update
-    let twoPromises: any[] = [];
+    const twoPromises: any[] = [];
     twoPromises.push(
       auth.updateUser(data.uid, {
         displayName: data.name,
@@ -67,7 +62,6 @@ export async function newProfile(
     );
     return await Promise.all(twoPromises);
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

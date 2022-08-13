@@ -25,7 +25,7 @@
       <mat-label>Select Season</mat-label>
       <mat-select (selectionChange)="getMatches($event)">
         <mat-option
-          [value]="season.name"
+          [value]="season"
           *ngFor="let season of existingSeasons$ | async"
         >
           {{ season.name }}

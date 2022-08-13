@@ -6,23 +6,21 @@
   fxLayoutGap.lt-md="20px"
 >
   <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="8px">
-    <h4 class="mat-subheading-1 align">A Powerful Community</h4>
+    <h4 class="mat-subheading-1 align">{{ content.heading | titlecase }}</h4>
     <span class="mat-body-1 align">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      {{ content.desc }}
     </span>
   </div>
   <div fxFlex.gt-sm="30%">
     <mat-grid-list cols="2" gutterSize="20px">
       <mat-grid-tile
-        *ngFor="let figure of commNumbers"
+        *ngFor="let figure of content.numbers | keyvalue"
         class="mat-elevation-z4"
       >
         <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="8px">
-          <h2 class="numbers">{{ figure.number }}</h2>
+          <h2 class="numbers">{{ figure.value }}</h2>
           <p>
-            {{ figure.name }}
+            {{ figure.key }}
           </p>
         </div>
       </mat-grid-tile>

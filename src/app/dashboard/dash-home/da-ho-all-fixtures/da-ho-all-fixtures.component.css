@@ -1,7 +1,7 @@
 ._bar {
   height: 72px;
   width: 100%;
-  max-width: 740px;
+  max-width: 100%;
 }
 ._fixture {
   height: 100%;
@@ -9,7 +9,7 @@
   width: 100%;
   border-radius: var(--borderRadiusCard);
   max-height: calc(72px * 6 + 6 * 16px);
-  max-width: 760px;
+  max-width: 100%;
   padding: 16px;
   margin: 0px;
 }

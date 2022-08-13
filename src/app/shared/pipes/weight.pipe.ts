@@ -5,7 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class WeightPipe implements PipeTransform {
   transform(value: number): string | number {
-    if (!!value) return value.toString() + ' kgs';
+    if (!!value) {
+      return `${value.toString()} kgs`;
+    }
     return value;
   }
 }

@@ -1,5 +1,27 @@
 {
   "projects": {
-    "default": "football-platform-v1"
+    "default": "freekyk-prod"
+  },
+  "targets": {
+    "freekyk-prod": {
+      "hosting": {
+        "football-platform-admin": [
+          "admin-freekyk"
+        ],
+        "football-platform": [
+          "freekyk-prod"
+        ]
+      }
+    },
+    "freekyk-development": {
+      "hosting": {
+        "football-platform-admin": [
+          "admin-freekyk-dev"
+        ],
+        "football-platform": [
+          "freekyk-development"
+        ]
+      }
+    }
   }
 }

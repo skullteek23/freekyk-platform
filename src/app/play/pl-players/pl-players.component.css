@@ -33,3 +33,6 @@
 .box {
   margin-top: 20px;
 }
+.min-height {
+  min-height: 80vh;
+}

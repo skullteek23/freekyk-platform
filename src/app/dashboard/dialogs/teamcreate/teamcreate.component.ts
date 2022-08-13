@@ -10,13 +10,18 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatListOption } from '@angular/material/list';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
+import {
+  DEFAULT_TEAM_LOGO,
+  DEFAULT_TEAM_PHOTO,
+} from 'src/app/shared/Constants/DEFAULTS';
+import { ALPHA_NUM_SPACE } from 'src/app/shared/Constants/REGEX';
 import { Invite } from '../../../shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
 
@@ -27,22 +32,26 @@ import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
 })
 export class TeamcreateComponent implements OnInit {
   @ViewChild('stepper') myStepper: MatStepper;
+  isStepOneComplete = false;
+  isStepTwoComplete = false;
   teamBasicinfoForm: FormGroup;
   newTeamId: string;
   invitesList: Invite[];
   error = false;
   state1 = 'details';
   state2 = 'invites';
-  search_player: string = '';
+  searchPlayer = '';
   success = false;
-  players$: Observable<PlayerBasicInfo[]>;
-  noPlayers: boolean = false;
+  players$: Observable<ListOption[]>;
+  selectedPlayers: ListOption[] = [];
+  noPlayers = false;
   $teamPhoto: File;
   $teamLogo: File;
   imgPath: string = null;
   logoPath: string = null;
-  file1Selected: boolean = false;
-  file2Selected: boolean = false;
+  file1Selected = false;
+  file2Selected = false;
+  filterTerm = '';
   constructor(
     public dialogRef: MatDialogRef<TeamcreateComponent>,
     private ngFire: AngularFirestore,
@@ -50,45 +59,47 @@ export class TeamcreateComponent implements OnInit {
     private snackServ: SnackbarService,
     private ngStorage: AngularFireStorage,
     private router: Router
-  ) {
+  ) { }
+  ngOnInit(): void {
     this.newTeamId = this.ngFire.createId();
     this.teamBasicinfoForm = new FormGroup({
       tName: new FormControl(
         null,
-        [Validators.required, Validators.pattern(/^[0-9a-zA-Z ]+$/)],
+        [Validators.required, Validators.pattern(ALPHA_NUM_SPACE)],
         this.validateTNameNotTaken.bind(this)
       ),
     });
     this.invitesList = [];
   }
-  ngOnInit(): void {}
-  onCloseDialog(toRoute: boolean = false) {
-    if (toRoute) this.router.navigate(['/dashboard/team-management']);
+  onCloseDialog(toRoute: boolean = false): void {
+    if (toRoute) {
+      this.router.navigate(['/dashboard/team-management']);
+    }
     this.dialogRef.close();
   }
-  onSubmitOne() {
-    this.myStepper.next();
-    if (
-      this.teamBasicinfoForm.valid &&
-      this.$teamPhoto != null &&
-      this.$teamLogo != null
-    ) {
+  onSubmitOne(): void {
+    if (this.teamBasicinfoForm.valid) {
+      this.isStepOneComplete = true;
+      this.myStepper.next();
       this.error = false;
       this.state1 = 'complete';
       this.getPlayers();
-    } else this.error = true;
+    } else {
+      this.error = true;
+    }
   }
-  onSubmitTwo(plSelected: MatListOption[]) {
+  onSubmitTwo(plSelected: ListOption[]): void {
     this.myStepper.next();
     !this.file1Selected || !this.file2Selected
       ? this.createTeam(this.getDefaultTLogo(), this.getDefaultTPhoto())
       : this.createTeam(this.logoPath, this.imgPath);
-    this.createInvites(plSelected.map((sel) => sel.value));
+    this.createInvites(plSelected.map((sel: ListOption) => ({ name: sel.data.name, id: sel.data.id })));
     this.sendInvites();
     this.state2 = 'complete';
     this.error = false;
+    this.isStepTwoComplete = true;
   }
-  async createTeam(logo: string, image: string) {
+  async createTeam(logo: string, image: string): Promise<any> {
     const uid = localStorage.getItem('uid');
 
     const FunctionData = {
@@ -103,7 +114,7 @@ export class TeamcreateComponent implements OnInit {
     const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_TEAM);
     return await callable(FunctionData).toPromise();
   }
-  createInvites(selArray: { name: string; id: string }[]) {
+  createInvites(selArray: { name: string; id: string }[]): void {
     selArray.forEach((selection) => {
       this.invitesList.push({
         teamId: this.newTeamId,
@@ -114,38 +125,35 @@ export class TeamcreateComponent implements OnInit {
       });
     });
   }
-  sendInvites() {
-    var batch = this.ngFire.firestore.batch();
-    for (let i = 0; i < this.invitesList.length; i++) {
+  sendInvites(): void {
+    const batch = this.ngFire.firestore.batch();
+    for (const invite of this.invitesList) {
       const newId = this.ngFire.createId();
       const colRef = this.ngFire.firestore.collection('invites').doc(newId);
-      batch.set(colRef, this.invitesList[i]);
+      batch.set(colRef, invite);
     }
     batch
       .commit()
       .then(() => {
         this.success = true;
         this.snackServ.displayCustomMsg('Invites sent successfully!');
-      })
-      .catch((error) => console.log(error));
+      });
+    // .catch((error) => console.log(error));
   }
   validateTNameNotTaken(
     control: AbstractControl
   ): Observable<ValidationErrors | null> {
-    let teamNameToBeChecked: string = (<String>control.value).trim();
+    const teamNameToBeChecked: string = (control.value as string).trim();
     return this.ngFire
       .collection('teams', (query) =>
         query.where('tname', '==', teamNameToBeChecked).limit(1)
       )
       .get()
       .pipe(
-        map((responseData) => {
-          if (responseData.empty) return null;
-          else return { nameTaken: true };
-        })
+        map((responseData) => (responseData.empty ? null : { nameTaken: true }))
       );
   }
-  async onChooseTeamImage(ev: any) {
+  async onChooseTeamImage(ev: any): Promise<any> {
     this.$teamPhoto = ev.target.files[0];
     this.imgPath = await (
       await this.ngStorage.upload(
@@ -155,7 +163,7 @@ export class TeamcreateComponent implements OnInit {
     ).ref.getDownloadURL();
     this.file1Selected = true;
   }
-  async onChooseTeamLogoImage(ev: any) {
+  async onChooseTeamLogoImage(ev: any): Promise<any> {
     this.$teamLogo = ev.target.files[0];
     this.logoPath = await (
       await this.ngStorage.upload(
@@ -165,29 +173,44 @@ export class TeamcreateComponent implements OnInit {
     ).ref.getDownloadURL();
     this.file2Selected = true;
   }
-  getDefaultTPhoto() {
-    return 'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/fcp.png?alt=media&token=4b023705-d0d5-4685-96e8-21aed5121e40';
+  getDefaultTPhoto(): string {
+    return DEFAULT_TEAM_PHOTO;
   }
-  getDefaultTLogo() {
-    return 'https://firebasestorage.googleapis.com/v0/b/football-platform-v1.appspot.com/o/Logo%20Mark%20Color.png?alt=media&token=ee3beb32-f6b7-4ef8-a226-59d86705d9d4';
+  getDefaultTLogo(): string {
+    return DEFAULT_TEAM_LOGO;
   }
-  getPlayers() {
+  getPlayers(): void {
     const uid = localStorage.getItem('uid');
     this.players$ = this.ngFire
       .collection('players', (query) => query.where('team', '==', null))
       .snapshotChanges()
       .pipe(
-        tap((resp) => (this.noPlayers = resp.length == 0)),
-        map((docs) =>
-          docs.map(
-            (doc) =>
-              <PlayerBasicInfo>{
-                id: doc.payload.doc.id,
-                ...(<PlayerBasicInfo>doc.payload.doc.data()),
-              }
-          )
-        ),
-        map((docs) => docs.filter((doc) => doc.id != uid))
+        tap((resp) => (this.noPlayers = resp.length === 0)),
+        map((docs) => {
+          const listOptions: ListOption[] = [];
+          docs.forEach(doc => {
+            const playerData = doc.payload.doc.data() as PlayerBasicInfo;
+            const id = doc.payload.doc.id;
+            if (id !== uid) {
+              listOptions.push({
+                viewValue: `${playerData.name} | ${playerData.pl_pos || 'NA'}`,
+                data: ({ id, ...playerData } as PlayerBasicInfo)
+              });
+            }
+          });
+          return listOptions;
+        }),
+        share()
       );
   }
+
+  onAddSelection(value: ListOption): void {
+    if (this.selectedPlayers.findIndex(player => player.viewValue === value.viewValue) === -1) {
+      this.selectedPlayers.push(value);
+    }
+  }
+  onRemoveSelection(delIndex: number): void {
+    this.selectedPlayers.splice(delIndex, 1);
+  }
+
 }

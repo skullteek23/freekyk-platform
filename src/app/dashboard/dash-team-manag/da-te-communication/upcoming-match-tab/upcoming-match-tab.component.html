@@ -1,9 +1,6 @@
 <div fxLayoutGap="20px" class="filter-spacing littleSpace" fxLayout="column">
   <!-- for players -->
-  <mat-card
-    *ngIf="!isCaptain; else CaptainCard"
-    class="normal mat-elevation-z8"
-  >
+  <mat-card *ngIf="!captain; else CaptainCard" class="normal mat-elevation-z8">
     <div
       fxLayout.gt-md="row"
       fxLayout="column"

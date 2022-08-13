@@ -44,6 +44,18 @@ ul {
   margin: 0;
   list-style: none;
 }
+p > ul {
+  list-style: disc !important;
+  padding-left: 16px !important;
+}
+button:disabled {
+  cursor: not-allowed !important;
+}
+@media only screen and (max-width: 959px) {
+  p > ul {
+    display: none;
+  }
+}
 img {
   height: 100%;
   width: auto;
@@ -208,7 +220,7 @@ mat-table {
   height: 200px;
   width: 100%;
   background-color: white;
-  border: 1px solid black;
+  border: 0px solid black;
   border-radius: 8px;
 }
 .placeholder-2 {
@@ -220,9 +232,8 @@ mat-table {
 }
 .placeholder-rectangle {
   height: 300px;
-  width: 100%;
   background-color: white;
-  border: 1px solid black;
+  border: 3px solid var(--primaryColor);
   border-radius: var(--borderRadiusCard);
 }
 .section-space-top {
@@ -458,7 +469,7 @@ mat-table {
     height: 280px;
     width: 280px;
     background-color: white;
-    border: 1px solid black;
+    border: 0px solid black;
     border-radius: var(--borderRadiusCard);
   }
   .placeholder-2 {
@@ -539,7 +550,7 @@ mat-table {
     height: 320px;
     width: 400px;
     background-color: white;
-    border: 1px solid black;
+    border: 0px solid black;
     border-radius: var(--borderRadiusCard);
   }
   .placeholder-2 {
@@ -553,7 +564,7 @@ mat-table {
     height: 300px;
     width: 420px;
     background-color: white;
-    border: 1px solid black;
+    border: 3px solid var(--primaryColor);
     border-radius: var(--borderRadiusCard);
   }
   .section-space-top {

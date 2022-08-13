@@ -7,10 +7,11 @@
   <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
-  <span class="mat-body-1">Add Profile Photo</span>
+  <span class="mat-body-1">Add/Edit Profile Photo</span>
 </mat-toolbar>
 <div class="container-2">
   <div
+    *ngIf="!isLoading && !isUploadComplete"
     ngClass.lt-md="dialogData"
     ngClass.gt-sm="stepdata"
     fxLayoutAlign="center center"
@@ -27,19 +28,54 @@
       (change)="onChooseImage($event)"
       id="file"
     />
+    <div>
+      <img
+        [src]="selectedImage || 'assets/images/placeholder_product.png'"
+        class="preview"
+        alt="Image"
+      />
+    </div>
     <p class="file">
       {{ this.$file?.name }}
     </p>
     <div fxLayoutGap="20px">
       <button (click)="fileInput.click()" class="buttonText secondaryButton">
-        Choose Image
+        Choose New Photo
       </button>
-      <button (click)="onUploadImage()" class="buttonText primaryButton">
+      <button
+        [disabled]="!$file"
+        (click)="onUploadImage()"
+        class="buttonText primaryButton"
+      >
         Upload
       </button>
+      <button
+        [disabled]="$file || !selectedImage"
+        (click)="onRemovePhoto()"
+        class="buttonText noResponseButton"
+      >
+        Remove Photo
+      </button>
     </div>
-    <div *ngIf="selectedImage != null">
-      <img [src]="selectedImage" class="preview" alt="Image" />
-    </div>
+  </div>
+  <div
+    *ngIf="!isLoading && isUploadComplete"
+    ngClass.lt-md="dialogData"
+    ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center"
+    fxLayout="column"
+    fxLayoutGap="8px"
+  >
+    <app-tick-animation></app-tick-animation>
+    <span class="mat-body-1"> Upload Complete! </span>
+  </div>
+  <div
+    *ngIf="isLoading && !isUploadComplete"
+    ngClass.lt-md="dialogData"
+    ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center"
+    fxLayout="column"
+  >
+    <app-loading></app-loading>
   </div>
 </div>

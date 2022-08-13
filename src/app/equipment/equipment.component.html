@@ -1,5 +1,6 @@
-<div class="grey-bg">
+<div>
   <app-hero-section
+    imageSource="assets/svgs/Banner/equipment_banner.svg"
     title="freekyk equipment"
     overline="buy"
     [CTA]="{ name: 'start shopping', route: '/signup' }"
@@ -69,6 +70,7 @@
               </mat-chip-list>
             </div>
             <button
+              disabled
               fxHide.lt-sm="true"
               mat-icon-button
               color="primary"

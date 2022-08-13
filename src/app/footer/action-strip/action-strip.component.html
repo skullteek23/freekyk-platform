@@ -8,7 +8,7 @@
     fxLayout="column"
     fxLayout.gt-sm="row"
     fxLayoutAlign="center stretch"
-    fxLayoutAlign.gt-sm="space-between center"
+    [fxLayoutAlign.gt-sm]="elementSpacing"
     fxLayoutGap="20px"
   >
     <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="0">
@@ -19,7 +19,7 @@
         }"
         class="align"
       >
-        {{ hText | titlecase }}
+        {{ headingText | titlecase }}
       </span>
       <span *ngIf="!isCompact" class="mat-body-1 align">
         Get started or contact us now!
@@ -41,6 +41,7 @@
         Contact us
       </button>
       <button
+        *ngIf="!enablePartnerForm"
         (click)="onNavigate('/signup')"
         class="buttonText"
         [ngClass]="{
@@ -49,6 +50,17 @@
         }"
       >
         Get Started
+      </button>
+      <button
+        *ngIf="enablePartnerForm"
+        (click)="onNavigateToForms()"
+        class="buttonText"
+        [ngClass]="{
+          primaryButton: isCompact,
+          secondaryButton: !isCompact
+        }"
+      >
+        {{ formCTA }}
       </button>
     </div>
   </div>

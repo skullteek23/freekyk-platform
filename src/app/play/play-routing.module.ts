@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
 import { PlFixturesComponent } from './pl-fixtures/pl-fixtures.component';
 import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
 import { PlHomeComponent } from './pl-home/pl-home.component';
@@ -15,14 +16,14 @@ const routes: Routes = [
     path: '',
     component: PlayComponent,
     children: [
-      { path: 'home', component: PlHomeComponent },
-      { path: 'seasons', component: PlSeasonsComponent },
-      { path: 'players', component: PlPlayersComponent },
-      { path: 'teams', component: PlTeamsComponent },
-      { path: 'fixtures', component: PlFixturesComponent },
-      { path: 'results', component: PlResultsComponent },
-      { path: 'standings', component: PlStandingsComponent },
-      { path: 'grounds', component: PlGroundsComponent },
+      { path: RouteLinks.PLAY[0], component: PlHomeComponent },
+      { path: RouteLinks.PLAY[1], component: PlSeasonsComponent },
+      { path: RouteLinks.PLAY[2], component: PlPlayersComponent },
+      { path: RouteLinks.PLAY[3], component: PlTeamsComponent },
+      { path: RouteLinks.PLAY[4], component: PlFixturesComponent },
+      { path: RouteLinks.PLAY[5], component: PlResultsComponent },
+      { path: RouteLinks.PLAY[6], component: PlStandingsComponent },
+      { path: RouteLinks.PLAY[7], component: PlGroundsComponent },
     ],
   },
 ];

@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
+import { Subject } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import {
-  SeasonAbout,
-  SeasonBasicInfo,
-} from 'src/app/shared/interfaces/season.model';
+import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
+import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-add-season',
@@ -14,103 +15,261 @@ import {
   styleUrls: ['./add-season.component.css'],
 })
 export class AddSeasonComponent implements OnInit {
-  seasonForm: FormGroup = new FormGroup({});
-  // cont_tour = new FormControl();
-  defaultImage =
-    'https://images.unsplash.com/photo-1516676324900-a8c0c01caa33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+
+  @Input() set data(value) {
+    if (value) {
+      this.setDates();
+      this.seasonData = value;
+      this.initForm(value);
+      if (Object.keys(value).length) {
+        this.enterPartialLockedMode();
+      }
+    }
+  }
+  @Input() seasonID = null;
+  @Output() seasonDataChange = new Subject<SeasonBasicInfo>();
+
   cities = ['Ghaziabad'];
+  currentDateTemp1 = new Date();
+  currentDateTemp2 = new Date();
+  imgUpload$: File = null;
+  isDisableSelection = false;
+  isLoading = false;
+  minDate: Date;
+  maxDate: Date;
+  seasonData: any = {};
+  seasonForm: FormGroup = new FormGroup({});
   states = ['Uttar Pradesh'];
-  imgUpload: File;
+  seasonImageUrl: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
+  teamsList = MatchConstants.ALLOWED_PARTICIPATION_COUNT;
+  tourTypes = MatchConstants.MATCH_TYPES;
+  tourTypesFiltered = MatchConstants.MATCH_TYPES;
+
+  @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
+
   constructor(
     private ngStorage: AngularFireStorage,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  initForm(value) {
     this.seasonForm = new FormGroup({
-      name: new FormControl(null, [
+      name: new FormControl(value.name || null, [
         Validators.required,
         Validators.pattern('^[A-Za-z0-9 _-]*$'),
         Validators.maxLength(50),
       ]),
-      imgpath: new FormControl(this.defaultImage),
-      locCity: new FormControl(null, Validators.required),
-      locState: new FormControl(null, Validators.required),
-      cont_tour: new FormControl(null, Validators.required),
-      desc: new FormControl(null, [
+      imgpath: new FormControl(value.imgpath || this.seasonImageUrl),
+      feesPerTeam: new FormControl(value.feesPerTeam || MatchConstants.SEASON_PRICE.MIN, [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]),
+      locCity: new FormControl(value.locCity || null, Validators.required),
+      locState: new FormControl(value.locState || null, Validators.required),
+      p_teams: new FormControl(value.p_teams || null, Validators.required),
+      start_date: new FormControl(value.start_date || this.minDate, Validators.required),
+      cont_tour: new FormControl(value.cont_tour || null, Validators.required),
+      description: new FormControl(value.description || null, [
         Validators.required,
         Validators.maxLength(300),
       ]),
-      rules: new FormControl(null, [
+      rules: new FormControl(value.rules || null, [
         Validators.required,
         Validators.maxLength(300),
       ]),
-      paymentMethod: new FormControl('Online'),
-      premium: new FormControl(true),
     });
+    this.seasonImageUrl = this.seasonForm.get('imgpath').value;
   }
-  async onSubmit() {
-    let uploadSnap = await this.ngStorage.upload(
-      '/seasonImages' + Math.random() + this.imgUpload.name,
-      this.imgUpload
-    );
-    uploadSnap.ref.getDownloadURL().then((path) => {
-      this.seasonForm.patchValue({
-        imgpath: path,
+
+  async onNext() {
+    if (this.isSubmitDisabled) {
+      return;
+    }
+    if (this.seasonID) {
+      this.seasonDataChange.next(null);
+      return;
+    }
+    this.isLoading = true;
+    const uploadSnap = this.imgUpload$ ? (await this.ngStorage.upload('/seasonImages/' + this.imgUpload$.name, this.imgUpload$)) : false;
+    if (uploadSnap) {
+      uploadSnap.ref.getDownloadURL().then((path) => {
+        this.setSeasonImage(path);
+        this.prepareServerData();
       });
-      this.saveFormToServer(this.seasonForm.value);
-    });
+    } else {
+      this.setSeasonImage();
+      this.prepareServerData();
+    }
   }
-  saveFormToServer(formData: {}) {
-    const newSeasonId = this.ngFire.createId();
-    const newSeason: SeasonBasicInfo = {
-      name: formData['name'],
-      imgpath: formData['imgpath'],
-      locCity: formData['locCity'],
-      locState: formData['locState'],
-      premium: formData['premium'],
-      start_date: new Date(),
-      cont_tour: formData['cont_tour'],
-      id: newSeasonId,
-    };
-    const newSeasonMore: SeasonAbout = {
-      description: formData['desc'],
-      rules: formData['rules'],
-      paymentMethod: formData['paymentMethod'],
-    };
-    let AllPromises = [];
-    AllPromises.push(
-      this.ngFire.collection('seasons').doc(newSeason.id).set(newSeason)
-    );
-    AllPromises.push(
-      this.ngFire
-        .collection('seasons')
-        .doc(newSeason.id)
-        .collection('additionalInfo')
-        .doc('moreInfo')
-        .set(newSeasonMore)
-    );
-    Promise.all(AllPromises).then(() => {
-      this.snackServ.displayCustomMsg('Season added successfully!');
+
+  async onSaveChanges() {
+    if (this.isSaveChangesDisabled) {
+      return;
+    }
+    if (!this.seasonID) {
+      return;
+    }
+    this.isLoading = true;
+    const uploadSnap = this.imgUpload$ ? (await this.ngStorage.upload('/seasonImages/' + this.imgUpload$.name, this.imgUpload$)) : false;
+    if (uploadSnap) {
+      uploadSnap.ref.getDownloadURL().then((path) => {
+        this.setSeasonImage(path);
+        this.prepareServerData(this.seasonID);
+      });
+    } else {
+      this.prepareServerData(this.seasonID);
+    }
+  }
+
+  prepareServerData(sid?: string) {
+    const newSeason: Partial<SeasonBasicInfo> = {};
+    const newSeasonMore: Partial<SeasonAbout> = {};
+    const seasonMoreKeys = ['description', 'rules'];
+    if (sid) {
+      for (const controlName in this.seasonForm.controls) {
+        const control = this.seasonForm.get(controlName);
+        if (control.dirty) {
+          if (seasonMoreKeys.includes(controlName)) {
+            newSeasonMore[controlName] = control.value;
+          } else {
+            newSeason[controlName] = control.value;
+          }
+        }
+      }
+      this.updateSeasonInfo(newSeason, newSeasonMore, sid);
+    } else {
+      for (const controlName in this.seasonForm.controls) {
+        const control = this.seasonForm.get(controlName);
+        if (control.dirty || (!control.dirty && control.valid)) {
+          if (seasonMoreKeys.includes(controlName)) {
+            newSeasonMore[controlName] = control.value;
+          } else {
+            newSeason[controlName] = control.value;
+          }
+        }
+      }
+      if (Object.keys(newSeason).length) {
+        const id = sid ? sid : this.ngFire.createId();
+        newSeason.id = id;
+        newSeason.premium = true;
+        newSeason.isFixturesCreated = false;
+        newSeason.isSeasonEnded = false;
+      }
+      if (Object.keys(newSeasonMore).length) {
+        newSeasonMore.paymentMethod = 'Online';
+      }
+      this.addSeasonInfo(newSeason, newSeasonMore, newSeason.id);
+    }
+  }
+
+  addSeasonInfo(newSeason: Partial<SeasonBasicInfo>, newSeasonMore: Partial<SeasonAbout>, sid: string) {
+    let allPromises: any[] = [];
+    if (Object.keys(newSeason).length) {
+      allPromises.push(this.ngFire.collection('seasons').doc(sid).set(newSeason));
+    }
+    if (Object.keys(newSeasonMore).length) {
+      allPromises.push(this.ngFire.collection(`seasons/${sid}/additionalInfo`).doc('moreInfo').set(newSeasonMore));
+    }
+    if (allPromises.length) {
+      Promise.all(allPromises)
+        .then(() => {
+          this.snackServ.displayCustomMsg('Info saved successfully!');
+          this.reset();
+          this.seasonForm.reset();
+          this.seasonDataChange.next(newSeason as any);
+        })
+        .catch(() => this.snackServ.displayError());
+    } else {
+      this.reset();
       this.seasonForm.reset();
-    });
+    }
   }
-  onAutofill() {
-    this.seasonForm.setValue({
-      name: 'Freekyk Football Season',
-      imgpath: this.defaultImage,
-      locCity: 'Ghaziabad',
-      locState: 'Uttar Pradesh',
-      cont_tour: ['FKC', 'FPL', 'FCP'],
-      desc: 'this is a dummy description',
-      rules: 'these are dummy rules',
-      paymentMethod: 'Online',
-      premium: true,
-    });
-    this.saveFormToServer(this.seasonForm.value);
+
+  updateSeasonInfo(newSeason: Partial<SeasonBasicInfo>, newSeasonMore: Partial<SeasonAbout>, sid: string) {
+    let allPromises: any[] = [];
+    if (Object.keys(newSeason).length) {
+      allPromises.push(this.ngFire.collection('seasons').doc(sid).update(newSeason));
+    }
+    if (Object.keys(newSeasonMore).length) {
+      allPromises.push(this.ngFire.collection(`seasons/${sid}/additionalInfo`).doc('moreInfo').update(newSeasonMore));
+    }
+    if (allPromises.length) {
+      Promise.all(allPromises)
+        .then(() => {
+          this.snackServ.displayCustomMsg('Info updated successfully!');
+          this.reset();
+        })
+        .catch(() => this.snackServ.displayError());
+    } else {
+      this.reset();
+    }
   }
-  onBrowsePhoto(file: any) {
-    this.imgUpload = file.target.files[0];
+
+  reset() {
+    if (this.photoUploaderComponent) {
+      this.photoUploaderComponent.resetImage();
+    }
+    this.isLoading = false;
+    this.imgUpload$ = null;
+  }
+
+  get isSubmitDisabled(): boolean {
+    if (this.seasonID) {
+      return false;
+    }
+    return this.seasonForm.invalid || !this.seasonForm.dirty
+  }
+
+  get isSaveChangesDisabled(): boolean {
+    if (this.imgUpload$) {
+      return false;
+    }
+    return this.seasonForm.invalid || !this.seasonForm.dirty;
+  }
+
+  enterPartialLockedMode() {
+    this.seasonForm.get('name').disable();
+    this.seasonForm.get('locCity').disable();
+    this.seasonForm.get('locState').disable();
+    this.seasonForm.get('p_teams').disable();
+    this.seasonForm.get('start_date').disable();
+    this.seasonForm.get('cont_tour').disable();
+    this.isDisableSelection = true;
+  }
+
+  setSeasonImage(fileURL?: string) {
+    if (this.seasonForm) {
+      const validURL = fileURL || MatchConstantsSecondary.DEFAULT_IMAGE_URL;
+      this.seasonForm.get('imgpath').setValue(validURL);
+    }
+  }
+
+  setDates() {
+    this.currentDateTemp1.setDate(this.currentDateTemp1.getDate() + MatchConstants.START_DATE_DIFF.MIN);
+    this.currentDateTemp2.setDate(this.currentDateTemp2.getDate() + MatchConstants.START_DATE_DIFF.MAX);
+    this.currentDateTemp1.setHours(0);
+    this.currentDateTemp1.setMinutes(0);
+    this.currentDateTemp1.setSeconds(0);
+    this.currentDateTemp2.setHours(0);
+    this.currentDateTemp2.setMinutes(0);
+    this.currentDateTemp2.setSeconds(0);
+    this.minDate = new Date(this.currentDateTemp1);
+    this.maxDate = new Date(this.currentDateTemp2);
+  }
+
+  onGetImage(event) {
+    this.imgUpload$ = event;
+  }
+
+  onRestrictTournamentTypes(event: MatSelectChange) {
+    this.tourTypesFiltered = [];
+    this.seasonForm.get('cont_tour').reset();
+    this.tourTypesFiltered.push('FCP');
+    if (event.value % 4 === 0) {
+      this.tourTypesFiltered.push('FKC');
+    }
+    if (event.value > 2) {
+      this.tourTypesFiltered.push('FPL');
+    }
   }
 }

@@ -1,0 +1,43 @@
+<mat-card>
+  <div mat-card-title class="mat-subheading-2" fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span>
+      Live Seasons
+    </span>
+    <span class="material-icons-round">sensors</span>
+  </div>
+  <div mat-card-content>
+    <div *ngIf="loadingStatus === SUCCESS" class="loading-container" fxLayoutAlign="center center">
+      <div class="loading-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
+        <app-tick-animation></app-tick-animation>
+        <span class="mat-body-1"> Payment Completed! Enjoy your Season. </span>
+        <button *ngIf="selectedSeason" (click)="onExitScreen()" [routerLink]="['/s', selectedSeason]"
+          class="primaryButton margin-top buttonText">
+          View Season
+        </button>
+      </div>
+    </div>
+    <div *ngIf="loadingStatus === LOADING" class="loading-container" fxLayoutAlign="center center">
+      <div class="loading-container" fxLayoutAlign="center center">
+        <app-loading></app-loading>
+      </div>
+    </div>
+    <ul *ngIf="loadingStatus === HOME">
+      <li *ngIf="(seasons$ | async)?.length === 0">
+        <app-no-items-message items="ongoing tournaments"></app-no-items-message>
+      </li>
+      <li class="tournament" *ngFor="let season of seasons$ | async" fxLayoutAlign="space-between center"
+        fxLayout.lt-md="column">
+        <span (click)="onExitScreen(season.name)" class="mat-subheading-1 name">
+          {{ season.name | textShorten: 30 }}
+          ( Includes {{ getContainingTournaments(season.cont_tour) }} )
+        </span>
+        <div fxLayoutGap="8px" fxLayout.lt-md="column" [matTooltip]="tooltipText">
+          <button fxFlexOrder.lt-md="0" fxFlexOrder.gt-sm="1" [disabled]="isParticipated(season.id) || !hasTeam"
+            (click)="onPayNow(season)" class="buttonText secondaryButtonInv">
+            {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</mat-card>

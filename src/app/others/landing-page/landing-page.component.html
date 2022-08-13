@@ -5,10 +5,15 @@
     [overline]="false"
     [title]="false"
     [landingPage]="true"
+    imageSource="assets/svgs/Banner/main_banner.svg"
+    [description]="mainContent"
   ></app-hero-section>
   <!-- banner-section -->
 
   <!-- features -->
+  <div class="what-we-offer" fxLayoutAlign="center start">
+    <h4 class="mat-subheading-1">{{ "What we offer?" | titlecase }}</h4>
+  </div>
   <div
     class="container section-space-bottom"
     ngClass.lt-md="section-space-top"
@@ -17,76 +22,50 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [featureContent]="{ head: 'freekyk play', route: '/play/home' }"
+      svg="assets/svgs/Banner/play_banner_small.svg"
+      [featureContent]="fkPlayContent"
     ></app-feature-section>
     <app-feature-section
-      [featureContent]="{ head: 'freekyk freestyle', route: '/freestyle/home' }"
-      [invert]="true"
-    ></app-feature-section>
-    <app-feature-section
-      [featureContent]="{ head: 'freekyk academies', route: '/academies' }"
-    ></app-feature-section>
-    <app-feature-section
-      [featureContent]="{ head: 'freekyk equipment', route: '/equipment' }"
+      svg="assets/svgs/Banner/freestyle_banner_small.svg"
+      [featureContent]="fkFreestyleContent"
       [invert]="true"
     ></app-feature-section>
   </div>
+  <app-action-strip
+    elementSpacing="space-between center"
+    [compact]="true"
+  ></app-action-strip>
+  <div
+    class="container section-space-bottom section-space-top"
+    fxLayout="column"
+    fxLayoutGap="48px"
+    fxLayoutGap.gt-sm="120px"
+  >
+    <app-feature-section
+      svg="assets/svgs/Banner/academy_banner_small.svg"
+      [featureContent]="fkAcademiesContent"
+    ></app-feature-section>
+    <app-feature-section
+      svg="assets/svgs/Banner/equipment_banner_small.svg"
+      [featureContent]="fkEquipmentContent"
+      [invert]="true"
+    ></app-feature-section>
+  </div>
+  <app-action-strip
+    heading="Ready to join us as a partner?"
+    elementSpacing="space-between center"
+    [enablePartnerForm]="true"
+    [compact]="true"
+  ></app-action-strip>
   <!-- features -->
 
-  <!-- action-strip-mini -->
-  <div class="section-space-top">
-    <app-action-strip [compact]="true"></app-action-strip>
-  </div>
-  <!-- action-strip-mini -->
-
   <!-- why choose fk -->
-  <app-why-choose-section></app-why-choose-section>
+  <app-why-choose-section [content]="whyChoose"></app-why-choose-section>
   <!-- why choose fk -->
 
   <!-- covid-19 -->
   <app-covid-section></app-covid-section>
   <!-- covid-19 -->
-
-  <!-- other services -->
-  <section
-    class="container section-space-top section-space-bottom"
-    fxLayoutAlign.lt-md="center center"
-    fxLayout="column"
-    fxLayoutGap="20px"
-  >
-    <h4 class="mat-subheading-1 align">What else do we offer...</h4>
-    <div
-      fxLayout.gt-sm="row"
-      fxLayout="column"
-      fxLayoutGap.gt-sm="20px"
-      fxLayoutGap.lt-md="20px"
-    >
-      <div
-        *ngFor="let otherService of otherServices"
-        fxLayoutAlign.lt-md="center center"
-        fxLayout="column"
-        fxLayoutGap.gt-sm="8px"
-      >
-        <span class="placeholder-2"></span>
-        <span class="mat-body-1 center">
-          {{ otherService.name | titlecase }}</span
-        >
-
-        <button
-          color="primary"
-          mat-button
-          [routerLink]="[otherService.route]"
-          fxLayout="column"
-          fxLayoutAlign="center center"
-          fxLayoutGap="8px"
-        >
-          <span>{{ " Explore " + (otherService.name | titlecase) }}</span>
-          <span class="material-icons-round"> keyboard_arrow_right </span>
-        </button>
-      </div>
-    </div>
-  </section>
-  <!-- other services -->
 
   <!-- community proof -->
   <section
@@ -95,18 +74,23 @@
     fxLayoutGap="8px"
     fxLayoutAlign.lt-md="center center"
   >
-    <div>
-      <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
-      <p class="mat-body-1 align">Lorem ipsum dolor sit amet, consectetur</p>
+    <h4 class="mat-subheading-1 align">A Word from Our Community</h4>
+    <div class="slider-container" (window:resize)="onResizeSlider()">
+      <ng-image-slider
+        [infinite]="true"
+        [imageSize]="responsiveSize"
+        [videoAutoPlay]="true"
+        [lazyLoading]="true"
+        [images]="sliderContent"
+      ></ng-image-slider>
     </div>
-    <span class="screenshot"></span>
   </section>
   <!-- community proof -->
 
   <!-- community numbers -->
 
   <app-community-numbers-section
-    [data]="communityNumbers"
+    [content]="communityNumbersContent"
   ></app-community-numbers-section>
   <!-- community numbers -->
 </div>

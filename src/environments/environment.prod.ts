@@ -1,14 +1,20 @@
 export const environment = {
   production: true,
+  development: false,
   firebase: {
+    apiKey: 'AIzaSyBibLl1ZM0B2Wf4gqofKnUNYuAJCoSBQ-c',
+    authDomain: 'freekyk-prod.firebaseapp.com',
     databaseURL:
-      'https://football-platform-v1-default-rtdb.asia-southeast1.firebasedatabase.app',
-    apiKey: 'AIzaSyBk-AFz7HhA0Htt9WICkVPYWYG4v3jbnmM',
-    authDomain: 'football-platform-v1.firebaseapp.com',
-    projectId: 'football-platform-v1',
-    storageBucket: 'football-platform-v1.appspot.com',
-    messagingSenderId: '581569985509',
-    appId: '1:581569985509:web:fea62348969bd618dc8d0c',
-    measurementId: 'G-DVFLJVY2LP',
+      'https://freekyk-prod-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'freekyk-prod',
+    storageBucket: 'freekyk-prod.appspot.com',
+    messagingSenderId: '678320827100',
+    appId: '1:678320827100:web:d14c29c405b86b825a2219',
+    measurementId: 'G-K55NRR7QXM',
+  },
+  // live api keys
+  razorPay: {
+    key_id: 'rzp_live_8BB9gOfLpWDtAG',
+    key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',
   },
 };

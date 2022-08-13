@@ -15,21 +15,7 @@
       >
         <span class="mat-body-2">Total Goals</span>
         <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-body">{{
-          !!data?.totGoals ? data?.totGoals : 0
-        }}</span>
-      </div>
-    </mat-grid-tile>
-    <mat-grid-tile ngClass.gt-sm="primary-bg whiteText mat-elevation-z4">
-      <div
-        ngClass.lt-md="full-width-table"
-        fxLayout.gt-sm="column"
-        fxLayout.lt-md="row"
-        fxLayoutAlign.gt-sm="center center"
-        fxLayoutAlign="space-between center"
-      >
-        <span class="mat-body-2">Total participants</span>
-        <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-body">{{
-          !!data?.totParticipants ? data?.totParticipants : 0
+          stats?.totGoals || 0
         }}</span>
       </div>
     </mat-grid-tile>
@@ -43,7 +29,7 @@
       >
         <span class="mat-body-2">FKC Winner</span>
         <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-body">{{
-          !!data?.FKC_winner ? data?.FKC_winner : "-"
+          stats?.FKC_winner || "-"
         }}</span>
       </div>
     </mat-grid-tile>
@@ -57,7 +43,7 @@
       >
         <span class="mat-body-2">FPL Winner</span>
         <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-body">{{
-          !!data?.FPL_winner ? data?.FPL_winner : "-"
+          stats?.FPL_winner || "-"
         }}</span>
       </div>
     </mat-grid-tile>
@@ -70,9 +56,9 @@
 >
   <div>
     <h4>Awards</h4>
-    <i *ngIf="!!data?.awards == false">none</i>
+    <i *ngIf="!!stats?.awards == false">none</i>
     <p class="mat-body-1">
-      {{ data?.awards }}
+      {{ stats?.awards }}
     </p>
   </div>
 </section>

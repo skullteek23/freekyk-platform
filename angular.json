@@ -59,12 +59,6 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -82,6 +76,20 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
                 }
               ]
             }
@@ -194,22 +202,17 @@
             "tsConfig": "projects/admin/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "projects/admin/src/favicon.ico",
+              "projects/admin/src/assets/favicon-32x32.png",
               "projects/admin/src/assets"
             ],
             "styles": [
+              "projects/admin/src/custom-theme.scss",
               "projects/admin/src/styles.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/admin/src/environments/environment.ts",
-                  "with": "projects/admin/src/environments/environment.prod.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -227,6 +230,20 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
                 }
               ]
             }
@@ -261,6 +278,7 @@
               "projects/admin/src/assets"
             ],
             "styles": [
+              "projects/admin/src/custom-theme.scss",
               "projects/admin/src/styles.css"
             ],
             "scripts": []

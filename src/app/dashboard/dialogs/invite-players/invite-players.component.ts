@@ -16,21 +16,21 @@ import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
 export class InvitePlayersComponent implements OnInit {
   invitesList: Invite[] = [];
   players$: Observable<PlayerBasicInfo[]>;
-  noPlayers: boolean = true;
+  noPlayers = true;
   constructor(
     public dialogRef: MatDialogRef<InvitePlayersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getPlayers();
   }
-  onCloseDialog() {
+  onCloseDialog(): void {
     this.dialogRef.close();
   }
-  getPlayers() {
+  getPlayers(): void {
     const uid = localStorage.getItem('uid');
     this.players$ = this.ngFire
       .collection('players')
@@ -42,16 +42,19 @@ export class InvitePlayersComponent implements OnInit {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              <PlayerBasicInfo>{ id: doc.id, ...(<PlayerBasicInfo>doc.data()) }
+            ({
+              id: doc.id,
+              ...(doc.data() as PlayerBasicInfo),
+            } as PlayerBasicInfo)
           )
         ),
-        map((docs) => docs.filter((doc) => doc.id != uid))
+        map((docs) => docs.filter((doc) => doc.id !== uid))
       );
   }
-  onSendInvites(plSelected: MatListOption[]) {
+  onSendInvites(plSelected: MatListOption[]): void {
     this.createInvites(plSelected.map((sel) => sel.value));
   }
-  createInvites(selArray: { name: string; id: string }[]) {
+  createInvites(selArray: { name: string; id: string }[]): void {
     const tid = sessionStorage.getItem('tid');
     selArray.forEach((selection) => {
       this.invitesList.push({
@@ -64,13 +67,13 @@ export class InvitePlayersComponent implements OnInit {
     });
     this.sendInvites();
   }
-  sendInvites() {
+  sendInvites(): void {
     if (this.invitesList.length > 1) {
-      var batch = this.ngFire.firestore.batch();
-      for (let i = 0; i < this.invitesList.length; i++) {
+      const batch = this.ngFire.firestore.batch();
+      for (const invite of this.invitesList) {
         const newId = this.ngFire.createId();
         const colRef = this.ngFire.firestore.collection('invites').doc(newId);
-        batch.set(colRef, this.invitesList[i]);
+        batch.set(colRef, invite);
       }
       batch
         .commit()
@@ -78,7 +81,7 @@ export class InvitePlayersComponent implements OnInit {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         })
-        .catch((error) => console.log(error));
+      // .catch((error) => console.log(error));
     } else {
       this.ngFire.firestore
         .collection('invites')
@@ -87,7 +90,7 @@ export class InvitePlayersComponent implements OnInit {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         })
-        .catch((error) => console.log(error));
+      // .catch((error) => console.log(error));
     }
   }
 }

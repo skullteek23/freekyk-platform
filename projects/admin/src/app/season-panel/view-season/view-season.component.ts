@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
@@ -10,37 +12,62 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./view-season.component.css'],
 })
 export class ViewSeasonComponent implements OnInit {
-  seasons$: Observable<SeasonBasicInfo[]>;
+  seasons: any[] = [];
   cols = [
     'sno',
     'season',
-    'confTeams',
-    'tmatches',
-    'fixt',
-    'gallery',
-    'stats',
-    'terminate',
+    'startDate',
+    'actions',
   ];
-  constructor(private ngFire: AngularFirestore) {}
+  constructor(private ngFire: AngularFirestore, private router: Router, private snackService: SnackbarService) { }
 
   ngOnInit(): void {
-    this.seasons$ = this.ngFire
+    this.ngFire
       .collection('seasons')
       .snapshotChanges()
       .pipe(
         map((docs) =>
           docs.map(
             (doc) =>
-              <SeasonBasicInfo>{
-                id: doc.payload.doc.id,
-                ...(<SeasonBasicInfo>doc.payload.doc.data()),
-              }
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as SeasonBasicInfo),
+            } as SeasonBasicInfo)
           )
-        )
-      );
+        ),
+        map(data => data.map(el =>
+        ({
+          ...el,
+          start_date: new Date(el.start_date['seconds'] * 1000),
+          isSeasonLive: (new Date(el.start_date['seconds'] * 1000).getTime() < new Date().getTime()) && !el['isSeasonEnded']
+        })
+        ))
+      )
+      .subscribe((resp) => (this.seasons = resp));
   }
-  onSelectFixtures() {}
-  onSelectGallery() {}
-  onSelectStats() {}
-  onTerminateSeason() {}
+  onTerminateSeasons(season: SeasonBasicInfo): void {
+    if (this.isSeasonStarted(season) || season.isFixturesCreated) {
+      return;
+    }
+    forkJoin([this.ngFire.collection('seasons').doc(season.id).delete(), this.ngFire.collection(`seasons/${season.id}/additionalInfo`).doc('moreInfo').delete()]).subscribe(resp => {
+      if (resp) {
+        this.snackService.displayCustomMsg('Season deleted successfully!');
+      }
+    })
+  }
+  onAddGallery(season: SeasonBasicInfo) {
+    return;
+    this.router.navigate(['/seasons', 'gallery', season.id], { queryParams: { 'name': season.name } });
+  }
+  onUpdateMatchReport(season: SeasonBasicInfo) {
+    return;
+    if (this.isSeasonStarted(season)) {
+      this.router.navigate(['/seasons', 'update-match', season.id], { queryParams: { 'name': season.name } });
+    }
+  }
+
+  isSeasonStarted(data): boolean {
+    const currentTimestamp = new Date().getTime();
+    return data && (data.start_date.getTime() < currentTimestamp);
+  }
 }

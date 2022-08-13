@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FOOTER } from '../shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-footer',
@@ -6,18 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements OnInit {
+  readonly COPYRIGHT = FOOTER.copyright;
+  productLinks = FOOTER.product;
+  aboutLinks = FOOTER.about;
   constructor() {}
-
   ngOnInit(): void {}
-  products_links = [
-    { name: 'play', route: 'play/home' },
-    { name: 'freestyle', route: 'freestyle/home' },
-    { name: 'academies', route: 'academies' },
-    { name: 'equipment', route: 'equipment' },
-  ];
-  about_links = [
-    { name: 'about us', route: 'about' },
-    { name: 'raise a ticket', route: 'support' },
-    { name: 'help & support', route: 'support' },
-  ];
 }

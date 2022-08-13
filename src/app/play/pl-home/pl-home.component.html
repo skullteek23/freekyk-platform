@@ -7,51 +7,31 @@
     fxLayoutGap.gt-sm="120px"
   >
     <app-feature-section
-      [openDialog]="true"
       DialogData="perfect team"
-      [featureContent]="{ head: 'find your perfect team', route: '/play' }"
+      svg="assets/svgs/Banner/find_your_team.svg"
+      [featureContent]="findTeamContent"
     ></app-feature-section>
     <app-feature-section
-      [openDialog]="true"
-      DialogData="season"
-      [featureContent]="{
-        head: 'be a part of freekyk seasons',
-        route: '/play'
-      }"
+      svg="assets/svgs/Banner/be_part_of_seasons.svg"
+      [featureContent]="seasonsContent"
       [invert]="true"
     ></app-feature-section>
     <app-feature-section
-      [openDialog]="true"
-      DialogData="fpl"
-      [featureContent]="{
-        head: 'experience freekyk premier league',
-        route: '/play'
-      }"
+      svg="assets/svgs/Banner/fpl.svg"
+      [featureContent]="fplContent"
     ></app-feature-section>
     <app-feature-section
-      [openDialog]="true"
-      DialogData="fkc"
-      [featureContent]="{
-        head: 'experience freekyk knockout championship',
-        route: '/play'
-      }"
+      svg="assets/svgs/Banner/fkc.svg"
+      [featureContent]="fkcContent"
       [invert]="true"
     ></app-feature-section>
     <app-feature-section
-      [openDialog]="true"
-      DialogData="fcp"
-      [featureContent]="{
-        head: 'experience freekyk community play',
-        route: '/play'
-      }"
+      svg="assets/svgs/Banner/fcp.svg"
+      [featureContent]="fcpContent"
     ></app-feature-section>
     <app-feature-section
-      [openDialog]="true"
-      DialogData="cust"
-      [featureContent]="{
-        head: 'customize your footballing experience',
-        route: '/play'
-      }"
+      svg="assets/svgs/Banner/customise_your_experience.svg"
+      [featureContent]="customizeContent"
       [invert]="true"
     ></app-feature-section>
   </div>
@@ -64,7 +44,10 @@
   <!-- action-strip-mini -->
 
   <!-- why choose fk -->
-  <app-why-choose-section name="Play"></app-why-choose-section>
+  <app-why-choose-section
+    [content]="whyChooseContent"
+    name="Play"
+  ></app-why-choose-section>
   <!-- why choose fk -->
 
   <!-- covid-19 -->
@@ -73,7 +56,7 @@
 
   <!-- community numbers -->
   <app-community-numbers-section
-    [data]="communityNumbers"
+    [content]="communityNumbers"
   ></app-community-numbers-section>
   <!-- community numbers -->
 </div>

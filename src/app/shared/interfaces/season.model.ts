@@ -4,8 +4,12 @@ export interface SeasonBasicInfo {
   locCity: string;
   locState: string;
   premium: boolean;
+  p_teams: number;
   start_date: Date;
   cont_tour: string[];
+  feesPerTeam: number;
+  isFixturesCreated: boolean;
+  isSeasonEnded: boolean;
   id?: string;
 }
 export interface SeasonAbout {
@@ -23,12 +27,11 @@ export interface SeasonMedia {
 export interface SeasonStats {
   FKC_winner?: string;
   FPL_winner?: string;
-  totParticipants: number;
   totGoals: number;
   awards: string;
 }
 export interface SeasonParticipants {
   tid: string;
   tname: string;
-  timgpath: string;
+  tlogo: string;
 }

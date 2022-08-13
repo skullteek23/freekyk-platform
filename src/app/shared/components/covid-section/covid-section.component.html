@@ -8,9 +8,11 @@
 >
   <span fxHide.gt-sm="true" class="overline center">Covid-19 precautions</span>
   <h4 fxHide.gt-sm="true" class="mat-subheading-1 center">
-    Lorem ipsum dolor sit amet, consectetur
+    {{ covidContent.heading }}
   </h4>
-  <span class="placeholder-rectangle"></span>
+  <div class="placeholder-rectangle" fxLayoutAlign="center center">
+    <img src="assets/svgs/Banner/covid.svg" alt="" />
+  </div>
   <div
     fxLayout="column"
     fxLayoutGap="8px"
@@ -20,15 +22,10 @@
   >
     <span fxHide.lt-md="true" class="overline left">Covid-19 precautions</span>
     <h4 fxHide.lt-md="true" class="mat-subheading-1 left">
-      Lorem ipsum dolor sit amet, consectetur
+      {{ covidContent.heading }}
     </h4>
     <span class="mat-body-1 align">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur
-      adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua.
+      {{ covidContent.desc }}
     </span>
     <button
       (click)="onLearnMore('covid')"
@@ -38,7 +35,7 @@
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
     >
-      <span> Learn more </span>
+      <span> Read COVID-19 Prevention Measures </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
   </div>

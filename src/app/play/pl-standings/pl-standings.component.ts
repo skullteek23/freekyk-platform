@@ -1,9 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { MatTabGroup } from '@angular/material/tabs';
+import { ActivatedRoute } from '@angular/router';
+import { MatchConstants, MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants/constants';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import {
+  CommunityLeaderboard,
+  FilterData,
+  LeagueTableModel,
+} from 'src/app/shared/interfaces/others.model';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
   selector: 'app-pl-standings',
@@ -11,28 +19,144 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./pl-standings.component.css'],
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
-  onMobile: boolean = false;
-  watcher: Subscription;
-  stFilters = ['Location', 'Season'];
-  constructor(private dialog: MatDialog, private mediaObs: MediaObserver) {}
-  ngOnInit(): void {}
-  ngOnDestroy() {
-    if (this.watcher) this.watcher.unsubscribe();
-  }
-  onChangeTab(event: MatTabChangeEvent) {
-    if (event.index == 1)
-      this.watcher = this.mediaObs
-        .asObservable()
-        .pipe(
-          filter((changes: MediaChange[]) => changes.length > 0),
-          map((changes: MediaChange[]) => changes[0])
+  onMobile = false;
+  subscriptions = new Subscription();
+  knockoutFixtures: MatchFixture[] = [];
+  seasonChosen = null;
+  isNoSeasonKnockout = true;
+  isNoSeasonLeague = true;
+  filterData: FilterData = {
+    defaultFilterPath: '',
+    filtersObj: {},
+  };
+  tableData: LeagueTableModel[] = [];
+  cpStandings: CommunityLeaderboard[] = [];
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+  constructor(
+    private ngFire: AngularFirestore,
+    private route: ActivatedRoute
+  ) { }
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.route.queryParams.subscribe((params) => {
+        if (params && params.s) {
+          this.onChooseSeason(params.s);
+        }
+      })
+    );
+    this.ngFire
+      .collection('seasons')
+      .get()
+      .pipe(
+        map((resp) =>
+          resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)
         )
-        .subscribe((change: MediaChange) => {
-          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-            this.onMobile = true;
-          } else {
-            this.onMobile = false;
+      )
+      .subscribe((resp) => {
+        this.filterData = {
+          defaultFilterPath: 'standings',
+          filtersObj: {
+            Season: resp,
+          },
+        };
+      });
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+  onQueryData(queryInfo): void {
+    return;
+    if (queryInfo) {
+      this.onChooseSeason(queryInfo.queryValue);
+    } else {
+      this.seasonChosen = null;
+    }
+  }
+  onChooseSeason(seasonName: string): void {
+    this.seasonChosen = seasonName;
+    this.ngFire
+      .collection('allMatches', (query) =>
+        query.where('season', '==', seasonName).where('type', '==', 'FKC')
+      )
+      .get()
+      .pipe(map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]))
+      .subscribe((res) => {
+        this.knockoutFixtures = res;
+        this.tabGroup.selectedIndex = this.knockoutFixtures.length ? 0 : 1;
+      });
+    this.ngFire
+      .collection('allMatches', (query) => query.where('season', '==', seasonName).where('type', '==', 'FCP'))
+      .get()
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]),
+        map(docs => docs.map(doc => {
+          const homeDetails = {
+            name: doc.teams[0] || MatchConstantsSecondary.TO_BE_DECIDED,
+            logo: doc.logos[0] || MatchConstantsSecondary.DEFAULT_LOGO,
+            score: doc.score[0] || null
           }
-        });
+          const awayDetails = {
+            name: doc.teams[1] || MatchConstantsSecondary.TO_BE_DECIDED,
+            logo: doc.logos[1] || MatchConstantsSecondary.DEFAULT_LOGO,
+            score: doc.score[1] || null
+          }
+          let winner = MatchConstantsSecondary.TO_BE_DECIDED;
+          if (homeDetails.score !== awayDetails.score) {
+            winner = homeDetails.score > awayDetails.score ? homeDetails.name : awayDetails.name;
+          }
+          return {
+            home: {
+              'timgpath': homeDetails.logo,
+              'tName': homeDetails.name
+            },
+            away: {
+              'timgpath': awayDetails.logo,
+              'tName': awayDetails.name
+            },
+            stadium: doc.stadium,
+            winner
+          } as CommunityLeaderboard
+        }))
+      )
+      .subscribe((res: CommunityLeaderboard[]) => {
+        console.log(res)
+        this.cpStandings = res;
+        if (this.knockoutFixtures.length) {
+          this.tabGroup.selectedIndex = 0;
+        } else if (this.tableData.length) {
+          this.tabGroup.selectedIndex = 1;
+        } else {
+          this.tabGroup.selectedIndex = 2;
+        }
+      });
+    this.ngFire
+      .collection('seasons', (query) => query.where('name', '==', seasonName))
+      .get()
+      .pipe(
+        map((res) => {
+          if (!res.empty) {
+            return res.docs[0].id;
+          }
+          return null;
+        })
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.ngFire
+            .collection('leagues')
+            .doc(res)
+            .get()
+            .subscribe((response) => {
+              this.tableData = [];
+              if (response.exists) {
+                this.tableData = Object.values(
+                  response.data()
+                ) as LeagueTableModel[];
+              }
+            });
+        }
+      });
   }
 }

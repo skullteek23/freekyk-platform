@@ -9,11 +9,15 @@ import { NotificationBasic } from 'src/app/shared/interfaces/notification.model'
   styleUrls: ['./notifications-list.component.css'],
 })
 export class NotificationsListComponent implements OnInit {
-  @Input('data') notifications: NotificationBasic[];
+  // tslint:disable-next-line: no-input-rename
+  @Input('data') set data(value: NotificationBasic[]) {
+    this.notifications = value.sort((a, b) => b.date.toMillis() - a.date.toMillis());
+  }
+  notifications: NotificationBasic[];
   noNotif$: Observable<boolean>;
-  constructor(private notifServ: NotificationsService) {}
-  ngOnInit(): void {}
-  onSelNotif(selectedNotif: NotificationBasic) {
+  constructor(private notifServ: NotificationsService) { }
+  ngOnInit(): void { }
+  onSelNotif(selectedNotif: NotificationBasic): void {
     this.notifServ.onSelNotif(selectedNotif);
   }
 }

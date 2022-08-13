@@ -1,7 +1,10 @@
-<div class="grey-bg">
+<div>
   <app-hero-section
+    [useAltLayout]="true"
+    [imageSource]="activeSvg"
     title="freekyk academies"
     overline="learn"
+    [description]="academiesBanner"
     [CTA]="{ name: 'start learning', route: '/signup' }"
   ></app-hero-section>
 </div>
@@ -56,7 +59,12 @@
                 {{ academy.locCity + ", " + academy.locState | slice: 0:50 }}
               </span>
             </div>
-            <button mat-icon-button color="primary" (click)="onShare(academy)">
+            <button
+              disabled
+              mat-icon-button
+              color="primary"
+              (click)="onShare(academy)"
+            >
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>

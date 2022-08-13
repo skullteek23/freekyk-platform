@@ -1,33 +1,42 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="playersFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
   <app-filters-lg
+    (changeFilter)="onQueryData($event)"
     fxHide.lt-md="true"
-    [filterArray]="playersFilters"
+    [data]="filterData"
   ></app-filters-lg>
   <!-- desktop filters -->
 
+  <app-search-lg
+    [isDisabled]="(players$ | async)?.length === 0"
+    searchPlaceholder="Search players by name, playing position, city"
+    (searchItem)="filterTerm = $event"
+  >
+  </app-search-lg>
+
   <!-- list -->
-  <div class="container section-space-bottom">
+  <div class="container min-height section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
       <mat-list-item
         (click)="onOpenPlayerProfile(player)"
-        *ngFor="let player of players$ | async; last as last"
+        *ngFor="
+          let player of players$
+            | async
+            | filterList: 'name,locCity,pl_pos':filterTerm;
+          last as last
+        "
       >
         <img
           matListAvatar
-          [src]="
-            player.imgpath_sm
-              ? player.imgpath_sm
-              : '../../../assets/images/dummy_player_sm.jpg'
-          "
+          [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
           [alt]="player.name"
         />
         <p matLine fxLayoutAlign="space-between center">
@@ -46,7 +55,9 @@
     <ng-template #lgScreen>
       <table
         mat-table
-        [dataSource]="players$ | async"
+        [dataSource]="
+          players$ | async | filterList: 'name,locCity,pl_pos':filterTerm
+        "
         class="full-width-table mat-elevation-z8"
       >
         <ng-container matColumnDef="jersey">
@@ -63,15 +74,11 @@
             <div fxLayoutAlign="start center" fxLayoutGap="8px">
               <img
                 class="plAvatar"
-                [src]="
-                  pl.imgpath_sm
-                    ? pl.imgpath_sm
-                    : '../../../assets/images/dummy_player_sm.jpg'
-                "
+                [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
                 [alt]="pl.name"
               />
               <span class="mat-body-1 left">
-                {{ pl.name | slice: 0:30 }}
+                {{ pl.name | textShorten: 30 }}
               </span>
             </div>
           </td>
@@ -89,7 +96,7 @@
           <th mat-header-cell *matHeaderCellDef>Location</th>
           <td mat-cell *matCellDef="let pl">
             <span class="mat-body-1">
-              {{ pl.locCity ? pl.locCity : "-" }}
+              {{ pl.locCity || "-" }}
             </span>
           </td>
         </ng-container>
@@ -97,7 +104,7 @@
           <th mat-header-cell *matHeaderCellDef>Playing Position</th>
           <td mat-cell *matCellDef="let pl">
             <span class="mat-body-1">
-              {{ pl.pl_pos ? pl.pl_pos : "-" }}
+              {{ pl.pl_pos || "-" }}
             </span>
           </td>
         </ng-container>
@@ -122,12 +129,6 @@
           </td>
         </tr>
       </table>
-      <!-- <mat-paginator
-        (page)="onChangePage($event)"
-        [length]="totLength"
-        [pageSize]="pageSize"
-      >
-      </mat-paginator> -->
     </ng-template>
     <!-- for large screens -->
   </div>

@@ -1,4 +1,11 @@
-mat-selection-list.mat-selection-list {
-  max-height: 540px;
-  overflow-y: auto;
+.selection-container {
+  width: 100%;
+}
+
+.remove-icon {
+  color: var(--red) !important;
+}
+
+.list {
+  min-height: 330px;
 }

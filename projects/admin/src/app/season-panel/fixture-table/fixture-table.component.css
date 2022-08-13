@@ -1,0 +1,36 @@
+.table-container {
+  height: 500px;
+  border: 2px solid var(--grey1);
+  border-radius: 20px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-mid {
+  width: 15%;
+}
+
+.mat-column-home {
+  width: 10%;
+}
+
+.mat-column-away {
+  width: 10%;
+}
+
+.mat-column-date {
+  width: 20%;
+}
+
+.mat-column-location {
+  width: 25%;
+}
+
+.mat-column-ground {
+  width: 20%;
+}

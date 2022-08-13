@@ -7,22 +7,32 @@
   padding: 20px;
   opacity: 0.6;
 }
+
 .button:hover {
   cursor: pointer;
   opacity: 0.8;
 }
-.whiteText > span {
+
+.whiteText>span {
   font-weight: 300 !important;
   line-height: 0px !important;
 }
+
 .darkGreen {
   /* background: var(--primaryDarkColor); */
   opacity: 1;
 }
+
 .box:hover {
   cursor: pointer;
   opacity: 0.8;
 }
+
 .mat-divider {
   margin: 0px !important;
+}
+
+.button-container {
+  margin-top: 20px;
+  margin-bottom: 8px !important;
 }

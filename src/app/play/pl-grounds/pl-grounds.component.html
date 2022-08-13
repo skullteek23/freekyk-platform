@@ -1,15 +1,16 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="groundsFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
   <app-filters-lg
     fxHide.lt-md="true"
-    [filterArray]="groundsFilters"
+    [data]="filterData"
+    (changeFilter)="onQueryData($event)"
   ></app-filters-lg>
   <!-- desktop filters -->
 
@@ -49,7 +50,7 @@
               fxLayoutAlign="center start"
             >
               <span class="mat-body-1 left">
-                {{ ground.name | slice: 0:50 }}
+                {{ ground.name | textShorten: 50 }}
               </span>
               <div
                 fxLayout="row"
@@ -60,7 +61,7 @@
                 <span class="quality">{{ ground.playLvl | uppercase }}</span>
               </div>
             </div>
-            <button mat-icon-button color="primary" (click)="onShare(ground)">
+            <button disabled mat-icon-button color="primary">
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>

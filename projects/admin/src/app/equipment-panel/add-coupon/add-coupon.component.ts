@@ -29,7 +29,7 @@ export class AddCouponComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onSubmit() {
     this.saveFormToServer(this.coupForm.value);
   }

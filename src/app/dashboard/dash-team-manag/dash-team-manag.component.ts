@@ -3,6 +3,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
+import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
 import { AppState } from 'src/app/store/app.reducer';
 
@@ -12,52 +13,57 @@ import { AppState } from 'src/app/store/app.reducer';
   styleUrls: ['./dash-team-manag.component.css'],
 })
 export class DashTeamManagComponent implements OnInit, OnDestroy {
-  isLoading: boolean = true;
+  isLoading = true;
   noTeam = false;
-  showMobile: boolean = false;
-  watcher: Subscription;
+  showMobile = false;
+  subscriptions = new Subscription();
 
   constructor(
     private mediaObs: MediaObserver,
     private teServ: TeamService,
+    private plServ: PlayerService,
     private store: Store<AppState>
-  ) {
-    this.store
-      .select('dash')
-      .pipe(map((resp) => resp.hasTeam))
-      .subscribe((team) => {
-        this.noTeam = team == null;
-      });
-    this.watcher = mediaObs
-      .asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.showMobile = true;
-        } else {
-          this.showMobile = false;
-        }
+  ) {}
+  ngOnInit(): void {
+    this.subscriptions.add(
+      this.store
+        .select('dash')
+        .pipe(map((resp) => resp.hasTeam))
+        .subscribe((team) => {
+          this.noTeam = team == null;
+        })
+    );
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+            this.showMobile = true;
+          } else {
+            this.showMobile = false;
+          }
 
-        this.isLoading = false;
-      });
+          this.isLoading = false;
+        })
+    );
   }
-  ngOnInit(): void {}
-  ngOnDestroy() {
-    this.watcher.unsubscribe();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
-  joinTeam() {
+  joinTeam(): void {
     this.teServ.onOpenJoinTeamDialog();
   }
-  createTeam() {
+  createTeam(): void {
     this.teServ.onOpenCreateTeamDialog();
   }
-  onTCommsMobile() {
+  onTCommsMobile(): void {
     this.teServ.onOpenTeamCommsMobileDialog();
   }
-  onOpenTeamSettings() {
+  onOpenTeamSettings(): void {
     this.teServ.onOpenTeamSettingsDialog();
   }
 }

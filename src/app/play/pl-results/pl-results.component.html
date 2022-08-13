@@ -1,16 +1,13 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filter -->
-  <app-filters-sm
+  <!-- <app-filters-sm
     fxHide.gt-sm="true"
     [filterArray]="resultFilters"
-  ></app-filters-sm>
+  ></app-filters-sm> -->
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    fxHide.lt-md="true"
-    [filterArray]="resultFilters"
-  ></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->
@@ -18,20 +15,12 @@
   <!-- loading -->
 
   <!-- results list -->
-  <ul class="container section-space-bottom">
-    <ng-template #placeholder>
-      <app-no-items-message items="results"></app-no-items-message>
-    </ng-template>
-    <ng-container *ngIf="noResults == false; else placeholder">
-      <li *ngFor="let result of results$ | async; last as last">
-        <app-fixture-basic
-          [resultMode]="true"
-          [premium]="result.premium"
-          [matchData]="result"
-        ></app-fixture-basic>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </li>
-    </ng-container>
+  <ul class="container section-space-bottom fixture-container">
+    <app-no-items-message *ngIf="noResults" items="results"></app-no-items-message>
+    <li *ngFor="let result of results$ | async; last as last">
+      <app-fixture-basic [resultMode]="true" [premium]="result.premium" [matchData]="result"></app-fixture-basic>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </li>
   </ul>
   <!-- results list -->
 </div>

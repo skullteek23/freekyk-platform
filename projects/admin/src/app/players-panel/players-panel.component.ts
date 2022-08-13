@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/LOREM_IPSUM';
+import { LOREM_IPSUM_SHORT } from 'src/app/shared/Constants/WEBSITE_CONTENT';
 import {
   FsBasic,
   FsStats,
@@ -29,7 +29,7 @@ export class PlayersPanelComponent implements OnInit {
     var profileMoreBatchFs = this.ngFire.firestore.batch();
     var fsProfiles: FsBasic[] = this.getBasicInfoProfilesFs();
     var fsStats: FsStats = this.getFsStats();
-    var fsVideos: FsProfileVideos = this.getFsVideos();
+    var fsVideos: any = this.getFsVideos();
     for (let k = 0; k < fsProfiles.length; k++) {
       var docRef = this.ngFire.firestore
         .collection('freestylers')
@@ -122,7 +122,7 @@ export class PlayersPanelComponent implements OnInit {
     };
   }
   getFsVideos() {
-    return <FsProfileVideos>{
+    return {
       vid_1: 'https://www.youtube.com/watch?v=K630UusINQY',
       vid_2: 'https://www.youtube.com/watch?v=K630UusINQY',
       vid_3: 'https://www.youtube.com/watch?v=K630UusINQY',

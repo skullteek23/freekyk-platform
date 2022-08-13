@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { QueryService } from 'src/app/services/query.service';
+import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { FilterData } from 'src/app/shared/interfaces/others.model';
+import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-results',
@@ -11,15 +15,37 @@ import { MatchFixture } from 'src/app/shared/interfaces/match.model';
   styleUrls: ['./pl-results.component.css'],
 })
 export class PlResultsComponent implements OnInit {
-  isLoading: boolean = true;
-  noResults: boolean = false;
+  isLoading = true;
+  noResults = false;
   results$: Observable<MatchFixture[]>;
-  resultFilters = ['Premium', 'Tournament Type', 'Location', 'Season', 'Team'];
-  constructor(private ngFire: AngularFirestore) {}
+  filterData: FilterData;
+  constructor(
+    private ngFire: AngularFirestore,
+    private queryServ: QueryService
+  ) { }
   ngOnInit(): void {
+    this.ngFire
+      .collection('seasons')
+      .get()
+      .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+      .subscribe((resp) => {
+        this.filterData = {
+          defaultFilterPath: 'allMatches',
+          filtersObj: {
+            ...MatchFilters,
+            Season: resp,
+          },
+        };
+      });
+    this.filterData = {
+      defaultFilterPath: 'allMatches',
+      filtersObj: {
+        ...MatchFilters
+      },
+    };
     this.getResults();
   }
-  getResults() {
+  getResults(): void {
     this.results$ = this.ngFire
       .collection('allMatches', (query) => query.where('concluded', '==', true))
       .get()
@@ -28,11 +54,22 @@ export class PlResultsComponent implements OnInit {
           this.noResults = val.empty;
           this.isLoading = false;
         }),
-        map((resp) =>
-          resp.docs.map(
-            (doc) => <MatchFixture>{ id: doc.id, ...(<MatchFixture>doc.data()) }
-          )
-        )
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc')))
+      );
+  }
+  onQueryData(queryInfo): void {
+    if (queryInfo === null) {
+      return this.getResults();
+    }
+    this.results$ = this.queryServ
+      .onQueryMatches(queryInfo, 'allMatches', true)
+      .pipe(
+        tap((val) => {
+          this.noResults = val.empty;
+          this.isLoading = false;
+        }),
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture))
       );
   }
 }

@@ -25,7 +25,7 @@
   background-color: var(--primaryColor);
 }
 .maxh-cards-r {
-  height: 350px;
+  height: auto;
   max-height: 350px;
 }
 li {

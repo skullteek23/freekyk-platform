@@ -25,6 +25,9 @@ export interface GroundPrivateInfo {
   locCity: string;
   locState: string;
   signedContractFileLink: string;
+  contractStartDate: Timestamp;
+  contractEndDate: Timestamp;
   timings: {};
-  totAvailHours: number;
+  availableDate: Timestamp;
+  id?: string;
 }

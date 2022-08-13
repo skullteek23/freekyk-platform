@@ -1,21 +1,23 @@
 import { Timestamp } from '@firebase/firestore-types';
 import { cartItem } from './product.model';
-export type DELIVERED = 'order is delivered';
-export type TRANSIT = 'order in transit';
-export type PLACED = 'order is placed';
-export type FAILED = 'order error';
-export type CARD = 'payment with card';
-export type UPI = 'payment with upi';
-export type NETBANKING = 'payment with netbanking';
+export type SUCCESS = 'SUCCESS';
+export type PROCESSING = 'PROCESSING';
+export type DELIVERED = 'DELIVERED';
+export type TRANSIT = 'TRANSIT';
+export type PLACED = 'PLACED';
+export type FAILED = 'FAILED';
+export type CARD = 'CARD';
+export type UPI = 'UPI';
+export type NETBANKING = 'NETBANKING';
 export interface OrderBasic {
-  orderedByUID: string;
-  orderStatus: DELIVERED | TRANSIT | PLACED | FAILED;
-  total: number;
+  by: string;
+  status: SUCCESS | FAILED | PROCESSING;
+  payableTotal: number;
   placedOn: Timestamp;
-  prodCount: number;
-  lastProduct: cartItem;
-  paymentId?: string;
-  order_ID?: string;
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+  itemsDescSnap?: cartItem;
   id?: string;
 }
 // export interface ProductOrder {

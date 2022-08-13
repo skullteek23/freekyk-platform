@@ -4,7 +4,12 @@
   fxLayoutGap="20px"
 >
   <div class="add-photo" fxLayoutAlign="center center">
-    <button mat-icon-button (click)="onOpenTeamSettings()">
+    <button
+      matTooltip="Upload Photos"
+      color="primary"
+      mat-icon-button
+      (click)="onOpenTeamSettings()"
+    >
       <mat-icon class="material-icons-round">add_photo_alternate</mat-icon>
     </button>
   </div>

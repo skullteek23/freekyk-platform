@@ -19,7 +19,7 @@ export interface TeamBasicInfo {
 }
 export interface TeamMoreInfo {
   tdateCreated: Timestamp;
-  tageCat: number;
+  tageCat: 15 | 19 | 21 | 25 | 30;
   captainName: string;
   tslogan?: string;
   tdesc?: string;
@@ -37,7 +37,6 @@ export interface TeamStats {
   l: string | number;
   rcards: string | number;
   ycards: string | number;
-  cl_sheet: string | number;
   g_conceded: string | number;
   pr_tour_wins?: string | number;
 }

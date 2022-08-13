@@ -11,7 +11,7 @@ export interface PlayerBasicInfo {
 }
 export interface PlayerMoreInfo {
   imgpath_lg?: string;
-  profile: true;
+  profile: boolean;
   born?: Timestamp;
   locState?: string;
   locCountry?: string;
@@ -58,11 +58,7 @@ export interface FsStats {
   tr_u?: number;
 }
 export interface FsProfileVideos {
-  vid_1: string;
-  vid_2?: string;
-  vid_3?: string;
-  vid_4?: string;
-  vid_5?: string;
+  top_vids: string[];
 }
 export interface FsJourney {
   approved_tricks: number[];

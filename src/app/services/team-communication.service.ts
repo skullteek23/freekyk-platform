@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as TeamCommActions from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { map, take, tap, filter } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import {
   Tmember,
   ActiveSquadMember,
@@ -12,18 +12,19 @@ import { SnackbarService } from './snackbar.service';
 import { TeamState } from '../dashboard/dash-team-manag/store/team.reducer';
 import { TeamCommState } from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.reducer';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TeamCommunicationService {
-  setSelectedMatch(selection: number) {
+export class TeamCommunicationService implements OnDestroy {
+  setSelectedMatch(selection: number): void {
     this.store.dispatch(new TeamCommActions.SelectUpmMatchNo(selection));
   }
-  setActiveSquad(selection: ActiveSquadMember[]) {
+  setActiveSquad(selection: ActiveSquadMember[]): void {
     this.store.dispatch(new TeamCommActions.SelectedActiveSquad(selection));
   }
-  updateResponseByMember(response: boolean) {
+  updateResponseByMember(response: boolean): Subscription {
     return this.store
       .select('teamComms')
       .pipe(take(1))
@@ -31,14 +32,15 @@ export class TeamCommunicationService {
         if (
           resp.currUpcomingMatchNo < 0 ||
           resp.currUpcomingMatchNo > 2 ||
-          resp.currUpcomingMatchNo == undefined ||
+          resp.currUpcomingMatchNo === undefined ||
           resp.currUpcomingMatchNo == null
-        )
+        ) {
           return null;
+        }
         const uid = localStorage.getItem('uid');
         if (
-          resp.activeSquad.every((sq) => sq.id != uid) ||
-          resp.activeSquad.length == 0
+          resp.activeSquad.every((sq) => sq.id !== uid) ||
+          resp.activeSquad.length === 0
         ) {
           this.snackServ.displayCustomMsgLong(
             'Only Players included in active squad can accept/reject the invitation'
@@ -49,9 +51,9 @@ export class TeamCommunicationService {
         const respSnap = this.ngFire
           .collection(
             'teamCommunications/' +
-              tid +
-              '/activeSquad' +
-              resp.currUpcomingMatchNo.toString()
+            tid +
+            '/activeSquad' +
+            resp.currUpcomingMatchNo.toString()
           )
           .doc(uid)
           .update({
@@ -67,17 +69,17 @@ export class TeamCommunicationService {
               content: pname + (response ? accept : deny),
               time: new Date().getTime(),
             };
-            console.log(log);
+            // console.log(log);
             this.updateTeamActivity(log, resp.currUpcomingMatchNo);
           })
           .then(() => this.snackServ.displaySent())
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             this.snackServ.displayError();
           });
       });
   }
-  createActiveSquadByCaptain(members: Tmember[]) {
+  createActiveSquadByCaptain(members: Tmember[]): Subscription {
     return this.store
       .select('teamComms')
       .pipe(
@@ -89,24 +91,25 @@ export class TeamCommunicationService {
         if (
           matchNo < 0 ||
           matchNo > 2 ||
-          matchNo == undefined ||
+          matchNo === undefined ||
           matchNo == null
-        )
+        ) {
           return null;
+        }
         const tid = sessionStorage.getItem('tid');
-        var batch = this.ngFire.firestore.batch();
-        for (let i = 0; i < members.length; i++) {
-          const docId = members[i].id;
+        const batch = this.ngFire.firestore.batch();
+        for (const member of members) {
+          const docId = member.id;
           const newData: ActiveSquadMember = {
-            name: members[i].name,
-            id: members[i].id,
-            pl_pos: members[i].pl_pos,
-            imgpath_sm: members[i].imgpath_sm,
+            name: member.name,
+            id: member.id,
+            pl_pos: member.pl_pos,
+            imgpath_sm: member.imgpath_sm,
             response: 'wait',
           };
           const colRef = this.ngFire
             .collection(
-              'teamCommunications/' + tid + '/activeSquad' + matchNo.toString()
+              `teamCommunications/${tid}/activeSquad${matchNo.toString()}`
             )
             .doc(docId).ref;
           batch.set(colRef, newData);
@@ -126,7 +129,7 @@ export class TeamCommunicationService {
           .then(() => this.snackServ.displayComplete());
       });
   }
-  getActiveSquad(upcomingMatchNo: number) {
+  getActiveSquad(upcomingMatchNo: number): void {
     const teamId = sessionStorage.getItem('tid');
     this.ngFire
       .collection('teamCommunications')
@@ -135,41 +138,39 @@ export class TeamCommunicationService {
       .valueChanges()
       .pipe(
         tap((resp: ActiveSquadMember[]) => {
-          console.log(resp);
+          // console.log(resp);
           this.setActiveSquad(resp);
         }),
-        map((resp) => {
-          if (resp) return false;
-          return true;
-        })
+        map((resp) => (resp ? true : false))
       )
       .subscribe();
   }
   private updateTeamActivity(
     content: MemberResponseNotification,
     matchNo: number
-  ) {
+  ): void {
     const tid = sessionStorage.getItem('tid');
     this.ngFireDb
       .list('teamActivity/' + tid + '/activity' + matchNo.toString())
       .push(content);
-    console.log(content);
+    // console.log(content);
   }
 
-  ngOnDestroy() {
-    console.log('Comms service ended');
+  ngOnDestroy(): void {
+    // console.log('Comms service ended');
   }
   constructor(
     private ngFire: AngularFirestore,
     private ngFireDb: AngularFireDatabase,
     private snackServ: SnackbarService,
-    // private store: Store<fromApp.AppState>,
 
     private store: Store<{ teamComms: TeamCommState }>,
     private store2: Store<{ team: TeamState }>
   ) {
-    console.log('Comms service started');
-    let tid = sessionStorage.getItem('tid');
-    if (!!tid) this.getActiveSquad(0);
+    // console.log('Comms service started');
+    const tid = sessionStorage.getItem('tid');
+    if (!!tid) {
+      this.getActiveSquad(0);
+    }
   }
 }

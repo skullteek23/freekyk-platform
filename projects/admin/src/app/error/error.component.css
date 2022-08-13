@@ -1,0 +1,12 @@
+.error_space {
+  height: 500px;
+}
+
+.large_404 {
+  font-weight: 700;
+  margin: 0px;
+  letter-spacing: 10px;
+  font-size: 110px;
+  text-align: center;
+  color: var(--primaryColor);
+}

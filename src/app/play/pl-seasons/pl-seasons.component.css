@@ -2,29 +2,55 @@
   border: 2px solid var(--grey4);
   border-radius: var(--borderRadiusCard);
 }
+
 .mat-grid-tile:hover {
   cursor: pointer;
 }
+
 .seasonContainer {
   height: 100%;
   width: 100%;
 }
+
 .box-image {
   max-height: 70%;
   width: 100%;
   object-fit: cover;
 }
+
 .content {
   padding: 8px 16px;
 }
 
+.status {
+  background: var(--grey5);
+  color: black;
+  padding: 2px 16px;
+  border-radius: 20px;
+}
+
+.status-live {
+  background: var(--red);
+  color: white;
+}
+
+.status-upcoming {
+  background: var(--primaryColor);
+  color: white;
+}
+
+.status-container {
+  padding: 0px 16px;
+}
+
 @media only screen and (max-width: 1279px) {
   .box-image {
-    max-height: 80%;
+    max-height: 70%;
     width: 100%;
     object-fit: cover;
   }
 }
+
 @media only screen and (min-width: 1280px) {
   .box-image {
     max-height: 67%;

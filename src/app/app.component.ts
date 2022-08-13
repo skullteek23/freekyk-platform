@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MockDataService } from './services/mock-data.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,24 +14,14 @@ export class AppComponent implements OnInit, OnDestroy {
   menuOpen = false;
   dashOpen = false;
   routeSubscription: Subscription = new Subscription();
-  constructor(private router: Router, private mockData: MockDataService) {}
-  ngOnInit(): any {
+  constructor(private router: Router, private ngFire: AngularFirestore, private mockData: MockDataService) { }
+  ngOnInit(): void {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
-        // Hide loading indicator
-        this.dashOpen = [
-          '/dashboard/home',
-          '/dashboard/team-management',
-          '/dashboard/freestyle',
-          '/dashboard/premium',
-          '/dashboard/account',
-        ]
-          .includes(event.url)
-          .valueOf();
+        this.dashOpen = event.url.includes('dashboard');
       }
     });
   }
-
   onOpenMenu(eventValue: any): any {
     this.menuOpen = eventValue;
   }

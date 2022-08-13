@@ -6,11 +6,14 @@
   fxLayoutAlign="space-evenly center"
   fxLayoutGap="8px"
 >
-  <span
+  <div
     [fxFlexOrder.gt-sm]="flexOrderInvert ? '1' : '2'"
     fxFlexOrder="1"
     class="placeholder"
-  ></span>
+    fxLayoutAlign="center center"
+  >
+    <img [src]="svg" alt="Illustration" />
+  </div>
   <div
     [fxFlexOrder.gt-sm]="flexOrderInvert ? '2' : '1'"
     fxFlexOrder="2"
@@ -20,43 +23,18 @@
     fxLayoutGap="8px"
     ngClass.gt-sm="content"
   >
-    <h4 class="mat-subheading-1 align">{{ content.head | titlecase }}</h4>
-    <span class="mat-body-1 align">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      magna aliqua.
-    </span>
-    <ul fxHide.lt-md="true">
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-      <li>Benefit of Feature</li>
-    </ul>
+    <h4 class="mat-subheading-1 align">{{ content.subHeading | titlecase }}</h4>
+    <p class="mat-body-1 align" [innerHTML]="content.desc"></p>
     <button
-      *ngIf="isDialog == false; else dialogOpener"
       color="primary"
       mat-button
-      (click)="onNavigate(content.route)"
+      (click)="onNavigate(content.CTA.link)"
       fxLayout="column"
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
     >
-      <span> {{ "Explore " + (content.head | titlecase) }} </span>
+      <span> {{ content.CTA.text }} </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <ng-template #dialogOpener>
-      <button
-        color="primary"
-        mat-button
-        (click)="onLearnMore()"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-        fxLayoutGap="8px"
-      >
-        <span> Learn More</span>
-        <span class="material-icons-round"> keyboard_arrow_right </span>
-      </button>
-    </ng-template>
   </div>
 </section>

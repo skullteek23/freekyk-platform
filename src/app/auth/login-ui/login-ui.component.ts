@@ -14,23 +14,23 @@ import {
   styleUrls: ['./login-ui.component.css'],
 })
 export class LoginUiComponent implements OnInit {
-  @Input('type') view: 'login' | 'signup' = 'login';
+  @Input() type: 'login' | 'signup' = 'login';
   formData = new FormGroup({});
   disableAllButtons = false;
   isLoading = false;
   constructor(
     private authServ: AuthService,
     private snackServ: SnackbarService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.initForm();
   }
 
-  isViewLogin() {
-    return this.view == 'login';
+  isViewLogin(): boolean {
+    return this.type === 'login';
   }
 
-  initForm() {
+  initForm(): void {
     if (this.isViewLogin()) {
       this.formData = new FormGroup({
         email: new FormControl(null, [
@@ -57,11 +57,11 @@ export class LoginUiComponent implements OnInit {
     }
   }
 
-  onForgotPassword() {
+  onForgotPassword(): void {
     this.authServ.onForgotPassword();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
     if (!this.formData.valid) {
@@ -74,7 +74,7 @@ export class LoginUiComponent implements OnInit {
         email: this.formData.get('email')?.value,
         pass: this.formData.get('pass')?.value,
       };
-      let loginSnap = this.authServ.onlogin(userData);
+      const loginSnap = this.authServ.onlogin(userData);
       loginSnap
         .then(() => this.authServ.afterSignin())
         .catch((error) => this.onErrorAfterSignin(error))
@@ -85,16 +85,16 @@ export class LoginUiComponent implements OnInit {
         pass: this.formData.get('pass')?.value,
         name: this.formData.get('name')?.value,
       };
-      let signupSnap = this.authServ.onSignup(userData);
+      const signupSnap = this.authServ.onSignup(userData);
       signupSnap
         .then((user) => {
           sessionStorage.setItem('name', userData.name);
-          let cloudSnap = this.authServ.createProfileByCloudFn(
+          const cloudSnap = this.authServ.createProfileByCloudFn(
             userData.name,
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup(userData.name))
+            .then(() => this.authServ.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         })
@@ -102,44 +102,52 @@ export class LoginUiComponent implements OnInit {
     }
   }
 
-  onGoogleLogin() {
+  onGoogleLogin(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
     this.authServ
       .onGoogleSignin()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
-        let cloudSnap = this.authServ.createProfileByCloudFn(
-          user.user.displayName,
-          user.user.uid
-        );
-        cloudSnap
-          .then(() => this.authServ.afterSignup(user.user.displayName))
-          .catch((error) => this.onErrorAfterSignin(error))
-          .finally(this.cleanUpAfterSignin.bind(this));
+        if (user.additionalUserInfo.isNewUser) {
+          const cloudSnap = this.authServ.createProfileByCloudFn(
+            user.user.displayName,
+            user.user.uid
+          );
+          cloudSnap
+            .then(() => this.authServ.afterSignup())
+            .catch((error) => this.onErrorAfterSignin(error))
+            .finally(this.cleanUpAfterSignin.bind(this));
+        } else {
+          this.authServ.afterSignup();
+        }
       })
       .catch((error) => this.onErrorAfterSignin(error));
   }
 
-  onFacebookLogin() {
+  onFacebookLogin(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
     this.authServ
       .onFacebookSignin()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
-        let cloudSnap = this.authServ.createProfileByCloudFn(
-          user.user.displayName,
-          user.user.uid
-        );
-        cloudSnap
-          .then(() => this.authServ.afterSignup(user.user.displayName))
-          .catch((error) => this.onErrorAfterSignin(error))
-          .finally(this.cleanUpAfterSignin.bind(this));
+        if (user.additionalUserInfo.isNewUser) {
+          const cloudSnap = this.authServ.createProfileByCloudFn(
+            user.user.displayName,
+            user.user.uid
+          );
+          cloudSnap
+            .then(() => this.authServ.afterSignup())
+            .catch((error) => this.onErrorAfterSignin(error))
+            .finally(this.cleanUpAfterSignin.bind(this));
+        } else {
+          this.authServ.afterSignup();
+        }
       })
       .catch((error) => this.onErrorAfterSignin(error));
   }
-  cleanUpAfterSignin(hideLoading = false) {
+  cleanUpAfterSignin(hideLoading = false): void {
     this.formData.reset();
     this.formData.markAsUntouched();
     this.disableAllButtons = false;
@@ -147,8 +155,8 @@ export class LoginUiComponent implements OnInit {
       this.isLoading = false;
     }
   }
-  onErrorAfterSignin(error) {
-    this.authServ.onError(error['code']);
+  onErrorAfterSignin(error): void {
+    this.authServ.onError(error.code);
     this.cleanUpAfterSignin(true);
   }
 }

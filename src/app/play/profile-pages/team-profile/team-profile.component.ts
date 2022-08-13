@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
 import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
@@ -23,17 +23,18 @@ import firebase from 'firebase/app';
   templateUrl: './team-profile.component.html',
   styleUrls: ['./team-profile.component.css'],
 })
-export class TeamProfileComponent implements OnInit {
+export class TeamProfileComponent implements OnInit, OnDestroy {
   isLoading = true;
   teamInfo$: Observable<TeamBasicInfo>;
   teamMoreInfo$: Observable<TeamMoreInfo>;
   stats$: Observable<StatsTeam>;
   members$: Observable<TeamMembers>;
   media$: Observable<string[]>;
-  noPhotos: boolean = false;
-  error: boolean = false;
+  noPhotos = false;
+  error = false;
   imgPath: string;
   id: string;
+  subscriptions = new Subscription();
   constructor(
     private snackServ: SnackbarService,
     private store: Store<{ dash: DashState }>,
@@ -41,13 +42,17 @@ export class TeamProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private enlServ: EnlargeService
-  ) {
-    const teamName = route.snapshot.params['teamid'];
-    console.log(teamName);
+  ) {}
+  ngOnInit(): void {
+    const teamName = this.route.snapshot.params.teamName;
     this.getTeamInfo(teamName);
   }
-  ngOnInit(): void {}
-  getTeamInfo(tName: string) {
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+  getTeamInfo(tName: string): void {
     this.teamInfo$ = this.ngFire
       .collection('teams', (query) =>
         query.where('tname', '==', tName).limit(1)
@@ -69,7 +74,10 @@ export class TeamProfileComponent implements OnInit {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              <TeamBasicInfo>{ id: doc.id, ...(<TeamBasicInfo>doc.data()) }
+              ({
+                id: doc.id,
+                ...(doc.data() as TeamBasicInfo),
+              } as TeamBasicInfo)
           )
         ),
         map((resp) => resp[0]),
@@ -80,32 +88,34 @@ export class TeamProfileComponent implements OnInit {
         share()
       );
   }
-  getTeamMoreInfo(tid: string) {
+  getTeamMoreInfo(tid: string): void {
     this.teamMoreInfo$ = this.ngFire
-      .collection('teams/' + tid + '/additionalInfo')
+      .collection(`teams/${tid}/additionalInfo`)
       .doc('moreInfo')
       .get()
       .pipe(
-        tap((resp) => (this.isLoading = false)),
+        tap(() => (this.isLoading = false)),
         map(
           (resp) =>
-            <TeamMoreInfo>{ id: resp.id, ...(<TeamMoreInfo>resp.data()) }
+            ({ id: resp.id, ...(resp.data() as TeamMoreInfo) } as TeamMoreInfo)
         ),
         share()
       );
   }
-  getStats(tid: string) {
+  getStats(tid: string): void {
     this.stats$ = this.ngFire
-      .collection('teams/' + tid + '/additionalInfo')
+      .collection(`teams/${tid}/additionalInfo`)
       .doc('statistics')
       .get()
       .pipe(
         map((resp) => {
-          if (resp.exists) return <TeamStats>resp.data();
+          if (resp.exists) {
+            return resp.data() as TeamStats;
+          }
         }),
         map(
           (resp) =>
-            <StatsTeam>{
+            ({
               'FKC Played': resp.played.fkc,
               'FCP Played': resp.played.fcp,
               'FPL Played': resp.played.fpl,
@@ -115,49 +125,52 @@ export class TeamProfileComponent implements OnInit {
               'Red cards': resp.rcards,
               'Yellow cards': resp.ycards,
               'Goals Conceded': resp.g_conceded,
-              'Clean Sheets': resp.cl_sheet,
-            }
+            } as StatsTeam)
         )
       );
   }
-  getTeamMedia(tid: string) {
+  getTeamMedia(tid: string): void {
     this.media$ = this.ngFire
-      .collection('teams/' + tid + '/additionalInfo')
+      .collection(`teams/${tid}/additionalInfo`)
       .doc('media')
       .get()
       .pipe(
         map((resp) => {
-          if (resp.exists) return (<TeamMedia>resp.data()).media;
+          if (resp.exists) {
+            return (resp.data() as TeamMedia).media;
+          }
           return [];
         })
       );
   }
-  getTeamMembers(tid: string) {
+  getTeamMembers(tid: string): void {
     this.members$ = this.ngFire
-      .collection('teams/' + tid + '/additionalInfo')
+      .collection(`teams/${tid}/additionalInfo`)
       .doc('members')
       .get()
       .pipe(
         map((resp) => {
-          if (resp.exists) return <TeamMembers>resp.data();
+          if (resp.exists) {
+            return resp.data() as TeamMembers;
+          }
         })
       );
   }
-  onChallengeTeam() {
+  onChallengeTeam(): void {
     const uid = localStorage.getItem('uid');
     this.store
       .select('dash')
       .pipe(map((resp) => resp))
       .subscribe(async (team) => {
-        if (team.hasTeam == null)
+        if (team.hasTeam == null) {
           this.snackServ.displayCustomMsg(
             'Join or create a team to perform this action!'
           );
-        else if (team.hasTeam.capId != uid)
+        } else if (team.hasTeam.capId !== uid) {
           this.snackServ.displayCustomMsg(
             'Only a Captain can perform this action!'
           );
-        else {
+        } else {
           const notif: NotificationBasic = {
             type: 'team challenge',
             senderId: uid,
@@ -167,7 +180,7 @@ export class TeamProfileComponent implements OnInit {
             senderName: team.hasTeam.name,
           };
           this.ngFire
-            .collection('players/${this.id}/Notifications')
+            .collection(`players/${this.id}/Notifications`)
             .add(notif)
             .then(() =>
               this.snackServ.displayCustomMsg(
@@ -177,7 +190,7 @@ export class TeamProfileComponent implements OnInit {
         }
       });
   }
-  onEnlargePhoto() {
+  onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.imgPath);
   }
 }

@@ -46,7 +46,7 @@ export class RegiSellerComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onSubmit() {
     this.saveFormToServer(this.sellerForm.value);
   }

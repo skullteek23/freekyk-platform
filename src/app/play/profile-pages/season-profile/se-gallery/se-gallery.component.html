@@ -1,5 +1,5 @@
 <mat-grid-list
-  *ngIf="photos?.length != 0; else unavailable"
+  *ngIf="photos?.length !== 0; else unavailable"
   class="section-space-top section-space-bottom"
   [cols]="columns"
   gutterSize="20px"

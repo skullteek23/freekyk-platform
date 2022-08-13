@@ -1,8 +1,10 @@
-<div class="grey-bg">
+<div>
   <app-hero-section
+    imageSource="assets/svgs/Banner/about.svg"
     [CTA]="false"
     title="about freekyk"
     [overline]="false"
+    [description]="aboutFreekyk"
   ></app-hero-section>
 </div>
 <div
@@ -16,52 +18,6 @@
 <section fxLayout="column" class="container section-space-bottom">
   <div>
     <h4 class="mat-subheading-1 align">Our Journey</h4>
-    <p class="mat-body-1 justify">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt aliquam orci. Pellentesque non libero urna. Vestibulum faucibus
-      dui sed elementum pharetra.
-    </p>
-    <p class="justify">
-      Maecenas pellentesque, quam quis finibus mollis, dolor diam pellentesque
-      dui, ac fermentum ligula lorem vitae magna. Aliquam pulvinar elementum
-      nisl vitae condimentum. Aliquam pulvinar luctus risus, ac eleifend metus
-      tincidunt sed. Vestibulum a nibh sollicitudin, iaculis turpis sit amet,
-      bibendum justo. Proin tempus, eros ut mollis porta, libero metus rhoncus
-      ante, in vehicula ipsum diam quis mi. Praesent laoreet sollicitudin
-      interdum. Quisque placerat facilisis sem vitae vulputate. Nunc laoreet
-      vulputate purus. Mauris et vestibulum justo, nec imperdiet nibh. Nunc vel
-      posuere massa, sit amet ultrices enim. Phasellus pretium nisi odio, ac
-      accumsan massa congue ut. Sed at odio nibh. In est dui, porta vulputate
-      tristique in, condimentum eget arcu. Vestibulum ante ipsum primis in
-      faucibus orci luctus et ultrices posuere cubilia curae; Proin euismod
-      porttitor rhoncus. Vivamus vitae tristique dolor.
-    </p>
-    <p class="justify">
-      Phasellus condimentum tempor diam. Vestibulum eget purus eu libero gravida
-      lobortis. Mauris fermentum et leo vitae suscipit. Nam vel facilisis arcu.
-      In vehicula ex eget convallis lobortis. Sed arcu leo, fermentum at eros
-      ac, consectetur rutrum orci. Sed eget metus diam.
-    </p>
-    <p class="justify">
-      Nulla at erat purus. Nunc consequat mi non justo gravida lacinia. Aenean
-      pellentesque ultricies mi ac dignissim. Pellentesque convallis, sem ac
-      congue semper, arcu odio porttitor elit, eu dapibus dui ex at augue.
-      Maecenas interdum arcu ac molestie vehicula. Morbi vel ullamcorper felis.
-      Sed sit amet lacinia purus. Ut vehicula vestibulum ipsum vel porta. Duis
-      aliquam feugiat diam ac suscipit. Etiam condimentum nunc in mi convallis
-      maximus. Nulla posuere consequat est ac tincidunt. Phasellus eget tellus
-      interdum, ullamcorper ligula ut, convallis lorem. Suspendisse sed aliquet
-      ligula, a dignissim neque. Suspendisse in dictum tortor. Pellentesque
-      habitant morbi tristique senectus et netus et malesuada fames ac turpis
-      egestas.
-    </p>
+    <p class="mat-body-1 justify" [innerHTML]="ourJourney"></p>
   </div>
 </section>

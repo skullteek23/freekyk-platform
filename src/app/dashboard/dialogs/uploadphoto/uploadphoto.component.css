@@ -1,4 +1,9 @@
 .preview {
   height: 300px;
   width: 100%;
+  border-radius: var(--dashCardBorder);
+}
+img {
+  height: 400px;
+  width: auto;
 }

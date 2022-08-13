@@ -4,11 +4,16 @@
   fxLayoutAlign="space-between center"
   fxLayoutGap="16px"
 >
-  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+  <button
+    matTooltip="Close"
+    mat-icon-button
+    mat-dialog-close
+    (click)="onCloseDialog()"
+  >
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
   <span class="mat-body-1">Player Profile</span>
-  <button mat-icon-button (click)="onShare(data)">
+  <button disabled mat-icon-button (click)="onShare(data)">
     <mat-icon class="material-icons-round"> share </mat-icon>
   </button>
 </mat-toolbar>
@@ -16,7 +21,10 @@
 <div class="container-2">
   <div class="name" fxLayout="row" fxLayoutGap="20px">
     <div class="profile-image">
-      <img [src]="data?.imgpath_sm | profilePic" [alt]="data.name" />
+      <img
+        [src]="(addiInfo$ | async)?.imgpath_lg | profilePic"
+        [alt]="data.name"
+      />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">
@@ -117,8 +125,8 @@
             <span class="dash-h5 align">{{ "other stats" | titlecase }}</span>
             <div fxLayoutAlign="start" fxLayout="column">
               <span class="mat-body-2">Professional teams played for</span>
-              <i *ngIf="user_teams.length == 0"> none </i>
-              <span class="mat-body-1" *ngFor="let team of user_teams">
+              <i *ngIf="userTeams.length === 0"> none </i>
+              <span class="mat-body-1" *ngFor="let team of userTeams">
                 {{ team }}
               </span>
             </div>
@@ -126,8 +134,8 @@
               <span class="mat-body-2">
                 Professional tournaments participated in
               </span>
-              <i *ngIf="user_tours.length == 0"> none </i>
-              <span class="mat-body-1" *ngFor="let tournas of user_tours">
+              <i *ngIf="userTours.length == 0"> none </i>
+              <span class="mat-body-1" *ngFor="let tournas of userTours">
                 {{ tournas }}
               </span>
             </div>
