@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../dashboard/constants/constants';
 import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS, RazorPayAPI } from '../shared/Constants/RAZORPAY';
+import { SeasonBasicInfo } from '../shared/interfaces/season.model';
 declare var Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 
@@ -14,16 +15,16 @@ export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 export class PaymentService {
   private loadingStatusChanged = new BehaviorSubject<PAYMENT_TYPE>(HOME);
   generateOrder(amount: number): Promise<any> {
-    const generatorFunc = this.ngFunc.httpsCallable(
-      CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER
-    );
+    // order generation can only be handled from backend, confirmed by razorpay team
+    const generatorFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER);
     return generatorFunc({ amount }).toPromise();
   }
-  openCheckoutPage(orderId: string, amount: number, season, teamId: string): void {
+  openCheckoutPage(orderId: string, season: SeasonBasicInfo, teamId: string): void {
     const options = {
       ...UNIVERSAL_OPTIONS,
+      description: `Participation Fees`,
       handler: this.redirectAfterPaymentSuccess.bind(this, season, teamId),
-      amount: amount.toString(),
+      amount: season.feesPerTeam.toString(),
       order_id: orderId,
     };
     const razorpayInstance = new Razorpay(options);

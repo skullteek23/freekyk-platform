@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .select('dash')
       .pipe(map((resp) => resp.playerBasicInfo.name))
       .subscribe(data => {
-        console.log(data)
         this.playerName = data;
       }));
     this.subscriptions.add(
@@ -71,17 +70,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
     );
-    // this.subscriptions.add(
-    //   this.authServ.userDataChanged.pipe(take(2)).subscribe((user) => {
-    //     console.log(user, 'user')
-    //     if (user != null) {
-    //       this.displayName = user?.name;
-    //       if (!this.displayName) {
-    //         this.displayName = sessionStorage.getItem('name');
-    //       }
-    //     }
-    //   })
-    // );
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
