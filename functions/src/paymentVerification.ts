@@ -2,8 +2,7 @@ import * as admin from 'firebase-admin';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { environment } from '../../src/environments/environment.dev';
-// import { environment } from '../../src/environments/environment.prod';
+import { environment } from './environments/environment';
 const crypto = require('crypto');
 const db = admin.firestore();
 

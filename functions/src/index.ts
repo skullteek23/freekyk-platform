@@ -1,8 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 admin.initializeApp();
-import { environment } from '../../src/environments/environment.dev';
-// import { environment } from '../../src/environments/environment.prod';
 import { fsTrick } from './fsTrick';
 import { joinRequests } from './JoinRequestToTeams';
 import { newProfile } from './newProfile';
@@ -17,6 +15,7 @@ import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
 import { removeThumbnail } from './trigger_functions/removeThumbnail';
+import { environment } from './environments/environment';
 
 // callable functions
 export const createProfile = functions.https.onCall(newProfile);

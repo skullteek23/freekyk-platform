@@ -1,5 +1,4 @@
-import { environment } from "../../src/environments/environment.dev";
-// import { environment } from "../../src/environments/environment.prod";
+import { environment } from './environments/environment';
 
 const Razorpay = require('razorpay');
 export async function generateOrder(data: any, context: any): Promise<any> {
