@@ -1,5 +1,4 @@
 export const environment = {
-  development: true,
   production: false,
   firebase: {
     apiKey: 'AIzaSyAD66YeExDHoZQAWKBGf87BkykUklsLlCI',
@@ -13,7 +12,7 @@ export const environment = {
   },
   // live api keys
   razorPay: {
-    key_id: 'rzp_live_8BB9gOfLpWDtAG',
-    key_secret: 'padz8nMQYYaD7XRZLAY7uZ2Y',
+    key_id: 'rzp_test_mQuopCCsNb542F',
+    key_secret: 'r7Y2JQ4n3VJkTquSn9lO6yHw',
   },
 };

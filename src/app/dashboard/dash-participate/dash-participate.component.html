@@ -10,7 +10,7 @@
       <div class="loading-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
         <app-tick-animation></app-tick-animation>
         <span class="mat-body-1"> Payment Completed! Enjoy your Season. </span>
-        <button *ngIf="selectedSeason" (click)="onExitScreen()" [routerLink]="['/s', selectedSeason]"
+        <button *ngIf="selectedSeason" (click)="goToSeason()" [routerLink]="['/s', selectedSeason]"
           class="primaryButton margin-top buttonText">
           View Season
         </button>
@@ -27,7 +27,7 @@
       </li>
       <li class="tournament" *ngFor="let season of seasons$ | async" fxLayoutAlign="space-between center"
         fxLayout.lt-md="column">
-        <span (click)="onExitScreen(season.name)" class="mat-subheading-1 name">
+        <span (click)="goToSeason(season.name)" class="mat-subheading-1 name">
           {{ season.name | textShorten: 30 }}
           ( Includes {{ getContainingTournaments(season.cont_tour) }} )
         </span>

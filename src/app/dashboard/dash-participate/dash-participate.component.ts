@@ -37,20 +37,25 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.paymentServ.getLoadingStatus().subscribe((status) => {
-        this.loadingStatus = status;
-      })
-    );
+    this.subscriptions.add(this.paymentServ.getLoadingStatus().subscribe((status) => {
+      this.loadingStatus = status;
+    }));
     this.subscriptions.add(this.store.select('team').pipe(take(1)).subscribe((data) => {
       this.teamInfo = data;
       this.hasTeam = data && data.basicInfo.captainId && data.basicInfo.tname ? true : false;
     }));
+    this.getSeasonOrders()
+    this.getSeasons()
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  getSeasonOrders() {
     const uid = localStorage.getItem('uid');
     this.subscriptions.add(
-      this.ngFire
-        .collection('seasonOrders', (query) => query.where('by', '==', uid))
-        .get()
+      this.ngFire.collection('seasonOrders', (query) => query.where('by', '==', uid)).get()
         .subscribe((res) => {
           if (!res.empty) {
             this.participatedTournaments = res.docs.map(
@@ -61,9 +66,9 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
           }
         })
     );
-    this.seasons$ = this.ngFire
-      .collection('seasons')
-      .snapshotChanges()
+  }
+  getSeasons() {
+    this.seasons$ = this.ngFire.collection('seasons').snapshotChanges()
       .pipe(
         map((resp) => {
           const seasons: SeasonBasicInfo[] = [];
@@ -79,9 +84,6 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         ),
         share()
       );
-  }
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
   async onPayNow(season: SeasonBasicInfo): Promise<any> {
     if (!season.id) {
@@ -112,7 +114,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       .then((res) => {
         if (res) {
           this.paymentServ.onLoadingStatusChange('home');
-          this.paymentServ.openCheckoutPage(res.id, season.feesPerTeam, season, teamId);
+          this.paymentServ.openCheckoutPage(res.id, season, teamId);
         }
       })
       .catch(() => {
@@ -120,7 +122,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         this.snackServ.displayError();
       });
   }
-  onExitScreen(name?: string): void {
+  goToSeason(name?: string): void {
     this.paymentServ.onLoadingStatusChange('home');
     if (name) {
       this.router.navigate(['/s', name])
