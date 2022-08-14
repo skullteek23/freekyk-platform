@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -23,40 +23,38 @@ export class PaymentService {
     const options = {
       ...UNIVERSAL_OPTIONS,
       description: `Participation Fees`,
-      handler: this.redirectAfterPaymentSuccess.bind(this, season, teamId),
+      handler: this.handleSuccess.bind(this, season, teamId),
       amount: season.feesPerTeam.toString(),
       order_id: orderId,
     };
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
-    razorpayInstance.on('payment.failed', this.redirectAfterPaymentFailure);
+    razorpayInstance.on('payment.failed', this.handleFailure);
   }
-  redirectAfterPaymentSuccess(season, tid, response): void {
+  handleSuccess(season, tid, response): void {
     this.onLoadingStatusChange('loading');
     const uid = localStorage.getItem('uid');
     const verifyPaymentFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.VERIFY_PAYMENT);
     verifyPaymentFunc({ ...response, uid, season, tid })
       .toPromise()
       .then(() => this.onLoadingStatusChange('success'))
-      .catch(() => this.onLoadingStatusChange('home'))
-      .catch((err) =>
+      .catch((err) => {
+        this.onLoadingStatusChange('home')
         err == null
-          ? this.redirectAfterPaymentFailure({
+          ? this.handleFailure({
             description: 'Payment Failed! Unauthorized payment source.',
             code: '501',
           })
-          : this.redirectAfterPaymentFailure({
+          : this.handleFailure({
             description: 'Payment Failed! Try again later',
             code: '401',
           })
+      }
       );
   }
-  redirectAfterPaymentFailure(error): void {
-    this.onLoadingStatusChange('home');
+  handleFailure(error): void {
     alert(error.description);
-    this.router.navigate(['/dashboard/error'], {
-      state: { message: error.description, code: error.code },
-    });
+    this.router.navigate(['/dashboard/error'], { state: { message: error.description, code: error.code } });
   }
   onLoadingStatusChange(status: PAYMENT_TYPE): void {
     this.loadingStatusChanged.next(status);
@@ -66,7 +64,6 @@ export class PaymentService {
   }
   constructor(
     private ngFunc: AngularFireFunctions,
-    private router: Router,
-    @Inject(RazorPayAPI) public RAZORPAY_SECRET: { key_id: string; key_secret: string }
+    private router: Router
   ) { }
 }

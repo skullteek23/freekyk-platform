@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 const db = admin.firestore();
 import { firestore } from 'firebase-admin';
 import { Invite, NotificationBasic } from '../../src/app/shared/interfaces/notification.model';
-import { SeasonParticipants } from '../../src/app/shared/interfaces/season.model';
+import { SeasonBasicInfo, SeasonParticipants } from '../../src/app/shared/interfaces/season.model';
 import { Tmember } from '../../src/app/shared/interfaces/team.model';
 import { PlayerBasicInfo } from '../../src/app/shared/interfaces/user.model';
 
@@ -36,13 +36,12 @@ export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any>
       memCount: firestore.FieldValue.increment(1),
       members: firestore.FieldValue.arrayUnion(newMember),
     }));
-    allPromises.push(
-      db.collection('players').doc(invite.inviteeId).update({
-        team: {
-          name: invite.teamName,
-          id: invite.teamId,
-        },
-      }));
+    allPromises.push(db.collection('players').doc(invite.inviteeId).update({
+      team: {
+        name: invite.teamName,
+        id: invite.teamId,
+      },
+    }));
     allPromises.push(db.collection('players/' + invite.inviteeId + '/Notifications').add(newNotif));
     allPromises.push(DeleteNotifById(inviteId, invite.inviteeId));
     allPromises.push(DeleteInviteById(inviteId));
@@ -59,16 +58,21 @@ export async function onRejectTeam(notifId: string, pid: string): Promise<any> {
 export async function DeleteInviteById(invId: string): Promise<any> {
   return await db.collection('invites').doc(invId).delete();
 }
-export async function DeleteNotifById(
-  notifId: string,
-  playerId: string
-): Promise<any> {
+export async function DeleteNotifById(notifId: string, playerId: string): Promise<any> {
   // notif id for team invites is same as invites id
   return await db.collection('players/' + playerId + '/Notifications').doc(notifId).delete();
 }
 export async function SendJoinNotification(notif: NotificationBasic, recieverId: string, notifId: string): Promise<any> {
   return await db.collection('players/' + recieverId + '/Notifications').doc(notifId).set(notif);
 }
-export async function getParticipants(sid: string): Promise<any> {
+export async function getParticipants(sid: string): Promise<SeasonParticipants[]> {
   return (await db.collection('seasons').doc(sid).collection('participants').get()).docs.map((doc) => doc.data() as SeasonParticipants);
+}
+export async function assignParticipants(season: SeasonBasicInfo, participant: any): Promise<any> {
+  const sid = season.id || '';
+  const participants = (await getParticipants(sid));
+  const participantCount = participants ? participants.length : 0;
+  if (participantCount < season.p_teams) {
+    return db.collection('seasons').doc(sid).collection('participants').add(participant);
+  }
 }
