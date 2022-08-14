@@ -1,18 +1,19 @@
 export const environment = {
-  production: false,
+  development: false,
   firebase: {
-    apiKey: 'AIzaSyAD66YeExDHoZQAWKBGf87BkykUklsLlCI',
-    authDomain: 'freekyk-development.firebaseapp.com',
+    apiKey: 'AIzaSyBibLl1ZM0B2Wf4gqofKnUNYuAJCoSBQ-c',
+    authDomain: 'freekyk-prod.firebaseapp.com',
     databaseURL:
-      'https://freekyk-development-default-rtdb.asia-southeast1.firebasedatabase.app',
-    projectId: 'freekyk-development',
-    storageBucket: 'freekyk-development.appspot.com',
-    messagingSenderId: '954435558889',
-    appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
+      'https://freekyk-prod-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'freekyk-prod',
+    storageBucket: 'freekyk-prod.appspot.com',
+    messagingSenderId: '678320827100',
+    appId: '1:678320827100:web:d14c29c405b86b825a2219',
+    measurementId: 'G-K55NRR7QXM',
   },
   // live api keys
   razorPay: {
-    key_id: 'rzp_test_mQuopCCsNb542F',
-    key_secret: 'r7Y2JQ4n3VJkTquSn9lO6yHw',
+    key_id: 'rzp_live_ow8sSR7ZCWKSST',
+    key_secret: 'ObgEc8yFbtkmCkrexJcedhju',
   },
 };
