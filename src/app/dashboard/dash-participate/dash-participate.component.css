@@ -9,6 +9,10 @@
   height: 100vh;
 }
 
+.red {
+  color: var(--red);
+}
+
 .tournament {
   width: 100%;
   border: 2px solid white;
