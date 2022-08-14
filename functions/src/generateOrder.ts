@@ -1,12 +1,11 @@
-import {
-  RAZORPAY_API_KEYˍID_LIVE,
-  RAZORPAY_API_KEYˍSECRET_LIVE,
-} from './constants';
+import { environment } from "../../src/environments/environment.dev";
+// import { environment } from "../../src/environments/environment.prod";
+
 const Razorpay = require('razorpay');
 export async function generateOrder(data: any, context: any): Promise<any> {
   const instance = new Razorpay({
-    key_id: RAZORPAY_API_KEYˍID_LIVE,
-    key_secret: RAZORPAY_API_KEYˍSECRET_LIVE,
+    key_id: environment.firebase.storageBucket,
+    key_secret: environment.firebase.storageBucket,
   });
   const options = {
     amount: (data.amount * 100).toString(), // amount in paise

@@ -1,13 +1,6 @@
 import * as admin from 'firebase-admin';
-import {
-  Invite,
-  NotificationBasic,
-} from '../../../src/app/shared/interfaces/notification.model';
-import {
-  SendJoinNotification,
-  onRejectTeam,
-  onJoinTeam,
-} from '../abstractFunctions';
+import { Invite, NotificationBasic } from '../../../src/app/shared/interfaces/notification.model';
+import { SendJoinNotification, onRejectTeam, onJoinTeam } from '../abstractFunctions';
 
 export async function inviteUpdationTrigger(
   change: any,

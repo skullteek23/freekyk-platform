@@ -8,10 +8,7 @@ const gcs = new Storage();
 const db = admin.firestore();
 import * as functions from 'firebase-functions';
 
-export async function generateThumbnail(
-  object: functions.storage.ObjectMetadata,
-  context: any
-): Promise<any> {
+export async function generateThumbnail(object: functions.storage.ObjectMetadata, context: any): Promise<any> {
   if (!object || !object.name) {
     console.log('exiting function');
     return false;
@@ -37,7 +34,7 @@ export async function generateThumbnail(
 
   // 2. Download Source File
   await bucket.file(filePath).download({
-    destination: tmpFilePath,
+    destination: tmpFilePath
   });
 
   // 3. Resize the images and define an array of upload promises
@@ -62,16 +59,8 @@ export async function generateThumbnail(
       });
     });
 
-  uploadPromises.push(
-    db.collection('players').doc(uid).update({
-      imgpath_sm: urlSnap[0],
-    })
-  );
-  uploadPromises.push(
-    db.collection('freestylers').doc(uid).update({
-      imgpath_lg: urlSnap[0],
-    })
-  );
+  uploadPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: urlSnap[0] }));
+  uploadPromises.push(db.collection('freestylers').doc(uid).update({ imgpath_lg: urlSnap[0] }));
   uploadPromises.push(fs.remove(workingDir));
 
   // 4. Run the upload operations

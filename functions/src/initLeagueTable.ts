@@ -19,10 +19,7 @@ export async function initLeagueTable(data: any, context: any): Promise<any> {
         ga: 0,
       });
     });
-    return db
-      .collection(`leagues`)
-      .doc(data)
-      .set({ ...table });
+    return db.collection(`leagues`).doc(data).set({ ...table });
   } catch (error) {
     Promise.reject(error);
   }

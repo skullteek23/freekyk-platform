@@ -1,7 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 admin.initializeApp();
-import { IMAGES_BUCKET } from './constants';
+import { environment } from '../../src/environments/environment.dev';
+// import { environment } from '../../src/environments/environment.prod';
 import { fsTrick } from './fsTrick';
 import { joinRequests } from './JoinRequestToTeams';
 import { newProfile } from './newProfile';
@@ -30,21 +31,9 @@ export const updateTable = functions.https.onCall(updateLeagueTable);
 // callable functions
 
 // trigger functions
-export const onCreateInvite = functions.firestore
-  .document('invites/{inviteId}')
-  .onCreate(inviteCreationTrigger);
-export const onUpdateInvite = functions.firestore
-  .document('invites/{inviteId}')
-  .onUpdate(inviteUpdationTrigger);
-export const onDeleteInvite = functions.firestore
-  .document('invites/{inviteId}')
-  .onDelete(inviteDeletionTrigger);
-export const onUploadProfilePhoto = functions.storage
-  .bucket(IMAGES_BUCKET)
-  .object()
-  .onFinalize(generateThumbnail);
-export const onDeleteProfilePhoto = functions.storage
-  .bucket(IMAGES_BUCKET)
-  .object()
-  .onDelete(removeThumbnail);
+export const onCreateInvite = functions.firestore.document('invites/{inviteId}').onCreate(inviteCreationTrigger);
+export const onUpdateInvite = functions.firestore.document('invites/{inviteId}').onUpdate(inviteUpdationTrigger);
+export const onDeleteInvite = functions.firestore.document('invites/{inviteId}').onDelete(inviteDeletionTrigger);
+export const onUploadProfilePhoto = functions.storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
+export const onDeleteProfilePhoto = functions.storage.bucket(environment.firebase.storageBucket).object().onDelete(removeThumbnail);
 // trigger functions

@@ -1,19 +1,15 @@
 import * as admin from 'firebase-admin';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
-import {
-  SeasonBasicInfo,
-  SeasonParticipants,
-} from '../../src/app/shared/interfaces/season.model';
+import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { RAZORPAY_API_KEYˍSECRET_LIVE } from './constants';
+import { environment } from '../../src/environments/environment.dev';
+// import { environment } from '../../src/environments/environment.prod';
 const crypto = require('crypto');
 const db = admin.firestore();
-export async function paymentVerification(
-  data: any,
-  context: any
-): Promise<any> {
+
+export async function paymentVerification(data: any, context: any): Promise<any> {
   try {
-    const KEY_SECRET = RAZORPAY_API_KEYˍSECRET_LIVE;
+    const KEY_SECRET = environment.razorPay.key_secret;
     const generatedSignature = crypto
       .createHmac('sha256', KEY_SECRET)
       .update(data.razorpay_order_id + '|' + data.razorpay_payment_id)
@@ -36,9 +32,7 @@ export async function paymentVerification(
       },
     };
     if (generatedSignature === data.razorpay_signature) {
-      const teamSnap = await ((
-        await db.collection('teams').doc(data.tid).get()
-      ).data() as TeamBasicInfo);
+      const teamSnap = await ((await db.collection('teams').doc(data.tid).get()).data() as TeamBasicInfo);
       if (!teamSnap) {
         return Promise.reject(null);
       }
@@ -47,17 +41,8 @@ export async function paymentVerification(
         tname: teamSnap.tname,
         tlogo: teamSnap.imgpath_logo,
       };
-
-      const orderSnap = await db
-        .collection('seasonOrders')
-        .doc(data.razorpay_order_id)
-        .set(newOrder);
-
-      const seasonSnap = await db
-        .collection('seasons')
-        .doc(season.id || 'id')
-        .collection('participants')
-        .add(newParticipant);
+      const orderSnap = await db.collection('seasonOrders').doc(data.razorpay_order_id).set(newOrder);
+      const seasonSnap = await db.collection('seasons').doc(season.id || 'id').collection('participants').add(newParticipant);
 
       if (seasonSnap && orderSnap) {
         return Promise.resolve(0);
