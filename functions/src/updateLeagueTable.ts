@@ -5,16 +5,10 @@ const db = admin.firestore();
 export async function updateLeagueTable(data: any, context: any): Promise<any> {
   try {
     // code here
-    let leagueTable = JSON.parse(
-      JSON.stringify(
-        (await db.collection('leagues').doc(data.sid).get()).data()
-      )
-    );
+    let leagueTable = JSON.parse(JSON.stringify((await db.collection('leagues').doc(data.sid).get()).data()));
 
     for (const entry in leagueTable) {
-      if (
-        (leagueTable[entry] as LeagueTableModel).tData.tName === data.homeTeam
-      ) {
+      if ((leagueTable[entry] as LeagueTableModel).tData.tName === data.homeTeam) {
         const statsBefore = leagueTable[entry] as LeagueTableModel;
         const gfor: number = statsBefore + data.score[0];
         const gagainst: number = statsBefore + data.score[1];
@@ -28,9 +22,7 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
           ga: gagainst,
         };
       }
-      if (
-        (leagueTable[entry] as LeagueTableModel).tData.tName === data.awayTeam
-      ) {
+      if ((leagueTable[entry] as LeagueTableModel).tData.tName === data.awayTeam) {
         const statsBefore = leagueTable[entry] as LeagueTableModel;
         const gfor: number = statsBefore + data.score[1];
         const gagainst: number = statsBefore + data.score[0];
@@ -45,12 +37,7 @@ export async function updateLeagueTable(data: any, context: any): Promise<any> {
         };
       }
     }
-    return db
-      .collection('leagues')
-      .doc(data.sid)
-      .update({
-        ...leagueTable,
-      });
+    return db.collection('leagues').doc(data.sid).update({ ...leagueTable });
   } catch (error) {
     Promise.reject(error);
   }

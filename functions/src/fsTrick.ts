@@ -3,13 +3,10 @@ import * as admin from 'firebase-admin';
 import { firestore } from 'firebase-admin';
 import { FsTrick } from '../../src/app/shared/interfaces/others.model';
 import { FsStats } from '../../src/app/shared/interfaces/user.model';
-
 const db = admin.firestore();
+
 export async function fsTrick(
-  data: {
-    trick: FsTrick;
-    videoLink: string;
-  },
+  data: { trick: FsTrick; videoLink: string; },
   context: any
 ): Promise<any> {
   try {

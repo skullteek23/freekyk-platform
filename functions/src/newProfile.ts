@@ -1,15 +1,10 @@
 /* eslint-disable */
 import * as admin from 'firebase-admin';
-import {
-  BasicStats,
-  FsStats,
-} from '../../src/app/shared/interfaces/user.model';
+import { BasicStats, FsStats, } from '../../src/app/shared/interfaces/user.model';
 const db = admin.firestore();
 const auth = admin.auth();
-export async function newProfile(
-  data: { name: string; uid: string },
-  context: any
-): Promise<any> {
+
+export async function newProfile(data: { name: string; uid: string }, context: any): Promise<any> {
   try {
     // create
     const newPlayerStats: BasicStats = {
@@ -30,36 +25,12 @@ export async function newProfile(
     // create
 
     // update
-    // update
     const twoPromises: any[] = [];
-    twoPromises.push(
-      auth.updateUser(data.uid, {
-        displayName: data.name,
-      })
-    );
-    twoPromises.push(
-      db.collection('players').doc(data.uid).set({
-        name: data.name,
-        team: null,
-      })
-    );
-    twoPromises.push(
-      db
-        .collection('players/' + data.uid + '/additionalInfo')
-        .doc('statistics')
-        .set(newPlayerStats)
-    );
-    twoPromises.push(
-      db.collection('freestylers').doc(data.uid).set({
-        name: data.name,
-      })
-    );
-    twoPromises.push(
-      db
-        .collection('freestylers/' + data.uid + '/additionalInfoFs')
-        .doc('statistics')
-        .set(newFsStats)
-    );
+    twoPromises.push(auth.updateUser(data.uid, { displayName: data.name }));
+    twoPromises.push(db.collection('players').doc(data.uid).set({ name: data.name, team: null }));
+    twoPromises.push(db.collection('players/' + data.uid + '/additionalInfo').doc('statistics').set(newPlayerStats));
+    twoPromises.push(db.collection('freestylers').doc(data.uid).set({ name: data.name, }));
+    twoPromises.push(db.collection('freestylers/' + data.uid + '/additionalInfoFs').doc('statistics').set(newFsStats));
     return await Promise.all(twoPromises);
   } catch (error) {
     return error;
