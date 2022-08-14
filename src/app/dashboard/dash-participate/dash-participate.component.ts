@@ -134,7 +134,4 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   getContainingTournaments(list: string[]) {
     return list.length ? list.join(', ') : "NA";
   }
-  get tooltipText(): string {
-    return this.hasTeam ? 'Pay Now' : '';
-  }
 }
