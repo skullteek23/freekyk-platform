@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map, share, take, tap } from 'rxjs/operators';
+import { map, share, take } from 'rxjs/operators';
 import { PaymentService, PAYMENT_TYPE } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UNIVERSAL_TOURNAMENT_FEES } from 'src/app/shared/Constants/RAZORPAY';
 import { OrderBasic } from 'src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
@@ -66,14 +65,17 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       .collection('seasons')
       .snapshotChanges()
       .pipe(
-        map((resp) =>
-          resp.map(
-            (doc) =>
-            ({
-              id: doc.payload.doc.id,
-              ...(doc.payload.doc.data() as SeasonBasicInfo),
-            } as SeasonBasicInfo)
-          )
+        map((resp) => {
+          const seasons: SeasonBasicInfo[] = [];
+          resp.forEach(doc => {
+            const data = doc.payload.doc.data() as SeasonBasicInfo;
+            const id = doc.payload.doc.id;
+            if (data.isFixturesCreated && !data.isSeasonEnded) {
+              seasons.push({ id, ...data } as SeasonBasicInfo);
+            }
+          })
+          return seasons;
+        }
         ),
         share()
       );
@@ -91,7 +93,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     if (teamInfo && teamInfo.basicInfo && teamInfo.basicInfo.captainId && teamInfo.basicInfo.tname) {
       if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount >= 8) {
         this.paymentServ.onLoadingStatusChange('loading');
-        this.initPayment(season, season.feesPerTeam, teamInfo.basicInfo.id);
+        this.initPayment(season, teamInfo.basicInfo.id);
         return;
       } else if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount < 8) {
         this.snackServ.displayCustomMsg('Not enough players in Team!');
@@ -104,13 +106,13 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       return;
     }
   }
-  initPayment(season: SeasonBasicInfo, fees: number, teamId: string): void {
+  initPayment(season: SeasonBasicInfo, teamId: string): void {
     this.paymentServ
-      .generateOrder(fees ? fees : UNIVERSAL_TOURNAMENT_FEES)
+      .generateOrder(season.feesPerTeam)
       .then((res) => {
         if (res) {
           this.paymentServ.onLoadingStatusChange('home');
-          this.paymentServ.openCheckoutPage(res.id, fees, season, teamId);
+          this.paymentServ.openCheckoutPage(res.id, season.feesPerTeam, season, teamId);
         }
       })
       .catch(() => {

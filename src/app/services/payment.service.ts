@@ -14,9 +14,8 @@ export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 export class PaymentService {
   private loadingStatusChanged = new BehaviorSubject<PAYMENT_TYPE>(HOME);
   generateOrder(amount: number): Promise<any> {
-    const generatorFunc = this.ngFunc.httpsCallable(
-      CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER
-    );
+    // order generation can only be handled from backend, confirmed by razorpay team
+    const generatorFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER);
     return generatorFunc({ amount }).toPromise();
   }
   openCheckoutPage(orderId: string, amount: number, season, teamId: string): void {

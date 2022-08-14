@@ -2,7 +2,6 @@ import { InjectionToken } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 export const RazorPayAPI = new InjectionToken<any>('razorPay');
-export const UNIVERSAL_TOURNAMENT_FEES = 8000;
 export const UNIVERSAL_OPTIONS = {
   key: environment.razorPay.key_id,
   currency: 'INR',

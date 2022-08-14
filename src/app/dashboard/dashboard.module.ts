@@ -53,6 +53,7 @@ import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 import { PlayerService } from '../services/player.service';
+import { TeamService } from '../services/team.service';
 
 @NgModule({
   declarations: [
@@ -116,5 +117,5 @@ import { PlayerService } from '../services/player.service';
   ],
 })
 export class DashboardModule {
-  constructor(plServ: PlayerService) { }
+  constructor(plServ: PlayerService, teServ: TeamService) { }
 }
