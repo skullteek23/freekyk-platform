@@ -123,8 +123,9 @@ export class MockDataService {
 
   private addUserInfo(uid: string, userDetails: any): any {
     const allPromises: any[] = [];
+    const avatar = randAvatar();
     const newDetails: PlayerMoreInfo = {
-      imgpath_lg: randAvatar(),
+      imgpath_lg: avatar,
       profile: true,
       born: firebase.firestore.Timestamp.fromDate(randBetweenDate({ from: new Date('01/01/1968'), to: new Date('01/01/2003') })),
       locState: randState(),
@@ -146,16 +147,18 @@ export class MockDataService {
       ],
     };
     const newBasicDetails = {
+      name: userDetails.name,
+      team: null,
       gen: 'M',
-      imgpath_sm: newDetails.imgpath_lg,
+      imgpath_sm: avatar,
       jer_no: randNumber({ min: 2, max: 40 }),
       locCity: randCity(),
       pl_pos: this.getRandomSelectionFromArray(this.PLAYING_POSITIONS),
     };
-    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(newDetails));
-    allPromises.push(this.ngFire.collection('players').doc(uid).update({
+    allPromises.push(this.ngFire.collection('players').doc(uid).set({
       ...newBasicDetails,
     }));
+    // allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(newDetails));
     return Promise.all(allPromises);
   }
 
