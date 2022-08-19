@@ -87,11 +87,18 @@ export class MockDataService {
   }
 
   private initFirebaseAuth(): any {
-    const slicedUsers = this.USERS.slice(20);
+    const slicedUsers = this.USERS.slice(0, 10);
+    // const slicedUsers = this.USERS.slice(10, 20);
+    // const slicedUsers = this.USERS.slice(20, 30);
+    // const slicedUsers = this.USERS.slice(30, 40);
+    // const slicedUsers = this.USERS.slice(40, 50);
+    // const slicedUsers = this.USERS.slice(50, 60);
+    // const slicedUsers = this.USERS.slice(60, 70);
+    // const slicedUsers = this.USERS.slice(70, 80);
+    // const slicedUsers = this.USERS.slice(80, 90);
+    // const slicedUsers = this.USERS.slice(90);
     slicedUsers.forEach(user => {
-      setTimeout(() => {
-        this.addUser(user.email, user.password, user.name);
-      }, 2000);
+      this.addUser(user.email, user.password, user.name);
     })
   }
 
