@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randSentence, randState, randWord } from '@ngneat/falso';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 import { PlayerMoreInfo } from '../shared/interfaces/user.model';
 import { PLAYING_POSTIIONS, DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
 import firebase from 'firebase/app';
@@ -88,7 +87,9 @@ export class MockDataService {
 
   private initFirebaseAuth(): any {
     for (let i = 0; i < this.USERS.length; i++) {
-      this.addUser(this.USERS[i].email, this.USERS[i].password, this.USERS[i].name);
+      setTimeout(() => {
+        this.addUser(this.USERS[i].email, this.USERS[i].password, this.USERS[i].name);
+      }, 5000);
     }
   }
 
@@ -103,22 +104,8 @@ export class MockDataService {
     })
   }
 
-  private async addUser(email: string, pass: string, name: string): Promise<any> {
-    const user = await this.ngAuth.createUserWithEmailAndPassword(email, pass);
-    if (user) {
-      const uid = user?.user?.uid;
-      let mockIds: any[] = [];
-      mockIds = JSON.parse(localStorage.getItem(this.MOCK_IDS)) as any[];
-      if (!mockIds) {
-        mockIds = [];
-      }
-      mockIds.push(uid);
-      localStorage.setItem(this.MOCK_IDS, JSON.stringify(mockIds));
-      return user;
-      // const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_PROFILE);
-      // return callable({ name, uid }).toPromise();
-    }
-    return false;
+  private addUser(email: string, pass: string, name: string): Promise<any> {
+    return this.ngAuth.createUserWithEmailAndPassword(email, pass);
   }
 
   private addUserInfo(uid: string, userDetails: any): any {
