@@ -680,13 +680,6 @@ export const DUMMY_USERS = [
   },
   {
     uid: '',
-    name: 'Bruce Riley',
-    nickname: 'Officia',
-    email: 'plowe@gmail.com',
-    password: 'kx2ZqVyk'
-  },
-  {
-    uid: '',
     name: 'Andrew Maxwell',
     nickname: 'Id',
     email: 'rachael.rippin@gmail.com',
