@@ -11,11 +11,11 @@ import firebase from 'firebase/app';
   providedIn: 'root'
 })
 export class MockDataService {
-  readonly STRONG_FOOT = STRONG_FOOT;
-  readonly GENDER = GENDER;
+  readonly STRONG_FOOT: string[] = STRONG_FOOT;
+  readonly GENDER: string[] = GENDER;
   readonly MOCK_IDS = 'mock-uids';
   readonly PLAYING_POSITIONS: string[] = PLAYING_POSTIIONS;
-  readonly USERS = DUMMY_USERS;
+  readonly USERS: any[] = DUMMY_USERS;
 
   constructor(
     private ngAuth: AngularFireAuth,
