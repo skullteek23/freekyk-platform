@@ -2,10 +2,10 @@
   <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
-  <span *ngIf="data?.mode == 'fixture'" class="mat-body-1">
+  <span *ngIf="data?.concluded === false" class="mat-body-1">
     Fixture Details
   </span>
-  <span *ngIf="data?.mode == 'result'" class="mat-body-1">Result Details</span>
+  <span *ngIf="data?.concluded === true" class="mat-body-1">Result Details</span>
 </mat-toolbar>
 <div class="container-2" fxLayout="column" fxLayoutGap="20px">
   <app-match-detail-header [data]="matchHeaderData"></app-match-detail-header>
@@ -80,7 +80,7 @@
         <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column">
           <div fxLayout="column" fxLayoutGap="16px">
             <span class="dash-h5 align">
-              {{ data?.teams[0] + " Lineup" | titlecase }}
+              {{ data?.home.name + " Lineup" | titlecase }}
             </span>
             <div fxLayoutAlign="start" fxLayout="column">
               <span *ngFor="let player of (lineups$ | async)?.home" class="mat-body-1">
@@ -89,7 +89,7 @@
             </div>
             <mat-divider></mat-divider>
             <span class="dash-h5 align">
-              {{ data?.teams[1] + " Lineup" | titlecase }}
+              {{ data?.away.name + " Lineup" | titlecase }}
             </span>
             <div fxLayoutAlign="start" fxLayout="column">
               <span *ngFor="let player of (lineups$ | async)?.away" class="mat-body-1">

@@ -34,7 +34,7 @@ export class MatchCardComponent implements OnInit {
     public data: MatchFixture,
     // private shareServ: ShareLinkService,
     private ngFirestore: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.lineups$ = this.ngFirestore
       .collection('allMatches/' + this.data?.id + '/additionalInfo')
@@ -55,26 +55,26 @@ export class MatchCardComponent implements OnInit {
         concluded: this.data.concluded,
         date: this.data?.date,
         home: {
-          name: this.data?.teams[0],
-          imgpathLogo: this.data?.logos[0],
+          name: this.data?.home.name,
+          imgpathLogo: this.data?.home.logo,
         },
         away: {
-          name: this.data?.teams[1],
-          imgpathLogo: this.data?.logos[1],
+          name: this.data?.away.name,
+          imgpathLogo: this.data?.away.logo,
         },
-        score: { home: this.data?.score[0], away: this.data?.score[1] },
+        score: { home: this.data?.home.score, away: this.data?.away.score },
       };
     } else {
       this.matchHeaderData = {
         concluded: this.data.concluded,
         date: this.data?.date,
         home: {
-          name: this.data?.teams[0],
-          imgpathLogo: this.data?.logos[0],
+          name: this.data?.home.name,
+          imgpathLogo: this.data?.home.logo,
         },
         away: {
-          name: this.data?.teams[1],
-          imgpathLogo: this.data?.logos[1],
+          name: this.data?.away.name,
+          imgpathLogo: this.data?.away.logo,
         },
       };
     }

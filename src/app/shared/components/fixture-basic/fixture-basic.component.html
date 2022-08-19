@@ -1,109 +1,57 @@
-<div
-  class="fixture"
-  [ngClass]="{
+<div class="fixture" [ngClass]="{
     premiumFixture: isPremium,
     'side-space': isPremium
-  }"
-  fxLayoutAlign.lt-md="center center"
-  fxLayoutAlign.gt-sm="space-between center"
->
+  }" fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="space-between center">
   <!-- date -->
   <div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
     <span class="mat-caption green">
       {{ fixture.date.toDate() | date: "shortTime" | lowercase }}
     </span>
     <span class="mat-caption">
-      {{ fixture.date.toDate() | date: "mediumDate" }}</span
-    >
+      {{ fixture.date.toDate() | date: "mediumDate" }}</span>
   </div>
   <!-- date -->
 
   <!-- teams  -->
-  <div
-    fxLayoutAlign="center center"
-    fxLayoutGap.lt-md="8px"
-    fxLayoutGap.gt-sm="20px"
-  >
-    <div
-      fxLayoutAlign="end center"
-      fxLayoutGap.lt-md="8px"
-      fxLayoutGap.gt-sm="20px"
-    >
-      <span
-        class="team_name right"
-        ngClass.gt-sm="mat-body-1"
-        ngClass.lt-md="mat-body-2"
-      >
-        {{ fixture.teams[0] }}
+  <div fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+    <div fxLayoutAlign="end center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture.home.name }}
       </span>
-      <img
-        class="avatarSize"
-        [ngClass]="{ hide: isResult }"
-        [src]="fixture.logos[0]"
-        alt="Team Logo"
-      />
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" />
     </div>
     <ng-template #score>
       <div fxLayoutAlign="center center" fxLayoutGap="8px">
         <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.score[0] }}</span>
+          <span class="mat-body-2 scoreColor">{{ fixture.home.score }}</span>
         </div>
         <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.score[1] }}</span>
+          <span class="mat-body-2 scoreColor">{{ fixture.away.score }}</span>
         </div>
       </div>
     </ng-template>
     <div *ngIf="!isResult; else score" fxLayoutAlign="center center">
-      <span
-        fxHide.gt-sm="true"
-        class="versus round mat-caption"
-        fxLayoutAlign="center center"
-      >
+      <span fxHide.gt-sm="true" class="versus round mat-caption" fxLayoutAlign="center center">
         {{ "v" }}
       </span>
-      <span
-        fxHide.lt-md="true"
-        class="grey-bg versus round mat-caption"
-        fxLayoutAlign="center center"
-      >
+      <span fxHide.lt-md="true" class="grey-bg versus round mat-caption" fxLayoutAlign="center center">
         {{ "vs" | uppercase }}
       </span>
     </div>
-    <div
-      fxLayoutAlign="start center"
-      fxLayoutGap.lt-md="8px"
-      fxLayoutGap.gt-sm="20px"
-    >
-      <img
-        class="avatarSize"
-        [ngClass]="{ hide: isResult }"
-        [src]="fixture.logos[1]"
-        alt="Team Logo"
-      />
+    <div fxLayoutAlign="start center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" />
 
-      <span
-        class="team_name left"
-        ngClass.gt-sm="mat-body-1"
-        ngClass.lt-md="mat-body-2"
-      >
-        {{ fixture.teams[1] }}
+      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture.away.name }}
       </span>
     </div>
   </div>
   <!-- teams  -->
 
   <!-- action-button - small  -->
-  <button
-    (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')"
-    fxHide.gt-sm="true"
-    mat-icon-button
-    matTooltip="Open Fixture"
-    fxLayoutAlign="center center"
-  >
-    <mat-icon
-      *ngIf="admin == false; else updateSm"
-      class="material-icons-round"
-    >
+  <button (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')" fxHide.gt-sm="true" mat-icon-button
+    matTooltip="Open Fixture" fxLayoutAlign="center center">
+    <mat-icon *ngIf="admin == false; else updateSm" class="material-icons-round">
       keyboard_arrow_right
     </mat-icon>
     <ng-template #updateSm>
@@ -113,10 +61,7 @@
   <!-- action-button - small  -->
 
   <!-- action-button - large  -->
-  <a
-    (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')"
-    fxHide.lt-md="true"
-  >
+  <a (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')" fxHide.lt-md="true">
     <span *ngIf="admin == false; else update" class="mat-caption">
       See more
     </span>

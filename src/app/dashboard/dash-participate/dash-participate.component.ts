@@ -57,7 +57,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.ngFire.collection('seasonOrders', (query) => query.where('by', '==', uid)).snapshotChanges()
         .subscribe((res) => {
-          if (!res.length) {
+          if (res.length) {
             this.participatedTournaments = res.map(
               (doc) => (doc.payload.doc.data() as OrderBasic).itemsDescSnap.prodId
             );

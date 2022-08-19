@@ -171,17 +171,20 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = false;
   }
   onSaveFixtures() {
-    const fixtures: MatchFixture[] = this.genFixtService.getPublishableFixture(this.tableData);
     this.isLoading = true;
+    const fixtures: MatchFixture[] = this.genFixtService.getPublishableFixture(this.tableData);
     const lastFixture: MatchFixture = fixtures[fixtures.length - 1];
+    const seasonID = this.newSeasonId ? this.newSeasonId : this.formData['id'];
     let allPromises = [];
-    allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
-    allPromises.push(this.genFixtService.updateSeason(this.newSeasonId));
-    this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.id), new Date(lastFixture.date['seconds'] * 1000));
-    Promise.all(allPromises).then(() => {
-      this.isLoading = false;
-      this.stepper.next();
-    })
+    if (seasonID && this.selectedGroundsList.length && fixtures.length) {
+      allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
+      allPromises.push(this.genFixtService.updateSeason(seasonID));
+      allPromises.push(this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.id), new Date(lastFixture.date['seconds'] * 1000)));
+      Promise.all(allPromises).then(() => {
+        this.isLoading = false;
+        this.stepper.next();
+      });
+    }
   }
   goToURL() {
     window.open(`${SEASON_PROD_URL}${this.seasonName}`, "_blank");

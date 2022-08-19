@@ -108,9 +108,9 @@ export class UpdateMrComponent implements OnInit {
       const data = {
         mid: this.selectedMatch.id,
         sid: this.selectedSeason,
-        homeTeam: this.selectedMatch.teams[0],
-        awayTeam: this.selectedMatch.teams[1],
-        score: this.selectedMatch.score,
+        homeTeam: this.selectedMatch.home.name,
+        awayTeam: this.selectedMatch.away.name,
+        score: this.selectedMatch.home.score,
       };
       const callable = this.ngFunc.httpsCallable(
         CLOUD_FUNCTIONS.UPDATE_LEAGUE_TABLE

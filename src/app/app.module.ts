@@ -35,14 +35,7 @@ import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-
 import { NgImageSliderModule } from 'ng-image-slider';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
-// export function initializeApp1(afa: AngularFireAuth): any {
-//   return () => {
-//     return new Promise<void>((resolve) => {
-//       afa.useEmulator(`http://${location.hostname}:9099/`);
-//       setTimeout(() => resolve(), 100); // delay Angular initialization by 100ms
-//     });
-//   };
-// }
+import { REGION } from '@angular/fire/functions';
 
 @NgModule({
   declarations: [
@@ -86,7 +79,9 @@ import { HttpClientModule } from '@angular/common/http';
     }),
     NgImageSliderModule,
   ],
-  providers: [],
+  providers: [
+    { provide: REGION, useValue: 'asia-south1' }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

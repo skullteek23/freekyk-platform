@@ -97,12 +97,18 @@ export class GenFixtService {
     return data.map(val => {
       const newId = this.ngFire.createId();
       return {
-        id: newId,
-        mid: val.mid,
+        id: val.mid,
         date: firebase.firestore.Timestamp.fromDate(val.date),
         concluded: false,
-        teams: [MatchConstantsSecondary.TO_BE_DECIDED, MatchConstantsSecondary.TO_BE_DECIDED],
-        logos: [MatchConstantsSecondary.DEFAULT_LOGO, MatchConstantsSecondary.DEFAULT_LOGO],
+        home: {
+          name: MatchConstantsSecondary.TO_BE_DECIDED,
+          logo: MatchConstantsSecondary.DEFAULT_LOGO
+        },
+        away: {
+          name: MatchConstantsSecondary.TO_BE_DECIDED,
+          logo: MatchConstantsSecondary.DEFAULT_LOGO
+        },
+        teams: [MatchConstantsSecondary.TO_BE_DECIDED],
         season: val.season,
         premium: val.premium,
         type: val.type,

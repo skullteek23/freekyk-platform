@@ -42,7 +42,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private enlServ: EnlargeService
-  ) {}
+  ) { }
   ngOnInit(): void {
     const teamName = this.route.snapshot.params.teamName;
     this.getTeamInfo(teamName);
@@ -74,10 +74,10 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as TeamBasicInfo),
-              } as TeamBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as TeamBasicInfo),
+            } as TeamBasicInfo)
           )
         ),
         map((resp) => resp[0]),
@@ -115,17 +115,17 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         }),
         map(
           (resp) =>
-            ({
-              'FKC Played': resp.played.fkc,
-              'FCP Played': resp.played.fcp,
-              'FPL Played': resp.played.fpl,
-              Goals: resp.g,
-              Wins: resp.w,
-              Losses: resp.l,
-              'Red cards': resp.rcards,
-              'Yellow cards': resp.ycards,
-              'Goals Conceded': resp.g_conceded,
-            } as StatsTeam)
+          ({
+            'FKC Played': resp.fkc_played.toString(),
+            'FCP Played': resp.fcp_played.toString(),
+            'FPL Played': resp.fpl_played.toString(),
+            'Goals': resp.g.toString(),
+            'Wins': resp.w.toString(),
+            'Losses': resp.l.toString(),
+            'Red cards': resp.rcards.toString(),
+            'Yellow cards': resp.ycards.toString(),
+            'Goals Conceded': resp.g_conceded.toString(),
+          } as StatsTeam)
         )
       );
   }
