@@ -74,3 +74,18 @@ export interface MembershipInfo {
   validity: Date;
   paymentId: string;
 }
+export class BasicStats {
+  apps = 0;
+  g = 0;
+  w = 0;
+  cards = 0;
+  l = 0;
+}
+export class FsStats {
+  sk_lvl: number = 0;
+  br_colb?: BrandCollabInfo[] = [];
+  top_vids?: string[] = [];
+  tr_a?: number = 0;
+  tr_w?: number = 0;
+  tr_u?: number = 0;
+}

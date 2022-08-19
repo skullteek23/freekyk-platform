@@ -15,7 +15,7 @@ export class DaTeStatsComponent implements OnInit, OnDestroy {
   tournamentWins: any[];
   noPremiumWon = true;
   subscriptions = new Subscription();
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -32,17 +32,17 @@ export class DaTeStatsComponent implements OnInit, OnDestroy {
               {
                 icon: 'sports_soccer',
                 name: 'FKC Played',
-                value: stats.played.fkc,
+                value: stats.fkc_played,
               },
               {
                 icon: 'sports_soccer',
                 name: 'FCP Played',
-                value: stats.played.fcp,
+                value: stats.fcp_played,
               },
               {
                 icon: 'sports_soccer',
                 name: 'FPL Played',
-                value: stats.played.fpl,
+                value: stats.fpl_played,
               },
               { icon: 'sports_soccer', name: 'Goals', value: stats.g },
               { icon: 'flag', name: 'Wins', value: stats.w },

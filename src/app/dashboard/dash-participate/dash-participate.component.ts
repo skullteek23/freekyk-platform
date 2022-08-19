@@ -6,7 +6,7 @@ import { map, share, take } from 'rxjs/operators';
 import { PaymentService, PAYMENT_TYPE } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { OrderBasic } from 'src/app/shared/interfaces/order.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { SeasonBasicInfo, SeasonParticipants } from 'src/app/shared/interfaces/season.model';
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
@@ -55,11 +55,11 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   getSeasonOrders() {
     const uid = localStorage.getItem('uid');
     this.subscriptions.add(
-      this.ngFire.collection('seasonOrders', (query) => query.where('by', '==', uid)).get()
+      this.ngFire.collection('seasonOrders', (query) => query.where('by', '==', uid)).snapshotChanges()
         .subscribe((res) => {
-          if (!res.empty) {
-            this.participatedTournaments = res.docs.map(
-              (doc) => (doc.data() as OrderBasic).itemsDescSnap.prodId
+          if (res.length) {
+            this.participatedTournaments = res.map(
+              (doc) => (doc.payload.doc.data() as OrderBasic).itemsDescSnap.prodId
             );
           } else {
             this.participatedTournaments = [];
@@ -95,7 +95,13 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     if (teamInfo && teamInfo.basicInfo && teamInfo.basicInfo.captainId && teamInfo.basicInfo.tname) {
       if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount >= 8) {
         this.paymentServ.onLoadingStatusChange('loading');
-        this.initPayment(season, teamInfo.basicInfo.id);
+        const isSlotEmpty: boolean = await this.isSlotEmpty(season.p_teams, season.id);
+        if (isSlotEmpty) {
+          this.initPayment(season, teamInfo.basicInfo.id);
+        } else {
+          this.snackServ.displayCustomMsg('Participation is full!');
+          this.paymentServ.onLoadingStatusChange('home');
+        }
         return;
       } else if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount < 8) {
         this.snackServ.displayCustomMsg('Not enough players in Team!');
@@ -122,6 +128,12 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         this.snackServ.displayError();
       });
   }
+  async isSlotEmpty(maxTeams: number, sid: string): Promise<boolean> {
+    const participants: SeasonParticipants[] = (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.map((doc) => doc.data() as SeasonParticipants);
+    if (participants.length < maxTeams) {
+      return true;
+    }
+  }
   goToSeason(name?: string): void {
     this.paymentServ.onLoadingStatusChange('home');
     if (name) {
@@ -133,8 +145,5 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   }
   getContainingTournaments(list: string[]) {
     return list.length ? list.join(', ') : "NA";
-  }
-  get tooltipText(): string {
-    return this.hasTeam ? 'Pay Now' : '';
   }
 }

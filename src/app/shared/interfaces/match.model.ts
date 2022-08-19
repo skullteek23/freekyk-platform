@@ -2,19 +2,25 @@ import { Timestamp } from '@firebase/firestore-types';
 export interface MatchFixture {
   date: Timestamp;
   concluded: boolean;
+  home: {
+    name: string,
+    logo: string,
+    score: number
+  };
+  away: {
+    name: string,
+    logo: string,
+    score: number
+  };
   teams: string[];
-  logos: string[];
   season: string;
   premium: boolean;
   type: 'FKC' | 'FCP' | 'FPL';
   locCity: string;
   locState: string;
-  score?: number[];
   id?: string;
-  mid?: string;
   tie_breaker?: string;
   stadium?: string;
-  mode?: 'fixture' | 'result';
   fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
 }
 export interface MatchFixtureOverview {

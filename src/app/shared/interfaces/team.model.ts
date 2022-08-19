@@ -27,18 +27,16 @@ export interface TeamMoreInfo {
 }
 
 export interface TeamStats {
-  played: {
-    fkc: number | string;
-    fcp: string | number;
-    fpl: string | number;
-  };
-  w: string | number;
-  g: string | number;
-  l: string | number;
-  rcards: string | number;
-  ycards: string | number;
-  g_conceded: string | number;
-  pr_tour_wins?: string | number;
+  fkc_played: number;
+  fcp_played: number;
+  fpl_played: number;
+  w: number;
+  g: number;
+  l: number;
+  rcards: number;
+  ycards: number;
+  g_conceded: number;
+  pr_tour_wins?: number;
 }
 export interface TeamMembers {
   memCount: number;
@@ -63,4 +61,16 @@ export interface ActiveSquadMember {
 export interface MemberResponseNotification {
   content: string;
   time: Date | number;
+}
+export class TeamStats {
+  fkc_played = 0;
+  fcp_played = 0;
+  fpl_played = 0;
+  w = 0;
+  g = 0;
+  l = 0;
+  rcards = 0;
+  ycards = 0;
+  g_conceded = 0;
+  pr_tour_wins?= 0;
 }

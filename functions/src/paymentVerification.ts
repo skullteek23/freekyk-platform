@@ -2,19 +2,29 @@ import * as admin from 'firebase-admin';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
+import { assignParticipants } from './abstractFunctions';
 import { environment } from './environments/environment';
+
 const crypto = require('crypto');
 const db = admin.firestore();
 
 export async function paymentVerification(data: any, context: any): Promise<any> {
-  try {
-    const KEY_SECRET = environment.razorPay.key_secret;
-    const generatedSignature = crypto
-      .createHmac('sha256', KEY_SECRET)
-      .update(data.razorpay_order_id + '|' + data.razorpay_payment_id)
-      .digest('hex');
-    const season = data.season as SeasonBasicInfo;
-    const newOrder: OrderBasic = {
+
+  const ORDER_ID = data && data.razorpay_order_id ? data.razorpay_order_id : null;
+  const PAYMENT_ID = data && data.razorpay_payment_id ? data.razorpay_payment_id : null;
+  const SIGNATURE = data && data.razorpay_signature ? data.razorpay_signature : null;
+  const KEY_SECRET = environment.razorPay.key_secret;
+  const season = data && data.season ? (data.season as SeasonBasicInfo) : null;
+  const teamID = data && data.tid ? data.tid : null;
+  const allPromises: any[] = [];
+  let generatedSignature = null;
+  let newOrder: OrderBasic;
+  let teamInfo: TeamBasicInfo;
+  let participantDetail: SeasonParticipants;
+
+  if (ORDER_ID && PAYMENT_ID && season) {
+    generatedSignature = crypto.createHmac('sha256', KEY_SECRET).update(`${ORDER_ID}|${PAYMENT_ID}`).digest('hex');
+    newOrder = {
       razorpay_order_id: data.razorpay_order_id,
       razorpay_payment_id: data.razorpay_payment_id,
       razorpay_signature: data.razorpay_signature,
@@ -30,26 +40,16 @@ export async function paymentVerification(data: any, context: any): Promise<any>
         prodType: 'season',
       },
     };
-    if (generatedSignature === data.razorpay_signature) {
-      const teamSnap = await ((await db.collection('teams').doc(data.tid).get()).data() as TeamBasicInfo);
-      if (!teamSnap) {
-        return Promise.reject(null);
-      }
-      const newParticipant: SeasonParticipants = {
+    if (teamID && newOrder && SIGNATURE && generatedSignature && SIGNATURE === generatedSignature) {
+      teamInfo = (await db.collection('teams').doc(teamID).get()).data() as TeamBasicInfo;
+      participantDetail = {
         tid: data.tid,
-        tname: teamSnap.tname,
-        tlogo: teamSnap.imgpath_logo,
-      };
-      const orderSnap = await db.collection('seasonOrders').doc(data.razorpay_order_id).set(newOrder);
-      const seasonSnap = await db.collection('seasons').doc(season.id || 'id').collection('participants').add(newParticipant);
-
-      if (seasonSnap && orderSnap) {
-        return Promise.resolve(0);
+        tname: teamInfo.tname,
+        tlogo: teamInfo.imgpath_logo,
       }
-    } else {
-      return Promise.reject(null);
+      allPromises.push(db.collection('seasonOrders').doc(data.razorpay_order_id).set(newOrder));
+      allPromises.push(assignParticipants(season, participantDetail))
     }
-  } catch (error) {
-    return Promise.reject(error);
   }
+  return Promise.all(allPromises);
 }

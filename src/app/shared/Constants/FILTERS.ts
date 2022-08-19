@@ -3,9 +3,9 @@ import { PLAYING_POSITIONS_LIST } from './PLAYING_POSITIONS';
 export const SeasonsFilters: {} = {
   Premium: ['Yes', 'No'],
   'Containing Tournaments': [
+    'Freekyk Community Play',
     'Freekyk Knockout Championship',
     'Freekyk Premier League',
-    'Freekyk Community Play',
   ],
 };
 export const PlayersFilters = {
@@ -20,9 +20,9 @@ export const TeamMemberListFilter = {
 export const MatchFilters = {
   Premium: ['Yes', 'No'],
   'Tournament Type': [
+    'Freekyk Community Play',
     'Freekyk Knockout Championship',
     'Freekyk Premier League',
-    'Freekyk Community Play',
   ],
   Season: [],
 };

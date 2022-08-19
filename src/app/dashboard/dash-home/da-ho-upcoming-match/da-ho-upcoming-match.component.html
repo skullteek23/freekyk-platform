@@ -8,16 +8,11 @@
     <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center center">
       <div class="team" fxLayout="column" fxLayoutGap="8px">
         <div class="img_cont">
-          <img [src]="upFixture?.logos[0]" alt="profile image" />
+          <img [src]="upFixture?.home.logo" alt="profile image" />
         </div>
-        <span class="mat-body-1 center">{{ upFixture?.teams[0] }} </span>
+        <span class="mat-body-1 center">{{ upFixture?.home.name }} </span>
       </div>
-      <div
-        class="kickoff"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-        fxLayoutGap="8px"
-      >
+      <div class="kickoff" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
         <span class="overline">
           {{ "kick-off" | uppercase }}
         </span>
@@ -29,9 +24,9 @@
 
       <div class="team" fxLayout="column" fxLayoutGap="8px">
         <div class="img_cont">
-          <img [src]="upFixture?.logos[1]" alt="profile image" />
+          <img [src]="upFixture?.away.logo" alt="profile image" />
         </div>
-        <span class="mat-body-1 center"> {{ upFixture?.teams[1] }} </span>
+        <span class="mat-body-1 center"> {{ upFixture?.away.name }} </span>
       </div>
     </div>
     <span class="mat-body-2 center">

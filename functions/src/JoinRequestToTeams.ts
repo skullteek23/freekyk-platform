@@ -2,31 +2,31 @@ import * as admin from 'firebase-admin';
 const db = admin.firestore();
 import { NotificationBasic } from '../../src/app/shared/interfaces/notification.model';
 
+
 export async function joinRequests(data: { capId: string[]; name: string }, context: any): Promise<any> {
-  try {
-    // get
+
+  const CAPTAIN_IDS = data && data.capId ? data.capId : [];
+  const requesterName = data && data.name ? data.name : '';
+
+  if (CAPTAIN_IDS.length && requesterName) {
     const batch = db.batch();
-    // get
+    const UID = context && context.auth && context.auth.uid ? context.auth.uid : null;
 
-    // create
-    data.capId.forEach((captainId) => {
-      const newNotif: NotificationBasic = {
+    CAPTAIN_IDS.forEach((ID) => {
+      const notification: NotificationBasic = {
         type: 'request',
-        senderId: context.auth?.uid === undefined ? '' : context.auth?.uid,
-        recieverId: captainId,
-        date: admin.firestore.Timestamp.fromDate(new Date()),
+        senderId: UID,
+        recieverId: ID,
+        date: admin.firestore.Timestamp.now(),
         title: 'Join Request',
-        senderName: data.name,
+        senderName: requesterName,
       };
-      const notifRef = db.collection('players/' + captainId + '/Notifications').doc();
-      batch.set(notifRef, newNotif);
-    });
-    // create
+      const notificationRef = db.collection(`players/${ID}/Notifications`).doc();
 
-    // update
+      batch.set(notificationRef, notification);
+    });
+
     return batch.commit();
-    // update
-  } catch (error) {
-    return error;
   }
+  return false;
 }

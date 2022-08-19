@@ -1,112 +1,59 @@
-<div
-  class="fixture"
-  [ngClass]="{
+<div class="fixture" [ngClass]="{
     premiumFixture: isPremium,
     'side-space': isPremium
-  }"
-  fxLayoutAlign.lt-md="space-evenly center"
-  fxLayoutAlign.gt-sm="space-between center"
->
+  }" fxLayoutAlign.lt-md="space-evenly center" fxLayoutAlign.gt-sm="space-between center">
   <!-- fixture time -->
-  <div
-    class="timestamp"
-    fxHide.lt-md="true"
-    fxLayout="column"
-    fxLayoutAlign="center start"
-  >
+  <div class="timestamp" fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
     <span class="overline filled">
       {{ fixture?.date.toDate() | date: "shortTime" | lowercase }}
     </span>
     <span class="mat-caption">
-      {{ fixture?.date.toDate() | date: "mediumDate" }}</span
-    >
+      {{ fixture?.date.toDate() | date: "mediumDate" }}</span>
   </div>
   <!-- fixture time -->
 
   <!-- team data -->
-  <div
-    fxLayoutAlign="center center"
-    fxLayoutGap.lt-md="8px"
-    fxLayoutGap.gt-sm="16px"
-  >
-    <div
-      fxLayoutAlign="end center"
-      fxLayoutGap.lt-md="8px"
-      fxLayoutGap.gt-sm="16px"
-    >
-      <span
-        class="team_name right"
-        ngClass.gt-sm="mat-body-1"
-        ngClass.lt-md="mat-body-2"
-      >
-        {{ fixture?.teams[0] }}
+  <div fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="16px">
+    <div fxLayoutAlign="end center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="16px">
+      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture?.home.name }}
       </span>
-      <img
-        class="avatarSize"
-        [ngClass]="{ hide: isResult }"
-        [src]="fixture?.logos[0]"
-        alt="Team Logo"
-      />
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture?.home.logo" alt="Team Logo" />
     </div>
     <ng-template #score>
       <div fxLayoutAlign="center center" fxLayoutGap="8px">
         <div class="score box primary-bg" fxLayoutAlign="center center">
           <span class="mat-body-2 scoreColor">
-            {{ fixture?.score[0] }}
+            {{ fixture?.home.score }}
           </span>
         </div>
         <div class="score box primary-bg" fxLayoutAlign="center center">
           <span class="mat-body-2 scoreColor">
-            {{ fixture?.score[1] }}
+            {{ fixture?.away.score }}
           </span>
         </div>
       </div>
     </ng-template>
     <div *ngIf="!isResult; else score" fxLayoutAlign="center center">
-      <span
-        fxHide.gt-sm="true"
-        class="versus round mat-caption"
-        fxLayoutAlign="center center"
-      >
+      <span fxHide.gt-sm="true" class="versus round mat-caption" fxLayoutAlign="center center">
         {{ "v" }}
       </span>
-      <span
-        fxHide.lt-md="true"
-        class="grey-bg versus round mat-caption"
-        fxLayoutAlign="center center"
-      >
+      <span fxHide.lt-md="true" class="grey-bg versus round mat-caption" fxLayoutAlign="center center">
         {{ "vs" | uppercase }}
       </span>
     </div>
-    <div
-      fxLayoutAlign="start center"
-      fxLayoutGap.lt-md="8px"
-      fxLayoutGap.gt-sm="16px"
-    >
-      <img
-        class="avatarSize"
-        [ngClass]="{ hide: isResult }"
-        [src]="fixture.logos[1]"
-        alt="Team Logo"
-      />
+    <div fxLayoutAlign="start center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="16px">
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" />
 
-      <span
-        class="team_name left"
-        ngClass.gt-sm="mat-body-1"
-        ngClass.lt-md="mat-body-2"
-      >
-        {{ fixture.teams[1] }}
+      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture.away.name }}
       </span>
     </div>
   </div>
   <!-- team data -->
 
   <!-- full view button -->
-  <a
-    (click)="onOpenFixture()"
-    matTooltip="Open Fixture"
-    fxLayoutAlign="center center"
-  >
+  <a (click)="onOpenFixture()" matTooltip="Open Fixture" fxLayoutAlign="center center">
     <mat-icon class="material-icons-round"> keyboard_arrow_right </mat-icon>
   </a>
   <!-- full view button -->
