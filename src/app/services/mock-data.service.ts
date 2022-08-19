@@ -87,19 +87,9 @@ export class MockDataService {
   }
 
   private initFirebaseAuth(): any {
-    const slicedUsers = this.USERS.slice(0, 10);
-    // const slicedUsers = this.USERS.slice(10, 20);
-    // const slicedUsers = this.USERS.slice(20, 30);
-    // const slicedUsers = this.USERS.slice(30, 40);
-    // const slicedUsers = this.USERS.slice(40, 50);
-    // const slicedUsers = this.USERS.slice(50, 60);
-    // const slicedUsers = this.USERS.slice(60, 70);
-    // const slicedUsers = this.USERS.slice(70, 80);
-    // const slicedUsers = this.USERS.slice(80, 90);
-    // const slicedUsers = this.USERS.slice(90);
-    slicedUsers.forEach(user => {
-      this.addUser(user.email, user.password, user.name);
-    })
+    for (let i = 0; i < this.USERS.length; i++) {
+      this.addUser(this.USERS[i].email, this.USERS[i].password, this.USERS[i].name);
+    }
   }
 
   private initFirestore(): any {
@@ -113,27 +103,22 @@ export class MockDataService {
     })
   }
 
-  private addUser(email: string, pass: string, name: string): any {
-    return this.ngAuth
-      .createUserWithEmailAndPassword(email, pass)
-      .then((userData) => {
-        // saving mock UIDs
-        let mockIds: any[] = [];
-        mockIds = JSON.parse(localStorage.getItem(this.MOCK_IDS)) as any[];
-        if (!mockIds) {
-          mockIds = [];
-        }
-        mockIds.push(userData.user.uid);
-        localStorage.setItem(this.MOCK_IDS, JSON.stringify(mockIds));
-        // saving mock UIDs
-
-        // generating mock profiles via cloud function
-        const callable = this.ngFunc.httpsCallable(
-          CLOUD_FUNCTIONS.CREATE_PROFILE
-        );
-        return callable({ name, uid: userData.user.uid }).toPromise();
-        // generating mock profiles via cloud function
-      });
+  private async addUser(email: string, pass: string, name: string): Promise<any> {
+    const user = await this.ngAuth.createUserWithEmailAndPassword(email, pass);
+    if (user) {
+      const uid = user?.user?.uid;
+      let mockIds: any[] = [];
+      mockIds = JSON.parse(localStorage.getItem(this.MOCK_IDS)) as any[];
+      if (!mockIds) {
+        mockIds = [];
+      }
+      mockIds.push(uid);
+      localStorage.setItem(this.MOCK_IDS, JSON.stringify(mockIds));
+      return user;
+      // const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_PROFILE);
+      // return callable({ name, uid }).toPromise();
+    }
+    return false;
   }
 
   private addUserInfo(uid: string, userDetails: any): any {
