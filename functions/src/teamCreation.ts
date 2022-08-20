@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as admin from 'firebase-admin';
 import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '../../src/app/shared/interfaces/team.model';
 import { PlayerBasicInfo } from '../../src/app/shared/interfaces/user.model';
