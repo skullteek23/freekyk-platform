@@ -162,7 +162,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
       .select('dash')
       .pipe(take(1), map((resp) => resp))
       .subscribe(async (team) => {
-        if (team.hasTeam == null) {
+        if (team && team.hasTeam == null) {
           this.snackServ.displayCustomMsg(
             'Join or create a team to perform this action!'
           );

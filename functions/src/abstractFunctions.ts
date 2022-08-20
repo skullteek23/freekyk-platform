@@ -126,17 +126,17 @@ export async function assignParticipants(season: SeasonBasicInfo, participant: S
       selectedFixtures.push({ id: matchID, ...tempFixture as MatchFixture });
     }
   });
-  console.log(value);
   selectedFixtures.forEach(fixture => {
     const id = fixture.id || '';
-    console.log(id);
     if (fixture.home.name === 'TBD') {
       allPromises.push(db.collection('allMatches').doc(id).update({
-        home: value
+        home: value,
+        team: admin.firestore.FieldValue.arrayUnion(value.name)
       }));
     } else if (fixture.away.name === 'TBD') {
       allPromises.push(db.collection('allMatches').doc(id).update({
-        away: value
+        away: value,
+        team: admin.firestore.FieldValue.arrayUnion(value.name)
       }));
     }
   })
