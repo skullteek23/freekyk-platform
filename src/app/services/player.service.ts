@@ -53,7 +53,7 @@ export class PlayerService implements OnDestroy {
     this.fetchPlayerBasicInfo(uid);
     this.fetchPlayerMoreInfo(uid);
     this.fetchSMLinks(uid);
-    this.fetchPlayerBasicInfoFs(uid);
+    // this.fetchPlayerBasicInfoFs(uid);
   }
   private fetchPlayerBasicInfoFs(uid: string): void {
     this.ngfire

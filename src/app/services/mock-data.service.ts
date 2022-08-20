@@ -24,8 +24,6 @@ export class MockDataService {
     // this.initFirebaseAuth();
     // this.initFirestore();
 
-    // this.startFromAuth();
-    // this.startFromMoreInfo();
     // const teamInfo = {
     //   capId: "qHoWkwF6RHTkC8U9JWMvgeWyk7Z2",
     //   id: "gOZ5yL2RkRmGqP94EDQK",

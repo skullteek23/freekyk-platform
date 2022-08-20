@@ -60,7 +60,6 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
     });
 
   uploadPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: urlSnap[0] }));
-  uploadPromises.push(db.collection('freestylers').doc(uid).update({ imgpath_lg: urlSnap[0] }));
   uploadPromises.push(fs.remove(workingDir));
 
   // 4. Run the upload operations
