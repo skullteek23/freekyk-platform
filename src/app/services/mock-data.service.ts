@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireFunctions } from '@angular/fire/functions';
-import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randSentence, randState, randWord } from '@ngneat/falso';
+import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randParagraph, randPhrase, randSentence, randState, randWord } from '@ngneat/falso';
 import { PlayerMoreInfo } from '../shared/interfaces/user.model';
 import { PLAYING_POSTIIONS, DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
 import firebase from 'firebase/app';
+import { TeamBasicInfo, TeamMembers, TeamMoreInfo, Tmember } from '../shared/interfaces/team.model';
+import { AngularFireFunctions } from '@angular/fire/functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,75 +16,20 @@ export class MockDataService {
   readonly MOCK_IDS = 'mock-uids';
   readonly PLAYING_POSITIONS: string[] = PLAYING_POSTIIONS;
   readonly USERS: any[] = DUMMY_USERS;
+  readonly TEAM_LOGO_DEFAULT = 'https://images.unsplash.com/photo-1614851099518-055a1000e6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
+  readonly TEAM_PHOTO_DEFAULT = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg';
 
   constructor(
     private ngAuth: AngularFireAuth,
     private ngFire: AngularFirestore,
-    private ngFunc: AngularFireFunctions
+    private ngFunctions: AngularFireFunctions
   ) {
     // this.initFirebaseAuth();
     // this.initFirestore();
-
-    // const teamInfo = {
-    //   capId: "qHoWkwF6RHTkC8U9JWMvgeWyk7Z2",
-    //   id: "gOZ5yL2RkRmGqP94EDQK",
-    //   name: "SkullKickers FC"
-    // }
-    // const teamMembersArray: Tmember[] = [
-    //   {
-    //     name: 'Prateek goel',
-    //     id: 'qHoWkwF6RHTkC8U9JWMvgeWyk7Z2',
-    //     pl_pos: 'Left Winger',
-    //     imgpath_sm: 'https://storage.googleapis.com/freekyk-development.appspot.com/thumb_qHoWkwF6RHTkC8U9JWMvgeWyk7Z2?GoogleAccessId=freekyk-development%40appspot.gserviceaccount.com&Expires=7258032000&Signature=k1n2VCq6iolXzohMSPlVaE1RR264QJ0jF7kYF6cBr2YgbB43ocL%2FDXa4mYSg1vAatlLKQag2%2FPNKPd9M3GpbsQUIsSBM2zDG43h%2FdexKihHl%2FYJIe5DG8c58LWC5pa9Ug2OHaIIzPPepnaRCdOkfbC%2B2fJ2FCA1c1qX70Y1K6Zer0e1uwj%2F6%2F7%2BvcfzFxNyG%2BwN2ldC75w63mE5F64v0rJQcHno4ZdgXXJL1PQzTRa9064IwSIUVIOaQkD21%2Br%2F3h2tVj5QrEBWorDfL3IBb7VMboSzpzmqacG4vzPkUqPlYxHjjjZrGktmjjBSzRpJoO2iz73Rbo6Y%2FzlmhUsQ5jw%3D%3D',
-    //   },
-    //   {
-    //     name: 'et quaerat',
-    //     id: '21bTnNXmrLZxrxgeIS67L8tBvN63',
-    //     pl_pos: 'Left Winger',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'in in',
-    //     id: '2x4d8vmYgtcHYZACoplishCIpYp2',
-    //     pl_pos: 'Striker',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'in quae',
-    //     id: '6oNcBrRm7EMIYjzpRohyR5jm1nn1',
-    //     pl_pos: 'Center Forward',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'quas at',
-    //     id: 'DJC2wLYNfpeU19uTWY5AfMta9Qw2',
-    //     pl_pos: 'Center Forward',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'in repellat',
-    //     id: 'NcBQzjoeaOgWa7ThVYSt1ZPmuv23',
-    //     pl_pos: 'Left Midfielder',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'facilis excepturi',
-    //     id: 'R3PbkjVFtQNn5SMAk1ABodPFVsV2',
-    //     pl_pos: 'Left Midfielder',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    //   {
-    //     name: 'sapiente ducimus',
-    //     id: 'dUeADtf8RnY1KeoHpic7UgiuLJE3',
-    //     pl_pos: 'Left Midfielder',
-    //     imgpath_sm: 'https://i.pravatar.cc/100',
-    //   },
-    // ]
-    // this.startFromTeams(teamInfo);
-    // this.updateTeamMembers(teamMembersArray, 'gOZ5yL2RkRmGqP94EDQK');
+    // this.initTeam();
   }
 
-  private initFirebaseAuth(): any {
+  private initFirebaseAuth(): void {
     for (let i = 0; i < this.USERS.length; i++) {
       const email = this.USERS[i].email;
       setTimeout(() => {
@@ -95,7 +41,7 @@ export class MockDataService {
     }
   }
 
-  private initFirestore(): any {
+  private initFirestore(): void {
     for (let i = 0; i < this.USERS.length; i++) {
       const userDetails = {
         nickname: this.USERS[i].nickname,
@@ -109,6 +55,87 @@ export class MockDataService {
         }
       }, 5000);
     }
+  }
+
+  private initTeam(): Promise<any> {
+    const allPromises: any[] = [];
+    const teamID = this.ngFire.createId();
+    const teamInfo: TeamBasicInfo = {
+      tname: "Andrew Diggers",
+      isVerified: true,
+      imgpath: this.TEAM_PHOTO_DEFAULT,
+      imgpath_logo: this.TEAM_LOGO_DEFAULT,
+      captainId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
+      locState: randState(),
+      locCity: randCity()
+    };
+    const teamMoreInfo: TeamMoreInfo = {
+      tdateCreated: firebase.firestore.Timestamp.now(),
+      tageCat: 30,
+      captainName: 'Andrew Goodman',
+      tslogan: randPhrase(),
+      tdesc: randSentence()
+    };
+    const membersList: Tmember[] = [
+      {
+        name: 'Andrew Goodman',
+        id: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
+        pl_pos: 'Right Winger',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        name: 'William Bennett',
+        id: 'AtJVy95rpVTBF5oIKpMGY9yN0fv2',
+        pl_pos: 'Center Midfielder',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: '4yrGdwrESKMs0cPdIVv0Bkh0dzv1',
+        name: 'Daniel Martin',
+        pl_pos: 'Right Midfielder',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'hX8OsbWrg4dJ9LKwYCaZ7tSl4rl2',
+        name: 'Henry White',
+        pl_pos: 'GoalKeeper',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: '72OPMo3LsYSeOmDuz7AswPa7tVw2',
+        name: 'Matthew Smith',
+        pl_pos: 'Center Forward',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'ygihPRcCQohLx4Vs9PqdUjr7mzQ2',
+        name: 'Hunter Hamilton',
+        pl_pos: 'Center Forward',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'AvRW7hEqEedWfptgSSUqs6GXlp52',
+        name: 'Nicholas Spencer',
+        pl_pos: '	Left Winger',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: '1nondsTE1RPuXWVuBsIm9MsOvSy2',
+        name: 'Brandon West',
+        pl_pos: 'Striker',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      }
+    ]
+    const tMembers: TeamMembers = {
+      memCount: 8,
+      members: membersList,
+    };
+    allPromises.push(this.ngFire.collection('teams').doc(teamID).set(teamInfo));
+    allPromises.push(this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('moreInfo').set(teamMoreInfo));
+    allPromises.push(this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').set(tMembers));
+
+    return Promise.all(allPromises);
+
   }
 
   private addUser(email: string, pass: string, name: string): Promise<any> {
