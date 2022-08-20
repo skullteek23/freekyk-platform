@@ -35,7 +35,7 @@
         ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100
         }}
       </p>
-      <button (click)="onChallengeTeam()" class="primaryButton buttonText">
+      <button *ngIf="!isOwnTeam" (click)="onChallengeTeam()" class="primaryButton buttonText">
         Challenge Team
       </button>
     </div>

@@ -7,38 +7,20 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    (changeFilter)="onQueryData($event)"
-    fxHide.lt-md="true"
-    [data]="filterData"
-  ></app-filters-lg>
+  <app-filters-lg (changeFilter)="onQueryData($event)" fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
   <!-- desktop filters -->
 
-  <app-search-lg
-    [isDisabled]="(players$ | async)?.length === 0"
-    searchPlaceholder="Search players by name, playing position, city"
-    (searchItem)="filterTerm = $event"
-  >
+  <app-search-lg [isDisabled]="(players$ | async)?.length === 0"
+    searchPlaceholder="Search players by name, playing position, city" (searchItem)="filterTerm = $event">
   </app-search-lg>
 
   <!-- list -->
   <div class="container min-height section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
-      <mat-list-item
-        (click)="onOpenPlayerProfile(player)"
-        *ngFor="
-          let player of players$
-            | async
-            | filterList: 'name,locCity,pl_pos':filterTerm;
-          last as last
-        "
-      >
-        <img
-          matListAvatar
-          [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
-          [alt]="player.name"
-        />
+      <mat-list-item (click)="onOpenPlayerProfile(player)"
+        *ngFor="let player of players$ | async | filterList: 'name,locCity,pl_pos':filterTerm;last as last">
+        <img matListAvatar [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="player.name" />
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-body-1"> {{ player.name | slice: 0:40 }} </span>
           <span class="material-icons-round"> keyboard_arrow_right </span>
@@ -53,13 +35,9 @@
 
     <!-- for large screens -->
     <ng-template #lgScreen>
-      <table
-        mat-table
-        [dataSource]="
+      <table mat-table [dataSource]="
           players$ | async | filterList: 'name,locCity,pl_pos':filterTerm
-        "
-        class="full-width-table mat-elevation-z8"
-      >
+        " class="full-width-table mat-elevation-z8">
         <ng-container matColumnDef="jersey">
           <th mat-header-cell *matHeaderCellDef>Jersey #</th>
           <td mat-cell *matCellDef="let pl; let i = index">
@@ -72,11 +50,7 @@
           <th mat-header-cell *matHeaderCellDef>Player</th>
           <td mat-cell *matCellDef="let pl; let i = index">
             <div fxLayoutAlign="start center" fxLayoutGap="8px">
-              <img
-                class="plAvatar"
-                [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
-                [alt]="pl.name"
-              />
+              <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name" />
               <span class="mat-body-1 left">
                 {{ pl.name | textShorten: 30 }}
               </span>
@@ -108,19 +82,10 @@
             </span>
           </td>
         </ng-container>
-        <tr
-          mat-header-row
-          class="green-table-header"
-          *matHeaderRowDef="cols"
-        ></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: cols"
-          [ngClass]="{ underline: row === selectedRowIndex }"
+        <tr mat-header-row class="green-table-header" *matHeaderRowDef="cols"></tr>
+        <tr mat-row *matRowDef="let row; columns: cols" [ngClass]="{ underline: row === selectedRowIndex }"
           (mouseenter)="selectedRowIndex = selectedRowIndex === row ? -1 : row"
-          (click)="selectedRowIndex = -1; onOpenPlayerProfile(row)"
-          (mouseleave)="selectedRowIndex = -1"
-        ></tr>
+          (click)="selectedRowIndex = -1; onOpenPlayerProfile(row)" (mouseleave)="selectedRowIndex = -1"></tr>
 
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="5">

@@ -34,6 +34,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   error = false;
   imgPath: string;
   id: string;
+  uid: string;
   subscriptions = new Subscription();
   constructor(
     private snackServ: SnackbarService,
@@ -44,6 +45,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private enlServ: EnlargeService
   ) { }
   ngOnInit(): void {
+    this.uid = localStorage.getItem('uid');
     const teamName = this.route.snapshot.params.teamName;
     this.getTeamInfo(teamName);
   }
@@ -157,23 +159,21 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
       );
   }
   onChallengeTeam(): void {
-    const uid = localStorage.getItem('uid');
+    if (this.isOwnTeam) {
+      return;
+    }
     this.subscriptions.add(this.store
       .select('dash')
       .pipe(take(1), map((resp) => resp))
       .subscribe(async (team) => {
         if (team && team.hasTeam == null) {
-          this.snackServ.displayCustomMsg(
-            'Join or create a team to perform this action!'
-          );
-        } else if (team.hasTeam.capId !== uid) {
-          this.snackServ.displayCustomMsg(
-            'Only a Captain can perform this action!'
-          );
+          this.snackServ.displayCustomMsg('Join or create a team to perform this action!');
+        } else if (team.hasTeam.capId !== this.uid) {
+          this.snackServ.displayCustomMsg('Only a Captain can perform this action!');
         } else {
           const notif: NotificationBasic = {
             type: 'team challenge',
-            senderId: uid,
+            senderId: this.uid,
             recieverId: this.id,
             date: firebase.firestore.Timestamp.fromDate(new Date()),
             title: 'Team Challenge Recieved',
@@ -192,5 +192,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
   onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.imgPath);
+  }
+
+  get isOwnTeam(): boolean {
+    return this.id === this.uid;
   }
 }
