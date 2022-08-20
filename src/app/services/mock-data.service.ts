@@ -26,7 +26,7 @@ export class MockDataService {
   ) {
     // this.initFirebaseAuth();
     // this.initFirestore();
-    this.initTeam();
+    // this.initTeam();
     // this.initPlayerStatusUpdate();
   }
 
@@ -141,7 +141,7 @@ export class MockDataService {
 
   private initPlayerStatusUpdate(): Promise<any> {
     const batch = this.ngFire.firestore.batch();
-    for (let i = 1; i < 18; i++) {
+    for (let i = 0; i < 0; i++) {
       if (this.USERS[i]['teamId']) {
         const uid = this.USERS[i].uid || '';
         const updateData = {

@@ -184,56 +184,80 @@ export const DUMMY_USERS = [
     name: 'Dakota Tyler', // captain Team North Dakota
     nickname: 'Dolor',
     email: 'ezekiel.welch@gmail.com',
-    password: 'n*HG1Xl!'
+    password: 'n*HG1Xl!',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'vc0Jq1TZBGhLrR4XXNeMspDYkr52',
     name: 'Robert Carroll', // Team North Dakota
     nickname: 'Labore',
     email: 'felicia82@gmail.com',
-    password: '&7teyzLd'
+    password: '&7teyzLd',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'oOZemlPHwaTgj8D0dDowvRaqGL43',
     name: 'Anthony Richardson', // Team North Dakota
     nickname: 'Ex',
     email: 'flang@gmail.com',
-    password: '%Px8p^hH'
+    password: '%Px8p^hH',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'v1cw5ZPT2ZSNLdfBEOJrIghhSaj1',
     name: 'Caleb Miller', // Team North Dakota
     nickname: 'Id',
     email: 'fritsch.travon@gmail.com',
-    password: 'YKxyP&PO'
+    password: 'YKxyP&PO',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'NrL8l6vS66SOkAizFSfIvaBcV6r2',
     name: 'David Jackson', // Team North Dakota
     nickname: 'Lorem',
     email: 'funk.catherine@gmail.com',
-    password: 'khNxMHYg'
+    password: 'khNxMHYg',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'lJ1g7F6gPvhhSqCioIXyQ7bReFE2',
     name: 'Gregory Barajas', // Team North Dakota
     nickname: 'Dolore',
     email: 'gkutch@gmail.com',
-    password: 'J*d@SlYc'
+    password: 'J*d@SlYc',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: 'UTpd0Na5EJT7ABz1wcXv4XdanMf2',
     name: 'Andrew Hernandez', // Team North Dakota
     nickname: 'Aliquip',
     email: 'gleason.eleanore@gmail.com',
-    password: '&@T9l^$b'
+    password: '&@T9l^$b',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: '6SHdRu7k5rUSCZ1YfO5raz4fIDP2',
     name: 'Robert Rice', // Team North Dakota
     nickname: 'Adipiscing',
     email: 'glebsack@gmail.com',
-    password: 'fMOULf&8'
+    password: 'fMOULf&8',
+    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+    teamId: 'nHlbPa0mer5xdxH8LgXu',
+    teamName: 'North Dakota'
   },
   {
     uid: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
