@@ -87,28 +87,37 @@ export class MockDataService {
 
   private initFirebaseAuth(): any {
     for (let i = 0; i < this.USERS.length; i++) {
+      const email = this.USERS[i].email;
       setTimeout(() => {
-        this.addUser(this.USERS[i].email, this.USERS[i].password, this.USERS[i].name);
+        this.addUser(email, this.USERS[i].password, this.USERS[i].name);
+        if (email === 'zmurray@gmail.com') {
+          console.log('operation completed!');
+        }
       }, 5000);
     }
   }
 
   private initFirestore(): any {
-    this.USERS.forEach(user => {
+    for (let i = 0; i < this.USERS.length; i++) {
       const userDetails = {
-        nickname: user.nickname
+        nickname: this.USERS[i].nickname,
+        name: this.USERS[i].name
       };
+      const uid = this.USERS[i].uid;
       setTimeout(() => {
-        this.addUserInfo(user.uid, userDetails);
-      }, 2000);
-    })
+        this.addUserInfo(uid, userDetails);
+        if (uid === 'CuqHEBpraUglw5ncToeVrYIWueH3') {
+          console.log('operation completed!');
+        }
+      }, 5000);
+    }
   }
 
   private addUser(email: string, pass: string, name: string): Promise<any> {
     return this.ngAuth.createUserWithEmailAndPassword(email, pass);
   }
 
-  private addUserInfo(uid: string, userDetails: any): any {
+  private addUserInfo(uid: string, userDetails: any): Promise<any> {
     const allPromises: any[] = [];
     const avatar = randAvatar();
     const newDetails: PlayerMoreInfo = {
@@ -145,7 +154,7 @@ export class MockDataService {
     allPromises.push(this.ngFire.collection('players').doc(uid).set({
       ...newBasicDetails,
     }));
-    // allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(newDetails));
+    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').set(newDetails));
     return Promise.all(allPromises);
   }
 
