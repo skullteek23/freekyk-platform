@@ -70,6 +70,13 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe((info) => {
+          this.initStatesList();
+          // for location
+          if (info.main.locState && info.main.locCity) {
+            this.states$ = this.locationServ.getStateByCountry();
+            this.cities$ = this.locationServ.getCityByState(info.main.locState);
+          }
+          // for location
           this.TeamInfoForm = new FormGroup({
             t_name: new FormControl(
               info.main.tname,
@@ -112,7 +119,6 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           });
         })
     );
-    this.initStatesList();
   }
   ngOnDestroy(): void {
     if (this.subscriptions) {
