@@ -100,21 +100,21 @@ export async function assignParticipants(season: SeasonBasicInfo, participant: S
   });
   fixtures.sort(sortObjectByKey('date'));
   fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FCP') {
+    if (element.hasOwnProperty('type') && element.type === 'FCP' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
       matchIDs.push(element['id']);
       return true;
     }
     return false;
   })
   fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FKC') {
+    if (element.hasOwnProperty('type') && element.type === 'FKC' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
       matchIDs.push(element['id']);
       return true;
     }
     return false;
   })
   fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FPL') {
+    if (element.hasOwnProperty('type') && element.type === 'FPL' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
       matchIDs.push(element['id']);
       return true;
     }
