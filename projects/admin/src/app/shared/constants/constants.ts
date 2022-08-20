@@ -11,7 +11,7 @@ export class MatchConstants {
   }
   public static TO_BE_DECIDED: 'TBD';
   public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
-  public static DEFAULT_LOGO: 'https://images.unsplash.com/photo-1614851099518-055a1000e6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
+  public static DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png'
   public static SEASON_PRICE = {
     MIN: 0,
     MAX: 20000,
@@ -24,7 +24,7 @@ export class MatchConstants {
 export const SEASON_PROD_URL = 'https://freekyk-prod.web.app/s/';
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',
-  DEFAULT_LOGO: 'https://images.unsplash.com/photo-1614851099518-055a1000e6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+  DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png',
   DEFAULT_PLACEHOLDER: 'assets/placeholder_product.png',
   DEFAULT_IMAGE_URL: 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
 }
