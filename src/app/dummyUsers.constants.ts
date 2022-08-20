@@ -261,52 +261,73 @@ export const DUMMY_USERS = [
   },
   {
     uid: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
-    name: 'Douglas Palmer',
+    name: 'Douglas Palmer', // captain Team South Park United
     nickname: 'Cillum',
     email: 'gus.schaefer@gmail.com',
-    password: 'EV87oRbB'
+    password: 'EV87oRbB',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'VJzhhl9O1Eerav1qR6SIH67GQ1K2',
-    name: 'John Wilkerson',
+    name: 'John Wilkerson', // Team South Park United
     nickname: 'Veniam',
     email: 'hannah.harber@gmail.com',
-    password: 'Q4Lt!ID0'
+    password: 'Q4Lt!ID0',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'kEC8lzonTFey4jLA798fQe0XHBv1',
-    name: 'James Vance',
+    name: 'James Vance', // Team South Park United
     nickname: 'Ipsum',
     email: 'irving.mayert@gmail.com',
-    password: '@tgj*U2W'
+    password: '@tgj*U2W',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'Chi3xkyldRcsP9tEdThOkbUBffa2',
-    name: 'David Allen',
+    name: 'David Allen', // Team South Park United
     nickname: 'Commodo',
     email: 'iryan@gmail.com',
-    password: 'JGWU2cxW'
+    password: 'JGWU2cxW',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'EdOItpqXmFdFLqCHo45gYzFJzRQ2',
-    name: 'Andrew Fischer',
+    name: 'Andrew Fischer', // Team South Park United
     nickname: 'Fugiat',
     email: 'jacobi.nettie@gmail.com',
-    password: 'oc1Inbuv'
+    password: 'oc1Inbuv',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'uBw8TjNm54gedqAh2WLFWqXGnqt1',
-    name: 'Kevin Hughes',
+    name: 'Kevin Hughes', // Team South Park United
     nickname: 'Excepteur',
     email: 'jadon.conn@gmail.com',
-    password: 'NkpVw&CO'
+    password: 'NkpVw&CO',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: '91TtWPndI2STeBvrLPjmgXB1MKv2',
-    name: 'Matthew Christian',
+    name: 'Matthew Christian', // Team South Park United
     nickname: 'Labore',
     email: 'jakubowski.hortense@gmail.com',
-    password: '0wN2aHHN'
+    password: '0wN2aHHN',
+    teamId: '07rVPWq6x6ewtdlCAi6J',
+    teamName: 'South Park United',
+    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
   },
   {
     uid: 'aVawqyz9b3b0Lz3ReHubk7qqPvp1',

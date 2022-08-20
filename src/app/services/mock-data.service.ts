@@ -62,73 +62,67 @@ export class MockDataService {
     const allPromises: any[] = [];
     const teamID = this.ngFire.createId();
     const teamInfo: TeamBasicInfo = {
-      tname: "North Dakota",
+      tname: "South Park United",
       isVerified: true,
       imgpath: this.TEAM_PHOTO_DEFAULT,
       imgpath_logo: this.TEAM_LOGO_DEFAULT,
-      captainId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+      captainId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
       locState: randState(),
       locCity: randCity()
     };
     const teamMoreInfo: TeamMoreInfo = {
       tdateCreated: firebase.firestore.Timestamp.now(),
       tageCat: 30,
-      captainName: 'Dakota Tyler',
+      captainName: 'Douglas Palmer',
       tslogan: randPhrase(),
       tdesc: randSentence()
     };
     const membersList: Tmember[] = [
       {
-        id: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-        name: 'Dakota Tyler', // captain Team North Dakota
-        pl_pos: 'Center Back',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'vc0Jq1TZBGhLrR4XXNeMspDYkr52',
-        name: 'Robert Carroll', // Team North Dakota
-        pl_pos: 'Left Midfielder',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'oOZemlPHwaTgj8D0dDowvRaqGL43',
-        name: 'Anthony Richardson', // Team North Dakota
-        pl_pos: 'GoalKeeper',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'v1cw5ZPT2ZSNLdfBEOJrIghhSaj1',
-        name: 'Caleb Miller', // Team North Dakota
-        pl_pos: 'Left Winger',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'NrL8l6vS66SOkAizFSfIvaBcV6r2',
-        name: 'David Jackson', // Team North Dakota
-        pl_pos: 'Center Back',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'lJ1g7F6gPvhhSqCioIXyQ7bReFE2',
-        name: 'Gregory Barajas', // Team North Dakota
-        pl_pos: 'Right Winger',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'UTpd0Na5EJT7ABz1wcXv4XdanMf2',
-        name: 'Andrew Hernandez', // Team North Dakota
+        id: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
+        name: 'Douglas Palmer',
         pl_pos: 'Left Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: '6SHdRu7k5rUSCZ1YfO5raz4fIDP2',
-        name: 'Robert Rice', // Team North Dakota
+        id: 'VJzhhl9O1Eerav1qR6SIH67GQ1K2',
+        name: 'John Wilkerson',
+        pl_pos: 'Center Midfielder',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'kEC8lzonTFey4jLA798fQe0XHBv1',
+        name: 'James Vance',
+        pl_pos: 'GoalKeeper',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'Chi3xkyldRcsP9tEdThOkbUBffa2',
+        name: 'David Allen',
         pl_pos: 'Right Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
+      {
+        id: 'EdOItpqXmFdFLqCHo45gYzFJzRQ2',
+        name: 'Andrew Fischer',
+        pl_pos: 'Center Forward',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: 'uBw8TjNm54gedqAh2WLFWqXGnqt1',
+        name: 'Kevin Hughes',
+        pl_pos: 'Center Midfielder',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
+      {
+        id: '91TtWPndI2STeBvrLPjmgXB1MKv2',
+        name: 'Matthew Christian',
+        pl_pos: 'Right Back',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      }
     ]
     const tMembers: TeamMembers = {
-      memCount: 8,
+      memCount: 7,
       members: membersList,
     };
     allPromises.push(this.ngFire.collection('teams').doc(teamID).set(teamInfo));
@@ -141,7 +135,7 @@ export class MockDataService {
 
   private initPlayerStatusUpdate(): Promise<any> {
     const batch = this.ngFire.firestore.batch();
-    for (let i = 0; i < 0; i++) {
+    for (let i = 26; i < 34; i++) {
       if (this.USERS[i]['teamId']) {
         const uid = this.USERS[i].uid || '';
         const updateData = {
