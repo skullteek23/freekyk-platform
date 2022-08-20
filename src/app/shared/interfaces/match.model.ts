@@ -76,7 +76,7 @@ export interface dummyFixture {
   type: 'FKC' | 'FCP' | 'FPL';
   locCity: string;
   locState: string;
-  mid?: string;
+  id?: string;
   stadium?: string;
   fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
   timestamp?: number;

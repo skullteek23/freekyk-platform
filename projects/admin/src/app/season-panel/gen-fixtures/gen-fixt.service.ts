@@ -87,7 +87,7 @@ export class GenFixtService {
       const i = index + 1;
       return {
         ...element,
-        mid: this.getMID(element.type, i)
+        id: this.getMID(element.type, i)
       }
     })
     return (fixtures);
@@ -97,7 +97,7 @@ export class GenFixtService {
     return data.map(val => {
       const newId = this.ngFire.createId();
       return {
-        id: val.mid,
+        id: val.id,
         date: firebase.firestore.Timestamp.fromDate(val.date),
         concluded: false,
         home: {
@@ -119,14 +119,21 @@ export class GenFixtService {
     })
   }
 
-  updateGroundAvailability(groundIds: string[] = [], lastUnavailableDate: Date) {
+  updateGroundAvailability(groundIds: string[] = [], unavailableStartDate: Date, unavailableEndDate: Date) {
     let allAsyncPromises = [];
-    lastUnavailableDate.setDate(lastUnavailableDate.getDate() + 1);
-    lastUnavailableDate.setHours(0);
-    lastUnavailableDate.setMinutes(0);
-    const lastAvailableDate = new Date(JSON.parse(JSON.stringify(lastUnavailableDate)));
+    unavailableStartDate.setDate(unavailableStartDate.getDate() + 1);
+    unavailableStartDate.setHours(0);
+    unavailableStartDate.setMinutes(0);
+    const startDate = new Date(JSON.parse(JSON.stringify(unavailableStartDate)));
+    unavailableEndDate.setDate(unavailableEndDate.getDate() + 1);
+    unavailableEndDate.setHours(0);
+    unavailableEndDate.setMinutes(0);
+    const endDate = new Date(JSON.parse(JSON.stringify(unavailableEndDate)));
     groundIds.forEach(groundId => {
-      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(groundId).update({ availableDate: lastAvailableDate }));
+      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(groundId).update({
+        unavailableStartDate: startDate,
+        unavailableEndDate: endDate
+      }));
     })
     return Promise.all(allAsyncPromises);
   }
@@ -170,10 +177,11 @@ export class GenFixtService {
     return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);
   }
   private getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
+    const uniqueID = this.ngFire.createId().slice(0, 8).toLocaleUpperCase();
     switch (type) {
-      case 'FKC': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
-      case 'FPL': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FPL}-${index}`;
-      case 'FCP': return `${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
+      case 'FKC': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
+      case 'FPL': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FPL}-${index}`;
+      case 'FCP': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
     }
   }
   private calculateTotalLeagueMatches(teams: number): number {

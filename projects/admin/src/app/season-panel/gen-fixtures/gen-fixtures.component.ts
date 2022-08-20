@@ -4,7 +4,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Observable, } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { GroundBasicInfo, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { SeasonAbout, SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 import { MatListOption } from '@angular/material/list';
 import { GenFixtService } from './gen-fixt.service';
@@ -175,11 +175,13 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     const fixtures: MatchFixture[] = this.genFixtService.getPublishableFixture(this.tableData);
     const lastFixture: MatchFixture = fixtures[fixtures.length - 1];
     const seasonID = this.newSeasonId ? this.newSeasonId : this.formData['id'];
+    const unavailableStartDate = new Date(lastFixture.date['seconds'] * 1000);
+    const unavailableEndDate = this.formData['start_date'];
     let allPromises = [];
-    if (seasonID && this.selectedGroundsList.length && fixtures.length) {
+    if (seasonID && this.selectedGroundsList.length && fixtures.length && unavailableStartDate && unavailableEndDate) {
       allPromises.push(this.genFixtService.onCreateFixtures(fixtures));
       allPromises.push(this.genFixtService.updateSeason(seasonID));
-      allPromises.push(this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.id), new Date(lastFixture.date['seconds'] * 1000)));
+      allPromises.push(this.genFixtService.updateGroundAvailability(this.selectedGroundsList.map(gr => gr.id), unavailableStartDate, unavailableEndDate));
       Promise.all(allPromises).then(() => {
         this.isLoading = false;
         this.stepper.next();
@@ -190,8 +192,23 @@ export class GenFixturesComponent implements OnInit, OnDestroy, AfterViewInit {
     window.open(`${SEASON_PROD_URL}${this.seasonName}`, "_blank");
   }
 
-  isGroundUnavailable(date: Date): boolean {
-    return date.getTime() > new Date(this.formData.start_date).getTime();
+  isGroundDisabled(ground: GroundPrivateInfo): boolean {
+    const contractStartDate = ground['contractStartDate'] ? ground['contractStartDate'].toMillis() : null;
+    const contractEndDate = ground['contractEndDate'] ? ground['contractEndDate'].toMillis() : null;
+    const unavailableStartDate = ground['unavailableStartDate'] ? ground['unavailableStartDate'].toMillis() : null;
+    const unavailableEndDate = ground['unavailableEndDate'] ? ground['unavailableEndDate'].toMillis() : null;
+    const seasonStartDate = new Date(this.formData['start_date']).getTime();
+    if (!unavailableStartDate || !unavailableEndDate) {
+      return false;
+    }
+    if (seasonStartDate && unavailableStartDate && unavailableEndDate && seasonStartDate > unavailableStartDate && seasonStartDate < unavailableEndDate) {
+      return true;
+    } else if (seasonStartDate && (seasonStartDate > contractEndDate || seasonStartDate < contractStartDate)) {
+      return true;
+    } else if (seasonStartDate && unavailableStartDate && unavailableEndDate && (seasonStartDate < unavailableStartDate || seasonStartDate > unavailableEndDate)) {
+      return false;
+    }
+    return true;
   }
 
   get totalMatches(): number {

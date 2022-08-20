@@ -11,20 +11,21 @@ table {
   width: 100%;
 }
 
-.mat-column-mid {
-  width: 15%;
+.mat-column-id {
+  width: 20%;
+  padding-right: 10px;
 }
 
 .mat-column-home {
-  width: 10%;
+  width: 9%;
 }
 
 .mat-column-away {
-  width: 10%;
+  width: 9%;
 }
 
 .mat-column-date {
-  width: 20%;
+  width: 16%;
 }
 
 .mat-column-location {
@@ -32,5 +33,5 @@ table {
 }
 
 .mat-column-ground {
-  width: 20%;
+  width: 21%;
 }

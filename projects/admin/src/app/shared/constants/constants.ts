@@ -30,7 +30,7 @@ export const MatchConstantsSecondary = {
 }
 
 export const DUMMY_FIXTURE_TABLE_COLUMNS = {
-  MATCH_ID: 'mid',
+  MATCH_ID: 'id',
   HOME: 'home',
   AWAY: 'away',
   DATE: 'date',
