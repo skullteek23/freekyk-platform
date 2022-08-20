@@ -29,7 +29,7 @@ export class PlayerProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.playerId = this.route.snapshot.params.playerid;
     this.getBasicInfo();
@@ -76,12 +76,12 @@ export class PlayerProfileComponent implements OnInit {
         map((resp) => resp.data() as BasicStats),
         map(
           (resp) =>
-            ({
-              Appearances: resp ? resp.apps : 0,
-              Wins: resp ? resp.w : 0,
-              Goals: resp ? resp.g : 0,
-              Cards: resp ? resp.cards : 0,
-            } as Stats)
+          ({
+            Appearances: resp ? resp.apps : 0,
+            Wins: resp ? resp.w : 0,
+            Goals: resp ? resp.g : 0,
+            Cards: resp ? resp.cards : 0,
+          } as Stats)
         )
       );
   }
