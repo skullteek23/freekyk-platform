@@ -17,7 +17,6 @@ export async function removeThumbnail(object: functions.storage.ObjectMetadata, 
   const FieldValue = admin.firestore.FieldValue;
   allPromises.push(db.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: FieldValue.delete() }));
   allPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: FieldValue.delete() }));
-  allPromises.push(db.collection('freestylers').doc(uid).update({ imgpath_lg: FieldValue.delete() }));
   await Promise.all(allPromises);
   return bucket.file(thumbObjName).delete();
 }

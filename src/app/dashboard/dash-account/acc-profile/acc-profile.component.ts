@@ -346,15 +346,15 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         );
       }
       if (Object.keys(newBasicDetails).length) {
-        allPromises.push(
-          this.ngFire
-            .collection('freestylers')
-            .doc(uid)
-            .update({
-              ...newDetails,
-              ...newBasicDetails
-            })
-        );
+        // allPromises.push(
+        //   this.ngFire
+        //     .collection('freestylers')
+        //     .doc(uid)
+        //     .update({
+        //       ...newDetails,
+        //       ...newBasicDetails
+        //     })
+        // );
         allPromises.push(
           this.ngFire
             .collection('players')
@@ -416,14 +416,14 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             ...newBasicDetails,
           })
       );
-      allPromises.push(
-        this.ngFire
-          .collection('freestylers')
-          .doc(uid)
-          .update({
-            ...newFsDetails,
-          })
-      );
+      // allPromises.push(
+      //   this.ngFire
+      //     .collection('freestylers')
+      //     .doc(uid)
+      //     .update({
+      //       ...newFsDetails,
+      //     })
+      // );
       return Promise.all(allPromises).then(() =>
         this.snackServ.displayCustomMsg('Updated Successfully!')
       );
@@ -520,11 +520,11 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           { merge: true }
         )
     );
-    allPromises.push(
-      this.ngFire.collection('freestylers').doc(uid).update({
-        ig: newSocials.ig,
-      })
-    );
+    // allPromises.push(
+    //   this.ngFire.collection('freestylers').doc(uid).update({
+    //     ig: newSocials.ig,
+    //   })
+    // );
     this.socialInfoForm.reset();
     return Promise.all(allPromises).then(() =>
       this.snackServ.displayCustomMsg('Updated Successfully!')
