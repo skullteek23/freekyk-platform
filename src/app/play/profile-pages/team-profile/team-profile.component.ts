@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { tap, map, share } from 'rxjs/operators';
+import { tap, map, share, take } from 'rxjs/operators';
 import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -158,9 +158,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
   onChallengeTeam(): void {
     const uid = localStorage.getItem('uid');
-    this.store
+    this.subscriptions.add(this.store
       .select('dash')
-      .pipe(map((resp) => resp))
+      .pipe(take(1), map((resp) => resp))
       .subscribe(async (team) => {
         if (team.hasTeam == null) {
           this.snackServ.displayCustomMsg(
@@ -188,7 +188,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
               )
             );
         }
-      });
+      }));
   }
   onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.imgPath);
