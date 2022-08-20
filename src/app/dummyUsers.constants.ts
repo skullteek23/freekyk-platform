@@ -4,179 +4,233 @@ export const DUMMY_USERS = [
     name: 'Andrew Goodman', // captain Team Andrew Diggers
     nickname: 'Ullamco',
     email: 'acronin@gmail.com',
-    password: 'i^o2Sd03'
+    password: 'i^o2Sd03',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: 'AtJVy95rpVTBF5oIKpMGY9yN0fv2',
     name: 'William Bennett', // Team Andrew Diggers
     nickname: 'Officia',
     email: 'alexanne.thiel@gmail.com',
-    password: '6wcdxYq%'
+    password: '6wcdxYq%',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: '4yrGdwrESKMs0cPdIVv0Bkh0dzv1',
     name: 'Daniel Martin', // Team Andrew Diggers
     nickname: 'Officia',
     email: 'balistreri.evangeline@gmail.com',
-    password: '41st@e5H'
+    password: '41st@e5H',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: 'hX8OsbWrg4dJ9LKwYCaZ7tSl4rl2',
     name: 'Henry White', // Team Andrew Diggers
     nickname: 'Officia',
     email: 'bednar.emmalee@gmail.com',
-    password: 'JzmgSt*C'
+    password: 'JzmgSt*C',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: '72OPMo3LsYSeOmDuz7AswPa7tVw2',
     name: 'Matthew Smith', // Team Andrew Diggers
     nickname: 'Esse',
     email: 'bernhard.funk@gmail.com',
-    password: 'oCjUu8HG'
+    password: 'oCjUu8HG',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: 'ygihPRcCQohLx4Vs9PqdUjr7mzQ2',
     name: 'Hunter Hamilton', // Team Andrew Diggers
     nickname: 'Officia',
     email: 'birdie.feil@gmail.com',
-    password: 'u$Y25M0&'
+    password: 'u$Y25M0&',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: 'AvRW7hEqEedWfptgSSUqs6GXlp52',
     name: 'Nicholas Spencer', // Team Andrew Diggers
     nickname: 'Dolore',
     email: 'bogan.keith@gmail.com',
-    password: 'AAiZPyrx'
+    password: 'AAiZPyrx',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: '1nondsTE1RPuXWVuBsIm9MsOvSy2',
     name: 'Brandon West', // Team Andrew Diggers
     nickname: 'Pariatur',
     email: 'bondricka@gmail.com',
-    password: 'DtDt*nB3'
+    password: 'DtDt*nB3',
+    teamId: 'karrMGuMgyDFWWnFZJRT',
+    teamName: 'Andrew Diggers',
+    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
   },
   {
     uid: 'aT1gpwmmPbP5vionOsAk9kYh2PR2',
-    name: 'Jonathan Cohen',
+    name: 'Jonathan Cohen', // captain Team Jonathan Healers
     nickname: 'Aute',
     email: 'brennon.mccullough@gmail.com',
-    password: 'AVul$6jE'
+    password: 'AVul$6jE',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: '2q3G8cwwAVXsCsHH1CcaKp7gPIz2',
-    name: 'Vincent Stewart',
+    name: 'Vincent Stewart', // Team Jonathan Healers
     nickname: 'Sed',
     email: 'carson.donnelly@gmail.com',
-    password: 'nNAhzOPr'
+    password: 'nNAhzOPr',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'LVG5oiEwTNaZpqcWkTt8YavOdcf1',
-    name: 'Michael Chung',
+    name: 'Michael Chung', // Team Jonathan Healers
     nickname: 'Nostrud',
     email: 'clare.sporer@gmail.com',
-    password: 'm8ixf3Z0'
+    password: 'm8ixf3Z0',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'iqndBhjFYpdqfFHw29xbbQpxCya2',
-    name: 'Andrew Webb',
+    name: 'Andrew Webb', // Team Jonathan Healers
     nickname: 'Dolor',
     email: 'crist.winifred@gmail.com',
-    password: '#V4^PRI2'
+    password: '#V4^PRI2',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'H9e4j51SWyRImVXFHXlZ1VInB7z1',
-    name: 'Jason Santana', // captain
+    name: 'Jason Santana', // Team Jonathan Healers
     nickname: 'Ut',
     email: 'cruickshank.hassan@gmail.com',
-    password: 'ZawIPQdT'
+    password: 'ZawIPQdT',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'ESoZ06huo1hznNrthlxatpzSNSm2',
-    name: 'Hector Burgess Jr',
+    name: 'Hector Burgess Jr', // Team Jonathan Healers
     nickname: 'Cillum',
     email: 'dino36@gmail.com',
-    password: 'O80vU!j4'
+    password: 'O80vU!j4',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: '4nOykhszu7YYB6OGwbrTUTVohnk1',
-    name: 'Jeffrey Gordon',
+    name: 'Jeffrey Gordon', // Team Jonathan Healers
     nickname: 'Sed',
     email: 'dpurdy@gmail.com',
-    password: 'l9sbbWIl'
+    password: 'l9sbbWIl',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'dehvzGaYCPhEsOK629nopJboM7h2',
-    name: 'Justin Stokes',
+    name: 'Justin Stokes', // Team Jonathan Healers
     nickname: 'Ut',
     email: 'enoch.schumm@gmail.com',
-    password: 'ezl1Z1vm'
+    password: 'ezl1Z1vm',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'bDZtUvJ22WMU72HVsbt9bLipBv32',
-    name: 'Joseph Brown',
+    name: 'Joseph Brown', // Team Jonathan Healers
     nickname: 'Esse',
     email: 'eokuneva@gmail.com',
-    password: 'Sbp5@P3V'
+    password: 'Sbp5@P3V',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'AXFz9ZE2KgOWEpYJL4ypoupKa532',
-    name: 'Steve Dean DVM',
+    name: 'Steve Dean DVM', // Team Jonathan Healers
     nickname: 'Amet',
     email: 'ernser.quinten@gmail.com',
-    password: 'Ml%PZbM&'
+    password: 'Ml%PZbM&',
+    teamId: '6417QtzjebPNWPlU0fvP',
+    teamName: 'Jonathan Healers',
+    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
   },
   {
     uid: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    name: 'Dakota Tyler',
+    name: 'Dakota Tyler', // captain Team North Dakota
     nickname: 'Dolor',
     email: 'ezekiel.welch@gmail.com',
     password: 'n*HG1Xl!'
   },
   {
     uid: 'vc0Jq1TZBGhLrR4XXNeMspDYkr52',
-    name: 'Robert Carroll',
+    name: 'Robert Carroll', // Team North Dakota
     nickname: 'Labore',
     email: 'felicia82@gmail.com',
     password: '&7teyzLd'
   },
   {
     uid: 'oOZemlPHwaTgj8D0dDowvRaqGL43',
-    name: 'Anthony Richardson',
+    name: 'Anthony Richardson', // Team North Dakota
     nickname: 'Ex',
     email: 'flang@gmail.com',
     password: '%Px8p^hH'
   },
   {
     uid: 'v1cw5ZPT2ZSNLdfBEOJrIghhSaj1',
-    name: 'Caleb Miller',
+    name: 'Caleb Miller', // Team North Dakota
     nickname: 'Id',
     email: 'fritsch.travon@gmail.com',
     password: 'YKxyP&PO'
   },
   {
     uid: 'NrL8l6vS66SOkAizFSfIvaBcV6r2',
-    name: 'David Jackson',
+    name: 'David Jackson', // Team North Dakota
     nickname: 'Lorem',
     email: 'funk.catherine@gmail.com',
     password: 'khNxMHYg'
   },
   {
     uid: 'lJ1g7F6gPvhhSqCioIXyQ7bReFE2',
-    name: 'Gregory Barajas',
+    name: 'Gregory Barajas', // Team North Dakota
     nickname: 'Dolore',
     email: 'gkutch@gmail.com',
     password: 'J*d@SlYc'
   },
   {
     uid: 'UTpd0Na5EJT7ABz1wcXv4XdanMf2',
-    name: 'Andrew Hernandez',
+    name: 'Andrew Hernandez', // Team North Dakota
     nickname: 'Aliquip',
     email: 'gleason.eleanore@gmail.com',
     password: '&@T9l^$b'
   },
   {
     uid: '6SHdRu7k5rUSCZ1YfO5raz4fIDP2',
-    name: 'Robert Rice',
+    name: 'Robert Rice', // Team North Dakota
     nickname: 'Adipiscing',
     email: 'glebsack@gmail.com',
     password: 'fMOULf&8'

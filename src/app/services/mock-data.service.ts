@@ -26,7 +26,8 @@ export class MockDataService {
   ) {
     // this.initFirebaseAuth();
     // this.initFirestore();
-    // this.initTeam();
+    this.initTeam();
+    // this.initPlayerStatusUpdate();
   }
 
   private initFirebaseAuth(): void {
@@ -61,70 +62,70 @@ export class MockDataService {
     const allPromises: any[] = [];
     const teamID = this.ngFire.createId();
     const teamInfo: TeamBasicInfo = {
-      tname: "Andrew Diggers",
+      tname: "North Dakota",
       isVerified: true,
       imgpath: this.TEAM_PHOTO_DEFAULT,
       imgpath_logo: this.TEAM_LOGO_DEFAULT,
-      captainId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
+      captainId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
       locState: randState(),
       locCity: randCity()
     };
     const teamMoreInfo: TeamMoreInfo = {
       tdateCreated: firebase.firestore.Timestamp.now(),
       tageCat: 30,
-      captainName: 'Andrew Goodman',
+      captainName: 'Dakota Tyler',
       tslogan: randPhrase(),
       tdesc: randSentence()
     };
     const membersList: Tmember[] = [
       {
-        name: 'Andrew Goodman',
-        id: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
-        pl_pos: 'Right Winger',
+        id: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
+        name: 'Dakota Tyler', // captain Team North Dakota
+        pl_pos: 'Center Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        name: 'William Bennett',
-        id: 'AtJVy95rpVTBF5oIKpMGY9yN0fv2',
-        pl_pos: 'Center Midfielder',
+        id: 'vc0Jq1TZBGhLrR4XXNeMspDYkr52',
+        name: 'Robert Carroll', // Team North Dakota
+        pl_pos: 'Left Midfielder',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: '4yrGdwrESKMs0cPdIVv0Bkh0dzv1',
-        name: 'Daniel Martin',
-        pl_pos: 'Right Midfielder',
-        imgpath_sm: 'https://i.pravatar.cc/100',
-      },
-      {
-        id: 'hX8OsbWrg4dJ9LKwYCaZ7tSl4rl2',
-        name: 'Henry White',
+        id: 'oOZemlPHwaTgj8D0dDowvRaqGL43',
+        name: 'Anthony Richardson', // Team North Dakota
         pl_pos: 'GoalKeeper',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: '72OPMo3LsYSeOmDuz7AswPa7tVw2',
-        name: 'Matthew Smith',
-        pl_pos: 'Center Forward',
+        id: 'v1cw5ZPT2ZSNLdfBEOJrIghhSaj1',
+        name: 'Caleb Miller', // Team North Dakota
+        pl_pos: 'Left Winger',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'ygihPRcCQohLx4Vs9PqdUjr7mzQ2',
-        name: 'Hunter Hamilton',
-        pl_pos: 'Center Forward',
+        id: 'NrL8l6vS66SOkAizFSfIvaBcV6r2',
+        name: 'David Jackson', // Team North Dakota
+        pl_pos: 'Center Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'AvRW7hEqEedWfptgSSUqs6GXlp52',
-        name: 'Nicholas Spencer',
-        pl_pos: '	Left Winger',
+        id: 'lJ1g7F6gPvhhSqCioIXyQ7bReFE2',
+        name: 'Gregory Barajas', // Team North Dakota
+        pl_pos: 'Right Winger',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: '1nondsTE1RPuXWVuBsIm9MsOvSy2',
-        name: 'Brandon West',
-        pl_pos: 'Striker',
+        id: 'UTpd0Na5EJT7ABz1wcXv4XdanMf2',
+        name: 'Andrew Hernandez', // Team North Dakota
+        pl_pos: 'Left Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
-      }
+      },
+      {
+        id: '6SHdRu7k5rUSCZ1YfO5raz4fIDP2',
+        name: 'Robert Rice', // Team North Dakota
+        pl_pos: 'Right Back',
+        imgpath_sm: 'https://i.pravatar.cc/100',
+      },
     ]
     const tMembers: TeamMembers = {
       memCount: 8,
@@ -136,6 +137,25 @@ export class MockDataService {
 
     return Promise.all(allPromises);
 
+  }
+
+  private initPlayerStatusUpdate(): Promise<any> {
+    const batch = this.ngFire.firestore.batch();
+    for (let i = 1; i < 18; i++) {
+      if (this.USERS[i]['teamId']) {
+        const uid = this.USERS[i].uid || '';
+        const updateData = {
+          team: {
+            capId: this.USERS[i].capId,
+            name: this.USERS[i].teamName,
+            id: this.USERS[i].teamId,
+          }
+        }
+        const ref = this.ngFire.collection('players').doc(uid).ref;
+        batch.update(ref, updateData);
+      }
+    }
+    return batch.commit();
   }
 
   private addUser(email: string, pass: string, name: string): Promise<any> {
