@@ -44,13 +44,29 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
 
   // Upload to GCS
   const uploadedFile = await bucketRef.upload(thumbPath, { destination: join(bucketDir, thumbName), contentType });
-  const uploadedFilePath = uploadedFile && uploadedFile[0] ? uploadedFile[0].getSignedUrl({ action: 'read', expires: new Date('31 December 2199'), }) : null;
+  const uploadedFilePathTemp = uploadedFile && uploadedFile[0] ? await uploadedFile[0].getSignedUrl({ action: 'read', expires: new Date('31 December 2199') }) : null;
 
   // Update player documents
-  if (uploadedFilePath && workingDir) {
-    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm: uploadedFilePath }));
+  if (uploadedFilePathTemp && workingDir) {
+    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm: uploadedFilePathTemp[0] }));
     allPromises.push(fs.remove(workingDir));
     return Promise.all(allPromises);
   }
   return false;
+
+  // const urlSnap = await bucket
+  //   .upload(thumbPath, {
+  //     destination: join(bucketDir, thumbName),
+  //     contentType,
+  //   })
+  //   .then((res) => {
+  //     return res[0].getSignedUrl({
+  //       action: 'read',
+  //       expires: new Date('31 December 2199'),
+  //     });
+  //   });
+
+  // uploadPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: urlSnap[0] }));
+  // uploadPromises.push(db.collection('freestylers').doc(uid).update({ imgpath_lg: urlSnap[0] }));
+  // uploadPromises.push(fs.remove(workingDir));
 }
