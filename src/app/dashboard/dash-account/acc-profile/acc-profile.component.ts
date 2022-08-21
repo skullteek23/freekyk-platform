@@ -85,7 +85,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
   initFormWithValues(): void {
     const uid = localStorage.getItem('uid');
-    this.initFsArrayForm();
+    // this.initFsArrayForm();
     this.subscriptions.add(
       this.store.select('dash').subscribe((data) => {
         // for location
@@ -200,47 +200,47 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       })
     );
   }
-  initFsArrayForm(): void {
-    const uid = localStorage.getItem('uid');
-    // for player brand collabs & fs videos
-    this.fsArrayForm = new FormGroup({
-      top_vids: new FormArray([
-        new FormControl(null, [
-          Validators.required,
-          Validators.pattern(YOUTUBE_REGEX),
-        ]),
-      ]),
-    });
-    this.ngFire
-      .collection(`freestylers/${uid}/additionalInfoFs`)
-      .doc('fsVideos')
-      .get()
-      .pipe(map((resp) => resp.data() as FsProfileVideos))
-      .subscribe((videos) => {
-        // for player brand collabs & fs videos
-        if (videos && videos.top_vids && videos.top_vids?.length > 0) {
-          videos.top_vids.forEach((video) => {
-            const newControl = new FormControl(
-              video,
-              Validators.pattern(YOUTUBE_REGEX)
-            );
-            this.fsVidsArray.push(newControl);
-          });
-        }
-        // for player brand collabs & fs videos
-        if (this.fsVidsArray.length !== 0) {
-          this.fsVidsArray.push(
-            new FormControl(null, [
-              Validators.required,
-              Validators.pattern(YOUTUBE_REGEX),
-            ])
-          );
-        }
-        this.fsArrayForm = new FormGroup({
-          top_vids: this.fsVidsArray,
-        });
-      });
-  }
+  // initFsArrayForm(): void {
+  //   const uid = localStorage.getItem('uid');
+  //   // for player brand collabs & fs videos
+  //   this.fsArrayForm = new FormGroup({
+  //     top_vids: new FormArray([
+  //       new FormControl(null, [
+  //         Validators.required,
+  //         Validators.pattern(YOUTUBE_REGEX),
+  //       ]),
+  //     ]),
+  //   });
+  //   this.ngFire
+  //     .collection(`freestylers/${uid}/additionalInfoFs`)
+  //     .doc('fsVideos')
+  //     .get()
+  //     .pipe(map((resp) => resp.data() as FsProfileVideos))
+  //     .subscribe((videos) => {
+  //       // for player brand collabs & fs videos
+  //       if (videos && videos.top_vids && videos.top_vids?.length > 0) {
+  //         videos.top_vids.forEach((video) => {
+  //           const newControl = new FormControl(
+  //             video,
+  //             Validators.pattern(YOUTUBE_REGEX)
+  //           );
+  //           this.fsVidsArray.push(newControl);
+  //         });
+  //       }
+  //       // for player brand collabs & fs videos
+  //       if (this.fsVidsArray.length !== 0) {
+  //         this.fsVidsArray.push(
+  //           new FormControl(null, [
+  //             Validators.required,
+  //             Validators.pattern(YOUTUBE_REGEX),
+  //           ])
+  //         );
+  //       }
+  //       this.fsArrayForm = new FormGroup({
+  //         top_vids: this.fsVidsArray,
+  //       });
+  //     });
+  // }
   onAddControl(controlName: string, formName: 'player' | 'fs'): void {
     let fmCtrl = new FormControl(null, [
       Validators.required,
@@ -448,39 +448,39 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     }
     this.playerArrayForm.reset();
   }
-  onSaveFreestylerArrayInfo(): Promise<any> {
-    // console.log(this.fsArrayForm.value);
-    if (
-      !this.fsArrayForm.value ||
-      this.fsArrayForm.value.top_vids.length === 0
-    ) {
-      return;
-    }
-    const newArrayDetails = {
-      top_vids: this.fsArrayForm.get('top_vids').value,
-    };
-    if (newArrayDetails.top_vids.length > 5) {
-      this.fsArrayForm.reset();
-      return;
-    }
-    const uid = localStorage.getItem('uid');
-    if (Object.keys(newArrayDetails).length !== 0) {
-      return this.ngFire
-        .collection('freestylers/' + uid + '/additionalInfoFs')
-        .doc('fsVideos')
-        .set(
-          {
-            ...newArrayDetails,
-          },
-          { merge: true }
-        )
-        .then(() => {
-          this.snackServ.displayCustomMsg('Updated Successfully!');
-          location.reload();
-        });
-    }
-    this.fsArrayForm.reset();
-  }
+  // onSaveFreestylerArrayInfo(): Promise<any> {
+  //   // console.log(this.fsArrayForm.value);
+  //   if (
+  //     !this.fsArrayForm.value ||
+  //     this.fsArrayForm.value.top_vids.length === 0
+  //   ) {
+  //     return;
+  //   }
+  //   const newArrayDetails = {
+  //     top_vids: this.fsArrayForm.get('top_vids').value,
+  //   };
+  //   if (newArrayDetails.top_vids.length > 5) {
+  //     this.fsArrayForm.reset();
+  //     return;
+  //   }
+  //   const uid = localStorage.getItem('uid');
+  //   if (Object.keys(newArrayDetails).length !== 0) {
+  //     return this.ngFire
+  //       .collection('freestylers/' + uid + '/additionalInfoFs')
+  //       .doc('fsVideos')
+  //       .set(
+  //         {
+  //           ...newArrayDetails,
+  //         },
+  //         { merge: true }
+  //       )
+  //       .then(() => {
+  //         this.snackServ.displayCustomMsg('Updated Successfully!');
+  //         location.reload();
+  //       });
+  //   }
+  //   this.fsArrayForm.reset();
+  // }
   onSaveSMInfo(): Promise<any> {
     // console.log(this.socialInfoForm);
     const newSocials: SocialMediaLinks = {
