@@ -66,7 +66,7 @@ export class TeamCommunicationService implements OnDestroy {
             const deny = ' has rejected the invitation for this fixture.';
             const pname = sessionStorage.getItem('name');
             const log: MemberResponseNotification = {
-              content: pname + (response ? accept : deny),
+              content: (pname && pname !== 'null' ? pname : 'Team Member') + (response ? accept : deny),
               time: new Date().getTime(),
             };
             // console.log(log);
