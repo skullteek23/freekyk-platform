@@ -152,6 +152,9 @@ export class AuthService {
     }
     return this.currentUser?.name;
   }
+  public updateAuthDisplayName(name: string) {
+    this.updateName(name);
+  }
   // public accessible functions
 
   // success display functions

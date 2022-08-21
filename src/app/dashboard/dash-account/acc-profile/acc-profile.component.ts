@@ -1,31 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, AbstractControl, } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UpdateInfoComponent } from 'src/app/shared/components/update-info/update-info.component';
 import { positionGroup } from 'src/app/shared/interfaces/others.model';
-import {
-  FsProfileVideos,
-  PlayerMoreInfo,
-  SocialMediaLinks,
-} from 'src/app/shared/interfaces/user.model';
+import { FsProfileVideos, PlayerMoreInfo, SocialMediaLinks, } from 'src/app/shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
-import {
-  ALPHA_W_SPACE,
-  ALPHA_NUM_SPACE,
-  BIO,
-  YOUTUBE_REGEX,
-  ALPHA_LINK,
-} from 'src/app/shared/Constants/REGEX';
+import { ALPHA_W_SPACE, ALPHA_NUM_SPACE, BIO, YOUTUBE_REGEX, ALPHA_LINK, } from 'src/app/shared/Constants/REGEX';
 import { PLAYING_POSITIONS } from 'src/app/shared/Constants/PLAYING_POSITIONS';
 import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -33,6 +17,7 @@ import { BIO_MAX_LIMIT } from '../../constants/constants';
 import { map } from 'rxjs/operators';
 import { DeactivateAccountComponent } from '../../dialogs/deactivate-account/deactivate-account.component';
 import { SOCIAL_MEDIA_PRE } from 'src/app/shared/Constants/DEFAULTS';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',
@@ -72,7 +57,8 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     }>,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService,
-    private locationServ: LocationCitiesService
+    private locationServ: LocationCitiesService,
+    private authService: AuthService
   ) { }
   ngOnInit(): void {
     this.initFormWithValues();
@@ -327,6 +313,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       }
       if (this.personalInfoForm.get('name').dirty && this.personalInfoForm.get('name').value) {
         newBasicDetails.name = this.personalInfoForm.get('name').value;
+        this.authService.updateAuthDisplayName(newBasicDetails['name'])
       }
 
       const uid = localStorage.getItem('uid');

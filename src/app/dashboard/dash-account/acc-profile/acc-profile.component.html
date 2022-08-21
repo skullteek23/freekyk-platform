@@ -136,7 +136,7 @@
       <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select City</mat-label>
         <mat-select formControlName="loc_city">
-          <mat-option>Select Country</mat-option>
+          <mat-option>Select City</mat-option>
           <mat-option *ngFor="let city of cities$ | async" [value]="city">
             {{ city }}
           </mat-option>
