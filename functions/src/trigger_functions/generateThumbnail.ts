@@ -53,20 +53,4 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
     return Promise.all(allPromises);
   }
   return false;
-
-  // const urlSnap = await bucket
-  //   .upload(thumbPath, {
-  //     destination: join(bucketDir, thumbName),
-  //     contentType,
-  //   })
-  //   .then((res) => {
-  //     return res[0].getSignedUrl({
-  //       action: 'read',
-  //       expires: new Date('31 December 2199'),
-  //     });
-  //   });
-
-  // uploadPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: urlSnap[0] }));
-  // uploadPromises.push(db.collection('freestylers').doc(uid).update({ imgpath_lg: urlSnap[0] }));
-  // uploadPromises.push(fs.remove(workingDir));
 }
