@@ -9,6 +9,8 @@
     "build-dev": "ng build admin --configuration development && ng build --configuration development && npm run deploy-dev",
     "build-prod": "ng build admin --configuration production && ng build --configuration production && npm run deploy-prod",
     "deploy": "npm run firebase-deploy-dev && npm run firebase-deploy-prod",
+    "deploy-functions-dev": "firebase use freekyk-development && firebase deploy --only functions",
+    "deploy-functions-prod": "firebase use freekyk-prod && firebase deploy --only functions",
     "deploy-dev": "firebase use freekyk-development && firebase deploy --only hosting",
     "deploy-prod": "firebase use freekyk-prod && firebase deploy --only hosting",
     "firebase-deploy-dev": "firebase use freekyk-development && firebase deploy",

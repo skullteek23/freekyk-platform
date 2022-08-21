@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ArraySorting } from '../../utils/array-sorting';
 export interface ListOption { viewValue: string, data: any };
 @Component({
   selector: 'app-search-autocomplete',
@@ -13,6 +14,7 @@ export class SearchAutocompleteComponent implements OnInit {
   @Input() placeholder = '';
   @Input() isDisabled = false;
   @Input() set options(value: ListOption[]) {
+    value.sort(ArraySorting.sortObjectByKey('viewValue'));
     this.optionsList = value;
     this.optionsListCache = value;
   }

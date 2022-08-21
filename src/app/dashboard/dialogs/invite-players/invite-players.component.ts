@@ -7,6 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { Invite } from 'src/app/shared/interfaces/notification.model';
 import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 
 @Component({
   selector: 'app-invite-players',
@@ -48,7 +49,8 @@ export class InvitePlayersComponent implements OnInit {
             } as PlayerBasicInfo)
           )
         ),
-        map((docs) => docs.filter((doc) => doc.id !== uid))
+        map((docs) => docs.filter((doc) => doc.id !== uid)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
   onSendInvites(plSelected: MatListOption[]): void {

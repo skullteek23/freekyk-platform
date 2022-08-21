@@ -6,7 +6,11 @@ const db = admin.firestore();
 export async function inviteCreationTrigger(snap: any, context: any): Promise<any> {
 
   const invite: Invite = snap.data() as Invite;
-  const notificationID = invite.id;
+  const notificationID = snap.id;
+
+  console.log(invite);
+  console.log(notificationID);
+
   if (invite && notificationID) {
     const notification: NotificationBasic = {
       type: 'invite',
@@ -16,7 +20,7 @@ export async function inviteCreationTrigger(snap: any, context: any): Promise<an
       title: 'Team Join Invite',
       senderName: invite.teamName,
     };
-    return db.collection(`players/${notification.receiverId}/Notifications`).doc(notificationID).set(notification);
+    return db.collection(`players/${invite.inviteeId}/Notifications`).doc(notificationID).set(notification);
   }
   return false;
 }
