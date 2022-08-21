@@ -1,22 +1,28 @@
 import { Storage } from '@google-cloud/storage';
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
 const gcs = new Storage();
 const db = admin.firestore();
+import * as functions from 'firebase-functions';
 
 export async function removeThumbnail(object: functions.storage.ObjectMetadata, context: any): Promise<any> {
-  if (!object || !object.name || !object.name.startsWith('image')) {
-    console.log('exiting function');
+
+  const fileName = object?.name;
+  if (!object || !fileName || !fileName.startsWith('image')) {
     return false;
   }
   const bucket = gcs.bucket(object.bucket);
-  const objName = object.name || '';
-  const uid = objName.split('_')[1];
-  const thumbObjName = 'thumb_' + uid;
+  const UID = fileName.split('_')[1];
+  const thumbObjName = 'thumb_' + UID;
   const allPromises: any[] = [];
-  const FieldValue = admin.firestore.FieldValue;
-  allPromises.push(db.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: FieldValue.delete() }));
-  allPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: FieldValue.delete() }));
-  await Promise.all(allPromises);
-  return bucket.file(thumbObjName).delete();
+
+  const deleteFile = bucket.file(thumbObjName);
+
+  if (deleteFile) {
+    allPromises.push(db.collection(`players/${UID}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: admin.firestore.FieldValue.delete() }));
+    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm: admin.firestore.FieldValue.delete() }));
+    allPromises.push(deleteFile.delete());
+    return Promise.all(allPromises);
+  }
+
+  return false;
 }

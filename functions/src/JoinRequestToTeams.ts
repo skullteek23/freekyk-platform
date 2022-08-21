@@ -16,7 +16,7 @@ export async function joinRequests(data: { capId: string[]; name: string }, cont
       const notification: NotificationBasic = {
         type: 'request',
         senderId: UID,
-        recieverId: ID,
+        receiverId: ID,
         date: admin.firestore.Timestamp.now(),
         title: 'Join Request',
         senderName: requesterName,

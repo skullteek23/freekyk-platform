@@ -6,7 +6,7 @@ export type CHALLENGE = 'team challenge';
 export interface NotificationBasic {
   type: TEAM_WELCOME | REQUEST | INVITE | CHALLENGE;
   senderId: string;
-  recieverId: string;
+  receiverId: string;
   date: Timestamp;
   title: string;
   senderName?: string | null;

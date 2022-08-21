@@ -27,7 +27,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore,
     @Inject(MAT_DIALOG_DATA) public data: string
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.data) {
@@ -81,10 +81,8 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       return this.onCloseDialog();
     }
     const uid = localStorage.getItem('uid');
-    this.uploadImageTask = this.ngStorage.upload('image_' + uid, this.$file);
-    const downloadURL: string = await this.uploadImageTask.then((res) =>
-      res.ref.getDownloadURL()
-    );
+    this.uploadImageTask = this.ngStorage.upload('/profileImages/image_' + uid, this.$file);
+    const downloadURL: string = await this.uploadImageTask.then((res) => res.ref.getDownloadURL());
     return this.ngFire
       .collection(`players/${uid}/additionalInfo`)
       .doc('otherInfo')

@@ -2,8 +2,8 @@ import * as admin from 'firebase-admin';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { assignParticipants } from './abstractFunctions';
-import { environment } from './environments/environment';
+import { assignSeasonParticipants } from './utils/utilities';
+import { environment } from './utils/environments/environment';
 
 const crypto = require('crypto');
 const db = admin.firestore();
@@ -48,7 +48,7 @@ export async function paymentVerification(data: any, context: any): Promise<any>
         tlogo: teamInfo.imgpath_logo,
       }
       allPromises.push(db.collection('seasonOrders').doc(data.razorpay_order_id).set(newOrder));
-      allPromises.push(assignParticipants(season, participantDetail))
+      allPromises.push(assignSeasonParticipants(season, participantDetail))
     }
   }
   return Promise.all(allPromises);

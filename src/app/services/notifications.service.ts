@@ -194,10 +194,10 @@ export class NotificationsService implements OnDestroy {
         map((resp) =>
           resp.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as NotificationBasic),
-              } as NotificationBasic)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as NotificationBasic),
+            } as NotificationBasic)
           )
         )
       );
@@ -211,10 +211,10 @@ export class NotificationsService implements OnDestroy {
           this.emptyInvites.next(responseData.length === 0);
           return responseData.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as Invite),
-              } as Invite)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as Invite),
+            } as Invite)
           );
         })
       );
@@ -248,10 +248,10 @@ export class NotificationsService implements OnDestroy {
           map((resp) =>
             resp.map(
               (doc) =>
-                ({
-                  id: doc.payload.doc.id,
-                  ...(doc.payload.doc.data() as NotificationBasic),
-                } as NotificationBasic)
+              ({
+                id: doc.payload.doc.id,
+                ...(doc.payload.doc.data() as NotificationBasic),
+              } as NotificationBasic)
             )
           )
         )

@@ -1,14 +1,17 @@
 import * as admin from 'firebase-admin';
-import { firestore } from 'firebase-admin';
-import { Invite, NotificationBasic } from '../../src/app/shared/interfaces/notification.model';
-import { SeasonBasicInfo, SeasonParticipants } from '../../src/app/shared/interfaces/season.model';
-import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
-import { Tmember } from '../../src/app/shared/interfaces/team.model';
-import { PlayerBasicInfo } from '../../src/app/shared/interfaces/user.model';
+import { Invite, NotificationBasic } from '../../../src/app/shared/interfaces/notification.model';
+import { SeasonBasicInfo, SeasonParticipants } from '../../../src/app/shared/interfaces/season.model';
+import { MatchFixture } from '../../../src/app/shared/interfaces/match.model';
+import { Tmember } from '../../../src/app/shared/interfaces/team.model';
+import { PlayerBasicInfo } from '../../../src/app/shared/interfaces/user.model';
 
 const db = admin.firestore();
 
-export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any> {
+export async function joinTeam(invite: Invite, inviteID: string): Promise<any> {
+
+  // const inviteID = invite.
+
+
   try {
     // get
     const playerSnap: PlayerBasicInfo = (await db.collection('players').doc(invite.inviteeId).get()).data() as PlayerBasicInfo;
@@ -18,7 +21,7 @@ export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any>
     const newNotif: NotificationBasic = {
       type: 'team welcome',
       senderId: invite.teamId,
-      recieverId: invite.inviteeId,
+      receiverId: invite.inviteeId,
       date: admin.firestore.Timestamp.fromDate(new Date()),
       title: 'Welcome to our Team',
       senderName: invite.teamName,
@@ -34,9 +37,9 @@ export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any>
 
     // update
     const allPromises: any[] = [];
-    allPromises.push(db.collection('teams/' + invite.teamId + '/additionalInfo').doc('members').update({
-      memCount: firestore.FieldValue.increment(1),
-      members: firestore.FieldValue.arrayUnion(newMember),
+    allPromises.push(db.collection(`teams/${invite.teamId}/additionalInfo`).doc('members').update({
+      memCount: admin.firestore.FieldValue.increment(1),
+      members: admin.firestore.FieldValue.arrayUnion(newMember),
     }));
     allPromises.push(db.collection('players').doc(invite.inviteeId).update({
       team: {
@@ -44,9 +47,9 @@ export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any>
         id: invite.teamId,
       },
     }));
-    allPromises.push(db.collection('players/' + invite.inviteeId + '/Notifications').add(newNotif));
-    allPromises.push(DeleteNotifById(inviteId, invite.inviteeId));
-    allPromises.push(DeleteInviteById(inviteId));
+    allPromises.push(db.collection(`players/${invite.inviteeId}/Notifications`).add(newNotif));
+    allPromises.push(db.collection(`players/${invite.inviteeId}/Notifications`).doc(inviteID).delete());
+    allPromises.push(db.collection('invites').doc(inviteID).delete());
     // update
 
     return await Promise.all(allPromises);
@@ -55,28 +58,7 @@ export async function onJoinTeam(invite: Invite, inviteId: string): Promise<any>
   }
 }
 
-export async function onRejectTeam(notifId: string, pid: string): Promise<any> {
-  return DeleteNotifById(notifId, pid);
-}
-
-export async function DeleteInviteById(invId: string): Promise<any> {
-  return await db.collection('invites').doc(invId).delete();
-}
-
-export async function DeleteNotifById(notifId: string, playerId: string): Promise<any> {
-  // notif id for team invites is same as invites id
-  return await db.collection('players/' + playerId + '/Notifications').doc(notifId).delete();
-}
-
-export async function SendJoinNotification(notif: NotificationBasic, recieverId: string, notifId: string): Promise<any> {
-  return await db.collection('players/' + recieverId + '/Notifications').doc(notifId).set(notif);
-}
-
-export async function getParticipants(sid: string): Promise<SeasonParticipants[]> {
-  return (await db.collection('seasons').doc(sid).collection('participants').get()).docs.map((doc) => doc.data() as SeasonParticipants);
-}
-
-export async function assignParticipants(season: SeasonBasicInfo, participant: SeasonParticipants): Promise<any> {
+export async function assignSeasonParticipants(season: SeasonBasicInfo, participant: SeasonParticipants): Promise<any> {
   const sid = season.id || '';
   const seasonName = season.name || '';
   const seasonFixturesData = (await db.collection('allMatches').where('season', '==', seasonName).get()).docs;
@@ -131,12 +113,12 @@ export async function assignParticipants(season: SeasonBasicInfo, participant: S
     if (fixture.home.name === 'TBD') {
       allPromises.push(db.collection('allMatches').doc(id).update({
         home: value,
-        team: admin.firestore.FieldValue.arrayUnion(value.name)
+        teams: admin.firestore.FieldValue.arrayUnion(value.name)
       }));
     } else if (fixture.away.name === 'TBD') {
       allPromises.push(db.collection('allMatches').doc(id).update({
         away: value,
-        team: admin.firestore.FieldValue.arrayUnion(value.name)
+        teams: admin.firestore.FieldValue.arrayUnion(value.name)
       }));
     }
   })
@@ -147,6 +129,7 @@ export async function assignParticipants(season: SeasonBasicInfo, participant: S
   allPromises.push(db.collection(`seasons/${sid}/participants`).add(participant));
   return Promise.all(allPromises);
 }
+
 export function sortObjectByKey(key: string, order = 'asc', isConvertNA = true): any {
   return function innerSort(a: any, b: any) {
     const isTypescriptProperty = key in a || key in b;

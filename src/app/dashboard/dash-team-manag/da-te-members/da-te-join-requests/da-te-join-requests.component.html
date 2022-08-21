@@ -10,31 +10,18 @@
     Invite more Players
   </button>
 </div>
-<mat-list
-  class="scroll"
-  *ngIf="(teamInvites$ | async)?.length != 0; else noreq"
->
+<mat-list class="scroll" *ngIf="(teamInvites$ | async)?.length != 0; else noreq">
   <mat-list-item *ngFor="let invite of teamInvites$ | async">
     <div class="full-width-table" fxLayoutAlign="space-between center">
       <span class="mat-body-1">{{ invite?.inviteeName }}</span>
       <div fxLayoutGap="8px" fxLayoutAlign="center center">
-        <a
-          *ngIf="invite?.status == 'reject'"
-          (click)="onSendAgain(invite)"
-          class="mat-caption"
-        >
+        <a *ngIf="invite?.status == 'reject'" (click)="onSendAgain(invite)" class="mat-caption">
           Resend Invite
         </a>
         <ng-container [ngSwitch]="invite?.status">
-          <span *ngSwitchCase="'wait'" class="material-icons-round"
-            >hourglass_empty</span
-          >
-          <span *ngSwitchCase="'accept'" class="material-icons-round"
-            >check_circle</span
-          >
-          <span *ngSwitchCase="'reject'" class="material-icons-round"
-            >replay</span
-          >
+          <span *ngSwitchCase="'wait'" class="material-icons-round">hourglass_empty</span>
+          <span *ngSwitchCase="'accept'" class="material-icons-round">check_circle</span>
+          <span *ngSwitchCase="'reject'" class="material-icons-round">replay</span>
         </ng-container>
         <span (click)="onDelete(invite.id)" class="material-icons-round red">
           delete

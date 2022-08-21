@@ -9,59 +9,48 @@ const db = admin.firestore();
 import * as functions from 'firebase-functions';
 
 export async function generateThumbnail(object: functions.storage.ObjectMetadata, context: any): Promise<any> {
-  if (!object || !object.name) {
-    console.log('exiting function');
+
+  const SIZE = 64;
+  const allPromises: any[] = [];
+  const filePath = object.name;
+  const contentType = object && object.contentType ? object.contentType : '';
+
+  if (!object || !filePath || !contentType.includes('image')) {
     return false;
   }
-  const bucket = gcs.bucket(object.bucket);
-  const contentType = object.contentType || '';
-  const filePath = object.name;
-  const fileNameTemp = filePath.split('/').pop();
-  const fileName = fileNameTemp || '';
-  const uid = fileName ? fileName.split('_')[1] : '';
-  const bucketDir = dirname(filePath);
 
+  const bucketRef = gcs.bucket(object.bucket);
+  const fileName = filePath.split('/').pop() || '';
+
+  if (fileName.includes('thumb')) {
+    return false;
+  }
+
+  const UID = fileName ? fileName.split('_')[1] : '';
+  const bucketDir = dirname(filePath);
   const workingDir = join(tmpdir(), 'thumbs');
   const tmpFilePath = join(workingDir, 'source.png');
-
-  if (fileName.includes('thumb') || !contentType.includes('image')) {
-    console.log('exiting function');
-    return false;
-  }
+  const thumbName = `/thumbnails/thumb_${UID}`;
+  const thumbPath = join(workingDir, thumbName);
 
   // 1. Ensure thumbnail dir exists
   await fs.ensureDir(workingDir);
 
   // 2. Download Source File
-  await bucket.file(filePath).download({
-    destination: tmpFilePath
-  });
+  await bucketRef.file(filePath).download({ destination: tmpFilePath });
 
-  // 3. Resize the images and define an array of upload promises
-  const sizes = [64];
-  const uploadPromises: any[] = [];
-  const thumbName = `thumb_${uid}`;
-  const thumbPath = join(workingDir, thumbName);
-
-  // Resize source image
-  await sharp(tmpFilePath).resize(sizes[0], sizes[0]).toFile(thumbPath);
+  // Resize source image using sharp library
+  await sharp(tmpFilePath).resize(SIZE, SIZE).toFile(thumbPath);
 
   // Upload to GCS
-  const urlSnap = await bucket
-    .upload(thumbPath, {
-      destination: join(bucketDir, thumbName),
-      contentType,
-    })
-    .then((res) => {
-      return res[0].getSignedUrl({
-        action: 'read',
-        expires: new Date('31 December 2199'),
-      });
-    });
+  const uploadedFile = await bucketRef.upload(thumbPath, { destination: join(bucketDir, thumbName), contentType });
+  const uploadedFilePath = uploadedFile && uploadedFile[0] ? uploadedFile[0].getSignedUrl({ action: 'read', expires: new Date('31 December 2199'), }) : null;
 
-  uploadPromises.push(db.collection('players').doc(uid).update({ imgpath_sm: urlSnap[0] }));
-  uploadPromises.push(fs.remove(workingDir));
-
-  // 4. Run the upload operations
-  return Promise.all(uploadPromises);
+  // Update player documents
+  if (uploadedFilePath && workingDir) {
+    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm: uploadedFilePath }));
+    allPromises.push(fs.remove(workingDir));
+    return Promise.all(allPromises);
+  }
+  return false;
 }

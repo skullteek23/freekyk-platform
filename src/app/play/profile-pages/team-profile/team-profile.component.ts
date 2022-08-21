@@ -174,7 +174,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
           const notif: NotificationBasic = {
             type: 'team challenge',
             senderId: this.uid,
-            recieverId: this.id,
+            receiverId: this.id,
             date: firebase.firestore.Timestamp.fromDate(new Date()),
             title: 'Team Challenge Recieved',
             senderName: team.hasTeam.name,
