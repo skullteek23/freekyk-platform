@@ -30,7 +30,7 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
   const bucketDir = dirname(filePath);
   const workingDir = join(tmpdir(), 'thumbs');
   const tmpFilePath = join(workingDir, 'source.png');
-  const thumbName = `/thumbnails/thumb_${UID}`;
+  const thumbName = `thumb_${UID}`;
   const thumbPath = join(workingDir, thumbName);
 
   // 1. Ensure thumbnail dir exists
@@ -43,7 +43,7 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
   await sharp(tmpFilePath).resize(SIZE, SIZE).toFile(thumbPath);
 
   // Upload to GCS
-  const uploadedFile = await bucketRef.upload(thumbPath, { destination: join(bucketDir, thumbName), contentType });
+  const uploadedFile = await bucketRef.upload(thumbPath, { destination: join(bucketDir, `/thumbnails/${thumbName}`), contentType });
   const uploadedFilePathTemp = uploadedFile && uploadedFile[0] ? await uploadedFile[0].getSignedUrl({ action: 'read', expires: new Date('31 December 2199') }) : null;
 
   // Update player documents
