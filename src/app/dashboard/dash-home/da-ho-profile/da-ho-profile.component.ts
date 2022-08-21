@@ -31,7 +31,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     private store: Store<{
       dash: DashState;
     }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -69,8 +69,8 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
             } else {
               return {
                 Age: this.getAge(info.playerMoreInfo.born),
-                Country: info.fsInfo.locCountry,
-                bio: info.fsInfo.bio?.slice(0, 30).concat('...'),
+                Country: info.playerMoreInfo.locCountry,
+                bio: info.playerMoreInfo.bio?.slice(0, 30).concat('...'),
               };
             }
           })

@@ -176,7 +176,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             Validators.pattern('^[0-9]*$'),
             Validators.required,
           ]),
-          bio: new FormControl(data.fsInfo.bio, [
+          bio: new FormControl(data.playerMoreInfo.bio, [
             Validators.maxLength(BIO_MAX_LIMIT),
             Validators.pattern(BIO),
           ]),
