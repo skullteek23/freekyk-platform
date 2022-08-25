@@ -5,6 +5,7 @@ import { ErrorComponent } from './error/error.component';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
 import { SeasonPanelComponent } from './season-panel/season-panel.component';
+import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
 import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
           { path: '', component: ViewSeasonComponent },
           { path: 'season', component: GenFixturesComponent },
           { path: 'season/:sid', component: GenFixturesComponent },
+          { path: 'update-match/:sid', component: UpdateMrComponent },
         ],
       },
       { path: 'grounds', component: GroundsPanelComponent },

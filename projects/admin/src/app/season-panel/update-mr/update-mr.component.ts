@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import {
   AbstractControl,
@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   MatchFixture,
@@ -20,52 +20,69 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-update-mr',
   templateUrl: './update-mr.component.html',
   styleUrls: ['./update-mr.component.css'],
 })
-export class UpdateMrComponent implements OnInit {
+export class UpdateMrComponent implements OnInit, OnDestroy {
   matchReport: FormGroup;
-  existingSeasons$: Observable<SeasonBasicInfo[]>;
   matches$: Observable<MatchFixture[]>;
   selectedSeason: string;
   selectedMatch: MatchFixture;
+
+  seasonName = '';
+  subscriptions = new Subscription();
+  matches: MatchFixture[] = [];
+  isLoading = false;
+  matchReportForm = new FormGroup({});
+
   constructor(
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackServ: SnackbarService
+    private snackServ: SnackbarService,
+    private route: ActivatedRoute
   ) {
-    this.getSeasons();
+    const qParams = this.route.snapshot.queryParams;
+    if (qParams && qParams.hasOwnProperty('name')) {
+      this.isLoading = true;
+      this.seasonName = qParams.name;
+      this.getMatches();
+    }
   }
 
   ngOnInit(): void {
-    this.matchReport = new FormGroup({
-      mid: new FormControl(null, Validators.required),
-      homeScore: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^[0-9]\d*$/),
-      ]),
-      awayScore: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^[0-9]\d*$/),
-      ]),
-      penalties: new FormControl(false, Validators.required),
-      matchEndDate: new FormControl(
-        null,
-        Validators.required,
-        this.PastDateChecker.bind(this)
-      ),
-      pen_resultHome: new FormControl({ value: null, disabled: true }, [
-        Validators.pattern(/^[0-9]\d*$/),
-      ]),
-      pen_resultAway: new FormControl({ value: null, disabled: true }, [
-        Validators.pattern(/^[0-9]\d*$/),
-      ]),
-      scorersHome: new FormArray([]),
-      scorersAway: new FormArray([]),
+    this.matchReportForm = new FormGroup({
+      id: new FormControl(null, Validators.required),
+      home: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]\d*$/),]),
+      away: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]\d*$/),]),
+      pen: new FormControl(false, Validators.required),
+      endDate: new FormControl(null, Validators.required, this.PastDateChecker.bind(this)),
+      penHomeScore: new FormControl({ value: null, disabled: true }, [Validators.pattern(/^[0-9]\d*$/),]),
+      penAwayScore: new FormControl({ value: null, disabled: true }, [Validators.pattern(/^[0-9]\d*$/),]),
+      scorerHome: new FormArray([]),
+      scorerAway: new FormArray([]),
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+
+  getMatches(): void {
+    this.subscriptions.add(
+      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonName).where('concluded', '==', false)).get()
+        .subscribe(response => {
+          if (response.docs.length) {
+            this.matches = response.docs.map(doc => { return { id: doc.id, ...doc.data() as MatchFixture } });
+            this.isLoading = false;
+          }
+        })
+    )
   }
   onSetPenalties(event: MatRadioChange) {
     event.value
@@ -122,36 +139,6 @@ export class UpdateMrComponent implements OnInit {
       this.snackServ.displayCustomMsg('Match updated successfully!');
       this.matchReport.reset();
     });
-  }
-  getSeasons() {
-    this.existingSeasons$ = this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(
-        map((resp) =>
-          resp.docs.map(
-            (doc) =>
-              <SeasonBasicInfo>{ id: doc.id, ...(<SeasonBasicInfo>doc.data()) }
-          )
-        )
-      );
-  }
-  getMatches(season: MatSelectChange) {
-    this.selectedSeason = season.value.id;
-    this.matches$ = this.ngFire
-      .collection('allMatches', (query) =>
-        query
-          .where('season', '==', season.value.name)
-          .where('concluded', '==', false)
-      )
-      .get()
-      .pipe(
-        map((resp) =>
-          resp.docs.map(
-            (doc) => <MatchFixture>{ id: doc.id, ...(<MatchFixture>doc.data()) }
-          )
-        )
-      );
   }
   onSelectMatch(match: MatSelectChange) {
     this.selectedMatch = match.value;

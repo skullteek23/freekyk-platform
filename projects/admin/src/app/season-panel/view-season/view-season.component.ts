@@ -60,8 +60,7 @@ export class ViewSeasonComponent implements OnInit {
     this.router.navigate(['/seasons', 'gallery', season.id], { queryParams: { 'name': season.name } });
   }
   onUpdateMatchReport(season: SeasonBasicInfo) {
-    return;
-    if (this.isSeasonStarted(season)) {
+    if (this.isSeasonStarted(season) && season.isFixturesCreated && !season.isSeasonEnded) {
       this.router.navigate(['/seasons', 'update-match', season.id], { queryParams: { 'name': season.name } });
     }
   }
