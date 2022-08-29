@@ -56,6 +56,7 @@ export class UpdateMrComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.matchReportForm = new FormGroup({
       id: new FormControl(null, Validators.required),
+      match: new FormControl(null, Validators.required),
       home: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]\d*$/),]),
       away: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]\d*$/),]),
       pen: new FormControl(false, Validators.required),
@@ -84,6 +85,11 @@ export class UpdateMrComponent implements OnInit, OnDestroy {
         })
     )
   }
+
+  onInputMatchId(mid) {
+    console.log(mid)
+  }
+
   onSetPenalties(event: MatRadioChange) {
     event.value
       ? this.matchReport.get('pen_resultHome').enable()

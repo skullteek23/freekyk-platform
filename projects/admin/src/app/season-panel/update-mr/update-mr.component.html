@@ -8,7 +8,7 @@
     fxLayout.lt-md="column">
     <mat-form-field fxFlex="30" appearance="outline" color="primary">
       <mat-label>Enter Match ID</mat-label>
-      <input type="text" matInput formControlName="id">
+      <input (ngModelChange)="onInputMatchId($event)" type="text" matInput formControlName="id">
     </mat-form-field>
     <span class="mat-body-2 or-text">OR</span>
     <mat-form-field fxFlex appearance="outline" color="primary">
