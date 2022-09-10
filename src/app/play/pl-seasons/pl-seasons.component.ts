@@ -84,18 +84,4 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
       map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
     );
   }
-
-  getSeasonStatus(start_date?, isFixturesCreated?: boolean, isSeasonEnded?: boolean): string {
-    const seasonTimeInMillis = (start_date as any).toMillis();
-    const currentTimeInMillis = new Date().getTime();
-    if (seasonTimeInMillis > currentTimeInMillis) {
-      return this.UPCOMING;
-    } else if (isFixturesCreated && !isSeasonEnded && seasonTimeInMillis <= currentTimeInMillis) {
-      return this.LIVE;
-    } else if (isSeasonEnded) {
-      return PlayConstants.SEASON_STATUS_ENDED;
-    } else {
-      return 'No Status';
-    }
-  }
 }

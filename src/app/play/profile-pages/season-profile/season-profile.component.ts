@@ -135,29 +135,7 @@ export class SeasonProfileComponent implements OnInit {
         })
       );
   }
-  onClickActionButton(): void {
-    const data = this.getSeasonStatus();
-    if (data.isUpcoming && !data.hasFixtures) {
-      this.snackServ.displayCustomMsg('Participation opening soon!');
-    } else if (data.isUpcoming && data.hasFixtures) {
-      this.onParticipate();
-    } else if (data.isOngoing) {
-      this.router.navigate(['/play', 'fixtures'], { queryParams: { s: this.seasonName } })
-    } else if (data.isEnded) {
-      this.router.navigate(['/play', 'standings'], { queryParams: { s: this.seasonName } });
-    }
-  }
-  get actionText(): string {
-    const data = this.getSeasonStatus();
-    if (data.isUpcoming) {
-      return 'Participate';
-    } else if (data.isOngoing) {
-      return 'View Fixtures';
-    } else if (data.isEnded) {
-      return 'View Standings'
-    }
-    return 'NA';
-  }
+
   onParticipate(): void {
     const uid = localStorage.getItem('uid');
     this.router.navigate(['/dashboard/participate']);
@@ -177,16 +155,16 @@ export class SeasonProfileComponent implements OnInit {
     this.enlServ.onOpenPhoto(this.imgPath);
   }
 
-  getSeasonStatus(): any {
-    if (this.seasonInfo) {
-      const seasonTimeInMillis = (this.seasonInfo.start_date as any).toMillis();
-      const currentTimeInMillis = new Date().getTime();
-      const isUpcoming = seasonTimeInMillis > currentTimeInMillis;
-      const isEnded = seasonTimeInMillis < currentTimeInMillis && this.seasonInfo.isSeasonEnded;
-      const isOngoing = seasonTimeInMillis <= currentTimeInMillis
-      const hasFixtures = this.seasonInfo.isFixturesCreated || false;
-      return { isUpcoming, isEnded, isOngoing, hasFixtures }
-    }
-    return {};
-  }
+  // getSeasonStatus(): any {
+  //   if (this.seasonInfo) {
+  //     const seasonTimeInMillis = (this.seasonInfo.start_date as any).toMillis();
+  //     const currentTimeInMillis = new Date().getTime();
+  //     const isUpcoming = seasonTimeInMillis > currentTimeInMillis;
+  //     const isEnded = seasonTimeInMillis < currentTimeInMillis && this.seasonInfo.isSeasonEnded;
+  //     const isOngoing = seasonTimeInMillis <= currentTimeInMillis
+  //     const hasFixtures = this.seasonInfo.isFixturesCreated || false;
+  //     return { isUpcoming, isEnded, isOngoing, hasFixtures }
+  //   }
+  //   return {};
+  // }
 }

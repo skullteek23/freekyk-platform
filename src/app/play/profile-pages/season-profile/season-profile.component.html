@@ -20,11 +20,27 @@
       <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p>
-      <button (click)="onClickActionButton()" class="primaryButton buttonText">
-        <div fxLayoutGap="8px" fxLayoutAlign="center center">
-          <span [matTooltip]="actionText">{{ actionText }}</span>
-        </div>
-      </button>
+      <div fxLayout.gt-sm fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign.gt-sm="start center"
+        fxLayoutAlign.lt-md="stretch center">
+        <button (click)="onParticipate()" *ngIf="(seasonInfo$ | async)?.status !== 'FINISHED'"
+          class="primaryButton buttonText">
+          <div fxLayoutGap="8px" fxLayoutAlign="center center">
+            <span matTooltip="Participate in this season">Participate</span>
+          </div>
+        </button>
+        <button [routerLink]="['/play', 'fixtures']" [queryParams]="{s: this.seasonName}"
+          class="primaryButton buttonText" *ngIf="(seasonInfo$ | async)?.status !== 'FINISHED'">
+          <div fxLayoutGap="8px" fxLayoutAlign="center center">
+            <span matTooltip="View Fixtures">View Fixtures</span>
+          </div>
+        </button>
+        <button [routerLink]="['/play', 'standings']" [queryParams]="{s: this.seasonName}"
+          class="primaryButton buttonText">
+          <div fxLayoutGap="8px" fxLayoutAlign="center center">
+            <span matTooltip="View Standings">View Standings</span>
+          </div>
+        </button>
+      </div>
     </div>
   </section>
 </div>

@@ -107,6 +107,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         cont_tour: this.seasonDraftData.basicInfo?.containingTournaments,
         feesPerTeam: this.seasonDraftData.basicInfo?.fees,
         discount: this.seasonDraftData.basicInfo?.discount,
+        status: 'PUBLISHED'
       }
       const seasonAbout: SeasonAbout = {
         description: this.seasonDraftData.basicInfo?.description,

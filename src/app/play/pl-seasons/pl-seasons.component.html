@@ -43,10 +43,8 @@
             </button>
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px" class="status-container">
-            <span
-              [ngClass]="{'status-live': getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) === LIVE, 'status-upcoming': getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) === UPCOMING }"
-              class="mat-caption status left">
-              {{ getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) }}
+            <span [ngClass]="{'status-live': season.status === 'PUBLISHED'}" class="mat-caption status left">
+              {{ season.status === 'PUBLISHED' ? 'LIVE' : season.status }}
             </span>
           </div>
         </div>

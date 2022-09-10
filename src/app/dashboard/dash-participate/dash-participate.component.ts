@@ -75,7 +75,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
           resp.forEach(doc => {
             const data = doc.payload.doc.data() as SeasonBasicInfo;
             const id = doc.payload.doc.id;
-            if (data.isFixturesCreated && !data.isSeasonEnded) {
+            if (data.status !== 'FINISHED') {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
           })

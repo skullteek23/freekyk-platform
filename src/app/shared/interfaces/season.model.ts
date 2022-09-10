@@ -10,9 +10,7 @@ export interface SeasonBasicInfo {
   cont_tour: string[];
   feesPerTeam: number;
   discount: number;
-  isFixturesCreated?: boolean;
-  isSeasonEnded?: boolean;
-  status?: statusType;
+  status: statusType;
   id?: string;
 }
 export interface SeasonAbout {
