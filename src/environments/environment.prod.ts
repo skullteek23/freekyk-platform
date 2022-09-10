@@ -10,6 +10,7 @@ export const environment = {
     messagingSenderId: '678320827100',
     appId: '1:678320827100:web:d14c29c405b86b825a2219',
     measurementId: 'G-K55NRR7QXM',
+    url: 'https://freekyk-prod.web.app'
   },
   // live api keys
   razorPay: {

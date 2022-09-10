@@ -1,3 +1,4 @@
+export type statusType = 'PUBLISHED' | 'DRAFTED' | 'FINISHED' | 'READY TO PUBLISH';
 export interface SeasonBasicInfo {
   name: string;
   imgpath: string;
@@ -8,8 +9,10 @@ export interface SeasonBasicInfo {
   start_date: Date;
   cont_tour: string[];
   feesPerTeam: number;
-  isFixturesCreated: boolean;
-  isSeasonEnded: boolean;
+  discount: number;
+  isFixturesCreated?: boolean;
+  isSeasonEnded?: boolean;
+  status?: statusType;
   id?: string;
 }
 export interface SeasonAbout {
@@ -34,4 +37,12 @@ export interface SeasonParticipants {
   tid: string;
   tname: string;
   tlogo: string;
+}
+
+export interface SeasonDraft {
+  lastUpdated: number;
+  draftID: string;
+  status: statusType;
+  basicInfo?: any;
+  grounds?: any[];
 }

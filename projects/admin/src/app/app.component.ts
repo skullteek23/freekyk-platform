@@ -1,5 +1,4 @@
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,17 +9,29 @@ import { filter, map } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'admin';
+export class AppComponent implements OnDestroy {
+
+  activeLink = '';
   cols: number;
-  watcher = new Subscription();
   links: any[] = [
-    { name: 'seasons', route: 'seasons' },
-    { name: 'grounds', route: 'grounds' }
+    { name: 'seasons', route: '/seasons/list' },
+    { name: 'grounds', route: '/grounds' }
   ];
-  activeLink = 'seasons';
+  title = 'admin';
+  subscriptions = new Subscription();
+
   constructor(private mediaObs: MediaObserver, private router: Router) {
-    this.watcher.add(this.mediaObs
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        const route = event.url.split('/');
+        if (route.length === 2 && route[1] === '') {
+          this.router.navigate(['/seasons/list']);
+        } else {
+          this.activeLink = route[1];
+        }
+      }
+    }));
+    this.subscriptions.add(this.mediaObs
       .asObservable()
       .pipe(
         filter((changes: MediaChange[]) => changes.length > 0),
@@ -35,18 +46,14 @@ export class AppComponent implements OnInit, OnDestroy {
           this.cols = 3;
         }
       }));
-    // this.watcher.add(this.router.events.subscribe((event: any) => {
-    //   if (event instanceof NavigationEnd) {
-    //     this.activeLink = event.url.slice('/'.length);
-    //   }
-    // }))
-  }
-  ngOnInit(): void {
-    this.router.navigate(['/seasons']);
   }
   ngOnDestroy(): void {
-    if (this.watcher) {
-      this.watcher.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
+  }
+
+  goHome(): void {
+    this.router.navigate(['/seasons/list']);
   }
 }

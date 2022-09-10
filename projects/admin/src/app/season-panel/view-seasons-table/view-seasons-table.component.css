@@ -1,3 +1,26 @@
+.table-container {
+  height: 500px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 959px) {
+  .table-container {
+    height: 450px;
+  }
+}
+
+.selected-row:hover {
+  background-color: var(--grey4);
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border: 1px solid var(--grey5);
+}
+
 .mat-column-season {
   width: 300px;
   text-align: left;
@@ -13,22 +36,21 @@ a.disabled {
   color: grey !important;
 }
 
-.row {
-  cursor: pointer;
-}
-
 .row:hover span,
 .row:hover div .material-icons-round {
   color: var(--primaryDarkColor);
 }
 
-.red {
-  color: var(--red);
-}
+
 
 .season-ended .row:hover span,
 .season-ended .row:hover div .material-icons-round,
 .season-ended span,
 .season-ended div .material-icons-round {
   opacity: 0.5;
+}
+
+.button-container {
+  margin-top: 20px;
+  margin-bottom: 8px !important;
 }

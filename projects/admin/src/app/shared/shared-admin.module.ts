@@ -10,6 +10,7 @@ import { PhotoUploaderComponent } from './components/photo-uploader/photo-upload
 import { TickAnimationComponent } from './components/tick-animation/tick-animation.component';
 import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ConfirmationBoxComponent } from './components/confirmation-box/confirmation-box.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FileUploaderComponent,
     NumberToAMPMPipe,
     TickAnimationComponent,
-    FixtureBasicComponent
+    FixtureBasicComponent,
+    ConfirmationBoxComponent
   ],
   imports: [CommonModule, AppMaterialModule, ReactiveFormsModule, FlexLayoutModule],
   exports: [
@@ -29,7 +31,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FileUploaderComponent,
     NumberToAMPMPipe,
     TickAnimationComponent,
-    FixtureBasicComponent
+    FixtureBasicComponent,
+    ConfirmationBoxComponent
   ],
 })
 export class SharedAdminModule { }

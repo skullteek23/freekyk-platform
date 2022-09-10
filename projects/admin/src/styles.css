@@ -3,7 +3,6 @@
 /* default settings */
 html,
 body {
-  height: 100%;
   font-size: 15px;
   margin: 0;
   font-family: "Open Sans", sans-serif;
@@ -65,6 +64,26 @@ a:hover {
   color: var(--primaryLightColor);
 }
 
+.green {
+  color: var(--primaryDarkColor);
+}
+
+.red {
+  color: var(--red);
+}
+
+.yellow {
+  color: var(--premiumServiceColor);
+}
+
+.grey {
+  color: var(--grey1);
+}
+
+.greenLight {
+  color: var(--primaryColor)
+}
+
 .shine {
   background: #f6f7f8;
   background-image: linear-gradient(to right,
@@ -94,6 +113,7 @@ mat-table {
   padding: 0 16px !important;
 }
 
+.extra-large-dialogs .mat-dialog-container mat-toolbar,
 .large-dialogs .mat-dialog-container mat-toolbar {
   padding: 0 16px !important;
 }
@@ -143,12 +163,25 @@ mat-table {
   overflow-y: auto;
 }
 
+app-fixture-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
 .container-2 {
   box-sizing: border-box;
   padding: 16px;
   height: calc(100% - 64px);
   max-height: calc(100% - 64px);
   min-height: calc(100% - 64px);
+}
+
+.container-2 .mat-horizontal-content-container {
+  padding: 0px !important;
+}
+
+.container-2 .mat-horizontal-stepper-header {
+  padding: 0px 20px !important;
 }
 
 .container-2 .dialogData {
@@ -188,6 +221,18 @@ mat-table {
   min-height: 80vh;
   width: 80vw;
   max-width: 740px;
+  min-width: auto;
+}
+
+.extra-large-dialogs .mat-dialog-container {
+  padding: 0px;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 85vh;
+  max-height: 85vh;
+  min-height: 85vh;
+  width: 80vw;
   min-width: auto;
 }
 
@@ -450,6 +495,7 @@ mat-table {
   }
 
   .fk-dialogs,
+  .extra-large-dialogs,
   .large-dialogs {
     max-width: 100vw !important;
     width: 100vw;
@@ -457,6 +503,7 @@ mat-table {
   }
 
   .fk-dialogs .mat-dialog-container,
+  .extra-large-dialogs .mat-dialog-container,
   .large-dialogs .mat-dialog-container {
     padding: 0px !important;
     margin: 0px !important;
@@ -773,4 +820,75 @@ mat-table {
 
 .update-match-report.mat-select-panel .mat-option {
   height: 53px !important;
+}
+
+.create-season-container .fixture-table-container .mat-column-id {
+  width: 20%;
+  padding-right: 10px;
+}
+
+.create-season-container .fixture-table-container {
+  height: 100%;
+  max-height: 340px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 1px solid var(--grey5);
+}
+
+.create-season-container .fixture-table-container .mat-column-home {
+  width: 9%;
+}
+
+.create-season-container .fixture-table-container .mat-column-away {
+  width: 9%;
+}
+
+.create-season-container .fixture-table-container .mat-column-date {
+  width: 16%;
+}
+
+.create-season-container .fixture-table-container .mat-column-location {
+  width: 25%;
+}
+
+.create-season-container .fixture-table-container .mat-column-ground {
+  width: 21%;
+}
+
+.season-page-container .fixture-table-container {
+  height: 100%;
+  max-height: 500px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 1px solid var(--grey5);
+  margin-top: 16px;
+}
+
+.season-page-container .fixture-table-container .mat-column-id {
+  width: 20%;
+  padding-right: 10px;
+}
+
+.season-page-container .fixture-table-container .mat-column-home {
+  width: 9%;
+}
+
+.season-page-container .fixture-table-container .mat-column-away {
+  width: 9%;
+}
+
+.season-page-container .fixture-table-container .mat-column-date {
+  width: 16%;
+}
+
+.season-page-container .fixture-table-container .mat-column-location {
+  width: 25%;
+}
+
+.season-page-container .fixture-table-container .mat-column-ground {
+  width: 21%;
 }

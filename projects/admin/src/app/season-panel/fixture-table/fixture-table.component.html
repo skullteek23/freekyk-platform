@@ -1,4 +1,4 @@
-<div class="table-container">
+<div class="fixture-table-container">
   <table mat-table [dataSource]="dataSource" matSort>
 
     <ng-container [matColumnDef]="TABLE_COLUMNS.MATCH_ID" sticky>
@@ -35,6 +35,10 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.GROUND }}</th>
       <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.GROUND] }} </td>
       <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container>
+
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

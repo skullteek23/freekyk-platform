@@ -198,14 +198,12 @@ export interface tempTour {
   startDate: Date;
   isFixturesEmpty?: boolean;
 }
-export interface CloudFunctionFixtureData {
-  sid: string;
+export interface fixtureGenerationData {
   sName: string;
   grounds: GroundPrivateInfo[];
   matches: any;
   startDate: Date;
   oneMatchDur: number;
-  tour_type: string | string[];
   teamParticipating: number;
 }
 export interface GroundTimings {

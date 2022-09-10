@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
-import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
-import { CloudFunctionFixtureData } from 'src/app/shared/interfaces/others.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from "firebase/app";
-import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
+import firebase from 'firebase/app';
+import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
+import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
+import { statusType } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { element } from 'protractor';
+import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/constants';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
+export class GenerateFixturesService {
 
-export class GenFixtService {
-  onGenerateDummyFixtures(data: CloudFunctionFixtureData) {
+  constructor(private ngFire: AngularFirestore) { }
+
+  onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
     let fcpMatches = data.matches.fcp;
     let fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
     let fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
@@ -90,7 +92,7 @@ export class GenFixtService {
         id: this.getMID(element.type, i)
       }
     })
-    return (fixtures);
+    return fixtures && fixtures.length ? fixtures : [];
   }
 
   getPublishableFixture(data: dummyFixture[]) {
@@ -164,18 +166,21 @@ export class GenFixtService {
     }
     return batch.commit();
   }
-  updateSeason(sid: string) {
-    if (!sid) {
-      return;
-    }
-    return this.ngFire.collection('seasons').doc(sid).update({
-      isFixturesCreated: true
-    })
 
-  }
+  // updateSeason(sid: string) {
+  //   if (!sid) {
+  //     return;
+  //   }
+  //   return this.ngFire.collection('seasons').doc(sid).update({
+  //     isFixturesCreated: true
+  //   })
+
+  // }
+
   calculateTotalTournamentMatches(teams: number): number {
     return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);
   }
+
   private getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
     const uniqueID = this.ngFire.createId().slice(0, 8).toLocaleUpperCase();
     switch (type) {
@@ -184,14 +189,37 @@ export class GenFixtService {
       case 'FCP': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FCP}-${index}`;
     }
   }
+
   private calculateTotalLeagueMatches(teams: number): number {
     return !teams ? 0 : (teams * (teams - 1)) / 2;
   }
+
   private calculateTotalKnockoutMatches(teams: number): number {
     return !teams ? 0 : teams - 1;
   }
+
   private getDifference(a: number, b: number): number {
     return a - b;
   }
-  constructor(private ngFire: AngularFirestore) { }
+
+  getStatusClass(status: statusType): any {
+    if (this.isSeasonLive(status)) {
+      return { 'green': true };
+    } else if (status === 'READY TO PUBLISH') {
+      return { 'yellow': true };
+    } else if (status === 'DRAFTED') {
+      return { 'grey': true };
+    } else if (this.isSeasonFinished(status)) {
+      return { 'greenLight': true };
+    }
+    return {};
+  }
+
+  isSeasonLive(status: statusType): boolean {
+    return status === 'PUBLISHED';
+  }
+
+  isSeasonFinished(status: statusType): boolean {
+    return status === 'FINISHED';
+  }
 }

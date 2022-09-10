@@ -1,0 +1,49 @@
+<div fxLayoutAlign="end center" class="button-container">
+  <button (click)="createSeason()" class="primaryButton buttonText">
+    Create New Season
+  </button>
+</div>
+<div class="table-container">
+  <table mat-table [dataSource]="seasons">
+    <ng-container matColumnDef="sno">
+      <th mat-header-cell *matHeaderCellDef>S.No.</th>
+      <td class="row" mat-cell *matCellDef="let i = index; let data">
+        <span class="mat-body-2">
+          {{ i + 1 }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="season">
+      <th mat-header-cell *matHeaderCellDef>Season</th>
+      <td class="row" mat-cell *matCellDef="let data">
+        <div fxLayoutGap="8px" fxLayoutAlign="start center">
+          <span class="mat-body-2">
+            {{ data.basicInfo?.name }}
+          </span>
+          <span *ngIf="isSeasonLive(data.status)" matTooltip="Live" class="material-icons-round red">sensors</span>
+          <span *ngIf="isSeasonFinished(data.status)" matTooltip="Finished"
+            class="material-icons-round greenLight">assignment_turned_in</span>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Start Date</th>
+      <td class="row" mat-cell *matCellDef="let data">
+        <span class="mat-body-2">
+          {{ data.start_date | date: 'fullDate' }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let data">
+        <span class="mat-body-2" [ngClass]="getStatusClass(data.status)">
+          {{ data.status }}
+        </span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="cols; sticky: true"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: cols" class="selected-row" routerLink="/seasons/s/{{myRowData.id}}">
+    </tr>
+  </table>
+</div>

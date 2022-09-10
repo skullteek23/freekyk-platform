@@ -1,0 +1,36 @@
+<form [formGroup]="groundsForm" class="form-container" fxLayout="column" fxLayoutAlign="stretch center">
+  <ng-container *ngIf="lines.length > 2">
+    <app-line-info-display fxFlexFill [heading]="lines[0].heading" [content]="lines[0].content">
+    </app-line-info-display>
+    <app-line-info-display fxFlexFill [heading]="lines[1].heading" [content]="lines[1].content">
+    </app-line-info-display>
+    <app-line-info-display fxFlexFill [heading]="lines[2].heading" [content]="lines[2].content | date: 'fullDate'">
+    </app-line-info-display>
+  </ng-container>
+  <div class="heading" fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center stretch" fxLayout.lt-md="column"
+    fxLayout fxLayoutGap="16px">
+    <span class="mat-body-2">Available Ground(s) in {{location?.city + ', ' + location?.state}} </span>
+    <!-- <i class="mat-caption">Ground not listed here?&nbsp; <a (click)="onAddGround()"> Add here</a> </i> -->
+  </div>
+  <mat-selection-list (selectionChange)="onChooseGround()" class="list" color="primary" multiple>
+    <mat-list-option [disabled]="isGroundDisabled(ground)" [value]="ground"
+      *ngFor="let ground of grounds; last as last">
+      <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+        <span class="mat-body">
+          {{ ground.name }}
+        </span>
+        <span class="mat-body grey">
+          {{ "|" }}
+        </span>
+        <span *ngIf="isGroundDisabled(ground)" class="mat-body red">
+          {{ "Ground not available" }}
+        </span>
+        <span *ngIf="isGroundDisabled(ground) === false" class="mat-body grey"
+          [matTooltip]="getAvailableDays(ground.timings)">
+          {{ "Available on " + getAvailableDays(ground.timings) }}
+        </span>
+      </div>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </mat-list-option>
+  </mat-selection-list>
+</form>

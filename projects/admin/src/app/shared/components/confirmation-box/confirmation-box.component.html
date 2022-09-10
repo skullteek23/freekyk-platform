@@ -1,0 +1,9 @@
+<div mat-dialog-content>
+  <p>Are you sure you want to Exit?</p>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+  <button mat-button cdkFocusInitial (click)="onCloseDialog(false)">
+    Cancel
+  </button>
+  <button mat-button color="warn" (click)="onCloseDialog(true)">Yes</button>
+</div>

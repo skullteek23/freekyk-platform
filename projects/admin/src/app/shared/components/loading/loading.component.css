@@ -1,0 +1,16 @@
+.loading-container {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: white;
+  opacity: 0.8;
+  height: 100vh;
+  width: 100vw;
+  z-index: 99999;
+}
+
+body {
+  background: white !important;
+}

@@ -1,0 +1,60 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">
+    Create Season
+  </span>
+</mat-toolbar>
+<div class="container-2 create-season-container" fxLayout="column" fxLayoutGap="20px">
+  <div class="season-heading mat-subheading-2" *ngIf="seasonName">
+    {{seasonName}}
+  </div>
+  <mat-horizontal-stepper [linear]="true">
+    <mat-step label="Add Season" [stepControl]="seasonForm">
+      <app-add-season></app-add-season>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>
+        <button type="button" [disabled]="!isSeasonFormValid" class="primaryButton buttonText"
+          (click)="onSaveDraft()">Save & Next</button>
+      </div>
+    </mat-step>
+    <mat-step label="Select Ground(s)" [stepControl]="groundForm">
+      <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
+        <button type="button" [disabled]="!isGroundFormValid" class="primaryButton buttonText"
+          (click)="onUpdateDraft()">Save & Next</button>
+      </div>
+    </mat-step>
+    <mat-step label="Generate Fixtures" [stepControl]="fixtureForm">
+      <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
+        <button type="button" [disabled]="!isFixtureFormValid" class="primaryButton buttonText"
+          (click)="onConfirmFixtures()">Confirm Fixtures</button>
+      </div>
+    </mat-step>
+    <mat-step label="Done">
+      <app-tick-animation *ngIf="!isLoaderShown"></app-tick-animation>
+      <p class="mat-body-1 center">
+        Wohoo!!! Your Season has been published
+      </p>
+      <p class="mat-caption center">
+        You can now edit only your Season name, Description and Season Image
+      </p>
+      <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="16px" class="section-space-top">
+        <button (click)="navigateToDraftAndClose(draftID)" class="primaryButton buttonText">
+          View your season
+        </button>
+        <button (click)="navigateToListAndClose()" class="secondaryButton buttonText">
+          Go to Admin Home
+        </button>
+      </div>
+      <p class="mat-caption center section-space-top">
+        Please contact freekyk123@gmail.com in case of any queries.
+      </p>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

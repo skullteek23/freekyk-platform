@@ -1,3 +1,5 @@
+import { environment } from "src/environments/environment";
+
 export class MatchConstants {
   public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
   public static DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
@@ -20,12 +22,12 @@ export class MatchConstants {
     MIN: 1,
     MAX: 365,
   }
+  public static SEASON_URL = environment?.firebase?.url + '/s/';
 }
-export const SEASON_PROD_URL = 'https://freekyk-prod.web.app/s/';
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',
   DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png',
-  DEFAULT_PLACEHOLDER: 'assets/placeholder_product.png',
+  DEFAULT_PLACEHOLDER: 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg',
   DEFAULT_IMAGE_URL: 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
 }
 

@@ -2,14 +2,14 @@
   <span class="mat-title">
     {{ "freekyk admin console" | titlecase }}
   </span>
-  <button mat-mini-fab color="primary" [routerLink]="['/seasons']">
+  <button mat-mini-fab color="primary" (click)="goHome()">
     <span class="material-icons-round"> home </span>
   </button>
 </div>
 <div class="container section-space-bottom">
   <nav mat-tab-nav-bar color="primary">
-    <a mat-tab-link *ngFor="let link of links" (click)="activeLink = link.route" [routerLink]="[link.route]"
-      [active]="activeLink == link.route">
+    <a mat-tab-link *ngFor="let link of links" (click)="activeLink = link.route" routerLink="{{link.route}}"
+      [active]="activeLink == link.name">
       {{ link.name | titlecase }}
     </a>
   </nav>

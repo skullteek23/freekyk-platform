@@ -1,4 +1,4 @@
-ul.matches-container li {
+/* ul.matches-container li {
   display: inline-block;
   margin-right: 10px;
 }
@@ -37,10 +37,6 @@ mat-selection-list {
   color: var(--red);
 }
 
-.season-heading {
-  text-align: center;
-  margin-top: 16px;
-}
 
 .fixtures {
   height: 100%;
@@ -49,4 +45,16 @@ mat-selection-list {
 
 .buttons-container-generate {
   margin: 100px 0 0;
+} */
+.container-2 {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.action-buttons-container {
+  margin-top: 20px;
+}
+
+.season-heading {
+  text-align: center;
 }

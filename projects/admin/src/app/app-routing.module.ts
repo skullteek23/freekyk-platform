@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { ErrorComponent } from './error/error.component';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
-import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
+import { CreateSeasonContainerComponent } from './season-panel/create-season-container/create-season-container.component';
 import { SeasonPanelComponent } from './season-panel/season-panel.component';
-import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
-import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
+import { ViewSeasonsTableComponent } from './season-panel/view-seasons-table/view-seasons-table.component';
+import { CanDeactivateGuardService } from './shared/guards/can-deactivate-guard.service';
+import { ViewSeasonDraftComponent } from './season-panel/view-season-draft/view-season-draft.component';
 
 const routes: Routes = [
   {
@@ -17,10 +18,11 @@ const routes: Routes = [
         path: 'seasons',
         component: SeasonPanelComponent,
         children: [
-          { path: '', component: ViewSeasonComponent },
-          { path: 'season', component: GenFixturesComponent },
-          { path: 'season/:sid', component: GenFixturesComponent },
-          { path: 'update-match/:sid', component: UpdateMrComponent },
+          { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
+          { path: 'list', component: ViewSeasonsTableComponent },
+          { path: 'create', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
+          { path: 'create/:draftID', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
+          { path: 's/:draftid', component: ViewSeasonDraftComponent }
         ],
       },
       { path: 'grounds', component: GroundsPanelComponent },
@@ -34,7 +36,7 @@ const routes: Routes = [
       code: '404',
     },
   },
-  { path: '**', redirectTo: 'error' },
+  // { path: '**', redirectTo: 'error' },
 ];
 
 @NgModule({

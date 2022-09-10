@@ -1,0 +1,126 @@
+<app-loading *ngIf="isLoaderShown"></app-loading>
+<div fxLayoutAlign="start center" class="back-button">
+  <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
+  <a [routerLink]="['/seasons/list']">Go Back to All Seasons</a>
+</div>
+<mat-card fxLayoutAlign="space-between center" fxLayout="row">
+  <span class="mat-subheading-2">
+    {{ seasonDraftData?.basicInfo?.name }}
+  </span>
+  <div fxLayout="column" fxLayoutAlign="center end">
+    <span class="mat-subheading-1" [ngClass]="getStatusClass()">
+      {{seasonDraftData?.status}}
+    </span>
+    <span class="mat-body-1">
+      Last updated on {{ seasonDraftData?.lastUpdated | date: 'medium' }}
+    </span>
+  </div>
+</mat-card>
+<mat-card class="info-card">
+  <div fxLayoutAlign="space-between start">
+    <div>
+      <div class="text-container">
+        <h4>Season Name</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.name }}
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Location</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.city + ", " + seasonDraftData?.basicInfo?.state }}
+        </p>
+      </div>
+      <div class="text-container" fxLayoutAlign="start start" fxLayoutGap="30px" fxLayout>
+        <div>
+          <h4>Fees</h4>
+          <p class="mat-body-1">
+            {{ seasonDraftData?.basicInfo?.fees }}
+          </p>
+        </div>
+        <div>
+          <h4>Apply Discount</h4>
+          <p class="mat-body-1">
+            {{ seasonDraftData?.basicInfo?.discount }}%
+          </p>
+        </div>
+        <div>
+          <h4>Payable Fees (per team)</h4>
+          <p class="mat-body-2">
+            {{ finalFees }}
+          </p>
+        </div>
+      </div>
+      <div class="text-container">
+        <h4 fxLayoutAlign="start center" fxLayoutGap="4px">
+          <span>
+            Description
+          </span>
+          <span class="material-icons-round cursors" (click)="editSeasonInfo()">edit_note</span>
+        </h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.description }}
+        </p>
+      </div>
+      <div class="text-container">
+        <h4 fxLayoutAlign="start center" fxLayoutGap="4px">
+          <span>
+            Rules
+          </span>
+          <span class="material-icons-round cursors" (click)="editSeasonInfo()">edit_note</span>
+        </h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.rules }}
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Start Date</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.startDate.toDate() | date: 'fullDate' }}
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Total Participating Teams</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.participatingTeamsCount }} Teams
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Start Date</h4>
+        <p class="mat-body-1">
+          {{ containingTournaments }}
+        </p>
+      </div>
+    </div>
+    <div class="photo-container" fxFlex.lt-md="250px" fxLayout fxLayoutAlign="center center">
+      <img [src]="seasonDraftData?.basicInfo?.imgpath" class="preview" alt="Image" id="preview-image" />
+    </div>
+  </div>
+</mat-card>
+<mat-card class="info-card season-page-container">
+  <h4 *ngIf="seasonFixtures.length">Generated Fixtures </h4>
+  <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
+  <app-fixture-table *ngIf="seasonFixtures.length" [data]="seasonFixtures" [actions]="true"></app-fixture-table>
+  <div *ngIf="seasonFixtures.length" class="mat-caption trouble-text">
+    Have trouble with any match data? Raise a quest to revoke match data immediately. <a
+      (click)="onRaiseRequest()">Click here</a>
+  </div>
+  <div *ngIf="seasonFixtures.length" class="trouble-text" fxLayout.lt-md="column" fxLayoutGap="20px"
+    fxLayoutAlign="center center">
+    <button [routerLink]="['/seasons/list']" class="buttonText secondaryButton">
+      Go Back
+    </button>
+    <button *ngIf="isSeasonPublished" (click)="goToURL()" class="buttonText primaryButton">
+      View your season
+    </button>
+    <button *ngIf="isSeasonPublished" (click)="onRaiseDeleteRequest()" class="buttonText noResponseButton">
+      Delete this season
+    </button>
+    <button *ngIf="isSeasonPublished === false" (click)="publishSeason()" class="buttonText primaryButton">
+      Publish Season
+    </button>
+    <button *ngIf="isSeasonPublished === false" (click)="onRaiseDeleteRequest()" class="buttonText noResponseButton">
+      Delete this draft
+    </button>
+  </div>
+</mat-card>

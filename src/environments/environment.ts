@@ -9,6 +9,7 @@ export const environment = {
     storageBucket: 'freekyk-development.appspot.com',
     messagingSenderId: '954435558889',
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
+    url: 'https://freekyk-development.web.app'
   },
   // live api keys
   razorPay: {

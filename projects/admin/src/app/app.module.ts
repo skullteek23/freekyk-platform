@@ -15,13 +15,19 @@ import { environment } from 'src/environments/environment';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { ErrorComponent } from './error/error.component';
 import { AddSeasonComponent } from './season-panel/add-season/add-season.component';
-import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
 import { SeasonPanelComponent } from './season-panel/season-panel.component';
-import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
-import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
 import { SharedAdminModule } from './shared/shared-admin.module';
 import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
 import { FixtureTableComponent } from './season-panel/fixture-table/fixture-table.component';
+import { ViewSeasonsTableComponent } from './season-panel/view-seasons-table/view-seasons-table.component';
+import { CreateSeasonComponent } from './season-panel/create-season/create-season.component';
+import { CreateSeasonContainerComponent } from './season-panel/create-season-container/create-season-container.component';
+import { SelectGroundsComponent } from './season-panel/select-grounds/select-grounds.component';
+import { LineInfoDisplayComponent } from './season-panel/line-info-display/line-info-display.component';
+import { ViewSeasonDraftComponent } from './season-panel/view-season-draft/view-season-draft.component';
+import { DatePipe } from '@angular/common';
+import { GenerateFixturesComponent } from './season-panel/generate-fixtures/generate-fixtures.component';
+import { RequestDialogComponent } from './season-panel/request-dialog/request-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,12 +35,18 @@ import { FixtureTableComponent } from './season-panel/fixture-table/fixture-tabl
     AdminHomeComponent,
     SeasonPanelComponent,
     AddSeasonComponent,
-    GenFixturesComponent,
-    UpdateMrComponent,
-    ViewSeasonComponent,
     ErrorComponent,
     GroundsPanelComponent,
     FixtureTableComponent,
+    ViewSeasonsTableComponent,
+    CreateSeasonComponent,
+    CreateSeasonContainerComponent,
+    SelectGroundsComponent,
+    LineInfoDisplayComponent,
+    ViewSeasonDraftComponent,
+    GenerateFixturesComponent,
+    RequestDialogComponent
+
   ],
   imports: [
     BrowserModule,
@@ -50,7 +62,7 @@ import { FixtureTableComponent } from './season-panel/fixture-table/fixture-tabl
     AngularFireDatabaseModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

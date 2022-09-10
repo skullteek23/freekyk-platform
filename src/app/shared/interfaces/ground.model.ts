@@ -28,7 +28,11 @@ export interface GroundPrivateInfo {
   contractStartDate: Timestamp;
   contractEndDate: Timestamp;
   timings: {};
-  unavailableStartDate?: Timestamp;
-  unavailableEndDate?: Timestamp;
   id?: string;
+}
+
+export interface GroundBookings {
+  groundID: string;
+  bookingFrom: number;
+  bookingTo: number;
 }
