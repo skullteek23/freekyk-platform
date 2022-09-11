@@ -51,4 +51,12 @@ export class FixtureTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getDate(date): Date {
+    if (Object.keys(date).length < 2) {
+      return new Date(date);
+    } else {
+      return date?.toDate();
+    }
+  }
+
 }

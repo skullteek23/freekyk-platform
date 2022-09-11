@@ -11,7 +11,7 @@
     {{seasonName}}
   </div>
   <mat-horizontal-stepper [linear]="true">
-    <mat-step label="Add Season" [stepControl]="seasonForm">
+    <mat-step label="Add Season" [stepControl]="seasonForm" [editable]="false">
       <app-add-season></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>
@@ -19,7 +19,7 @@
           (click)="onSaveDraft()">Save & Next</button>
       </div>
     </mat-step>
-    <mat-step label="Select Ground(s)" [stepControl]="groundForm">
+    <mat-step label="Select Ground(s)" [stepControl]="groundForm" [editable]="false">
       <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
@@ -27,7 +27,7 @@
           (click)="onUpdateDraft()">Save & Next</button>
       </div>
     </mat-step>
-    <mat-step label="Generate Fixtures" [stepControl]="fixtureForm">
+    <mat-step label="Generate Fixtures" [stepControl]="fixtureForm" [editable]="false">
       <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
@@ -35,7 +35,7 @@
           (click)="onConfirmFixtures()">Confirm Fixtures</button>
       </div>
     </mat-step>
-    <mat-step label="Done">
+    <mat-step label="Done" [editable]="false">
       <app-tick-animation *ngIf="!isLoaderShown"></app-tick-animation>
       <p class="mat-body-1 center">
         Wohoo!!! Your Season is ready to publish.
