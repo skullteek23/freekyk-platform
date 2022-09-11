@@ -72,7 +72,7 @@ export interface tempFullFixtureData {
   lineup: MatchLineup;
 }
 export interface dummyFixture {
-  date: Date;
+  date: Timestamp;
   concluded: boolean;
   season: string;
   premium: boolean;

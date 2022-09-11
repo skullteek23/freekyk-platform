@@ -77,7 +77,7 @@ export class SeasonAdminService {
         matchType = 'FPL';
       }
       fixturesTemp.push({
-        date: availableSlotList[index].date,
+        date: firebase.firestore.Timestamp.fromDate(availableSlotList[index].date),
         concluded: false,
         premium: true,
         season: data.sName,
@@ -103,7 +103,7 @@ export class SeasonAdminService {
       const newId = this.ngFire.createId();
       return {
         id: val.id,
-        date: firebase.firestore.Timestamp.fromDate(val.date),
+        date: val.date,
         concluded: false,
         home: {
           name: MatchConstantsSecondary.TO_BE_DECIDED,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { dummyFixture } from 'src/app/shared/interfaces/match.model';
+import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { SeasonAbout, SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
@@ -25,7 +25,6 @@ export class ViewSeasonDraftComponent implements OnInit {
   seasonDraftData: SeasonDraft;
   finalFees = 0;
   seasonFixtures: dummyFixture[] = [];
-  isSeasonPublished = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,15 +43,13 @@ export class ViewSeasonDraftComponent implements OnInit {
   getDraftInfo(draftID): void {
     if (draftID) {
       this.isLoaderShown = true;
-      forkJoin([this.ngFire.collection('seasonDrafts').doc(draftID).get(), this.isSeasonPublished$(draftID), this.getDraftFixtures(draftID)])
+      forkJoin([this.ngFire.collection('seasonDrafts').doc(draftID).get(), this.getDraftFixtures(draftID)])
         .subscribe((response) => {
           this.seasonDraftData = response[0].data() as SeasonDraft;
-          this.isSeasonPublished = response[1];
-          this.setDraftFixtures(response[2], this.seasonDraftData?.grounds);
+          this.setDraftFixtures(response[1], this.seasonDraftData?.grounds);
           const fees = this.seasonDraftData?.basicInfo?.fees || 0;
           this.finalFees = (fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * fees));
           this.isLoaderShown = false;
-
         }, (error) => {
           this.isLoaderShown = false;
           this.finalFees = 0;
@@ -66,8 +63,8 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.seasonAdminService.getStatusClass(this.seasonDraftData?.status);
   }
 
-  isSeasonPublished$(draftID): Observable<boolean> {
-    return this.ngFire.collection('seasons').doc(draftID).get().pipe(map(resp => resp.exists));
+  get isSeasonPublished(): boolean {
+    return this.seasonDraftData?.status === 'PUBLISHED' || this.seasonDraftData?.status === 'FINISHED';
   }
 
   editSeasonInfo() {
@@ -171,9 +168,33 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   setDraftFixtures(fixtures: dummyFixture[], groundsList: GroundPrivateInfo[]): void {
-    if (groundsList && groundsList.length) {
+    if (fixtures && groundsList && groundsList.length && fixtures.length) {
       const groundsListNames = groundsList.map(ground => ground.name);
       this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
+    } else if (this.isSeasonPublished) {
+      this.isLoaderShown = true;
+      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).get().subscribe(
+        (response) => {
+          this.seasonFixtures = response.docs.map(fixture => {
+            if (fixture.exists) {
+              const fixtureData = fixture.data() as MatchFixture;
+              const id = fixture.id;
+              return ({
+                date: fixtureData.date,
+                concluded: fixtureData.concluded,
+                premium: fixtureData.premium,
+                season: fixtureData.season,
+                type: fixtureData.type,
+                locCity: fixtureData.locCity,
+                locState: fixtureData.locState,
+                stadium: fixtureData.stadium,
+                id,
+              } as dummyFixture)
+            }
+          })
+          this.isLoaderShown = false;
+        }
+      )
     } else {
       this.seasonFixtures = [];
     }
