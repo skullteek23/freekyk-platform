@@ -112,7 +112,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         locState: this.seasonDraftData.basicInfo?.state,
         premium: true,
         p_teams: this.seasonDraftData.basicInfo?.participatingTeamsCount,
-        start_date: this.seasonDraftData.basicInfo?.startDate,
+        start_date: new Date(this.seasonDraftData.basicInfo?.startDate).getTime(),
         cont_tour: this.seasonDraftData.basicInfo?.containingTournaments,
         feesPerTeam: this.seasonDraftData.basicInfo?.fees,
         discount: this.seasonDraftData.basicInfo?.discount,

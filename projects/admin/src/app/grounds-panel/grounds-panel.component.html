@@ -41,14 +41,13 @@
           fxLayoutGap="20px">
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Contract Start Date</mat-label>
-            <input [(ngModel)]="startDateValue" matInput [min]="todayDate" formControlName="contractStartDate"
-              [matDatepicker]="startDate" />
+            <input matInput formControlName="contractStartDate" [matDatepicker]="startDate" />
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
           </mat-form-field>
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Contract End Date</mat-label>
-            <input matInput [min]="startDateValue" formControlName="contractEndDate" [matDatepicker]="endDate" />
+            <input matInput formControlName="contractEndDate" [matDatepicker]="endDate" />
             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
             <mat-datepicker #endDate></mat-datepicker>
           </mat-form-field>

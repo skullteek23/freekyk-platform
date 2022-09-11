@@ -22,7 +22,7 @@ export class GenerateFixturesComponent implements OnInit {
     const seasonInfo = value.season;
     const teams = seasonInfo ? seasonInfo['participatingTeamsCount'] : null;
     const tournaments = seasonInfo ? this.getTournaments(teams, seasonInfo['containingTournaments']) : null;
-    const startDate = seasonInfo ? seasonInfo['startDate'] : null;
+    const startDate = seasonInfo ? new Date(seasonInfo['startDate']) : null;
     const groundNamesArray: string[] = value.grounds.map(ground => ground.name);
     const groundNamesString: string = groundNamesArray.length ? groundNamesArray.join(', ') : 'NA';
     const data: fixtureGenerationData = {
@@ -30,7 +30,7 @@ export class GenerateFixturesComponent implements OnInit {
       grounds: value?.grounds,
       teamParticipating: seasonInfo?.participatingTeamsCount,
       matches: tournaments?.value,
-      startDate: new Date(seasonInfo?.startDate),
+      startDate: new Date(seasonInfo?.startDate).getTime(),
       oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
     }
     if (tournaments && startDate && teams) {

@@ -70,7 +70,7 @@ export interface BrandCollabInfo {
 }
 export interface MembershipInfo {
   premium: boolean;
-  validity: Date;
+  validity: number;
   paymentId: string;
 }
 export class BasicStats {

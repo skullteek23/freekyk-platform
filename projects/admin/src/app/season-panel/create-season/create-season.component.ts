@@ -68,7 +68,7 @@ export class CreateSeasonComponent implements OnDestroy {
     this.onCloseDialog();
   }
 
-  getGrounds(city: string, state: string, date: Date) {
+  getGrounds(city: string, state: string, date: number) {
     this.isLoaderShown = true;
     this.subscriptions.add(this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim()).where('contractStartDate', '<', date))
       .snapshotChanges()
@@ -140,6 +140,7 @@ export class CreateSeasonComponent implements OnDestroy {
       const imgpath = this.seasonImage ? await this.getImageURL(this.seasonImage) : MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
       const formData = {
         ...this.seasonForm.value,
+        startDate: new Date(this.seasonForm.value['startDate']).getTime(),
         imgpath
       };
       this.saveDraftDetails(formData);

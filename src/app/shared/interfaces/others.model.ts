@@ -187,21 +187,21 @@ export interface userAddress {
 }
 export interface adminSeasonForm {
   sData: SeasonBasicInfo;
-  startDate: Date;
+  startDate: number;
   cont_tour: 'FKC' | 'FCP' | 'FPL';
 }
 export interface tempTour {
   participantCount: number;
   perTeamPlaying: number;
   tour_type: 'FKC' | 'FPL' | 'FCP';
-  startDate: Date;
+  startDate: number;
   isFixturesEmpty?: boolean;
 }
 export interface fixtureGenerationData {
   sName: string;
   grounds: GroundPrivateInfo[];
   matches: any;
-  startDate: Date;
+  startDate: number;
   oneMatchDur: number;
   teamParticipating: number;
 }

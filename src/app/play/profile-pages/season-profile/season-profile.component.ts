@@ -74,7 +74,7 @@ export class SeasonProfileComponent implements OnInit {
             ({
               id: doc.id,
               ...(doc.data() as SeasonBasicInfo),
-              start_date: new Date((doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000),
+              start_date: new Date((doc.data() as SeasonBasicInfo).start_date).getTime(),
             } as SeasonBasicInfo)
           )
         ),

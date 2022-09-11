@@ -6,7 +6,7 @@ export interface SeasonBasicInfo {
   locState: string;
   premium: boolean;
   p_teams: number;
-  start_date: Date;
+  start_date: number;
   cont_tour: string[];
   feesPerTeam: number;
   discount: number;

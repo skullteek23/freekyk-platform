@@ -14,7 +14,6 @@ import { MatchConstants } from '../shared/constants/constants';
 export class GroundsPanelComponent implements OnInit {
   @ViewChild('RegisterGroundForm') tForm: NgForm;
   days = MatchConstants.DAYS_LIST;
-  startDateValue: Date;
   Rform: FormGroup;
   defaultImage =
     'https://images.unsplash.com/photo-1516676324900-a8c0c01caa33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
@@ -32,7 +31,6 @@ export class GroundsPanelComponent implements OnInit {
   timingsForm: FormGroup = new FormGroup({});
   cities = ['Ghaziabad'];
   states = ['Uttar Pradesh'];
-  todayDate = new Date();
   contractFileName: any;
   imgUploadFile$: File = null;
   contractFile$: File = null;
@@ -44,6 +42,7 @@ export class GroundsPanelComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    const today = new Date();
     this.groundForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
@@ -52,10 +51,10 @@ export class GroundsPanelComponent implements OnInit {
       ]),
       imgpath: new FormControl(this.defaultImage),
       type: new FormControl('public', Validators.required),
-      locState: new FormControl(null, Validators.required),
-      locCity: new FormControl(null, Validators.required),
+      locState: new FormControl('Uttar Pradesh', Validators.required),
+      locCity: new FormControl('Ghaziabad', Validators.required),
       contractFilePath: new FormControl(null),
-      contractStartDate: new FormControl(null, Validators.required),
+      contractStartDate: new FormControl(today, Validators.required),
       contractEndDate: new FormControl(null, Validators.required),
     })
     this.dayArrayMap.set('Sun', 0);
@@ -130,8 +129,8 @@ export class GroundsPanelComponent implements OnInit {
       signedContractFileLink: this.groundForm.value['contractFilePath'],
       locState: this.groundForm.value['locState'],
       locCity: this.groundForm.value['locCity'],
-      contractStartDate: this.groundForm.value['contractStartDate'],
-      contractEndDate: this.groundForm.value['contractEndDate'],
+      contractStartDate: new Date(this.groundForm.value['contractStartDate']).getTime(),
+      contractEndDate: new Date(this.groundForm.value['contractEndDate']).getTime(),
       timings: this.timingsPreferences
     }
     let AllPromises = [];
