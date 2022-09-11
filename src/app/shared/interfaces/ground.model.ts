@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 export interface GroundBasicInfo {
   name: string;
   imgpath: string;
@@ -13,8 +12,8 @@ export interface GroundMoreInfo {
   parking: boolean;
   mainten: boolean;
   goalp: boolean;
-  opmTimeStart: Timestamp;
-  opmTimeEnd: Timestamp;
+  opmTimeStart: number;
+  opmTimeEnd: number;
   washroom: boolean;
   foodBev: boolean;
   avgRating: number;
@@ -25,8 +24,8 @@ export interface GroundPrivateInfo {
   locCity: string;
   locState: string;
   signedContractFileLink: string;
-  contractStartDate: Timestamp;
-  contractEndDate: Timestamp;
+  contractStartDate: number;
+  contractEndDate: number;
   timings: {};
   id?: string;
 }

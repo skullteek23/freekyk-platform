@@ -77,7 +77,7 @@ export class SeasonAdminService {
         matchType = 'FPL';
       }
       fixturesTemp.push({
-        date: firebase.firestore.Timestamp.fromDate(availableSlotList[index].date),
+        date: availableSlotList[index].date.getTime(),
         concluded: false,
         premium: true,
         season: data.sName,

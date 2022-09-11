@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 import { cartItem } from './product.model';
 export type SUCCESS = 'SUCCESS';
 export type PROCESSING = 'PROCESSING';
@@ -13,7 +12,7 @@ export interface OrderBasic {
   by: string;
   status: SUCCESS | FAILED | PROCESSING;
   payableTotal: number;
-  placedOn: Timestamp;
+  placedOn: number;
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
@@ -30,7 +29,7 @@ export interface OrderBasic {
 //   size: number;
 // }
 export interface OrderAdditionalDetails {
-  dateAdded: Timestamp;
+  dateAdded: number;
   phoneNum: number;
   addressId: string;
   paymentMethod?: CARD | UPI | NETBANKING;

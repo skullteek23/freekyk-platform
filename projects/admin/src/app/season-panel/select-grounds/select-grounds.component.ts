@@ -135,8 +135,8 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
     let isGroundUnavailable = false;
     const existingBooking = this.bookingsList && this.bookingsList.length ? this.bookingsList.find(booking => booking.groundID === ground.id) : null;
     const startDate = new Date(this.seasonStartDate).getTime();
-    const contractStartDate = ground['contractStartDate'] ? ground['contractStartDate'].toMillis() : null;
-    const contractEndDate = ground['contractEndDate'] ? ground['contractEndDate'].toMillis() : null;
+    const contractStartDate = ground['contractStartDate'] || 0;
+    const contractEndDate = ground['contractEndDate'] || 0;
 
     if (existingBooking) {
       const unavailableFrom = existingBooking.bookingFrom;

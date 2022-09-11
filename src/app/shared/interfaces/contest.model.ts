@@ -1,10 +1,9 @@
-import { Timestamp } from '@firebase/firestore-types';
 export interface ContestBasicInfo {
   id: string;
   imgpath: string;
   name: string;
-  start_date: Timestamp;
-  end_date: Timestamp;
+  start_date: number;
+  end_date: number;
   fees: number;
 }
 export interface ContestDescription {

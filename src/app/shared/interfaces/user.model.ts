@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 export interface PlayerBasicInfo {
   name: string;
   team: { name: string; id: string; capId: string };
@@ -12,7 +11,7 @@ export interface PlayerBasicInfo {
 export interface PlayerMoreInfo {
   imgpath_lg?: string;
   profile: boolean;
-  born?: Timestamp;
+  born?: number;
   locState?: string;
   locCountry?: string;
   nickname?: string;
@@ -29,7 +28,7 @@ export interface FsBasic {
   nickname: string;
   gen?: 'M' | 'F';
   imgpath_lg?: string;
-  born?: Timestamp;
+  born?: number;
   locCountry?: string;
   bio?: string;
   ig?: string;

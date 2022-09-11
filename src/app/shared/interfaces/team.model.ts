@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 import { SocialMediaLinks } from './user.model';
 
 export const NO_TEAM = 'NO_TEAM';
@@ -18,7 +17,7 @@ export interface TeamBasicInfo {
   id?: string;
 }
 export interface TeamMoreInfo {
-  tdateCreated: Timestamp;
+  tdateCreated: number;
   tageCat: 15 | 19 | 21 | 25 | 30;
   captainName: string;
   tslogan?: string;

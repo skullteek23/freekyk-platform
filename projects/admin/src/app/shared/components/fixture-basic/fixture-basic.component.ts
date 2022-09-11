@@ -11,6 +11,12 @@ export class FixtureBasicComponent implements OnInit {
   @Input() fixture: MatchFixture;
   adminSub: Subscription;
   todaysDate = new Date();
+
   constructor() { }
+
   ngOnInit(): void { }
+
+  get date() {
+    return this.fixture ? new Date(this.fixture.date) : 0;
+  }
 }

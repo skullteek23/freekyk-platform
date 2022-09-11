@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 import { GroundPrivateInfo } from './ground.model';
 import { SeasonBasicInfo } from './season.model';
 export interface heroCallToAction {
@@ -110,7 +109,7 @@ export interface positionGroup {
   pos_name: string[];
 }
 export interface matchData {
-  date: Timestamp;
+  date: number;
   concluded: boolean;
   home: { imgpathLogo: string; name: string };
   away: { imgpathLogo: string; name: string };

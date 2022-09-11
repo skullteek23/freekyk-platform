@@ -1,4 +1,3 @@
-import { Timestamp } from '@firebase/firestore-types';
 export type TEAM_WELCOME = 'team welcome';
 export type REQUEST = 'request';
 export type INVITE = 'invite';
@@ -7,7 +6,7 @@ export interface NotificationBasic {
   type: TEAM_WELCOME | REQUEST | INVITE | CHALLENGE;
   senderId: string;
   receiverId: string;
-  date: Timestamp;
+  date: number;
   title: string;
   senderName?: string | null;
   id?: string;
