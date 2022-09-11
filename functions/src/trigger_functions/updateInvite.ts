@@ -17,7 +17,7 @@ export async function inviteUpdationTrigger(change: any, context: any): Promise<
         type: 'invite',
         senderId: update.teamId,
         receiverId: update.inviteeId,
-        date: admin.firestore.Timestamp.now(),
+        date: admin.firestore.Timestamp.now().toMillis(),
         title: 'Team Join Invite',
         senderName: update.teamName,
       };
