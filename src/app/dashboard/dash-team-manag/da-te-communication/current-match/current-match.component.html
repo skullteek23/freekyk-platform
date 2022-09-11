@@ -12,7 +12,7 @@
       </span>
 
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-        {{ data?.date.toDate() | date: "HH:mm" }}
+        {{ data?.date | date: "HH:mm" }}
       </span>
     </div>
 
@@ -23,7 +23,7 @@
       <span class="mat-body-1 center"> {{ data?.away.name }} </span>
     </div>
   </div>
-  <span class="mat-body-2 center">This match is on {{ data?.date.toDate() | date: "mediumDate" }}</span>
+  <span class="mat-body-2 center">This match is on {{ data?.date | date: "mediumDate" }}</span>
 </div>
 <div fxLayoutAlign="center center">
   <button (click)="onOpenFixture()" class="secondaryButton buttonText">

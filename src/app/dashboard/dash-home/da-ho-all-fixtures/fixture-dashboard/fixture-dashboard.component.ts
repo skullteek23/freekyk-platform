@@ -15,8 +15,8 @@ export class FixtureDashboardComponent implements OnInit {
   @Input('resultMode') isResult = false;
   @Input('addSticker') myTeam: string = null;
   todaysDate = new Date();
-  constructor(private dialog: MatDialog) {}
-  ngOnInit(): void {}
+  constructor(private dialog: MatDialog) { }
+  ngOnInit(): void { }
   onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',

@@ -5,10 +5,10 @@
   <!-- fixture time -->
   <div class="timestamp" fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
     <span class="overline filled">
-      {{ fixture?.date.toDate() | date: "shortTime" | lowercase }}
+      {{ fixture?.date | date: "shortTime" | lowercase }}
     </span>
     <span class="mat-caption">
-      {{ fixture?.date.toDate() | date: "mediumDate" }}</span>
+      {{ fixture?.date | date: "mediumDate" }}</span>
   </div>
   <!-- fixture time -->
 

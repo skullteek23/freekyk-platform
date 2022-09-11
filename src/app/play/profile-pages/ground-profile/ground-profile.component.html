@@ -1,55 +1,23 @@
 <!-- intro-section -->
 <div class="grey-bg">
-  <section
-    class="container product"
-    ngClass.lt-md="section-space-bottom"
-    fxLayout="column"
-    fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner"
-    fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="space-between center"
-    fxLayoutGap="20px"
-  >
-    <div
-      (click)="onEnlargePhoto()"
-      fxFlexOrder.gt-sm="2"
-      fxFlexOrder="1"
-      class="bannerPhoto"
-    >
+  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
+    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
+    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
       <img [src]="(groundInfo$ | async)?.imgpath" alt="Ground Image" />
     </div>
 
-    <div
-      fxFlexOrder.gt-sm="1"
-      fxFlexOrder="2"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start"
-      ngClass.gt-sm="banner-text"
-    >
+    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
       <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
       Freekyk - India's No.1 Football Network
     </span> -->
-      <button
-        fxHide.lt-md="true"
-        [routerLink]="['/play', 'grounds']"
-        mat-mini-fab
-        color="primary"
-        class="back-button"
-      >
+      <button fxHide.lt-md="true" [routerLink]="['/play', 'grounds']" mat-mini-fab color="primary" class="back-button">
         <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
       </button>
-      <div
-        fxLayoutAlign.lt-md="center center"
-        fxLayoutAlign.gt-sm="center start"
-        fxLayout="column"
-      >
+      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
         <span class="overline align">Football Ground</span>
-        <span
-          class="mat-title align"
-          [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }"
-          >{{ (groundInfo$ | async)?.name }}</span
-        >
+        <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
+          (groundInfo$ | async)?.name }}</span>
       </div>
       <button disabled class="primaryButton buttonText">Share</button>
     </div>
@@ -58,16 +26,12 @@
 <!-- intro-section -->
 
 <!-- content -->
-<section
-  class="container section-space-top section-space-bottom"
-  fxLayout="column"
-  fxLayoutGap="24px"
->
+<section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="24px">
   <div>
     <h4>Ground Location</h4>
     <p class="mat-body-1">
       {{
-        (groundInfo$ | async)?.locCity + ", " + (groundInfo$ | async)?.locState
+      (groundInfo$ | async)?.locCity + ", " + (groundInfo$ | async)?.locState
       }}
     </p>
   </div>
@@ -118,9 +82,9 @@
     <h4>Optimum Time To Play Football</h4>
     <p class="mat-body-1">
       {{
-        ((groundMoreInfo$ | async)?.opmTimeStart.toDate() | date: "shortTime") +
-          " - " +
-          ((groundMoreInfo$ | async)?.opmTimeEnd.toDate() | date: "shortTime")
+      ((groundMoreInfo$ | async)?.opmTimeStart | date: "shortTime") +
+      " - " +
+      ((groundMoreInfo$ | async)?.opmTimeEnd | date: "shortTime")
       }}
     </p>
   </div>

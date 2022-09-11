@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NotificationBasic } from 'src/app/shared/interfaces/notification.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 
 @Component({
   selector: 'app-notifications-list',
@@ -11,7 +12,7 @@ import { NotificationBasic } from 'src/app/shared/interfaces/notification.model'
 export class NotificationsListComponent implements OnInit {
   // tslint:disable-next-line: no-input-rename
   @Input('data') set data(value: NotificationBasic[]) {
-    this.notifications = value.sort((a, b) => b.date.toMillis() - a.date.toMillis());
+    this.notifications = value.sort(ArraySorting.sortObjectByKey('date'));
   }
   notifications: NotificationBasic[];
   noNotif$: Observable<boolean>;

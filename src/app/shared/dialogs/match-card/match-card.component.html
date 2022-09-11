@@ -20,7 +20,7 @@
             </span>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Kick Off</span><span class="mat-body-1">
-                {{ data?.date.toDate() | date: "short" }}
+                {{ data?.date | date: "short" }}
               </span>
             </div>
             <div fxLayoutAlign="space-between center">
@@ -116,7 +116,7 @@
               <div fxLayoutAlign="space-between center">
                 <span class="mat-body-2">Match End Time</span>
                 <span class="mat-body-1">
-                  {{ (stats$ | async)?.matchEndDate.toDate() | date: "short" }}
+                  {{ (stats$ | async)?.matchEndDate | date: "short" }}
                 </span>
               </div>
               <div fxLayout="column" fxLayoutAlign="center start">

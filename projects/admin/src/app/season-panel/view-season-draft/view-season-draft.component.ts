@@ -204,7 +204,6 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', draftID)).get()
       .pipe(
         map(response => response.docs.map(doc => doc.data() as dummyFixture)),
-        map(response => response.map(doc => ({ ...doc, date: (doc.date as any).toDate() }))),
         map(response => response.sort(ArraySorting.sortObjectByKey('date'))),
         map(response => response as dummyFixture[])
       )

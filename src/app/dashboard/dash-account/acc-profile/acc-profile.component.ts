@@ -138,7 +138,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             Validators.required
           ),
           birthdate: new FormControl(
-            data.playerMoreInfo.born ? data.playerMoreInfo.born.toDate() : null,
+            data.playerMoreInfo.born ? new Date(data.playerMoreInfo.born) : null,
             Validators.required,
             this.minimumAge.bind(this)
           ),

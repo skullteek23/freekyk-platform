@@ -25,10 +25,10 @@
   <div *ngIf="!match?.concluded" class="box_inner-v mat-body-1" fxFlex="40%" fxLayoutAlign="center center"
     fxLayout="column">
     <span>
-      {{ checkTBD(match?.date.toDate()) }}
+      {{ checkTBD(match?.date) }}
     </span>
     <span>
-      {{ match?.date.toDate() | date: "mediumDate" }}
+      {{ match?.date | date: "mediumDate" }}
     </span>
   </div>
 </div>

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import {
@@ -22,7 +21,7 @@ export class MatchCardComponent implements OnInit {
   lineups$: Observable<MatchLineup>;
   stats$: Observable<MatchStats>;
   matchHeaderData: {
-    date: firebase.firestore.Timestamp;
+    date: number;
     concluded: boolean;
     home: { imgpathLogo: string; name: string };
     away: { imgpathLogo: string; name: string };

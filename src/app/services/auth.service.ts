@@ -77,10 +77,7 @@ export class AuthService {
   public onChangePassword(newPass: string): void {
     this.ngAuth.currentUser.then((user) => {
       const lastSigninTime = new Date(user.metadata.lastSignInTime);
-      if (
-        new Date().getMilliseconds() - lastSigninTime.getMilliseconds() <=
-        EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI
-      ) {
+      if (new Date().getTime() - lastSigninTime.getTime() <= EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
         this.changePassword(newPass)
           .then(() => {
             // console.log('password changed!');
@@ -99,10 +96,7 @@ export class AuthService {
   public onChangeEmail(newEmail: string): void {
     this.ngAuth.currentUser.then((user) => {
       const lastSigninTime = new Date(user.metadata.lastSignInTime);
-      if (
-        new Date().getMilliseconds() - lastSigninTime.getMilliseconds() <=
-        EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI
-      ) {
+      if (new Date().getTime() - lastSigninTime.getTime() <= EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
         this.changeEmail(newEmail)
           ?.then(() => {
             // console.log('email changed!');

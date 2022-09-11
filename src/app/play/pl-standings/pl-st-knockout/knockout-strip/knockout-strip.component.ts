@@ -12,11 +12,11 @@ import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 })
 export class KnockoutStripComponent implements OnInit {
   @Input() match: MatchFixture;
-  constructor(private datePipe: DatePipe, private dialog: MatDialog) {}
+  constructor(private datePipe: DatePipe, private dialog: MatDialog) { }
 
-  ngOnInit(): void {}
-  checkTBD(date: Date): string {
-    if (date.getHours() === 0) {
+  ngOnInit(): void { }
+  checkTBD(date: number): string {
+    if (new Date(date).getHours() === 0) {
       return 'TBD';
     }
     return this.datePipe.transform(date, 'shortTime');

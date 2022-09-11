@@ -16,7 +16,6 @@ import {
   TeamMoreInfo,
   TeamStats,
 } from 'src/app/shared/interfaces/team.model';
-import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-team-profile',
@@ -175,7 +174,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             type: 'team challenge',
             senderId: this.uid,
             receiverId: this.id,
-            date: firebase.firestore.Timestamp.fromDate(new Date()),
+            date: new Date().getTime(),
             title: 'Team Challenge Recieved',
             senderName: team.hasTeam.name,
           };

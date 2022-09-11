@@ -7,7 +7,6 @@ import { tap, map } from 'rxjs/operators';
 import { SocialMediaLinks } from 'src/app/shared/interfaces/user.model';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
-import firebase from 'firebase/app';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 @Component({
   selector: 'app-da-ho-profile',
@@ -87,11 +86,11 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   getTeam(team: { name: string; id: string; capId: string } | null): string {
     return team ? team.name : 'No Team';
   }
-  getAge(birthdate: firebase.firestore.Timestamp | null): any {
+  getAge(birthdate: number): any {
     if (birthdate === null) {
       return birthdate;
     }
-    const diffInMilliseconds = Date.now() - birthdate.seconds * 1000;
+    const diffInMilliseconds = Date.now() - birthdate;
     const ageDate = new Date(diffInMilliseconds);
     return Math.abs(ageDate.getUTCFullYear() - 1970).toString() + ' yrs';
   }

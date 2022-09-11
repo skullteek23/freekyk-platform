@@ -6,36 +6,26 @@
       </div>
       <span class="mat-body-1 center">{{ matchData?.home.name }} </span>
     </div>
-    <div
-      *ngIf="isFixture; else score"
-      class="kickoff"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutGap="8px"
-    >
+    <div *ngIf="isFixture; else score" class="kickoff" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutGap="8px">
       <span class="overline">
         {{ "kick-off" | uppercase }}
       </span>
 
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-        {{ matchData?.date.toDate() | date: "HH:mm" }}
+        {{ matchData?.date | date: "HH:mm" }}
       </span>
     </div>
     <ng-template #score>
-      <div
-        class="kickoff"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-        fxLayoutGap="8px"
-      >
+      <div class="kickoff" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
         <span class="overline"> FT </span>
         <div fxLayoutGap="4px" fxLayout>
           <span class="score_square mat-body-2" fxLayoutAlign="center center">{{
             matchData.score?.home
-          }}</span>
+            }}</span>
           <span class="score_square mat-body-2" fxLayoutAlign="center center">{{
             matchData.score?.away
-          }}</span>
+            }}</span>
         </div>
       </div>
     </ng-template>
@@ -46,9 +36,8 @@
       <span class="mat-body-1 center"> {{ matchData?.away.name }} </span>
     </div>
   </div>
-  <span *ngIf="isFixture; else result" class="mat-body-2 center"
-    >This match is on {{ matchData?.date.toDate() | date: "mediumDate" }}</span
-  >
+  <span *ngIf="isFixture; else result" class="mat-body-2 center">This match is on {{ matchData?.date | date:
+    "mediumDate" }}</span>
   <ng-template #result>
     <span class="mat-body-2 center">
       {{ getWinningTeam() }}

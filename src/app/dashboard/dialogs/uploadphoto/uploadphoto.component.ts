@@ -5,7 +5,6 @@ import {
   AngularFireUploadTask,
 } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 

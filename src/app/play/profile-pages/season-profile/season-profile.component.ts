@@ -14,7 +14,7 @@ import {
   SeasonParticipants,
   SeasonStats,
 } from 'src/app/shared/interfaces/season.model';
-import firebase from 'firebase/app';
+
 
 @Component({
   selector: 'app-season-profile',

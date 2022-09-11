@@ -45,7 +45,7 @@
             </div>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Birthday</span><span class="mat-body-1 right">{{
-                (addiInfo$ | async)?.born?.toDate() | date: "mediumDate"
+                (addiInfo$ | async)?.born | date: "mediumDate"
                 }}</span>
             </div>
             <div fxLayoutAlign="space-between center">

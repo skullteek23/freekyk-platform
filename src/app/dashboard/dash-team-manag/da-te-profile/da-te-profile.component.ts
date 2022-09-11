@@ -44,9 +44,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
             this.photoUrl = info.basicInfo.imgpath;
             this.smLinks = info.moreInfo.tSocials;
             return {
-              'Created On': this.getCreationDate(
-                info.moreInfo.tdateCreated?.toDate()
-              ),
+              'Created On': this.getCreationDate(info.moreInfo.tdateCreated),
               'age category': this.getAgeCategory(info.moreInfo.tageCat),
               captain: info.moreInfo.captainName,
               location: this.getLocation(
@@ -71,7 +69,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCreationDate(date: Date): string {
+  getCreationDate(date: number): string {
     return date ? this.datePipe.transform(date, 'mediumDate') : null;
   }
   getAgeCategory(category: number): string {

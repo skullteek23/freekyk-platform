@@ -15,6 +15,7 @@ import {
 } from 'src/app/shared/Constants/FILTERS';
 import { QueryService } from 'src/app/services/query.service';
 import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from 'src/app/shared/Constants/DEFAULTS';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
@@ -33,7 +34,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private store: Store<AppState>,
     private queryServ: QueryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -108,9 +109,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
           .pipe(
             tap((resp) => (this.tabGroup.selectedIndex = resp.empty ? 1 : 0)),
             map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-            map((resp) =>
-              resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-            ),
+            map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
             tap(() => (this.isListLoading = false))
           );
       })
@@ -127,9 +126,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        ),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
         tap(() => (this.isListLoading = false))
       );
   }
@@ -144,9 +141,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        ),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
         tap(() => (this.isListLoading = false))
       );
   }
@@ -172,9 +167,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        )
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
       );
   }
 }

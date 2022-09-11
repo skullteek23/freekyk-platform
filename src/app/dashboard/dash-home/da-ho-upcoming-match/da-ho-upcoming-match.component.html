@@ -18,7 +18,7 @@
         </span>
 
         <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-          {{ upFixture?.date.toDate() | date: "HH:mm" }}
+          {{ upFixture?.date | date: "HH:mm" }}
         </span>
       </div>
 
@@ -31,7 +31,7 @@
     </div>
     <span class="mat-body-2 center">
       This match is on
-      {{ upFixture?.date.toDate() | date: "mediumDate" }}
+      {{ upFixture?.date | date: "mediumDate" }}
     </span>
   </div>
   <div fxLayoutAlign="center center">

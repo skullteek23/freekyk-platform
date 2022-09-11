@@ -1,16 +1,10 @@
 <ul>
-  <li
-    class="notification mat-elevation-z4"
-    *ngFor="let notification of notifications"
-    (click)="onSelNotif(notification)"
-    fxLayout="column"
-    fxLayoutGap="0px"
-    fxLayoutAlign="center"
-  >
+  <li class="notification mat-elevation-z4" *ngFor="let notification of notifications"
+    (click)="onSelNotif(notification)" fxLayout="column" fxLayoutGap="0px" fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <span class="mat-body-1"> {{ notification.title }} </span>
       <span class="mat-body-2 notif_time">
-        {{ notification.date.toDate() | date: "shortTime" | lowercase }}
+        {{ notification.date | date: "shortTime" | lowercase }}
       </span>
     </div>
     <span fxHide.lt-sm="true" class="sec-menu mat-caption">

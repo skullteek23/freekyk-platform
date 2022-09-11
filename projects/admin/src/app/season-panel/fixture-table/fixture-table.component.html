@@ -21,7 +21,7 @@
 
     <ng-container [matColumnDef]="TABLE_COLUMNS.DATE" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.DATE }}</th>
-      <td mat-cell *matCellDef="let element"> {{ getDate(element[TABLE_COLUMNS.DATE]) | date: 'medium'}} </td>
+      <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.DATE] | date: 'medium'}} </td>
       <td mat-footer-cell *matFooterCellDef> </td>
     </ng-container>
 
