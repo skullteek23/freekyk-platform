@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
@@ -169,28 +170,31 @@ export class SeasonAdminService {
     return batch.commit();
   }
 
-  deleteDraft(docID: string) {
-    if (docID) {
-      this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', docID))
+  deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {
+    return this.getSeasonFixtureDrafts(docID).pipe(switchMap(response => {
+      const batch = this.ngFire.firestore.batch();
+
+      if (response && response.length) {
+        response.forEach(deleteDocID => {
+          const draftRef = this.ngFire.collection('seasonFixturesDrafts').doc(deleteDocID).ref;
+          batch.delete(draftRef);
+        })
+      }
+
+      if (deleteFixturesOnly === false) {
+        const draftRef = this.ngFire.collection('seasonDrafts').doc(docID).ref;
+        batch.delete(draftRef);
+      }
+
+      return batch.commit();
+    })).toPromise();
+  }
+
+  getSeasonFixtureDrafts(draftID): Observable<any> {
+    if (draftID) {
+      return this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', draftID))
         .get()
         .pipe(map(resp => resp.docs.map(doc => doc.exists ? doc.id : null)))
-        .subscribe((response: string[]) => {
-          const batch = this.ngFire.firestore.batch();
-
-          if (response && response.length) {
-            response.forEach(deleteDocID => {
-              const draftRef = this.ngFire.collection('seasonFixturesDrafts').doc(deleteDocID).ref;
-              batch.delete(draftRef);
-            })
-          }
-
-          const draftRef = this.ngFire.collection('seasonDrafts').doc(docID).ref;
-          batch.delete(draftRef);
-
-          batch.commit()
-            .then(() => this.snackbarService.displayDelete())
-            .catch(err => this.snackbarService.displayCustomMsg(err))
-        })
     }
   }
 

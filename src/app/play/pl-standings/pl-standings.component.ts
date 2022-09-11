@@ -121,7 +121,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         }))
       )
       .subscribe((res: CommunityLeaderboard[]) => {
-        console.log(res)
+        // console.log(res)
         this.cpStandings = res;
         if (this.knockoutFixtures.length) {
           this.tabGroup.selectedIndex = 0;

@@ -1,4 +1,7 @@
 import { Timestamp } from '@firebase/firestore-types';
+
+export type KnockoutStages = 'R16' | 'R8' | 'R4' | 'F';
+export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export interface MatchFixture {
   date: Timestamp;
   concluded: boolean;
@@ -15,13 +18,13 @@ export interface MatchFixture {
   teams: string[];
   season: string;
   premium: boolean;
-  type: 'FKC' | 'FCP' | 'FPL';
+  type: TournamentTypes;
   locCity: string;
   locState: string;
   id?: string;
   tie_breaker?: string;
   stadium?: string;
-  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
+  fkc_status?: KnockoutStages;
 }
 export interface MatchFixtureOverview {
   ref: string;
@@ -73,11 +76,11 @@ export interface dummyFixture {
   concluded: boolean;
   season: string;
   premium: boolean;
-  type: 'FKC' | 'FCP' | 'FPL';
+  type: TournamentTypes;
   locCity: string;
   locState: string;
   id?: string;
   stadium?: string;
-  fkc_status?: 'R16' | 'R8' | 'R4' | 'F';
+  fkc_status?: KnockoutStages;
   timestamp?: number;
 }

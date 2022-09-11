@@ -92,19 +92,20 @@ export class ViewSeasonDraftComponent implements OnInit {
     })
   }
 
-  onDeleteDraft(): void {
-    const dialogRef = this.dialog.open(ConfirmationBoxComponent)
+  onConfirmDelete(): void {
+    this.dialog.open(ConfirmationBoxComponent)
       .afterClosed()
       .subscribe(response => {
         if (response) {
           this.router.navigate(['/seasons/list']);
-          this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID);
+          this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID)
+            .then(() => this.snackbarService.displayDelete())
+            .catch(err => this.snackbarService.displayCustomMsg(err));
         }
       })
   }
 
   publishSeason() {
-    // forkJoin([this.groundAvailable$, this.checkSeasonPublish$]).subscribe(data => {
     if (this.seasonDraftData?.draftID && !this.isSeasonPublished) {
       this.isLoaderShown = true;
       const season: SeasonBasicInfo = {
@@ -131,7 +132,6 @@ export class ViewSeasonDraftComponent implements OnInit {
       const lastUpdated = new Date().getTime();
       const status: statusType = 'PUBLISHED';
 
-      const allPromises = [];
       const batch = this.ngFire.firestore.batch();
 
       const seasonRef = this.ngFire.collection('seasons').doc(this.seasonDraftData.draftID).ref;
@@ -155,9 +155,9 @@ export class ViewSeasonDraftComponent implements OnInit {
         batch.set(fixtureRef, fixture);
       })
 
-
       batch.commit().then(
         () => {
+          this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
           this.isLoaderShown = false;
           this.goToURL();
           location.reload();
@@ -168,7 +168,6 @@ export class ViewSeasonDraftComponent implements OnInit {
       )
 
     }
-    // })
   }
 
   setDraftFixtures(fixtures: dummyFixture[], groundsList: GroundPrivateInfo[]): void {
