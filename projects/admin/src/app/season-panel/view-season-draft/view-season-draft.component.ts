@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute } from '@angular/router';
-import { map, share } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { SeasonAbout, SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
-import { GenerateFixturesService } from '../generate-fixtures.service';
-import firebase from 'firebase/app';
+import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { MatchConstants } from '../../shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateSeasonComponent } from '../create-season/create-season.component';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -31,9 +30,10 @@ export class ViewSeasonDraftComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private generateFixtureService: GenerateFixturesService,
+    private seasonAdminService: SeasonAdminService,
     private dialog: MatDialog,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +63,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   getStatusClass() {
-    return this.generateFixtureService.getStatusClass(this.seasonDraftData?.status);
+    return this.seasonAdminService.getStatusClass(this.seasonDraftData?.status);
   }
 
   isSeasonPublished$(draftID): Observable<boolean> {
@@ -92,6 +92,17 @@ export class ViewSeasonDraftComponent implements OnInit {
     })
   }
 
+  onDeleteDraft(): void {
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe(response => {
+        if (response) {
+          this.router.navigate(['/seasons/list']);
+          this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID);
+        }
+      })
+  }
+
   publishSeason() {
     // forkJoin([this.groundAvailable$, this.checkSeasonPublish$]).subscribe(data => {
     if (this.seasonDraftData?.draftID && !this.isSeasonPublished) {
@@ -114,7 +125,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         rules: this.seasonDraftData.basicInfo?.rules,
         paymentMethod: 'Online',
       }
-      const fixtures = this.generateFixtureService.getPublishableFixture(this.seasonFixtures);
+      const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
       const startDate = season.start_date;
       const endDate = fixtures[fixtures.length - 1].date;
       const lastUpdated = new Date().getTime();
@@ -135,7 +146,7 @@ export class ViewSeasonDraftComponent implements OnInit {
 
       (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id).forEach(groundID => {
         const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
-        const booking: GroundBookings = { groundID, bookingFrom: (startDate as any).toMillis(), bookingTo: endDate.toMillis() };
+        const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: (startDate as any).toMillis(), bookingTo: endDate.toMillis() };
         batch.set(setRef, booking);
       })
 

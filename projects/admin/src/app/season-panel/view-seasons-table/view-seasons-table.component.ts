@@ -3,8 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
-import { GenerateFixturesService } from '../generate-fixtures.service';
+import { SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
+import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-view-seasons-table',
@@ -17,7 +17,7 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   seasons: any[] = [];
   subscription = new Subscription();
 
-  constructor(private ngFire: AngularFirestore, private router: Router, private generateFixtureService: GenerateFixturesService) { }
+  constructor(private ngFire: AngularFirestore, private router: Router, private seasonAdminService: SeasonAdminService) { }
 
   ngOnInit(): void {
     this.getSeasons();
@@ -46,14 +46,14 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   }
 
   isSeasonLive(status: statusType): boolean {
-    return this.generateFixtureService.isSeasonLive(status);
+    return this.seasonAdminService.isSeasonLive(status);
   }
 
   isSeasonFinished(status: statusType): boolean {
-    return this.generateFixtureService.isSeasonFinished(status);
+    return this.seasonAdminService.isSeasonFinished(status);
   }
 
   getStatusClass(status: statusType): any {
-    return this.generateFixtureService.getStatusClass(status);
+    return this.seasonAdminService.getStatusClass(status);
   }
 }

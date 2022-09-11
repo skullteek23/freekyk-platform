@@ -33,6 +33,7 @@ export interface GroundPrivateInfo {
 
 export interface GroundBookings {
   groundID: string;
+  seasonID: string;
   bookingFrom: number;
   bookingTo: number;
 }

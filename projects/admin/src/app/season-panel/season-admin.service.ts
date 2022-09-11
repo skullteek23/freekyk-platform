@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
+import { map } from 'rxjs/operators';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { statusType } from 'src/app/shared/interfaces/season.model';
@@ -10,9 +12,9 @@ import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/con
 @Injectable({
   providedIn: 'root'
 })
-export class GenerateFixturesService {
+export class SeasonAdminService {
 
-  constructor(private ngFire: AngularFirestore) { }
+  constructor(private ngFire: AngularFirestore, private snackbarService: SnackbarService) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
     let fcpMatches = data.matches.fcp;
@@ -167,15 +169,30 @@ export class GenerateFixturesService {
     return batch.commit();
   }
 
-  // updateSeason(sid: string) {
-  //   if (!sid) {
-  //     return;
-  //   }
-  //   return this.ngFire.collection('seasons').doc(sid).update({
-  //     isFixturesCreated: true
-  //   })
+  deleteDraft(docID: string) {
+    if (docID) {
+      this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', docID))
+        .get()
+        .pipe(map(resp => resp.docs.map(doc => doc.exists ? doc.id : null)))
+        .subscribe((response: string[]) => {
+          const batch = this.ngFire.firestore.batch();
 
-  // }
+          if (response && response.length) {
+            response.forEach(deleteDocID => {
+              const draftRef = this.ngFire.collection('seasonFixturesDrafts').doc(deleteDocID).ref;
+              batch.delete(draftRef);
+            })
+          }
+
+          const draftRef = this.ngFire.collection('seasonDrafts').doc(docID).ref;
+          batch.delete(draftRef);
+
+          batch.commit()
+            .then(() => this.snackbarService.displayDelete())
+            .catch(err => this.snackbarService.displayCustomMsg(err))
+        })
+    }
+  }
 
   calculateTotalTournamentMatches(teams: number): number {
     return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);

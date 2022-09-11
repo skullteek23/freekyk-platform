@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { MatchConstants } from '../../shared/constants/constants';
-import { GenerateFixturesService } from '../generate-fixtures.service';
+import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-generate-fixtures',
@@ -52,7 +52,7 @@ export class GenerateFixturesComponent implements OnInit {
           content: groundNamesString
         },
       ];
-      this.fixturesList = this.generateFixtureService.onGenerateDummyFixtures(data);
+      this.fixturesList = this.seasonAdminService.onGenerateDummyFixtures(data);
     } else {
       this.lines = [];
       this.fixturesList = [];
@@ -60,7 +60,7 @@ export class GenerateFixturesComponent implements OnInit {
     this.initForm(this.fixturesList);
   }
 
-  constructor(private generateFixtureService: GenerateFixturesService) { }
+  constructor(private seasonAdminService: SeasonAdminService) { }
 
   ngOnInit(): void { }
 
