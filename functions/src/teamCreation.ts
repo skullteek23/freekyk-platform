@@ -42,7 +42,7 @@ export async function teamCreation(data: {
       captainId: CAPTAIN_ID,
     };
     teamMoreInfo = {
-      tdateCreated: admin.firestore.Timestamp.now(),
+      tdateCreated: admin.firestore.Timestamp.now().toMillis(),
       tageCat: 30,
       captainName: captainInfo.name,
     };

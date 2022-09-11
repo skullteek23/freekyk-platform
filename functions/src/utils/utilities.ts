@@ -22,7 +22,7 @@ export async function joinTeam(invite: Invite, inviteID: string): Promise<any> {
       type: 'team welcome',
       senderId: invite.teamId,
       receiverId: invite.inviteeId,
-      date: admin.firestore.Timestamp.fromDate(new Date()),
+      date: new Date().getTime(),
       title: 'Welcome to our Team',
       senderName: invite.teamName,
     };
@@ -77,7 +77,7 @@ export async function assignSeasonParticipants(season: SeasonBasicInfo, particip
   seasonFixturesData.forEach(element => {
     const id = element.id;
     const fixtureData = element.data() as MatchFixture;
-    const date = fixtureData.date.toMillis();
+    const date = fixtureData.date;
     fixtures.push({ ...fixtureData, id, date });
   });
   fixtures.sort(sortObjectByKey('date'));

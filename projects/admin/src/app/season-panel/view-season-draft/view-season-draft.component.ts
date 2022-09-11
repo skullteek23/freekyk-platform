@@ -143,7 +143,7 @@ export class ViewSeasonDraftComponent implements OnInit {
 
       (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id).forEach(groundID => {
         const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
-        const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: (startDate as any).toMillis(), bookingTo: endDate };
+        const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
         batch.set(setRef, booking);
       })
 

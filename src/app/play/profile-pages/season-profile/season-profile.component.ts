@@ -154,17 +154,4 @@ export class SeasonProfileComponent implements OnInit {
   onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.imgPath);
   }
-
-  // getSeasonStatus(): any {
-  //   if (this.seasonInfo) {
-  //     const seasonTimeInMillis = (this.seasonInfo.start_date as any).toMillis();
-  //     const currentTimeInMillis = new Date().getTime();
-  //     const isUpcoming = seasonTimeInMillis > currentTimeInMillis;
-  //     const isEnded = seasonTimeInMillis < currentTimeInMillis && this.seasonInfo.isSeasonEnded;
-  //     const isOngoing = seasonTimeInMillis <= currentTimeInMillis
-  //     const hasFixtures = this.seasonInfo.isFixturesCreated || false;
-  //     return { isUpcoming, isEnded, isOngoing, hasFixtures }
-  //   }
-  //   return {};
-  // }
 }

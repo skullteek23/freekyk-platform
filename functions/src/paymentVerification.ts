@@ -31,7 +31,7 @@ export async function paymentVerification(data: any, context: any): Promise<any>
       status: 'SUCCESS',
       by: data.uid,
       payableTotal: season.feesPerTeam || 1,
-      placedOn: admin.firestore.Timestamp.fromDate(new Date()),
+      placedOn: admin.firestore.Timestamp.now().toMillis(),
       itemsDescSnap: {
         prodName: season.name,
         prodImgpath: season.imgpath,

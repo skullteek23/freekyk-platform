@@ -17,7 +17,7 @@ export async function joinRequests(data: { capId: string[]; name: string }, cont
         type: 'request',
         senderId: UID,
         receiverId: ID,
-        date: admin.firestore.Timestamp.now(),
+        date: admin.firestore.Timestamp.now().toMillis(),
         title: 'Join Request',
         senderName: requesterName,
       };
