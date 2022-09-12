@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
@@ -31,7 +32,10 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
   getSeasons(): void {
     this.subscription.add(this.ngFire.collection('seasonDrafts').snapshotChanges()
-      .pipe(map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))))
+      .pipe(
+        map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('lastUpdated', 'desc')))
+      )
       .subscribe((resp) => (this.seasons = resp)));
   }
 

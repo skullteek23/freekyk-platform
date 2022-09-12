@@ -28,6 +28,7 @@ import { ViewSeasonDraftComponent } from './season-panel/view-season-draft/view-
 import { DatePipe } from '@angular/common';
 import { GenerateFixturesComponent } from './season-panel/generate-fixtures/generate-fixtures.component';
 import { RequestDialogComponent } from './season-panel/request-dialog/request-dialog.component';
+import { UpdateMatchReportComponent } from './season-panel/update-match-report/update-match-report.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { RequestDialogComponent } from './season-panel/request-dialog/request-di
     LineInfoDisplayComponent,
     ViewSeasonDraftComponent,
     GenerateFixturesComponent,
-    RequestDialogComponent
+    RequestDialogComponent,
+    UpdateMatchReportComponent
 
   ],
   imports: [

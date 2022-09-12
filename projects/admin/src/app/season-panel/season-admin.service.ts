@@ -98,75 +98,30 @@ export class SeasonAdminService {
   }
 
   getPublishableFixture(data: dummyFixture[]) {
-    return data.map(val => {
-      const newId = this.ngFire.createId();
-      return {
-        id: val.id,
-        date: val.date,
-        concluded: false,
-        home: {
-          name: MatchConstantsSecondary.TO_BE_DECIDED,
-          logo: MatchConstantsSecondary.DEFAULT_LOGO
-        },
-        away: {
-          name: MatchConstantsSecondary.TO_BE_DECIDED,
-          logo: MatchConstantsSecondary.DEFAULT_LOGO
-        },
-        teams: [MatchConstantsSecondary.TO_BE_DECIDED],
-        season: val.season,
-        premium: val.premium,
-        type: val.type,
-        locCity: val.locCity,
-        locState: val.locState,
-        stadium: val.stadium,
-      } as MatchFixture;
-    })
+    return data.map(val => ({
+      id: val.id,
+      date: val.date,
+      concluded: false,
+      home: {
+        name: MatchConstantsSecondary.TO_BE_DECIDED,
+        logo: MatchConstantsSecondary.DEFAULT_LOGO
+      },
+      away: {
+        name: MatchConstantsSecondary.TO_BE_DECIDED,
+        logo: MatchConstantsSecondary.DEFAULT_LOGO
+      },
+      teams: [MatchConstantsSecondary.TO_BE_DECIDED],
+      season: val.season,
+      premium: val.premium,
+      type: val.type,
+      locCity: val.locCity,
+      locState: val.locState,
+      stadium: val.stadium,
+    } as MatchFixture));
   }
 
-  updateGroundAvailability(groundIds: string[] = [], unavailableStartDate: Date, unavailableEndDate: Date) {
-    let allAsyncPromises = [];
-    unavailableStartDate.setDate(unavailableStartDate.getDate() + 1);
-    unavailableStartDate.setHours(0);
-    unavailableStartDate.setMinutes(0);
-    const startDate = new Date(JSON.parse(JSON.stringify(unavailableStartDate)));
-    unavailableEndDate.setDate(unavailableEndDate.getDate() + 1);
-    unavailableEndDate.setHours(0);
-    unavailableEndDate.setMinutes(0);
-    const endDate = new Date(JSON.parse(JSON.stringify(unavailableEndDate)));
-    groundIds.forEach(groundId => {
-      allAsyncPromises.push(this.ngFire.collection('groundsPvt').doc(groundId).update({
-        unavailableStartDate: startDate,
-        unavailableEndDate: endDate
-      }));
-    })
-    return Promise.all(allAsyncPromises);
-  }
-
-  onCreateFixtures(
-    fixtures: MatchFixture[],
-    overviews: MatchFixtureOverview[] = [],
-    lineups: MatchLineup[] = []
-  ) {
-    var batch = this.ngFire.firestore.batch();
-    for (let i = 0; i < fixtures.length; i++) {
-      const colRef = this.ngFire
-        .collection('allMatches')
-        .doc(fixtures[i].id).ref;
-      batch.set(colRef, fixtures[i]);
-    }
-    for (let i = 0; i < overviews.length; i++) {
-      const colRef = this.ngFire
-        .collection('allMatches/' + fixtures[i].id + '/additionalInfo')
-        .doc('matchOverview').ref;
-      batch.set(colRef, overviews[i]);
-    }
-    for (let i = 0; i < lineups.length; i++) {
-      const colRef = this.ngFire
-        .collection('allMatches/' + fixtures[i].id + '/additionalInfo')
-        .doc('matchLineup').ref;
-      batch.set(colRef, lineups[i]);
-    }
-    return batch.commit();
+  isGroundBooked(grounds: string[], firstFixture: MatchFixture, lastFixture: MatchFixture) {
+    return true;
   }
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {

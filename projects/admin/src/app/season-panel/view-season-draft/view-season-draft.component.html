@@ -94,7 +94,8 @@
 <mat-card class="info-card season-page-container">
   <h4 *ngIf="seasonFixtures.length">Generated Fixtures </h4>
   <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
-  <app-fixture-table *ngIf="seasonFixtures.length" [data]="seasonFixtures" [actions]="true">
+  <app-fixture-table (actionTrigger)="onUpdateMatchData($event)" *ngIf="seasonFixtures.length" [data]="seasonFixtures"
+    [actions]="true">
   </app-fixture-table>
   <div *ngIf="seasonFixtures.length" class="mat-caption trouble-text">
     Have trouble with any match data? Raise a quest to revoke match data immediately. <a

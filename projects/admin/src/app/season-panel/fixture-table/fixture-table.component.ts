@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstantsSecondary } from '../../shared/constants/constants';
 
 @Component({
@@ -9,9 +11,8 @@ import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, Match
 })
 export class FixtureTableComponent implements OnInit {
 
-  @Input() set data(value: any) {
-    let dummyFixturesTemp = value;
-    dummyFixturesTemp = dummyFixturesTemp.map(val => {
+  @Input() set data(value: dummyFixture[]) {
+    const dummyFixturesTemp = value.map(val => {
       return {
         [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
         [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: this.TBD,
@@ -28,26 +29,55 @@ export class FixtureTableComponent implements OnInit {
     }
   }
 
-  @Input() actions = false;
+  @Input() set actions(value: boolean) {
+    this.isActions = value;
+    this.setDisplayColumns(value);
+  }
+
+  @Output() actionTrigger = new Subject<any>();
 
   readonly TABLE_UI_COLUMNS = DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS;
   readonly TABLE_COLUMNS = DUMMY_FIXTURE_TABLE_COLUMNS;
   readonly TBD = MatchConstantsSecondary.TO_BE_DECIDED;
 
-  displayedColumns = [
-    DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
-    DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
-    DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
-    DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
-    DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
-    DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
-  ]
+  isActions = false;
+  displayedColumns = [];
   dataSource = new MatTableDataSource<any>([]);
   tableLength = 0;
 
-  constructor() { }
+  constructor() {
+    this.setDisplayColumns(false);
+  }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  setDisplayColumns(onIncludeActionCol = false) {
+    if (onIncludeActionCol) {
+      this.displayedColumns = [
+        DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
+        DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
+        DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
+        DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
+        DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
+        DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
+        'actions'
+      ]
+    } else {
+      this.displayedColumns = [
+        DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
+        DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
+        DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
+        DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
+        DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
+        DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
+      ];
+    }
+  }
+
+  onTriggerAction(data) {
+    if (this.isActions) {
+      this.actionTrigger.next(data);
+    }
   }
 
 }

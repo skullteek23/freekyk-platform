@@ -131,9 +131,13 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
     return availDays.slice().join(', ').concat(' & ').concat(lastElement[0]);
   }
 
+  getBooking(groundID: string) {
+    return this.bookingsList && this.bookingsList.length ? this.bookingsList.find(booking => booking.groundID === groundID) : null;
+  }
+
   isGroundDisabled(ground: GroundPrivateInfo): boolean {
     let isGroundUnavailable = false;
-    const existingBooking = this.bookingsList && this.bookingsList.length ? this.bookingsList.find(booking => booking.groundID === ground.id) : null;
+    const existingBooking = this.getBooking(ground.id);
     const startDate = new Date(this.seasonStartDate).getTime();
     const contractStartDate = ground['contractStartDate'] || 0;
     const contractEndDate = ground['contractEndDate'] || 0;
@@ -147,5 +151,8 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
       isGroundUnavailable = true;
     }
     return isGroundUnavailable;
+  }
+  getAvailableDate(groundID: string) {
+    return this.getBooking(groundID)?.bookingTo;
   }
 }

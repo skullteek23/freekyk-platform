@@ -13,6 +13,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
+import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -174,6 +175,11 @@ export class ViewSeasonDraftComponent implements OnInit {
         paymentMethod: 'Online',
       }
       const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
+      if (this.seasonAdminService.isGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
+        this.isLoaderShown = false;
+        this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
+        return;
+      }
       const startDate = season.start_date;
       const endDate = fixtures[fixtures.length - 1].date;
       const lastUpdated = new Date().getTime();
@@ -247,6 +253,31 @@ export class ViewSeasonDraftComponent implements OnInit {
       )
     } else {
       this.seasonFixtures = [];
+    }
+  }
+
+  onUpdateMatchData(matchID: any) {
+    if (matchID) {
+      this.isLoaderShown = true;
+      this.isInvalidUpdate(matchID).subscribe(response => {
+        if (response === false) {
+          this.isLoaderShown = false;
+          this.dialog.open(UpdateMatchReportComponent, {
+            panelClass: 'extra-large-dialogs',
+            data: matchID,
+            disableClose: true
+          }).afterClosed().subscribe(userResponse => {
+            console.log(userResponse);
+          });
+        }
+        this.isLoaderShown = false;
+      })
+    }
+  }
+
+  isInvalidUpdate(matchID: string): Observable<boolean> {
+    if (matchID) {
+      return this.ngFire.collection('allMatches').doc(matchID).get().pipe(map(resp => resp.exists ? (resp.data() as MatchFixture).concluded === true : true));
     }
   }
 

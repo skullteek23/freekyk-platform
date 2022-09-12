@@ -1,3 +1,13 @@
 table {
   width: 100%;
 }
+
+th.mat-column-actions .mat-sort-header-container {
+  justify-content: center;
+}
+
+.action-button {
+  min-width: 100% !important;
+  max-height: 30px;
+  font-size: small;
+}

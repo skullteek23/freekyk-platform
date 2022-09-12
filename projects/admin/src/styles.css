@@ -869,16 +869,16 @@ app-fixture-table {
 }
 
 .season-page-container .fixture-table-container .mat-column-id {
-  width: 20%;
-  padding-right: 10px;
+  width: 18%;
+  padding-right: 5px;
 }
 
 .season-page-container .fixture-table-container .mat-column-home {
-  width: 9%;
+  width: 6%;
 }
 
 .season-page-container .fixture-table-container .mat-column-away {
-  width: 9%;
+  width: 6%;
 }
 
 .season-page-container .fixture-table-container .mat-column-date {
@@ -886,9 +886,13 @@ app-fixture-table {
 }
 
 .season-page-container .fixture-table-container .mat-column-location {
-  width: 25%;
+  width: 17%;
 }
 
 .season-page-container .fixture-table-container .mat-column-ground {
   width: 21%;
+}
+
+.season-page-container .fixture-table-container .mat-column-actions {
+  width: 16%;
 }
