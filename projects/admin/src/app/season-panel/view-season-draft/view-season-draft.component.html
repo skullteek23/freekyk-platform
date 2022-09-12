@@ -94,7 +94,8 @@
 <mat-card class="info-card season-page-container">
   <h4 *ngIf="seasonFixtures.length">Generated Fixtures </h4>
   <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
-  <app-fixture-table *ngIf="seasonFixtures.length" [data]="seasonFixtures" [actions]="true"></app-fixture-table>
+  <app-fixture-table *ngIf="seasonFixtures.length" [data]="seasonFixtures" [actions]="true">
+  </app-fixture-table>
   <div *ngIf="seasonFixtures.length" class="mat-caption trouble-text">
     Have trouble with any match data? Raise a quest to revoke match data immediately. <a
       (click)="onRaiseRequest()">Click here</a>
@@ -104,16 +105,18 @@
     <button [routerLink]="['/seasons/list']" class="buttonText secondaryButton">
       Go Back
     </button>
-    <button *ngIf="isSeasonPublished" (click)="goToURL()" class="buttonText primaryButton">
+    <button *ngIf="isSeasonFinished || this.isSeasonPublished" (click)="goToURL()" class="buttonText primaryButton">
       View your season
     </button>
-    <button *ngIf="isSeasonPublished" (click)="onRaiseDeleteRequest()" class="buttonText noResponseButton">
+    <button *ngIf="this.isSeasonPublished" (click)="onRaiseDeleteRequest()" class="buttonText noResponseButton">
       Delete this season
     </button>
-    <button *ngIf="isSeasonPublished === false" (click)="publishSeason()" class="buttonText primaryButton">
+    <button *ngIf="isSeasonFinished === false && this.isSeasonPublished === false" (click)="publishSeason()"
+      class="buttonText primaryButton">
       Publish Season
     </button>
-    <button *ngIf="isSeasonPublished === false" (click)="onConfirmDelete()" class="buttonText noResponseButton">
+    <button *ngIf="isSeasonFinished === false && this.isSeasonPublished === false" (click)="onConfirmDelete()"
+      class="buttonText noResponseButton">
       Delete this draft
     </button>
   </div>

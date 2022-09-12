@@ -47,3 +47,8 @@ export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   LOCATION: 'Location',
   GROUND: 'Ground',
 }
+
+export const DELETE_SEASON_SUBHEADING = `Deletion request will disable all <strong>update match data</strong> button for you. Please provide us the reason
+below: [max characters: 1000]`;
+export const REVOKE_MATCH_UPDATE_SUBHEADING = `Please note that reverting the match update will revert all the numbers shown in match summaries. please provide us the reason below: [max characters: 1000]`;
+export const UNIQUE_DELETION_REQUEST_CODE = 'FK-SEASON'

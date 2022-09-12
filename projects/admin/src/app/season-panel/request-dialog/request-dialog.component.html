@@ -1,1 +1,25 @@
-<p>request-dialog works!</p>
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Raise a request</span>
+</mat-toolbar>
+<div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <div class="box-size">
+    <p class="mat-body-2 text-align" [innerHtml]="data.heading"></p>
+  </div>
+  <mat-form-field class="box-size" appearance="outline">
+    <mat-placeholder> Ex: Nobody has participated 3 days ahead of the tournament / season.</mat-placeholder>
+    <textarea matInput [(ngModel)]="reason" cols="30" rows="10" maxlength="1000"></textarea>
+    <mat-error *ngIf="!isReasonValid">Max Characters allowed: 1000</mat-error>
+  </mat-form-field>
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
+    fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">
+    <button (click)="onCloseDialog()" class="secondaryButton buttonText">
+      Cancel
+    </button>
+    <button [disabled]="!isReasonValid" (click)="sendRequestToAdmin()" class="primaryButton buttonText">
+      Confirm & Send
+    </button>
+  </div>
+</div>

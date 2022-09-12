@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { map, share } from 'rxjs/operators';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { SeasonAbout, SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstants } from '../../shared/constants/constants';
+import { DELETE_SEASON_SUBHEADING, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING } from '../../shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
@@ -63,10 +63,6 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.seasonAdminService.getStatusClass(this.seasonDraftData?.status);
   }
 
-  get isSeasonPublished(): boolean {
-    return this.seasonDraftData?.status === 'PUBLISHED' || this.seasonDraftData?.status === 'FINISHED';
-  }
-
   editSeasonInfo() {
     // if (this.seasonDraftData?.draftID) {
     //   this.dialog.open(CreateSeasonComponent, {
@@ -78,15 +74,69 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   onRaiseRequest() {
-    this.dialog.open(RequestDialogComponent, {
-      panelClass: 'fk-dialogs',
-    })
+    this.isLoaderShown = true;
+    this.isRequestExists$.subscribe(response => {
+      if (!response && this.isSeasonPublished) {
+        this.isLoaderShown = false;
+        this.dialog.open(RequestDialogComponent, {
+          panelClass: 'fk-dialogs',
+          data: {
+            season: this.seasonDraftData?.draftID,
+            heading: REVOKE_MATCH_UPDATE_SUBHEADING
+          }
+        }).afterClosed().subscribe(userResponse => {
+          if (userResponse && Object.keys(userResponse).length === 4) {
+            this.isLoaderShown = true
+            this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
+              .then(
+                () => {
+                  this.isLoaderShown = false;
+                  this.snackbarService.displayCustomMsgLong('Revoke Request Submitted!');
+                }, err => {
+                  this.isLoaderShown = false;
+                  this.snackbarService.displayError();
+                }
+              )
+          }
+        });
+      } else {
+        this.isLoaderShown = false;
+        this.snackbarService.displayCustomMsg('Request already submitted!');
+      }
+    });
   }
 
   onRaiseDeleteRequest() {
-    this.dialog.open(RequestDialogComponent, {
-      panelClass: 'fk-dialogs',
-    })
+    this.isLoaderShown = true;
+    this.isRequestExists$.subscribe(response => {
+      if (!response && this.isSeasonPublished) {
+        this.isLoaderShown = false;
+        this.dialog.open(RequestDialogComponent, {
+          panelClass: 'fk-dialogs',
+          data: {
+            season: this.seasonDraftData?.draftID,
+            heading: DELETE_SEASON_SUBHEADING
+          }
+        }).afterClosed().subscribe(userResponse => {
+          if (userResponse && Object.keys(userResponse).length === 4) {
+            this.isLoaderShown = true
+            this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
+              .then(
+                () => {
+                  this.isLoaderShown = false;
+                  this.snackbarService.displayCustomMsgLong('Delete Request Submitted!');
+                }, err => {
+                  this.isLoaderShown = false;
+                  this.snackbarService.displayError();
+                }
+              )
+          }
+        });
+      } else {
+        this.isLoaderShown = false;
+        this.snackbarService.displayCustomMsg('Request already submitted!');
+      }
+    });
   }
 
   onConfirmDelete(): void {
@@ -103,7 +153,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   publishSeason() {
-    if (this.seasonDraftData?.draftID && !this.isSeasonPublished) {
+    if (this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
       this.isLoaderShown = true;
       const season: SeasonBasicInfo = {
         name: this.seasonDraftData.basicInfo?.name,
@@ -171,7 +221,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     if (fixtures && groundsList && groundsList.length && fixtures.length) {
       const groundsListNames = groundsList.map(ground => ground.name);
       this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
-    } else if (this.isSeasonPublished) {
+    } else if (this.isSeasonFinished || this.isSeasonPublished) {
       this.isLoaderShown = true;
       this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).get().subscribe(
         (response) => {
@@ -223,4 +273,17 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.ngFire.collection('groundBookings').snapshotChanges().pipe(map(resp => resp.length === 0));
   }
 
+  get isSeasonPublished(): boolean {
+    return this.seasonDraftData?.status === 'PUBLISHED';
+  }
+
+  get isSeasonFinished(): boolean {
+    return this.seasonDraftData?.status === 'FINISHED';
+  }
+
+  get isRequestExists$(): Observable<boolean> {
+    if (this.seasonDraftData?.draftID) {
+      return this.ngFire.collection('adminRequests', query => query.where('seasonId', '==', this.seasonDraftData.draftID)).get().pipe(map(resp => !resp.empty), share());
+    }
+  }
 }
