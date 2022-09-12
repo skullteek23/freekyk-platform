@@ -12,7 +12,7 @@ import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
 import { removeThumbnail } from './trigger_functions/removeThumbnail';
-import { environment } from './utils/environment';
+import { environment } from '../../src/environments/environment';
 
 
 // callable functions

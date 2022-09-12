@@ -3,7 +3,7 @@ import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
 import { assignSeasonParticipants } from './utils/utilities';
-import { environment } from './utils/environment';
+import { environment } from '../../src/environments/environment';
 
 const crypto = require('crypto');
 const db = admin.firestore();

@@ -1,4 +1,4 @@
-import { environment } from './utils/environment';
+import { environment } from '../../src/environments/environment';
 
 const Razorpay = require('razorpay');
 
