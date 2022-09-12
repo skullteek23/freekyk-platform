@@ -30,7 +30,7 @@
       <th mat-header-cell *matHeaderCellDef>Start Date</th>
       <td class="row" mat-cell *matCellDef="let data">
         <span class="mat-body-2">
-          {{ data.start_date | date: 'fullDate' }}
+          {{ data?.basicInfo?.startDate | date: 'fullDate' }}
         </span>
       </td>
     </ng-container>

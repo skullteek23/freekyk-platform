@@ -31,13 +31,7 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
   getSeasons(): void {
     this.subscription.add(this.ngFire.collection('seasonDrafts').snapshotChanges()
-      .pipe(
-        map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))),
-        map(data => data.map(el => ({
-          ...el,
-          start_date: new Date(el.basicInfo?.startDate['seconds'] * 1000)
-        })))
-      )
+      .pipe(map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))))
       .subscribe((resp) => (this.seasons = resp)));
   }
 
