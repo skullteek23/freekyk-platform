@@ -1,3 +1,5 @@
+import { GroundPrivateInfo } from "./ground.model";
+
 export type statusType = 'PUBLISHED' | 'DRAFTED' | 'FINISHED' | 'READY TO PUBLISH';
 export interface SeasonBasicInfo {
   name: string;
@@ -42,5 +44,5 @@ export interface SeasonDraft {
   draftID: string;
   status: statusType;
   basicInfo?: any;
-  grounds?: any[];
+  grounds?: GroundPrivateInfo[];
 }

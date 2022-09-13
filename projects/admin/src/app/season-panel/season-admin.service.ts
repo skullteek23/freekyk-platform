@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { dummyFixture, MatchFixture, MatchFixtureOverview, MatchLineup } from 'src/app/shared/interfaces/match.model';
+import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { statusType } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
@@ -14,7 +14,7 @@ import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/con
 })
 export class SeasonAdminService {
 
-  constructor(private ngFire: AngularFirestore, private snackbarService: SnackbarService) { }
+  constructor(private ngFire: AngularFirestore) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
     let fcpMatches = data.matches.fcp;
@@ -120,9 +120,32 @@ export class SeasonAdminService {
     } as MatchFixture));
   }
 
-  isGroundBooked(grounds: string[], firstFixture: MatchFixture, lastFixture: MatchFixture) {
-    return true;
+  async isGroundBooked(grounds: GroundPrivateInfo[], firstFixture: MatchFixture, lastFixture: MatchFixture): Promise<boolean> {
+    if (firstFixture.date && lastFixture.date) {
+      for (let i = 0; i < grounds.length; i++) {
+        const bookingsList = await this.ngFire.collection('groundBookings', query => query.where('groundID', '==', grounds[i]['id'])).get()
+          .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBookings) : [])).toPromise();
+        if (!bookingsList.length) {
+          continue;
+        } else {
+          return bookingsList.some(booking => this.isBookingOverlapping(firstFixture.date, lastFixture.date, booking));
+        }
+      }
+    }
+    return false;
   }
+
+  isBookingOverlapping(firstDate: number, lastDate: number, booking: GroundBookings): boolean {
+    if (firstDate < booking.bookingFrom && lastDate >= booking.bookingTo) {
+      return true;
+    } else if (firstDate >= booking.bookingFrom && firstDate <= booking.bookingTo) {
+      return true;
+    } else if (firstDate > booking.bookingTo && lastDate <= booking.bookingTo) {
+      return false;
+    }
+    return false;
+  }
+
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {
     return this.getSeasonFixtureDrafts(docID).pipe(switchMap(response => {

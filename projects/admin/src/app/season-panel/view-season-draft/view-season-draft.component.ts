@@ -153,7 +153,7 @@ export class ViewSeasonDraftComponent implements OnInit {
       })
   }
 
-  publishSeason() {
+  async publishSeason() {
     if (this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
       this.isLoaderShown = true;
       const season: SeasonBasicInfo = {
@@ -175,7 +175,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         paymentMethod: 'Online',
       }
       const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
-      if (this.seasonAdminService.isGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
+      if (await this.seasonAdminService.isGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
         this.isLoaderShown = false;
         this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
         return;
