@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { MatchConstants } from '../../shared/constants/constants';
 import { SeasonAdminService } from '../season-admin.service';
@@ -12,7 +13,7 @@ import { SeasonAdminService } from '../season-admin.service';
 export class GenerateFixturesComponent implements OnInit {
 
   fixturesForm = new FormGroup({});
-  fixturesList = [];
+  fixturesList: dummyFixture[] = [];
   lines = [];
 
   @Input() set data(value: any) {
@@ -34,6 +35,8 @@ export class GenerateFixturesComponent implements OnInit {
       oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
     }
     if (tournaments && startDate && teams) {
+      this.fixturesList = this.seasonAdminService.onGenerateDummyFixtures(data);
+      const endDate = this.fixturesList && this.fixturesList.length ? this.fixturesList[this.fixturesList.length - 1].date : '';
       this.lines = [
         {
           heading: 'Teams Participating',
@@ -51,8 +54,11 @@ export class GenerateFixturesComponent implements OnInit {
           heading: 'Selected Grounds',
           content: groundNamesString
         },
+        {
+          heading: 'End Date (Approx)',
+          content: endDate
+        },
       ];
-      this.fixturesList = this.seasonAdminService.onGenerateDummyFixtures(data);
     } else {
       this.lines = [];
       this.fixturesList = [];

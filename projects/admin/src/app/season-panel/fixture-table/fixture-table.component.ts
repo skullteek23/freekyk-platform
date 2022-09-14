@@ -30,9 +30,10 @@ export class FixtureTableComponent implements OnInit {
   }
 
   @Input() set actions(value: boolean) {
-    this.isActions = value;
     this.setDisplayColumns(value);
   }
+
+  @Input() disabled: boolean = false;
 
   @Output() actionTrigger = new Subject<any>();
 
@@ -40,7 +41,6 @@ export class FixtureTableComponent implements OnInit {
   readonly TABLE_COLUMNS = DUMMY_FIXTURE_TABLE_COLUMNS;
   readonly TBD = MatchConstantsSecondary.TO_BE_DECIDED;
 
-  isActions = false;
   displayedColumns = [];
   dataSource = new MatTableDataSource<any>([]);
   tableLength = 0;
@@ -75,7 +75,7 @@ export class FixtureTableComponent implements OnInit {
   }
 
   onTriggerAction(data) {
-    if (this.isActions) {
+    if (!this.disabled) {
       this.actionTrigger.next(data);
     }
   }

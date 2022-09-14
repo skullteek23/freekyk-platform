@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
-  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+  <button matTooltip="Close" mat-icon-button (click)="onNavigateAway()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
   <span class="mat-body-1">
@@ -11,7 +11,7 @@
     {{seasonName}}
   </div>
   <mat-horizontal-stepper [linear]="true">
-    <mat-step label="Add Season" [stepControl]="seasonForm" [editable]="false">
+    <mat-step label="Add Season" [stepControl]="seasonForm" [editable]="true">
       <app-add-season></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>

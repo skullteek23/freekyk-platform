@@ -63,12 +63,10 @@ export class CreateSeasonComponent implements OnDestroy {
 
   navigateToDraftAndClose(draftID) {
     this.router.navigate(['/seasons/s/' + draftID]);
-    this.onCloseDialog();
   }
 
   navigateToListAndClose() {
-    this.router.navigate(['/seasons/list']);
-    this.onCloseDialog();
+    this.onNavigateAway();
   }
 
   getGrounds(city: string, state: string, date: number) {
@@ -90,8 +88,12 @@ export class CreateSeasonComponent implements OnDestroy {
       ))
   }
 
-  saveDetails() {
+  onNavigateAway() {
     this.router.navigate(['/seasons/list'])
+  }
+
+  saveDetails() {
+    this.onNavigateAway();
     this.onCloseDialog();
   }
 

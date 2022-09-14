@@ -196,17 +196,19 @@ export class ViewSeasonDraftComponent implements OnInit {
 
       batch.update(draftRef, { lastUpdated, status });
 
+      const groundIDList = (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id);
 
-      (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id).forEach(async groundID => {
+      for (let i = 0; i < groundIDList.length; i++) {
+        const groundID = groundIDList[i];
         const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
         const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
         const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBookings;
         if (existingBooking && existingBooking.bookingTo < endDate) {
-          batch.update(setRef, booking);
+          batch.update(setRef, { bookingTo: endDate });
         } else {
           batch.set(setRef, booking);
         }
-      })
+      }
 
       fixtures.forEach(fixture => {
         const fixtureRef = this.ngFire.collection('allMatches').doc(fixture.id).ref;
@@ -217,8 +219,8 @@ export class ViewSeasonDraftComponent implements OnInit {
         () => {
           this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
           this.isLoaderShown = false;
-          this.goToURL();
-          location.reload();
+          // this.goToURL();
+          // location.reload();
         }, err => {
           this.isLoaderShown = false;
           this.snackbarService.displayError();

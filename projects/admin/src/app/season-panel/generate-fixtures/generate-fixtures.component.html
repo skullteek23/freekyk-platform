@@ -1,12 +1,7 @@
 <form [formGroup]="fixturesForm" class="form-container" fxLayout="column" fxLayoutAlign="stretch center">
   <ng-container *ngIf="lines.length > 2">
-    <app-line-info-display fxFlexFill [heading]="lines[0].heading" [content]="lines[0].content">
-    </app-line-info-display>
-    <app-line-info-display fxFlexFill [heading]="lines[1].heading" [content]="lines[1].content">
-    </app-line-info-display>
-    <app-line-info-display fxFlexFill [heading]="lines[2].heading" [content]="lines[2].content | date: 'fullDate'">
-    </app-line-info-display>
-    <app-line-info-display fxFlexFill [heading]="lines[3].heading" [content]="lines[3].content">
+    <app-line-info-display *ngFor="let line of lines; let i = index" fxFlexFill [heading]="line.heading"
+      [content]="(i === 2 || i === 4) ? (line.content | date: 'fullDate') : line.content">
     </app-line-info-display>
   </ng-container>
   <app-fixture-table [data]="fixturesList"></app-fixture-table>

@@ -41,7 +41,8 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
       <td mat-cell *matCellDef="let element">
         <div>
-          <button (click)="onTriggerAction(element[TABLE_COLUMNS.MATCH_ID])" class="action-button primaryButton">
+          <button [disabled]="disabled" (click)="onTriggerAction(element[TABLE_COLUMNS.MATCH_ID])"
+            class="action-button primaryButton">
             Update Match Report
           </button>
         </div>

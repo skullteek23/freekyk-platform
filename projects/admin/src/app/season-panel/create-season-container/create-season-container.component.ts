@@ -1,23 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { canComponentDeactivate, Guard } from '../../shared/guards/can-deactivate-guard.service';
 import { CreateSeasonComponent } from '../create-season/create-season.component';
+import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-create-season-container',
   templateUrl: './create-season-container.component.html',
   styleUrls: ['./create-season-container.component.css']
 })
-export class CreateSeasonContainerComponent implements OnInit {
+export class CreateSeasonContainerComponent implements OnInit, canComponentDeactivate {
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private router: Router) { }
+  dialogRef: MatDialogRef<CreateSeasonComponent>;
+
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private router: Router, private seasonAdminService: SeasonAdminService) { }
 
   ngOnInit(): void {
     const params = this.route.snapshot.params;
-    this.dialog.open(CreateSeasonComponent, {
+    this.dialogRef = this.dialog.open(CreateSeasonComponent, {
       panelClass: 'extra-large-dialogs',
       disableClose: true,
+      closeOnNavigation: true,
       data: params
     })
   }
+
+  canDeactivate(): Guard {
+    const response = window.confirm('Are you sure you want to exit?').valueOf();
+    if (response && this.dialogRef) {
+      this.dialogRef.close();
+    }
+    return response;
+  };
 }

@@ -14,6 +14,8 @@ import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/con
 })
 export class SeasonAdminService {
 
+  isTriggerCloseDialog
+
   constructor(private ngFire: AngularFirestore) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
@@ -96,6 +98,8 @@ export class SeasonAdminService {
     })
     return fixtures && fixtures.length ? fixtures : [];
   }
+
+  onTriggerDialogClose() { }
 
   getPublishableFixture(data: dummyFixture[]) {
     return data.map(val => ({
