@@ -144,7 +144,7 @@ export class SeasonAdminService {
   }
 
   isBookingOverlapping(firstDate: number, lastDate: number, booking: GroundBookings): boolean {
-    if (firstDate < booking.bookingFrom && lastDate >= booking.bookingTo) {
+    if (firstDate < booking.bookingFrom && (lastDate >= booking.bookingTo || (lastDate < booking.bookingTo && lastDate >= booking.bookingFrom))) {
       return true;
     } else if (firstDate >= booking.bookingFrom && firstDate <= booking.bookingTo) {
       return true;
