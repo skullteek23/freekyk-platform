@@ -6,14 +6,16 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { SeasonDraft } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
+import { MatchConstantsSecondary } from '../../shared/constants/constants';
 import { AddSeasonComponent } from '../add-season/add-season.component';
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
+import { SeasonAdminService } from '../season-admin.service';
 import { SelectGroundsComponent } from '../select-grounds/select-grounds.component';
 
 @Component({
@@ -42,7 +44,8 @@ export class CreateSeasonComponent implements OnDestroy {
     public dialogRef: MatDialogRef<CreateSeasonComponent>,
     private router: Router,
     private snackBarService: SnackbarService,
-    private ngStorage: AngularFireStorage
+    private ngStorage: AngularFireStorage,
+    private seasonAdminService: SeasonAdminService
   ) {
     this.draftID = ngFire.createId();
     const qParams = route.snapshot.queryParams;
@@ -72,10 +75,13 @@ export class CreateSeasonComponent implements OnDestroy {
     this.isLoaderShown = true;
     this.subscriptions.add(this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim()).where('contractStartDate', '<', date))
       .snapshotChanges()
+      .pipe(
+        map(response => response.map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo)),
+        map(response => response.sort(ArraySorting.sortObjectByKey('name')))
+      )
       .subscribe(
         (response) => {
-          this.availableGroundsList = response.map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo);
-          this.availableGroundsList.sort(ArraySorting.sortObjectByKey('name'));
+          this.availableGroundsList = response;
           this.isLoaderShown = false;
         }, (err) => {
           this.isLoaderShown = false;

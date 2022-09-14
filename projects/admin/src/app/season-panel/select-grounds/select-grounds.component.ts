@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { MatSelectionList } from '@angular/material/list';
+import { Subscription } from 'rxjs';
 import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-select-grounds',
@@ -56,7 +57,7 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSelectionList) list: MatSelectionList;
 
-  constructor(private ngFire: AngularFirestore) { }
+  constructor(private ngFire: AngularFirestore, private seasonAdminService: SeasonAdminService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -132,27 +133,27 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
   }
 
   getBooking(groundID: string) {
-    return this.bookingsList && this.bookingsList.length ? this.bookingsList.find(booking => booking.groundID === groundID) : null;
+    return this.bookingsList && this.bookingsList.length ? this.bookingsList.filter(booking => booking.groundID === groundID).sort(ArraySorting.sortObjectByKey('bookingTo', 'desc')) : null;
   }
 
   isGroundDisabled(ground: GroundPrivateInfo): boolean {
     let isGroundUnavailable = false;
-    const existingBooking = this.getBooking(ground.id);
+    const existingBookings: GroundBookings[] = this.getBooking(ground.id);
     const startDate = new Date(this.seasonStartDate).getTime();
     const contractStartDate = ground['contractStartDate'] || 0;
     const contractEndDate = ground['contractEndDate'] || 0;
 
-    if (existingBooking) {
-      const unavailableFrom = existingBooking.bookingFrom;
-      const unavailableTo = existingBooking.bookingTo;
-      isGroundUnavailable = (startDate && unavailableFrom && unavailableTo && ((startDate > unavailableFrom) || (startDate < unavailableTo)));
+    if (existingBookings) {
+      isGroundUnavailable = existingBookings.some(booking => this.seasonAdminService.isBookingOverlappingWithFirstDate(startDate, booking));
     }
     if (startDate && contractEndDate && contractStartDate && ((startDate > contractEndDate) || (startDate < contractStartDate))) {
       isGroundUnavailable = true;
     }
     return isGroundUnavailable;
   }
-  getAvailableDate(groundID: string) {
-    return this.getBooking(groundID)?.bookingTo;
+
+  getAvailableDate(groundID: string): number {
+    const booking = this.getBooking(groundID);
+    return booking && booking[booking.length - 1] ? booking[0]['bookingTo'] : 0;
   }
 }

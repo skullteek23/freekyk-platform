@@ -175,7 +175,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         paymentMethod: 'Online',
       }
       const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
-      if (await this.seasonAdminService.isGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
+      if (await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
         this.isLoaderShown = false;
         this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
         return;
@@ -197,10 +197,15 @@ export class ViewSeasonDraftComponent implements OnInit {
       batch.update(draftRef, { lastUpdated, status });
 
 
-      (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id).forEach(groundID => {
+      (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id).forEach(async groundID => {
         const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
         const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
-        batch.set(setRef, booking);
+        const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBookings;
+        if (existingBooking && existingBooking.bookingTo < endDate) {
+          batch.update(setRef, booking);
+        } else {
+          batch.set(setRef, booking);
+        }
       })
 
       fixtures.forEach(fixture => {

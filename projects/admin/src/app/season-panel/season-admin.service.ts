@@ -120,11 +120,10 @@ export class SeasonAdminService {
     } as MatchFixture));
   }
 
-  async isGroundBooked(grounds: GroundPrivateInfo[], firstFixture: MatchFixture, lastFixture: MatchFixture): Promise<boolean> {
+  async isAnyGroundBooked(grounds: GroundPrivateInfo[], firstFixture: MatchFixture, lastFixture: MatchFixture): Promise<boolean> {
     if (firstFixture.date && lastFixture.date) {
       for (let i = 0; i < grounds.length; i++) {
-        const bookingsList = await this.ngFire.collection('groundBookings', query => query.where('groundID', '==', grounds[i]['id'])).get()
-          .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBookings) : [])).toPromise();
+        const bookingsList = await this.getBookingsForGround(grounds[i]);
         if (!bookingsList.length) {
           continue;
         } else {
@@ -133,6 +132,11 @@ export class SeasonAdminService {
       }
     }
     return false;
+  }
+
+  async getBookingsForGround(ground: GroundPrivateInfo): Promise<GroundBookings[]> {
+    return await this.ngFire.collection('groundBookings', query => query.where('groundID', '==', ground['id'])).get()
+      .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBookings) : [])).toPromise();
   }
 
   isBookingOverlapping(firstDate: number, lastDate: number, booking: GroundBookings): boolean {
@@ -144,6 +148,10 @@ export class SeasonAdminService {
       return false;
     }
     return false;
+  }
+
+  isBookingOverlappingWithFirstDate(firstDate: number, booking: GroundBookings): boolean {
+    return !(firstDate < booking.bookingFrom || firstDate > booking.bookingTo);
   }
 
 

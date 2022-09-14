@@ -13,8 +13,7 @@
     <!-- <i class="mat-caption">Ground not listed here?&nbsp; <a (click)="onAddGround()"> Add here</a> </i> -->
   </div>
   <mat-selection-list (selectionChange)="onChooseGround()" class="list" color="primary" multiple>
-    <mat-list-option [disabled]="isGroundDisabled(ground)" [value]="ground"
-      *ngFor="let ground of grounds; last as last">
+    <mat-list-option [disabled]="ground.disabled" [value]="ground" *ngFor="let ground of grounds; last as last">
       <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
         <span class="mat-body">
           {{ ground.name }}
@@ -22,11 +21,10 @@
         <span class="mat-body grey">
           {{ "|" }}
         </span>
-        <span *ngIf="isGroundDisabled(ground)" class="mat-body red">
+        <span *ngIf="ground.disabled" class="mat-body red">
           {{ "Ground not available till " }} {{ getAvailableDate(ground?.id) | date: 'mediumDate' }}
         </span>
-        <span *ngIf="isGroundDisabled(ground) === false" class="mat-body grey"
-          [matTooltip]="getAvailableDays(ground.timings)">
+        <span *ngIf="!ground.disabled" class="mat-body grey" [matTooltip]="getAvailableDays(ground.timings)">
           {{ "Available on " + getAvailableDays(ground.timings) }}
         </span>
       </div>
