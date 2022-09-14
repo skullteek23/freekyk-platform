@@ -219,8 +219,8 @@ export class ViewSeasonDraftComponent implements OnInit {
         () => {
           this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
           this.isLoaderShown = false;
-          // this.goToURL();
-          // location.reload();
+          this.goToURL();
+          location.reload();
         }, err => {
           this.isLoaderShown = false;
           this.snackbarService.displayError();
