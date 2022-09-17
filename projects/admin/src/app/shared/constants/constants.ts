@@ -3,6 +3,7 @@ import { environment } from "src/environments/environment";
 export class MatchConstants {
   public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
   public static DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+  public static DAYS_LIST_FULL = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   // match duration and on-field operations should finish within 1 hour
   public static ONE_MATCH_DURATION = 1;
   public static MATCH_TYPES = ['FCP', 'FKC', 'FPL'];

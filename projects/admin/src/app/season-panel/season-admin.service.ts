@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { statusType } from 'src/app/shared/interfaces/season.model';
@@ -124,38 +124,31 @@ export class SeasonAdminService {
     } as MatchFixture));
   }
 
-  async isAnyGroundBooked(grounds: GroundPrivateInfo[], firstFixture: MatchFixture, lastFixture: MatchFixture): Promise<boolean> {
-    if (firstFixture.date && lastFixture.date) {
+  async isAnyGroundBooked(grounds: GroundPrivateInfo[], startDate: number, endDate: number): Promise<boolean> {
+    if (startDate && endDate) {
       for (let i = 0; i < grounds.length; i++) {
         const bookingsList = await this.getBookingsForGround(grounds[i]);
         if (!bookingsList.length) {
           continue;
         } else {
-          return bookingsList.some(booking => this.isBookingOverlapping(firstFixture.date, lastFixture.date, booking));
+          return bookingsList.some(booking => this.isBookingOverlap(startDate, endDate, booking));
         }
       }
     }
     return false;
   }
 
-  async getBookingsForGround(ground: GroundPrivateInfo): Promise<GroundBookings[]> {
+  async getBookingsForGround(ground: GroundPrivateInfo): Promise<GroundBooking[]> {
     return await this.ngFire.collection('groundBookings', query => query.where('groundID', '==', ground['id'])).get()
-      .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBookings) : [])).toPromise();
+      .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBooking) : [])).toPromise();
   }
 
-  isBookingOverlapping(firstDate: number, lastDate: number, booking: GroundBookings): boolean {
-    if (firstDate < booking.bookingFrom && (lastDate >= booking.bookingTo || (lastDate < booking.bookingTo && lastDate >= booking.bookingFrom))) {
-      return true;
-    } else if (firstDate >= booking.bookingFrom && firstDate <= booking.bookingTo) {
-      return true;
-    } else if (firstDate > booking.bookingTo && lastDate <= booking.bookingTo) {
-      return false;
-    }
-    return false;
+  isBookingOverlap(startDate: number, endDate: number, booking: GroundBooking): boolean {
+    return (startDate <= booking.bookingTo) && (booking.bookingFrom <= endDate);
   }
 
-  isBookingOverlappingWithFirstDate(firstDate: number, booking: GroundBookings): boolean {
-    return !(firstDate < booking.bookingFrom || firstDate > booking.bookingTo);
+  isStartDateOverlap(startDate: number, booking: GroundBooking): boolean {
+    return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
 

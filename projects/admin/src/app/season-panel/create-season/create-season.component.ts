@@ -69,9 +69,9 @@ export class CreateSeasonComponent implements OnDestroy {
     this.onNavigateAway();
   }
 
-  getGrounds(city: string, state: string, date: number) {
+  getGrounds(city: string, state: string, startDate: number) {
     this.isLoaderShown = true;
-    this.subscriptions.add(this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim()).where('contractStartDate', '<', date))
+    this.subscriptions.add(this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim()).where('contractStartDate', '<', startDate).where('contractEndDate', '>', startDate))
       .snapshotChanges()
       .pipe(
         map(response => response.map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo)),

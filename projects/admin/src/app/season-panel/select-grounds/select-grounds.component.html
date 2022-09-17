@@ -22,9 +22,7 @@
         <span class="mat-body grey">
           {{ "|" }}
         </span>
-        <span *ngIf="isGroundDisabled(ground)" class="mat-body red">
-          {{ "Ground not available till " }} {{ getAvailableDate(ground?.id) | date: 'mediumDate' }}
-        </span>
+        <span *ngIf="isGroundDisabled(ground)" class="mat-body red"> {{ getUnavailability(ground?.id) }} </span>
         <span *ngIf="!isGroundDisabled(ground)" class="mat-body grey" [matTooltip]="getAvailableDays(ground.timings)">
           {{ "Available on " + getAvailableDays(ground.timings) }}
         </span>

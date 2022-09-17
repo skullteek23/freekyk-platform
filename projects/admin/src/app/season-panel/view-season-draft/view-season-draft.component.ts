@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { GroundBookings, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 
@@ -175,7 +175,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         paymentMethod: 'Online',
       }
       const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
-      if (await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0], fixtures[fixtures.length - 1])) {
+      if (await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0].date, fixtures[fixtures.length - 1].date)) {
         this.isLoaderShown = false;
         this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
         return;
@@ -201,10 +201,14 @@ export class ViewSeasonDraftComponent implements OnInit {
       for (let i = 0; i < groundIDList.length; i++) {
         const groundID = groundIDList[i];
         const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
-        const booking: GroundBookings = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
-        const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBookings;
-        if (existingBooking && existingBooking.bookingTo < endDate) {
+        const booking: GroundBooking = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
+        const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBooking;
+        if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
+          batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
+        } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
           batch.update(setRef, { bookingTo: endDate });
+        } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
+          batch.update(setRef, { bookingFrom: startDate });
         } else {
           batch.set(setRef, booking);
         }
