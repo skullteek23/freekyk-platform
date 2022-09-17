@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -10,7 +11,7 @@ import { SeasonAdminService } from '../season-admin.service';
 @Component({
   selector: 'app-select-grounds',
   templateUrl: './select-grounds.component.html',
-  styleUrls: ['./select-grounds.component.css']
+  styleUrls: ['./select-grounds.component.css'],
 })
 export class SelectGroundsComponent implements OnInit, OnDestroy {
 
@@ -57,7 +58,11 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSelectionList) list: MatSelectionList;
 
-  constructor(private ngFire: AngularFirestore, private seasonAdminService: SeasonAdminService) { }
+  constructor(
+    private ngFire: AngularFirestore,
+    private seasonAdminService: SeasonAdminService,
+    private datePipe: DatePipe,
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -139,13 +144,13 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
   isGroundDisabled(ground: GroundPrivateInfo): boolean {
     const startDate = new Date(this.seasonStartDate).getTime();
     const existingBooking: GroundBooking = this.getBooking(ground.id);
-    return this.seasonAdminService.isStartDateOverlap(startDate, existingBooking);
+    return startDate && existingBooking ? this.seasonAdminService.isStartDateOverlap(startDate, existingBooking) : false;
   }
 
   getUnavailability(groundID: string): string {
     const booking = this.getBooking(groundID);
-    const unavailableFrom = new Date(booking.bookingFrom);
-    const unavailableTo = new Date(booking.bookingTo);
+    const unavailableFrom = this.datePipe.transform(booking.bookingFrom, 'mediumDate');
+    const unavailableTo = this.datePipe.transform(booking.bookingTo, 'mediumDate');
     return `Ground not available from ${unavailableFrom} till ${unavailableTo}`
   }
 }
