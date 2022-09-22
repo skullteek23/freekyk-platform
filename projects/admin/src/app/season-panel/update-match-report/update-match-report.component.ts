@@ -10,6 +10,7 @@ import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
 import { MatchConstants } from '../../shared/constants/constants';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
+import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-update-match-report',
@@ -34,6 +35,7 @@ export class UpdateMatchReportComponent implements OnInit {
     private ngFire: AngularFirestore,
     private snackbarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: string,
+    private seasonAdminService: SeasonAdminService
   ) { }
 
   ngOnInit(): void {
@@ -155,11 +157,19 @@ export class UpdateMatchReportComponent implements OnInit {
       return;
     }
     this.isViewSummary = true;
+    this.matchReportForm.disable();
     this.assignSummary();
   }
 
   onSubmitMatchReport() {
-    //
+    // on submit details
+    this.isLoaderShown = true;
+    if (this.matchReportForm.valid) {
+      this.seasonAdminService.updateMatchReport(this.matchReportForm.value);
+      this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
+      this.isLoaderShown = false;
+      this.onCloseDialog();
+    }
   }
 
   assignSummary(): void {

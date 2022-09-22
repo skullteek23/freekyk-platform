@@ -9,4 +9,5 @@ export const CLOUD_FUNCTIONS = {
   VERIFY_PAYMENT: 'verifyPayment',
   INIT_LEAGUE_TABLE: 'initLeagueTable',
   UPDATE_LEAGUE_TABLE: 'updateLeagueTable',
+  UPDATE_MATCH_REPORT: 'updateMatchReport'
 };

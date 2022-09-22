@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
@@ -16,7 +18,7 @@ export class SeasonAdminService {
 
   isTriggerCloseDialog
 
-  constructor(private ngFire: AngularFirestore) { }
+  constructor(private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
     let fcpMatches = data.matches.fcp;
@@ -151,6 +153,10 @@ export class SeasonAdminService {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
+  updateMatchReport(data): void {
+    const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.UPDATE_MATCH_REPORT);
+    callable(data);
+  }
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {
     return this.getSeasonFixtureDrafts(docID).pipe(switchMap(response => {
