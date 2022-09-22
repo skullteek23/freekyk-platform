@@ -208,7 +208,6 @@ export class UpdateMatchReportComponent implements OnInit {
     const redCardAway = this.redCardHoldersAway.length > 0 ? `+${this.redCardHoldersAway.length}` : MatchConstants.LABEL_NOT_AVAILABLE;
     const redCardPlayersHome: string[] = this.redCardHoldersHome.value ? this.redCardHoldersHome.value.map((el: ListOption) => el.viewValue) : [];
     const redCardPlayersAway: string[] = this.redCardHoldersAway.value ? this.redCardHoldersAway.value.map((el: ListOption) => el.viewValue) : [];
-    console.log(this.redCardHoldersHome.length, this.redCardHoldersAway.length)
     const redCardTotal = (this.redCardHoldersHome.length + this.redCardHoldersAway.length) > 0 ? `+${(this.redCardHoldersHome.length + this.redCardHoldersAway.length)}` : MatchConstants.LABEL_NOT_AVAILABLE;
     let allRedCardPlayerList = (redCardPlayersHome.concat(redCardPlayersAway)).join(", ");
     if (!redCardPlayersHome.length && !redCardPlayersAway.length) {
