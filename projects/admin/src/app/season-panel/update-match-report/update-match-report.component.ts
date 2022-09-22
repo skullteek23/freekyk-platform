@@ -217,7 +217,7 @@ export class UpdateMatchReportComponent implements OnInit {
           value: 'point'
         },
         {
-          viewValue: 'Updates on Season Stats',
+          viewValue: 'Season Stats Update',
           value: 'update'
         }
       ],
@@ -227,11 +227,11 @@ export class UpdateMatchReportComponent implements OnInit {
           value: 'point'
         },
         {
-          viewValue: 'Home Team updates',
+          viewValue: 'Team Stats Update (Home)',
           value: 'home'
         },
         {
-          viewValue: 'Away Team updates',
+          viewValue: 'Team Stats Update (Away)',
           value: 'away'
         }
       ],
@@ -241,11 +241,11 @@ export class UpdateMatchReportComponent implements OnInit {
           value: 'pointTwo'
         },
         {
-          viewValue: 'Applied To',
+          viewValue: 'Applied to',
           value: 'applied',
         },
         {
-          viewValue: 'Updates on Player Stats',
+          viewValue: 'Player Stats Update',
           value: 'updateTwo',
         }
       ]
