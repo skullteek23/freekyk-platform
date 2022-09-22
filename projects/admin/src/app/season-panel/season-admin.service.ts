@@ -153,9 +153,14 @@ export class SeasonAdminService {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
-  updateMatchReport(data): void {
+  updateMatchReport(data, fixture: MatchFixture, matchID: string): void {
+    const functionData = {
+      data,
+      fixture,
+      matchID,
+    }
     const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.UPDATE_MATCH_REPORT);
-    callable(data);
+    callable(functionData);
   }
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {

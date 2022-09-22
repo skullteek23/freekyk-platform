@@ -21,8 +21,7 @@ export class FixtureTableComponent implements OnInit {
         [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
         [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
         [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium,
-        // occurred: currentDate > val.date,
-        occurred: true,
+        occurred: currentDate > val.date,
       }
     }, this);
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
