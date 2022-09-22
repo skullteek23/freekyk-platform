@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
@@ -60,82 +60,44 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   async getInvolvedPlayersList() {
-    // const homeTeamID = await this.getTeamInfo(this.fixture?.home?.name).toPromise();
-    // const homeMembers = await this.getMemberInfo(homeTeamID).toPromise();
-    // const awayTeamID = await this.getTeamInfo(this.fixture?.home?.name).toPromise();
-    // const awayMembers = await this.getMemberInfo(awayTeamID).toPromise();
-    // if (homeMembers && homeMembers.length) {
-    //   for (let k = 0; k < homeMembers.length; k++) {
-    //     this.homeTeamPlayersList.push({
-    //       viewValue: homeMembers[k].name,
-    //       value: homeMembers[k].id
-    //     });
-    //   }
-    // }
-    // if (awayMembers && awayMembers.length) {
-    //   for (let k = 0; k < awayMembers.length; k++) {
-    //     this.awayTeamPlayersList.push({
-    //       viewValue: awayMembers[k].name,
-    //       value: awayMembers[k].id
-    //     });
-    //   }
-    // }
-    this.homeTeamPlayersList = [
-      {
-        value: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
-        viewValue: 'Andrew Goodman', // captain Team Andrew Diggers
-      },
-      {
-        value: 'AtJVy95rpVTBF5oIKpMGY9yN0fv2',
-        viewValue: 'William Bennett', // Team Andrew Diggers
-      },
-      {
-        value: '4yrGdwrESKMs0cPdIVv0Bkh0dzv1',
-        viewValue: 'Daniel Martin', // Team Andrew Diggers
-      },
-      {
-        value: 'hX8OsbWrg4dJ9LKwYCaZ7tSl4rl2',
-        viewValue: 'Henry White', // Team Andrew Diggers
-      },
-      {
-        value: '72OPMo3LsYSeOmDuz7AswPa7tVw2',
-        viewValue: 'Matthew Smith', // Team Andrew Diggers
+    const homeTeamID = await this.getTeamInfo(this.fixture?.home?.name)?.toPromise();
+    const homeMembers = await this.getMemberInfo(homeTeamID)?.toPromise();
+    const awayTeamID = await this.getTeamInfo(this.fixture?.home?.name)?.toPromise();
+    const awayMembers = await this.getMemberInfo(awayTeamID)?.toPromise();
+    if (!homeMembers || !homeMembers.length || !awayMembers || !awayMembers.length) {
+      this.isLoaderShown = false;
+      this.snackbarService.displayCustomMsg('Unable to get team members!');
+      this.onCloseDialog();
+      return;
+    }
+    if (homeMembers && homeMembers.length) {
+      for (let k = 0; k < homeMembers.length; k++) {
+        this.homeTeamPlayersList.push({
+          viewValue: homeMembers[k].name,
+          value: homeMembers[k].id
+        });
       }
-    ];
-    this.awayTeamPlayersList = [
-      {
-        value: 'ygihPRcCQohLx4Vs9PqdUjr7mzQ2',
-        viewValue: 'Hunter Hamilton', // Team Andrew Diggers
-      },
-      {
-        value: 'AvRW7hEqEedWfptgSSUqs6GXlp52',
-        viewValue: 'Nicholas Spencer', // Team Andrew Diggers
-      },
-      {
-        value: '1nondsTE1RPuXWVuBsIm9MsOvSy2',
-        viewValue: 'Brandon West', // Team Andrew Diggers
-      },
-      {
-        value: 'aT1gpwmmPbP5vionOsAk9kYh2PR2',
-        viewValue: 'Jonathan Cohen', // captain Team Jonathan Healers
-      },
-      {
-        value: '2q3G8cwwAVXsCsHH1CcaKp7gPIz2',
-        viewValue: 'Vincent Stewart', // Team Jonathan Healers
-      },
-    ];
+    }
+    if (awayMembers && awayMembers.length) {
+      for (let k = 0; k < awayMembers.length; k++) {
+        this.awayTeamPlayersList.push({
+          viewValue: awayMembers[k].name,
+          value: awayMembers[k].id
+        });
+      }
+    }
     this.isLoaderShown = false;
   }
 
   getTeamInfo(name: string): Observable<any> {
     if (name) {
-      return name ? this.ngFire.collection('teams', query => query.where('tname', '==', name)).get().pipe(map(resp => resp.docs[0].id)) : null;
+      return this.ngFire.collection('teams', query => query.where('tname', '==', name)).get().pipe(map(resp => resp?.docs[0]?.id));
     }
   }
 
   getMemberInfo(teamID: string): Observable<any> {
     if (teamID) {
-      return teamID ? this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').get().pipe(map(resp => (resp.data() as TeamMembers).members)) : null;
+      return this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').get().pipe(map(resp => (resp?.data() as TeamMembers)?.members));
     }
   }
 
@@ -160,10 +122,10 @@ export class UpdateMatchReportComponent implements OnInit {
       redCardHoldersAway: new FormArray([]),
       yellowCardHoldersHome: new FormArray([]),
       yellowCardHoldersAway: new FormArray([]),
-      billsFile: new FormControl(null,),
-      matchReportFile: new FormControl(null,),
-      moneySpent: new FormControl(0,),
-      referee: new FormControl(null,),
+      billsFile: new FormControl(null, [Validators.required]),
+      matchReportFile: new FormControl(null, [Validators.required]),
+      moneySpent: new FormControl(0, [Validators.required]),
+      referee: new FormControl(null, [Validators.required]),
       specialNotes: new FormControl(null),
     });
   }
@@ -194,6 +156,10 @@ export class UpdateMatchReportComponent implements OnInit {
     }
     this.isViewSummary = true;
     this.assignSummary();
+  }
+
+  onSubmitMatchReport() {
+    //
   }
 
   assignSummary(): void {

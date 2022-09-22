@@ -36,3 +36,7 @@ mat-form-field {
 .summary-container {
   width: 100%;
 }
+
+.center {
+  text-align: justify;
+}

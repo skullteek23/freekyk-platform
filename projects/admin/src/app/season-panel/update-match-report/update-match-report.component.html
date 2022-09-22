@@ -149,5 +149,17 @@
       <app-match-report-summary [data]="reportSummary?.player"></app-match-report-summary>
     </div>
   </ng-container>
+
+  <div *ngIf="isViewSummary">
+    <button type="button" [disabled]="matchReportForm.invalid" (click)="onSubmitMatchReport()"
+      class="buttonText primaryButton">
+      Submit
+    </button>
+  </div>
+  <p *ngIf="isViewSummary" class="mat-caption center">
+    By clicking 'Submit' above, You accept that this data is true to your knowledge and you take complete responsibility
+    of it's authenticity. You also agree on if this data is found to be manipulated, your organizer's ID will be
+    revoked with immediate effect.
+  </p>
 </div>
 <app-loading *ngIf="isLoaderShown"></app-loading>
