@@ -1,0 +1,30 @@
+.table-container {
+  border: 1px solid var(--grey5);
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+}
+
+.mat-column-point {
+  width: 40%;
+}
+
+.mat-column-update {
+  width: 30%;
+}
+
+.mat-column-pointTwo {
+  width: 20%;
+}
+
+.mat-column-updateTwo {
+  width: 20%;
+}
+
+.mat-column-applied {
+  width: 60%;
+}

@@ -896,3 +896,13 @@ app-fixture-table {
 .season-page-container .fixture-table-container .mat-column-actions {
   width: 16%;
 }
+
+.red-card-holder {
+  background: var(--red) !important;
+  color: white !important;
+}
+
+.yellow-card-holder {
+  background: var(--premiumServiceColor) !important;
+  color: black !important;
+}

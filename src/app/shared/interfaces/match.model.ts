@@ -82,3 +82,24 @@ export interface dummyFixture {
   fkc_status?: KnockoutStages;
   timestamp?: number;
 }
+export class ReportSummary {
+  team: ReportData;
+  player: ReportData;
+  season: ReportData
+}
+
+export interface ReportData {
+  cols: any[];
+  displayCols: any[];
+  dataSource: any[];
+}
+
+// export interface TeamStatUpdates {
+//   apps
+// }
+// export interface PlayerStatUpdates {
+
+// }
+// export interface SeasonStatUpdates {
+
+// }

@@ -249,3 +249,8 @@ export interface CommunityNumbersContent {
   desc: string;
   numbers: {};
 }
+
+export interface ListOption {
+  value: any;
+  viewValue: string;
+}

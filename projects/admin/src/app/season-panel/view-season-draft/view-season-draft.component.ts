@@ -274,7 +274,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         if (response === false) {
           this.isLoaderShown = false;
           this.dialog.open(UpdateMatchReportComponent, {
-            panelClass: 'extra-large-dialogs',
+            panelClass: 'large-dialogs',
             data: matchID,
             disableClose: true
           }).afterClosed().subscribe(userResponse => {

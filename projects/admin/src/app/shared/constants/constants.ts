@@ -1,7 +1,7 @@
 import { environment } from "src/environments/environment";
 
 export class MatchConstants {
-  public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+  public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
   public static DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
   public static DAYS_LIST_FULL = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   // match duration and on-field operations should finish within 1 hour
@@ -11,19 +11,36 @@ export class MatchConstants {
     FKC: 'FK-FKC',
     FCP: 'FK-FCP',
     FPL: 'FK-FPL'
-  }
+  };
   public static TO_BE_DECIDED: 'TBD';
   public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
-  public static DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png'
+  public static DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
   public static SEASON_PRICE = {
     MIN: 0,
     MAX: 20000,
-  }
+  };
   public static START_DATE_DIFF = {
     MIN: 1,
     MAX: 365,
-  }
+  };
   public static SEASON_URL = environment?.firebase?.url + '/s/';
+  public static STATISTICS = {
+    FKC_PLAYED: 'FKC Played',
+    FCP_PLAYED: 'FCP Played',
+    FPL_PLAYED: 'FPL Played',
+    GOALS: 'Goals',
+    TOTAL_GOALS: 'Total Goals',
+    WINS: 'Wins',
+    LOSSES: 'Losses',
+    RED_CARDS: 'Red Cards',
+    YELLOW_CARDS: 'Yellow Cards',
+    GOALS_CONCEDED: 'Goals Conceded',
+    APPEARANCES: 'Appearances',
+    TOTAL_RED_CARDS: 'Total Red Cards',
+    TOTAL_YELLOW_CARDS: 'Total Yellow Cards',
+    HIGHEST_GOALSCORER: 'Highest Goal Scorer',
+  };
+  public static LABEL_NOT_AVAILABLE = 'N/A';
 }
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',

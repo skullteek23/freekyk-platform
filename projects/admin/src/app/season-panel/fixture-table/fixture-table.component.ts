@@ -12,6 +12,7 @@ import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, Match
 export class FixtureTableComponent implements OnInit {
 
   @Input() set data(value: dummyFixture[]) {
+    const currentDate = new Date().getTime();
     const dummyFixturesTemp = value.map(val => {
       return {
         [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
@@ -19,7 +20,9 @@ export class FixtureTableComponent implements OnInit {
         [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: this.TBD,
         [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
         [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium
+        [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium,
+        // occurred: currentDate > val.date,
+        occurred: true,
       }
     }, this);
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
@@ -32,8 +35,6 @@ export class FixtureTableComponent implements OnInit {
   @Input() set actions(value: boolean) {
     this.setDisplayColumns(value);
   }
-
-  @Input() disabled: boolean = false;
 
   @Output() actionTrigger = new Subject<any>();
 
@@ -74,9 +75,9 @@ export class FixtureTableComponent implements OnInit {
     }
   }
 
-  onTriggerAction(data) {
-    if (!this.disabled) {
-      this.actionTrigger.next(data);
+  onTriggerAction(data: any) {
+    if (data.occurred) {
+      this.actionTrigger.next(data[this.TABLE_COLUMNS.MATCH_ID]);
     }
   }
 

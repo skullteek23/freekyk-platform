@@ -1,0 +1,16 @@
+<mat-form-field class="example-chip-list">
+  <mat-label>{{label}}</mat-label>
+  <mat-chip-list #chipList aria-label="item-selection">
+    <mat-chip [class]="chipClass" *ngFor="let item of list" selectable removable (removed)="remove(item)">
+      {{item.viewValue}}
+      <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+    </mat-chip>
+    <input [placeholder]="isMax ? 'All Set!' : 'Add more...'" [disabled]="isMax" #scorerInput [matAutocomplete]="auto"
+      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
+    <mat-option *ngFor="let item of autoCompleteList" [value]="item">
+      {{item.viewValue}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

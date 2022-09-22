@@ -4,6 +4,150 @@
   </button>
   <span class="mat-body-1">Update Match Report</span>
 </mat-toolbar>
-<div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
-  {{data}}
+<div class="container-2 overflow" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start center">
+  <div class="text-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+    <div class="text-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center"
+      fxLayoutAlign.lt-md="center stretch" fxLayoutGap="16px">
+      <span class="mat-body-1">
+        This match was played for season
+      </span>
+      <span class="mat-body-2">
+        {{ fixture?.season }}
+      </span>
+    </div>
+
+    <div class="text-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center"
+      fxLayoutAlign.lt-md="center stretch" fxLayoutGap="16px">
+      <span class="mat-body-1">
+        Match Type
+      </span>
+      <span class="mat-body-2">
+        {{ fixture?.type }}
+      </span>
+    </div>
+  </div>
+  <form [autocomplete]="false" class="form-container" [formGroup]="matchReportForm" fxLayout="column"
+    fxLayoutAlign="center stretch" fxLayoutGap="16px">
+    <mat-card fxLayoutAlign="space-between center" fxLayoutGap="16px">
+      <mat-form-field appearance="outline">
+        <mat-label>Home Team's Final Score</mat-label>
+        <input matInput [min]="0" type="number" formControlName="homeScore">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Away Team's Final Score</mat-label>
+        <input matInput [min]="0" type="number" formControlName="awayScore">
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px">
+      <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
+        <span> Penalties after fulltime? </span>
+        <mat-radio-group color="primary" aria-label="Penalties after fulltime" formControlName="penalties"
+          fxLayoutGap="8px">
+          <mat-radio-button [value]="1">Yes</mat-radio-button>
+          <mat-radio-button [value]="0">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="radio-buttons" *ngIf="matchReportForm?.get('penalties')?.value === 1"
+        fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <mat-form-field appearance="outline">
+          <mat-label>Home Team's Penalty Score</mat-label>
+          <input matInput [min]="0" type="number" formControlName="homePenScore">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Away Team's Penalty Score</mat-label>
+          <input matInput [min]="0" type="number" formControlName="awayPenScore">
+        </mat-form-field>
+      </div>
+    </mat-card>
+
+    <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
+      <div class="text-container" fxLayout="column">
+        <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
+        <app-chip-selection-input [max]="totalGoals" #scorerSelection label="Select Goal Scorers"
+          [autoCompleteList]="matchDayPlayersList" (onAddItem)="onAdd($event, 'scorers')">
+        </app-chip-selection-input>
+
+        <div fxLayout="row wrap" formArrayName="scorersGoals" fxLayoutGap="16px" fxLayoutAlign="space-between center">
+          <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionList; let i = index" appearance="outline">
+            <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
+            <input type="number" [min]="0" matInput [formControlName]="i">
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
+      <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
+        <app-chip-selection-input fxFlex="45%" [max]="5" chipClass="red-card-holder" label="Red Card Holders (Home)"
+          [autoCompleteList]="homeTeamPlayersList" (onAddItem)="onAdd($event, 'redCardHoldersHome')">
+        </app-chip-selection-input>
+        <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="red-card-holder"
+          label="Red Card Holders (Away)" [autoCompleteList]="awayTeamPlayersList"
+          (onAddItem)="onAdd($event, 'redCardHoldersAway')">
+        </app-chip-selection-input>
+      </div>
+    </mat-card>
+
+    <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
+      <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
+        <app-chip-selection-input fxFlex="45%" [max]="homeTeamPlayersList.length" chipClass="yellow-card-holder"
+          label="Yellow Card Holders (Home)" [autoCompleteList]="homeTeamPlayersList"
+          (onAddItem)="onAdd($event, 'yellowCardHoldersHome')">
+        </app-chip-selection-input>
+        <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="yellow-card-holder"
+          label="Yellow Card Holders (Away)" [autoCompleteList]="awayTeamPlayersList"
+          (onAddItem)="onAdd($event, 'yellowCardHoldersAway')">
+        </app-chip-selection-input>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <span class="mat-body-2 heading">
+        Other Data
+      </span>
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
+          <app-file-uploader (changeUpload)="onSelectBillFileUpload($event)"></app-file-uploader>
+          <mat-label>Upload All Bills</mat-label>
+        </div>
+        <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
+          <app-file-uploader (changeUpload)="onSelectReportFileUpload($event)"></app-file-uploader>
+          <mat-label>Upload Match report (signed by captains)</mat-label>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Total Money Spent</mat-label>
+          <input min="0" type="number" matInput formControlName="moneySpent">
+          <mat-icon matPrefix>currency_rupee</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Referee Name</mat-label>
+          <input type="text" matInput formControlName="referee">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>
+            Important Information / Special Notes
+          </mat-label>
+          <textarea matInput formControlName="specialNotes"
+            placeholder="Mention any kind of important info in not more than 300 words"></textarea>
+        </mat-form-field>
+      </div>
+    </mat-card>
+    <div class="buttons-container" fxLayoutAlign="center center">
+      <button [disabled]="matchReportForm.invalid" type="button" (click)="onGenerateSummary()"
+        class="primaryButton buttonText">
+        Generate Match Summary
+      </button>
+    </div>
+  </form>
+
+  <ng-container *ngIf="isViewSummary">
+    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" class="summary-container">
+      <span class="mat-body-2">Match Summary</span>
+      <app-match-report-summary [data]="reportSummary?.season"></app-match-report-summary>
+      <app-match-report-summary [data]="reportSummary?.team"></app-match-report-summary>
+      <app-match-report-summary [data]="reportSummary?.player"></app-match-report-summary>
+    </div>
+  </ng-container>
 </div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

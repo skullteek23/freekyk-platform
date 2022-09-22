@@ -41,7 +41,7 @@
         <div>
           <h4>Payable Fees (per team)</h4>
           <p class="mat-body-2">
-            {{ finalFees }}
+            &#8377;{{ finalFees }}
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@
   <h4 *ngIf="seasonFixtures.length">Generated Fixtures </h4>
   <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
   <app-fixture-table (actionTrigger)="onUpdateMatchData($event)" *ngIf="seasonFixtures.length" [data]="seasonFixtures"
-    [actions]="isSeasonPublished" [disabled]="!isSeasonPublished"> </app-fixture-table>
+    [actions]="isSeasonPublished"> </app-fixture-table>
   <div *ngIf="seasonFixtures.length && isSeasonPublished" class="mat-caption trouble-text">
     Have trouble with any match data? Raise a quest to revoke match data immediately. <a
       (click)="onRaiseRequest()">Click here</a>

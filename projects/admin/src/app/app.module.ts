@@ -29,6 +29,8 @@ import { DatePipe } from '@angular/common';
 import { GenerateFixturesComponent } from './season-panel/generate-fixtures/generate-fixtures.component';
 import { RequestDialogComponent } from './season-panel/request-dialog/request-dialog.component';
 import { UpdateMatchReportComponent } from './season-panel/update-match-report/update-match-report.component';
+import { ChipSelectionInputComponent } from './season-panel/chip-selection-input/chip-selection-input.component';
+import { MatchReportSummaryComponent } from './season-panel/match-report-summary/match-report-summary.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { UpdateMatchReportComponent } from './season-panel/update-match-report/u
     ViewSeasonDraftComponent,
     GenerateFixturesComponent,
     RequestDialogComponent,
-    UpdateMatchReportComponent
+    UpdateMatchReportComponent,
+    ChipSelectionInputComponent,
+    MatchReportSummaryComponent
 
   ],
   imports: [
