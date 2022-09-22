@@ -153,7 +153,7 @@ export class SeasonAdminService {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
-  updateMatchReport(data, fixture: MatchFixture, matchID: string): void {
+  updateMatchReport(data: any, fixture: MatchFixture, matchID: string): void {
     const functionData = {
       data,
       fixture,
