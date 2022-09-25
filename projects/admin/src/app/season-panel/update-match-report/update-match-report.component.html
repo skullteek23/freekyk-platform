@@ -61,19 +61,35 @@
       </div>
     </mat-card>
 
-    <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
-      <div class="text-container" fxLayout="column">
+    <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+      <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
         <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
-        <app-chip-selection-input [max]="totalGoals" #scorerSelection label="Select Goal Scorers"
-          [autoCompleteList]="matchDayPlayersList" (onAddItem)="onAdd($event, 'scorers')">
+        <app-chip-selection-input [max]="totalGoals" #scorerSelectionHome label="Select Home Goal Scorers"
+          [autoCompleteList]="homeTeamPlayersList" (onAddItem)="onAdd($event, 'scorersHome')">
         </app-chip-selection-input>
 
-        <div fxLayout="row wrap" formArrayName="scorersGoals" fxLayoutGap="16px" fxLayoutAlign="space-between center">
-          <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionList; let i = index" appearance="outline">
+        <div fxLayout="row wrap" formArrayName="scorersGoalsHome" fxLayoutGap="16px"
+          fxLayoutAlign="space-between center">
+          <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionListHome; let i = index" appearance="outline">
             <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
             <input type="number" [min]="0" matInput [formControlName]="i">
           </mat-form-field>
         </div>
+      </div>
+      <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
+        <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
+        <app-chip-selection-input [max]="totalGoals" #scorerSelectionAway label="Select Away Goal Scorers"
+          [autoCompleteList]="awayTeamPlayersList" (onAddItem)="onAdd($event, 'scorersAway')">
+        </app-chip-selection-input>
+
+        <div fxLayout="row wrap" formArrayName="scorersGoalsAway" fxLayoutGap="16px"
+          fxLayoutAlign="space-between center">
+          <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionListAway; let i = index" appearance="outline">
+            <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
+            <input type="number" [min]="0" matInput [formControlName]="i">
+          </mat-form-field>
+        </div>
+
       </div>
     </mat-card>
 

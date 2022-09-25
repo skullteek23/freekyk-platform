@@ -123,14 +123,14 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
 
   // Player Stats Update
   for (let i = 0; i < playersHome.length; i++) {
-    const scorerIndex = formData.scorers.findIndex(el => el.viewValue === playersHome[i].viewValue);
+    const scorerIndex = formData.scorersHome.findIndex(el => el.viewValue === playersHome[i].viewValue);
     const w_player = w_home;
     const rcards_player = formData.redCardHoldersHome.findIndex(el => el.viewValue === playersHome[i].viewValue) > -1 ? 1 : 0;
     const ycards_player = formData.yellowCardHoldersHome.findIndex(el => el.viewValue === playersHome[i].viewValue) > -1 ? 1 : 0;
     const l_player = w_away;
     let g_player = 0;
     if (scorerIndex > -1) {
-      g_player = formData.scorersGoals[scorerIndex];
+      g_player = formData.scorersGoalsHome[scorerIndex];
     }
 
     const playerRef = db.collection(`players/${playersHome[i].value}/additionalInfo`).doc('statistics');
@@ -157,14 +157,14 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   }
 
   for (let i = 0; i < playersAway.length; i++) {
-    const scorerIndex = formData.scorers.findIndex(el => el.viewValue === playersAway[i].viewValue);
+    const scorerIndex = formData.scorersAway.findIndex(el => el.viewValue === playersAway[i].viewValue);
     const w_player = w_away;
     const rcards_player = formData.redCardHoldersAway.findIndex(el => el.viewValue === playersAway[i].viewValue) > -1 ? 1 : 0;
     const ycards_player = formData.yellowCardHoldersAway.findIndex(el => el.viewValue === playersAway[i].viewValue) > -1 ? 1 : 0;
     const l_player = w_home;
     let g_player = 0;
     if (scorerIndex > -1) {
-      g_player = formData.scorersGoals[scorerIndex];
+      g_player = formData.scorersGoalsAway[scorerIndex];
     }
 
     const playerRef = db.collection(`players/${playersAway[i].value}/additionalInfo`).doc('statistics');

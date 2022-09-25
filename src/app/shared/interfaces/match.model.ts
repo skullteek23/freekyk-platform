@@ -116,8 +116,10 @@ export interface MatchReportFormData {
   penalties: number;
   homePenScore: number;
   awayPenScore: number;
-  scorers: ListOption[];
-  scorersGoals: number[];
+  scorersHome: ListOption[];
+  scorersAway: ListOption[];
+  scorersGoalsHome: number[];
+  scorersGoalsAway: number[];
   redCardHoldersHome: ListOption[];
   redCardHoldersAway: ListOption[];
   yellowCardHoldersHome: ListOption[];

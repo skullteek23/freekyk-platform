@@ -29,7 +29,8 @@ export class UpdateMatchReportComponent implements OnInit {
   reportSummary = new ReportSummary();
   updateStats: CloudFunctionStatsData;
 
-  @ViewChild('scorerSelection') chipSelectionInputComponent: ChipSelectionInputComponent;
+  @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
+  @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateMatchReportComponent>,
@@ -119,8 +120,10 @@ export class UpdateMatchReportComponent implements OnInit {
       penalties: new FormControl(0),
       homePenScore: new FormControl(0, [Validators.required]),
       awayPenScore: new FormControl(0, [Validators.required]),
-      scorers: new FormArray([]),
-      scorersGoals: new FormArray([]),
+      scorersHome: new FormArray([]),
+      scorersAway: new FormArray([]),
+      scorersGoalsHome: new FormArray([]),
+      scorersGoalsAway: new FormArray([]),
       redCardHoldersHome: new FormArray([]),
       redCardHoldersAway: new FormArray([]),
       yellowCardHoldersHome: new FormArray([]),
@@ -143,14 +146,13 @@ export class UpdateMatchReportComponent implements OnInit {
       const control = new FormControl(ev[i]);
       (this.matchReportForm.get(controlName) as FormArray).push(control);
     }
-    if (controlName === 'scorers') {
-      this.onAddScorer();
-    }
-  }
 
-  onAddScorer() {
     const control = new FormControl(1, [Validators.required]);
-    this.scorersGoals.push(control);
+    if (controlName === 'scorersHome') {
+      this.scorersGoalsHome.push(control);
+    } else if (controlName === 'scorersAway') {
+      this.scorersGoalsAway.push(control);
+    }
   }
 
   onGenerateSummary() {
@@ -169,7 +171,6 @@ export class UpdateMatchReportComponent implements OnInit {
         ...this.fixture,
         id: this.data
       }
-
       this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList);
       this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
       this.isLoaderShown = false;
@@ -381,8 +382,12 @@ export class UpdateMatchReportComponent implements OnInit {
     }
   }
 
-  get scorersGoals(): FormArray {
-    return this.matchReportForm.get('scorersGoals') as FormArray;
+  get scorersGoalsHome(): FormArray {
+    return this.matchReportForm.get('scorersGoalsHome') as FormArray;
+  }
+
+  get scorersGoalsAway(): FormArray {
+    return this.matchReportForm.get('scorersGoalsAway') as FormArray;
   }
 
   get scorers(): FormArray {
@@ -401,8 +406,12 @@ export class UpdateMatchReportComponent implements OnInit {
     return (+this.matchReportForm.get('awayScore')?.value);
   }
 
-  get chipSelectionList() {
-    return this.chipSelectionInputComponent && this.chipSelectionInputComponent.list ? this.chipSelectionInputComponent.list : []
+  get chipSelectionListHome() {
+    return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : []
+  }
+
+  get chipSelectionListAway() {
+    return this.chipSelectionInputComponentAway && this.chipSelectionInputComponentAway.list ? this.chipSelectionInputComponentAway.list : []
   }
 
   get redCardHoldersAway(): FormArray {
