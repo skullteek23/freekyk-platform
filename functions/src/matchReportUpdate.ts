@@ -162,7 +162,6 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const newAwayObj = fixtureData.away;
     newHomeObj['score'] = g_home;
     newAwayObj['score'] = g_away;
-    let tie_breaker = '';
     const update: any = {
       concluded: true,
       home: newHomeObj,
