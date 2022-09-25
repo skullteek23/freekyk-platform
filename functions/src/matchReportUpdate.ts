@@ -136,7 +136,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const playerRef = db.collection(`players/${playersHome[i].value}/additionalInfo`).doc('statistics');
 
     if ((await playerRef.get()).exists) {
-      batch.update(refTeam_away, {
+      batch.update(playerRef, {
         apps: admin.firestore.FieldValue.increment(1),
         g: admin.firestore.FieldValue.increment(g_player),
         w: admin.firestore.FieldValue.increment(w_player),
@@ -145,7 +145,41 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
         l: admin.firestore.FieldValue.increment(l_player),
       });
     } else {
-      batch.set(refTeam_away, {
+      batch.set(playerRef, {
+        apps: 1,
+        g: g_player,
+        w: w_player,
+        rcards: rcards_player,
+        ycards: ycards_player,
+        l: l_player,
+      });
+    }
+  }
+
+  for (let i = 0; i < playersAway.length; i++) {
+    const scorerIndex = formData.scorers.findIndex(el => el.viewValue === playersAway[i].viewValue);
+    const w_player = w_away;
+    const rcards_player = formData.redCardHoldersAway.findIndex(el => el.viewValue === playersAway[i].viewValue) > -1 ? 1 : 0;
+    const ycards_player = formData.yellowCardHoldersAway.findIndex(el => el.viewValue === playersAway[i].viewValue) > -1 ? 1 : 0;
+    const l_player = w_home;
+    let g_player = 0;
+    if (scorerIndex > -1) {
+      g_player = formData.scorersGoals[scorerIndex];
+    }
+
+    const playerRef = db.collection(`players/${playersAway[i].value}/additionalInfo`).doc('statistics');
+
+    if ((await playerRef.get()).exists) {
+      batch.update(playerRef, {
+        apps: admin.firestore.FieldValue.increment(1),
+        g: admin.firestore.FieldValue.increment(g_player),
+        w: admin.firestore.FieldValue.increment(w_player),
+        rcards: admin.firestore.FieldValue.increment(rcards_player),
+        ycards: admin.firestore.FieldValue.increment(ycards_player),
+        l: admin.firestore.FieldValue.increment(l_player),
+      });
+    } else {
+      batch.set(playerRef, {
         apps: 1,
         g: g_player,
         w: w_player,
