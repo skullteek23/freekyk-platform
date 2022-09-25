@@ -85,16 +85,16 @@ export interface dummyFixture {
   timestamp?: number;
 }
 export class ReportSummary {
-  team: ReportData;
-  player: ReportData;
-  season: ReportData
+  team: ReportData = { cols: [], displayCols: [], dataSource: [] };
+  player: ReportData = { cols: [], displayCols: [], dataSource: [] };
+  season: ReportData = { cols: [], displayCols: [], dataSource: [] }
 }
 
 export class ReportUpdates {
-  homeTeam: UpdateData[];
-  awayTeam: UpdateData[];
-  player: UpdateData[];
-  season: UpdateData[];
+  homeTeam: UpdateData[] = [];
+  awayTeam: UpdateData[] = [];
+  player: UpdateData[] = [];
+  season: UpdateData[] = [];
 }
 
 export interface UpdateData {

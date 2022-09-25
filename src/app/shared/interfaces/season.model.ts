@@ -31,9 +31,9 @@ export class SeasonStats {
   // FKC_winner?: string;
   // FPL_winner?: string;
   // awards: string;
-  g: number;
-  rcards: number;
-  ycards: number;
+  g: number = 0;
+  rcards: number = 0;
+  ycards: number = 0;
   // highestScorer: string;
 }
 export interface SeasonParticipants {
