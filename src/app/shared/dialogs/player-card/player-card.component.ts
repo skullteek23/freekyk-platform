@@ -29,7 +29,7 @@ export class PlayerCardComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: PlayerBasicInfo,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.getAdditionalInfo();
   }
@@ -61,17 +61,18 @@ export class PlayerCardComponent implements OnInit {
         map((resp) => resp.data() as BasicStats),
         map(
           (resp) =>
-            ({
-              Appearances: resp ? resp.apps : 0,
-              Wins: resp ? resp.w : 0,
-              Goals: resp ? resp.g : 0,
-              Cards: resp ? resp.cards : 0,
-            } as Stats)
+          ({
+            Appearances: resp ? resp.apps : 0,
+            Wins: resp ? resp.w : 0,
+            Goals: resp ? resp.g : 0,
+            'Red Cards': resp ? resp.rcards : 0,
+            'Yellow Cards': resp ? resp.ycards : 0,
+          } as Stats)
         )
       );
   }
   onCloseDialog(): void {
     this.dialogRef.close();
   }
-  onShare(pl: PlayerBasicInfo): void {}
+  onShare(pl: PlayerBasicInfo): void { }
 }

@@ -70,3 +70,20 @@ export const DELETE_SEASON_SUBHEADING = `Deletion request will disable all <stro
 below: [max characters: 1000]`;
 export const REVOKE_MATCH_UPDATE_SUBHEADING = `Please note that reverting the match update will revert all the numbers shown in match summaries. please provide us the reason below: [max characters: 1000]`;
 export const UNIQUE_DELETION_REQUEST_CODE = 'FK-SEASON'
+
+export enum STATS_KEYS {
+  'FKC_PLAYED' = 'fkc_played',
+  'FCP_PLAYED' = 'fcp_played',
+  'FPL_PLAYED' = 'fpl_played',
+  'GOALS' = 'g',
+  'TOTAL_GOALS' = '',
+  'WINS' = 'w',
+  'LOSSES' = 'l',
+  'RED_CARDS' = 'rcards',
+  'YELLOW_CARDS' = 'ycards',
+  'GOALS_CONCEDED' = 'g_conceded',
+  'APPEARANCES' = 'apps',
+  'TOTAL_RED_CARDS' = '',
+  'TOTAL_YELLOW_CARDS' = '',
+  'HIGHEST_GOALSCORER' = 'highestScorer',
+}

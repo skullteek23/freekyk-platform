@@ -45,7 +45,8 @@ export interface BasicStats {
   apps: number;
   g: number;
   w: number;
-  cards: number;
+  rcards: number;
+  ycards: number;
   l: number;
 }
 export interface FsStats {
@@ -77,7 +78,8 @@ export class BasicStats {
   apps = 0;
   g = 0;
   w = 0;
-  cards = 0;
+  rcards = 0;
+  ycards = 0;
   l = 0;
 }
 export class FsStats {

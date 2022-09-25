@@ -2,10 +2,10 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
+import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
 import { MatchConstants } from '../../shared/constants/constants';
@@ -27,6 +27,7 @@ export class UpdateMatchReportComponent implements OnInit {
   awayTeamPlayersList: ListOption[] = [];
   scorersList: ListOption[] = [];
   reportSummary = new ReportSummary();
+  updateStats: CloudFunctionStatsData;
 
   @ViewChild('scorerSelection') chipSelectionInputComponent: ChipSelectionInputComponent;
 
@@ -64,7 +65,7 @@ export class UpdateMatchReportComponent implements OnInit {
   async getInvolvedPlayersList() {
     const homeTeamID = await this.getTeamInfo(this.fixture?.home?.name)?.toPromise();
     const homeMembers = await this.getMemberInfo(homeTeamID)?.toPromise();
-    const awayTeamID = await this.getTeamInfo(this.fixture?.home?.name)?.toPromise();
+    const awayTeamID = await this.getTeamInfo(this.fixture?.away?.name)?.toPromise();
     const awayMembers = await this.getMemberInfo(awayTeamID)?.toPromise();
     if (!homeMembers || !homeMembers.length || !awayMembers || !awayMembers.length) {
       this.isLoaderShown = false;
@@ -157,7 +158,6 @@ export class UpdateMatchReportComponent implements OnInit {
       return;
     }
     this.isViewSummary = true;
-    this.matchReportForm.disable();
     this.assignSummary();
   }
 
@@ -165,7 +165,12 @@ export class UpdateMatchReportComponent implements OnInit {
     // on submit details
     this.isLoaderShown = true;
     if (this.matchReportForm.valid) {
-      this.seasonAdminService.updateMatchReport(this.matchReportForm.value, this.fixture, this.data);
+      const fixture: MatchFixture = {
+        ...this.fixture,
+        id: this.data
+      }
+
+      this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList);
       this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
       this.isLoaderShown = false;
       this.onCloseDialog();
@@ -200,7 +205,7 @@ export class UpdateMatchReportComponent implements OnInit {
     }
 
     // Goals & Players
-    let highestScorer = MatchConstants.LABEL_NOT_AVAILABLE;
+    // let highestScorer = MatchConstants.LABEL_NOT_AVAILABLE;
     let winnersList = MatchConstants.LABEL_NOT_AVAILABLE;
     const homeWin = this.homeGoals > this.awayGoals ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
     const awayWin = this.awayGoals > this.homeGoals ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
@@ -210,11 +215,11 @@ export class UpdateMatchReportComponent implements OnInit {
     const playersList = this.matchDayPlayersList.length ? this.matchDayPlayersList.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
     const scorersListTemp: ListOption[] = this.scorers.value;
     const scorersList = scorersListTemp.length ? scorersListTemp.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
-    const goalsList: number[] = this.scorersGoals.value;
-    const index: number = goalsList.findIndex(val => val === Math.max(...goalsList));
-    if (index > -1 && scorersListTemp.length) {
-      highestScorer = scorersListTemp[index].viewValue;
-    }
+    // const goalsList: number[] = this.scorersGoals.value;
+    // const index: number = goalsList.findIndex(val => val === Math.max(...goalsList));
+    // if (index > -1 && scorersListTemp.length) {
+    //   highestScorer = scorersListTemp[index].viewValue;
+    // }
     if (this.homeGoals > this.awayGoals) {
       winnersList = this.homeTeamPlayersList.map(el => el.viewValue).join(", ");
     } else if (this.awayGoals > this.homeGoals) {
@@ -286,10 +291,10 @@ export class UpdateMatchReportComponent implements OnInit {
           point: MatchConstants.STATISTICS.TOTAL_YELLOW_CARDS,
           update: yellowCardTotal
         },
-        {
-          point: MatchConstants.STATISTICS.HIGHEST_GOALSCORER,
-          update: highestScorer
-        },
+        // {
+        //   point: MatchConstants.STATISTICS.HIGHEST_GOALSCORER,
+        //   update: highestScorer
+        // },
       ],
       team: [
         {
@@ -369,7 +374,7 @@ export class UpdateMatchReportComponent implements OnInit {
 
     for (const prop in cols) {
       this.reportSummary[prop] = {
-        cols: cols[prop].map(el => el.value),
+        cols: cols[prop].map((el: ListOption) => el.value),
         displayCols: cols[prop],
         dataSource: dataSource[prop]
       }

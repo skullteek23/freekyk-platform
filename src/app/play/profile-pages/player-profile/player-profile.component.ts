@@ -80,7 +80,8 @@ export class PlayerProfileComponent implements OnInit {
             Appearances: resp ? resp.apps : 0,
             Wins: resp ? resp.w : 0,
             Goals: resp ? resp.g : 0,
-            Cards: resp ? resp.cards : 0,
+            'Red Cards': resp ? resp.rcards : 0,
+            'Yellow Cards': resp ? resp.ycards : 0,
           } as Stats)
         )
       );

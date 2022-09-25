@@ -154,7 +154,9 @@ export interface Stats {
   Appearances: number;
   Wins: number;
   Goals: number;
-  Cards: number;
+  'Red Cards': number;
+  'Yellow Cards': number;
+
 }
 export interface StatsFs {
   'Skill Level': number;

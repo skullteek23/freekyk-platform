@@ -25,7 +25,7 @@ export class PlayerService implements OnDestroy {
       .pipe(
         map((resp) => {
           if (!resp.exists) {
-            return { apps: 0, g: 0, w: 0, cards: 0, l: 0 };
+            return new BasicStats();
           }
           return resp.data() as BasicStats;
         })

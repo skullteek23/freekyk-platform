@@ -10,17 +10,12 @@ import { SeasonStats } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./se-stats.component.css'],
 })
 export class SeStatsComponent implements OnInit, OnDestroy {
-  @Input() stats: SeasonStats = {
-    FKC_winner: 'NA',
-    FPL_winner: 'NA',
-    totGoals: 0,
-    awards: 'NA',
-  };
+  @Input() stats = new SeasonStats();
   subscriptions = new Subscription();
   columns = '4';
   height = '0';
   gutter = '0';
-  constructor(private mediaObs: MediaObserver) {}
+  constructor(private mediaObs: MediaObserver) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs

@@ -14,7 +14,7 @@ export class DaHoStatsCardComponent implements OnInit {
   statsIconsFs: statsIcon[] = [];
   plStats$: Observable<statsIcon[]>;
   fsStats$: Observable<statsIcon[]>;
-  constructor(private plServ: PlayerService) {}
+  constructor(private plServ: PlayerService) { }
   ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
@@ -32,7 +32,8 @@ export class DaHoStatsCardComponent implements OnInit {
             },
             { icon: 'sports_soccer', name: 'Goals', value: stats.g },
             { icon: 'flag', name: 'Wins', value: stats.w },
-            { icon: 'style', name: 'Cards', value: stats.cards },
+            { icon: 'style', name: 'Red Cards', value: stats.rcards },
+            { icon: 'style', name: 'Yellow Cards', value: stats.ycards },
             { icon: 'cancel_presentation', name: 'Losses', value: stats.l },
           ];
           return newArray;

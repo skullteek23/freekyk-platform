@@ -27,11 +27,14 @@ export interface SeasonMedia {
   photo_4: string;
   photo_5: string;
 }
-export interface SeasonStats {
-  FKC_winner?: string;
-  FPL_winner?: string;
-  totGoals: number;
-  awards: string;
+export class SeasonStats {
+  // FKC_winner?: string;
+  // FPL_winner?: string;
+  // awards: string;
+  g: number;
+  rcards: number;
+  ycards: number;
+  // highestScorer: string;
 }
 export interface SeasonParticipants {
   tid: string;

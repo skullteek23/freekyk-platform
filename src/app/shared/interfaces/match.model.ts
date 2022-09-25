@@ -1,3 +1,5 @@
+import { ListOption } from "./others.model";
+
 export type KnockoutStages = 'R16' | 'R8' | 'R4' | 'F';
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export interface MatchFixture {
@@ -88,18 +90,48 @@ export class ReportSummary {
   season: ReportData
 }
 
+export class ReportUpdates {
+  homeTeam: UpdateData[];
+  awayTeam: UpdateData[];
+  player: UpdateData[];
+  season: UpdateData[];
+}
+
+export interface UpdateData {
+  statName: string;
+  statValue: any;
+}
+
 export interface ReportData {
   cols: any[];
   displayCols: any[];
   dataSource: any[];
 }
 
-// export interface TeamStatUpdates {
-//   apps
-// }
-// export interface PlayerStatUpdates {
+export interface MatchReportFormData {
+  homeScore: number;
+  awayScore: number;
+  penalties: number;
+  homePenScore: number;
+  awayPenScore: number;
+  scorers: ListOption[];
+  scorersGoals: number[];
+  redCardHoldersHome: ListOption[];
+  redCardHoldersAway: ListOption[];
+  yellowCardHoldersHome: ListOption[];
+  yellowCardHoldersAway: ListOption[];
+  billsFile: File;
+  matchReportFile: File;
+  moneySpent: number;
+  referee: string;
+  specialNotes: string;
+}
 
-// }
-// export interface SeasonStatUpdates {
-
-// }
+export interface CloudFunctionStatsData {
+  highestScorer: string;
+  totGoals: number;
+  fkc_played: number;
+  fcp_played: number;
+  fpl_played: number;
+  allPlayersList: string[];
+}
