@@ -10,8 +10,8 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   const formData: MatchReportFormData = data['formData'] || null;
   const batch = db.batch();
   const seasonID: string = (await db.collection('seasons').where('name', '==', fixtureData.season).get())?.docs[0]?.id;
-  const tid_home = (await db.collection('teams').where('tname', '==', fixtureData.home.name).get())?.docs[0]?.id;
-  const tid_away = (await db.collection('teams').where('tname', '==', fixtureData.away.name).get())?.docs[0]?.id;
+  const tid_home: string = (await db.collection('teams').where('tname', '==', fixtureData.home.name).get())?.docs[0]?.id;
+  const tid_away: string = (await db.collection('teams').where('tname', '==', fixtureData.away.name).get())?.docs[0]?.id;
   // const LABEL_NOT_AVAILABLE = 'N/A';
 
   if (!fixtureData || !playersHome || !playersAway || !formData || !seasonID || !batch || !tid_home || !tid_away) {
@@ -133,7 +133,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
       g_player = formData.scorersGoals[scorerIndex];
     }
 
-    const playerRef = db.collection(`players/${tid_home}/additionalInfo`).doc('statistics');
+    const playerRef = db.collection(`players/${playersHome[i].value}/additionalInfo`).doc('statistics');
 
     if ((await playerRef.get()).exists) {
       batch.update(refTeam_away, {
