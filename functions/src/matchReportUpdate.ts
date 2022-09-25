@@ -156,5 +156,24 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     }
   }
 
+  // Match Stats Update
+  if (fixtureData && fixtureData.id) {
+    const newHomeObj = fixtureData.home;
+    const newAwayObj = fixtureData.away;
+    newHomeObj['score'] = g_home;
+    newAwayObj['score'] = g_away;
+    let tie_breaker = '';
+    const update: any = {
+      concluded: true,
+      home: newHomeObj,
+      away: newAwayObj
+    };
+    if (formData.homePenScore && formData.awayPenScore && (formData.homePenScore > 0 || formData.awayPenScore > 0)) {
+      update['tie_breaker'] = `Penalities: ${formData.homePenScore}-${formData.awayPenScore}`
+    }
+    const matchRef = db.collection('allMatches').doc(fixtureData.id);
+    batch.update(matchRef, update)
+  }
+
   return batch.commit();
 }
