@@ -9,13 +9,15 @@
 
     <ng-container [matColumnDef]="TABLE_COLUMNS.HOME" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.HOME }}</th>
-      <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.HOME] }} </td>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element[TABLE_COLUMNS.HOME]"> {{ element[TABLE_COLUMNS.HOME]
+        | textShorten:5 }} </td>
       <td mat-footer-cell *matFooterCellDef> </td>
     </ng-container>
 
     <ng-container [matColumnDef]="TABLE_COLUMNS.AWAY" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ TABLE_UI_COLUMNS.AWAY }}</th>
-      <td mat-cell *matCellDef="let element"> {{ element[TABLE_COLUMNS.AWAY] }} </td>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element[TABLE_COLUMNS.AWAY]"> {{ element[TABLE_COLUMNS.AWAY]
+        | textShorten:5 }} </td>
       <td mat-footer-cell *matFooterCellDef> </td>
     </ng-container>
 

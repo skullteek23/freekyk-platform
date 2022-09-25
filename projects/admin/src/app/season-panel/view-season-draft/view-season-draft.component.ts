@@ -247,6 +247,8 @@ export class ViewSeasonDraftComponent implements OnInit {
               const fixtureData = fixture.data() as MatchFixture;
               const id = fixture.id;
               return ({
+                home: fixtureData.home.name,
+                away: fixtureData.away.name,
                 date: fixtureData.date,
                 concluded: fixtureData.concluded,
                 premium: fixtureData.premium,

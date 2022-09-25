@@ -11,6 +11,7 @@ import { TickAnimationComponent } from './components/tick-animation/tick-animati
 import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ConfirmationBoxComponent } from './components/confirmation-box/confirmation-box.component';
+import { TextShortenPipe } from './pipes/text-shorten.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ConfirmationBoxComponent } from './components/confirmation-box/confirma
     NumberToAMPMPipe,
     TickAnimationComponent,
     FixtureBasicComponent,
-    ConfirmationBoxComponent
+    ConfirmationBoxComponent,
+    TextShortenPipe
   ],
   imports: [CommonModule, AppMaterialModule, ReactiveFormsModule, FlexLayoutModule],
   exports: [
@@ -32,7 +34,8 @@ import { ConfirmationBoxComponent } from './components/confirmation-box/confirma
     NumberToAMPMPipe,
     TickAnimationComponent,
     FixtureBasicComponent,
-    ConfirmationBoxComponent
+    ConfirmationBoxComponent,
+    TextShortenPipe
   ],
 })
 export class SharedAdminModule { }

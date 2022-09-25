@@ -16,8 +16,8 @@ export class FixtureTableComponent implements OnInit {
     const dummyFixturesTemp = value.map(val => {
       return {
         [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: this.TBD,
-        [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: this.TBD,
+        [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: val.home,
+        [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: val.away,
         [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
         [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
         [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium,

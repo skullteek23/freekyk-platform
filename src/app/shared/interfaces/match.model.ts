@@ -79,6 +79,8 @@ export interface dummyFixture {
   type: TournamentTypes;
   locCity: string;
   locState: string;
+  home: string;
+  away: string;
   id?: string;
   stadium?: string;
   fkc_status?: KnockoutStages;

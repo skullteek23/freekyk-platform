@@ -32,7 +32,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   // });
   // const highestScorer = highestScorerList.length ? highestScorerList.join(", ") : LABEL_NOT_AVAILABLE;
 
-  const seasonRef = db.collection(`season/${seasonID}/additionalInfo`).doc('statistics');
+  const seasonRef = db.collection(`seasons/${seasonID}/additionalInfo`).doc('statistics');
 
   if ((await seasonRef.get()).exists) {
     batch.update(seasonRef, {

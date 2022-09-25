@@ -80,6 +80,8 @@ export class SeasonAdminService {
         matchType = 'FPL';
       }
       fixturesTemp.push({
+        home: MatchConstants.TO_BE_DECIDED,
+        away: MatchConstants.TO_BE_DECIDED,
         date: availableSlotList[index].date.getTime(),
         concluded: false,
         premium: true,
