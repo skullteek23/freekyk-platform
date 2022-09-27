@@ -158,7 +158,8 @@
   </form>
 
   <ng-container *ngIf="isViewSummary">
-    <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" class="summary-container">
+    <div fxLayout="column" id="match-summary" fxLayoutAlign="center stretch" fxLayoutGap="16px"
+      class="summary-container">
       <span class="mat-body-2">Match Summary</span>
       <app-match-report-summary [data]="reportSummary?.season"></app-match-report-summary>
       <app-match-report-summary [data]="reportSummary?.team"></app-match-report-summary>

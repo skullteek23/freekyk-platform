@@ -85,6 +85,7 @@ export interface dummyFixture {
   stadium?: string;
   fkc_status?: KnockoutStages;
   timestamp?: number;
+  actionDisabled?: boolean;
 }
 export class ReportSummary {
   team: ReportData = { cols: [], displayCols: [], dataSource: [] };

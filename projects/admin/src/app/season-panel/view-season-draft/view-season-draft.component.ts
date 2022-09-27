@@ -240,12 +240,12 @@ export class ViewSeasonDraftComponent implements OnInit {
       this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
     } else if (this.isSeasonFinished || this.isSeasonPublished) {
       this.isLoaderShown = true;
-      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).get().subscribe(
+      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).snapshotChanges().subscribe(
         (response) => {
-          this.seasonFixtures = response.docs.map(fixture => {
-            if (fixture.exists) {
-              const fixtureData = fixture.data() as MatchFixture;
-              const id = fixture.id;
+          if (response.length) {
+            this.seasonFixtures = response.map(fixture => {
+              const fixtureData = fixture.payload.doc.data() as MatchFixture;
+              const id = fixture.payload.doc.id;
               return ({
                 home: fixtureData.home.name,
                 away: fixtureData.away.name,
@@ -258,12 +258,11 @@ export class ViewSeasonDraftComponent implements OnInit {
                 locState: fixtureData.locState,
                 stadium: fixtureData.stadium,
                 id,
-              } as dummyFixture)
-            }
-          })
-          this.isLoaderShown = false;
-        }
-      )
+              } as dummyFixture);
+            })
+            this.isLoaderShown = false;
+          }
+        });
     } else {
       this.seasonFixtures = [];
     }
@@ -274,13 +273,10 @@ export class ViewSeasonDraftComponent implements OnInit {
       this.isLoaderShown = true;
       this.isInvalidUpdate(matchID).subscribe(response => {
         if (response === false) {
-          this.isLoaderShown = false;
           this.dialog.open(UpdateMatchReportComponent, {
             panelClass: 'extra-large-dialogs',
             data: matchID,
             disableClose: true
-          }).afterClosed().subscribe(userResponse => {
-            console.log(userResponse);
           });
         }
         this.isLoaderShown = false;

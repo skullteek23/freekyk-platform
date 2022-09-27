@@ -128,10 +128,14 @@ export class UpdateMatchReportComponent implements OnInit {
       redCardHoldersAway: new FormArray([]),
       yellowCardHoldersHome: new FormArray([]),
       yellowCardHoldersAway: new FormArray([]),
-      billsFile: new FormControl(null, [Validators.required]),
-      matchReportFile: new FormControl(null, [Validators.required]),
-      moneySpent: new FormControl(0, [Validators.required]),
-      referee: new FormControl(null, [Validators.required]),
+      billsFile: new FormControl(null),
+      // billsFile: new FormControl(null, [Validators.required]),
+      matchReportFile: new FormControl(null),
+      // matchReportFile: new FormControl(null, [Validators.required]),
+      moneySpent: new FormControl(0),
+      // moneySpent: new FormControl(0, [Validators.required]),
+      referee: new FormControl(null),
+      // referee: new FormControl(null, [Validators.required]),
       specialNotes: new FormControl(null),
     });
   }
@@ -159,8 +163,20 @@ export class UpdateMatchReportComponent implements OnInit {
     if (this.isViewSummary || this.matchReportForm.invalid) {
       return;
     }
+    const element = document.getElementById("match-summary");
+    element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
     this.isViewSummary = true;
     this.assignSummary();
+  }
+
+  findPosition(obj) {
+    var currenttop = 0;
+    if (obj.offsetParent) {
+      do {
+        currenttop += obj.offsetTop;
+      } while ((obj = obj.offsetParent));
+      return [currenttop];
+    }
   }
 
   onSubmitMatchReport() {

@@ -22,6 +22,7 @@ export class FixtureTableComponent implements OnInit {
         [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
         [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium,
         occurred: currentDate > val.date,
+        concluded: val.concluded
       }
     }, this);
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
@@ -75,7 +76,7 @@ export class FixtureTableComponent implements OnInit {
   }
 
   onTriggerAction(data: any) {
-    if (data.occurred) {
+    if (data.occurred && !data.concluded) {
       this.actionTrigger.next(data[this.TABLE_COLUMNS.MATCH_ID]);
     }
   }
