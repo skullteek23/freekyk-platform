@@ -14,6 +14,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -33,7 +34,8 @@ export class ViewSeasonDraftComponent implements OnInit {
     private seasonAdminService: SeasonAdminService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private router: Router
+    private router: Router,
+    private readonly sso: ScrollStrategyOptions
   ) { }
 
   ngOnInit(): void {
@@ -276,7 +278,8 @@ export class ViewSeasonDraftComponent implements OnInit {
           this.dialog.open(UpdateMatchReportComponent, {
             panelClass: 'extra-large-dialogs',
             data: matchID,
-            disableClose: true
+            disableClose: true,
+            scrollStrategy: this.sso.noop()
           });
         }
         this.isLoaderShown = false;

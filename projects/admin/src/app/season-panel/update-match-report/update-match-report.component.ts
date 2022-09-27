@@ -163,10 +163,10 @@ export class UpdateMatchReportComponent implements OnInit {
     if (this.isViewSummary || this.matchReportForm.invalid) {
       return;
     }
-    const element = document.getElementById("match-summary");
-    element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
     this.isViewSummary = true;
     this.assignSummary();
+    const element = document.getElementById("match-summary");
+    element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
   }
 
   findPosition(obj) {
