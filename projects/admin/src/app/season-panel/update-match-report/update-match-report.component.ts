@@ -171,10 +171,13 @@ export class UpdateMatchReportComponent implements OnInit {
         ...this.fixture,
         id: this.data
       }
-      this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList);
-      this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
-      this.isLoaderShown = false;
-      this.onCloseDialog();
+      this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList)
+        .then(() => {
+          this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
+          this.isLoaderShown = false;
+          this.onCloseDialog();
+        })
+        .catch(() => this.snackbarService.displayError());
     }
   }
 
@@ -214,8 +217,10 @@ export class UpdateMatchReportComponent implements OnInit {
     const awayGoals = this.awayGoals > 0 ? `+${this.awayGoals}` : MatchConstants.LABEL_NOT_AVAILABLE;
     const goalsTotal = this.totalGoals > 0 ? `+${this.totalGoals}` : MatchConstants.LABEL_NOT_AVAILABLE;
     const playersList = this.matchDayPlayersList.length ? this.matchDayPlayersList.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
-    const scorersListTemp: ListOption[] = this.scorers.value;
-    const scorersList = scorersListTemp.length ? scorersListTemp.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
+    const scorersListHomeTemp: ListOption[] = this.scorersHome.value;
+    const scorersListAwayTemp: ListOption[] = this.scorersAway.value;
+    const scorerListTemp = scorersListHomeTemp.concat(scorersListAwayTemp);
+    const scorersList = scorerListTemp.length ? scorerListTemp.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
     // const goalsList: number[] = this.scorersGoals.value;
     // const index: number = goalsList.findIndex(val => val === Math.max(...goalsList));
     // if (index > -1 && scorersListTemp.length) {
@@ -353,7 +358,7 @@ export class UpdateMatchReportComponent implements OnInit {
         {
           pointTwo: MatchConstants.STATISTICS.GOALS,
           applied: scorersList,
-          updateTwo: scorersListTemp.length ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
+          updateTwo: scorerListTemp.length ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
         },
         {
           pointTwo: MatchConstants.STATISTICS.WINS,
@@ -390,8 +395,12 @@ export class UpdateMatchReportComponent implements OnInit {
     return this.matchReportForm.get('scorersGoalsAway') as FormArray;
   }
 
-  get scorers(): FormArray {
-    return this.matchReportForm.get('scorers') as FormArray;
+  get scorersHome(): FormArray {
+    return this.matchReportForm.get('scorersHome') as FormArray;
+  }
+
+  get scorersAway(): FormArray {
+    return this.matchReportForm.get('scorersAway') as FormArray;
   }
 
   get totalGoals(): number {

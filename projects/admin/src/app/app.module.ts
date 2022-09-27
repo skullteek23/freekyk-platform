@@ -31,6 +31,7 @@ import { RequestDialogComponent } from './season-panel/request-dialog/request-di
 import { UpdateMatchReportComponent } from './season-panel/update-match-report/update-match-report.component';
 import { ChipSelectionInputComponent } from './season-panel/chip-selection-input/chip-selection-input.component';
 import { MatchReportSummaryComponent } from './season-panel/match-report-summary/match-report-summary.component';
+import { REGION } from '@angular/fire/functions';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,10 @@ import { MatchReportSummaryComponent } from './season-panel/match-report-summary
     AngularFireDatabaseModule,
     FormsModule,
   ],
-  providers: [DatePipe],
+  providers: [
+    { provide: REGION, useValue: 'asia-south1' },
+    DatePipe
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture, MatchFixture, MatchReportFormData, ReportUpdates } from 'src/app/shared/interfaces/match.model';
@@ -103,8 +104,6 @@ export class SeasonAdminService {
     return fixtures && fixtures.length ? fixtures : [];
   }
 
-  onTriggerDialogClose() { }
-
   getPublishableFixture(data: dummyFixture[]) {
     return data.map(val => ({
       id: val.id,
@@ -155,62 +154,11 @@ export class SeasonAdminService {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
-  updateMatchReport(formData: MatchReportFormData, fixture: MatchFixture, playersListHome: ListOption[], playersListAway: ListOption[]): void {
+  updateMatchReport(formData: MatchReportFormData, fixture: MatchFixture, playersListHome: ListOption[], playersListAway: ListOption[]): Promise<any> {
     const functionData = { formData, fixture, playersListHome, playersListAway };
     const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.UPDATE_MATCH_REPORT);
-    callable(functionData);
+    return callable(functionData).toPromise();
   }
-
-  // createMatchReportData(formData: MatchReportFormData, fixture: MatchFixture, matchID: string) {
-  //   const data: ReportUpdates = {
-  //     team: [
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.FKC_PLAYED],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.FPL_PLAYED],
-  //         statValue: fixture.type === 'FPL' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.FCP_PLAYED],
-  //         statValue: fixture.type === 'FCP' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.GOALS],
-  //         statValue: formData.awayScore + formData.homeScore
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.WINS],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.LOSSES],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.RED_CARDS],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.YELLOW_CARDS],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-  //       {
-  //         statName: STATS_KEYS[MatchConstants.STATISTICS.GOALS_CONCEDED],
-  //         statValue: fixture.type === 'FKC' ? 1 : 0
-  //       },
-
-  //     ],
-  //     player: [
-
-  //     ],
-  //     season: [
-
-  //     ]
-  //   };
-
-  // }
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {
     return this.getSeasonFixtureDrafts(docID).pipe(switchMap(response => {
