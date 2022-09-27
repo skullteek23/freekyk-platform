@@ -58,8 +58,9 @@ export class PlFixturesComponent implements OnInit {
           this.isLoading = false;
         }),
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date')))
-      );
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
+        map((res) => res.filter(el => el.date > new Date().getTime()))
+      )
   }
   onQueryData(queryInfo): void {
     this.isLoading = true;
@@ -69,12 +70,13 @@ export class PlFixturesComponent implements OnInit {
     this.fixtures$ = this.queryServ
       .onQueryMatches(queryInfo, 'allMatches', false)
       .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
+        map((res) => res.filter(el => el.date > new Date().getTime())),
         tap((val) => {
-          this.noFixtures = val.empty;
+          this.noFixtures = !val.length;
           this.isLoading = false;
         }),
-        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date')))
-      );
+      )
   }
 }
