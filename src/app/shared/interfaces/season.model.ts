@@ -9,6 +9,7 @@ export interface SeasonBasicInfo {
   premium: boolean;
   p_teams: number;
   start_date: number;
+  lastRegDate: number;
   cont_tour: string[];
   feesPerTeam: number;
   discount: number;

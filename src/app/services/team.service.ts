@@ -242,7 +242,8 @@ export class TeamService implements OnDestroy {
               ({ id: doc.id, ...(doc.data() as MatchFixture) } as MatchFixture)
           )
         ),
-        map((resp) => (resp.length === 0 ? [] : resp))
+        map((resp) => (resp.length === 0 ? [] : resp)),
+        map(resp => resp.filter(el => el.date > new Date().getTime()))
       )
       .toPromise();
     this.store.dispatch(new TeamActions.AddUpcomingMatches(upmSnap));

@@ -49,25 +49,19 @@
   <!-- teams  -->
 
   <!-- action-button - small  -->
-  <button (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')" fxHide.gt-sm="true" mat-icon-button
+  <button (click)="isResult ? onOpenFixture() : onOpenFixture()" fxHide.gt-sm="true" mat-icon-button
     matTooltip="Open Fixture" fxLayoutAlign="center center">
-    <mat-icon *ngIf="admin == false; else updateSm" class="material-icons-round">
+    <mat-icon class="material-icons-round">
       keyboard_arrow_right
     </mat-icon>
-    <ng-template #updateSm>
-      <mat-icon class="material-icons-round"> edit </mat-icon>
-    </ng-template>
   </button>
   <!-- action-button - small  -->
 
   <!-- action-button - large  -->
-  <a (click)="isResult ? onOpenFixture('result') : onOpenFixture('fixture')" fxHide.lt-md="true">
-    <span *ngIf="admin == false; else update" class="mat-caption">
+  <a (click)="isResult ? onOpenFixture() : onOpenFixture()" fxHide.lt-md="true">
+    <span class="mat-caption">
       See more
     </span>
-    <ng-template #update>
-      <span class="mat-caption"> Update info </span>
-    </ng-template>
   </a>
   <!-- action-button - large  -->
 </div>
