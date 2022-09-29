@@ -16,9 +16,6 @@ import { MatchConstantsSecondary, MatchConstants, STATS_KEYS } from '../shared/c
   providedIn: 'root'
 })
 export class SeasonAdminService {
-
-  isTriggerCloseDialog
-
   constructor(private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
@@ -81,8 +78,8 @@ export class SeasonAdminService {
         matchType = 'FPL';
       }
       fixturesTemp.push({
-        home: MatchConstants.TO_BE_DECIDED,
-        away: MatchConstants.TO_BE_DECIDED,
+        home: 'TBD',
+        away: 'TBD',
         date: availableSlotList[index].date.getTime(),
         concluded: false,
         premium: true,
