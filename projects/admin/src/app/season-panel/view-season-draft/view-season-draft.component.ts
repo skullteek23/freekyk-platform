@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, share } from 'rxjs/operators';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
-import { SeasonAbout, SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
+import { SeasonDraft } from 'src/app/shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { DELETE_SEASON_SUBHEADING, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING } from '../../shared/constants/constants';
@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
+import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
@@ -27,6 +27,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   seasonDraftData: SeasonDraft;
   finalFees = 0;
   seasonFixtures: dummyFixture[] = [];
+  lastRegistrationDate = new Date();
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +54,7 @@ export class ViewSeasonDraftComponent implements OnInit {
           const fees = this.seasonDraftData?.basicInfo?.fees || 0;
           this.finalFees = (fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * fees));
           this.isLoaderShown = false;
+          this.lastRegistrationDate = this.maxRegisDate;
         }, (error) => {
           this.isLoaderShown = false;
           this.finalFees = 0;
@@ -122,7 +124,7 @@ export class ViewSeasonDraftComponent implements OnInit {
           }
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {
-            this.isLoaderShown = true
+            this.isLoaderShown = true;
             this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
               .then(
                 () => {
@@ -158,81 +160,23 @@ export class ViewSeasonDraftComponent implements OnInit {
   async publishSeason() {
     if (this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
       this.isLoaderShown = true;
-      const season: SeasonBasicInfo = {
-        name: this.seasonDraftData.basicInfo?.name,
-        imgpath: this.seasonDraftData.basicInfo?.imgpath,
-        locCity: this.seasonDraftData.basicInfo?.city,
-        locState: this.seasonDraftData.basicInfo?.state,
-        premium: true,
-        p_teams: this.seasonDraftData.basicInfo?.participatingTeamsCount,
-        start_date: new Date(this.seasonDraftData.basicInfo?.startDate).getTime(),
-        cont_tour: this.seasonDraftData.basicInfo?.containingTournaments,
-        feesPerTeam: this.seasonDraftData.basicInfo?.fees,
-        discount: this.seasonDraftData.basicInfo?.discount,
-        status: 'PUBLISHED'
-      }
-      const seasonAbout: SeasonAbout = {
-        description: this.seasonDraftData.basicInfo?.description,
-        rules: this.seasonDraftData.basicInfo?.rules,
-        paymentMethod: 'Online',
-      }
       const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
-      if (await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0].date, fixtures[fixtures.length - 1].date)) {
+      if ((await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0].date, fixtures[fixtures.length - 1].date)) === false) {
+        this.seasonAdminService.publishSeason(this.seasonDraftData, fixtures, this.lastRegistrationDate.getTime()).then(
+          () => {
+            this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
+            this.isLoaderShown = false;
+            this.goToURL();
+            location.reload();
+          }, () => {
+            this.isLoaderShown = false;
+            this.snackbarService.displayError();
+          }
+        )
+      } else {
         this.isLoaderShown = false;
         this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
-        return;
       }
-      const startDate = season.start_date;
-      const endDate = fixtures[fixtures.length - 1].date;
-      const lastUpdated = new Date().getTime();
-      const status: statusType = 'PUBLISHED';
-
-      const batch = this.ngFire.firestore.batch();
-
-      const seasonRef = this.ngFire.collection('seasons').doc(this.seasonDraftData.draftID).ref;
-      const seasonMoreRef = this.ngFire.collection(`seasons/${this.seasonDraftData.draftID}/additionalInfo`).doc('moreInfo').ref;
-      const draftRef = this.ngFire.collection(`seasonDrafts`).doc(this.seasonDraftData.draftID).ref;
-
-      batch.set(seasonRef, season);
-      batch.set(seasonMoreRef, seasonAbout);
-
-      batch.update(draftRef, { lastUpdated, status });
-
-      const groundIDList = (this.seasonDraftData.grounds as GroundPrivateInfo[]).map(gr => gr.id);
-
-      for (let i = 0; i < groundIDList.length; i++) {
-        const groundID = groundIDList[i];
-        const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
-        const booking: GroundBooking = { seasonID: this.seasonDraftData.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
-        const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBooking;
-        if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
-          batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
-        } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
-          batch.update(setRef, { bookingTo: endDate });
-        } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
-          batch.update(setRef, { bookingFrom: startDate });
-        } else {
-          batch.set(setRef, booking);
-        }
-      }
-
-      fixtures.forEach(fixture => {
-        const fixtureRef = this.ngFire.collection('allMatches').doc(fixture.id).ref;
-        batch.set(fixtureRef, fixture);
-      })
-
-      batch.commit().then(
-        () => {
-          this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
-          this.isLoaderShown = false;
-          this.goToURL();
-          location.reload();
-        }, err => {
-          this.isLoaderShown = false;
-          this.snackbarService.displayError();
-        }
-      )
-
     }
   }
 
@@ -328,5 +272,9 @@ export class ViewSeasonDraftComponent implements OnInit {
     if (this.seasonDraftData?.draftID) {
       return this.ngFire.collection('adminRequests', query => query.where('seasonId', '==', this.seasonDraftData.draftID)).get().pipe(map(resp => !resp.empty), share());
     }
+  }
+
+  get maxRegisDate(): Date {
+    return this.seasonDraftData && this.seasonDraftData.basicInfo ? new Date(this.seasonDraftData?.basicInfo?.startDate) : new Date();
   }
 }

@@ -16,6 +16,16 @@
     </span>
   </div>
 </mat-card>
+<mat-card class="last-date-card" *ngIf="!isSeasonFinished && !isSeasonPublished">
+  <h4>
+    Select last date for Participation in Season:
+  </h4>
+  <mat-form-field appearance="standard" color="primary">
+    <input matInput [max]="maxRegisDate" [(ngModel)]="lastRegistrationDate" [matDatepicker]="startDate" />
+    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+    <mat-datepicker #startDate></mat-datepicker>
+  </mat-form-field>
+</mat-card>
 <mat-card class="info-card">
   <div fxLayoutAlign="space-between start">
     <div>
@@ -80,7 +90,7 @@
         </p>
       </div>
       <div class="text-container">
-        <h4>Start Date</h4>
+        <h4>Tournaments Involved</h4>
         <p class="mat-body-1">
           {{ containingTournaments }}
         </p>

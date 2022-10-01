@@ -3,14 +3,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture, MatchFixture, MatchReportFormData, ReportUpdates } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData, ListOption } from 'src/app/shared/interfaces/others.model';
-import { statusType } from 'src/app/shared/interfaces/season.model';
+import { SeasonAbout, SeasonBasicInfo, SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstantsSecondary, MatchConstants, STATS_KEYS } from '../shared/constants/constants';
+import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -175,6 +174,75 @@ export class SeasonAdminService {
 
       return batch.commit();
     })).toPromise();
+  }
+
+  async publishSeason(data: SeasonDraft, fixtures: MatchFixture[], lastRegTimestamp: number): Promise<any> {
+    if (!data || !fixtures || !fixtures.length || !lastRegTimestamp) {
+      return;
+    }
+    const season: SeasonBasicInfo = {
+      name: data.basicInfo?.name,
+      imgpath: data.basicInfo?.imgpath,
+      locCity: data.basicInfo?.city,
+      locState: data.basicInfo?.state,
+      premium: true,
+      p_teams: data.basicInfo?.participatingTeamsCount,
+      start_date: data.basicInfo?.startDate,
+      cont_tour: data.basicInfo?.containingTournaments,
+      feesPerTeam: data.basicInfo?.fees,
+      discount: data.basicInfo?.discount,
+      lastRegDate: lastRegTimestamp,
+      status: 'PUBLISHED'
+    }
+    const seasonAbout: SeasonAbout = {
+      description: data.basicInfo?.description,
+      rules: data.basicInfo?.rules,
+      paymentMethod: 'Online',
+    }
+    if (lastRegTimestamp !== season.start_date) {
+      season['lastRegDate'] = lastRegTimestamp;
+    }
+
+    const startDate = season.start_date;
+    const endDate = fixtures[fixtures.length - 1].date;
+    const lastUpdated = new Date().getTime();
+    const status: statusType = 'PUBLISHED';
+
+    const batch = this.ngFire.firestore.batch();
+
+    const seasonRef = this.ngFire.collection('seasons').doc(data.draftID).ref;
+    const seasonMoreRef = this.ngFire.collection(`seasons/${data.draftID}/additionalInfo`).doc('moreInfo').ref;
+    const draftRef = this.ngFire.collection(`seasonDrafts`).doc(data.draftID).ref;
+
+    batch.set(seasonRef, season);
+    batch.set(seasonMoreRef, seasonAbout);
+
+    batch.update(draftRef, { lastUpdated, status });
+
+    const groundIDList = (data.grounds as GroundPrivateInfo[]).map(gr => gr.id);
+
+    for (let i = 0; i < groundIDList.length; i++) {
+      const groundID = groundIDList[i];
+      const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
+      const booking: GroundBooking = { seasonID: data.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
+      const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBooking;
+      if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
+        batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
+      } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
+        batch.update(setRef, { bookingTo: endDate });
+      } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
+        batch.update(setRef, { bookingFrom: startDate });
+      } else {
+        batch.set(setRef, booking);
+      }
+    }
+
+    fixtures.forEach(fixture => {
+      const fixtureRef = this.ngFire.collection('allMatches').doc(fixture.id).ref;
+      batch.set(fixtureRef, fixture);
+    })
+
+    return batch.commit();
   }
 
   getSeasonFixtureDrafts(draftID): Observable<any> {

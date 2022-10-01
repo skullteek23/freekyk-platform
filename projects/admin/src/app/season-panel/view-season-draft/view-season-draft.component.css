@@ -24,7 +24,7 @@ img {
 }
 
 .info-card {
-  margin-top: 20px
+  margin-top: 20px;
 }
 
 .cursors {
@@ -45,4 +45,14 @@ h4 {
   margin-top: 10px;
   width: 100%;
   text-align: center;
+}
+
+.last-date-card {
+  margin-top: 20px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
 }
