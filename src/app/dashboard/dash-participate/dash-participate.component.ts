@@ -44,8 +44,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       this.teamInfo = data;
       this.hasTeam = data && data.basicInfo.captainId && data.basicInfo.tname ? true : false;
     }));
-    this.getSeasonOrders()
-    this.getSeasons()
+    this.getSeasonOrders();
+    this.getSeasons();
   }
 
   ngOnDestroy(): void {
@@ -68,14 +68,15 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     );
   }
   getSeasons() {
-    this.seasons$ = this.ngFire.collection('seasons').snapshotChanges()
+    const currentTimestamp = new Date().getTime();
+    this.seasons$ = this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
       .pipe(
         map((resp) => {
           const seasons: SeasonBasicInfo[] = [];
           resp.forEach(doc => {
             const data = doc.payload.doc.data() as SeasonBasicInfo;
             const id = doc.payload.doc.id;
-            if (data.status !== 'FINISHED') {
+            if (data.status === 'PUBLISHED') {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
           })
