@@ -327,11 +327,10 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.seasonDraftData && this.seasonDraftData.basicInfo ? new Date(this.seasonDraftData?.basicInfo?.startDate) : new Date();
   }
 
-  get payableFees(): string {
+  get payableFees(): any {
     const fees = (this.seasonDraftData?.basicInfo?.fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * this.seasonDraftData?.basicInfo?.fees));
     if (fees > 0) {
-      return `&#8377;${fees}`;
+      return fees;
     }
-    return 'ENTRY-FREE TOURNAMENT';
   }
 }

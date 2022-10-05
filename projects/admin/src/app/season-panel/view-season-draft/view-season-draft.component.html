@@ -69,15 +69,33 @@
         <div>
           <h4>Apply Discount</h4>
           <p class="mat-body-1">
-            {{ seasonDraftData?.basicInfo?.discount ? '{{seasonDraftData?.basicInfo?.discount}}%' : 'No Discount' }}
+            {{ seasonDraftData?.basicInfo?.discount}} %
           </p>
         </div>
         <div>
           <h4>Payable Fees (per team)</h4>
           <p class="mat-body-2">
-            {{ payableFees }}
+            {{ payableFees | currency: 'INR':true }}
           </p>
         </div>
+      </div>
+      <div class="text-container">
+        <h4>Start Date</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.startDate | date: 'fullDate' }}
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Total Participating Teams</h4>
+        <p class="mat-body-1">
+          {{ seasonDraftData?.basicInfo?.participatingTeamsCount }} Teams
+        </p>
+      </div>
+      <div class="text-container">
+        <h4>Tournaments Involved</h4>
+        <p class="mat-body-1">
+          {{ containingTournaments }}
+        </p>
       </div>
       <form [formGroup]="updateEntriesForm">
         <div class="text-container">
@@ -126,28 +144,9 @@
           </ng-template>
         </div>
       </form>
-      <div class="text-container">
-        <h4>Start Date</h4>
-        <p class="mat-body-1">
-          {{ seasonDraftData?.basicInfo?.startDate | date: 'fullDate' }}
-        </p>
-      </div>
-      <div class="text-container">
-        <h4>Total Participating Teams</h4>
-        <p class="mat-body-1">
-          {{ seasonDraftData?.basicInfo?.participatingTeamsCount }} Teams
-        </p>
-      </div>
-      <div class="text-container">
-        <h4>Tournaments Involved</h4>
-        <p class="mat-body-1">
-          {{ containingTournaments }}
-        </p>
-      </div>
     </div>
-    <div class="photo-container" fxFlex.lt-md="250px" fxLayout fxLayoutAlign="center center">
-      <img [src]="seasonDraftData?.basicInfo?.imgpath" class="preview" alt="Image" id="preview-image" />
-    </div>
+    <app-photo-uploader [defaultImgUrl]="seasonDraftData?.basicInfo?.imgpath">
+    </app-photo-uploader>
   </div>
 </mat-card>
 <mat-card class="info-card season-page-container">
