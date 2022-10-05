@@ -15,6 +15,8 @@ import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BIO } from 'src/app/shared/Constants/REGEX';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -23,11 +25,12 @@ import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 })
 export class ViewSeasonDraftComponent implements OnInit {
 
+  isEditMode = false;
   isLoaderShown = false;
   seasonDraftData: SeasonDraft;
-  finalFees = 0;
   seasonFixtures: dummyFixture[] = [];
   lastRegistrationDate = new Date();
+  updateEntriesForm = new FormGroup({});
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +47,13 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.getDraftInfo(params['draftid']);
   }
 
+  initForm() {
+    this.updateEntriesForm = new FormGroup({
+      description: new FormControl(this.seasonDraftData?.basicInfo?.description, [Validators.required, Validators.pattern(BIO), Validators.maxLength(200)]),
+      rules: new FormControl(this.seasonDraftData?.basicInfo?.rules, [Validators.required, Validators.pattern(BIO), Validators.maxLength(500)]),
+    })
+  }
+
   getDraftInfo(draftID): void {
     if (draftID) {
       this.isLoaderShown = true;
@@ -51,13 +61,11 @@ export class ViewSeasonDraftComponent implements OnInit {
         .subscribe((response) => {
           this.seasonDraftData = response[0].data() as SeasonDraft;
           this.setDraftFixtures(response[1], this.seasonDraftData?.grounds);
-          const fees = this.seasonDraftData?.basicInfo?.fees || 0;
-          this.finalFees = (fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * fees));
+          this.initForm();
           this.isLoaderShown = false;
           this.lastRegistrationDate = this.maxRegisDate;
         }, (error) => {
           this.isLoaderShown = false;
-          this.finalFees = 0;
           this.seasonFixtures = [];
           this.seasonDraftData = null;
         });
@@ -68,14 +76,55 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.seasonAdminService.getStatusClass(this.seasonDraftData?.status);
   }
 
-  editSeasonInfo() {
-    // if (this.seasonDraftData?.draftID) {
-    //   this.dialog.open(CreateSeasonComponent, {
-    //     panelClass: 'extra-large-dialogs',
-    //     disableClose: true,
-    //     data: this.seasonDraftData.draftID
-    //   })
-    // }
+  edit() {
+    if (this.isSeasonFinished) {
+      return;
+    };
+    this.isEditMode = true;
+  }
+
+  updateSeason() {
+    if (this.isSeasonFinished) {
+      return;
+    }
+    const updatedFields: any = {
+      ...this.seasonDraftData.basicInfo
+    };
+    let isUpdate = false;
+    for (const control in this.updateEntriesForm.controls) {
+      if (this.updateEntriesForm.get(control).valid && this.updateEntriesForm.get(control).dirty && this.updateEntriesForm.get(control).value && this.updateEntriesForm.get(control).value !== this.seasonDraftData?.basicInfo[control]) {
+        updatedFields[control] = this.updateEntriesForm.get(control).value;
+        isUpdate = true;
+      }
+    }
+    if (isUpdate) {
+      this.isLoaderShown = true;
+      let allPromises = [];
+      allPromises.push(this.ngFire.collection('seasonDrafts').doc(this.seasonDraftData.draftID).update({
+        lastUpdated: new Date().getTime(),
+        basicInfo: updatedFields
+      }))
+      allPromises.push(this.ngFire.collection(`seasons/${this.seasonDraftData.draftID}/additionalInfo`).doc('moreInfo').update({
+        ...updatedFields
+      }))
+      return Promise.all(allPromises)
+        .then(() => {
+          this.isLoaderShown = false;
+          this.snackbarService.displayCustomMsg('Info updated successfully!');
+          location.reload();
+        })
+        .catch(() => {
+          this.isLoaderShown = false;
+          this.snackbarService.displayError();
+        });
+    }
+    this.isEditMode = false;
+    this.updateEntriesForm.reset();
+  }
+
+  cancel() {
+    this.isEditMode = false;
+    this.updateEntriesForm.reset();
   }
 
   onRaiseRequest() {
@@ -276,5 +325,13 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   get maxRegisDate(): Date {
     return this.seasonDraftData && this.seasonDraftData.basicInfo ? new Date(this.seasonDraftData?.basicInfo?.startDate) : new Date();
+  }
+
+  get payableFees(): string {
+    const fees = (this.seasonDraftData?.basicInfo?.fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * this.seasonDraftData?.basicInfo?.fees));
+    if (fees > 0) {
+      return `&#8377;${fees}`;
+    }
+    return 'ENTRY-FREE TOURNAMENT';
   }
 }

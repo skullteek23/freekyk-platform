@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstantsSecondary } from '../../shared/constants/constants';
 
 @Component({
@@ -25,6 +26,7 @@ export class FixtureTableComponent implements OnInit {
         concluded: val.concluded
       }
     }, this);
+    dummyFixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
     this.tableLength = value.length;
     this.dataSource.sortingDataAccessor = (data, sortHeaderId) => {
