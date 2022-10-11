@@ -118,8 +118,8 @@ export class UpdateMatchReportComponent implements OnInit {
       homeScore: new FormControl(0, [Validators.required]),
       awayScore: new FormControl(0, [Validators.required]),
       penalties: new FormControl(0),
-      homePenScore: new FormControl(0, [Validators.required]),
-      awayPenScore: new FormControl(0, [Validators.required]),
+      homePenScore: new FormControl(0),
+      awayPenScore: new FormControl(0),
       scorersHome: new FormArray([]),
       scorersAway: new FormArray([]),
       scorersGoalsHome: new FormArray([]),
@@ -128,14 +128,14 @@ export class UpdateMatchReportComponent implements OnInit {
       redCardHoldersAway: new FormArray([]),
       yellowCardHoldersHome: new FormArray([]),
       yellowCardHoldersAway: new FormArray([]),
-      billsFile: new FormControl(null),
-      // billsFile: new FormControl(null, [Validators.required]),
-      matchReportFile: new FormControl(null),
-      // matchReportFile: new FormControl(null, [Validators.required]),
-      moneySpent: new FormControl(0),
-      // moneySpent: new FormControl(0, [Validators.required]),
-      referee: new FormControl(null),
-      // referee: new FormControl(null, [Validators.required]),
+      // billsFile: new FormControl(null),
+      billsFile: new FormControl(null, [Validators.required]),
+      // matchReportFile: new FormControl(null),
+      matchReportFile: new FormControl(null, [Validators.required]),
+      // moneySpent: new FormControl(0),
+      moneySpent: new FormControl(0, [Validators.required]),
+      // referee: new FormControl(null),
+      referee: new FormControl(null, [Validators.required]),
       specialNotes: new FormControl(null),
     });
   }
@@ -160,13 +160,15 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   onGenerateSummary() {
-    if (this.isViewSummary || this.matchReportForm.invalid) {
+    console.log(this.matchReportForm)
+    console.log(this.matchReportForm.value)
+    if (this.matchReportForm.invalid) {
       return;
     }
     this.isViewSummary = true;
     this.assignSummary();
-    const element = document.getElementById("match-summary");
-    element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+    // const element = document.getElementById("match-summary");
+    // element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
   }
 
   findPosition(obj) {
