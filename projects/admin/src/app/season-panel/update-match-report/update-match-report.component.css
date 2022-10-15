@@ -33,10 +33,18 @@ mat-form-field {
   margin-bottom: 16px;
 }
 
+.label {
+  width: 150px;
+}
+
 .summary-container {
   width: 100%;
 }
 
 .center {
   text-align: justify;
+}
+
+.contract-container {
+  margin-bottom: 20px !important;
 }

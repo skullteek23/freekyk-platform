@@ -12,11 +12,11 @@ import { UNIQUE_DELETION_REQUEST_CODE } from '../../shared/constants/constants';
 export class RequestDialogComponent implements OnInit {
 
   reason: string = null;
+  mid: string = null;
 
   constructor(
     public dialogRef: MatDialogRef<RequestDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { season: string, heading: string },
-    private snackbarService: SnackbarService,
+    @Inject(MAT_DIALOG_DATA) public data: { season: string, heading: string, isShowMatch: boolean },
     private ngFire: AngularFirestore
   ) { }
 
@@ -35,9 +35,13 @@ export class RequestDialogComponent implements OnInit {
         id: uniqueRequestID,
         seasonId: this.data.season,
         timestamp,
-        reason: this.reason
+        reason: this.reason,
+      }
+      if (this.data.isShowMatch) {
+        requestData['mid'] = this.mid;
       }
       this.reason = null;
+      this.mid = null;
       this.onCloseDialogWithData(requestData);
     }
   }

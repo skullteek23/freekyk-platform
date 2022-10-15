@@ -1,22 +1,22 @@
 <mat-card class="stats-card mat-elevation-z8">
   <mat-tab-group>
-    <mat-tab label="Team stats">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Team stats
+        <span matTooltip="Refresh Stats" class="refresh material-icons-round"
+          (click)="refreshStats(); $event.stopPropagation()">
+          refresh
+        </span>
+      </ng-template>
       <ng-template matTabContent>
         <div class="fullpad-20 placehold">
           <mat-grid-list cols="3" rowHeight="72px" gutterSize="20px">
             <mat-grid-tile *ngFor="let stat of Stats">
-              <div
-                class="full-width-table"
-                fxLayoutAlign="start center"
-                fxLayoutGap="8px"
-              >
-                <mat-icon
-                  [ngClass]="{
+              <div class="full-width-table" fxLayoutAlign="start center" fxLayoutGap="8px">
+                <mat-icon [ngClass]="{
                     red: stat.name == 'Red cards',
                     yellow: stat.name == 'Yellow cards'
-                  }"
-                  class="material-icons-round"
-                >
+                  }" class="material-icons-round">
                   {{ stat.icon }}
                 </mat-icon>
 
@@ -34,24 +34,17 @@
     </mat-tab>
     <mat-tab label="Premium Stats">
       <ng-template matTabContent>
-        <div
-          class="grey-bg placeholde"
-          *ngIf="noPremiumWon"
-          fxLayoutAlign="center center"
-        >
+        <div class="grey-bg placeholde" *ngIf="noPremiumWon" fxLayoutAlign="center center">
           <p class="mat-body-1" fxLayoutAlign="center center">
             No Premium Tournaments Won!
           </p>
         </div>
         <div class="fullpad-20" fxLayout="row wrap">
-          <mat-icon
-            *ngFor="let wins of tournamentWins"
-            class="material-icons-round premium"
-          >
+          <mat-icon *ngFor="let wins of tournamentWins" class="material-icons-round premium">
             emoji_events
           </mat-icon>
         </div>
       </ng-template>
     </mat-tab>
-  </mat-tab-group></mat-card
->
+  </mat-tab-group>
+</mat-card>

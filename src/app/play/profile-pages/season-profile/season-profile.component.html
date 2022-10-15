@@ -28,18 +28,12 @@
             <span matTooltip="Participate in this season">Participate</span>
           </div>
         </button>
-        <button [routerLink]="['/play', 'fixtures']" [queryParams]="{s: this.seasonName}"
-          class="primaryButton buttonText" *ngIf="(seasonInfo$ | async)?.status !== 'FINISHED'">
-          <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span matTooltip="View Fixtures">View Fixtures</span>
-          </div>
-        </button>
-        <button [routerLink]="['/play', 'standings']" [queryParams]="{s: this.seasonName}"
-          class="primaryButton buttonText">
-          <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span matTooltip="View Standings">View Standings</span>
-          </div>
-        </button>
+      </div>
+      <div fxLayoutAlign="start center" class="nav-links">
+        <a [routerLink]="['/play', 'fixtures']" [queryParams]="{s: this.seasonName}"
+          *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'">Fixtures</a>/<a [routerLink]="['/play', 'results']"
+          [queryParams]="{s: this.seasonName}">Results</a>/<a [routerLink]="['/play', 'standings']"
+          [queryParams]="{s: this.seasonName}">Standings</a>
       </div>
     </div>
   </section>

@@ -4,6 +4,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { ALPHA_NUM_SPACE, BIO } from 'src/app/shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
+import { FormsMessages } from '../../shared/constants/messages';
 
 @Component({
   selector: 'app-add-season',
@@ -28,6 +29,7 @@ export class AddSeasonComponent implements OnInit {
   teamsList = MatchConstants.ALLOWED_PARTICIPATION_COUNT;
   tourTypes = MatchConstants.MATCH_TYPES;
   tourTypesFiltered = MatchConstants.MATCH_TYPES;
+  messages = FormsMessages;
 
   @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
 

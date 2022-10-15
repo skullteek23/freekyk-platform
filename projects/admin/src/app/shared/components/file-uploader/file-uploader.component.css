@@ -1,0 +1,25 @@
+.file-name {
+  width: 100px;
+  max-width: 100px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.delete {
+  color: var(--red);
+}
+
+.upload {
+  color: var(--primaryColor);
+}
+
+.uploader-container {
+  height: 38px;
+  width: 175px;
+  border: 1px solid var(--grey1);
+  border-radius: 8px;
+  padding: 4px 0px 4px 12px;
+  background-color: var(--grey5);
+  cursor: pointer;
+}

@@ -136,7 +136,8 @@ export class ViewSeasonDraftComponent implements OnInit {
           panelClass: 'fk-dialogs',
           data: {
             season: this.seasonDraftData?.draftID,
-            heading: REVOKE_MATCH_UPDATE_SUBHEADING
+            heading: REVOKE_MATCH_UPDATE_SUBHEADING,
+            isShowMatch: true
           }
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {
@@ -169,7 +170,8 @@ export class ViewSeasonDraftComponent implements OnInit {
           panelClass: 'fk-dialogs',
           data: {
             season: this.seasonDraftData?.draftID,
-            heading: DELETE_SEASON_SUBHEADING
+            heading: DELETE_SEASON_SUBHEADING,
+            isShowMatch: false
           }
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {

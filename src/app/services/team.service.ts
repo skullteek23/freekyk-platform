@@ -209,7 +209,7 @@ export class TeamService implements OnDestroy {
         this.store.dispatch(new TeamActions.AddMoreInfo(teamData))
       );
   }
-  private async getTeamStats(tid: string): Promise<any> {
+  async getTeamStats(tid: string): Promise<any> {
     this.ngFire
       .collection('teams/' + tid + '/additionalInfo')
       .doc('statistics')

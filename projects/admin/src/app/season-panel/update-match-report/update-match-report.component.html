@@ -32,14 +32,26 @@
       <mat-form-field appearance="outline">
         <mat-label>Home Team's Final Score</mat-label>
         <input matInput [min]="0" type="number" formControlName="homeScore">
+        <mat-error *ngIf="homeScore.hasError('required')">
+          {{formMessages.error.requiredField}}
+        </mat-error>
+        <mat-error *ngIf="homeScore.hasError('pattern')">
+          {{formMessages.error.invalidField}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Away Team's Final Score</mat-label>
         <input matInput [min]="0" type="number" formControlName="awayScore">
+        <mat-error *ngIf="awayScore.hasError('required')">
+          {{formMessages.error.requiredField}}
+        </mat-error>
+        <mat-error *ngIf="awayScore.hasError('pattern')">
+          {{formMessages.error.invalidField}}
+        </mat-error>
       </mat-form-field>
     </mat-card>
 
-    <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px">
+    <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px" *ngIf="homeGoals === awayGoals">
       <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
         <span> Penalties after fulltime? </span>
         <mat-radio-group color="primary" aria-label="Penalties after fulltime" formControlName="penalties"
@@ -48,8 +60,7 @@
           <mat-radio-button [value]="0">No</mat-radio-button>
         </mat-radio-group>
       </div>
-      <div class="radio-buttons" *ngIf="matchReportForm?.get('penalties')?.value === 1"
-        fxLayoutAlign="space-between center" fxLayoutGap="16px">
+      <div class="radio-buttons" *ngIf="penalties?.value === 1" fxLayoutAlign="space-between center" fxLayoutGap="16px">
         <mat-form-field appearance="outline">
           <mat-label>Home Team's Penalty Score</mat-label>
           <input matInput [min]="0" type="number" formControlName="homePenScore">
@@ -72,7 +83,7 @@
           fxLayoutAlign="space-between center">
           <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionListHome; let i = index" appearance="outline">
             <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
-            <input type="number" [min]="0" matInput [formControlName]="i">
+            <input type="number" min="1" matInput [formControlName]="i">
           </mat-form-field>
         </div>
       </div>
@@ -86,10 +97,9 @@
           fxLayoutAlign="space-between center">
           <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionListAway; let i = index" appearance="outline">
             <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
-            <input type="number" [min]="0" matInput [formControlName]="i">
+            <input type="number" min="1" matInput [formControlName]="i">
           </mat-form-field>
         </div>
-
       </div>
     </mat-card>
 
@@ -124,12 +134,14 @@
       </span>
       <div fxLayout="column" fxLayoutGap="10px">
         <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
-          <app-file-uploader (changeUpload)="onSelectBillFileUpload($event)"></app-file-uploader>
-          <mat-label>Upload All Bills</mat-label>
+          <mat-label class="label">Bills</mat-label>
+          <app-file-uploader [error]="billsFile?.hasError('required')" (changeUpload)="onSelectBillFileUpload($event)">
+          </app-file-uploader>
         </div>
         <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
-          <app-file-uploader (changeUpload)="onSelectReportFileUpload($event)"></app-file-uploader>
-          <mat-label>Upload Match report (signed by captains)</mat-label>
+          <mat-label class="label">Signed Match report</mat-label>
+          <app-file-uploader [error]="matchReportFile?.hasError('required')"
+            (changeUpload)="onSelectReportFileUpload($event)"></app-file-uploader>
         </div>
         <mat-form-field appearance="outline">
           <mat-label>Total Money Spent</mat-label>
@@ -137,8 +149,9 @@
           <mat-icon matPrefix>currency_rupee</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Referee Name</mat-label>
+          <mat-label>Referee</mat-label>
           <input type="text" matInput formControlName="referee">
+          <mat-error *ngIf="referee.hasError('required')">{{formMessages.error.requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>

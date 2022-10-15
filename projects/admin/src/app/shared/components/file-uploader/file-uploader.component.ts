@@ -1,24 +1,32 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FileUploadMessages } from '../../constants/messages';
 
 @Component({
   selector: 'app-file-uploader',
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.css']
 })
-export class FileUploaderComponent implements OnInit {
-  $uploadedImageFile: File = null;
-  @Output() changeUpload = new EventEmitter<File>();
-  fileName: string = '';
-  constructor() { }
+export class FileUploaderComponent {
 
-  ngOnInit(): void {
-  }
+  fileName = 'Select File';
+  uploadedImageFile$: File = null;
+  messages = FileUploadMessages;
+
+  @Input() error = false;
+  @Output() changeUpload = new EventEmitter<File>();
 
   onSelectFile(fileEvent) {
-    const file = fileEvent.target.files[0];
-    if (file) {
-      this.fileName = file.name;
-      this.changeUpload.emit(file);
+    this.uploadedImageFile$ = fileEvent.target.files[0];
+    fileEvent.target.value = null;
+    if (this.uploadedImageFile$) {
+      this.fileName = this.uploadedImageFile$.name;
+      this.changeUpload.emit(this.uploadedImageFile$);
     }
+  }
+
+  deleteFile() {
+    this.fileName = 'Select File';
+    this.uploadedImageFile$ = null;
+    this.changeUpload.emit(this.uploadedImageFile$);
   }
 }

@@ -6,6 +6,9 @@
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Season Name</mat-label>
           <input type="text" matInput formControlName="name" />
+          <mat-error *ngIf="seasonForm.get('name').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select State</mat-label>
@@ -14,6 +17,9 @@
               {{ state }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="seasonForm.get('state').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select City</mat-label>
@@ -22,6 +28,9 @@
               {{ city }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="seasonForm.get('city').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
@@ -30,14 +39,23 @@
           <input matInput [min]="minDate" [max]="maxDate" formControlName="startDate" [matDatepicker]="startDate" />
           <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
           <mat-datepicker #startDate></mat-datepicker>
+          <mat-error *ngIf="seasonForm.get('startDate').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Season Fees (per team)</mat-label>
           <input type="number" matInput formControlName="fees" />
+          <mat-error *ngIf="seasonForm.get('fees').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Discount (in %)</mat-label>
           <input type="number" matInput formControlName="discount" />
+          <mat-error *ngIf="seasonForm.get('discount').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
@@ -45,10 +63,16 @@
           <mat-label>Mention Season Description in not more than 200 characters</mat-label>
           <textarea matInput formControlName="description"
             placeholder="Mention season description in 300 words"></textarea>
+          <mat-error *ngIf="seasonForm.get('description').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="text-area-field" appearance="outline" color="primary">
           <mat-label>Mention Season Rules in not more than 500 characters</mat-label>
           <textarea matInput formControlName="rules" placeholder="Mention season rules in 300 words"></textarea>
+          <mat-error *ngIf="seasonForm.get('rules').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -63,6 +87,9 @@
             {{ team }} teams
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="seasonForm.get('participatingTeamsCount').hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Select Containing Tournaments</mat-label>
@@ -73,6 +100,9 @@
             {{ type }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="seasonForm.get('participatingTeamsCount').hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
       </mat-form-field>
     </div>
   </section>

@@ -47,25 +47,30 @@ export class QueryService {
     collectionName: string,
     isConcluded: boolean
   ): Observable<QuerySnapshot<unknown>> {
-    queryInfo = {
-      queryItem: FilterHeadingMap[queryInfo.queryItem],
-      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
-        ? FilterSymbolMap[queryInfo.queryItem]
-        : '==',
-      queryValue: FilterValueMap[queryInfo.queryValue] || queryInfo.queryValue,
-    };
-
-    return this.ngFire
-      .collection(collectionName, (query) =>
-        query
-          .where(
-            queryInfo.queryItem,
-            queryInfo.queryComparisonSymbol,
-            queryInfo.queryValue
-          )
-          .where('concluded', '==', isConcluded)
-      )
-      .get();
+    if (!queryInfo) {
+      return this.ngFire
+        .collection(collectionName, (query) => query.where('concluded', '==', isConcluded))
+        .get();
+    } else {
+      queryInfo = {
+        queryItem: FilterHeadingMap[queryInfo.queryItem],
+        queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
+          ? FilterSymbolMap[queryInfo.queryItem]
+          : '==',
+        queryValue: FilterValueMap[queryInfo.queryValue] || queryInfo.queryValue,
+      };
+      return this.ngFire
+        .collection(collectionName, (query) =>
+          query
+            .where(
+              queryInfo.queryItem,
+              queryInfo.queryComparisonSymbol,
+              queryInfo.queryValue
+            )
+            .where('concluded', '==', isConcluded)
+        )
+        .get();
+    }
   }
   onQueryMatchesForDashboard(
     queryInfo: QueryInfo,

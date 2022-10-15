@@ -13,6 +13,10 @@
     <textarea matInput [(ngModel)]="reason" cols="30" rows="10" maxlength="1000"></textarea>
     <mat-error *ngIf="!isReasonValid">Max Characters allowed: 1000</mat-error>
   </mat-form-field>
+  <mat-form-field *ngIf="data?.isShowMatch" class="box-size" appearance="outline">
+    <mat-label> Enter Unique Match ID</mat-label>
+    <input matInput [(ngModel)]="mid">
+  </mat-form-field>
   <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
     fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">
     <button (click)="onCloseDialog()" class="secondaryButton buttonText">

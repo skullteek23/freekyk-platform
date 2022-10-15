@@ -1,14 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { ALPHA_W_SPACE, BIO, NUM } from 'src/app/shared/Constants/REGEX';
 import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
 import { MatchConstants } from '../../shared/constants/constants';
+import { FormsMessages, MatchReportMessages } from '../../shared/constants/messages';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
 
@@ -28,6 +30,8 @@ export class UpdateMatchReportComponent implements OnInit {
   scorersList: ListOption[] = [];
   reportSummary = new ReportSummary();
   updateStats: CloudFunctionStatsData;
+  formMessages = FormsMessages;
+  messages = MatchReportMessages;
 
   @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
   @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
@@ -43,6 +47,29 @@ export class UpdateMatchReportComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.getMatchInfo();
+  }
+
+  initForm(): void {
+    this.matchReportForm = new FormGroup({
+      homeScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
+      awayScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
+      penalties: new FormControl(1),
+      homePenScore: new FormControl(0, Validators.pattern(NUM)),
+      awayPenScore: new FormControl(0, Validators.pattern(NUM)),
+      scorersHome: new FormArray([]),
+      scorersAway: new FormArray([]),
+      scorersGoalsHome: new FormArray([]),
+      scorersGoalsAway: new FormArray([]),
+      redCardHoldersHome: new FormArray([]),
+      redCardHoldersAway: new FormArray([]),
+      yellowCardHoldersHome: new FormArray([]),
+      yellowCardHoldersAway: new FormArray([]),
+      billsFile: new FormControl(null, [Validators.required]),
+      matchReportFile: new FormControl(null, [Validators.required]),
+      moneySpent: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
+      referee: new FormControl(null, [Validators.required, Validators.pattern(ALPHA_W_SPACE)]),
+      specialNotes: new FormControl(null, [Validators.pattern(BIO), Validators.maxLength(200)]),
+    });
   }
 
   getMatchInfo(): void {
@@ -113,33 +140,6 @@ export class UpdateMatchReportComponent implements OnInit {
     this.matchReportForm.get('matchReportFile').setValue(file);
   }
 
-  initForm(): void {
-    this.matchReportForm = new FormGroup({
-      homeScore: new FormControl(0, [Validators.required]),
-      awayScore: new FormControl(0, [Validators.required]),
-      penalties: new FormControl(0),
-      homePenScore: new FormControl(0),
-      awayPenScore: new FormControl(0),
-      scorersHome: new FormArray([]),
-      scorersAway: new FormArray([]),
-      scorersGoalsHome: new FormArray([]),
-      scorersGoalsAway: new FormArray([]),
-      redCardHoldersHome: new FormArray([]),
-      redCardHoldersAway: new FormArray([]),
-      yellowCardHoldersHome: new FormArray([]),
-      yellowCardHoldersAway: new FormArray([]),
-      // billsFile: new FormControl(null),
-      billsFile: new FormControl(null, [Validators.required]),
-      // matchReportFile: new FormControl(null),
-      matchReportFile: new FormControl(null, [Validators.required]),
-      // moneySpent: new FormControl(0),
-      moneySpent: new FormControl(0, [Validators.required]),
-      // referee: new FormControl(null),
-      referee: new FormControl(null, [Validators.required]),
-      specialNotes: new FormControl(null),
-    });
-  }
-
   onCloseDialog(): void {
     this.dialogRef.close();
   }
@@ -151,7 +151,7 @@ export class UpdateMatchReportComponent implements OnInit {
       (this.matchReportForm.get(controlName) as FormArray).push(control);
     }
 
-    const control = new FormControl(1, [Validators.required]);
+    const control = new FormControl(1, [Validators.required, Validators.pattern(NUM), Validators.min(1), Validators.max(this.totalGoals)]);
     if (controlName === 'scorersHome') {
       this.scorersGoalsHome.push(control);
     } else if (controlName === 'scorersAway') {
@@ -160,25 +160,11 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   onGenerateSummary() {
-    console.log(this.matchReportForm)
-    console.log(this.matchReportForm.value)
     if (this.matchReportForm.invalid) {
       return;
     }
     this.isViewSummary = true;
     this.assignSummary();
-    // const element = document.getElementById("match-summary");
-    // element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
-  }
-
-  findPosition(obj) {
-    var currenttop = 0;
-    if (obj.offsetParent) {
-      do {
-        currenttop += obj.offsetTop;
-      } while ((obj = obj.offsetParent));
-      return [currenttop];
-    }
   }
 
   onSubmitMatchReport() {
@@ -416,6 +402,9 @@ export class UpdateMatchReportComponent implements OnInit {
   get scorersHome(): FormArray {
     return this.matchReportForm.get('scorersHome') as FormArray;
   }
+  get penalties(): FormArray {
+    return this.matchReportForm.get('penalties') as FormArray;
+  }
 
   get scorersAway(): FormArray {
     return this.matchReportForm.get('scorersAway') as FormArray;
@@ -426,11 +415,27 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   get homeGoals(): number {
-    return (+this.matchReportForm.get('homeScore')?.value);
+    return Number(this.homeScore?.value);
   }
 
   get awayGoals(): number {
-    return (+this.matchReportForm.get('awayScore')?.value);
+    return Number(this.awayScore?.value);
+  }
+  get homeScore(): AbstractControl {
+    return this.matchReportForm.get('homeScore');
+  }
+  get referee(): AbstractControl {
+    return this.matchReportForm.get('referee');
+  }
+  get billsFile(): AbstractControl {
+    return this.matchReportForm.get('billsFile');
+  }
+  get matchReportFile(): AbstractControl {
+    return this.matchReportForm.get('matchReportFile');
+  }
+
+  get awayScore(): AbstractControl {
+    return this.matchReportForm.get('awayScore');
   }
 
   get chipSelectionListHome() {
