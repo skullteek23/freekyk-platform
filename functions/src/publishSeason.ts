@@ -199,7 +199,7 @@ export function getRoundsList(totalTeams: number): number[] {
   const roundsList: number[] = [];
   for (let i = totalTeams; i >= 2; i /= 2) {
     for (let j = i; j > i / 2; j--) {
-      roundsList.push(i)
+      roundsList.push(i);
     }
   }
   return roundsList;

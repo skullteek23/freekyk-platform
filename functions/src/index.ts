@@ -27,7 +27,6 @@ export const generateRazorpayOrder = functions.region('asia-south1').https.onCal
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
 export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
-// export const initTable = functions.https.onCall(initLeagueTable);
 // export const updateTable = functions.https.onCall(updateLeagueTable);
 // callable functions
 
