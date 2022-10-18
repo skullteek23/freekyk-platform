@@ -8,7 +8,7 @@ import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 import { FilterData } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-pl-fixtures',
@@ -24,7 +24,8 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private queryServ: QueryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
   ngOnInit(): void {
     this.initSeasonFilter();
@@ -83,6 +84,10 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     this.isLoading = true;
-    return this.onQueryFixtures(queryInfo);
+    if (queryInfo) {
+      this.router.navigate(['/play', 'fixtures'], { queryParams: { s: queryInfo.queryValue } });
+    } else {
+      this.router.navigate(['/play', 'fixtures']);
+    }
   }
 }

@@ -68,7 +68,7 @@ export class AuthService {
     this.forgotPassword()
       .then(() => {
         // console.log('password reset link sent!');
-        this.snackServ.displayCustomMsgLong(
+        this.snackServ.displayCustomMsg(
           'Password Reset link has been successfully sent! Please check your email'
         );
       })
@@ -153,51 +153,51 @@ export class AuthService {
 
   // success display functions
   private onSuccesslogIn(name: string | undefined | null): void {
-    this.snackServ.displayCustomMsgLong(`Welcome back, ${name}!`);
+    this.snackServ.displayCustomMsg(`Welcome back, ${name}!`);
   }
   private onSuccessSignup(name: string | undefined | null): void {
-    this.snackServ.displayCustomMsgLong(`Welcome, ${name}!`);
+    this.snackServ.displayCustomMsg(`Welcome, ${name}!`);
   }
   private onSuccesslogOut(): void {
-    this.snackServ.displayCustomMsgLong('Successfully logged out!');
+    this.snackServ.displayCustomMsg('Successfully logged out!');
   }
   // success display functions
 
   // error display functions
   private passwordIncorrect(): void {
-    this.snackServ.displayCustomMsgLong('Incorrect password! Please try again');
+    this.snackServ.displayCustomMsg('Incorrect password! Please try again');
   }
   private passwordWeak(): void {
-    this.snackServ.displayCustomMsgLong(
+    this.snackServ.displayCustomMsg(
       'Password too weak! Please try another one'
     );
   }
   private emailIncorrect(): void {
-    this.snackServ.displayCustomMsgLong('Incorrect email! Please try again');
+    this.snackServ.displayCustomMsg('Incorrect email! Please try again');
   }
   private emailAlreadyRegistered(): void {
-    this.snackServ.displayCustomMsgLong(
+    this.snackServ.displayCustomMsg(
       'Email already registered! Please try another one'
     );
   }
   private accountNotExist(): void {
-    this.snackServ.displayCustomMsgLong(
+    this.snackServ.displayCustomMsg(
       'Account does not exist! Please sign up'
     );
   }
   private sessionExpired(): void {
-    this.snackServ.displayCustomMsgLong('Session Expired! Please login again');
+    this.snackServ.displayCustomMsg('Session Expired! Please login again');
   }
   private tooManyRequests(): void {
-    this.snackServ.displayCustomMsgLong(
+    this.snackServ.displayCustomMsg(
       'Request error! Please try again after sometime'
     );
   }
   private popupClosedByUser(): void {
-    this.snackServ.displayCustomMsgLong('Please sign in using the popup box');
+    this.snackServ.displayCustomMsg('Please sign in using the popup box');
   }
   private networkFail(): void {
-    this.snackServ.displayCustomMsgLong(
+    this.snackServ.displayCustomMsg(
       'Please check your internet connection'
     );
   }
@@ -277,7 +277,7 @@ export class AuthService {
         this.popupClosedByUser();
         break;
       default:
-        this.snackServ.displayError();
+        this.snackServ.displayError('Error occurred!');
         break;
     }
   }

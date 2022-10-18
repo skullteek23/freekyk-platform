@@ -12,17 +12,17 @@
 
   <!-- tab groups -->
   <mat-tab-group class="container section-space-bottom">
-    <mat-tab disabled label="Knockout Groups">
+    <mat-tab label="Knockout Groups">
       <ng-template matTabContent>
         <app-pl-st-knockout [season]="seasonChosen" [fixtures]="knockoutFixtures"></app-pl-st-knockout>
       </ng-template>
     </mat-tab>
-    <mat-tab disabled label="League Tables">
+    <mat-tab label="League Tables">
       <ng-template matTabContent>
         <app-pl-st-league [data]="tableData"></app-pl-st-league>
       </ng-template>
     </mat-tab> -->
-    <mat-tab disabled label="Community Play Leaderboard">
+    <mat-tab label="Community Play Leaderboard">
       <ng-template matTabContent>
         <app-pl-st-community-play [data]="cpStandings"></app-pl-st-community-play>
       </ng-template>

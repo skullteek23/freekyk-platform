@@ -80,11 +80,11 @@ export class UpdateMatchReportComponent implements OnInit {
         this.getInvolvedPlayersList();
       } else if (data && data.concluded === true) {
         this.isLoaderShown = false;
-        this.snackbarService.displayCustomMsg('Match data already submitted!');
+        this.snackbarService.displayError('Match data already submitted!');
         this.onCloseDialog();
       } else {
         this.isLoaderShown = false;
-        this.snackbarService.displayCustomMsg('Match day has not occurred yet!');
+        this.snackbarService.displayError('Match day has not occurred yet!');
         this.onCloseDialog();
       }
     })
@@ -97,7 +97,7 @@ export class UpdateMatchReportComponent implements OnInit {
     const awayMembers = await this.getMemberInfo(awayTeamID)?.toPromise();
     if (!homeMembers || !homeMembers.length || !awayMembers || !awayMembers.length) {
       this.isLoaderShown = false;
-      this.snackbarService.displayCustomMsg('Unable to get team members!');
+      this.snackbarService.displayError('Unable to get team members!');
       this.onCloseDialog();
       return;
     }
@@ -181,7 +181,7 @@ export class UpdateMatchReportComponent implements OnInit {
           this.isLoaderShown = false;
           this.onCloseDialog();
         })
-        .catch(() => this.snackbarService.displayError());
+        .catch(() => this.snackbarService.displayError('Unable to update match'));
     }
   }
 

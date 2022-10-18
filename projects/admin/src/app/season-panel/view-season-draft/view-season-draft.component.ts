@@ -115,7 +115,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         })
         .catch(() => {
           this.isLoaderShown = false;
-          this.snackbarService.displayError();
+          this.snackbarService.displayError('Update failed.');
         });
     }
     this.isEditMode = false;
@@ -146,10 +146,10 @@ export class ViewSeasonDraftComponent implements OnInit {
               .then(
                 () => {
                   this.isLoaderShown = false;
-                  this.snackbarService.displayCustomMsgLong('Revoke Request Submitted!');
+                  this.snackbarService.displayCustomMsg('Revoke Request Submitted!');
                 }, err => {
                   this.isLoaderShown = false;
-                  this.snackbarService.displayError();
+                  this.snackbarService.displayError('Request raise failed!');
                 }
               )
           }
@@ -180,10 +180,10 @@ export class ViewSeasonDraftComponent implements OnInit {
               .then(
                 () => {
                   this.isLoaderShown = false;
-                  this.snackbarService.displayCustomMsgLong('Delete Request Submitted!');
+                  this.snackbarService.displayCustomMsg('Delete Request Submitted!');
                 }, err => {
                   this.isLoaderShown = false;
-                  this.snackbarService.displayError();
+                  this.snackbarService.displayError('Request raise failed!');
                 }
               )
           }
@@ -202,7 +202,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         if (response) {
           this.router.navigate(['/seasons/list']);
           this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID)
-            .then(() => this.snackbarService.displayDelete())
+            .then(() => this.snackbarService.displayCustomMsg('Draft deleted successfully!'))
             .catch(err => this.snackbarService.displayCustomMsg(err));
         }
       })
@@ -211,23 +211,21 @@ export class ViewSeasonDraftComponent implements OnInit {
   async publishSeason() {
     if (this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
       this.isLoaderShown = true;
-      const fixtures = this.seasonAdminService.getPublishableFixture(this.seasonFixtures);
-      if ((await this.seasonAdminService.isAnyGroundBooked(this.seasonDraftData.grounds, fixtures[0].date, fixtures[fixtures.length - 1].date)) === false) {
-        this.seasonAdminService.publishSeason(this.seasonDraftData, fixtures, this.lastRegistrationDate.getTime()).then(
-          () => {
-            this.seasonAdminService.deleteDraft(this.seasonDraftData.draftID, true);
-            this.isLoaderShown = false;
-            this.goToURL();
-            location.reload();
-          }, () => {
-            this.isLoaderShown = false;
-            this.snackbarService.displayError();
-          }
-        )
-      } else {
-        this.isLoaderShown = false;
-        this.snackbarService.displayCustomMsg('Sorry! One or more grounds you selected is already booked!');
+      const data = {
+        seasonDraft: this.seasonDraftData,
+        fixturesDraft: this.seasonFixtures,
+        lastRegTimestamp: this.lastRegistrationDate.getTime()
       }
+      this.seasonAdminService.publishSeason(data)
+        .then(() => {
+          this.isLoaderShown = false;
+          this.goToURL();
+          location.reload();
+        })
+        .catch(error => {
+          this.snackbarService.displayError(error?.msg);
+          this.isLoaderShown = false;
+        })
     }
   }
 

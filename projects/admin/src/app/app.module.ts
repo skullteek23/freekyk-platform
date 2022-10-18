@@ -32,6 +32,7 @@ import { UpdateMatchReportComponent } from './season-panel/update-match-report/u
 import { ChipSelectionInputComponent } from './season-panel/chip-selection-input/chip-selection-input.component';
 import { MatchReportSummaryComponent } from './season-panel/match-report-summary/match-report-summary.component';
 import { REGION } from '@angular/fire/functions';
+import { SnackBarModule } from 'src/app/shared/snack-bar/snack-bar.module';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { REGION } from '@angular/fire/functions';
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     FormsModule,
+    SnackBarModule
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },

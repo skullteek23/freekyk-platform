@@ -281,7 +281,7 @@ export class TeamService implements OnDestroy {
     callable({ teamId: tid })
       .toPromise()
       .then(() => {
-        this.snackServ.displayCustomMsgLong(
+        this.snackServ.displayCustomMsg(
           'Your Team will be deleted shortly!'
         );
         location.reload();

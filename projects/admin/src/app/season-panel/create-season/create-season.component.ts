@@ -84,7 +84,7 @@ export class CreateSeasonComponent implements OnDestroy {
           this.isLoaderShown = false;
         }, (err) => {
           this.isLoaderShown = false;
-          this.snackBarService.displayError();
+          this.snackBarService.displayError('Unable to get grounds!');
         }
       ))
   }
@@ -210,7 +210,7 @@ export class CreateSeasonComponent implements OnDestroy {
       this.isLoaderShown = false;
     }, (err) => {
       this.isLoaderShown = false;
-      this.snackBarService.displayError();
+      this.snackBarService.displayError('Unable to save drafted fixtures');
     });
   }
 

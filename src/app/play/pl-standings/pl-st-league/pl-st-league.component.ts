@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LeagueTableModel } from 'src/app/shared/interfaces/others.model';
+import { PlayConstants } from '../../play.constants';
 
 @Component({
   selector: 'app-pl-st-league',
@@ -11,6 +12,7 @@ import { LeagueTableModel } from 'src/app/shared/interfaces/others.model';
   styleUrls: ['./pl-st-league.component.css'],
 })
 export class PlStLeagueComponent implements OnInit {
+  readonly TO_BE_DECIDED = PlayConstants.TO_BE_DECIDED;
   timgpath =
     'https://images.unsplash.com/photo-1599446740719-23f3414840ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=742&q=80';
   LeagueDataSource: LeagueTableModel[] = [];

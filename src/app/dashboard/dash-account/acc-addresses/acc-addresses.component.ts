@@ -102,7 +102,7 @@ export class AccAddressesComponent implements OnInit {
       .collection(`players/${this.uid}/Addresses`)
       .doc(formid)
       .delete()
-      .then(() => this.snackServ.displayDelete());
+      .then(() => this.snackServ.displayCustomMsg('Address deleted successfully!'));
   }
   resetAll(): void {
     this.additionAvailable = true;

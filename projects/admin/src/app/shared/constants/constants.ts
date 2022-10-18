@@ -14,6 +14,7 @@ export class MatchConstants {
   };
   public static TO_BE_DECIDED: 'TBD';
   public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
+  public static ALLOWED_KNOCKOUT_BRACKETS = [4, 8, 16];
   public static DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
   public static SEASON_PRICE = {
     MIN: 0,

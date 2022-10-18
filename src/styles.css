@@ -784,3 +784,24 @@ mat-table {
 }
 
 /* custom buttons */
+
+/* Custom snack-bars */
+.snack-bar-success {
+  background: var(--primaryColor);
+  color: white;
+}
+
+.snack-bar-error {
+  background: var(--secondaryDarkColor);
+  color: white;
+}
+
+/* Custom snack-bars */
+
+/* Custom Mat-menu Panels */
+.mat-menu-panel .mat-menu-content {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+/* Custom Mat-menu Panels */

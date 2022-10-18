@@ -1,63 +1,40 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { SnackBarComponent } from '../shared/snack-bar/snack-bar.component';
+
+const SNACKBAR_AUTO_HIDE = 5000; // time in milliseconds
+const SNACKBAR_HORIZONTAL_POSITION = 'center'; // time in milliseconds
+const SNACKBAR_VERTICAL_POSITION = 'bottom'; // time in milliseconds
 
 @Injectable({
   providedIn: 'root',
 })
 export class SnackbarService {
-  complete = 'Successfully completed!';
-  delete = 'Successfully deleted!';
-  applied = 'Successfully applied!';
-  sent = 'Successfully sent!';
-  error = 'Error occured! Please try again later.';
-  wait = 'Please wait..';
-  displayComplete(): void {
-    this.matSnack.open(this.complete, 'OK', {
-      duration: 2000,
-      panelClass: ['primary-snackbar'],
-    });
+
+  constructor(
+    private matSnack: MatSnackBar
+  ) { }
+
+  displayCustomMsg(message: string, isError = false): void {
+    if (message === null || message === '') {
+      return;
+    }
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = SNACKBAR_VERTICAL_POSITION;
+    config.horizontalPosition = SNACKBAR_HORIZONTAL_POSITION;
+    config.duration = SNACKBAR_AUTO_HIDE;
+    config.panelClass = isError === false ? ['snack-bar-success'] : ['snack-bar-error'];
+    config.data = { 'msg': message };
+
+    this.matSnack.openFromComponent(SnackBarComponent, config);
   }
-  displayDelete(): void {
-    this.matSnack.open(this.delete, 'OK', {
-      duration: 2000,
-      panelClass: ['primary-snackbar'],
-    });
+
+  displayError(errorMessage?: string): void {
+    if (errorMessage === undefined || errorMessage === null || errorMessage === '') {
+      errorMessage = 'Error Occurred! Please try again later';
+    }
+    this.displayCustomMsg(errorMessage, true);
   }
-  displaySent(): void {
-    this.matSnack.open(this.sent, 'OK', {
-      duration: 2000,
-      panelClass: ['primary-snackbar'],
-    });
-  }
-  displayApplied(): void {
-    this.matSnack.open(this.applied, 'OK', {
-      duration: 2000,
-      panelClass: ['primary-snackbar'],
-    });
-  }
-  displayError(): void {
-    this.matSnack.open(this.error, 'OK', {
-      duration: 2000,
-      panelClass: ['warn-snackbar'],
-    });
-  }
-  displayWait(): void {
-    this.matSnack.open(this.wait, 'OK', {
-      duration: 1000,
-      panelClass: ['primary-snackbar'],
-    });
-  }
-  displayCustomMsg(msg: string): void {
-    this.matSnack.open(msg, 'OK', {
-      duration: 2000,
-      panelClass: ['primary-snackbar'],
-    });
-  }
-  displayCustomMsgLong(msg: string): void {
-    this.matSnack.open(msg, 'OK', {
-      duration: 4000,
-      panelClass: ['primary-snackbar'],
-    });
-  }
-  constructor(private matSnack: MatSnackBar) {}
+
 }

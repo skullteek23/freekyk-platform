@@ -42,7 +42,7 @@ export class TeamCommunicationService implements OnDestroy {
           resp.activeSquad.every((sq) => sq.id !== uid) ||
           resp.activeSquad.length === 0
         ) {
-          this.snackServ.displayCustomMsgLong(
+          this.snackServ.displayCustomMsg(
             'Only Players included in active squad can accept/reject the invitation'
           );
           return null;
@@ -72,10 +72,10 @@ export class TeamCommunicationService implements OnDestroy {
             // console.log(log);
             this.updateTeamActivity(log, resp.currUpcomingMatchNo);
           })
-          .then(() => this.snackServ.displaySent())
+          .then(() => this.snackServ.displayCustomMsg('Response sent!'))
           .catch((error) => {
             // console.log(error);
-            this.snackServ.displayError();
+            this.snackServ.displayError('Unable to update response');
           });
       });
   }
@@ -126,7 +126,7 @@ export class TeamCommunicationService implements OnDestroy {
             };
             this.updateTeamActivity(newLog, matchNo);
           })
-          .then(() => this.snackServ.displayComplete());
+          .then(() => this.snackServ.displayCustomMsg('Active Squad created successfully!'));
       });
   }
   getActiveSquad(upcomingMatchNo: number): void {

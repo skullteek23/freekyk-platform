@@ -123,29 +123,6 @@ export class SeasonAdminService {
     } as MatchFixture));
   }
 
-  async isAnyGroundBooked(grounds: GroundPrivateInfo[], startDate: number, endDate: number): Promise<boolean> {
-    if (startDate && endDate) {
-      for (let i = 0; i < grounds.length; i++) {
-        const bookingsList = await this.getBookingsForGround(grounds[i]);
-        if (!bookingsList.length) {
-          continue;
-        } else {
-          return bookingsList.some(booking => this.isBookingOverlap(startDate, endDate, booking));
-        }
-      }
-    }
-    return false;
-  }
-
-  async getBookingsForGround(ground: GroundPrivateInfo): Promise<GroundBooking[]> {
-    return await this.ngFire.collection('groundBookings', query => query.where('groundID', '==', ground['id'])).get()
-      .pipe(map(resp => !resp.empty ? resp.docs.map(res => res.data() as GroundBooking) : [])).toPromise();
-  }
-
-  isBookingOverlap(startDate: number, endDate: number, booking: GroundBooking): boolean {
-    return (startDate <= booking.bookingTo) && (booking.bookingFrom <= endDate);
-  }
-
   isStartDateOverlap(startDate: number, booking: GroundBooking): boolean {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
@@ -176,73 +153,12 @@ export class SeasonAdminService {
     })).toPromise();
   }
 
-  async publishSeason(data: SeasonDraft, fixtures: MatchFixture[], lastRegTimestamp: number): Promise<any> {
-    if (!data || !fixtures || !fixtures.length || !lastRegTimestamp) {
+  async publishSeason(data: any): Promise<any> {
+    if (!data || !data.hasOwnProperty('seasonDraft') || !data.hasOwnProperty('fixturesDraft') || !data.hasOwnProperty('lastRegTimestamp')) {
       return;
     }
-    const season: SeasonBasicInfo = {
-      name: data.basicInfo?.name,
-      imgpath: data.basicInfo?.imgpath,
-      locCity: data.basicInfo?.city,
-      locState: data.basicInfo?.state,
-      premium: true,
-      p_teams: data.basicInfo?.participatingTeamsCount,
-      start_date: data.basicInfo?.startDate,
-      cont_tour: data.basicInfo?.containingTournaments,
-      feesPerTeam: data.basicInfo?.fees,
-      discount: data.basicInfo?.discount,
-      lastRegDate: lastRegTimestamp,
-      status: 'PUBLISHED'
-    }
-    const seasonAbout: SeasonAbout = {
-      description: data.basicInfo?.description,
-      rules: data.basicInfo?.rules,
-      paymentMethod: 'Online',
-    }
-    if (lastRegTimestamp !== season.start_date) {
-      season['lastRegDate'] = lastRegTimestamp;
-    }
-
-    const startDate = season.start_date;
-    const endDate = fixtures[fixtures.length - 1].date;
-    const lastUpdated = new Date().getTime();
-    const status: statusType = 'PUBLISHED';
-
-    const batch = this.ngFire.firestore.batch();
-
-    const seasonRef = this.ngFire.collection('seasons').doc(data.draftID).ref;
-    const seasonMoreRef = this.ngFire.collection(`seasons/${data.draftID}/additionalInfo`).doc('moreInfo').ref;
-    const draftRef = this.ngFire.collection(`seasonDrafts`).doc(data.draftID).ref;
-
-    batch.set(seasonRef, season);
-    batch.set(seasonMoreRef, seasonAbout);
-
-    batch.update(draftRef, { lastUpdated, status });
-
-    const groundIDList = (data.grounds as GroundPrivateInfo[]).map(gr => gr.id);
-
-    for (let i = 0; i < groundIDList.length; i++) {
-      const groundID = groundIDList[i];
-      const setRef = this.ngFire.collection('groundBookings').doc(groundID).ref;
-      const booking: GroundBooking = { seasonID: data.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
-      const existingBooking = (await this.ngFire.collection('groundBookings').doc(groundID).get().toPromise()).data() as GroundBooking;
-      if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
-        batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
-      } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
-        batch.update(setRef, { bookingTo: endDate });
-      } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
-        batch.update(setRef, { bookingFrom: startDate });
-      } else {
-        batch.set(setRef, booking);
-      }
-    }
-
-    fixtures.forEach(fixture => {
-      const fixtureRef = this.ngFire.collection('allMatches').doc(fixture.id).ref;
-      batch.set(fixtureRef, fixture);
-    })
-
-    return batch.commit();
+    const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.PUBLISH_SEASON);
+    return callable(data).toPromise();
   }
 
   getSeasonFixtureDrafts(draftID): Observable<any> {

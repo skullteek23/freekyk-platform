@@ -1,70 +1,69 @@
 <!-- tournament stage headings -->
-<div class="section-space-top mat-subheading-1" fxLayoutAlign="center center">
-  {{ season | titlecase }}
-</div>
-<div class="section-space-top section-space-bottom">
-  <span fxFlex="25%" class="mat-body-2 center">Round of 16</span>
-  <span fxFlex="25%" class="mat-body-2 center">Quarter Finals</span>
-  <span fxFlex="25%" class="mat-body-2 center">Semi Finals</span>
-  <div fxFlex="25%" fxLayoutAlign="center center">
-    <span class="material-icons-round">emoji_events</span>
-    <span class="mat-body-2 center">Final</span>
-  </div>
-</div>
-<!-- tournament stage headings -->
 <ng-template #noitem>
   <app-no-items-message items="tournament"></app-no-items-message>
 </ng-template>
 
+<ng-container *ngIf="!showEmptyTable; else noitem">
+  <!-- tournament stage headings -->
+  <div class="section-space-top mat-subheading-1" fxLayoutAlign="center center">
+    {{ season | titlecase }}
+  </div>
+
+  <div class="section-space-top headings section-space-bottom" fxLayoutAlign="center">
+    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfSixteenMatches.length">Round of 16</span>
+    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfEightMatches.length">Quarter Finals</span>
+    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfFourMatches.length">Semi Finals</span>
+    <div fxFlex="25%" fxLayoutAlign="center center" *ngIf="roundOfTwoMatches.length">
+      <span class="material-icons-round">emoji_events</span>
+      <span class="mat-body-2 center">Final</span>
+    </div>
+  </div>
+
+  <div class="section-space-top stage_container" fxLayout="row nowrap" fxLayoutGap="20px" fxLayoutAlign="center">
+    <!-- round of 16 -->
+    <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch" *ngIf="roundOfSixteenMatches.length">
+      <!-- <span fxFlexAlign="start" class="mat-body-2 knockout-heading">Round of 16</span> -->
+      <div [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
+        *ngFor="let match of roundOfSixteenMatches" class="match">
+        <app-knockout-strip [match]="match"></app-knockout-strip>
+      </div>
+    </div>
+    <!-- round of 16 -->
+
+    <!-- Quarter Finals -->
+    <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch" *ngIf="roundOfEightMatches.length">
+      <!-- <span fxFlexAlign="start" class="mat-body-2 knockout-heading">Quarter Finals</span> -->
+      <div [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }" *ngFor="let match of roundOfEightMatches"
+        class="match">
+        <app-knockout-strip [match]="match"></app-knockout-strip>
+      </div>
+    </div>
+    <!-- Quarter Finals -->
+
+    <!-- Semi Finals -->
+    <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch" *ngIf="roundOfFourMatches.length">
+      <!-- <span fxFlexAlign="start" class="mat-body-2 knockout-heading">Semi Finals</span> -->
+      <div [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }" *ngFor="let match of roundOfFourMatches"
+        class="match">
+        <app-knockout-strip [match]="match"></app-knockout-strip>
+      </div>
+    </div>
+    <!-- Semi Finals -->
+
+    <!-- Final -->
+    <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch" *ngIf="roundOfTwoMatches.length">
+      <!-- <div fxFlexAlign="start" class="knockout-heading" fxLayoutAlign="center center"> -->
+      <!-- <span class="material-icons-round">emoji_events</span> -->
+      <!-- <span class="mat-body-2 center">Final</span> -->
+      <!-- </div> -->
+      <div class="match final" *ngFor="let match of roundOfTwoMatches">
+        <app-knockout-strip [match]="match"></app-knockout-strip>
+      </div>
+    </div>
+    <!-- Final -->
+  </div>
+</ng-container>
+
+
 <!-- tournament stages -->
-<div
-  *ngIf="!showEmptyTable; else noitem"
-  class="section-space-top stage_container"
-  fxLayout="row nowrap"
-  fxLayoutGap="20px"
->
-  <!-- round of 16 -->
-  <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-    <div
-      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
-      *ngFor="let match of r16Matches"
-      class="match"
-    >
-      <app-knockout-strip [match]="match"></app-knockout-strip>
-    </div>
-  </div>
-  <!-- round of 16 -->
-
-  <!-- Quarter Finals -->
-  <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-    <div
-      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
-      *ngFor="let match of r8Matches"
-      class="match"
-    >
-      <app-knockout-strip [match]="match"></app-knockout-strip>
-    </div>
-  </div>
-  <!-- Quarter Finals -->
-
-  <!-- Semi Finals -->
-  <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-    <div
-      [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
-      *ngFor="let match of qFMatches"
-      class="match"
-    >
-      <app-knockout-strip [match]="match"></app-knockout-strip>
-    </div>
-  </div>
-  <!-- Semi Finals -->
-
-  <!-- Final -->
-  <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-    <div class="match final">
-      <app-knockout-strip [match]="finalMatch"></app-knockout-strip>
-    </div>
-  </div>
-  <!-- Final -->
-</div>
 <!-- tournament stages -->

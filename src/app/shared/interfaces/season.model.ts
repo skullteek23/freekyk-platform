@@ -1,4 +1,5 @@
 import { GroundPrivateInfo } from "./ground.model";
+import { TournamentTypes } from "./match.model";
 
 export type statusType = 'PUBLISHED' | 'DRAFTED' | 'FINISHED' | 'READY TO PUBLISH';
 export interface SeasonBasicInfo {
@@ -9,7 +10,7 @@ export interface SeasonBasicInfo {
   premium: boolean;
   p_teams: number;
   start_date: number;
-  cont_tour: string[];
+  cont_tour: TournamentTypes[];
   feesPerTeam: number;
   discount: number;
   status: statusType;
@@ -39,8 +40,8 @@ export class SeasonStats {
 }
 export interface SeasonParticipants {
   tid: string;
-  tname: string;
-  tlogo: string;
+  name: string;
+  logo: string;
 }
 
 export interface SeasonDraft {

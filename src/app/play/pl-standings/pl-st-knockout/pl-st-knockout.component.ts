@@ -1,24 +1,36 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
 @Component({
   selector: 'app-pl-st-knockout',
   templateUrl: './pl-st-knockout.component.html',
   styleUrls: ['./pl-st-knockout.component.css'],
 })
-export class PlStKnockoutComponent implements OnInit {
+export class PlStKnockoutComponent {
+
+  roundOfTwoMatches: MatchFixture[] = [];
+  roundOfFourMatches: MatchFixture[] = [];
+  roundOfEightMatches: MatchFixture[] = [];
+  roundOfSixteenMatches: MatchFixture[] = [];
+  showEmptyTable = true;
+
   @Input() set fixtures(values: MatchFixture[]) {
     this.showEmptyTable = values.length === 0;
-    this.r16Matches = values.filter((val) => val.fkc_status === 'R16');
-    this.r8Matches = values.filter((val) => val.fkc_status === 'R8');
-    this.qFMatches = values.filter((val) => val.fkc_status === 'R4');
-    this.finalMatch = values.find((val) => val.fkc_status === 'F');
+    values.forEach(element => {
+      if (element.fkcRound) {
+        if (element.fkcRound === 2) {
+          this.roundOfTwoMatches.push(element);
+        } else if (element.fkcRound === 4) {
+          this.roundOfFourMatches.push(element);
+        } else if (element.fkcRound === 8) {
+          this.roundOfEightMatches.push(element);
+        } else if (element.fkcRound === 16) {
+          this.roundOfSixteenMatches.push(element);
+        }
+      } else {
+        this.showEmptyTable = true;
+      }
+    });
   }
   @Input() season = 'Select a Season';
-  showEmptyTable = true;
-  r16Matches: MatchFixture[];
-  r8Matches: MatchFixture[];
-  qFMatches: MatchFixture[];
-  finalMatch: MatchFixture;
-  constructor() {}
-  ngOnInit(): void {}
+
 }

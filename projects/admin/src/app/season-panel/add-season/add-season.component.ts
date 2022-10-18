@@ -76,7 +76,7 @@ export class AddSeasonComponent implements OnInit {
     this.tourTypesFiltered = [];
     this.seasonForm.get('containingTournaments').reset();
     this.tourTypesFiltered.push('FCP');
-    if (event.value % 4 === 0) {
+    if (MatchConstants.ALLOWED_KNOCKOUT_BRACKETS.includes(event.value)) {
       this.tourTypesFiltered.push('FKC');
     }
     if (event.value > 2) {

@@ -1,6 +1,5 @@
 import { ListOption } from "./others.model";
 
-export type KnockoutStages = 'R16' | 'R8' | 'R4' | 'F';
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export interface MatchFixture {
   date: number;
@@ -24,7 +23,7 @@ export interface MatchFixture {
   id?: string;
   tie_breaker?: string;
   stadium?: string;
-  fkc_status?: KnockoutStages;
+  fkcRound?: number;
 }
 export interface MatchFixtureOverview {
   ref: string;
@@ -83,7 +82,7 @@ export interface dummyFixture {
   away: string;
   id?: string;
   stadium?: string;
-  fkc_status?: KnockoutStages;
+  fkcRound?: number;
   timestamp?: number;
   actionDisabled?: boolean;
 }

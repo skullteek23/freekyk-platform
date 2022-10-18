@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
@@ -24,7 +24,8 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private queryServ: QueryService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) { }
   ngOnInit(): void {
     this.initSeasonFilter();
@@ -82,6 +83,10 @@ export class PlResultsComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     this.isLoading = true;
-    return this.onQueryResults(queryInfo);
+    if (queryInfo) {
+      this.router.navigate(['/play', 'results'], { queryParams: { s: queryInfo.queryValue } });
+    } else {
+      this.router.navigate(['/play', 'results']);
+    }
   }
 }

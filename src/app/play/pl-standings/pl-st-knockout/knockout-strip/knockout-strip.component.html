@@ -1,9 +1,9 @@
 <div (click)="openFixture()" class="box" fxLayout="row" fxLayoutAlign="space-between center">
   <div fxFlex="<grow>" fxLayout="column" fxLayoutGap="12px">
     <div class="box_inner-1" fxLayout="row" fxLayoutGap="8px" fxLayoutlign="center center">
-      <img [src]="match?.home.name || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
+      <img [src]="match?.home.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
       <span class="mat-caption" fxLayoutAlign="start center">
-        {{ match?.home.logo | textShorten: 15 }}
+        {{ match?.home.name | textShorten: 15 }}
         <mat-icon fxLayoutAlign="center center" *ngIf="match?.concluded && match?.home.score > match?.away.score">
           sports_soccer</mat-icon>
       </span>

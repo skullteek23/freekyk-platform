@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
-import { ActivatedRoute } from '@angular/router';
-import { MatchConstants, MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants/constants';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants/constants';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
@@ -34,7 +34,8 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   constructor(
     private ngFire: AngularFirestore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
   ngOnInit(): void {
     this.subscriptions.add(
@@ -61,19 +62,21 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         };
       });
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onQueryData(queryInfo): void {
-    return;
     if (queryInfo) {
-      this.onChooseSeason(queryInfo.queryValue);
+      this.router.navigate(['/play', 'standings'], { queryParams: { s: queryInfo.queryValue } });
     } else {
       this.seasonChosen = null;
     }
   }
+
   onChooseSeason(seasonName: string): void {
     this.seasonChosen = seasonName;
     this.ngFire
@@ -121,7 +124,6 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         }))
       )
       .subscribe((res: CommunityLeaderboard[]) => {
-        // console.log(res)
         this.cpStandings = res;
         if (this.knockoutFixtures.length) {
           this.tabGroup.selectedIndex = 0;

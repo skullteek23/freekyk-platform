@@ -25,7 +25,7 @@ export class SupportComponent implements OnInit {
     private ngFire: AngularFirestore,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
     if (this.router.url.includes('faqs')) {
       this.activeIndex = 1;
@@ -77,11 +77,11 @@ export class SupportComponent implements OnInit {
           tkt_status: 'Recieved',
         } as BasicTicket)
         .then(() => {
-          this.snackServ.displaySent();
+          this.snackServ.displayCustomMsg('Ticket registered successfully!');
           this.ticketForm.reset();
         });
     } else {
-      this.snackServ.displayError();
+      this.snackServ.displayError('Unable to register ticket!');
     }
     window.scrollTo(0, 0);
   }

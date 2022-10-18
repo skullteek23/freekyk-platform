@@ -14,6 +14,7 @@ import { generateThumbnail } from './trigger_functions/generateThumbnail';
 import { removeThumbnail } from './trigger_functions/removeThumbnail';
 import { environment } from '../../src/environments/environment';
 import { matchReportUpdate } from './matchReportUpdate';
+import { seasonPublish } from './publishSeason';
 
 
 // callable functions
@@ -25,6 +26,7 @@ export const deleteTeam = functions.region('asia-south1').https.onCall(onDelete)
 export const generateRazorpayOrder = functions.region('asia-south1').https.onCall(generateOrder);
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
+export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
 // export const initTable = functions.https.onCall(initLeagueTable);
 // export const updateTable = functions.https.onCall(updateLeagueTable);
 // callable functions

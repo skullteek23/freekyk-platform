@@ -49,7 +49,7 @@ export class NotificationsService implements OnDestroy {
         break;
 
       default:
-        this.snackServ.displayError();
+        this.snackServ.displayError('Error Occurred! Please try again later');
         break;
     }
   }
@@ -84,7 +84,7 @@ export class NotificationsService implements OnDestroy {
             .collection('invites')
             .doc(invId)
             .delete()
-            .then(() => this.snackServ.displayDelete())
+            .then(() => this.snackServ.displayCustomMsg('Invite deleted successfully!'))
         )
     );
   }

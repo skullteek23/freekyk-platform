@@ -906,3 +906,15 @@ app-fixture-table {
   background: var(--premiumServiceColor) !important;
   color: black !important;
 }
+
+
+/* Custom snack-bars */
+.snack-bar-success {
+  background: var(--primaryColor);
+}
+
+.snack-bar-error {
+  background: var(--secondaryDarkColor);
+}
+
+/* Custom snack-bars */

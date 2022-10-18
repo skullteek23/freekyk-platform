@@ -101,7 +101,7 @@ export class AccTicketsComponent implements OnInit {
       .collection('tickets')
       .doc(ticketID)
       .delete()
-      .then(() => this.snackServ.displayDelete());
+      .then(() => this.snackServ.displayCustomMsg('Ticket deleted successfully!'));
   }
   resetAll(): void {
     this.additionAvailable = true;

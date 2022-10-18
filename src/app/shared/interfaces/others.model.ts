@@ -45,7 +45,7 @@ export interface VEProject {
   photos: string[];
 }
 export interface LeagueTableModel {
-  tData: { timgpath: string; tName: string };
+  tData: { logo: string; name: string };
   w: number;
   d: number;
   l: number;
