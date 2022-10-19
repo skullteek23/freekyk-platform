@@ -1,8 +1,9 @@
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { sortObjectByKey } from './utils/utilities';
+import { Constants, sortObjectByKey } from './utils/utilities';
 import { environment } from '../../src/environments/environment';
 import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
 
@@ -17,15 +18,16 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   const KEY_SECRET = environment.razorPay.key_secret;
   const season = data && data.season ? (data.season as SeasonBasicInfo) : null;
   const teamID = data && data.tid ? data.tid : null;
-  const allPromises: any[] = [];
+  const batch = db.batch();
   let generatedSignature = null;
   let newOrder: OrderBasic;
   let teamInfo: TeamBasicInfo;
   let participantDetail: SeasonParticipants;
 
   if (!ORDER_ID || !PAYMENT_ID || !season) {
-    return false;
+    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
   }
+
 
   generatedSignature = crypto.createHmac('sha256', KEY_SECRET).update(`${ORDER_ID}|${PAYMENT_ID}`).digest('hex');
   newOrder = {
@@ -39,14 +41,14 @@ export async function paymentVerification(data: any, context: any): Promise<any>
     itemsDescSnap: {
       prodName: season.name,
       prodImgpath: season.imgpath,
-      prodPrice: season.feesPerTeam ? season.feesPerTeam.toString() : '0',
+      prodPrice: season.feesPerTeam,
       prodId: season.id || 'id',
       prodType: 'season',
     },
   };
 
   if (!teamID || !newOrder || !SIGNATURE || !generatedSignature || SIGNATURE !== generatedSignature) {
-    return false;
+    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
   }
 
   teamInfo = (await db.collection('teams').doc(teamID).get()).data() as TeamBasicInfo;
@@ -55,84 +57,113 @@ export async function paymentVerification(data: any, context: any): Promise<any>
     name: teamInfo.tname,
     logo: teamInfo.imgpath_logo,
   }
-  allPromises.push(db.collection('seasonOrders').doc(data.razorpay_order_id).set(newOrder));
-  allPromises.push(assignSeasonParticipants(season, participantDetail));
 
-  if (!allPromises.length) {
-    return false;
+  // Saving season order
+  const docRef = db.collection('seasonOrders').doc(ORDER_ID);
+  batch.set(docRef, newOrder);
+
+  // getting all season fixtures
+  const seasonFixtures: MatchFixture[] = (await db.collection('allMatches').where('season', '==', season.name).get()).docs.map((fixtureData) => ({ ...fixtureData.data() as MatchFixture, id: fixtureData.id }));
+  if (!seasonFixtures.length) {
+    throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
 
-  return Promise.all(allPromises);
+  // getting available/empty fixtures for FPL, FKC & FCP
+  const availableFCPMatches = seasonFixtures.filter(fixture => fixture.type === 'FCP' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
+  const availableFKCMatches = seasonFixtures.filter(fixture => fixture.type === 'FKC' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
+  const availableFPLMatches = seasonFixtures.filter(fixture => fixture.type === 'FPL' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
+
+  // Assigning participant in available/empty FCP
+  availableFCPMatches.sort(sortObjectByKey('date'));
+  if (availableFCPMatches.length) {
+    for (let i = 0; i < availableFCPMatches.length; i++) {
+      const matchID = availableFCPMatches[i].id;
+      const updateDoc: any = {};
+      const updateKey = isFixtureAvailableHome(availableFKCMatches[i]) ? 'home' : 'away';
+      updateDoc[updateKey] = {
+        name: participantDetail.name,
+        logo: participantDetail.logo
+      };
+      updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+
+      if (matchID) {
+        const updateRef = db.collection('allMatches').doc(matchID);
+        batch.update(updateRef, updateDoc);
+        break;
+      }
+    }
+  }
+
+  // Assigning participant in available/empty FKC
+  availableFKCMatches.sort(sortObjectByKey('date'));
+  if (availableFKCMatches.length) {
+    for (let i = 0; i < availableFKCMatches.length; i++) {
+      const matchID = availableFKCMatches[i].id;
+      const updateDoc: any = {};
+      const updateKey = isFixtureAvailableHome(availableFKCMatches[i]) ? 'home' : 'away';
+      updateDoc[updateKey] = {
+        name: participantDetail.name,
+        logo: participantDetail.logo
+      };
+      updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+
+      if (matchID) {
+        const updateRef = db.collection('allMatches').doc(matchID);
+        batch.update(updateRef, updateDoc);
+        break;
+      }
+    }
+  }
+
+  // Assigning participant in available/empty FPL
+  const assignedRivals: any[] = [];
+  availableFPLMatches.sort(sortObjectByKey('date'));
+  if (availableFPLMatches.length) {
+    for (let i = 0; i < availableFPLMatches.length; i++) {
+      if (assignedRivals.length === season.p_teams) {
+        break;
+      }
+      if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (assignedRivals.includes(availableFPLMatches[i].home.name) && assignedRivals.includes(availableFPLMatches[i].home.name))) {
+        // fixtures that are either fully available or one opponent is not repeated.
+        const matchID = availableFPLMatches[i].id;
+        const updateDoc: any = {};
+        const updateKey = assignedRivals.includes(availableFPLMatches[i].home.name) ? 'home' : 'away';
+        updateDoc[updateKey] = {
+          name: participantDetail.name,
+          logo: participantDetail.logo
+        }
+        updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+        if (matchID) {
+          assignedRivals.push(participantDetail.name);
+          const updateRef = db.collection('allMatches').doc(matchID);
+          batch.update(updateRef, updateDoc);
+        }
+      }
+    }
+  }
+
+  // Adding participant in season
+  const seasonID = season.id;
+  if (seasonID) {
+    const participantRef = db.collection(`seasons/${seasonID}/participants`).doc();
+    batch.set(participantRef, participantDetail);
+  }
+
+  if (!batch) {
+    throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
+  }
+
+  return batch.commit();
 }
 
-export async function assignSeasonParticipants(season: SeasonBasicInfo, participant: SeasonParticipants): Promise<any> {
-  const sid = season.id || '';
-  const seasonName = season.name || '';
-  const seasonFixturesData = (await db.collection('allMatches').where('season', '==', seasonName).get()).docs;
+export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
+  return isFixtureAvailableHome(fixture) && isFixtureAvailableAway(fixture);
+}
 
-  const fixtures: any[] = [];
-  const selectedFixtures: MatchFixture[] = [];
-  const value = {
-    name: participant.name,
-    logo: participant.logo
-  }
-  const allPromises: any[] = [];
-  const matchIDs: string[] = [];
-  if (!seasonFixturesData.length) {
-    return false;
-  }
-  seasonFixturesData.forEach(element => {
-    const id = element.id;
-    const fixtureData = element.data() as MatchFixture;
-    const date = fixtureData.date;
-    fixtures.push({ ...fixtureData, id, date });
-  });
-  fixtures.sort(sortObjectByKey('date'));
-  fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FCP' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
-      matchIDs.push(element['id']);
-      return true;
-    }
-    return false;
-  })
-  fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FKC' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
-      matchIDs.push(element['id']);
-      return true;
-    }
-    return false;
-  })
-  fixtures.some(element => {
-    if (element.hasOwnProperty('type') && element.type === 'FPL' && (element.home.name === 'TBD' || element.away.name === 'TBD')) {
-      matchIDs.push(element['id']);
-      return true;
-    }
-    return false;
-  })
-  matchIDs.forEach(matchID => {
-    const tempFixture: any = fixtures.find(fixture => fixture.id === matchID);
-    if (tempFixture) {
-      selectedFixtures.push({ id: matchID, ...tempFixture as MatchFixture });
-    }
-  });
-  selectedFixtures.forEach(fixture => {
-    const id = fixture.id || '';
-    if (fixture.home.name === 'TBD') {
-      allPromises.push(db.collection('allMatches').doc(id).update({
-        home: value,
-        teams: admin.firestore.FieldValue.arrayUnion(value.name)
-      }));
-    } else if (fixture.away.name === 'TBD') {
-      allPromises.push(db.collection('allMatches').doc(id).update({
-        away: value,
-        teams: admin.firestore.FieldValue.arrayUnion(value.name)
-      }));
-    }
-  })
+export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
+  return fixture?.home?.name === Constants.TO_BE_DECIDED;
+}
 
-  if (!allPromises.length) {
-    return false;
-  }
-  allPromises.push(db.collection(`seasons/${sid}/participants`).add(participant));
-  return Promise.all(allPromises);
+export function isFixtureAvailableAway(fixture: MatchFixture): boolean {
+  return fixture?.away?.name === Constants.TO_BE_DECIDED;
 }
