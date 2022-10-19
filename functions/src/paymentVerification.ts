@@ -84,7 +84,7 @@ export async function paymentVerification(data: any, context: any): Promise<any>
     for (let i = 0; i < availableFCPMatches.length; i++) {
       const matchID = availableFCPMatches[i].id;
       const updateDoc: any = {};
-      const updateKey = isFixtureAvailableHome(availableFKCMatches[i]) ? 'home' : 'away';
+      const updateKey = isFixtureAvailableHome(availableFCPMatches[i]) ? 'home' : 'away';
       updateDoc[updateKey] = {
         name: participantDetail.name,
         logo: participantDetail.logo
@@ -166,7 +166,6 @@ export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
 }
 
 export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
-  console.log(TO_BE_DECIDED);
   return fixture?.home?.name === TO_BE_DECIDED;
 }
 
