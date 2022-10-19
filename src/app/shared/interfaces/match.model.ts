@@ -7,12 +7,12 @@ export interface MatchFixture {
   home: {
     name: string,
     logo: string,
-    score: number
+    score?: number
   };
   away: {
     name: string,
     logo: string,
-    score: number
+    score?: number
   };
   teams: string[];
   season: string;

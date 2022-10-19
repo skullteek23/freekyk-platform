@@ -95,28 +95,22 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]),
         map(docs => docs.map(doc => {
-          const homeDetails = {
-            name: doc.home.name || MatchConstantsSecondary.TO_BE_DECIDED,
-            logo: doc.home.logo || MatchConstantsSecondary.DEFAULT_LOGO,
-            score: doc.home.score || null
-          }
-          const awayDetails = {
-            name: doc.away.name || MatchConstantsSecondary.TO_BE_DECIDED,
-            logo: doc.away.logo || MatchConstantsSecondary.DEFAULT_LOGO,
-            score: doc.away.score || null
-          }
           let winner = MatchConstantsSecondary.TO_BE_DECIDED;
-          if (homeDetails.score !== awayDetails.score) {
-            winner = homeDetails.score > awayDetails.score ? homeDetails.name : awayDetails.name;
+          if (doc.concluded) {
+            if (doc.home.score !== doc.away.score) {
+              winner = doc.home.score > doc.away.score ? doc.home.name : doc.away.name;
+            } else {
+              winner = 'Draw'
+            }
           }
           return {
             home: {
-              'timgpath': homeDetails.logo,
-              'tName': homeDetails.name
+              'timgpath': doc.home.logo,
+              'tName': doc.home.name
             },
             away: {
-              'timgpath': awayDetails.logo,
-              'tName': awayDetails.name
+              'timgpath': doc.away.logo,
+              'tName': doc.away.name
             },
             stadium: doc.stadium,
             winner
