@@ -69,7 +69,7 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
     const groundID = groundIDList[i];
     if (groundID) {
       const setRef = db.collection('groundBookings').doc(groundID);
-      const booking: GroundBooking = { seasonID: data.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
+      const booking: GroundBooking = { seasonID: draftSeason.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
       const existingBooking = (await db.collection('groundBookings').doc(groundID).get()).data() as GroundBooking;
       if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
         batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
