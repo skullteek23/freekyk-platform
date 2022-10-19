@@ -67,6 +67,7 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   }
 
   onQueryFixtures(queryInfo): void {
+    this.isLoading = true;
     this.fixtures$ = this.queryServ
       .onQueryMatches(queryInfo, 'allMatches', false)
       .pipe(
@@ -83,7 +84,6 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   }
 
   onQueryData(queryInfo): void {
-    this.isLoading = true;
     if (queryInfo) {
       this.router.navigate(['/play', 'fixtures'], { queryParams: { s: queryInfo.queryValue } });
     } else {

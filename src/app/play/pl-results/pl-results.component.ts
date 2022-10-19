@@ -67,6 +67,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   }
 
   onQueryResults(queryInfo): void {
+    this.isLoading = true;
     this.results$ = this.queryServ
       .onQueryMatches(queryInfo, 'allMatches', true)
       .pipe(
@@ -82,7 +83,6 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   }
 
   onQueryData(queryInfo): void {
-    this.isLoading = true;
     if (queryInfo) {
       this.router.navigate(['/play', 'results'], { queryParams: { s: queryInfo.queryValue } });
     } else {

@@ -6,11 +6,7 @@ import { MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchFixture } from 'src/app/shared/interfaces/match.model';
-import {
-  CommunityLeaderboard,
-  FilterData,
-  LeagueTableModel,
-} from 'src/app/shared/interfaces/others.model';
+import { CommunityLeaderboard, FilterData, LeagueTableModel, } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
 @Component({
