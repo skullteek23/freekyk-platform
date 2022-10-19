@@ -4,7 +4,7 @@ import { GroundBooking, GroundPrivateInfo } from '../../src/app/shared/interface
 import { dummyFixture, MatchFixture } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
-import { Constants, DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
+import { DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 const db = admin.firestore();
 
 export async function seasonPublish(data: any, context: any): Promise<any> {

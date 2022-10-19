@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { Constants, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
+import { sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { environment } from '../../src/environments/environment';
 import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
 
