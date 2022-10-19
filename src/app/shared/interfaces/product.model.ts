@@ -34,7 +34,7 @@ export interface sellerInfo {
 export interface cartItem {
   prodName: string;
   prodImgpath: string;
-  prodPrice: string;
+  prodPrice: number;
   prodId: string;
   prodType?: SEASON | EQUIPMENT;
 }
