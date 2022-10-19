@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { Constants, sortObjectByKey } from './utils/utilities';
+import { Constants, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { environment } from '../../src/environments/environment';
 import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
 
@@ -11,6 +11,7 @@ const crypto = require('crypto');
 const db = admin.firestore();
 
 export async function paymentVerification(data: any, context: any): Promise<any> {
+
 
   const ORDER_ID = data && data.razorpay_order_id ? data.razorpay_order_id : null;
   const PAYMENT_ID = data && data.razorpay_payment_id ? data.razorpay_payment_id : null;
@@ -27,7 +28,11 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   if (!ORDER_ID || !PAYMENT_ID || !season) {
     throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
   }
-
+  // check if participation is allowed
+  const totalParticipants = (await db.collection(`seasons/${season.id}/participants`).get()).size;
+  if (totalParticipants >= season.p_teams) {
+    throw new functions.https.HttpsError('permission-denied', 'Season participating full!');
+  }
 
   generatedSignature = crypto.createHmac('sha256', KEY_SECRET).update(`${ORDER_ID}|${PAYMENT_ID}`).digest('hex');
   newOrder = {
@@ -74,8 +79,8 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   const availableFPLMatches = seasonFixtures.filter(fixture => fixture.type === 'FPL' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
 
   // Assigning participant in available/empty FCP
-  availableFCPMatches.sort(sortObjectByKey('date'));
   if (availableFCPMatches.length) {
+    availableFCPMatches.sort(sortObjectByKey('date'));
     for (let i = 0; i < availableFCPMatches.length; i++) {
       const matchID = availableFCPMatches[i].id;
       const updateDoc: any = {};
@@ -95,8 +100,8 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   }
 
   // Assigning participant in available/empty FKC
-  availableFKCMatches.sort(sortObjectByKey('date'));
   if (availableFKCMatches.length) {
+    availableFKCMatches.sort(sortObjectByKey('date'));
     for (let i = 0; i < availableFKCMatches.length; i++) {
       const matchID = availableFKCMatches[i].id;
       const updateDoc: any = {};
@@ -161,9 +166,10 @@ export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
 }
 
 export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
-  return fixture?.home?.name === Constants.TO_BE_DECIDED;
+  console.log(TO_BE_DECIDED);
+  return fixture?.home?.name === TO_BE_DECIDED;
 }
 
 export function isFixtureAvailableAway(fixture: MatchFixture): boolean {
-  return fixture?.away?.name === Constants.TO_BE_DECIDED;
+  return fixture?.away?.name === TO_BE_DECIDED;
 }

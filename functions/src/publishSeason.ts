@@ -4,7 +4,7 @@ import { GroundBooking, GroundPrivateInfo } from '../../src/app/shared/interface
 import { dummyFixture, MatchFixture } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
-import { Constants, sortObjectByKey } from './utils/utilities';
+import { Constants, DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 const db = admin.firestore();
 
 export async function seasonPublish(data: any, context: any): Promise<any> {
@@ -99,7 +99,7 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
     knockoutFixtures.sort(sortObjectByKey('date'));
     const roundsList = getRoundsList(totalTeams);
     knockoutFixtures.map((fixture, index) => {
-      const data = fixture;
+      const data: MatchFixture = fixture;
       data.fkcRound = roundsList[index];
       return data;
     })
@@ -138,14 +138,14 @@ export function getPublishableFixture(data: dummyFixture[]) {
     date: val.date,
     concluded: false,
     home: {
-      name: Constants.TO_BE_DECIDED,
-      logo: Constants.DEFAULT_LOGO
+      name: TO_BE_DECIDED,
+      logo: DEFAULT_LOGO
     },
     away: {
-      name: Constants.TO_BE_DECIDED,
-      logo: Constants.DEFAULT_LOGO
+      name: TO_BE_DECIDED,
+      logo: DEFAULT_LOGO
     },
-    teams: [Constants.TO_BE_DECIDED],
+    teams: [TO_BE_DECIDED],
     season: val.season,
     premium: val.premium,
     type: val.type,
@@ -174,7 +174,7 @@ export function getEmptyLeagueTable(seasonID: string, teamsCount: number): Leagu
     const table: LeagueTableModel[] = [];
     for (let i = 0; i < teamsCount; i++) {
       table.push({
-        tData: { logo: Constants.DEFAULT_LOGO, name: Constants.TO_BE_DECIDED },
+        tData: { logo: DEFAULT_LOGO, name: TO_BE_DECIDED },
         w: 0,
         d: 0,
         l: 0,
