@@ -223,7 +223,7 @@ export class ViewSeasonDraftComponent implements OnInit {
           location.reload();
         })
         .catch(error => {
-          this.snackbarService.displayError(error?.msg);
+          this.snackbarService.displayError(error?.message);
           this.isLoaderShown = false;
         })
     }
