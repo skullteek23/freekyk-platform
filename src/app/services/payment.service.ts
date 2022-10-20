@@ -20,11 +20,12 @@ export class PaymentService {
     return generatorFunc({ amount }).toPromise();
   }
   openCheckoutPage(orderId: string, season: SeasonBasicInfo, teamId: string): void {
+    const fees = this.getFeesAfterDiscount(season.feesPerTeam, season.discount);
     const options = {
       ...UNIVERSAL_OPTIONS,
       description: `Participation Fees`,
       handler: this.handleSuccess.bind(this, season, teamId),
-      amount: season.feesPerTeam.toString(),
+      amount: fees?.toString(),
       order_id: orderId,
     };
     const razorpayInstance = new Razorpay(options);
@@ -61,6 +62,12 @@ export class PaymentService {
   }
   getLoadingStatus(): BehaviorSubject<PAYMENT_TYPE> {
     return this.loadingStatusChanged;
+  }
+  getFeesAfterDiscount(fees: number, discount: number): number {
+    if (fees === 0) {
+      return 1;
+    }
+    return (fees - ((discount / 100) * fees));
   }
   constructor(
     private ngFunc: AngularFireFunctions,

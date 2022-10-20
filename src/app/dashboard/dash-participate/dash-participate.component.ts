@@ -116,18 +116,21 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     }
   }
   initPayment(season: SeasonBasicInfo, teamId: string): void {
-    this.paymentServ
-      .generateOrder(season.feesPerTeam)
-      .then((res) => {
-        if (res) {
+    // minimum fees
+    const fees = this.paymentServ.getFeesAfterDiscount(season.feesPerTeam, season.discount);
+    if (season.feesPerTeam)
+      this.paymentServ
+        .generateOrder(fees)
+        .then((res) => {
+          if (res) {
+            this.paymentServ.onLoadingStatusChange('home');
+            this.paymentServ.openCheckoutPage(res.id, season, teamId);
+          }
+        })
+        .catch(() => {
           this.paymentServ.onLoadingStatusChange('home');
-          this.paymentServ.openCheckoutPage(res.id, season, teamId);
-        }
-      })
-      .catch(() => {
-        this.paymentServ.onLoadingStatusChange('home');
-        this.snackServ.displayError();
-      });
+          this.snackServ.displayError();
+        });
   }
   async isSlotEmpty(maxTeams: number, sid: string): Promise<boolean> {
     const participants: SeasonParticipants[] = (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.map((doc) => doc.data() as SeasonParticipants);
