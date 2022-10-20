@@ -20,12 +20,12 @@ export class PaymentService {
     return generatorFunc({ amount }).toPromise();
   }
   openCheckoutPage(orderId: string, season: SeasonBasicInfo, teamId: string): void {
-    const fees = this.getFeesAfterDiscount(season.feesPerTeam, season.discount);
+    const fees = this.getFeesAfterDiscount(season.feesPerTeam, season.discount)?.toString();
     const options = {
       ...UNIVERSAL_OPTIONS,
       description: `Participation Fees`,
       handler: this.handleSuccess.bind(this, season, teamId),
-      amount: fees?.toString(),
+      amount: fees,
       order_id: orderId,
     };
     const razorpayInstance = new Razorpay(options);
