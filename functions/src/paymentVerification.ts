@@ -6,6 +6,7 @@ import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
 import { sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { environment } from '../../src/environments/environment';
 import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
+import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
 
 const crypto = require('crypto');
 const db = admin.firestore();
@@ -20,18 +21,19 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   const season = data && data.season ? (data.season as SeasonBasicInfo) : null;
   const teamID = data && data.tid ? data.tid : null;
   const batch = db.batch();
+  const seasonID = season?.id;
   let generatedSignature = null;
   let newOrder: OrderBasic;
   let teamInfo: TeamBasicInfo;
   let participantDetail: SeasonParticipants;
 
-  if (!ORDER_ID || !PAYMENT_ID || !season) {
-    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
+  if (!ORDER_ID || !PAYMENT_ID || !season || !seasonID || !batch) {
+    throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
   // check if participation is allowed
-  const totalParticipants = (await db.collection(`seasons/${season.id}/participants`).get()).size;
+  const totalParticipants = (await db.collection(`seasons/${seasonID}/participants`).get()).size;
   if (totalParticipants >= season.p_teams) {
-    throw new functions.https.HttpsError('permission-denied', 'Season participating full!');
+    throw new functions.https.HttpsError('permission-denied', 'Season participation is full!');
   }
 
   generatedSignature = crypto.createHmac('sha256', KEY_SECRET).update(`${ORDER_ID}|${PAYMENT_ID}`).digest('hex');
@@ -47,7 +49,7 @@ export async function paymentVerification(data: any, context: any): Promise<any>
       prodName: season.name,
       prodImgpath: season.imgpath,
       prodPrice: season.feesPerTeam,
-      prodId: season.id || 'id',
+      prodId: seasonID,
       prodType: 'season',
     },
   };
@@ -74,9 +76,9 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   }
 
   // getting available/empty fixtures for FPL, FKC & FCP
-  const availableFCPMatches = seasonFixtures.filter(fixture => fixture.type === 'FCP' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
-  const availableFKCMatches = seasonFixtures.filter(fixture => fixture.type === 'FKC' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
-  const availableFPLMatches = seasonFixtures.filter(fixture => fixture.type === 'FPL' && (isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture)));
+  const availableFCPMatches = seasonFixtures.filter(fixture => fixture.type === 'FCP' && isFixtureAvailableHomeOrAway(fixture));
+  const availableFKCMatches = seasonFixtures.filter(fixture => fixture.type === 'FKC' && isFixtureAvailableHomeOrAway(fixture));
+  const availableFPLMatches = seasonFixtures.filter(fixture => fixture.type === 'FPL' && isFixtureAvailableHomeOrAway(fixture));
 
   // Assigning participant in available/empty FCP
   if (availableFCPMatches.length) {
@@ -122,47 +124,63 @@ export async function paymentVerification(data: any, context: any): Promise<any>
 
   // Assigning participant in available/empty FPL
   const assignedRivals: any[] = [];
-  availableFPLMatches.sort(sortObjectByKey('date'));
   if (availableFPLMatches.length) {
+    availableFPLMatches.sort(sortObjectByKey('date'));
     for (let i = 0; i < availableFPLMatches.length; i++) {
-      if (assignedRivals.length === season.p_teams) {
-        break;
-      }
-      if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (assignedRivals.includes(availableFPLMatches[i].home.name) && assignedRivals.includes(availableFPLMatches[i].home.name))) {
+      if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (!assignedRivals.includes(availableFPLMatches[i].home.name) && !assignedRivals.includes(availableFPLMatches[i].home.name))) {
         // fixtures that are either fully available or one opponent is not repeated.
         const matchID = availableFPLMatches[i].id;
-        const updateDoc: any = {};
-        const updateKey = assignedRivals.includes(availableFPLMatches[i].home.name) ? 'home' : 'away';
-        updateDoc[updateKey] = {
-          name: participantDetail.name,
-          logo: participantDetail.logo
+        if (isFixtureAvailableAway(availableFPLMatches[i]) && availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
+          assignedRivals.push(availableFPLMatches[i].away.name);
+        } else if (isFixtureAvailableHome(availableFPLMatches[i]) && availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
+          assignedRivals.push(availableFPLMatches[i].home.name);
         }
-        updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+        if (assignedRivals.length >= season.p_teams) {
+          break;
+        }
         if (matchID) {
-          assignedRivals.push(participantDetail.name);
+          const updateDoc: any = {};
+          const updateKey = isFixtureAvailableHome(availableFPLMatches[i]) ? 'home' : 'away';
+          updateDoc[updateKey] = {
+            name: participantDetail.name,
+            logo: participantDetail.logo
+          }
+          updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
           const updateRef = db.collection('allMatches').doc(matchID);
           batch.update(updateRef, updateDoc);
         }
       }
     }
+
+    // updating league table
+    const dataTemp = (await db.collection('leagues').doc(seasonID).get()).data();
+    if (dataTemp) {
+      const leagueData: LeagueTableModel[] = Object.values(dataTemp);
+      for (let i = 0; i < leagueData.length; i++) {
+        if (leagueData[i]?.tData?.name === TO_BE_DECIDED) {
+          leagueData[i].tData.name = participantDetail.name;
+          leagueData[i].tData.logo = participantDetail.logo;
+          break;
+        }
+      }
+      const leagueRef = db.collection('leagues').doc(seasonID);
+      batch.update(leagueRef, { ...leagueData });
+    }
   }
 
   // Adding participant in season
-  const seasonID = season.id;
-  if (seasonID) {
-    const participantRef = db.collection(`seasons/${seasonID}/participants`).doc();
-    batch.set(participantRef, participantDetail);
-  }
-
-  if (!batch) {
-    throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
-  }
+  const participantRef = db.collection(`seasons/${seasonID}/participants`).doc();
+  batch.set(participantRef, participantDetail);
 
   return batch.commit();
 }
 
 export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
   return isFixtureAvailableHome(fixture) && isFixtureAvailableAway(fixture);
+}
+
+export function isFixtureAvailableHomeOrAway(fixture: MatchFixture): boolean {
+  return isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture);
 }
 
 export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
