@@ -123,9 +123,9 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   }
 
   // Assigning participant in available/empty FPL
-  const assignedRivals: any[] = [];
   if (availableFPLMatches.length) {
     availableFPLMatches.sort(sortObjectByKey('date'));
+    const assignedRivals: any[] = [];
     let matchesCount = season.p_teams - 1;
     for (let i = 0; i < availableFPLMatches.length; i++) {
       if (assignedRivals.includes(availableFPLMatches[i].home.name) || assignedRivals.includes(availableFPLMatches[i].away.name)) {
@@ -137,20 +137,20 @@ export async function paymentVerification(data: any, context: any): Promise<any>
       let updateDoc: any = {};
       updateDoc['id'] = availableFPLMatches[i].id;
       updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
-      if (availableFPLMatches[i].home.name === TO_BE_DECIDED) {
+      if (isFixtureAvailableHome(availableFPLMatches[i])) {
         updateDoc['home'] = {
           name: participantDetail.name,
           logo: participantDetail.logo
         };
-        if (availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
+        if (!isFixtureAvailableAway(availableFPLMatches[i])) {
           assignedRivals.push(availableFPLMatches[i].away.name);
         }
-      } else if (availableFPLMatches[i].away.name === TO_BE_DECIDED) {
+      } else if (isFixtureAvailableAway(availableFPLMatches[i])) {
         updateDoc['away'] = {
           name: participantDetail.name,
           logo: participantDetail.logo
         };
-        if (availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
+        if (!isFixtureAvailableHome(availableFPLMatches[i])) {
           assignedRivals.push(availableFPLMatches[i].home.name);
         }
       }
