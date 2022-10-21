@@ -2,7 +2,11 @@
   padding: 20px;
   border-radius: var(--borderRadiusCard);
   overflow: hidden;
-  min-height: 100vh;
+}
+
+.list-container {
+  overflow-y: auto;
+  max-height: calc(60vh);
 }
 
 .min-height {
@@ -20,7 +24,6 @@
   height: 150px;
   border-radius: var(--borderRadiusCard);
   padding: 20px;
-  margin: 20px 0;
   background-image: url("/assets/images/fkc_background.jpg");
   background-repeat: no-repeat, repeat;
   background-size: cover;

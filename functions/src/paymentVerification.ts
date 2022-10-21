@@ -126,30 +126,63 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   const assignedRivals: any[] = [];
   if (availableFPLMatches.length) {
     availableFPLMatches.sort(sortObjectByKey('date'));
+    let matchesCount = season.p_teams - 1;
     for (let i = 0; i < availableFPLMatches.length; i++) {
-      if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (!assignedRivals.includes(availableFPLMatches[i].home.name) && !assignedRivals.includes(availableFPLMatches[i].home.name))) {
-        // fixtures that are either fully available or one opponent is not repeated.
-        const matchID = availableFPLMatches[i].id;
-        if (isFixtureAvailableAway(availableFPLMatches[i]) && availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
+      if (assignedRivals.includes(availableFPLMatches[i].home.name) || assignedRivals.includes(availableFPLMatches[i].away.name)) {
+        continue;
+      }
+      if (matchesCount <= 0) {
+        break;
+      }
+      let updateDoc: any = {};
+      updateDoc['id'] = availableFPLMatches[i].id;
+      updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+      if (availableFPLMatches[i].home.name === TO_BE_DECIDED) {
+        updateDoc['home'] = {
+          name: participantDetail.name,
+          logo: participantDetail.logo
+        };
+        if (availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
           assignedRivals.push(availableFPLMatches[i].away.name);
-        } else if (isFixtureAvailableHome(availableFPLMatches[i]) && availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
+        }
+      } else if (availableFPLMatches[i].away.name === TO_BE_DECIDED) {
+        updateDoc['away'] = {
+          name: participantDetail.name,
+          logo: participantDetail.logo
+        };
+        if (availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
           assignedRivals.push(availableFPLMatches[i].home.name);
         }
-        if (assignedRivals.length >= season.p_teams) {
-          break;
-        }
-        if (matchID) {
-          const updateDoc: any = {};
-          const updateKey = isFixtureAvailableHome(availableFPLMatches[i]) ? 'home' : 'away';
-          updateDoc[updateKey] = {
-            name: participantDetail.name,
-            logo: participantDetail.logo
-          }
-          updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
-          const updateRef = db.collection('allMatches').doc(matchID);
-          batch.update(updateRef, updateDoc);
-        }
       }
+      if ((updateDoc.hasOwnProperty('home') || updateDoc.hasOwnProperty('away')) && updateDoc['id']) {
+        const updateRef = db.collection('allMatches').doc(updateDoc['id']);
+        batch.update(updateRef, updateDoc);
+        matchesCount -= 1;
+      }
+      // if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (!assignedRivals.includes(availableFPLMatches[i].home.name) && !assignedRivals.includes(availableFPLMatches[i].away.name))) {
+      //   // fixtures that are either fully available or one opponent is not repeated.
+      //   const matchID = availableFPLMatches[i].id;
+      //   if (isFixtureAvailableAway(availableFPLMatches[i]) && availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
+      //     assignedRivals.push(availableFPLMatches[i].home.name);
+      //   } else if (isFixtureAvailableHome(availableFPLMatches[i]) && availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
+      //     assignedRivals.push(availableFPLMatches[i].away.name);
+      //   }
+      //   if (assignedRivals.length >= season.p_teams) {
+      //     break;
+      //   }
+      //   if (matchID) {
+      //     const updateDoc: any = {};
+      //     const updateKey = isFixtureAvailableHome(availableFPLMatches[i]) ? 'home' : 'away';
+      //     updateDoc[updateKey] = {
+      //       name: participantDetail.name,
+      //       logo: participantDetail.logo
+      //     }
+      //     updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
+      //     const updateRef = db.collection('allMatches').doc(matchID);
+      //     batch.update(updateRef, updateDoc);
+      //   }
+      // }
+
     }
 
     // updating league table
