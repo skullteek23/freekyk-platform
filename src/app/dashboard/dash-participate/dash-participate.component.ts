@@ -10,6 +10,7 @@ import { SeasonBasicInfo, SeasonParticipants } from 'src/app/shared/interfaces/s
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',
@@ -80,7 +81,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
           })
-          return seasons;
+          return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
         }
         ),
         share()
