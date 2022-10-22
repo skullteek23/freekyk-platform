@@ -208,5 +208,36 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     batch.update(matchRef, update)
   }
 
+  // League Update (Conditional)
+  if (fpl_played) {
+    const tempData = (await db.collection('leagues').doc(seasonID).get())?.data() as any;
+    if (tempData) {
+      const currentData: any[] = Object.values(tempData);
+      currentData.forEach(data => {
+        const isDraw = ((g_home === g_away) || (w_home === 0 && w_away === 0)) ? 1 : 0;
+        if (data.tData.name === fixtureData.home.name) {
+          data.w = admin.firestore.FieldValue.increment(w_home);
+          data.d = admin.firestore.FieldValue.increment(isDraw);
+          data.l = admin.firestore.FieldValue.increment(w_away);
+          data.gf = admin.firestore.FieldValue.increment(g_home);
+          data.ga = admin.firestore.FieldValue.increment(g_away);
+        } else if (data.tData.name === fixtureData.away.name) {
+          data.w = admin.firestore.FieldValue.increment(w_away);
+          data.d = admin.firestore.FieldValue.increment(isDraw);
+          data.l = admin.firestore.FieldValue.increment(w_home);
+          data.gf = admin.firestore.FieldValue.increment(g_away);
+          data.ga = admin.firestore.FieldValue.increment(g_home);
+        }
+      });
+      const leagueRef = db.collection('leagues').doc(seasonID);
+      batch.update(leagueRef, { ...currentData });
+    }
+  }
+
+  // Knockout Stage Update (Conditional)
+  if (fkc_played) {
+
+  }
+
   return batch.commit();
 }

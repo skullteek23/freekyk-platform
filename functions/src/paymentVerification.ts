@@ -159,30 +159,6 @@ export async function paymentVerification(data: any, context: any): Promise<any>
         batch.update(updateRef, updateDoc);
         matchesCount -= 1;
       }
-      // if (isFixtureAvailableHomeAndAway(availableFPLMatches[i]) || (!assignedRivals.includes(availableFPLMatches[i].home.name) && !assignedRivals.includes(availableFPLMatches[i].away.name))) {
-      //   // fixtures that are either fully available or one opponent is not repeated.
-      //   const matchID = availableFPLMatches[i].id;
-      //   if (isFixtureAvailableAway(availableFPLMatches[i]) && availableFPLMatches[i].home.name !== TO_BE_DECIDED) {
-      //     assignedRivals.push(availableFPLMatches[i].home.name);
-      //   } else if (isFixtureAvailableHome(availableFPLMatches[i]) && availableFPLMatches[i].away.name !== TO_BE_DECIDED) {
-      //     assignedRivals.push(availableFPLMatches[i].away.name);
-      //   }
-      //   if (assignedRivals.length >= season.p_teams) {
-      //     break;
-      //   }
-      //   if (matchID) {
-      //     const updateDoc: any = {};
-      //     const updateKey = isFixtureAvailableHome(availableFPLMatches[i]) ? 'home' : 'away';
-      //     updateDoc[updateKey] = {
-      //       name: participantDetail.name,
-      //       logo: participantDetail.logo
-      //     }
-      //     updateDoc['teams'] = admin.firestore.FieldValue.arrayUnion(participantDetail.name);
-      //     const updateRef = db.collection('allMatches').doc(matchID);
-      //     batch.update(updateRef, updateDoc);
-      //   }
-      // }
-
     }
 
     // updating league table
