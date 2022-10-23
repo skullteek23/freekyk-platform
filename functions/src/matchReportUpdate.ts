@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import { MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
-import { ListOption } from '../../src/app/shared/interfaces/others.model';
+import { LeagueTableModel, ListOption } from '../../src/app/shared/interfaces/others.model';
 const db = admin.firestore();
 
 export async function matchReportUpdate(data: any, context: any): Promise<any> {
@@ -212,25 +212,35 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   if (fpl_played) {
     const tempData = (await db.collection('leagues').doc(seasonID).get())?.data() as any;
     if (tempData) {
-      const currentData: any[] = Object.values(tempData);
-      currentData.forEach(data => {
-        const isDraw = ((g_home === g_away) || (w_home === 0 && w_away === 0)) ? 1 : 0;
-        if (data.tData.name === fixtureData.home.name) {
-          data.w = admin.firestore.FieldValue.increment(w_home);
-          data.d = admin.firestore.FieldValue.increment(isDraw);
-          data.l = admin.firestore.FieldValue.increment(w_away);
-          data.gf = admin.firestore.FieldValue.increment(g_home);
-          data.ga = admin.firestore.FieldValue.increment(g_away);
-        } else if (data.tData.name === fixtureData.away.name) {
-          data.w = admin.firestore.FieldValue.increment(w_away);
-          data.d = admin.firestore.FieldValue.increment(isDraw);
-          data.l = admin.firestore.FieldValue.increment(w_home);
-          data.gf = admin.firestore.FieldValue.increment(g_away);
-          data.ga = admin.firestore.FieldValue.increment(g_home);
-        }
-      });
+      const currentData: LeagueTableModel[] = Object.values(tempData);
+      const homeUpdateIndex = currentData.findIndex(el => el?.tData?.name === fixtureData.home.name);
+      const awayUpdateIndex = currentData.findIndex(el => el?.tData?.name === fixtureData.away.name);
+      const isDraw = ((g_home === g_away) || (w_home === 0 && w_away === 0)) ? 1 : 0;
       const leagueRef = db.collection('leagues').doc(seasonID);
-      batch.update(leagueRef, { ...currentData });
+      if (homeUpdateIndex > -1) {
+        batch.update(leagueRef, {
+          [homeUpdateIndex]: {
+            ...currentData[homeUpdateIndex],
+            w: admin.firestore.FieldValue.increment(w_home),
+            d: admin.firestore.FieldValue.increment(isDraw),
+            l: admin.firestore.FieldValue.increment(!w_home ? 1 : 0),
+            gf: admin.firestore.FieldValue.increment(g_home),
+            ga: admin.firestore.FieldValue.increment(g_away),
+          }
+        });
+      }
+      if (awayUpdateIndex > -1) {
+        batch.update(leagueRef, {
+          [awayUpdateIndex]: {
+            ...currentData[awayUpdateIndex],
+            w: admin.firestore.FieldValue.increment(w_away),
+            d: admin.firestore.FieldValue.increment(isDraw),
+            l: admin.firestore.FieldValue.increment(!w_away ? 1 : 0),
+            gf: admin.firestore.FieldValue.increment(g_away),
+            ga: admin.firestore.FieldValue.increment(g_home),
+          }
+        });
+      }
     }
   }
 

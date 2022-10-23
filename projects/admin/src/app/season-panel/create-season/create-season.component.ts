@@ -15,7 +15,6 @@ import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { MatchConstantsSecondary } from '../../shared/constants/constants';
 import { AddSeasonComponent } from '../add-season/add-season.component';
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
-import { SeasonAdminService } from '../season-admin.service';
 import { SelectGroundsComponent } from '../select-grounds/select-grounds.component';
 
 @Component({
@@ -44,8 +43,7 @@ export class CreateSeasonComponent implements OnDestroy {
     public dialogRef: MatDialogRef<CreateSeasonComponent>,
     private router: Router,
     private snackBarService: SnackbarService,
-    private ngStorage: AngularFireStorage,
-    private seasonAdminService: SeasonAdminService
+    private ngStorage: AngularFireStorage
   ) {
     this.draftID = ngFire.createId();
     const qParams = route.snapshot.queryParams;

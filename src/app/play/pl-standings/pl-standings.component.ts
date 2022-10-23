@@ -118,7 +118,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         .subscribe(response => {
           if (response) {
             const data = response.data() as LeagueTableModel;
-            this.leagueData = Object.values(data);
+            this.leagueData = response.exists && data ? Object.values(data) : [];
             this.updateSelectedTab();
           }
         });
