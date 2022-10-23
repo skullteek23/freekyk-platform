@@ -11,16 +11,16 @@
   <!-- desktop filters -->
 
   <!-- tab groups -->
-  <mat-tab-group class="container section-space-bottom">
+  <mat-tab-group class="container section-space-bottom" [(selectedIndex)]="activeIndex">
     <mat-tab label="Knockout Groups" [disabled]="!knockoutFixtures.length">
       <ng-template matTabContent>
         <app-pl-st-knockout [season]="seasonChosen" [fixtures]="knockoutFixtures">
         </app-pl-st-knockout>
       </ng-template>
     </mat-tab>
-    <mat-tab label="League Tables" [disabled]="!tableData.length">
+    <mat-tab label="League Tables" [disabled]="!leagueData.length">
       <ng-template matTabContent>
-        <app-pl-st-league [data]="tableData"></app-pl-st-league>
+        <app-pl-st-league [data]="leagueData"></app-pl-st-league>
       </ng-template>
     </mat-tab> -->
     <mat-tab label="Community Play Leaderboard" [disabled]="!cpStandings.length">

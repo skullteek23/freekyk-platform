@@ -11,11 +11,6 @@
   font-size: 15px;
 }
 
-.mat-column-teamA,
-.mat-column-teamB {
-  width: 50%;
-  text-align: left;
-}
 .mat-column-stadium {
   width: 250px;
   text-align: left;

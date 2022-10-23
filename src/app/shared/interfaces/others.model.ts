@@ -58,13 +58,13 @@ export interface LeagueTableModel {
 }
 export interface CommunityPlayTableModel {
   rank: number;
-  tData: { timgpath: string; tName: string };
+  tData: { logo: string; name: string };
   loc: string;
   cpPts: number;
 }
 export interface CommunityLeaderboard {
-  home: { timgpath: string; tName: string };
-  away: { timgpath: string; tName: string };
+  home: { logo: string; name: string };
+  away: { logo: string; name: string };
   stadium: string;
   winner: string;
 }

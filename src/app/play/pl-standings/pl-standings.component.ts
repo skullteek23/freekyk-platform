@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatchConstantsSecondary } from 'projects/admin/src/app/shared/constants/constants';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { TO_BE_DECIDED } from 'functions/src/utils/utilities';
+import { forkJoin, Observable, Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { MatchFixture, TournamentTypes } from 'src/app/shared/interfaces/match.model';
 import { CommunityLeaderboard, FilterData, LeagueTableModel, } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
 
@@ -15,29 +15,35 @@ import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
   styleUrls: ['./pl-standings.component.css'],
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
+
+  activeIndex: number = 0;
+  cpStandings: CommunityLeaderboard[] = [];
+  filterData: FilterData;
+  knockoutFixtures: MatchFixture[] = [];
+  leagueData: LeagueTableModel[] = [];
   onMobile = false;
   subscriptions = new Subscription();
-  knockoutFixtures: MatchFixture[] = [];
   seasonChosen = null;
-  isNoSeasonKnockout = true;
-  isNoSeasonLeague = true;
-  filterData: FilterData = {
-    defaultFilterPath: '',
-    filtersObj: {},
-  };
-  tableData: LeagueTableModel[] = [];
-  cpStandings: CommunityLeaderboard[] = [];
+
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute,
     private router: Router
   ) { }
+
   ngOnInit(): void {
+    this.filterData = {
+      defaultFilterPath: '',
+      filtersObj: {},
+    };
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
         if (params && params.s) {
           this.onChooseSeason(params.s);
+        } else {
+          this.onChooseSeason(null);
         }
       })
     );
@@ -74,81 +80,70 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   }
 
   onChooseSeason(seasonName: string): void {
-    this.seasonChosen = seasonName;
-    this.ngFire
-      .collection('allMatches', (query) =>
-        query.where('season', '==', seasonName).where('type', '==', 'FKC')
-      )
-      .get()
-      .pipe(map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]))
-      .subscribe((res) => {
-        this.knockoutFixtures = res;
-        this.tabGroup.selectedIndex = this.knockoutFixtures.length ? 0 : 1;
-      });
-    this.ngFire
-      .collection('allMatches', (query) => query.where('season', '==', seasonName).where('type', '==', 'FCP'))
-      .get()
-      .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data()) as MatchFixture[]),
-        map(docs => docs.map(doc => {
-          let winner = MatchConstantsSecondary.TO_BE_DECIDED;
-          if (doc.concluded) {
-            if (doc.home.score !== doc.away.score) {
-              winner = doc.home.score > doc.away.score ? doc.home.name : doc.away.name;
-            } else {
-              winner = 'Draw'
-            }
-          }
-          return {
-            home: {
-              'timgpath': doc.home.logo,
-              'tName': doc.home.name
-            },
-            away: {
-              'timgpath': doc.away.logo,
-              'tName': doc.away.name
-            },
-            stadium: doc.stadium,
-            winner
-          } as CommunityLeaderboard
-        }))
-      )
-      .subscribe((res: CommunityLeaderboard[]) => {
-        this.cpStandings = res;
-        if (this.knockoutFixtures.length) {
-          this.tabGroup.selectedIndex = 0;
-        } else if (this.tableData.length) {
-          this.tabGroup.selectedIndex = 1;
-        } else {
-          this.tabGroup.selectedIndex = 2;
-        }
-      });
-    this.ngFire
-      .collection('seasons', (query) => query.where('name', '==', seasonName))
-      .get()
-      .pipe(
-        map((res) => {
-          if (!res.empty) {
-            return res.docs[0].id;
-          }
-          return null;
-        })
-      )
-      .subscribe((res) => {
-        if (res) {
-          this.ngFire
-            .collection('leagues')
-            .doc(res)
-            .get()
-            .subscribe((response) => {
-              this.tableData = [];
-              if (response.exists) {
-                this.tableData = Object.values(
-                  response.data()
-                ) as LeagueTableModel[];
+    if (seasonName) {
+      this.seasonChosen = seasonName;
+      forkJoin([this.getMatchesByType('FKC'), this.getMatchesByType('FCP'), this.getSeasonID()])
+        .pipe(switchMap(resp => {
+          if (resp && resp[2] && resp.length === 3) {
+            this.knockoutFixtures = resp[0] as MatchFixture[];
+            this.cpStandings = (resp[1] as MatchFixture[]).map(element => {
+              let winner = element.home.name;
+              if (element.away.score > element.home.score) {
+                winner = element.away.name;
+              } else if (element.away.score === element.home.score) {
+                winner = 'Draw';
               }
+              if (!element.concluded) {
+                winner = TO_BE_DECIDED;
+              }
+              const CPdata: CommunityLeaderboard = {
+                home: {
+                  name: element.home.name,
+                  logo: element.home.logo,
+                },
+                away: {
+                  name: element.away.name,
+                  logo: element.away.logo,
+                },
+                winner,
+                stadium: element.stadium,
+              }
+              return CPdata;
             });
-        }
-      });
+            return this.ngFire.collection('leagues').doc(resp[2]).get();
+          } else {
+            return null;
+          }
+        }))
+        .subscribe(response => {
+          if (response) {
+            const data = response.data() as LeagueTableModel;
+            this.leagueData = Object.values(data);
+            this.updateSelectedTab();
+          }
+        });
+    } else {
+      this.cpStandings = [];
+      this.knockoutFixtures = []
+      this.leagueData = [];
+    }
+  }
+
+  updateSelectedTab() {
+    if (this.knockoutFixtures.length) {
+      this.activeIndex = 0;
+    } else if (this.leagueData.length) {
+      this.activeIndex = 1;
+    } else if (this.cpStandings.length) {
+      this.activeIndex = 2;
+    }
+  }
+
+  getSeasonID(): Observable<string> {
+    return this.ngFire.collection('seasons', (query) => query.where('name', '==', this.seasonChosen)).get().pipe(map((res) => !res.empty ? res.docs[0].id : null))
+  }
+
+  getMatchesByType(matchType: TournamentTypes): Observable<any> {
+    return this.ngFire.collection('allMatches', (query) => query.where('season', '==', this.seasonChosen).where('type', '==', matchType)).get().pipe(map((res) => !res.empty ? res.docs.map(doc => doc.data() as MatchFixture[]) : []))
   }
 }

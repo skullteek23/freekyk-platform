@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { CommunityLeaderboard } from 'src/app/shared/interfaces/others.model';
@@ -11,12 +10,17 @@ import { CommunityLeaderboard } from 'src/app/shared/interfaces/others.model';
   styleUrls: ['./pl-st-community-play.component.css'],
 })
 export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
+
   cols: string[] = [];
   subscriptions = new Subscription();
+
   @Input('data') CommPlayDataSource: CommunityLeaderboard[] = [];
-  constructor(private dialog: MatDialog, private mediaObs: MediaObserver) {
+
+  constructor(private mediaObs: MediaObserver) { }
+
+  ngOnInit(): void {
     this.subscriptions.add(
-      mediaObs
+      this.mediaObs
         .asObservable()
         .pipe(
           filter((changes: MediaChange[]) => changes.length > 0),
@@ -31,7 +35,7 @@ export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
         })
     );
   }
-  ngOnInit(): void { }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

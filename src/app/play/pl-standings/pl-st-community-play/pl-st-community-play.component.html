@@ -3,9 +3,9 @@
     <th mat-header-cell *matHeaderCellDef>Home</th>
     <td mat-cell *matCellDef="let team">
       <div fxLayoutAlign="start center" fxLayoutGap="8px">
-        <img class="teAvatar" [src]="team.home.timgpath" alt="team" />
+        <img class="teAvatar" [src]="team.home.logo" alt="team" />
         <span class="mat-body-1 left">
-          {{ team.home.tName }}
+          {{ team.home.name }}
         </span>
       </div>
     </td>
@@ -14,9 +14,9 @@
     <th mat-header-cell *matHeaderCellDef>Away</th>
     <td mat-cell *matCellDef="let team">
       <div fxLayoutAlign="start center" fxLayoutGap="8px">
-        <img class="teAvatar" [src]="team.away.timgpath" alt="team" />
+        <img class="teAvatar" [src]="team.away.logo" alt="team" />
         <span class="mat-body-1 left">
-          {{ team.away.tName }}
+          {{ team.away.name }}
         </span>
       </div>
     </td>
