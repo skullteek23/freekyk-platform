@@ -30,10 +30,10 @@
         </button>
       </div>
       <div fxLayoutAlign="start center" class="nav-links">
-        <a [routerLink]="['/play', 'fixtures']" [queryParams]="{s: this.seasonName}"
+        <a [routerLink]="['/play', 'fixtures']" [queryParams]="{Season: this.seasonName}"
           *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'">Fixtures</a>/<a [routerLink]="['/play', 'results']"
-          [queryParams]="{s: this.seasonName}">Results</a>/<a [routerLink]="['/play', 'standings']"
-          [queryParams]="{s: this.seasonName}">Standings</a>
+          [queryParams]="{Season: this.seasonName}">Results</a>/<a [routerLink]="['/play', 'standings']"
+          [queryParams]="{Season: this.seasonName}">Standings</a>
       </div>
     </div>
   </section>
