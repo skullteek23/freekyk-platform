@@ -40,10 +40,10 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     };
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
-        if (params && params.s) {
-          this.onChooseSeason(params.s);
+        if (params && Object.keys(params).length) {
+          this.onQuerySeason(Object.values(params)[0]);
         } else {
-          this.onChooseSeason(null);
+          this.onQuerySeason(null);
         }
       })
     );
@@ -73,13 +73,14 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     if (queryInfo) {
-      this.router.navigate(['/play', 'standings'], { queryParams: { s: queryInfo.queryValue } });
+      const queryParamKey = queryInfo?.queryItem;
+      this.router.navigate(['/play', 'standings'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
     } else {
       this.seasonChosen = null;
     }
   }
 
-  onChooseSeason(seasonName: string): void {
+  onQuerySeason(seasonName: string): void {
     if (seasonName) {
       this.seasonChosen = seasonName;
       forkJoin([this.getMatchesByType('FKC'), this.getMatchesByType('FCP'), this.getSeasonID()])
