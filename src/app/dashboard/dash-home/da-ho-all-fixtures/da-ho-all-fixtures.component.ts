@@ -103,7 +103,10 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       switchMap((teamName) => {
         return this.ngFire
           .collection('allMatches', (query) =>
-            query.where('teams', 'array-contains', teamName)
+            query
+              .where('teams', 'array-contains', teamName)
+              .where('concluded', '==', false)
+              .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
           )
           .get()
           .pipe(

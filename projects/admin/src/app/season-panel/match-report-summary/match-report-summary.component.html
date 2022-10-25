@@ -1,12 +1,12 @@
 <div class="table-container">
   <table mat-table [dataSource]="dataSource">
 
-    <ng-container [matColumnDef]="columnDef.value" *ngFor="let columnDef of displayCols">
+    <ng-container [matColumnDef]="columnDef.value" *ngFor="let columnDef of cols">
       <th mat-header-cell *matHeaderCellDef> {{ columnDef.viewValue }} </th>
       <td mat-cell *matCellDef="let element"> {{ element[columnDef.value] }} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="cols;"></tr>
-    <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayCols;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayCols;"></tr>
   </table>
 </div>

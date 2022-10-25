@@ -106,8 +106,8 @@ export interface UpdateData {
 }
 
 export interface ReportData {
-  cols: any[];
-  displayCols: any[];
+  cols: ListOption[];
+  displayCols: string[];
   dataSource: any[];
 }
 

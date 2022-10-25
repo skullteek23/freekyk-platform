@@ -6,13 +6,29 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ALPHA_W_SPACE, BIO, NUM } from 'src/app/shared/Constants/REGEX';
-import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
+import { CloudFunctionStatsData, MatchFixture, ReportSummary, TournamentTypes } from 'src/app/shared/interfaces/match.model';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
-import { MatchConstants } from '../../shared/constants/constants';
+import { MatchConstants, STATISTICS } from '../../shared/constants/constants';
 import { FormsMessages, MatchReportMessages } from '../../shared/constants/messages';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
+
+export type HOME_AWAY = 'home' | 'away';
+export interface IStatHolder {
+  team: HOME_AWAY;
+  value: string;
+}
+export class IStatHolderEntity {
+  season: ListOption[] = [];
+  team: ListOption[] = [];
+  player: ListOption[] = [];
+}
+export class IStatHolderEntityGeneric {
+  season: any[] = [];
+  team: any[] = [];
+  player: any[] = [];
+}
 
 @Component({
   selector: 'app-update-match-report',
@@ -28,7 +44,7 @@ export class UpdateMatchReportComponent implements OnInit {
   homeTeamPlayersList: ListOption[] = [];
   awayTeamPlayersList: ListOption[] = [];
   scorersList: ListOption[] = [];
-  reportSummary = new ReportSummary();
+  reportSummary: ReportSummary;
   updateStats: CloudFunctionStatsData;
   formMessages = FormsMessages;
   messages = MatchReportMessages;
@@ -53,7 +69,7 @@ export class UpdateMatchReportComponent implements OnInit {
     this.matchReportForm = new FormGroup({
       homeScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
       awayScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
-      penalties: new FormControl(1),
+      penalties: new FormControl(0),
       homePenScore: new FormControl(0, Validators.pattern(NUM)),
       awayPenScore: new FormControl(0, Validators.pattern(NUM)),
       scorersHome: new FormArray([]),
@@ -187,209 +203,115 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   assignSummary(): void {
-    // Tournaments
-    const incrementUpdate = '+1';
-    const FPL_UPDATE = this.fixture.type === 'FPL' ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
-    const FKC_UPDATE = this.fixture.type === 'FKC' ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
-    const FCP_UPDATE = this.fixture.type === 'FCP' ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
 
-    // Cards
-    const redCardHome = this.redCardHoldersHome.length > 0 ? `+${this.redCardHoldersHome.length}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const redCardAway = this.redCardHoldersAway.length > 0 ? `+${this.redCardHoldersAway.length}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const redCardPlayersHome: string[] = this.redCardHoldersHome.value ? this.redCardHoldersHome.value.map((el: ListOption) => el.viewValue) : [];
-    const redCardPlayersAway: string[] = this.redCardHoldersAway.value ? this.redCardHoldersAway.value.map((el: ListOption) => el.viewValue) : [];
-    const redCardTotal = (this.redCardHoldersHome.length + this.redCardHoldersAway.length) > 0 ? `+${(this.redCardHoldersHome.length + this.redCardHoldersAway.length)}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    let allRedCardPlayerList = (redCardPlayersHome.concat(redCardPlayersAway)).join(", ");
-    if (!redCardPlayersHome.length && !redCardPlayersAway.length) {
-      allRedCardPlayerList = MatchConstants.LABEL_NOT_AVAILABLE;
-    }
-    const yellowCardHome = this.yellowCardHoldersHome.length > 0 ? `+${this.yellowCardHoldersHome.length}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const yellowCardAway = this.yellowCardHoldersAway.length > 0 ? `+${this.yellowCardHoldersAway.length}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const yellowCardPlayersHome: string[] = this.yellowCardHoldersHome.value ? this.yellowCardHoldersHome.value.map((el: ListOption) => el.viewValue) : [];
-    const yellowCardPlayersAway: string[] = this.yellowCardHoldersAway.value ? this.yellowCardHoldersAway.value.map((el: ListOption) => el.viewValue) : [];
-    const yellowCardTotal = (this.yellowCardHoldersHome.length + this.yellowCardHoldersAway.length) > 0 ? `+${(this.yellowCardHoldersHome.length + this.yellowCardHoldersAway.length)}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    let allYellowCardPlayerList = (yellowCardPlayersHome.concat(yellowCardPlayersAway)).join(", ");
-    if (!yellowCardPlayersHome.length && !yellowCardPlayersAway.length) {
-      allYellowCardPlayerList = MatchConstants.LABEL_NOT_AVAILABLE;
-    }
+    // Red Card Holders
+    const redCardHoldersAll: IStatHolder[] = [];
+    const redCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersHome.value, 'home');
+    const redCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersAway.value, 'away');
+    redCardHoldersAll.push(...redCardHoldersH, ...redCardHoldersA);
 
-    // Goals & Players
-    // let highestScorer = MatchConstants.LABEL_NOT_AVAILABLE;
-    let winnersList = MatchConstants.LABEL_NOT_AVAILABLE;
-    const homeWin = this.homeGoals > this.awayGoals ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
-    const awayWin = this.awayGoals > this.homeGoals ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE;
-    const homeGoals = this.homeGoals > 0 ? `+${this.homeGoals}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const awayGoals = this.awayGoals > 0 ? `+${this.awayGoals}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const goalsTotal = this.totalGoals > 0 ? `+${this.totalGoals}` : MatchConstants.LABEL_NOT_AVAILABLE;
-    const playersList = this.matchDayPlayersList.length ? this.matchDayPlayersList.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
-    const scorersListHomeTemp: ListOption[] = this.scorersHome.value;
-    const scorersListAwayTemp: ListOption[] = this.scorersAway.value;
-    const scorerListTemp = scorersListHomeTemp.concat(scorersListAwayTemp);
-    const scorersList = scorerListTemp.length ? scorerListTemp.map(el => el.viewValue).join(", ") : MatchConstants.LABEL_NOT_AVAILABLE;
-    // const goalsList: number[] = this.scorersGoals.value;
-    // const index: number = goalsList.findIndex(val => val === Math.max(...goalsList));
-    // if (index > -1 && scorersListTemp.length) {
-    //   highestScorer = scorersListTemp[index].viewValue;
-    // }
-    if (this.homeGoals > this.awayGoals) {
-      winnersList = this.homeTeamPlayersList.map(el => el.viewValue).join(", ");
-    } else if (this.awayGoals > this.homeGoals) {
-      winnersList = this.awayTeamPlayersList.map(el => el.viewValue).join(", ");
-    }
-    const cols = {
-      season: [
-        {
-          viewValue: 'Data Points',
-          value: 'point'
-        },
-        {
-          viewValue: 'Season Stats Update',
-          value: 'update'
-        }
-      ],
-      team: [
-        {
-          viewValue: 'Data Points',
-          value: 'point'
-        },
-        {
-          viewValue: 'Team Stats Update (Home)',
-          value: 'home'
-        },
-        {
-          viewValue: 'Team Stats Update (Away)',
-          value: 'away'
-        }
-      ],
-      player: [
-        {
-          viewValue: 'Data Points',
-          value: 'pointTwo'
-        },
-        {
-          viewValue: 'Applied to',
-          value: 'applied',
-        },
-        {
-          viewValue: 'Player Stats Update',
-          value: 'updateTwo',
-        }
-      ]
-    }
-    const dataSource = {
-      season: [
-        {
-          point: MatchConstants.STATISTICS.TOTAL_GOALS,
-          update: goalsTotal
-        },
-        {
-          point: MatchConstants.STATISTICS.FPL_PLAYED,
-          update: FPL_UPDATE
-        },
-        {
-          point: MatchConstants.STATISTICS.FKC_PLAYED,
-          update: FKC_UPDATE
-        },
-        {
-          point: MatchConstants.STATISTICS.FCP_PLAYED,
-          update: FCP_UPDATE
-        },
-        {
-          point: MatchConstants.STATISTICS.TOTAL_RED_CARDS,
-          update: redCardTotal
-        },
-        {
-          point: MatchConstants.STATISTICS.TOTAL_YELLOW_CARDS,
-          update: yellowCardTotal
-        },
-        // {
-        //   point: MatchConstants.STATISTICS.HIGHEST_GOALSCORER,
-        //   update: highestScorer
-        // },
-      ],
-      team: [
-        {
-          point: MatchConstants.STATISTICS.FPL_PLAYED,
-          home: FPL_UPDATE,
-          away: FPL_UPDATE,
-        },
-        {
-          point: MatchConstants.STATISTICS.FKC_PLAYED,
-          home: FKC_UPDATE,
-          away: FKC_UPDATE,
-        },
-        {
-          point: MatchConstants.STATISTICS.FCP_PLAYED,
-          home: FCP_UPDATE,
-          away: FCP_UPDATE,
-        },
-        {
-          point: MatchConstants.STATISTICS.GOALS,
-          home: homeGoals,
-          away: awayGoals
-        },
-        {
-          point: MatchConstants.STATISTICS.WINS,
-          home: homeWin,
-          away: awayWin
-        },
-        {
-          point: MatchConstants.STATISTICS.LOSSES,
-          home: awayWin,
-          away: homeWin,
-        },
-        {
-          point: MatchConstants.STATISTICS.RED_CARDS,
-          home: redCardHome,
-          away: redCardAway
-        },
-        {
-          point: MatchConstants.STATISTICS.YELLOW_CARDS,
-          home: yellowCardHome,
-          away: yellowCardAway
-        },
-        {
-          point: MatchConstants.STATISTICS.GOALS_CONCEDED,
-          home: awayGoals,
-          away: homeGoals
-        },
-      ],
-      player: [
-        {
-          pointTwo: MatchConstants.STATISTICS.APPEARANCES,
-          applied: playersList,
-          updateTwo: incrementUpdate,
-        },
-        {
-          pointTwo: MatchConstants.STATISTICS.GOALS,
-          applied: scorersList,
-          updateTwo: scorerListTemp.length ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
-        },
-        {
-          pointTwo: MatchConstants.STATISTICS.WINS,
-          applied: winnersList,
-          updateTwo: winnersList !== MatchConstants.LABEL_NOT_AVAILABLE ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
-        },
-        {
-          pointTwo: MatchConstants.STATISTICS.RED_CARDS,
-          applied: allRedCardPlayerList,
-          updateTwo: allRedCardPlayerList !== MatchConstants.LABEL_NOT_AVAILABLE ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
-        },
-        {
-          pointTwo: MatchConstants.STATISTICS.YELLOW_CARDS,
-          applied: allYellowCardPlayerList,
-          updateTwo: allYellowCardPlayerList !== MatchConstants.LABEL_NOT_AVAILABLE ? incrementUpdate : MatchConstants.LABEL_NOT_AVAILABLE,
-        },
-      ]
-    }
+    // Yellow Card Holders
+    const yellowCardHoldersAll: IStatHolder[] = [];
+    const yellowCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersHome.value, 'home');
+    const yellowCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersAway.value, 'away');
+    yellowCardHoldersAll.push(...yellowCardHoldersH, ...yellowCardHoldersA);
 
-    for (const prop in cols) {
-      this.reportSummary[prop] = {
-        cols: cols[prop].map((el: ListOption) => el.value),
-        displayCols: cols[prop],
-        dataSource: dataSource[prop]
+    // GoalScorers
+    const goalsHome: number = this.homeScore.value || 0;
+    const goalsAway: number = this.awayScore.value || 0;
+    const goalsAll: number = goalsHome + goalsAway;
+    const penaltiesHome: number = this.homePenScore.value || 0;
+    const penaltiesAway: number = this.homePenScore.value || 0;
+    const goalScorersAll: IStatHolder[] = [];
+    const goalScorersH: IStatHolder[] = this.parseFormArrayList(this.scorersHome.value, 'home');
+    const goalScorersA: IStatHolder[] = this.parseFormArrayList(this.scorersAway.value, 'away');
+    goalScorersAll.push(...goalScorersH, ...goalScorersA);
+
+    // Tournament type
+    const fcpPlayed: number = this.fixture.type === 'FCP' ? 1 : 0;
+    const fkcPlayed: number = this.fixture.type === 'FKC' ? 1 : 0;
+    const fplPlayed: number = this.fixture.type === 'FPL' ? 1 : 0;
+
+    // Players & Winners
+    let homeWin: number = 0;
+    let awayWin: number = 0;
+    if (goalsHome !== goalsAway) {
+      homeWin = (goalsHome > goalsAway) ? 1 : 0;
+      awayWin = 1 - homeWin;
+    } else if (this.penalties?.value === 1 && fplPlayed === 0) {
+      homeWin = (penaltiesHome > penaltiesAway) ? 1 : 0;
+      awayWin = 1 - homeWin;
+    }
+    const playersHome: IStatHolder[] = this.parseFormArrayList(this.homeTeamPlayersList, 'home');
+    const playersAway: IStatHolder[] = this.parseFormArrayList(this.awayTeamPlayersList, 'away');
+    const playerWinners: IStatHolder[] = homeWin ? playersHome : playersAway;
+    const playersAll: IStatHolder[] = playersHome.concat(playersAway);
+
+    // Preparing table data
+    const cols: IStatHolderEntity = new IStatHolderEntity();
+    const dataSource: IStatHolderEntityGeneric = new IStatHolderEntityGeneric();
+
+    cols.season.push({ value: 'point', viewValue: 'Data Points' });
+    cols.season.push({ value: 'update', viewValue: 'Season Stats Update' });
+    cols.team.push({ value: 'point', viewValue: 'Data Points' });
+    cols.team.push({ value: 'home', viewValue: 'Team Stats Update (Home)' });
+    cols.team.push({ value: 'away', viewValue: 'Team Stats Update (Away)' });
+    cols.player.push({ value: 'pointTwo', viewValue: 'Data Points' });
+    cols.player.push({ value: 'applied', viewValue: 'Applied to' });
+    cols.player.push({ value: 'updateTwo', viewValue: 'Player Stats Update' });
+
+    dataSource.season.push({ point: STATISTICS.TOTAL_GOALS, update: this.parseNumericValue(goalsAll) });
+    dataSource.season.push({ point: STATISTICS.FCP_PLAYED, update: this.parseNumericValue(fcpPlayed) });
+    dataSource.season.push({ point: STATISTICS.FKC_PLAYED, update: this.parseNumericValue(fkcPlayed) });
+    dataSource.season.push({ point: STATISTICS.FPL_PLAYED, update: this.parseNumericValue(fplPlayed) });
+    dataSource.season.push({ point: STATISTICS.TOTAL_RED_CARDS, update: this.parseNumericValue(redCardHoldersAll.length) });
+    dataSource.season.push({ point: STATISTICS.TOTAL_YELLOW_CARDS, update: this.parseNumericValue(yellowCardHoldersAll.length) });
+    // dataSource.season.push({ point: STATISTICS.HIGHEST_GOALSCORER, update: '' });
+    dataSource.team.push({ point: STATISTICS.FCP_PLAYED, home: this.parseNumericValue(fcpPlayed), away: this.parseNumericValue(fcpPlayed) });
+    dataSource.team.push({ point: STATISTICS.FKC_PLAYED, home: this.parseNumericValue(fkcPlayed), away: this.parseNumericValue(fkcPlayed) });
+    dataSource.team.push({ point: STATISTICS.FPL_PLAYED, home: this.parseNumericValue(fplPlayed), away: this.parseNumericValue(fplPlayed) });
+    dataSource.team.push({ point: STATISTICS.GOALS, home: this.parseNumericValue(goalsHome), away: this.parseNumericValue(goalsAway) });
+    dataSource.team.push({ point: STATISTICS.WINS, home: this.parseNumericValue(homeWin), away: this.parseNumericValue(awayWin) });
+    dataSource.team.push({ point: STATISTICS.LOSSES, home: this.parseNumericValue(awayWin), away: this.parseNumericValue(homeWin) });
+    dataSource.team.push({ point: STATISTICS.RED_CARDS, home: this.parseNumericValue(redCardHoldersH.length), away: this.parseNumericValue(redCardHoldersA.length) });
+    dataSource.team.push({ point: STATISTICS.YELLOW_CARDS, home: this.parseNumericValue(yellowCardHoldersH.length), away: this.parseNumericValue(yellowCardHoldersA.length) });
+    dataSource.team.push({ point: STATISTICS.GOALS_CONCEDED, home: this.parseNumericValue(goalsAway), away: this.parseNumericValue(goalsHome) });
+    dataSource.player.push({ pointTwo: STATISTICS.APPEARANCES, applied: this.getFormArrayStringList(playersAll), updateTwo: this.parseNumericValue(playersAll.length ? 1 : 0) });
+    dataSource.player.push({ pointTwo: STATISTICS.GOALS, applied: this.getFormArrayStringList(goalScorersAll), updateTwo: this.parseNumericValue(goalScorersAll.length ? 1 : 0) });
+    dataSource.player.push({ pointTwo: STATISTICS.WINS, applied: this.getFormArrayStringList(playerWinners), updateTwo: this.parseNumericValue(playerWinners.length ? 1 : 0) });
+    dataSource.player.push({ pointTwo: STATISTICS.RED_CARDS, applied: this.getFormArrayStringList(redCardHoldersAll), updateTwo: this.parseNumericValue(redCardHoldersAll.length ? 1 : 0) });
+    dataSource.player.push({ pointTwo: STATISTICS.YELLOW_CARDS, applied: this.getFormArrayStringList(yellowCardHoldersAll), updateTwo: this.parseNumericValue(yellowCardHoldersAll.length ? 1 : 0) });
+
+    this.reportSummary = new ReportSummary();
+    for (const property in cols) {
+      // property can be season, team & player
+      this.reportSummary[property] = {
+        cols: cols[property],
+        dataSource: dataSource[property],
+        displayCols: cols[property]?.map((el: ListOption) => el.value)
       }
     }
+  }
+
+  parseNumericValue(value: number): string {
+    if (value && value > 0) {
+      return `+${value}`;
+    }
+    return MatchConstants.LABEL_NOT_AVAILABLE;
+  }
+
+  parseFormArrayList(value: ListOption[], team: HOME_AWAY): IStatHolder[] {
+    if (value && value.length) {
+      return value.map((el: ListOption) => ({ team, value: el.viewValue } as IStatHolder));
+    }
+    return [];
+  }
+
+  getFormArrayStringList(value: IStatHolder[]): string {
+    if (value && value.length) {
+      return value.map((el: IStatHolder) => el.value).join(MatchConstants.JOINING_CHARACTER);
+    }
+    return MatchConstants.LABEL_NOT_AVAILABLE;
   }
 
   get scorersGoalsHome(): FormArray {
@@ -403,41 +325,50 @@ export class UpdateMatchReportComponent implements OnInit {
   get scorersHome(): FormArray {
     return this.matchReportForm.get('scorersHome') as FormArray;
   }
-  get penalties(): FormArray {
-    return this.matchReportForm.get('penalties') as FormArray;
-  }
 
   get scorersAway(): FormArray {
     return this.matchReportForm.get('scorersAway') as FormArray;
   }
 
   get totalGoals(): number {
-    return (this.homeGoals + this.awayGoals);
+    if (this.homeScore?.value >= 0 && this.awayScore?.value >= 0) {
+      return this.homeScore?.value + this.awayScore?.value;
+    }
+    return 0;
   }
 
-  get homeGoals(): number {
-    return Number(this.homeScore?.value);
-  }
-
-  get awayGoals(): number {
-    return Number(this.awayScore?.value);
-  }
   get homeScore(): AbstractControl {
     return this.matchReportForm.get('homeScore');
-  }
-  get referee(): AbstractControl {
-    return this.matchReportForm.get('referee');
-  }
-  get billsFile(): AbstractControl {
-    return this.matchReportForm.get('billsFile');
-  }
-  get matchReportFile(): AbstractControl {
-    return this.matchReportForm.get('matchReportFile');
   }
 
   get awayScore(): AbstractControl {
     return this.matchReportForm.get('awayScore');
   }
+
+  get homePenScore(): AbstractControl {
+    return this.matchReportForm.get('homePenScore');
+  }
+
+  get awayPenScore(): AbstractControl {
+    return this.matchReportForm.get('awayPenScore');
+  }
+
+  get penalties(): AbstractControl {
+    return this.matchReportForm.get('penalties');
+  }
+
+  get referee(): AbstractControl {
+    return this.matchReportForm.get('referee');
+  }
+
+  get billsFile(): AbstractControl {
+    return this.matchReportForm.get('billsFile');
+  }
+
+  get matchReportFile(): AbstractControl {
+    return this.matchReportForm.get('matchReportFile');
+  }
+
 
   get chipSelectionListHome() {
     return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : []
@@ -468,5 +399,13 @@ export class UpdateMatchReportComponent implements OnInit {
       return this.homeTeamPlayersList.concat(this.awayTeamPlayersList);
     }
     return [];
+  }
+
+  get isSubmitDisabled(): boolean {
+    if (!this.matchReportForm.dirty) {
+      return true;
+    } else if (!this.matchReportForm.invalid) {
+      return true;
+    }
   }
 }

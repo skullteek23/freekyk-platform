@@ -51,7 +51,8 @@
       </mat-form-field>
     </mat-card>
 
-    <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px" *ngIf="homeGoals === awayGoals">
+    <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px"
+      *ngIf="homeGoals === awayGoals && this.fixture.type !== 'FPL'">
       <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
         <span> Penalties after fulltime? </span>
         <mat-radio-group color="primary" aria-label="Penalties after fulltime" formControlName="penalties"
@@ -164,7 +165,7 @@
       </div>
     </mat-card>
     <div class="buttons-container" fxLayoutAlign="center center">
-      <button [disabled]="!matchReportForm.dirty" type="button" (click)="onGenerateSummary()"
+      <button [disabled]="isSubmitDisabled" type="button" (click)="onGenerateSummary()"
         class="primaryButton buttonText">
         Generate Match Summary
       </button>

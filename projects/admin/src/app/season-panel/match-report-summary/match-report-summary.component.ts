@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ReportData } from 'src/app/shared/interfaces/match.model';
 
@@ -7,11 +7,11 @@ import { ReportData } from 'src/app/shared/interfaces/match.model';
   templateUrl: './match-report-summary.component.html',
   styleUrls: ['./match-report-summary.component.css']
 })
-export class MatchReportSummaryComponent implements OnInit {
+export class MatchReportSummaryComponent {
 
-  cols: string[] = [];
+  cols: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
-  displayCols: any[] = [];
+  displayCols: string[] = [];
 
   @Input() set data(value: ReportData) {
     if (value) {
@@ -23,11 +23,6 @@ export class MatchReportSummaryComponent implements OnInit {
       this.displayCols = [];
       this.setDataSource([]);
     }
-  }
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
   setDataSource(data: any) {

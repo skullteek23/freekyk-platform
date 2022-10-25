@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '../../src/app/shared/interfaces/others.model';
 import { FKC_ROUND_MULTIPLIER, isFixtureAvailableHome, isFixtureAvailableHomeOrAway } from './utils/utilities';
@@ -16,7 +17,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   // const LABEL_NOT_AVAILABLE = 'N/A';
 
   if (!fixtureData || !playersHome || !playersAway || !formData || !seasonID || !batch || !tid_home || !tid_away) {
-    return false;
+    throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
 
   // Season Stats Update

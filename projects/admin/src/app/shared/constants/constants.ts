@@ -25,24 +25,25 @@ export class MatchConstants {
     MAX: 365,
   };
   public static SEASON_URL = environment?.firebase?.url + '/s/';
-  public static STATISTICS = {
-    FKC_PLAYED: 'FKC Played',
-    FCP_PLAYED: 'FCP Played',
-    FPL_PLAYED: 'FPL Played',
-    GOALS: 'Goals',
-    TOTAL_GOALS: 'Total Goals',
-    WINS: 'Wins',
-    LOSSES: 'Losses',
-    RED_CARDS: 'Red Cards',
-    YELLOW_CARDS: 'Yellow Cards',
-    GOALS_CONCEDED: 'Goals Conceded',
-    APPEARANCES: 'Appearances',
-    TOTAL_RED_CARDS: 'Total Red Cards',
-    TOTAL_YELLOW_CARDS: 'Total Yellow Cards',
-    HIGHEST_GOALSCORER: 'Highest Goal Scorer',
-  };
   public static LABEL_NOT_AVAILABLE = 'N/A';
+  public static JOINING_CHARACTER = ', ';
 }
+export const STATISTICS = {
+  FKC_PLAYED: 'FKC Played',
+  FCP_PLAYED: 'FCP Played',
+  FPL_PLAYED: 'FPL Played',
+  GOALS: 'Goals',
+  TOTAL_GOALS: 'Total Goals',
+  WINS: 'Wins',
+  LOSSES: 'Losses',
+  RED_CARDS: 'Red Cards',
+  YELLOW_CARDS: 'Yellow Cards',
+  GOALS_CONCEDED: 'Goals Conceded',
+  APPEARANCES: 'Appearances',
+  TOTAL_RED_CARDS: 'Total Red Cards',
+  TOTAL_YELLOW_CARDS: 'Total Yellow Cards',
+  HIGHEST_GOALSCORER: 'Highest Goal Scorer',
+};
 export const MatchConstantsSecondary = {
   TO_BE_DECIDED: 'TBD',
   DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png',
