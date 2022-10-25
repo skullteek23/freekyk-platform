@@ -3,12 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
-import {
-  MatchFixtureOverview,
-  MatchFixture,
-  MatchLineup,
-  MatchStats,
-} from '../../interfaces/match.model';
+import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchStats, } from '../../interfaces/match.model';
+import { matchData } from '../../interfaces/others.model';
 
 @Component({
   selector: 'app-match-card',
@@ -20,13 +16,7 @@ export class MatchCardComponent implements OnInit {
   currIndex = 0;
   lineups$: Observable<MatchLineup>;
   stats$: Observable<MatchStats>;
-  matchHeaderData: {
-    date: number;
-    concluded: boolean;
-    home: { imgpathLogo: string; name: string };
-    away: { imgpathLogo: string; name: string };
-    score?: { home: number; away: number };
-  };
+  matchHeaderData: matchData;
   constructor(
     public dialogRef: MatDialogRef<MatchCardComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -76,6 +66,10 @@ export class MatchCardComponent implements OnInit {
           imgpathLogo: this.data?.away.logo,
         },
       };
+    }
+
+    if (this.data?.tie_breaker) {
+      this.matchHeaderData['penalties'] = this.data?.tie_breaker;
     }
 
     this.overViewData$ = this.ngFirestore

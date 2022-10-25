@@ -55,8 +55,8 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   const rcards_away = formData.redCardHoldersHome.length;
   const ycards_home = formData.yellowCardHoldersHome.length;
   const ycards_away = formData.yellowCardHoldersHome.length;
-  let w_home = 0;
-  let w_away = 0;
+  let w_home: 1 | 0 = 0;
+  let w_away: 1 | 0 = 0;
   if (g_home !== g_away) {
     w_home = (g_home > g_away) ? 1 : 0;
     w_away = (g_home < g_away) ? 1 : 0;
@@ -197,16 +197,16 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const newAwayObj = fixtureData.away;
     newHomeObj['score'] = g_home;
     newAwayObj['score'] = g_away;
-    const update: any = {
+    const update: Partial<MatchFixture> = {
       concluded: true,
       home: newHomeObj,
       away: newAwayObj
     };
-    if (formData.homePenScore && formData.awayPenScore && (formData.homePenScore > 0 || formData.awayPenScore > 0)) {
-      update['tie_breaker'] = `Penalities: ${formData.homePenScore}-${formData.awayPenScore}`
+    if (g_home === g_away && formData.homePenScore >= 0 && formData.awayPenScore >= 0) {
+      update['tie_breaker'] = `${formData.homePenScore}-${formData.awayPenScore}`
     }
     const matchRef = db.collection('allMatches').doc(fixtureData.id);
-    batch.update(matchRef, update)
+    batch.update(matchRef, update);
   }
 
   // League Update (Conditional)
@@ -233,7 +233,8 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
           data.ga += g_home;
         }
       });
-      batch.update(leagueRef, { ...currentData });
+      const update = { ...currentData };
+      batch.update(leagueRef, update);
     }
   }
 

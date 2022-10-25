@@ -27,6 +27,8 @@
             matchData.score?.away
             }}</span>
         </div>
+        <span class="overline" *ngIf="matchData?.penalties"> Penalities </span>
+        <span class="overline" *ngIf="matchData?.penalties"> {{matchData?.penalties}} </span>
       </div>
     </ng-template>
     <div class="team" fxLayout="column" fxLayoutGap="8px">

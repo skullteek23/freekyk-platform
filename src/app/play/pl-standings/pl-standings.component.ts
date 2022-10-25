@@ -131,11 +131,11 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   }
 
   updateSelectedTab() {
-    if (this.knockoutFixtures.length) {
+    if (this.cpStandings.length) {
       this.activeIndex = 0;
-    } else if (this.leagueData.length) {
+    } else if (this.knockoutFixtures.length) {
       this.activeIndex = 1;
-    } else if (this.cpStandings.length) {
+    } else if (this.leagueData.length) {
       this.activeIndex = 2;
     }
   }

@@ -114,6 +114,7 @@ export interface matchData {
   home: { imgpathLogo: string; name: string };
   away: { imgpathLogo: string; name: string };
   score?: { home: number; away: number };
+  penalties?: string;
 }
 export interface tricks {
   submissionVideo: string;
