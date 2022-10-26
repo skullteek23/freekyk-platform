@@ -52,7 +52,7 @@
     </mat-card>
 
     <mat-card fxLayoutAlign="space-between start" fxLayout="column" fxLayoutGap="16px"
-      *ngIf="homeScore?.value === awayScore?.value && this.fixture.type !== 'FPL'">
+      *ngIf="homeScore?.value === awayScore?.value && fixture?.type !== 'FPL'">
       <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
         <span> Penalties after fulltime? </span>
         <mat-radio-group color="primary" aria-label="Penalties after fulltime" formControlName="penalties"

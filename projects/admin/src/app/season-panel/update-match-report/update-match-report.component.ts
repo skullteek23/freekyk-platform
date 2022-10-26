@@ -221,7 +221,7 @@ export class UpdateMatchReportComponent implements OnInit {
     const goalsAway: number = this.awayScore.value || 0;
     const goalsAll: number = goalsHome + goalsAway;
     const penaltiesHome: number = this.homePenScore.value || 0;
-    const penaltiesAway: number = this.homePenScore.value || 0;
+    const penaltiesAway: number = this.awayPenScore.value || 0;
     const goalScorersAll: IStatHolder[] = [];
     const goalScorersH: IStatHolder[] = this.parseFormArrayList(this.scorersHome.value, 'home');
     const goalScorersA: IStatHolder[] = this.parseFormArrayList(this.scorersAway.value, 'away');
@@ -244,8 +244,11 @@ export class UpdateMatchReportComponent implements OnInit {
     }
     const playersHome: IStatHolder[] = this.parseFormArrayList(this.homeTeamPlayersList, 'home');
     const playersAway: IStatHolder[] = this.parseFormArrayList(this.awayTeamPlayersList, 'away');
-    const playerWinners: IStatHolder[] = homeWin ? playersHome : playersAway;
     const playersAll: IStatHolder[] = playersHome.concat(playersAway);
+    let playerWinners: IStatHolder[] = homeWin ? playersHome : playersAway;
+    if (homeWin === awayWin && homeWin === 0) {
+      playerWinners = [];
+    }
 
     // Preparing table data
     const cols: IStatHolderEntity = new IStatHolderEntity();
@@ -404,7 +407,7 @@ export class UpdateMatchReportComponent implements OnInit {
   get isSubmitDisabled(): boolean {
     if (!this.matchReportForm.dirty) {
       return true;
-    } else if (!this.matchReportForm.invalid) {
+    } else if (this.matchReportForm.invalid) {
       return true;
     }
   }
