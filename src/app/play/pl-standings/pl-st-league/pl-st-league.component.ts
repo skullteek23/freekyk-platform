@@ -3,6 +3,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LeagueTableModel } from 'src/app/shared/interfaces/others.model';
+import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import { PlayConstants } from '../../play.constants';
 
 @Component({
@@ -21,6 +22,7 @@ export class PlStLeagueComponent implements OnInit, OnDestroy {
 
   @Input() set data(value: LeagueTableModel[]) {
     if (value) {
+      value.sort(ArraySorting.getSortedLeague);
       this.setDataSource(value);
     }
   }

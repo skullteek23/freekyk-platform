@@ -1,6 +1,8 @@
+import { LeagueTableModel } from "../interfaces/others.model";
+
 export class ArraySorting {
 
-  static sortObjectByKey(key: string, order = 'asc', isConvertNA = true): any {
+  static sortObjectByKey(key: string, order = 'asc', isConvertNA = true) {
     return function innerSort(a, b) {
       const isTypescriptProperty = key in a || key in b;
       if (isTypescriptProperty || a.hasOwnProperty(key) || b.hasOwnProperty(key)) {
@@ -26,7 +28,7 @@ export class ArraySorting {
     }
   }
 
-  static getSortedElement(valueA: any, valueB: any, order: string) {
+  static getSortedElement(valueA: any, valueB: any, order: string): number {
     let comparison = 0;
     if (valueB === null) {
       comparison = 1;
@@ -35,6 +37,25 @@ export class ArraySorting {
     } else if (valueA > valueB) {
       comparison = 1;
     } else if (valueA < valueB) {
+      comparison = -1;
+    }
+    return order === 'desc' ? comparison * -1 : comparison;
+  }
+
+  static getSortedLeague(valueA: LeagueTableModel, valueB: LeagueTableModel, order = 'asc') {
+    let comparison = 0;
+    // If any team finish with the same number of points, their position in the League table is determined by goal difference (GD), then the number of goals scored (GF)
+    if (valueA.pts > valueB.pts) {
+      comparison = 1;
+    } else if (valueA.pts < valueB.pts) {
+      comparison = -1;
+    } else if (valueA.gd > valueB.gd) {
+      comparison = 1;
+    } else if (valueA.gd < valueB.gd) {
+      comparison = -1;
+    } else if (valueA.gf > valueB.gf) {
+      comparison = 1;
+    } else if (valueA.gf < valueB.gf) {
       comparison = -1;
     }
     return order === 'desc' ? comparison * -1 : comparison;
