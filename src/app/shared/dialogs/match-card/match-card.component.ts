@@ -52,6 +52,7 @@ export class MatchCardComponent implements OnInit {
           imgpathLogo: this.data?.away.logo,
         },
         score: { home: this.data?.home.score, away: this.data?.away.score },
+        penalties: this.data?.tie_breaker
       };
     } else {
       this.matchHeaderData = {

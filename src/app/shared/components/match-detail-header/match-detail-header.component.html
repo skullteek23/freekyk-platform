@@ -38,11 +38,12 @@
       <span class="mat-body-1 center"> {{ matchData?.away.name }} </span>
     </div>
   </div>
-  <span *ngIf="isFixture; else result" class="mat-body-2 center">This match is on {{ matchData?.date | date:
-    "mediumDate" }}</span>
+  <span *ngIf="isFixture; else result" class="mat-body-2 center">
+    This match is on {{ matchData?.date | date: "mediumDate" }}
+  </span>
   <ng-template #result>
     <span class="mat-body-2 center">
-      {{ getWinningTeam() }}
+      {{ resultStatus }}
     </span>
   </ng-template>
 </div>

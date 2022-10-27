@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TO_BE_DECIDED } from 'functions/src/utils/utilities';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MatchFixture, TournamentTypes } from 'src/app/shared/interfaces/match.model';
 import { CommunityLeaderboard, FilterData, LeagueTableModel, } from 'src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { PlayConstants } from '../play.constants';
 
 @Component({
   selector: 'app-pl-standings',
@@ -88,14 +88,16 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
           if (resp && resp[2] && resp.length === 3) {
             this.knockoutFixtures = resp[0] as MatchFixture[];
             this.cpStandings = (resp[1] as MatchFixture[]).map(element => {
-              let winner = element.home.name;
-              if (element.away.score > element.home.score) {
-                winner = element.away.name;
-              } else if (element.away.score === element.home.score) {
-                winner = 'Draw';
-              }
-              if (!element.concluded) {
-                winner = TO_BE_DECIDED;
+              const penaltyScores: string[] = element?.tie_breaker?.split('-');
+              let winner = PlayConstants.MATCH_DRAW;
+              if (element?.home?.score > element?.away?.score) {
+                winner = element.home.name;
+              } else if (element?.home?.score < element?.away?.score) {
+                winner = element.home.name;
+              } else if (penaltyScores && penaltyScores.length === 2 && element.hasOwnProperty('tie_breaker') && element.tie_breaker !== '') {
+                winner = penaltyScores[0] > penaltyScores[1] ? element.home.name : element.away.name;
+              } else if (!element.concluded) {
+                winner = PlayConstants.TO_BE_DECIDED;
               }
               const CPdata: CommunityLeaderboard = {
                 home: {
