@@ -1,22 +1,24 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
+import { MatchDayReport, MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '../../src/app/shared/interfaces/others.model';
+import { SeasonBasicInfo, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
 import { FKC_ROUND_MULTIPLIER, isFixtureAvailableHome, isFixtureAvailableHomeOrAway } from './utils/utilities';
 const db = admin.firestore();
 
 export async function matchReportUpdate(data: any, context: any): Promise<any> {
+  const batch = db.batch();
   const fixtureData: MatchFixture = data['fixture'] || null;
+  const formData: MatchReportFormData = data['formData'] || null;
   const playersHome: ListOption[] = data['playersListHome'] || null;
   const playersAway: ListOption[] = data['playersListAway'] || null;
-  const formData: MatchReportFormData = data['formData'] || null;
-  const batch = db.batch();
-  const seasonID: string = (await db.collection('seasons').where('name', '==', fixtureData.season).get())?.docs[0]?.id;
+  const seasonTemp = (await db.collection('seasons').where('name', '==', fixtureData.season).get());
+  const season: SeasonBasicInfo = seasonTemp?.docs[0]?.data() as SeasonBasicInfo;
+  const seasonID = !seasonTemp.empty ? seasonTemp.docs[0].id : null;
   const tid_home: string = (await db.collection('teams').where('tname', '==', fixtureData.home.name).get())?.docs[0]?.id;
   const tid_away: string = (await db.collection('teams').where('tname', '==', fixtureData.away.name).get())?.docs[0]?.id;
-  // const LABEL_NOT_AVAILABLE = 'N/A';
 
-  if (!fixtureData || !playersHome || !playersAway || !formData || !seasonID || !batch || !tid_home || !tid_away) {
+  if (!fixtureData || !fixtureData.id || !playersHome || !playersAway || !formData || !season || !seasonID || !batch || !tid_home || !tid_away) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
 
@@ -24,26 +26,19 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   const g: number = (formData.awayScore + formData.homeScore);
   const rcards: number = (formData.redCardHoldersHome.length + formData.redCardHoldersAway.length);
   const ycards: number = (formData.yellowCardHoldersHome.length + formData.yellowCardHoldersAway.length);
-  // const maxGoal: number = Math.max(...formData.scorersGoals);
-  // const highestScorerList: string[] = [];
-  // formData.scorersGoals.forEach((value, index) => {
-  //   const scorer = formData.scorers[index]?.viewValue || '';
-  //   if (value === maxGoal && value > 0 && scorer) {
-  //     highestScorerList.push(scorer);
-  //   }
-  // });
-  // const highestScorer = highestScorerList.length ? highestScorerList.join(", ") : LABEL_NOT_AVAILABLE;
 
-  const seasonRef = db.collection(`seasons/${seasonID}/additionalInfo`).doc('statistics');
+  const seasonRef = db.collection('seasons').doc(seasonID);
+  const draftSeasonRef = db.collection('seasonDrafts').doc(seasonID);
+  const seasonStatsRef = db.collection(`seasons/${seasonID}/additionalInfo`).doc('statistics');
 
-  if ((await seasonRef.get()).exists) {
-    batch.update(seasonRef, {
+  if ((await seasonStatsRef.get()).exists) {
+    batch.update(seasonStatsRef, {
       g: admin.firestore.FieldValue.increment(g),
       rcards: admin.firestore.FieldValue.increment(rcards),
       ycards: admin.firestore.FieldValue.increment(ycards),
     });
   } else {
-    batch.set(seasonRef, { g, rcards, ycards });
+    batch.set(seasonStatsRef, { g, rcards, ycards });
   }
 
   // Team Stats Update
@@ -56,8 +51,8 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   const rcards_away = formData.redCardHoldersHome.length;
   const ycards_home = formData.yellowCardHoldersHome.length;
   const ycards_away = formData.yellowCardHoldersHome.length;
-  let w_home: 1 | 0 = 0;
-  let w_away: 1 | 0 = 0;
+  let w_home: number = 0;
+  let w_away: number = 0;
   if (g_home !== g_away) {
     w_home = (g_home > g_away) ? 1 : 0;
     w_away = (g_home < g_away) ? 1 : 0;
@@ -65,6 +60,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     w_home = (formData.homePenScore > formData.awayPenScore) ? 1 : 0;
     w_away = (formData.homePenScore < formData.awayPenScore) ? 1 : 0;
   }
+  const isPenalties: boolean = g_home === g_away && formData.homePenScore >= 0 && formData.awayPenScore >= 0;
 
   const refTeam_home = db.collection(`teams/${tid_home}/additionalInfo`).doc('statistics');
   const refTeam_away = db.collection(`teams/${tid_away}/additionalInfo`).doc('statistics');
@@ -203,7 +199,7 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
       home: newHomeObj,
       away: newAwayObj
     };
-    if (g_home === g_away && formData.homePenScore >= 0 && formData.awayPenScore >= 0) {
+    if (isPenalties) {
       update['tie_breaker'] = `${formData.homePenScore}-${formData.awayPenScore}`
     }
     const matchRef = db.collection('allMatches').doc(fixtureData.id);
@@ -219,14 +215,14 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
       const isDraw = ((g_home === g_away) || (w_home === 0 && w_away === 0)) ? 1 : 0;
       currentData.forEach(data => {
         if (data.tData.name === fixtureData.home.name) {
-          const l_home = w_home < w_away ? 1 : 0;
+          const l_home: number = w_home < w_away ? 1 : 0;
           data.w += w_home;
           data.d += isDraw;
           data.l += l_home;
           data.gf += g_home;
           data.ga += g_away;
         } else if (data.tData.name === fixtureData.away.name) {
-          const l_away = w_home > w_away ? 1 : 0;
+          const l_away: number = w_home > w_away ? 1 : 0;
           data.w += w_away;
           data.d += isDraw;
           data.l += l_away;
@@ -263,6 +259,56 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
       }
     }
   }
+
+  // Saving Match Stats
+  const statsRef = db.collection('matchReports').doc(fixtureData.id);
+  const matchReport: Partial<MatchDayReport> = {};
+  if (formData.specialNotes) {
+    matchReport.specialNotes = formData.specialNotes;
+  }
+  if (formData.referee) {
+    matchReport.referee = formData.referee;
+  }
+  matchReport.score = {
+    home: formData.homeScore,
+    away: formData.awayScore
+  }
+  if (isPenalties) {
+    matchReport.penalities = {
+      home: formData.homePenScore,
+      away: formData.awayPenScore
+    }
+  }
+  if (formData.redCardHoldersHome.length || formData.yellowCardHoldersHome.length) {
+    matchReport.cards = {
+      red: formData.redCardHoldersHome.map(el => el.viewValue),
+      yellow: formData.yellowCardHoldersHome.map(el => el.viewValue)
+    }
+  }
+  if (formData.homeScore > 0 || formData.awayScore > 0) {
+    matchReport.scorers = {
+      home: formData.scorersHome.map(el => el.viewValue),
+      away: formData.scorersAway.map(el => el.viewValue),
+    }
+  }
+  batch.create(statsRef, matchReport);
+
+  // Conclude Season (optional)
+  const updateSeason: any = {};
+  const isLastFixture = season.leftOverMatchCount === 1;
+  if (isLastFixture) {
+    updateSeason.status = 'FINISHED';
+  }
+  updateSeason.leftOverMatchCount = season.leftOverMatchCount - 1;
+  batch.update(seasonRef, updateSeason);
+
+  // Draft Season Update
+  const updateDraft: Partial<SeasonDraft> = {};
+  updateDraft.lastUpdated = new Date().getTime();
+  if (isLastFixture) {
+    updateDraft.status = 'FINISHED';
+  }
+  batch.update(draftSeasonRef, updateDraft);
 
   return batch.commit();
 }

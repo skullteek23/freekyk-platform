@@ -15,6 +15,7 @@ export interface SeasonBasicInfo {
   discount: number;
   status: statusType;
   lastRegDate: number;
+  leftOverMatchCount: number;
   id?: string;
 }
 export interface SeasonAbout {

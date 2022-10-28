@@ -39,7 +39,8 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
     feesPerTeam: draftSeason.basicInfo?.fees,
     discount: draftSeason.basicInfo?.discount,
     lastRegDate: data['lastRegTimestamp'],
-    status: 'PUBLISHED'
+    status: 'PUBLISHED',
+    leftOverMatchCount: fixtures.length
   };
   const seasonAbout: SeasonAbout = {
     description: draftSeason.basicInfo?.description,
@@ -68,17 +69,17 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
   for (let i = 0; i < groundIDList.length; i++) {
     const groundID = groundIDList[i];
     if (groundID) {
-      const setRef = db.collection('groundBookings').doc(groundID);
+      const bookingsRef = db.collection('groundBookings').doc(groundID);
       const booking: GroundBooking = { seasonID: draftSeason.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
       const existingBooking = (await db.collection('groundBookings').doc(groundID).get()).data() as GroundBooking;
       if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
-        batch.update(setRef, { bookingFrom: startDate, bookingTo: endDate });
+        batch.update(bookingsRef, { bookingFrom: startDate, bookingTo: endDate });
       } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
-        batch.update(setRef, { bookingTo: endDate });
+        batch.update(bookingsRef, { bookingTo: endDate });
       } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
-        batch.update(setRef, { bookingFrom: startDate });
+        batch.update(bookingsRef, { bookingFrom: startDate });
       } else {
-        batch.set(setRef, booking);
+        batch.set(bookingsRef, booking);
       }
     }
   }

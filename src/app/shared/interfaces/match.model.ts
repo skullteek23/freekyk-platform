@@ -132,6 +132,27 @@ export interface MatchReportFormData {
   specialNotes: string;
 }
 
+export interface MatchDayReport {
+  score: {
+    home: number,
+    away: number,
+  };
+  referee: string;
+  specialNotes?: string;
+  scorers?: {
+    home: string[],
+    away: string[]
+  };
+  cards?: {
+    red: string[],
+    yellow: string[],
+  };
+  penalities?: {
+    home: number,
+    away: number
+  };
+}
+
 export interface CloudFunctionStatsData {
   highestScorer: string;
   totGoals: number;

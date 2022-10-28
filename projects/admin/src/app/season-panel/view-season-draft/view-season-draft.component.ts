@@ -127,7 +127,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.updateEntriesForm.reset();
   }
 
-  onRaiseRequest() {
+  onRaiseRequest(isDeleteRequest = false) {
     this.isLoaderShown = true;
     this.isRequestExists$.subscribe(response => {
       if (!response && this.isSeasonPublished) {
@@ -136,42 +136,8 @@ export class ViewSeasonDraftComponent implements OnInit {
           panelClass: 'fk-dialogs',
           data: {
             season: this.seasonDraftData?.draftID,
-            heading: REVOKE_MATCH_UPDATE_SUBHEADING,
-            isShowMatch: true
-          }
-        }).afterClosed().subscribe(userResponse => {
-          if (userResponse && Object.keys(userResponse).length === 4) {
-            this.isLoaderShown = true
-            this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
-              .then(
-                () => {
-                  this.isLoaderShown = false;
-                  this.snackbarService.displayCustomMsg('Revoke Request Submitted!');
-                }, err => {
-                  this.isLoaderShown = false;
-                  this.snackbarService.displayError('Request raise failed!');
-                }
-              )
-          }
-        });
-      } else {
-        this.isLoaderShown = false;
-        this.snackbarService.displayCustomMsg('Request already submitted!');
-      }
-    });
-  }
-
-  onRaiseDeleteRequest() {
-    this.isLoaderShown = true;
-    this.isRequestExists$.subscribe(response => {
-      if (!response && this.isSeasonPublished) {
-        this.isLoaderShown = false;
-        this.dialog.open(RequestDialogComponent, {
-          panelClass: 'fk-dialogs',
-          data: {
-            season: this.seasonDraftData?.draftID,
-            heading: DELETE_SEASON_SUBHEADING,
-            isShowMatch: false
+            heading: isDeleteRequest ? DELETE_SEASON_SUBHEADING : REVOKE_MATCH_UPDATE_SUBHEADING,
+            isShowMatch: !isDeleteRequest
           }
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {
@@ -180,7 +146,8 @@ export class ViewSeasonDraftComponent implements OnInit {
               .then(
                 () => {
                   this.isLoaderShown = false;
-                  this.snackbarService.displayCustomMsg('Delete Request Submitted!');
+                  const message = (isDeleteRequest ? 'Delete' : 'Revoke') + ' Request Submitted!';
+                  this.snackbarService.displayCustomMsg(message);
                 }, err => {
                   this.isLoaderShown = false;
                   this.snackbarService.displayError('Request raise failed!');
@@ -195,9 +162,8 @@ export class ViewSeasonDraftComponent implements OnInit {
     });
   }
 
-  onConfirmDelete(): void {
-    this.dialog.open(ConfirmationBoxComponent)
-      .afterClosed()
+  onConfirmDelete() {
+    this.onConfirm()
       .subscribe(response => {
         if (response) {
           this.router.navigate(['/seasons/list']);
@@ -208,25 +174,32 @@ export class ViewSeasonDraftComponent implements OnInit {
       })
   }
 
-  async publishSeason() {
-    if (this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
-      this.isLoaderShown = true;
-      const data = {
-        seasonDraft: this.seasonDraftData,
-        fixturesDraft: this.seasonFixtures,
-        lastRegTimestamp: this.lastRegistrationDate.getTime()
-      }
-      this.seasonAdminService.publishSeason(data)
-        .then(() => {
-          this.isLoaderShown = false;
-          this.goToURL();
-          location.reload();
-        })
-        .catch(error => {
-          this.snackbarService.displayError(error?.message);
-          this.isLoaderShown = false;
-        })
-    }
+  onConfirmPublish() {
+    this.onConfirm()
+      .subscribe(response => {
+        if (response && this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
+          this.isLoaderShown = true;
+          const data = {
+            seasonDraft: this.seasonDraftData,
+            fixturesDraft: this.seasonFixtures,
+            lastRegTimestamp: this.lastRegistrationDate.getTime()
+          }
+          this.seasonAdminService.publishSeason(data)
+            .then(() => {
+              this.isLoaderShown = false;
+              this.goToURL();
+              location.reload();
+            })
+            .catch(error => {
+              this.snackbarService.displayError(error?.message);
+              this.isLoaderShown = false;
+            })
+        }
+      })
+  }
+
+  onConfirm(): Observable<any> {
+    return this.dialog.open(ConfirmationBoxComponent).afterClosed();
   }
 
   setDraftFixtures(fixtures: dummyFixture[], groundsList: GroundPrivateInfo[]): void {
@@ -327,10 +300,8 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.seasonDraftData && this.seasonDraftData.basicInfo ? new Date(this.seasonDraftData?.basicInfo?.startDate) : new Date();
   }
 
-  get payableFees(): any {
+  get payableFees(): number {
     const fees = (this.seasonDraftData?.basicInfo?.fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * this.seasonDraftData?.basicInfo?.fees));
-    if (fees > 0) {
-      return fees;
-    }
+    return fees || 0;
   }
 }
