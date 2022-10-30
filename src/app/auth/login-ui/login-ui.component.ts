@@ -76,7 +76,7 @@ export class LoginUiComponent implements OnInit {
       };
       const loginSnap = this.authServ.onlogin(userData);
       loginSnap
-        .then(() => this.authServ.afterSignin())
+        .then(() => this.authServ.afterSignIn())
         .catch((error) => this.onErrorAfterSignin(error))
         .finally(this.cleanUpAfterSignin.bind(this));
     } else {
@@ -106,7 +106,7 @@ export class LoginUiComponent implements OnInit {
     this.disableAllButtons = true;
     this.isLoading = true;
     this.authServ
-      .onGoogleSignin()
+      .onGoogleSignIn()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
         if (user.additionalUserInfo.isNewUser) {
@@ -129,7 +129,7 @@ export class LoginUiComponent implements OnInit {
     this.disableAllButtons = true;
     this.isLoading = true;
     this.authServ
-      .onFacebookSignin()
+      .onFacebookSignIn()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
         if (user.additionalUserInfo.isNewUser) {
