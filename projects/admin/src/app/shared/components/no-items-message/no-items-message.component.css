@@ -1,4 +1,4 @@
-.nofi {
+.item {
   height: 72px;
   padding: 20px;
   background-color: var(--grey4);
@@ -7,11 +7,13 @@
   border-radius: var(--borderRadiusCard);
   /* opacity: 0.75; */
 }
+
 .box {
   min-height: 500px;
 }
+
 @media only screen and (max-width: 959px) {
-  .nofi {
+  .item {
     height: 96px;
     padding: 20px;
     background-color: var(--grey4);

@@ -52,7 +52,7 @@ export const FilterHeadingMap = {
   'Tournament Type': 'type',
   Season: 'season',
   Status: 'status',
-  Owner: 'own_type',
+  Owner: 'ownType',
   'Field Type': 'fieldType',
   'Playing Position': 'pl_pos',
 };

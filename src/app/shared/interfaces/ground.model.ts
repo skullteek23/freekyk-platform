@@ -4,7 +4,7 @@ export interface GroundBasicInfo {
   locCity: string;
   locState: string;
   fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
-  own_type: 'FK' | 'PUBLIC' | 'PRIVATE';
+  ownType: 'FK' | 'PUBLIC' | 'PRIVATE';
   playLvl: 'good' | 'best' | 'fair';
   id?: string;
 }

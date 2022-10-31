@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UNIQUE_DELETION_REQUEST_CODE } from '../../shared/constants/constants';
 
 @Component({
@@ -9,19 +8,16 @@ import { UNIQUE_DELETION_REQUEST_CODE } from '../../shared/constants/constants';
   templateUrl: './request-dialog.component.html',
   styleUrls: ['./request-dialog.component.css']
 })
-export class RequestDialogComponent implements OnInit {
+export class RequestDialogComponent {
 
   reason: string = null;
   mid: string = null;
 
   constructor(
     public dialogRef: MatDialogRef<RequestDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { season: string; heading: string; isShowMatch: boolean },
-    private ngFire: AngularFirestore
+    private ngFire: AngularFirestore,
+    @Inject(MAT_DIALOG_DATA) public data: { season: string; heading: string; isShowMatch: boolean }
   ) { }
-
-  ngOnInit(): void {
-  }
 
   onCloseDialog() {
     this.dialogRef.close();

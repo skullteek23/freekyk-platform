@@ -15,13 +15,6 @@ import { SeasonAdminService } from '../season-admin.service';
 })
 export class SelectGroundsComponent implements OnInit, OnDestroy {
 
-  bookingsList: GroundBooking[] = [];
-  groundsForm = new FormGroup({});
-  lines = [];
-  location: any;
-  subscriptions = new Subscription();
-  seasonStartDate: any;
-
   @Input() grounds = [];
   @Input() set data(value: any) {
     if (!value) {
@@ -57,6 +50,14 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(MatSelectionList) list: MatSelectionList;
+
+  bookingsList: GroundBooking[] = [];
+  groundsForm = new FormGroup({});
+  lines = [];
+  location: any;
+  subscriptions = new Subscription();
+  seasonStartDate: any;
+
 
   constructor(
     private ngFire: AngularFirestore,
@@ -125,7 +126,7 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
     return `${fcp} FCP, ${fkc} FKC and ${fpl} FPL`;
   }
 
-  getAvailableDays(timings: {}) {
+  getAvailableDays(timings: any) {
     const availDays: string[] = [];
     const days = MatchConstants.DAYS_LIST_FULL;
     for (let i = 0; i < days.length; i++) {

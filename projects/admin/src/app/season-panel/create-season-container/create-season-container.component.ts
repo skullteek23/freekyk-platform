@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { canComponentDeactivate, Guard } from '../../shared/guards/can-deactivate-guard.service';
+import { ActivatedRoute } from '@angular/router';
+import { CanComponentDeactivate, Guard } from '../../shared/guards/can-deactivate-guard.service';
 import { CreateSeasonComponent } from '../create-season/create-season.component';
-import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
   selector: 'app-create-season-container',
   templateUrl: './create-season-container.component.html',
   styleUrls: ['./create-season-container.component.css']
 })
-export class CreateSeasonContainerComponent implements OnInit, canComponentDeactivate {
+export class CreateSeasonContainerComponent implements OnInit, CanComponentDeactivate {
 
   dialogRef: MatDialogRef<CreateSeasonComponent>;
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private router: Router, private seasonAdminService: SeasonAdminService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     const params = this.route.snapshot.params;

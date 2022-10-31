@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   templateUrl: './season-panel.component.html',
   styleUrls: ['./season-panel.component.css'],
 })
-export class SeasonPanelComponent {
-  constructor() { }
-}
+export class SeasonPanelComponent { }

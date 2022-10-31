@@ -249,7 +249,13 @@ export class UpdateMatchReportComponent implements OnInit {
         ...this.fixture,
         id: this.data
       };
-      this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList)
+      const options = {
+        formData: this.matchReportForm.value,
+        fixture,
+        playersListHome: this.homeTeamPlayersList,
+        playersListAway: this.awayTeamPlayersList
+      };
+      this.seasonAdminService.updateMatchReport(options)
         .then(() => {
           this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
           this.isLoaderShown = false;

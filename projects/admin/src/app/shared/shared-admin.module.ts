@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from '../app-material.module';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
-import { FixtureBasicComponent } from './components/fixture-basic/fixture-basic.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { NoItemsMessageComponent } from './components/no-items-message/no-items-message.component';
 import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
@@ -21,7 +20,6 @@ import { TextShortenPipe } from './pipes/text-shorten.pipe';
     FileUploaderComponent,
     NumberToAMPMPipe,
     TickAnimationComponent,
-    FixtureBasicComponent,
     ConfirmationBoxComponent,
     TextShortenPipe
   ],
@@ -33,7 +31,6 @@ import { TextShortenPipe } from './pipes/text-shorten.pipe';
     FileUploaderComponent,
     NumberToAMPMPipe,
     TickAnimationComponent,
-    FixtureBasicComponent,
     ConfirmationBoxComponent,
     TextShortenPipe
   ],

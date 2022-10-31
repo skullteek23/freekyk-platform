@@ -16,7 +16,6 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
-import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BIO } from 'src/app/shared/Constants/REGEX';
 import { formsMessages } from '../../shared/constants/messages';
@@ -59,8 +58,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     private seasonAdminService: SeasonAdminService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private router: Router,
-    private readonly sso: ScrollStrategyOptions
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -291,8 +289,7 @@ export class ViewSeasonDraftComponent implements OnInit {
           this.dialog.open(UpdateMatchReportComponent, {
             panelClass: 'extra-large-dialogs',
             data: matchID,
-            disableClose: true,
-            scrollStrategy: this.sso.noop()
+            disableClose: true
           });
         }
         this.setLoadingStatus(LOADING_STATUS.DEFAULT);

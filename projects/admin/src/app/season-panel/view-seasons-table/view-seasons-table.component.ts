@@ -18,7 +18,11 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   seasons: any[] = [];
   subscription = new Subscription();
 
-  constructor(private ngFire: AngularFirestore, private router: Router, private seasonAdminService: SeasonAdminService) { }
+  constructor(
+    private ngFire: AngularFirestore,
+    private router: Router,
+    private seasonAdminService: SeasonAdminService
+  ) { }
 
   ngOnInit(): void {
     this.getSeasons();

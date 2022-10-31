@@ -73,18 +73,9 @@
   }
 }
 
-/* other styles */
-/* .svg svg {
-    display: none
-}
- */
 .inlinesvg .svg svg {
   display: inline;
 }
-
-/* .svg img {
-    display: none
-} */
 
 .icon--order-success svg polyline {
   -webkit-animation: checkmark 0.25s ease-in-out 0.7s backwards;
@@ -95,6 +86,7 @@
   -webkit-animation: checkmark-circle 0.6s ease-in-out backwards;
   animation: checkmark-circle 0.6s ease-in-out backwards;
 }
+
 .icon--order-success svg circle#colored {
   -webkit-animation: colored-circle 0.6s ease-in-out 0.7s backwards;
   animation: colored-circle 0.6s ease-in-out 0.7s backwards;

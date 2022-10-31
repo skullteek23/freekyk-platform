@@ -27,33 +27,36 @@ export class SeasonAdminService {
     const initialDate = new Date(data.startDate);
     while (availableSlotList.length < totalMatches) {
       const day = initialDate.getDay();
-      for (let k = 0; k < grounds.length; k++) {
-        const grTimings = grounds[k].timings;
-        const groundName = grounds[k].name;
-        const locCity = grounds[k].locCity;
-        const locState = grounds[k].locState;
+      for (const ground of grounds) {
+        const grTimings = ground.timings;
+        const groundName = ground.name;
+        const locCity = ground.locCity;
+        const locState = ground.locState;
         if (grTimings.hasOwnProperty(day)) {
           const grTimingsByDay = grTimings[day] as number[];
-          for (let i = 0; i < grTimingsByDay.length; i++) {
+          for (const timing of grTimingsByDay) {
             if (!availableSlotList.length) {
               const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-              date.setHours(grTimingsByDay[i]);
+              date.setHours(timing);
               if (availableSlotList.length < totalMatches) {
                 availableSlotList.push({ date, groundName, locCity, locState });
               }
               continue;
             }
-            const currentHour = grTimingsByDay[i];
+            const currentHour = timing;
             const lastDateHour = availableSlotList[availableSlotList.length - 1].date.getHours();
             const currentDay = day;
             const lastDateDay = availableSlotList[availableSlotList.length - 1].date.getDay();
             const currentGround = groundName;
             const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
-            if (this.getDifference(currentHour, lastDateHour) >= data.oneMatchDur && currentDay === lastDateDay ||
-              this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay !== lastDateDay ||
-              this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay === lastDateDay && lastGround !== currentGround) {
+            if (
+              this.getDifference(currentHour, lastDateHour) >= data.oneMatchDur && currentDay === lastDateDay
+              || this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay !== lastDateDay
+              || (this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay === lastDateDay
+                && lastGround !== currentGround)
+            ) {
               const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-              date.setHours(grTimingsByDay[i]);
+              date.setHours(timing);
               if (availableSlotList.length < totalMatches) {
                 availableSlotList.push({ date, groundName, locCity, locState });
               }
@@ -127,10 +130,12 @@ export class SeasonAdminService {
     return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
   }
 
-  updateMatchReport(formData: MatchReportFormData, fixture: MatchFixture, playersListHome: ListOption[], playersListAway: ListOption[]): Promise<any> {
-    const functionData = { formData, fixture, playersListHome, playersListAway };
+  updateMatchReport(options: any): Promise<any> {
+    if (!options) {
+      return;
+    }
     const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.UPDATE_MATCH_REPORT);
-    return callable(functionData).toPromise();
+    return callable(options).toPromise();
   }
 
   deleteDraft(docID: string, deleteFixturesOnly = false): Promise<any> {
@@ -173,7 +178,30 @@ export class SeasonAdminService {
     return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);
   }
 
-  private getMID(type: 'FKC' | 'FPL' | 'FCP', index) {
+  getStatusClass(status: statusType): any {
+    switch (status) {
+      case 'READY TO PUBLISH':
+        return { yellow: true };
+      case 'DRAFTED':
+        return { grey: true };
+      case 'PUBLISHED':
+        return { green: true };
+      case 'FINISHED':
+        return { greenLight: true };
+      default:
+        return {};
+    }
+  }
+
+  isSeasonLive(status: statusType): boolean {
+    return status === 'PUBLISHED';
+  }
+
+  isSeasonFinished(status: statusType): boolean {
+    return status === 'FINISHED';
+  }
+
+  private getMID(type: 'FKC' | 'FPL' | 'FCP', index: number) {
     const uniqueID = this.ngFire.createId().slice(0, 8).toLocaleUpperCase();
     switch (type) {
       case 'FKC': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
@@ -192,26 +220,5 @@ export class SeasonAdminService {
 
   private getDifference(a: number, b: number): number {
     return a - b;
-  }
-
-  getStatusClass(status: statusType): any {
-    if (this.isSeasonLive(status)) {
-      return { green: true };
-    } else if (status === 'READY TO PUBLISH') {
-      return { yellow: true };
-    } else if (status === 'DRAFTED') {
-      return { grey: true };
-    } else if (this.isSeasonFinished(status)) {
-      return { greenLight: true };
-    }
-    return {};
-  }
-
-  isSeasonLive(status: statusType): boolean {
-    return status === 'PUBLISHED';
-  }
-
-  isSeasonFinished(status: statusType): boolean {
-    return status === 'FINISHED';
   }
 }

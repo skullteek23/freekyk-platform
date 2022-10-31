@@ -7,11 +7,7 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    fxHide.lt-md="true"
-    [data]="filterData"
-    (changeFilter)="onQueryData($event)"
-  ></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->
@@ -27,36 +23,16 @@
     <!-- no seasons -->
 
     <!-- grounds -->
-    <mat-grid-list
-      *ngIf="noGrounds == false; else placeholder"
-      [cols]="columns"
-      gutterSize="20px"
-    >
+    <mat-grid-list *ngIf="noGrounds == false; else placeholder" [cols]="columns" gutterSize="20px">
       <mat-grid-tile appElevateOnHover *ngFor="let ground of grounds$ | async">
-        <div
-          class="groundContainer"
-          [ngClass]="{ 'premiumBorder-2': ground.own_type == 'FK' }"
-        >
-          <img
-            [routerLink]="['/ground', ground.id]"
-            class="box-image"
-            [src]="ground.imgpath"
-            alt="Football Ground"
-          />
+        <div class="groundContainer" [ngClass]="{ 'premiumBorder-2': ground.ownType == 'FK' }">
+          <img [routerLink]="['/ground', ground.id]" class="box-image" [src]="ground.imgpath" alt="Football Ground" />
           <div class="content" fxLayoutAlign="space-between start">
-            <div
-              [routerLink]="['/ground', ground.id]"
-              fxLayout="column"
-              fxLayoutAlign="center start"
-            >
+            <div [routerLink]="['/ground', ground.id]" fxLayout="column" fxLayoutAlign="center start">
               <span class="mat-body-1 left">
                 {{ ground.name | textShorten: 50 }}
               </span>
-              <div
-                fxLayout="row"
-                fxLayoutAlign="start center"
-                fxLayoutGap="16px"
-              >
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
                 <span> Playability Level: </span>
                 <span class="quality">{{ ground.playLvl | uppercase }}</span>
               </div>

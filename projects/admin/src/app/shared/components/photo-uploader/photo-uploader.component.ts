@@ -32,5 +32,4 @@ export class PhotoUploaderComponent {
     this.preview = null;
     this.$uploadedImageFile = null;
   }
-
 }
