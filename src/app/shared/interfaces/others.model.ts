@@ -257,3 +257,9 @@ export interface ListOption {
   value: any;
   viewValue: string;
 }
+
+export class LocationDetails {
+  city: string = null;
+  state: string = null;
+  country: string = null;
+}
