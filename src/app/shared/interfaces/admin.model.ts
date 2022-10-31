@@ -17,7 +17,6 @@ export class Admin {
 
 export class RegistrationRequest {
   name = '';
-  organizerID: string = null;
   email: string = null;
   contactNumber: number = null;
   location: LocationDetails = new LocationDetails();
