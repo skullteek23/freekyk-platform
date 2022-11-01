@@ -9,7 +9,7 @@
   <app-match-detail-header [data]="matchHeaderData"></app-match-detail-header>
 
   <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" color="primary">
-    <mat-tab label="Overview" [disabled]="!data || !overViewData">
+    <mat-tab label="Overview" [disabled]="!data">
       <ng-template matTabContent>
         <div class="seperator" fxLayoutGap="16px" fxLayout="column">
           <div class="basic" fxLayout="column" fxLayoutGap="16px">
