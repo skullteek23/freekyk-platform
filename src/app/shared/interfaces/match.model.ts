@@ -1,6 +1,7 @@
 import { ListOption } from "./others.model";
 
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
+export type KnockoutRounds = 2 | 4 | 8 | 16;
 export interface MatchFixture {
   date: number;
   concluded: boolean;
@@ -23,7 +24,7 @@ export interface MatchFixture {
   id?: string;
   tie_breaker?: string;
   stadium?: string;
-  fkcRound?: number;
+  fkcRound?: KnockoutRounds; // can be 2, 4, 8, 16
 }
 export interface MatchFixtureOverview {
   ref: string;

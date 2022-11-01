@@ -31,10 +31,10 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
     this.initSeasonFilter();
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
-        if (params && params.s) {
+        if (params && Object.keys(params).length) {
           const filter = {
-            queryItem: 'Season',
-            queryValue: params.s
+            queryItem: Object.keys(params)[0],
+            queryValue: Object.values(params)[0]
           }
           this.onQueryFixtures(filter);
         } else {
@@ -85,7 +85,8 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     if (queryInfo) {
-      this.router.navigate(['/play', 'fixtures'], { queryParams: { s: queryInfo.queryValue } });
+      const queryParamKey = queryInfo?.queryItem;
+      this.router.navigate(['/play', 'fixtures'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
     } else {
       this.router.navigate(['/play', 'fixtures']);
     }

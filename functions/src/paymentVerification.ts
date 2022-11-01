@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
 import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
-import { sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
+import { isFixtureAvailableAway, isFixtureAvailableHome, isFixtureAvailableHomeOrAway, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { environment } from '../../src/environments/environment';
 import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
@@ -182,20 +182,4 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   batch.set(participantRef, participantDetail);
 
   return batch.commit();
-}
-
-export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
-  return isFixtureAvailableHome(fixture) && isFixtureAvailableAway(fixture);
-}
-
-export function isFixtureAvailableHomeOrAway(fixture: MatchFixture): boolean {
-  return isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture);
-}
-
-export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
-  return fixture?.home?.name === TO_BE_DECIDED;
-}
-
-export function isFixtureAvailableAway(fixture: MatchFixture): boolean {
-  return fixture?.away?.name === TO_BE_DECIDED;
 }

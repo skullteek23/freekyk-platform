@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import { MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '../../src/app/shared/interfaces/others.model';
+import { FKC_ROUND_MULTIPLIER, isFixtureAvailableHome, isFixtureAvailableHomeOrAway } from './utils/utilities';
 const db = admin.firestore();
 
 export async function matchReportUpdate(data: any, context: any): Promise<any> {
@@ -58,10 +59,10 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   let w_away = 0;
   if (g_home !== g_away) {
     w_home = (g_home > g_away) ? 1 : 0;
-    w_away = (g_away > g_home) ? 1 : 0;
+    w_away = (g_home < g_away) ? 1 : 0;
   } else {
     w_home = (formData.homePenScore > formData.awayPenScore) ? 1 : 0;
-    w_away = (formData.awayPenScore > formData.homePenScore) ? 1 : 0;
+    w_away = (formData.homePenScore < formData.awayPenScore) ? 1 : 0;
   }
 
   const refTeam_home = db.collection(`teams/${tid_home}/additionalInfo`).doc('statistics');
@@ -210,43 +211,55 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
 
   // League Update (Conditional)
   if (fpl_played) {
-    const tempData = (await db.collection('leagues').doc(seasonID).get())?.data() as any;
+    const leagueRef = db.collection('leagues').doc(seasonID);
+    const tempData = (await leagueRef.get())?.data() as any;
     if (tempData) {
       const currentData: LeagueTableModel[] = Object.values(tempData);
-      const homeUpdateIndex = currentData.findIndex(el => el?.tData?.name === fixtureData.home.name);
-      const awayUpdateIndex = currentData.findIndex(el => el?.tData?.name === fixtureData.away.name);
       const isDraw = ((g_home === g_away) || (w_home === 0 && w_away === 0)) ? 1 : 0;
-      const leagueRef = db.collection('leagues').doc(seasonID);
-      if (homeUpdateIndex > -1) {
-        batch.update(leagueRef, {
-          [homeUpdateIndex]: {
-            ...currentData[homeUpdateIndex],
-            w: admin.firestore.FieldValue.increment(w_home),
-            d: admin.firestore.FieldValue.increment(isDraw),
-            l: admin.firestore.FieldValue.increment(!w_home ? 1 : 0),
-            gf: admin.firestore.FieldValue.increment(g_home),
-            ga: admin.firestore.FieldValue.increment(g_away),
-          }
-        });
-      }
-      if (awayUpdateIndex > -1) {
-        batch.update(leagueRef, {
-          [awayUpdateIndex]: {
-            ...currentData[awayUpdateIndex],
-            w: admin.firestore.FieldValue.increment(w_away),
-            d: admin.firestore.FieldValue.increment(isDraw),
-            l: admin.firestore.FieldValue.increment(!w_away ? 1 : 0),
-            gf: admin.firestore.FieldValue.increment(g_away),
-            ga: admin.firestore.FieldValue.increment(g_home),
-          }
-        });
-      }
+      currentData.forEach(data => {
+        if (data.tData.name === fixtureData.home.name) {
+          const l_home = w_home < w_away ? 1 : 0;
+          data.w += w_home;
+          data.d += isDraw;
+          data.l += l_home;
+          data.gf += g_home;
+          data.ga += g_away;
+        } else if (data.tData.name === fixtureData.away.name) {
+          const l_away = w_home > w_away ? 1 : 0;
+          data.w += w_away;
+          data.d += isDraw;
+          data.l += l_away;
+          data.gf += g_away;
+          data.ga += g_home;
+        }
+      });
+      batch.update(leagueRef, { ...currentData });
     }
   }
 
   // Knockout Stage Update (Conditional)
-  if (fkc_played) {
+  if (fkc_played && fixtureData && fixtureData.id && fixtureData.fkcRound && fixtureData.fkcRound > 2) {
+    const nextRound: number = Number(fixtureData.fkcRound) / FKC_ROUND_MULTIPLIER;
+    const availableNextRoundMatches: MatchFixture[] = (await db.collection('allMatches')
+      .where('fkcRound', '==', nextRound)
+      .where('concluded', '==', false)
+      .where('type', '==', 'FKC')
+      .where('season', '==', fixtureData.season)
+      .get()).docs.map(doc => doc.data() as MatchFixture);
 
+    for (let i = 0; i < availableNextRoundMatches.length; i++) {
+      const matchID = availableNextRoundMatches[i].id;
+      if (isFixtureAvailableHomeOrAway(availableNextRoundMatches[i]) && matchID) {
+        const updateRef = db.collection('allMatches').doc(matchID);
+        const updateKey = isFixtureAvailableHome(availableNextRoundMatches[i]) ? 'home' : 'away';
+        availableNextRoundMatches[i][updateKey].name = w_home > w_away ? fixtureData.home.name : fixtureData.away.name;
+        availableNextRoundMatches[i][updateKey].logo = w_home > w_away ? fixtureData.home.logo : fixtureData.away.logo;
+        batch.update(updateRef, {
+          [updateKey]: availableNextRoundMatches[i][updateKey]
+        });
+        break;
+      }
+    }
   }
 
   return batch.commit();

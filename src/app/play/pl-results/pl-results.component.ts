@@ -31,10 +31,10 @@ export class PlResultsComponent implements OnInit, OnDestroy {
     this.initSeasonFilter();
     this.subscriptions.add(
       this.route.queryParams.subscribe((params) => {
-        if (params && params.s) {
+        if (params && Object.keys(params).length) {
           const filter = {
-            queryItem: 'Season',
-            queryValue: params.s
+            queryItem: Object.keys(params)[0],
+            queryValue: Object.values(params)[0]
           }
           this.onQueryResults(filter);
         } else {
@@ -84,7 +84,8 @@ export class PlResultsComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     if (queryInfo) {
-      this.router.navigate(['/play', 'results'], { queryParams: { s: queryInfo.queryValue } });
+      const queryParamKey = queryInfo?.queryItem;
+      this.router.navigate(['/play', 'results'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
     } else {
       this.router.navigate(['/play', 'results']);
     }

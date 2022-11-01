@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { GroundBooking, GroundPrivateInfo } from '../../src/app/shared/interfaces/ground.model';
-import { dummyFixture, MatchFixture } from '../../src/app/shared/interfaces/match.model';
+import { dummyFixture, KnockoutRounds, MatchFixture } from '../../src/app/shared/interfaces/match.model';
 import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
 import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
 import { DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
@@ -100,7 +100,7 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
     const roundsList = getRoundsList(totalTeams);
     knockoutFixtures.map((fixture, index) => {
       const data: MatchFixture = fixture;
-      data.fkcRound = roundsList[index];
+      data.fkcRound = roundsList[index] as KnockoutRounds;
       return data;
     })
     for (let i = 0; i < knockoutFixtures.length; i++) {

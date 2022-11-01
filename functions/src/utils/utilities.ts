@@ -1,3 +1,5 @@
+import { MatchFixture } from "../../../src/app/shared/interfaces/match.model";
+
 export function sortObjectByKey(key: string, order = 'asc', isConvertNA = true): any {
   return function innerSort(a: any, b: any) {
     const isTypescriptProperty = key in a || key in b;
@@ -38,9 +40,26 @@ export function getSortedElement(valueA: any, valueB: any, order: string) {
   return order === 'desc' ? comparison * -1 : comparison;
 }
 
+export function isFixtureAvailableHomeAndAway(fixture: MatchFixture): boolean {
+  return isFixtureAvailableHome(fixture) && isFixtureAvailableAway(fixture);
+}
+
+export function isFixtureAvailableHomeOrAway(fixture: MatchFixture): boolean {
+  return isFixtureAvailableHome(fixture) || isFixtureAvailableAway(fixture);
+}
+
+export function isFixtureAvailableHome(fixture: MatchFixture): boolean {
+  return fixture?.home?.name === TO_BE_DECIDED;
+}
+
+export function isFixtureAvailableAway(fixture: MatchFixture): boolean {
+  return fixture?.away?.name === TO_BE_DECIDED;
+}
+
 export const Constants = {
 }
 export const TO_BE_DECIDED = 'TBD';
+export const FKC_ROUND_MULTIPLIER = 2;
 export const DEFAULT_LOGO = 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
 export const DEFAULT_PLACEHOLDER = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg';
 export const DEFAULT_IMAGE_URL = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
