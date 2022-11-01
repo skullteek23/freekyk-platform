@@ -31,7 +31,7 @@ export class RequestDialogComponent implements OnInit {
     if (this.isReasonValid) {
       const timestamp = new Date().getTime();
       const uniqueRequestID = UNIQUE_DELETION_REQUEST_CODE + '-' + this.ngFire.createId().slice(0, 5);
-      const requestData = {
+      const requestData: any = {
         id: uniqueRequestID,
         seasonId: this.data.season,
         timestamp,

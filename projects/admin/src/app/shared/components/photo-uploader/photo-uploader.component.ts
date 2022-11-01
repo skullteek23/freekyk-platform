@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatchConstantsSecondary } from '../../constants/constants';
 
 @Component({
@@ -6,20 +6,18 @@ import { MatchConstantsSecondary } from '../../constants/constants';
   templateUrl: './photo-uploader.component.html',
   styleUrls: ['./photo-uploader.component.css']
 })
-export class PhotoUploaderComponent implements OnInit {
+export class PhotoUploaderComponent {
+
+  @Output() changeUpload = new EventEmitter<File>();
+  @Input() defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
+
   preview = null;
   $uploadedImageFile: File = null;
-  @Input() defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
-  @Output() changeUpload = new EventEmitter<File>();
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   onBrowsePhoto(ev): void {
     if (ev && ev.target && ev.target.files) {
       const src = URL.createObjectURL(ev.target.files[0]);
-      const preview = document.getElementById('preview-image');
+      const preview: any = document.getElementById('preview-image');
       const file = ev.target.files[0];
       preview.src = src;
       this.emitSelection(file);
