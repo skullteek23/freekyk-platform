@@ -55,6 +55,7 @@ import { PlayerService } from '../services/player.service';
 import { TeamService } from '../services/team.service';
 import { MaterialModule } from '@shared/material.module';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    FlexLayoutModule
   ],
   exports: [],
   providers: [
