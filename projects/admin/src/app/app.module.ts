@@ -1,17 +1,18 @@
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
+import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { BrowserModule } from '@angular/platform-browser';
+import { AngularFireModule } from '@angular/fire';
+import { RouterModule } from '@angular/router';
+import { REGION } from '@angular/fire/functions';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { environment } from 'environments/environment';
-import { CommonModule, DatePipe } from '@angular/common';
-import { REGION } from '@angular/fire/functions';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { AngularFireModule } from '@angular/fire';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ErrorComponent } from './error/error.component';
 import { MaterialModule } from '@shared/material.module';
-import { RouterModule } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
-import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const loginRedirect = () =>
   redirectLoggedInTo(['/']);
@@ -54,6 +55,7 @@ const routes = [
     BrowserModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     MaterialModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase)

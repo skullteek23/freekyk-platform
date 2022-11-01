@@ -10,10 +10,10 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./main-shell.component.css']
 })
 export class MainShellComponent implements OnDestroy {
-  activeLink = '';
+  activeLink = 'seasons';
   cols: number;
   links: any[] = [
-    { name: 'seasons', route: '/seasons/list' },
+    { name: 'seasons', route: '/seasons' },
     { name: 'grounds', route: '/grounds' }
   ];
   subscriptions = new Subscription();
@@ -23,7 +23,7 @@ export class MainShellComponent implements OnDestroy {
       if (event instanceof NavigationEnd) {
         const route = event.url.split('/');
         if (route.length === 2 && route[1] === '') {
-          this.router.navigate(['/seasons/list']);
+          this.router.navigate(['/']);
         } else {
           this.activeLink = route[1];
         }
@@ -52,6 +52,6 @@ export class MainShellComponent implements OnDestroy {
   }
 
   goHome(): void {
-    this.router.navigate(['/seasons/list']);
+    this.router.navigate(['/seasons']);
   }
 }

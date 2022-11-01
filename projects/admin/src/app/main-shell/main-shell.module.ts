@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
-import { RouterModule } from '@angular/router';
-import { MainShellComponent } from './main-shell.component';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
+import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 import { AdminConfigPanelComponent } from './components/admin-config-panel/admin-config-panel.component';
 import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
 import { RegistrationsPanelComponent } from './components/registrations-panel/registrations-panel.component';
+import { MainShellComponent } from './main-shell.component';
 import { AddSeasonComponent } from './components/season-panel/add-season/add-season.component';
 import { ChipSelectionInputComponent } from './components/season-panel/chip-selection-input/chip-selection-input.component';
 import { CreateSeasonContainerComponent } from './components/season-panel/create-season-container/create-season-container.component';
@@ -32,23 +32,29 @@ import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/material.module';
 import { MatchReportSummaryComponent } from './components/season-panel/match-report-summary/match-report-summary.component';
 
-const routes = [
+const routes: Routes = [
   {
+
     path: '',
-    component: SeasonPanelComponent,
-    pathMatch: 'full',
+    component: MainShellComponent,
     children: [
-      { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
-      { path: 'list', component: ViewSeasonsTableComponent },
-      { path: 'create', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
-      { path: 'create/:draftID', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
-      { path: 's/:draftid', component: ViewSeasonDraftComponent }
-    ],
+      {
+        path: 'seasons',
+        component: SeasonPanelComponent,
+        children: [
+          { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
+          { path: 'list', component: ViewSeasonsTableComponent },
+          { path: 'create', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
+          { path: 'create/:draftID', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
+          { path: 's/:draftid', component: ViewSeasonDraftComponent }
+        ],
+      },
+      { path: 'grounds', component: GroundsPanelComponent },
+      { path: 'account', component: MyAccountPanelComponent },
+      { path: 'manage-requests', component: RegistrationsPanelComponent },
+      { path: 'configurations', component: AdminConfigPanelComponent },
+    ]
   },
-  { path: 'grounds', component: GroundsPanelComponent },
-  { path: 'account', component: MyAccountPanelComponent },
-  { path: 'manage-requests', component: RegistrationsPanelComponent },
-  { path: 'configurations', component: AdminConfigPanelComponent },
 ];
 
 @NgModule({
@@ -84,7 +90,6 @@ const routes = [
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     FlexLayoutModule,
-    BrowserAnimationsModule,
     SnackBarModule,
     RouterModule.forChild(routes)
   ],
