@@ -35,9 +35,9 @@ import { REGION } from '@angular/fire/functions';
 import { SnackBarModule } from 'src/app/shared/snack-bar/snack-bar.module';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { MyAccountPanelComponent } from './my-account-panel/my-account-panel.component';
+import { MyAccountPanelComponent } from './panels/my-account-panel/my-account-panel.component';
 import { RegistrationsPanelComponent } from './panels/registrations-panel/registrations-panel.component';
-import { AdminConfigPanelComponent } from './admin-config-panel/admin-config-panel.component';
+import { AdminConfigPanelComponent } from './panels/admin-config-panel/admin-config-panel.component';
 
 @NgModule({
   declarations: [
