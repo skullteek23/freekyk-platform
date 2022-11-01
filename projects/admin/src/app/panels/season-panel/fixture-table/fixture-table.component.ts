@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS } from '../../shared/constants/constants';
+import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-fixture-table',

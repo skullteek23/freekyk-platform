@@ -9,8 +9,8 @@ import { ALPHA_W_SPACE, BIO, NUM } from 'src/app/shared/Constants/REGEX';
 import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
-import { MatchConstants, STATISTICS } from '../../shared/constants/constants';
-import { formsMessages, matchReportMessages } from '../../shared/constants/messages';
+import { MatchConstants, STATISTICS } from '../../../shared/constants/constants';
+import { formsMessages, matchReportMessages } from '../../../shared/constants/messages';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
 

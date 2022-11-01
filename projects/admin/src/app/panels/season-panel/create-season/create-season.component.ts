@@ -12,7 +12,7 @@ import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { SeasonDraft } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstantsSecondary } from '../../shared/constants/constants';
+import { MatchConstantsSecondary } from '../../../shared/constants/constants';
 import { AddSeasonComponent } from '../add-season/add-season.component';
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
 import { SelectGroundsComponent } from '../select-grounds/select-grounds.component';

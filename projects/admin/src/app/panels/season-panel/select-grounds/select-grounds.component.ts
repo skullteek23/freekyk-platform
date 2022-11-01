@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionList } from '@angular/material/list';
 import { Subscription } from 'rxjs';
 import { GroundBooking, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
-import { MatchConstants } from '../../shared/constants/constants';
+import { MatchConstants } from '../../../shared/constants/constants';
 import { SeasonAdminService } from '../season-admin.service';
 
 @Component({

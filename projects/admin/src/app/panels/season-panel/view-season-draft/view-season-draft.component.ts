@@ -8,17 +8,17 @@ import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
 import {
   DELETE_SEASON_SUBHEADING, DUMMY_FIXTURE_TABLE_COLUMNS, LOADING_STATUS, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING
-} from '../../shared/constants/constants';
+} from '../../../shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
-import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
+import { ConfirmationBoxComponent } from '../../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BIO } from 'src/app/shared/Constants/REGEX';
-import { formsMessages } from '../../shared/constants/messages';
+import { formsMessages } from '../../../shared/constants/messages';
 
 @Component({
   selector: 'app-view-season-draft',

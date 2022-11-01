@@ -9,7 +9,7 @@ import { dummyFixture, MatchFixture, } from 'src/app/shared/interfaces/match.mod
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
 import { statusType } from 'src/app/shared/interfaces/season.model';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstantsSecondary, MatchConstants } from '../shared/constants/constants';
+import { MatchConstantsSecondary, MatchConstants } from '../../shared/constants/constants';
 
 @Injectable({
   providedIn: 'root'

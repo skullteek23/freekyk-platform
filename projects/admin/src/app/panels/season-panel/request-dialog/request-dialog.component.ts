@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UNIQUE_DELETION_REQUEST_CODE } from '../../shared/constants/constants';
+import { UNIQUE_DELETION_REQUEST_CODE } from '../../../shared/constants/constants';
 
 @Component({
   selector: 'app-request-dialog',
