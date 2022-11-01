@@ -11,31 +11,36 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ErrorComponent } from './error/error.component';
 import { MaterialModule } from '@shared/material.module';
 import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
+
+const loginRedirect = () =>
+  redirectLoggedInTo(['/']);
 
 const routes = [
-  // {
-  //   path: '',
-  //   loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
-  // },
-  // {
-  //   path: 'register',
-  //   component: SignupComponent,
-  //   ...canActivate(redirectLoggedUserTo),
-  // },
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  //   ...canActivate(redirectLoggedUserTo),
-  // },
-  // {
-  //   path: 'error',
-  //   component: ErrorComponent,
-  //   data: {
-  //     message: 'We are sorry, but the page you requested was not found!',
-  //     code: '404',
-  //   },
-  // },
-  // { path: '**', redirectTo: 'error' },
+  {
+    path: '',
+    loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
+  },
+  {
+    path: 'register',
+    component: SignupComponent,
+    ...canActivate(loginRedirect),
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    ...canActivate(loginRedirect),
+  },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    data: {
+      message: 'We are sorry, but the page you requested was not found!',
+      code: '404',
+    },
+  },
+  { path: '**', redirectTo: 'error' },
 ];
 
 @NgModule({
@@ -47,6 +52,7 @@ const routes = [
   ],
   imports: [
     CommonModule,
+    BrowserModule,
     RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     MaterialModule,
     ReactiveFormsModule,

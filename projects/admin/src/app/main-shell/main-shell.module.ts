@@ -9,7 +9,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
 import { AdminConfigPanelComponent } from './components/admin-config-panel/admin-config-panel.component';
@@ -85,7 +84,6 @@ const routes = [
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     FlexLayoutModule,
-    BrowserModule,
     BrowserAnimationsModule,
     SnackBarModule,
     RouterModule.forChild(routes)
