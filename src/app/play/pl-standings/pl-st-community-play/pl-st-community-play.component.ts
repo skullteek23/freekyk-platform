@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { CommunityLeaderboard } from 'src/app/shared/interfaces/others.model';
+import { CommunityLeaderboard } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-pl-st-community-play',

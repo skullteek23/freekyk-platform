@@ -5,11 +5,11 @@ import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap, map, take } from 'rxjs/operators';
 import { TeamCommunicationService } from 'src/app/services/team-communication.service';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import {
   ActiveSquadMember,
   MemberResponseNotification,
-} from 'src/app/shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 import { TeamState } from '../store/team.reducer';
 @Component({
   selector: 'app-da-te-communication',
@@ -31,7 +31,7 @@ export class DaTeCommunicationComponent implements OnInit, OnDestroy {
     private store: Store<{ team: TeamState }>,
     private commServ: TeamCommunicationService,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.storeSub$ = this.store.select('team').pipe(
       tap(() => {

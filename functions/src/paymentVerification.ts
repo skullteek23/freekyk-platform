@@ -1,12 +1,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { OrderBasic } from '../../src/app/shared/interfaces/order.model';
-import { SeasonBasicInfo, SeasonParticipants, } from '../../src/app/shared/interfaces/season.model';
-import { TeamBasicInfo } from '../../src/app/shared/interfaces/team.model';
+import { OrderBasic } from '@shared/interfaces/order.model';
+import { SeasonBasicInfo, SeasonParticipants, } from '@shared/interfaces/season.model';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { isFixtureAvailableAway, isFixtureAvailableHome, isFixtureAvailableHomeOrAway, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
-import { environment } from '../../src/environments/environment';
-import { MatchFixture } from '../../src/app/shared/interfaces/match.model';
-import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
+import { environment } from '../../environments/environment';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { LeagueTableModel } from '@shared/interfaces/others.model';
 
 const crypto = require('crypto');
 const db = admin.firestore();

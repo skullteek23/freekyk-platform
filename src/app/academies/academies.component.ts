@@ -3,8 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { ACADEMIES_PAGE } from '../shared/Constants/WEBSITE_CONTENT';
-import { AcadBasicInfo } from '../shared/interfaces/academy.model';
+import { ACADEMIES_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { AcadBasicInfo } from '@shared/interfaces/academy.model';
 
 @Component({
   selector: 'app-academies',
@@ -24,7 +24,7 @@ export class AcademiesComponent implements OnInit, OnDestroy {
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -71,5 +71,5 @@ export class AcademiesComponent implements OnInit, OnDestroy {
         map((resp) => resp.docs.map((doc) => doc.data() as AcadBasicInfo))
       );
   }
-  onShare(acad: AcadBasicInfo): void {}
+  onShare(acad: AcadBasicInfo): void { }
 }

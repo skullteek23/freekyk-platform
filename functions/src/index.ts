@@ -12,7 +12,7 @@ import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
 import { removeThumbnail } from './trigger_functions/removeThumbnail';
-import { environment } from '../../src/environments/environment';
+import { environment } from '../../environments/environment';
 import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 

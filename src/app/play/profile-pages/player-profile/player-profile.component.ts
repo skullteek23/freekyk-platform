@@ -3,12 +3,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
-import { Stats } from 'src/app/shared/interfaces/others.model';
+import { Stats } from '@shared/interfaces/others.model';
 import {
   BasicStats,
   PlayerBasicInfo,
   PlayerMoreInfo,
-} from 'src/app/shared/interfaces/user.model';
+} from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-player-profile',

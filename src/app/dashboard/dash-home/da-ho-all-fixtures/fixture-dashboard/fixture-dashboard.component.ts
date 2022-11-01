@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatchCardComponent } from 'src/app/shared/dialogs/match-card/match-card.component';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchCardComponent } from '@shared/dialogs/match-card/match-card.component';
+import { MatchFixture } from '@shared/interfaces/match.model';
 
 @Component({
   selector: 'app-fixture-dashboard',

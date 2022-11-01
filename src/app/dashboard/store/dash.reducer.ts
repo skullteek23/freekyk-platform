@@ -3,7 +3,7 @@ import {
   PlayerMoreInfo,
   FsBasic,
   SocialMediaLinks,
-} from 'src/app/shared/interfaces/user.model';
+} from '@shared/interfaces/user.model';
 import * as DashActions from './dash.actions';
 
 export interface DashState {

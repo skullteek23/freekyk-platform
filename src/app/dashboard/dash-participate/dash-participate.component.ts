@@ -5,12 +5,12 @@ import { Observable, Subscription } from 'rxjs';
 import { map, share, take } from 'rxjs/operators';
 import { PaymentService, PAYMENT_TYPE } from 'src/app/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { OrderBasic } from 'src/app/shared/interfaces/order.model';
-import { SeasonBasicInfo, SeasonParticipants } from 'src/app/shared/interfaces/season.model';
+import { OrderBasic } from '@shared/interfaces/order.model';
+import { SeasonBasicInfo, SeasonParticipants } from '@shared/interfaces/season.model';
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',

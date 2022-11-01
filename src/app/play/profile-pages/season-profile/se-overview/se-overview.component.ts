@@ -5,7 +5,7 @@ import { map, share } from 'rxjs/operators';
 import {
   SeasonAbout,
   SeasonParticipants,
-} from 'src/app/shared/interfaces/season.model';
+} from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-overview',
@@ -21,8 +21,8 @@ export class SeOverviewComponent implements OnInit {
   }
   @Input() venue: { city: string; state: string };
   participants$: Observable<SeasonParticipants[]>;
-  constructor(private ngFire: AngularFirestore) {}
-  ngOnInit(): void {}
+  constructor(private ngFire: AngularFirestore) { }
+  ngOnInit(): void { }
   getSeasonParticipants(sid: string): void {
     this.participants$ = this.ngFire
       .collection(`seasons/${sid}/participants`)

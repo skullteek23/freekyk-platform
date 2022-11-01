@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { dummyFixture } from 'src/app/shared/interfaces/match.model';
-import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
-import { DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants } from '../../../shared/constants/constants';
+import { dummyFixture } from '@shared/interfaces/match.model';
+import { fixtureGenerationData } from '@shared/interfaces/others.model';
+import { DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants } from '@shared/constants/constants';
 import { SeasonAdminService } from '../season-admin.service';
 
 @Component({

@@ -1,18 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminConfigPanelComponent } from '../panels/admin-config-panel/admin-config-panel.component';
-import { GroundsPanelComponent } from '../panels/grounds-panel/grounds-panel.component';
-import { MyAccountPanelComponent } from '../panels/my-account-panel/my-account-panel.component';
-import { RegistrationsPanelComponent } from '../panels/registrations-panel/registrations-panel.component';
-import { CanDeactivateGuardService } from '../shared/guards/can-deactivate-guard.service';
+import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 import { RouterModule } from '@angular/router';
 import { MainShellComponent } from './main-shell.component';
-import { CreateSeasonContainerComponent } from '../panels/season-panel/create-season-container/create-season-container.component';
-import { SeasonPanelComponent } from '../panels/season-panel/season-panel.component';
-import { ViewSeasonDraftComponent } from '../panels/season-panel/view-season-draft/view-season-draft.component';
-import { ViewSeasonsTableComponent } from '../panels/season-panel/view-seasons-table/view-seasons-table.component';
-import { SharedAdminModule } from '../shared/shared-admin.module';
-import { AppMaterialModule } from '../app-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -21,18 +11,28 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorComponent } from '../error/error.component';
-import { AddSeasonComponent } from '../panels/season-panel/add-season/add-season.component';
-import { ChipSelectionInputComponent } from '../panels/season-panel/chip-selection-input/chip-selection-input.component';
-import { CreateSeasonComponent } from '../panels/season-panel/create-season/create-season.component';
-import { FixtureTableComponent } from '../panels/season-panel/fixture-table/fixture-table.component';
-import { GenerateFixturesComponent } from '../panels/season-panel/generate-fixtures/generate-fixtures.component';
-import { LineInfoDisplayComponent } from '../panels/season-panel/line-info-display/line-info-display.component';
-import { RequestDialogComponent } from '../panels/season-panel/request-dialog/request-dialog.component';
-import { SelectGroundsComponent } from '../panels/season-panel/select-grounds/select-grounds.component';
-import { UpdateMatchReportComponent } from '../panels/season-panel/update-match-report/update-match-report.component';
-import { SnackBarModule } from 'src/app/shared/snack-bar/snack-bar.module';
+import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
 import { AdminHomeComponent } from '../admin-home/admin-home.component';
+import { AdminConfigPanelComponent } from './components/admin-config-panel/admin-config-panel.component';
+import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
+import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
+import { RegistrationsPanelComponent } from './components/registrations-panel/registrations-panel.component';
+import { AddSeasonComponent } from './components/season-panel/add-season/add-season.component';
+import { ChipSelectionInputComponent } from './components/season-panel/chip-selection-input/chip-selection-input.component';
+import { CreateSeasonContainerComponent } from './components/season-panel/create-season-container/create-season-container.component';
+import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
+import { FixtureTableComponent } from './components/season-panel/fixture-table/fixture-table.component';
+import { GenerateFixturesComponent } from './components/season-panel/generate-fixtures/generate-fixtures.component';
+import { LineInfoDisplayComponent } from './components/season-panel/line-info-display/line-info-display.component';
+import { RequestDialogComponent } from './components/season-panel/request-dialog/request-dialog.component';
+import { SeasonPanelComponent } from './components/season-panel/season-panel.component';
+import { SelectGroundsComponent } from './components/season-panel/select-grounds/select-grounds.component';
+import { UpdateMatchReportComponent } from './components/season-panel/update-match-report/update-match-report.component';
+import { ViewSeasonDraftComponent } from './components/season-panel/view-season-draft/view-season-draft.component';
+import { ViewSeasonsTableComponent } from './components/season-panel/view-seasons-table/view-seasons-table.component';
+import { SharedModule } from '@shared/shared.module';
+import { MaterialModule } from '@shared/material.module';
+import { MatchReportSummaryComponent } from './components/season-panel/match-report-summary/match-report-summary.component';
 
 const routes = [
   {
@@ -58,7 +58,6 @@ const routes = [
     AdminHomeComponent,
     SeasonPanelComponent,
     AddSeasonComponent,
-    ErrorComponent,
     GroundsPanelComponent,
     FixtureTableComponent,
     ViewSeasonsTableComponent,
@@ -71,11 +70,15 @@ const routes = [
     RequestDialogComponent,
     UpdateMatchReportComponent,
     ChipSelectionInputComponent,
+    MyAccountPanelComponent,
+    RegistrationsPanelComponent,
+    AdminConfigPanelComponent,
+    MatchReportSummaryComponent
   ],
   imports: [
     CommonModule,
-    SharedAdminModule,
-    AppMaterialModule,
+    SharedModule,
+    MaterialModule,
     ReactiveFormsModule,
     FormsModule,
     AngularFireModule,

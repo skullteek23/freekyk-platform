@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
-import { TeamMembers } from 'src/app/shared/interfaces/team.model';
+import { TeamMembers } from '@shared/interfaces/team.model';
 import { TeamState } from '../store/team.reducer';
 
 @Component({
@@ -21,7 +21,7 @@ export class DaTeMembersComponent implements OnInit, OnDestroy {
   constructor(
     private teServ: TeamService,
     private store: Store<{ team: TeamState }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.capId$ = this.store.select('team').pipe(
       map((resp) => resp.basicInfo.captainId),

@@ -6,7 +6,7 @@ import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
-import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
+import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     private ngAuth: AngularFireAuth,
     private notifServ: NotificationsService,
     private avatarServ: AccountAvatarService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.menuState = false;
     this.sidenavOpen = false;

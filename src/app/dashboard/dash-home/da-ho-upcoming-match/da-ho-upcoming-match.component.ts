@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatchCardComponent } from 'src/app/shared/dialogs/match-card/match-card.component';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchCardComponent } from '@shared/dialogs/match-card/match-card.component';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 
 @Component({

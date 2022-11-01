@@ -9,17 +9,17 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { SOCIAL_MEDIA_PRE } from 'src/app/shared/Constants/DEFAULTS';
+import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import {
   ALPHA_LINK,
   ALPHA_NUM_SPACE,
   BIO,
   QUERY,
-} from 'src/app/shared/Constants/REGEX';
+} from '@shared/Constants/REGEX';
 import {
   TeamBasicInfo,
   TeamMoreInfo,
-} from 'src/app/shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 import { TEAM_DESC_MAX_LIMIT } from '../../constants/constants';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';

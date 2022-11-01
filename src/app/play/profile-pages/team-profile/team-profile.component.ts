@@ -7,15 +7,15 @@ import { tap, map, share, take } from 'rxjs/operators';
 import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { NotificationBasic } from 'src/app/shared/interfaces/notification.model';
-import { StatsTeam } from 'src/app/shared/interfaces/others.model';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { StatsTeam } from '@shared/interfaces/others.model';
 import {
   TeamBasicInfo,
   TeamMedia,
   TeamMembers,
   TeamMoreInfo,
   TeamStats,
-} from 'src/app/shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-team-profile',

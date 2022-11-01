@@ -13,7 +13,7 @@ import {
   SeasonMedia,
   SeasonParticipants,
   SeasonStats,
-} from 'src/app/shared/interfaces/season.model';
+} from '@shared/interfaces/season.model';
 
 
 @Component({

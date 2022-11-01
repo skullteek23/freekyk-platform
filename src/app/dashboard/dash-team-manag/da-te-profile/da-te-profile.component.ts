@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { TeamService } from 'src/app/services/team.service';
-import { SocialMediaLinks } from 'src/app/shared/interfaces/user.model';
+import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { AppState } from 'src/app/store/app.reducer';
 
 @Component({

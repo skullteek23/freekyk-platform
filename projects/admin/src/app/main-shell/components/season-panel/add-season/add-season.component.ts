@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { ALPHA_NUM_SPACE, BIO } from 'src/app/shared/Constants/REGEX';
-import { PhotoUploaderComponent } from '../../../shared/components/photo-uploader/photo-uploader.component';
-import { MatchConstantsSecondary, MatchConstants } from '../../../shared/constants/constants';
-import { formsMessages } from '../../../shared/constants/messages';
+import { ALPHA_NUM_SPACE, BIO } from '@shared/Constants/REGEX';
+import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
+import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
+import { formsMessages } from '@shared/constants/messages';
 
 @Component({
   selector: 'app-add-season',

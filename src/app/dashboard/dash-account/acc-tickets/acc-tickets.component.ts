@@ -4,8 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ALPHA_W_SPACE, NUM, QUERY } from 'src/app/shared/Constants/REGEX';
-import { BasicTicket } from 'src/app/shared/interfaces/ticket.model';
+import { ALPHA_W_SPACE, NUM, QUERY } from '@shared/Constants/REGEX';
+import { BasicTicket } from '@shared/interfaces/ticket.model';
 
 @Component({
   selector: 'app-acc-tickets',

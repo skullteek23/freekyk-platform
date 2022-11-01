@@ -4,9 +4,9 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { TeamsFilters } from 'src/app/shared/Constants/FILTERS';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
+import { TeamsFilters } from '@shared/Constants/FILTERS';
+import { FilterData } from '@shared/interfaces/others.model';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-pl-teams',
@@ -26,7 +26,7 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
     private queryServ: QueryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.filterData = {
@@ -69,10 +69,10 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as TeamBasicInfo),
-              } as TeamBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as TeamBasicInfo),
+            } as TeamBasicInfo)
           )
         ),
         share()

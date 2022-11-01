@@ -4,9 +4,9 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { SeasonsFilters } from 'src/app/shared/Constants/FILTERS';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { SeasonsFilters } from '@shared/Constants/FILTERS';
+import { FilterData } from '@shared/interfaces/others.model';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
 
 @Component({

@@ -5,9 +5,9 @@ import { MatListOption } from '@angular/material/list';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { Invite } from 'src/app/shared/interfaces/notification.model';
-import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { Invite } from '@shared/interfaces/notification.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-invite-players',

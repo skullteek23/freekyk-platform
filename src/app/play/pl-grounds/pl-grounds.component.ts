@@ -4,9 +4,9 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { GroundsFilters } from 'src/app/shared/Constants/FILTERS';
-import { GroundBasicInfo } from 'src/app/shared/interfaces/ground.model';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
+import { GroundsFilters } from '@shared/Constants/FILTERS';
+import { GroundBasicInfo } from '@shared/interfaces/ground.model';
+import { FilterData } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-pl-grounds',
@@ -24,7 +24,7 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore,
     private queryServ: QueryService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'grounds',
@@ -66,10 +66,10 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as GroundBasicInfo),
-              } as GroundBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as GroundBasicInfo),
+            } as GroundBasicInfo)
           )
         )
       );

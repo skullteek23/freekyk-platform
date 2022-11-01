@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
-import { Invite, NotificationBasic } from '../../../src/app/shared/interfaces/notification.model';
-import { Tmember } from '../../../src/app/shared/interfaces/team.model';
-import { PlayerBasicInfo } from '../../../src/app/shared/interfaces/user.model';
+import { Invite, NotificationBasic } from '@shared/interfaces/notification.model';
+import { Tmember } from '@shared/interfaces/team.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
 const db = admin.firestore();
 

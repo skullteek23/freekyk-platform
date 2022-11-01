@@ -4,8 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
-import { heroCallToAction } from '../shared/interfaces/others.model';
-import { BasicTicket } from '../shared/interfaces/ticket.model';
+import { heroCallToAction } from '@shared/interfaces/others.model';
+import { BasicTicket } from '@shared/interfaces/ticket.model';
 
 @Component({
   selector: 'app-support',

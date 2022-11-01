@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  FREESTYLE_PAGE,
-  LANDING_PAGE,
-} from 'src/app/shared/Constants/WEBSITE_CONTENT';
+import { FREESTYLE_PAGE, LANDING_PAGE, } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-action-strip',

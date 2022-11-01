@@ -8,7 +8,7 @@ import { take, map, tap, filter } from 'rxjs/operators';
 import {
   NotificationBasic,
   Invite,
-} from '../shared/interfaces/notification.model';
+} from '@shared/interfaces/notification.model';
 import { SnackbarService } from './snackbar.service';
 import { InviteAcceptCardComponent } from '../dashboard/dialogs/invite-accept-card/invite-accept-card.component';
 import { SendinviteComponent } from '../dashboard/dialogs/sendinvite/sendinvite.component';

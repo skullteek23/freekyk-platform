@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { LeagueTableModel } from 'src/app/shared/interfaces/others.model';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { LeagueTableModel } from '@shared/interfaces/others.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { PlayConstants } from '../../play.constants';
 
 @Component({
@@ -53,11 +53,11 @@ export class PlStLeagueComponent implements OnInit, OnDestroy {
   setDataSource(value: LeagueTableModel[]) {
     const tableData = value
       .map((val) => ({
-          ...val,
-          p: val.w + val.d + val.l,
-          pts: 3 * val.w + val.d,
-          gd: val.gf - val.ga,
-        } as LeagueTableModel))
+        ...val,
+        p: val.w + val.d + val.l,
+        pts: 3 * val.w + val.d,
+        gd: val.gf - val.ga,
+      } as LeagueTableModel))
       .sort((a, b) => b.pts - a.pts);
     this.LeagueDataSource = tableData;
   }

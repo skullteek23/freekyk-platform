@@ -1,4 +1,4 @@
-import { ActiveSquadMember } from 'src/app/shared/interfaces/team.model';
+import { ActiveSquadMember } from '@shared/interfaces/team.model';
 import * as TeamCommActions from './teamComm.actions';
 export interface TeamCommState {
   currUpcomingMatchNo: number;

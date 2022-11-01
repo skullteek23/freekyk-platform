@@ -6,9 +6,9 @@ import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
-import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
-import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
+import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-teamjoin',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ABOUT_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
-import { profile } from 'src/app/shared/interfaces/others.model';
+import { ABOUT_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { profile } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-about',
@@ -12,7 +12,7 @@ export class AboutComponent implements OnInit {
   ankit: profile;
   aboutFreekyk: string;
   ourJourney: string;
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.prateek = ABOUT_PAGE.prateek;

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RouteLinks } from '../shared/Constants/ROUTE_LINKS';
-import { FREESTYLE_PAGE } from '../shared/Constants/WEBSITE_CONTENT';
+import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-freestyle',
@@ -27,7 +27,7 @@ export class FreestyleComponent implements OnInit, OnDestroy {
       }
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }

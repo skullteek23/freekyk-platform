@@ -4,8 +4,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { NgForm, FormGroup, FormControl, Validators, } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { GroundBasicInfo, GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
-import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
+import { GroundBasicInfo, GroundPrivateInfo } from '@shared/interfaces/ground.model';
+import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 @Component({
   selector: 'app-grounds-panel',
   templateUrl: './grounds-panel.component.html',

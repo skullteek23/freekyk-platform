@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { ProdBasicInfo } from '../shared/interfaces/product.model';
+import { ProdBasicInfo } from '@shared/interfaces/product.model';
 
 @Component({
   selector: 'app-equipment',
@@ -22,7 +22,7 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -61,10 +61,10 @@ export class EquipmentComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as ProdBasicInfo),
-              } as ProdBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as ProdBasicInfo),
+            } as ProdBasicInfo)
           )
         )
       );
@@ -72,5 +72,5 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   getDate(): Date {
     return new Date();
   }
-  onShare(prod: ProdBasicInfo): void {}
+  onShare(prod: ProdBasicInfo): void { }
 }

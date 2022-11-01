@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '../shared/Constants/DEFAULTS';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import {
   FilterHeadingMap,
   FilterSymbolMap,
   FilterValueMap,
-} from '../shared/Constants/FILTERS';
-import { QueryInfo } from '../shared/interfaces/others.model';
+} from '@shared/Constants/FILTERS';
+import { QueryInfo } from '@shared/interfaces/others.model';
 
 @Injectable({
   providedIn: 'root',

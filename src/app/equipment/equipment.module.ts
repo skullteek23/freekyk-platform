@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { EquipmentRoutingModule } from './equipment-routing.module';
 import { EquipmentComponent } from './equipment.component';
 import { ProductProfileComponent } from './profile-pages/product-profile/product-profile.component';
@@ -9,4 +9,4 @@ import { ProductProfileComponent } from './profile-pages/product-profile/product
   imports: [SharedModule, EquipmentRoutingModule],
   exports: [],
 })
-export class EquipmentModule {}
+export class EquipmentModule { }

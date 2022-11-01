@@ -4,9 +4,9 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { MatchFixture, TournamentTypes } from 'src/app/shared/interfaces/match.model';
-import { CommunityLeaderboard, FilterData, LeagueTableModel, } from 'src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { MatchFixture, TournamentTypes } from '@shared/interfaces/match.model';
+import { CommunityLeaderboard, FilterData, LeagueTableModel, } from '@shared/interfaces/others.model';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
 
 @Component({

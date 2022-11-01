@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { Invite, NotificationBasic } from '../../../src/app/shared/interfaces/notification.model';
+import { Invite, NotificationBasic } from '@shared/interfaces/notification.model';
 
 const db = admin.firestore();
 

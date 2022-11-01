@@ -4,7 +4,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { TeamMedia } from 'src/app/shared/interfaces/team.model';
+import { TeamMedia } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-te-gallery',
@@ -20,7 +20,7 @@ export class TeGalleryComponent implements OnInit, OnDestroy {
     private mediaObs: MediaObserver,
     private enServ: EnlargeService,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs

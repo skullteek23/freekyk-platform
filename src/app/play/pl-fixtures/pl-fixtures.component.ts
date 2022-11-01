@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { MatchFilters } from 'src/app/shared/Constants/FILTERS';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { MatchFilters } from '@shared/Constants/FILTERS';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { FilterData } from '@shared/interfaces/others.model';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

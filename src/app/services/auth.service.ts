@@ -4,10 +4,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { uData, logDetails } from '../shared/interfaces/others.model';
+import { uData, logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
-import { EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI } from '../shared/Constants/DEFAULTS';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI } from '@shared/Constants/DEFAULTS';
 
 @Injectable({
   providedIn: 'root',

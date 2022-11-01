@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { CanComponentDeactivate, Guard } from '../../../shared/guards/can-deactivate-guard.service';
+import { CanComponentDeactivate, Guard } from '@shared/guards/can-deactivate-guard.service';
 import { CreateSeasonComponent } from '../create-season/create-season.component';
 
 @Component({

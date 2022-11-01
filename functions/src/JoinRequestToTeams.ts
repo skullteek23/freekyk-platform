@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 const db = admin.firestore();
-import { NotificationBasic } from '../../src/app/shared/interfaces/notification.model';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 
 
 export async function joinRequests(data: { capId: string[]; name: string }, context: any): Promise<any> {

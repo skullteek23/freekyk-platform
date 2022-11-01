@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-pl-st-knockout',
   templateUrl: './pl-st-knockout.component.html',

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { SharesheetComponent } from '../shared/components/sharesheet/sharesheet.component';
-import { SharesheetmobileComponent } from '../shared/components/sharesheetmobile/sharesheetmobile.component';
-import { ShareData } from '../shared/interfaces/others.model';
+import { SharesheetComponent } from '@shared/components/sharesheet/sharesheet.component';
+import { SharesheetmobileComponent } from '@shared/components/sharesheetmobile/sharesheetmobile.component';
+import { ShareData } from '@shared/interfaces/others.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,8 @@ export class SocialShareService {
   };
 
   onShare(data?: ShareData) {
-    if (this.isMobile()) {this.OpenShareSheet(data);}
-    else {this.OpenShareDialog(data);}
+    if (this.isMobile()) { this.OpenShareSheet(data); }
+    else { this.OpenShareDialog(data); }
   }
 
   private OpenShareSheet(data: ShareData) {
@@ -37,8 +37,8 @@ export class SocialShareService {
     });
   }
   private isMobile() {
-    if (sessionStorage.desktop) {return false;}
-    else if (localStorage.mobile) {return true;}
+    if (sessionStorage.desktop) { return false; }
+    else if (localStorage.mobile) { return true; }
     const mobile = [
       'iphone',
       'ipad',
@@ -50,12 +50,12 @@ export class SocialShareService {
       'windows phone',
       'iemobile',
     ];
-    for (const i in mobile)
-      {if (
+    for (const i in mobile) {
+      if (
         navigator.userAgent.toLowerCase().indexOf(mobile[i].toLowerCase()) > 0
-      )
-        {return true;}}
+      ) { return true; }
+    }
     return false;
   }
-  constructor(private _botSheet: MatBottomSheet, private dialog: MatDialog) {}
+  constructor(private _botSheet: MatBottomSheet, private dialog: MatDialog) { }
 }

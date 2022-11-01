@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlayerService } from 'src/app/services/player.service';
-import { statsIcon } from 'src/app/shared/interfaces/others.model';
+import { statsIcon } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-da-ho-stats-card',

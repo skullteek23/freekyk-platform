@@ -3,12 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { CAPTAIN_ONLY, Tmember } from 'src/app/shared/interfaces/team.model';
+import { CAPTAIN_ONLY, Tmember } from '@shared/interfaces/team.model';
 import { TeamService } from 'src/app/services/team.service';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { TeamState } from '../../store/team.reducer';
-import { ConfirmationBoxComponent } from 'src/app/shared/dialogs/confirmation-box/confirmation-box.component';
+import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 
 @Component({
   selector: 'app-da-te-mang-players',
@@ -28,7 +28,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
     private router: Router,
     private teamServ: TeamService,
     private store: Store<{ team: TeamState }>
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid');
     this.capId$ = this.store
@@ -53,9 +53,9 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           filter((resp) => resp.basicInfo.captainId === this.uid),
           take(1),
           switchMap(() => this.dialog
-              .open(ConfirmationBoxComponent)
-              .afterClosed()
-              .pipe(filter((resp) => !!resp === true)))
+            .open(ConfirmationBoxComponent)
+            .afterClosed()
+            .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() => this.teamServ.onDeleteTeam())
     );
@@ -73,9 +73,9 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           filter((resp) => resp.basicInfo.captainId === this.uid),
           take(1),
           switchMap(() => this.dialog
-              .open(ConfirmationBoxComponent)
-              .afterClosed()
-              .pipe(filter((resp) => !!resp === true)))
+            .open(ConfirmationBoxComponent)
+            .afterClosed()
+            .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
           this.teamServ
@@ -96,9 +96,9 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           filter((resp) => resp.basicInfo.captainId != this.uid),
           take(1),
           switchMap(() => this.dialog
-              .open(ConfirmationBoxComponent)
-              .afterClosed()
-              .pipe(filter((resp) => !!resp === true)))
+            .open(ConfirmationBoxComponent)
+            .afterClosed()
+            .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
           this.teamServ.onLeaveTeam(this.membersArray).then(() => {

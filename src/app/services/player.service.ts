@@ -11,7 +11,7 @@ import {
   PlayerMoreInfo,
   BasicStats,
   FsStats,
-} from '../shared/interfaces/user.model';
+} from '@shared/interfaces/user.model';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',

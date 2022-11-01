@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { SeasonStats } from 'src/app/shared/interfaces/season.model';
+import { SeasonStats } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-stats',

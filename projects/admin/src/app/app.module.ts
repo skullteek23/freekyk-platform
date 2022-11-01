@@ -1,33 +1,27 @@
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environments/environment';
 
 import { DatePipe } from '@angular/common';
 import { REGION } from '@angular/fire/functions';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { MyAccountPanelComponent } from './panels/my-account-panel/my-account-panel.component';
-import { RegistrationsPanelComponent } from './panels/registrations-panel/registrations-panel.component';
-import { AdminConfigPanelComponent } from './panels/admin-config-panel/admin-config-panel.component';
 import { AngularFireModule } from '@angular/fire';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { AppMaterialModule } from './app-material.module';
-import { SharedAdminModule } from './shared/shared-admin.module';
+import { ErrorComponent } from './error/error.component';
+import { MaterialModule } from '@shared/material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    MyAccountPanelComponent,
-    RegistrationsPanelComponent,
-    AdminConfigPanelComponent,
+    ErrorComponent
   ],
   imports: [
     AppRoutingModule,
-    SharedAdminModule,
-    AppMaterialModule,
+    MaterialModule,
     ReactiveFormsModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase)

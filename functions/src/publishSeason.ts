@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { GroundBooking, GroundPrivateInfo } from '../../src/app/shared/interfaces/ground.model';
-import { dummyFixture, KnockoutRounds, MatchFixture } from '../../src/app/shared/interfaces/match.model';
-import { LeagueTableModel } from '../../src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
+import { GroundBooking, GroundPrivateInfo } from '@shared/interfaces/ground.model';
+import { dummyFixture, KnockoutRounds, MatchFixture } from '@shared/interfaces/match.model';
+import { LeagueTableModel } from '@shared/interfaces/others.model';
+import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '@shared/interfaces/season.model';
 import { DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 const db = admin.firestore();
 

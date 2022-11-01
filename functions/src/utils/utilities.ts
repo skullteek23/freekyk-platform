@@ -1,4 +1,4 @@
-import { MatchFixture } from "../../../src/app/shared/interfaces/match.model";
+import { MatchFixture } from '@shared/interfaces/match.model';
 
 export function sortObjectByKey(key: string, order = 'asc', isConvertNA = true): any {
   return function innerSort(a: any, b: any) {

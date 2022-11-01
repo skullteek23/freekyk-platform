@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { NotificationBasic } from 'src/app/shared/interfaces/notification.model';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 
 @Component({
   selector: 'app-da-ho-notifs',

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { NotificationBasic } from 'src/app/shared/interfaces/notification.model';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-notifications-list',

@@ -3,13 +3,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
-import { GroundBooking } from 'src/app/shared/interfaces/ground.model';
-import { dummyFixture, MatchFixture, } from 'src/app/shared/interfaces/match.model';
-import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
-import { statusType } from 'src/app/shared/interfaces/season.model';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { MatchConstantsSecondary, MatchConstants } from '../../shared/constants/constants';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { GroundBooking } from '@shared/interfaces/ground.model';
+import { dummyFixture, MatchFixture, } from '@shared/interfaces/match.model';
+import { fixtureGenerationData } from '@shared/interfaces/others.model';
+import { statusType } from '@shared/interfaces/season.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 
 @Injectable({
   providedIn: 'root'

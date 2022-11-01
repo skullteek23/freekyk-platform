@@ -1,5 +1,5 @@
-import { InjectionToken, NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { NgModule } from '@angular/core';
+import { SharedModule } from '@shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
@@ -48,8 +48,8 @@ import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LocationCitiesService } from '../services/location-cities.service';
-import { environment } from 'src/environments/environment';
-import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
+import { environment } from 'environments/environment';
+import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 import { PlayerService } from '../services/player.service';

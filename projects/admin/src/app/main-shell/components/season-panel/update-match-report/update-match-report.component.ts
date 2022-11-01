@@ -5,12 +5,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ALPHA_W_SPACE, BIO, NUM } from 'src/app/shared/Constants/REGEX';
-import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
-import { ListOption } from 'src/app/shared/interfaces/others.model';
-import { TeamMembers } from 'src/app/shared/interfaces/team.model';
-import { MatchConstants, STATISTICS } from '../../../shared/constants/constants';
-import { formsMessages, matchReportMessages } from '../../../shared/constants/messages';
+import { ALPHA_W_SPACE, BIO, NUM } from '@shared/Constants/REGEX';
+import { CloudFunctionStatsData, MatchFixture, ReportSummary } from '@shared/interfaces/match.model';
+import { ListOption } from '@shared/interfaces/others.model';
+import { TeamMembers } from '@shared/interfaces/team.model';
+import { MatchConstants, STATISTICS } from '@shared/constants/constants';
+import { formsMessages, matchReportMessages } from '@shared/constants/messages';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
 

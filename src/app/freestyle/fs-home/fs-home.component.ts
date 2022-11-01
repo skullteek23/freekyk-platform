@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FREESTYLE_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
+import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-fs-home',
@@ -12,6 +12,6 @@ export class FsHomeComponent implements OnInit {
   readonly contests = FREESTYLE_PAGE.contests;
   readonly whyChooseContent = FREESTYLE_PAGE.whyChooseFreestyle;
   readonly communityNumbers = FREESTYLE_PAGE.communityNumbers;
-  constructor() {}
-  ngOnInit(): void {}
+  constructor() { }
+  ngOnInit(): void { }
 }

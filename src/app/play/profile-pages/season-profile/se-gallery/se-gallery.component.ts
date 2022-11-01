@@ -4,7 +4,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { SeasonMedia } from 'src/app/shared/interfaces/season.model';
+import { SeasonMedia } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-gallery',
@@ -20,7 +20,7 @@ export class SeGalleryComponent implements OnInit, OnDestroy {
     private mediaObs: MediaObserver,
     private enServ: EnlargeService,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs

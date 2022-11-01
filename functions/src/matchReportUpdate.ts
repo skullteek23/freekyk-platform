@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { MatchDayReport, MatchFixture, MatchReportFormData } from '../../src/app/shared/interfaces/match.model';
-import { LeagueTableModel, ListOption } from '../../src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo, SeasonDraft } from '../../src/app/shared/interfaces/season.model';
+import { MatchDayReport, MatchFixture, MatchReportFormData } from '@shared/interfaces/match.model';
+import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
+import { SeasonBasicInfo, SeasonDraft } from '@shared/interfaces/season.model';
 import { FKC_ROUND_MULTIPLIER, isFixtureAvailableHome, isFixtureAvailableHomeOrAway } from './utils/utilities';
 const db = admin.firestore();
 

@@ -3,7 +3,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { MemberResponseNotification } from 'src/app/shared/interfaces/team.model';
+import { MemberResponseNotification } from '@shared/interfaces/team.model';
 import { TeamCommState } from '../store/teamComm.reducer';
 
 @Component({

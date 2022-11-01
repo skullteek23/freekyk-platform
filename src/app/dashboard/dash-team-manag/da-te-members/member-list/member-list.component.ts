@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
-import { TeamMemberListFilter } from 'src/app/shared/Constants/FILTERS';
-import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
-import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
-import { Tmember } from 'src/app/shared/interfaces/team.model';
-import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
+import { TeamMemberListFilter } from '@shared/Constants/FILTERS';
+import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
+import { FilterData, QueryInfo } from '@shared/interfaces/others.model';
+import { Tmember } from '@shared/interfaces/team.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-member-list',
@@ -19,7 +19,7 @@ export class MemberListComponent implements OnInit {
   @Input() capId: string;
   filterData: FilterData;
   term: string = null;
-  constructor(private dialog: MatDialog, private ngFire: AngularFirestore) {}
+  constructor(private dialog: MatDialog, private ngFire: AngularFirestore) { }
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: '',
@@ -33,9 +33,9 @@ export class MemberListComponent implements OnInit {
       .get()
       .pipe(
         map((resp) => ({
-            id: pid,
-            ...(resp.data() as PlayerBasicInfo),
-          } as PlayerBasicInfo))
+          id: pid,
+          ...(resp.data() as PlayerBasicInfo),
+        } as PlayerBasicInfo))
       )
       .toPromise();
     const dialogRef = this.dialog.open(PlayerCardComponent, {

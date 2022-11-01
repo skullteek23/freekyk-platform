@@ -1,7 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { SnackBarComponent } from '../shared/snack-bar/snack-bar.component';
+import { SnackBarComponent } from '@shared/modules/snack-bar/snack-bar.component';
 
 const SNACKBAR_AUTO_HIDE = 5000; // time in milliseconds
 const SNACKBAR_HORIZONTAL_POSITION = 'center'; // time in milliseconds

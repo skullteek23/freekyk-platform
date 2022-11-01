@@ -15,11 +15,23 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@admin/*": [
+        "projects/admin/src/app/*"
+      ],
+      "@shared/*": [
+        "shared/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "fullTemplateTypeCheck": true,
-    "preserveWhitespaces": true,"strictTemplates":true
+    "preserveWhitespaces": true,
+    "strictTemplates": true
   }
 }

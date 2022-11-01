@@ -15,15 +15,15 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
-import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
+import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import {
   DEFAULT_TEAM_LOGO,
   DEFAULT_TEAM_PHOTO,
-} from 'src/app/shared/Constants/DEFAULTS';
-import { ALPHA_NUM_SPACE } from 'src/app/shared/Constants/REGEX';
-import { Invite } from '../../../shared/interfaces/notification.model';
-import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
+} from '@shared/Constants/DEFAULTS';
+import { ALPHA_NUM_SPACE } from '@shared/Constants/REGEX';
+import { Invite } from '@shared/interfaces/notification.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-teamcreate',

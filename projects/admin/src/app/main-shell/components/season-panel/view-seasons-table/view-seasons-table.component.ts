@@ -3,8 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SeasonDraft, statusType } from 'src/app/shared/interfaces/season.model';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { SeasonDraft, statusType } from '@shared/interfaces/season.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAdminService } from '../season-admin.service';
 
 @Component({

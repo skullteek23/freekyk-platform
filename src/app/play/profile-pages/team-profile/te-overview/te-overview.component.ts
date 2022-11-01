@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TeamMoreInfo } from 'src/app/shared/interfaces/team.model';
+import { TeamMoreInfo } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-te-overview',
@@ -10,9 +10,9 @@ import { TeamMoreInfo } from 'src/app/shared/interfaces/team.model';
 export class TeOverviewComponent implements OnInit {
   @Input() data: TeamMoreInfo;
   @Input() loc: { city: string; state: string };
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onRedirectSocialMedia(loc: string): void {
     if (loc != null) {
       window.location.href = loc;

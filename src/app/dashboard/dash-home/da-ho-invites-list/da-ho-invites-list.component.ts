@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { Invite } from 'src/app/shared/interfaces/notification.model';
+import { Invite } from '@shared/interfaces/notification.model';
 
 @Component({
   selector: 'app-da-ho-invites-list',
@@ -14,7 +14,7 @@ export class DaHoInvitesListComponent implements OnInit {
   constructor(private notifServ: NotificationsService) {
     this.getInvites();
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   getInvites(): void {
     this.emptyInvites$ = this.notifServ.emptyInvites;
     const uid = localStorage.getItem('uid');

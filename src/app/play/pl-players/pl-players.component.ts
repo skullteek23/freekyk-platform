@@ -8,10 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { PlayersFilters } from 'src/app/shared/Constants/FILTERS';
-import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
+import { PlayersFilters } from '@shared/Constants/FILTERS';
+import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
+import { FilterData } from '@shared/interfaces/others.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-pl-players',
@@ -32,7 +32,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
     private queryServ: QueryService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -66,10 +66,10 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as PlayerBasicInfo),
-              } as PlayerBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as PlayerBasicInfo),
+            } as PlayerBasicInfo)
           )
         ),
         share()

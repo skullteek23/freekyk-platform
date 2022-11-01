@@ -2,7 +2,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Component, ElementRef, Input, Output, ViewChild } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Subject } from 'rxjs';
-import { ListOption } from 'src/app/shared/interfaces/others.model';
+import { ListOption } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-chip-selection-input',

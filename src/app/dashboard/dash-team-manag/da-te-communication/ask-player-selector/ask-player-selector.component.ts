@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TeamCommunicationService } from 'src/app/services/team-communication.service';
-import { Tmember } from 'src/app/shared/interfaces/team.model';
+import { Tmember } from '@shared/interfaces/team.model';
 import { TeamState } from '../../store/team.reducer';
 import { TeamCommState } from '../store/teamComm.reducer';
 

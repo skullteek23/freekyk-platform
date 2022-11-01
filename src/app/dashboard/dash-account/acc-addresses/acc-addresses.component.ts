@@ -11,7 +11,7 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { userAddress } from 'src/app/shared/interfaces/others.model';
+import { userAddress } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-acc-addresses',

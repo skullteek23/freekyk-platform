@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { TeamService } from 'src/app/services/team.service';
-import { Invite } from 'src/app/shared/interfaces/notification.model';
+import { Invite } from '@shared/interfaces/notification.model';
 
 @Component({
   selector: 'app-da-te-join-requests',
@@ -14,7 +14,7 @@ export class DaTeJoinRequestsComponent implements OnInit {
   constructor(
     private teamServ: TeamService,
     private notifServ: NotificationsService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.getInvitesForTeam();
   }

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { TeamService } from 'src/app/services/team.service';
-import { statsIcon } from 'src/app/shared/interfaces/others.model';
+import { statsIcon } from '@shared/interfaces/others.model';
 import { AppState } from 'src/app/store/app.reducer';
 
 @Component({

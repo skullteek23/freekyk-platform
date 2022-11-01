@@ -9,7 +9,7 @@ import {
   URL_CITIES,
   API_TOKEN,
   USER_EMAIL,
-} from '../shared/Constants/UNIVERSAL_TUTORIAL';
+} from '@shared/Constants/UNIVERSAL_TUTORIAL';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +35,11 @@ export class LocationCitiesService implements OnDestroy {
   getCountry(): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_COUNTRIES, {
-          headers: {
-            Authorization: `Bearer ${res.auth_token}`,
-            Accept: 'application/json',
-          },
-        })),
+        headers: {
+          Authorization: `Bearer ${res.auth_token}`,
+          Accept: 'application/json',
+        },
+      })),
       map((resp) =>
         (Object.values(resp) as Array<{}>).map((val: any) => val.country_name)
       )
@@ -48,11 +48,11 @@ export class LocationCitiesService implements OnDestroy {
   getStateByCountry(country: string = 'India'): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_STATES + country, {
-          headers: {
-            Authorization: `Bearer ${res.auth_token}`,
-            Accept: 'application/json',
-          },
-        })),
+        headers: {
+          Authorization: `Bearer ${res.auth_token}`,
+          Accept: 'application/json',
+        },
+      })),
       map((resp) =>
         (Object.values(resp) as Array<{}>).map((val: any) => val.state_name)
       )
@@ -61,11 +61,11 @@ export class LocationCitiesService implements OnDestroy {
   getCityByState(state: string): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_CITIES + state, {
-          headers: {
-            Authorization: `Bearer ${res.auth_token}`,
-            Accept: 'application/json',
-          },
-        })),
+        headers: {
+          Authorization: `Bearer ${res.auth_token}`,
+          Accept: 'application/json',
+        },
+      })),
       map((resp) =>
         (Object.values(resp) as Array<{}>).map((val: any) => val.city_name)
       )

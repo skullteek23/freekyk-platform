@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { SocialMediaLinks } from 'src/app/shared/interfaces/user.model';
+import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';

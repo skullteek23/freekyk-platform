@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
-import { RouteLinks } from 'src/app/shared/Constants/ROUTE_LINKS';
+import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 @Component({
   selector: 'app-dash-account',
   templateUrl: './dash-account.component.html',
@@ -24,7 +24,7 @@ export class DashAccountComponent implements OnInit, OnDestroy {
       }
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }

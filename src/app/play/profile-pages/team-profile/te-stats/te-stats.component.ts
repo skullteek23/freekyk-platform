@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { StatsTeam } from 'src/app/shared/interfaces/others.model';
+import { StatsTeam } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-te-stats',
@@ -26,7 +26,7 @@ export class TeStatsComponent implements OnInit, OnDestroy {
     'Goals Conceded',
   ];
   gutter = '0';
-  constructor(private mediaObs: MediaObserver) {}
+  constructor(private mediaObs: MediaObserver) { }
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs

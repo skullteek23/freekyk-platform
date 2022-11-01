@@ -3,9 +3,9 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../dashboard/constants/constants';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
-import { UNIVERSAL_OPTIONS, RazorPayAPI } from '../shared/Constants/RAZORPAY';
-import { SeasonBasicInfo } from '../shared/interfaces/season.model';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { UNIVERSAL_OPTIONS, RazorPayAPI } from '@shared/Constants/RAZORPAY';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 

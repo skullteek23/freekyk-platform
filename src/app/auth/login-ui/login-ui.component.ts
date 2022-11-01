@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { logDetails } from 'src/app/shared/interfaces/others.model';
+import { logDetails } from '@shared/interfaces/others.model';
 import {
   EMAIL,
   ALPHA_W_SPACE,
   PASS_STRONG,
-} from '../../shared/Constants/REGEX';
+} from '@shared/Constants/REGEX';
 @Component({
   selector: 'app-login-ui',
   templateUrl: './login-ui.component.html',

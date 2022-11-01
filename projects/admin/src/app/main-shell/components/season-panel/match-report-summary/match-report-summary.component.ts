@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ReportData } from 'src/app/shared/interfaces/match.model';
+import { ReportData } from '@shared/interfaces/match.model';
 
 @Component({
   selector: 'app-match-report-summary',

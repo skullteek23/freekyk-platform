@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LANDING_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
+import { LANDING_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-landing-page',
@@ -16,7 +16,7 @@ export class LandingPageComponent implements OnInit {
   readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   readonly sliderContent = LANDING_PAGE.communityMedia;
   responsiveSize;
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.onResizeSlider();

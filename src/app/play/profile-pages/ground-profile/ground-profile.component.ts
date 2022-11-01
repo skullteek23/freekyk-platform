@@ -7,7 +7,7 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
 import {
   GroundBasicInfo,
   GroundMoreInfo,
-} from 'src/app/shared/interfaces/ground.model';
+} from '@shared/interfaces/ground.model';
 
 @Component({
   selector: 'app-ground-profile',
@@ -27,7 +27,7 @@ export class GroundProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private enlServ: EnlargeService,
     private router: Router
-  ) {}
+  ) { }
   ngOnInit(): void {
     const GroundId = this.route.snapshot.params.groundid;
     this.getGroundInfo(GroundId);

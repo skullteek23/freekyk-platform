@@ -7,7 +7,7 @@ import {
   Tmember,
   ActiveSquadMember,
   MemberResponseNotification,
-} from '../shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 import { SnackbarService } from './snackbar.service';
 import { TeamState } from '../dashboard/dash-team-manag/store/team.reducer';
 import { TeamCommState } from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.reducer';

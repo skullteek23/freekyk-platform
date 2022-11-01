@@ -5,18 +5,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UpdateInfoComponent } from 'src/app/shared/components/update-info/update-info.component';
-import { positionGroup } from 'src/app/shared/interfaces/others.model';
-import { FsProfileVideos, PlayerMoreInfo, SocialMediaLinks, } from 'src/app/shared/interfaces/user.model';
+import { UpdateInfoComponent } from '@shared/components/update-info/update-info.component';
+import { positionGroup } from '@shared/interfaces/others.model';
+import { FsProfileVideos, PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
-import { ALPHA_W_SPACE, ALPHA_NUM_SPACE, BIO, YOUTUBE_REGEX, ALPHA_LINK, } from 'src/app/shared/Constants/REGEX';
-import { PLAYING_POSITIONS } from 'src/app/shared/Constants/PLAYING_POSITIONS';
+import { ALPHA_W_SPACE, ALPHA_NUM_SPACE, BIO, YOUTUBE_REGEX, ALPHA_LINK, } from '@shared/Constants/REGEX';
+import { PLAYING_POSITIONS } from '@shared/Constants/PLAYING_POSITIONS';
 import { LocationCitiesService } from 'src/app/services/location-cities.service';
 import { MatSelectChange } from '@angular/material/select';
 import { BIO_MAX_LIMIT } from '../../constants/constants';
 import { map } from 'rxjs/operators';
 import { DeactivateAccountComponent } from '../../dialogs/deactivate-account/deactivate-account.component';
-import { SOCIAL_MEDIA_PRE } from 'src/app/shared/Constants/DEFAULTS';
+import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-acc-profile',

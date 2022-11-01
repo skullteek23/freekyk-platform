@@ -3,19 +3,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import { AppState } from 'src/app/store/app.reducer';
 import { Observable, Subscription } from 'rxjs';
-import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
+import { FilterData, QueryInfo } from '@shared/interfaces/others.model';
 import {
   FilterHeadingMap,
   FilterSymbolMap,
   FilterValueMap,
   MatchFilters,
-} from 'src/app/shared/Constants/FILTERS';
+} from '@shared/Constants/FILTERS';
 import { QueryService } from 'src/app/services/query.service';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from 'src/app/shared/Constants/DEFAULTS';
-import { ArraySorting } from 'src/app/shared/utils/array-sorting';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
+import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
@@ -101,19 +101,19 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     this.myFixtures$ = this.store.select('dash').pipe(
       map((resp) => (resp.hasTeam ? resp.hasTeam.name : null)),
       switchMap((teamName) => this.ngFire
-          .collection('allMatches', (query) =>
-            query
-              .where('teams', 'array-contains', teamName)
-              .where('concluded', '==', false)
-              .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
-          )
-          .get()
-          .pipe(
-            tap((resp) => (this.tabGroup.selectedIndex = resp.empty ? 1 : 0)),
-            map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-            map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
-            tap(() => (this.isListLoading = false))
-          ))
+        .collection('allMatches', (query) =>
+          query
+            .where('teams', 'array-contains', teamName)
+            .where('concluded', '==', false)
+            .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+        )
+        .get()
+        .pipe(
+          tap((resp) => (this.tabGroup.selectedIndex = resp.empty ? 1 : 0)),
+          map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
+          map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
+          tap(() => (this.isListLoading = false))
+        ))
     );
   }
   getAllFixtures(): void {

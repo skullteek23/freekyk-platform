@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { TeamMedia } from 'src/app/shared/interfaces/team.model';
+import { TeamMedia } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-teamgallery',

@@ -6,19 +6,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { map, take, tap } from 'rxjs/operators';
-import { MatchFixture } from '../shared/interfaces/match.model';
-import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '../shared/interfaces/team.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '@shared/interfaces/team.model';
 import { SnackbarService } from './snackbar.service';
 import { TeamsettingsComponent } from '../dashboard/dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from '../dashboard/dialogs/teamcreate/teamcreate.component';
-import { Invite } from '../shared/interfaces/notification.model';
-import { TeamCommsMobileComponent } from '../shared/components/team-comms-mobile/team-comms-mobile.component';
+import { Invite } from '@shared/interfaces/notification.model';
+import { TeamCommsMobileComponent } from '@shared/components/team-comms-mobile/team-comms-mobile.component';
 import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { DashState } from '../dashboard/store/dash.reducer';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '../shared/Constants/DEFAULTS';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
