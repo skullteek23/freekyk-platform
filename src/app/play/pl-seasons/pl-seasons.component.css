@@ -43,6 +43,13 @@
   padding: 0px 16px;
 }
 
+.text-container {
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media only screen and (max-width: 1279px) {
   .box-image {
     max-height: 70%;

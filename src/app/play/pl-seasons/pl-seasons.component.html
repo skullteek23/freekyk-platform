@@ -31,11 +31,11 @@
           <img [routerLink]="['/s', season.name]" class="box-image" [src]="season.imgpath" [alt]="season.name" />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/s', season.name]" fxLayout="column" fxLayoutAlign="center start">
-              <span class="mat-body-1 left">
-                {{ season.name | textShorten: 50 }}
+              <span matTooltip="{{season.name}}" class="mat-body-1 left text-container">
+                {{ season.name }}
               </span>
-              <span class="mat-caption left">
-                {{ season.locCity + ", " + season.locState | textShorten: 50 }}
+              <span matTooltip="{{season.locCity + ', '  + season.locState}}" class="mat-caption left text-container">
+                {{ season.locCity + ", " + season.locState }}
               </span>
             </div>
             <button disabled mat-icon-button color="primary">

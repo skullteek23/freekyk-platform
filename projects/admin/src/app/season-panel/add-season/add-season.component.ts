@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { ALPHA_NUM_SPACE, BIO } from 'src/app/shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
@@ -14,6 +14,9 @@ import { FormsMessages } from '../../shared/constants/messages';
 export class AddSeasonComponent implements OnInit {
 
   readonly seasonImageUrl: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
+  readonly descriptionLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
+  readonly rulesLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
+
 
   cities = ['Ghaziabad'];
   currentDateTemp1 = new Date();
@@ -58,8 +61,8 @@ export class AddSeasonComponent implements OnInit {
       name: new FormControl(null, [Validators.required, Validators.pattern(ALPHA_NUM_SPACE), Validators.maxLength(50)]),
       city: new FormControl(null, [Validators.required]),
       state: new FormControl(null, [Validators.required]),
-      description: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(200)]),
-      rules: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(500)]),
+      description: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
+      rules: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
       startDate: new FormControl(this.minDate, [Validators.required]),
       fees: new FormControl(0, [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
@@ -82,5 +85,13 @@ export class AddSeasonComponent implements OnInit {
     if (event.value > 2) {
       this.tourTypesFiltered.push('FPL');
     }
+  }
+
+  get description(): AbstractControl {
+    return this.seasonForm.get('description');
+  }
+
+  get rules(): AbstractControl {
+    return this.seasonForm.get('rules');
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -37,17 +37,20 @@ export class IStatHolderEntityGeneric {
 })
 export class UpdateMatchReportComponent implements OnInit {
 
-  fixture: MatchFixture;
-  isLoaderShown = false;
-  isViewSummary = false;
-  matchReportForm: FormGroup;
-  homeTeamPlayersList: ListOption[] = [];
+  readonly messages = MatchReportMessages;
+
+  AWAY_TEAM = '';
   awayTeamPlayersList: ListOption[] = [];
-  scorersList: ListOption[] = [];
-  reportSummary: ReportSummary;
-  updateStats: CloudFunctionStatsData;
+  fixture: MatchFixture;
   formMessages = FormsMessages;
-  messages = MatchReportMessages;
+  HOME_TEAM = '';
+  homeTeamPlayersList: ListOption[] = [];
+  isLoaderShown = false;
+  isShowSummary = false;
+  matchReportForm: FormGroup;
+  reportSummary: ReportSummary;
+  scorersList: ListOption[] = [];
+  updateStats: CloudFunctionStatsData;
 
   @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
   @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
@@ -70,8 +73,8 @@ export class UpdateMatchReportComponent implements OnInit {
       homeScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
       awayScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
       penalties: new FormControl(0),
-      homePenScore: new FormControl(0, Validators.pattern(NUM)),
-      awayPenScore: new FormControl(0, Validators.pattern(NUM)),
+      homePenScore: new FormControl(null, [Validators.pattern(NUM), Validators.min(1), this.isHomeEqualScoreValidator.bind(this)]),
+      awayPenScore: new FormControl(null, [Validators.pattern(NUM), Validators.min(1), this.isAwayEqualScoreValidator.bind(this)]),
       scorersHome: new FormArray([]),
       scorersAway: new FormArray([]),
       scorersGoalsHome: new FormArray([]),
@@ -80,7 +83,7 @@ export class UpdateMatchReportComponent implements OnInit {
       redCardHoldersAway: new FormArray([]),
       yellowCardHoldersHome: new FormArray([]),
       yellowCardHoldersAway: new FormArray([]),
-      billsFile: new FormControl(null, [Validators.required]),
+      billsFile: new FormControl(null),
       matchReportFile: new FormControl(null, [Validators.required]),
       moneySpent: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
       referee: new FormControl(null, [Validators.required, Validators.pattern(ALPHA_W_SPACE)]),
@@ -93,6 +96,8 @@ export class UpdateMatchReportComponent implements OnInit {
     this.ngFire.collection('allMatches').doc(this.data).get().pipe(map(resp => resp.data() as MatchFixture)).subscribe(data => {
       if (data && data.date < new Date().getTime() && data.concluded === false) {
         this.fixture = data;
+        this.HOME_TEAM = this.fixture?.home?.name;
+        this.AWAY_TEAM = this.fixture?.away?.name;
         this.getInvolvedPlayersList();
       } else if (data && data.concluded === true) {
         this.isLoaderShown = false;
@@ -104,6 +109,22 @@ export class UpdateMatchReportComponent implements OnInit {
         this.onCloseDialog();
       }
     })
+  }
+
+  isAwayEqualScoreValidator(control: AbstractControl): ValidationErrors {
+    if (control.value === this.homePenScore?.value) {
+      return { notEqual: true };
+    }
+    this.homePenScore?.markAsUntouched();
+    return null;
+  }
+
+  isHomeEqualScoreValidator(control: AbstractControl): ValidationErrors {
+    if (control.value === this.awayPenScore?.value) {
+      return { notEqual: true };
+    }
+    this.awayPenScore?.markAsUntouched();
+    return null;
   }
 
   async getInvolvedPlayersList() {
@@ -180,14 +201,14 @@ export class UpdateMatchReportComponent implements OnInit {
       this.matchReportForm.markAllAsTouched();
       return;
     }
-    this.isViewSummary = true;
+    this.isShowSummary = true;
     this.assignSummary();
   }
 
   onSubmitMatchReport() {
     // on submit details
-    this.isLoaderShown = true;
     if (this.matchReportForm.valid) {
+      this.isLoaderShown = true;
       const fixture: MatchFixture = {
         ...this.fixture,
         id: this.data
@@ -198,7 +219,10 @@ export class UpdateMatchReportComponent implements OnInit {
           this.isLoaderShown = false;
           this.onCloseDialog();
         })
-        .catch(() => this.snackbarService.displayError('Unable to update match'));
+        .catch(() => {
+          this.isLoaderShown = false;
+          this.snackbarService.displayError('Unable to update match');
+        });
     }
   }
 
@@ -349,29 +373,28 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   get homePenScore(): AbstractControl {
-    return this.matchReportForm.get('homePenScore');
+    return this.matchReportForm?.get('homePenScore');
   }
 
   get awayPenScore(): AbstractControl {
-    return this.matchReportForm.get('awayPenScore');
+    return this.matchReportForm?.get('awayPenScore');
   }
 
   get penalties(): AbstractControl {
-    return this.matchReportForm.get('penalties');
+    return this.matchReportForm?.get('penalties');
   }
 
   get referee(): AbstractControl {
-    return this.matchReportForm.get('referee');
+    return this.matchReportForm?.get('referee');
   }
 
   get billsFile(): AbstractControl {
-    return this.matchReportForm.get('billsFile');
+    return this.matchReportForm?.get('billsFile');
   }
 
   get matchReportFile(): AbstractControl {
-    return this.matchReportForm.get('matchReportFile');
+    return this.matchReportForm?.get('matchReportFile');
   }
-
 
   get chipSelectionListHome() {
     return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : []
@@ -382,19 +405,19 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   get redCardHoldersAway(): FormArray {
-    return this.matchReportForm.get('redCardHoldersAway') as FormArray;
+    return this.matchReportForm?.get('redCardHoldersAway') as FormArray;
   }
 
   get yellowCardHoldersAway(): FormArray {
-    return this.matchReportForm.get('yellowCardHoldersAway') as FormArray;
+    return this.matchReportForm?.get('yellowCardHoldersAway') as FormArray;
   }
 
   get redCardHoldersHome(): FormArray {
-    return this.matchReportForm.get('redCardHoldersHome') as FormArray;
+    return this.matchReportForm?.get('redCardHoldersHome') as FormArray;
   }
 
   get yellowCardHoldersHome(): FormArray {
-    return this.matchReportForm.get('yellowCardHoldersHome') as FormArray;
+    return this.matchReportForm?.get('yellowCardHoldersHome') as FormArray;
   }
 
   get matchDayPlayersList(): ListOption[] {
@@ -409,6 +432,9 @@ export class UpdateMatchReportComponent implements OnInit {
       return true;
     } else if (this.matchReportForm.invalid) {
       return true;
+    } else if (this.penalties?.value === 1 && this.awayPenScore?.value === this.homePenScore?.value) {
+      return true;
     }
+    return false;
   }
 }

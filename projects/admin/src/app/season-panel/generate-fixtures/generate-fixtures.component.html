@@ -4,5 +4,5 @@
       [content]="(i === 2 || i === 4) ? (line.content | date: 'fullDate') : line.content">
     </app-line-info-display>
   </ng-container>
-  <app-fixture-table [data]="fixturesList"></app-fixture-table>
+  <app-fixture-table [data]="fixturesList" [displayedCols]="cols"></app-fixture-table>
 </form>

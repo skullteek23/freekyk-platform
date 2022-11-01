@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
 import { fixtureGenerationData } from 'src/app/shared/interfaces/others.model';
-import { MatchConstants } from '../../shared/constants/constants';
+import { DUMMY_FIXTURE_TABLE_COLUMNS, MatchConstants } from '../../shared/constants/constants';
 import { SeasonAdminService } from '../season-admin.service';
 
 @Component({
@@ -12,9 +12,17 @@ import { SeasonAdminService } from '../season-admin.service';
 })
 export class GenerateFixturesComponent implements OnInit {
 
+  cols = [
+    DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
+    DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
+    DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
+    DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
+    DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
+    DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
+  ]
+  lines = [];
   fixturesForm = new FormGroup({});
   fixturesList: dummyFixture[] = [];
-  lines = [];
 
   @Input() set data(value: any) {
     if (!value || !value.hasOwnProperty('season') || !value.hasOwnProperty('grounds')) {

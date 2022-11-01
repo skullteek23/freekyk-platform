@@ -874,11 +874,11 @@ app-fixture-table {
 }
 
 .season-page-container .fixture-table-container .mat-column-home {
-  width: 6%;
+  width: 7%;
 }
 
 .season-page-container .fixture-table-container .mat-column-away {
-  width: 6%;
+  width: 7%;
 }
 
 .season-page-container .fixture-table-container .mat-column-date {

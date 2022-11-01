@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { dummyFixture } from 'src/app/shared/interfaces/match.model';
@@ -10,7 +10,7 @@ import { DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, DUMMY_FIXTURE_TABLE_COLUMNS, Match
   templateUrl: './fixture-table.component.html',
   styleUrls: ['./fixture-table.component.css']
 })
-export class FixtureTableComponent implements OnInit {
+export class FixtureTableComponent {
 
   @Input() set data(value: dummyFixture[]) {
     const currentDate = new Date().getTime();
@@ -23,7 +23,8 @@ export class FixtureTableComponent implements OnInit {
         [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
         [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.stadium,
         occurred: currentDate > val.date,
-        concluded: val.concluded
+        concluded: val.concluded,
+        action: val.concluded ? 'Submitted' : 'Update Match'
       }
     }, this);
     dummyFixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
@@ -34,9 +35,7 @@ export class FixtureTableComponent implements OnInit {
     }
   }
 
-  @Input() set actions(value: boolean) {
-    this.setDisplayColumns(value);
-  }
+  @Input() displayedCols: string[] = [];
 
   @Output() actionTrigger = new Subject<any>();
 
@@ -44,38 +43,8 @@ export class FixtureTableComponent implements OnInit {
   readonly TABLE_COLUMNS = DUMMY_FIXTURE_TABLE_COLUMNS;
   readonly TBD = MatchConstantsSecondary.TO_BE_DECIDED;
 
-  displayedColumns = [];
   dataSource = new MatTableDataSource<any>([]);
   tableLength = 0;
-
-  constructor() {
-    this.setDisplayColumns(false);
-  }
-
-  ngOnInit(): void { }
-
-  setDisplayColumns(onIncludeActionCol = false) {
-    if (onIncludeActionCol) {
-      this.displayedColumns = [
-        DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
-        DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
-        DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
-        DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
-        DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
-        DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
-        'actions'
-      ]
-    } else {
-      this.displayedColumns = [
-        DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
-        DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
-        DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
-        DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
-        DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
-        DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
-      ];
-    }
-  }
 
   onTriggerAction(data: any) {
     if (data.occurred && !data.concluded) {

@@ -7,6 +7,7 @@ export const SeasonsFilters: {} = {
     'Freekyk Knockout Championship',
     'Freekyk Premier League',
   ],
+  Status: ['Live', 'Finished']
 };
 export const PlayersFilters = {
   Gender: ['Male', 'Female'],
@@ -24,7 +25,7 @@ export const MatchFilters = {
     'Freekyk Knockout Championship',
     'Freekyk Premier League',
   ],
-  Season: [],
+  Season: []
 };
 export const StandingsFilters = {
   Season: [],
@@ -50,6 +51,7 @@ export const FilterHeadingMap = {
   'Age Group': 'tageCat',
   'Tournament Type': 'type',
   Season: 'season',
+  Status: 'status',
   Owner: 'own_type',
   'Field Type': 'fieldType',
   'Playing Position': 'pl_pos',
@@ -65,6 +67,8 @@ export const FilterValueMap = {
   Freekyk: 'FK',
   Public: 'PUBLIC',
   Private: 'PRIVATE',
+  Live: 'PUBLISHED',
+  Finished: 'FINISHED',
   'Soft Ground': 'SG',
   'Futsal Ground': 'FG',
   'Hard Ground': 'HG',

@@ -30,7 +30,7 @@
     fxLayoutAlign="center stretch" fxLayoutGap="16px">
     <mat-card fxLayoutAlign="space-between center" fxLayoutGap="16px">
       <mat-form-field appearance="outline">
-        <mat-label>Home Team's Final Score</mat-label>
+        <mat-label>{{HOME_TEAM}}'s Final Score</mat-label>
         <input matInput [min]="0" type="number" formControlName="homeScore">
         <mat-error *ngIf="homeScore.hasError('required')">
           {{formMessages.error.requiredField}}
@@ -40,7 +40,7 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Away Team's Final Score</mat-label>
+        <mat-label>{{AWAY_TEAM}}'s Final Score</mat-label>
         <input matInput [min]="0" type="number" formControlName="awayScore">
         <mat-error *ngIf="awayScore.hasError('required')">
           {{formMessages.error.requiredField}}
@@ -63,12 +63,16 @@
       </div>
       <div class="radio-buttons" *ngIf="penalties?.value === 1" fxLayoutAlign="space-between center" fxLayoutGap="16px">
         <mat-form-field appearance="outline">
-          <mat-label>Home Team's Penalty Score</mat-label>
+          <mat-label>{{HOME_TEAM}}'s Penalty Score</mat-label>
           <input matInput [min]="0" type="number" formControlName="homePenScore">
+          <mat-error *ngIf="homePenScore?.hasError('min')">{{messages.error.minPenaltyScore}}</mat-error>
+          <mat-error *ngIf="homePenScore?.hasError('notEqual')">{{messages.error.penaltySameScore}}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Away Team's Penalty Score</mat-label>
+          <mat-label>{{AWAY_TEAM}}'s Penalty Score</mat-label>
           <input matInput [min]="0" type="number" formControlName="awayPenScore">
+          <mat-error *ngIf="awayPenScore?.hasError('min')">{{messages.error.minPenaltyScore}}</mat-error>
+          <mat-error *ngIf="awayPenScore?.hasError('notEqual')">{{messages.error.penaltySameScore}}</mat-error>
         </mat-form-field>
       </div>
     </mat-card>
@@ -76,7 +80,7 @@
     <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
       <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
         <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
-        <app-chip-selection-input [max]="totalGoals" #scorerSelectionHome label="Select Home Goal Scorers"
+        <app-chip-selection-input [max]="totalGoals" #scorerSelectionHome label="Select {{HOME_TEAM}} Goal Scorers"
           [autoCompleteList]="homeTeamPlayersList" (onAddItem)="onAdd($event, 'scorersHome')">
         </app-chip-selection-input>
 
@@ -90,7 +94,7 @@
       </div>
       <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
         <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
-        <app-chip-selection-input [max]="totalGoals" #scorerSelectionAway label="Select Away Goal Scorers"
+        <app-chip-selection-input [max]="totalGoals" #scorerSelectionAway label="Select {{AWAY_TEAM}} Goal Scorers"
           [autoCompleteList]="awayTeamPlayersList" (onAddItem)="onAdd($event, 'scorersAway')">
         </app-chip-selection-input>
 
@@ -106,11 +110,12 @@
 
     <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
       <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
-        <app-chip-selection-input fxFlex="45%" [max]="5" chipClass="red-card-holder" label="Red Card Holders (Home)"
-          [autoCompleteList]="homeTeamPlayersList" (onAddItem)="onAdd($event, 'redCardHoldersHome')">
+        <app-chip-selection-input fxFlex="45%" [max]="5" chipClass="red-card-holder"
+          label="Red Card Holders ({{HOME_TEAM}})" [autoCompleteList]="homeTeamPlayersList"
+          (onAddItem)="onAdd($event, 'redCardHoldersHome')">
         </app-chip-selection-input>
         <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="red-card-holder"
-          label="Red Card Holders (Away)" [autoCompleteList]="awayTeamPlayersList"
+          label="Red Card Holders ({{AWAY_TEAM}})" [autoCompleteList]="awayTeamPlayersList"
           (onAddItem)="onAdd($event, 'redCardHoldersAway')">
         </app-chip-selection-input>
       </div>
@@ -119,11 +124,11 @@
     <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
       <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
         <app-chip-selection-input fxFlex="45%" [max]="homeTeamPlayersList.length" chipClass="yellow-card-holder"
-          label="Yellow Card Holders (Home)" [autoCompleteList]="homeTeamPlayersList"
+          label="Yellow Card Holders ({{HOME_TEAM}})" [autoCompleteList]="homeTeamPlayersList"
           (onAddItem)="onAdd($event, 'yellowCardHoldersHome')">
         </app-chip-selection-input>
         <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="yellow-card-holder"
-          label="Yellow Card Holders (Away)" [autoCompleteList]="awayTeamPlayersList"
+          label="Yellow Card Holders ({{AWAY_TEAM}})" [autoCompleteList]="awayTeamPlayersList"
           (onAddItem)="onAdd($event, 'yellowCardHoldersAway')">
         </app-chip-selection-input>
       </div>
@@ -136,7 +141,7 @@
       <div fxLayout="column" fxLayoutGap="10px">
         <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
           <mat-label class="label">Bills</mat-label>
-          <app-file-uploader [error]="billsFile?.hasError('required')" (changeUpload)="onSelectBillFileUpload($event)">
+          <app-file-uploader (changeUpload)="onSelectBillFileUpload($event)">
           </app-file-uploader>
         </div>
         <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
@@ -167,12 +172,12 @@
     <div class="buttons-container" fxLayoutAlign="center center">
       <button [disabled]="isSubmitDisabled" type="button" (click)="onGenerateSummary()"
         class="primaryButton buttonText">
-        Generate Match Summary
+        Generate Summary
       </button>
     </div>
   </form>
 
-  <ng-container *ngIf="isViewSummary">
+  <ng-container *ngIf="isShowSummary">
     <div fxLayout="column" id="match-summary" fxLayoutAlign="center stretch" fxLayoutGap="16px"
       class="summary-container">
       <span class="mat-body-2">Match Summary</span>
@@ -182,13 +187,13 @@
     </div>
   </ng-container>
 
-  <div *ngIf="isViewSummary">
+  <div *ngIf="isShowSummary">
     <button type="button" [disabled]="matchReportForm.invalid" (click)="onSubmitMatchReport()"
       class="buttonText primaryButton">
       Submit
     </button>
   </div>
-  <p *ngIf="isViewSummary" class="mat-caption center">
+  <p *ngIf="isShowSummary" class="mat-caption center">
     By clicking 'Submit' above, You accept that this data is true to your knowledge and you take complete responsibility
     of it's authenticity. You also agree on if this data is found to be manipulated, your organizer's ID will be
     revoked with immediate effect.

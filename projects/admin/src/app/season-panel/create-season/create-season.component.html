@@ -36,24 +36,25 @@
       </div>
     </mat-step>
     <mat-step label="Done" [editable]="false">
-      <app-tick-animation *ngIf="!isLoaderShown"></app-tick-animation>
-      <p class="mat-body-1 center">
-        Wohoo!!! Your Season is ready to publish.
-      </p>
-      <p class="mat-caption center">
-        You can now edit only your Season name, Description and Season Image
-      </p>
-      <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="16px" class="section-space-top">
-        <button (click)="navigateToDraftAndClose(draftID)" class="primaryButton buttonText">
-          View your season
-        </button>
-        <button (click)="navigateToListAndClose()" class="secondaryButton buttonText">
-          Go to Admin Home
-        </button>
+      <div class="success-container">
+        <p class="mat-body-1 center">
+          Your season draft is ready to publish.
+        </p>
+        <p class="mat-caption center">
+          You can edit your season description and rules.
+        </p>
+        <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="16px" class="section-space-top">
+          <button (click)="navigateToDraftAndClose(draftID)" class="primaryButton buttonText">
+            View Draft
+          </button>
+          <button (click)="navigateToListAndClose()" class="secondaryButton buttonText">
+            View All Seasons
+          </button>
+        </div>
+        <p class="mat-caption center section-space-top">
+          Please contact freekyk123@gmail.com in case of any queries.
+        </p>
       </div>
-      <p class="mat-caption center section-space-top">
-        Please contact freekyk123@gmail.com in case of any queries.
-      </p>
     </mat-step>
   </mat-horizontal-stepper>
 </div>

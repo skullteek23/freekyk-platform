@@ -58,10 +58,15 @@
   <!-- action-button - small  -->
 
   <!-- action-button - large  -->
-  <a (click)="isResult ? onOpenFixture() : onOpenFixture()" fxHide.lt-md="true">
-    <span class="mat-caption">
-      See more
-    </span>
-  </a>
+  <div fxHide.lt-md="true" fxLayout fxLayoutGap="12px">
+    <mat-chip-list>
+      <mat-chip>{{fixture.type | uppercase}}</mat-chip>
+    </mat-chip-list>
+    <a (click)="isResult ? onOpenFixture() : onOpenFixture()">
+      <span class="mat-caption">
+        See more
+      </span>
+    </a>
+  </div>
   <!-- action-button - large  -->
 </div>

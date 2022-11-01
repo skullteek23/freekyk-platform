@@ -27,6 +27,7 @@ export class MatchConstants {
   public static SEASON_URL = environment?.firebase?.url + '/s/';
   public static LABEL_NOT_AVAILABLE = 'N/A';
   public static JOINING_CHARACTER = ', ';
+  public static LARGE_TEXT_CHARACTER_LIMIT = 2000;
 }
 export const STATISTICS = {
   FKC_PLAYED: 'FKC Played',
@@ -58,6 +59,7 @@ export const DUMMY_FIXTURE_TABLE_COLUMNS = {
   DATE: 'date',
   LOCATION: 'location',
   GROUND: 'ground',
+  ACTIONS: 'actions',
 }
 export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   MATCH_ID: 'Unique Match ID',
@@ -72,3 +74,9 @@ export const DELETE_SEASON_SUBHEADING = `Deletion request will disable all <stro
 below: [max characters: 1000]`;
 export const REVOKE_MATCH_UPDATE_SUBHEADING = `Please note that reverting the match update will revert all the numbers shown in match summaries. please provide us the reason below: [max characters: 1000]`;
 export const UNIQUE_DELETION_REQUEST_CODE = 'FK-SEASON'
+
+export enum LOADING_STATUS {
+  DEFAULT,
+  LOADING,
+  DONE
+}

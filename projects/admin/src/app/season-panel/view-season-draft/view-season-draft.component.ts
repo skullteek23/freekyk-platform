@@ -3,10 +3,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, share } from 'rxjs/operators';
 import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.model';
-import { SeasonDraft } from 'src/app/shared/interfaces/season.model';
+import { SeasonAbout, SeasonDraft } from 'src/app/shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { DELETE_SEASON_SUBHEADING, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING } from '../../shared/constants/constants';
+import { DELETE_SEASON_SUBHEADING, DUMMY_FIXTURE_TABLE_COLUMNS, LOADING_STATUS, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING } from '../../shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
@@ -15,8 +15,9 @@ import { GroundPrivateInfo } from 'src/app/shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '../../shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BIO } from 'src/app/shared/Constants/REGEX';
+import { FormsMessages } from '../../shared/constants/messages';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -25,11 +26,29 @@ import { BIO } from 'src/app/shared/Constants/REGEX';
 })
 export class ViewSeasonDraftComponent implements OnInit {
 
+  readonly DEFAULT = LOADING_STATUS.DEFAULT;
+  readonly LOADING = LOADING_STATUS.LOADING;
+  readonly DONE = LOADING_STATUS.DONE;
+  readonly descriptionLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
+  readonly rulesLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
+
+  draftID: string = null;
+  currentDate = new Date();
+  cols = [
+    DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID,
+    DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
+    DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
+    DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
+    DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
+    DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
+    DUMMY_FIXTURE_TABLE_COLUMNS.ACTIONS,
+  ];
   isEditMode = false;
-  isLoaderShown = false;
+  loadingStatus: number = 0;
+  lastRegistrationDate = new Date();
+  messages = FormsMessages;
   seasonDraftData: SeasonDraft;
   seasonFixtures: dummyFixture[] = [];
-  lastRegistrationDate = new Date();
   updateEntriesForm = new FormGroup({});
 
   constructor(
@@ -44,32 +63,37 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   ngOnInit(): void {
     const params = this.route.snapshot.params;
-    this.getDraftInfo(params['draftid']);
+    this.draftID = params['draftid'];
+    if (this.draftID) {
+      this.getDraftInfo();
+    }
   }
 
   initForm() {
     this.updateEntriesForm = new FormGroup({
-      description: new FormControl(this.seasonDraftData?.basicInfo?.description, [Validators.required, Validators.pattern(BIO), Validators.maxLength(200)]),
-      rules: new FormControl(this.seasonDraftData?.basicInfo?.rules, [Validators.required, Validators.pattern(BIO), Validators.maxLength(500)]),
+      description: new FormControl(this.seasonDraftData?.basicInfo?.description, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
+      rules: new FormControl(this.seasonDraftData?.basicInfo?.rules, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
     })
   }
 
-  getDraftInfo(draftID): void {
-    if (draftID) {
-      this.isLoaderShown = true;
-      forkJoin([this.ngFire.collection('seasonDrafts').doc(draftID).get(), this.getDraftFixtures(draftID)])
-        .subscribe((response) => {
+  getDraftInfo(): void {
+    this.setLoadingStatus(LOADING_STATUS.LOADING);
+    forkJoin([this.ngFire.collection('seasonDrafts').doc(this.draftID).get(), this.getDraftFixtures(this.draftID)])
+      .subscribe({
+        next: (response) => {
           this.seasonDraftData = response[0].data() as SeasonDraft;
           this.setDraftFixtures(response[1], this.seasonDraftData?.grounds);
           this.initForm();
-          this.isLoaderShown = false;
+          this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           this.lastRegistrationDate = this.maxRegisDate;
-        }, (error) => {
-          this.isLoaderShown = false;
+        },
+        error: () => {
+          this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           this.seasonFixtures = [];
           this.seasonDraftData = null;
-        });
-    }
+        }
+      });
+
   }
 
   getStatusClass() {
@@ -81,45 +105,53 @@ export class ViewSeasonDraftComponent implements OnInit {
       return;
     };
     this.isEditMode = true;
+    this.updateEntriesForm.setValue({
+      description: this.seasonDraftData?.basicInfo?.description,
+      rules: this.seasonDraftData?.basicInfo?.rules
+    })
   }
 
   updateSeason() {
-    if (this.isSeasonFinished) {
+    if (this.isSeasonFinished || this.updateEntriesForm.invalid) {
       return;
     }
-    const updatedFields: any = {
-      ...this.seasonDraftData.basicInfo
-    };
-    let isUpdate = false;
-    for (const control in this.updateEntriesForm.controls) {
-      if (this.updateEntriesForm.get(control).valid && this.updateEntriesForm.get(control).dirty && this.updateEntriesForm.get(control).value && this.updateEntriesForm.get(control).value !== this.seasonDraftData?.basicInfo[control]) {
-        updatedFields[control] = this.updateEntriesForm.get(control).value;
-        isUpdate = true;
-      }
+    const updatedTextFields: Partial<SeasonAbout> = {};
+    if (this.description.valid && this.description.dirty && this.description.value && (this.description.value !== this.seasonDraftData?.basicInfo?.description)) {
+      updatedTextFields.description = this.description.value.trim();
     }
-    if (isUpdate) {
-      this.isLoaderShown = true;
+    if (this.rules.valid && this.rules.dirty && this.rules.value && (this.rules.value !== this.seasonDraftData?.basicInfo?.rules)) {
+      updatedTextFields.rules = this.rules.value.trim();
+    }
+    if (Object.keys(updatedTextFields).length) {
+      this.setLoadingStatus(LOADING_STATUS.LOADING);
       let allPromises = [];
       allPromises.push(this.ngFire.collection('seasonDrafts').doc(this.seasonDraftData.draftID).update({
         lastUpdated: new Date().getTime(),
-        basicInfo: updatedFields
+        basicInfo: {
+          ...this.seasonDraftData?.basicInfo,
+          ...updatedTextFields
+        }
       }))
-      allPromises.push(this.ngFire.collection(`seasons/${this.seasonDraftData.draftID}/additionalInfo`).doc('moreInfo').update({
-        ...updatedFields
-      }))
-      return Promise.all(allPromises)
+      if (this.isSeasonPublished) {
+        allPromises.push(this.ngFire.collection(`seasons/${this.seasonDraftData.draftID}/additionalInfo`).doc('moreInfo').update({
+          ...updatedTextFields
+        }));
+      }
+      Promise.all(allPromises)
         .then(() => {
-          this.isLoaderShown = false;
+          this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           this.snackbarService.displayCustomMsg('Info updated successfully!');
-          location.reload();
+          this.getDraftInfo();
+          this.isEditMode = false;
         })
         .catch(() => {
-          this.isLoaderShown = false;
+          this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           this.snackbarService.displayError('Update failed.');
+          this.isEditMode = false;
         });
+    } else {
+      this.isEditMode = false;
     }
-    this.isEditMode = false;
-    this.updateEntriesForm.reset();
   }
 
   cancel() {
@@ -128,10 +160,10 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   onRaiseRequest(isDeleteRequest = false) {
-    this.isLoaderShown = true;
+    this.setLoadingStatus(LOADING_STATUS.LOADING);
     this.isRequestExists$.subscribe(response => {
       if (!response && this.isSeasonPublished) {
-        this.isLoaderShown = false;
+        this.setLoadingStatus(LOADING_STATUS.DEFAULT);
         this.dialog.open(RequestDialogComponent, {
           panelClass: 'fk-dialogs',
           data: {
@@ -141,22 +173,22 @@ export class ViewSeasonDraftComponent implements OnInit {
           }
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {
-            this.isLoaderShown = true;
+            this.setLoadingStatus(LOADING_STATUS.LOADING);
             this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
               .then(
                 () => {
-                  this.isLoaderShown = false;
+                  this.setLoadingStatus(LOADING_STATUS.DEFAULT);
                   const message = (isDeleteRequest ? 'Delete' : 'Revoke') + ' Request Submitted!';
                   this.snackbarService.displayCustomMsg(message);
                 }, err => {
-                  this.isLoaderShown = false;
+                  this.setLoadingStatus(LOADING_STATUS.DEFAULT);
                   this.snackbarService.displayError('Request raise failed!');
                 }
               )
           }
         });
       } else {
-        this.isLoaderShown = false;
+        this.setLoadingStatus(LOADING_STATUS.DEFAULT);
         this.snackbarService.displayCustomMsg('Request already submitted!');
       }
     });
@@ -178,7 +210,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.onConfirm()
       .subscribe(response => {
         if (response && this.seasonDraftData?.draftID && !this.isSeasonFinished && !this.isSeasonPublished) {
-          this.isLoaderShown = true;
+          this.setLoadingStatus(LOADING_STATUS.LOADING);
           const data = {
             seasonDraft: this.seasonDraftData,
             fixturesDraft: this.seasonFixtures,
@@ -186,13 +218,14 @@ export class ViewSeasonDraftComponent implements OnInit {
           }
           this.seasonAdminService.publishSeason(data)
             .then(() => {
-              this.isLoaderShown = false;
-              this.goToURL();
-              location.reload();
+              this.setLoadingStatus(LOADING_STATUS.DONE);
+              setTimeout(() => {
+                this.getDraftInfo();
+              }, 5000);
             })
             .catch(error => {
               this.snackbarService.displayError(error?.message);
-              this.isLoaderShown = false;
+              this.setLoadingStatus(LOADING_STATUS.DEFAULT);
             })
         }
       })
@@ -207,7 +240,7 @@ export class ViewSeasonDraftComponent implements OnInit {
       const groundsListNames = groundsList.map(ground => ground.name);
       this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
     } else if (this.isSeasonFinished || this.isSeasonPublished) {
-      this.isLoaderShown = true;
+      this.setLoadingStatus(LOADING_STATUS.LOADING);
       this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).snapshotChanges().subscribe(
         (response) => {
           if (response.length) {
@@ -228,7 +261,7 @@ export class ViewSeasonDraftComponent implements OnInit {
                 id,
               } as dummyFixture);
             })
-            this.isLoaderShown = false;
+            this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           }
         });
     } else {
@@ -238,7 +271,7 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   onUpdateMatchData(matchID: any) {
     if (matchID) {
-      this.isLoaderShown = true;
+      this.setLoadingStatus(LOADING_STATUS.LOADING);
       this.isInvalidUpdate(matchID).subscribe(response => {
         if (response === false) {
           this.dialog.open(UpdateMatchReportComponent, {
@@ -248,7 +281,7 @@ export class ViewSeasonDraftComponent implements OnInit {
             scrollStrategy: this.sso.noop()
           });
         }
-        this.isLoaderShown = false;
+        this.setLoadingStatus(LOADING_STATUS.DEFAULT);
       })
     }
   }
@@ -266,6 +299,10 @@ export class ViewSeasonDraftComponent implements OnInit {
         map(response => response.sort(ArraySorting.sortObjectByKey('date'))),
         map(response => response as dummyFixture[])
       )
+  }
+
+  setLoadingStatus(value: LOADING_STATUS) {
+    this.loadingStatus = value;
   }
 
   goToURL() {
@@ -303,5 +340,13 @@ export class ViewSeasonDraftComponent implements OnInit {
   get payableFees(): number {
     const fees = (this.seasonDraftData?.basicInfo?.fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * this.seasonDraftData?.basicInfo?.fees));
     return fees || 0;
+  }
+
+  get description(): AbstractControl {
+    return this.updateEntriesForm.get('description');
+  }
+
+  get rules(): AbstractControl {
+    return this.updateEntriesForm.get('rules');
   }
 }
