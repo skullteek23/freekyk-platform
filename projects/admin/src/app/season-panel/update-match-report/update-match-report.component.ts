@@ -6,15 +6,19 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ALPHA_W_SPACE, BIO, NUM } from 'src/app/shared/Constants/REGEX';
-import { CloudFunctionStatsData, MatchFixture, ReportSummary, TournamentTypes } from 'src/app/shared/interfaces/match.model';
+import { CloudFunctionStatsData, MatchFixture, ReportSummary } from 'src/app/shared/interfaces/match.model';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
 import { TeamMembers } from 'src/app/shared/interfaces/team.model';
 import { MatchConstants, STATISTICS } from '../../shared/constants/constants';
-import { FormsMessages, MatchReportMessages } from '../../shared/constants/messages';
+import { formsMessages, matchReportMessages } from '../../shared/constants/messages';
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
 
 export type HomeAway = 'home' | 'away';
+export enum TeamSides {
+  home = 'home',
+  away = 'away'
+}
 export interface IStatHolder {
   team: HomeAway;
   value: string;
@@ -40,12 +44,14 @@ export class UpdateMatchReportComponent implements OnInit {
   @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
   @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
 
-  readonly messages = MatchReportMessages;
+  readonly messages = matchReportMessages;
+  readonly home = TeamSides.home;
+  readonly away = TeamSides.away;
 
   awayTeam = '';
   awayTeamPlayersList: ListOption[] = [];
   fixture: MatchFixture;
-  formMessages = FormsMessages;
+  formMessages = formsMessages;
   homeTeam = '';
   homeTeamPlayersList: ListOption[] = [];
   isLoaderShown = false;
@@ -112,7 +118,7 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   isAwayEqualScoreValidator(control: AbstractControl): ValidationErrors {
-    if (control.value === this.homePenScore?.value) {
+    if (control.value === this.homePenScore?.value && this.penalties?.value === 1) {
       return { notEqual: true };
     }
     if (this.homePenScore?.value > 0) {
@@ -122,7 +128,7 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   isHomeEqualScoreValidator(control: AbstractControl): ValidationErrors {
-    if (control.value === this.awayPenScore?.value) {
+    if (control.value === this.awayPenScore?.value && this.penalties?.value === 1) {
       return { notEqual: true };
     }
     if (this.awayPenScore?.value > 0) {
@@ -187,34 +193,57 @@ export class UpdateMatchReportComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onAdd(ev: ListOption[], controlName: string): void {
-    (this.matchReportForm.get(controlName) as FormArray).clear();
-
-    ev.forEach(element => {
-      const controlTemp = new FormControl(element);
-      (this.matchReportForm.get(controlName) as FormArray).push(controlTemp);
-    });
-
-    const control = new FormControl(1, [Validators.required, Validators.pattern(NUM), Validators.min(1), Validators.max(this.totalGoals)]);
-    if (controlName === 'scorersHome') {
-      this.scorersGoalsHome.push(control);
-    } else if (controlName === 'scorersAway') {
-      this.scorersGoalsAway.push(control);
+  onAddScorer(newOption: ListOption, team: HomeAway): void {
+    const control = new FormControl(newOption);
+    const controlGoal = new FormControl(null, [Validators.required, Validators.pattern(NUM), Validators.min(1)]);
+    if (team === TeamSides.home) {
+      this.scorersHome.push(control);
+      this.scorersGoalsHome.push(controlGoal);
+    } else {
+      this.scorersAway.push(control);
+      this.scorersGoalsAway.push(controlGoal);
     }
   }
 
+  onRemoveScorerGoal(team: HomeAway): void {
+    if (team === TeamSides.home) {
+      const removeIndex = this.scorersGoalsHome.length > 0 ? this.scorersGoalsHome.length - 1 : 0;
+      this.scorersHome.removeAt(removeIndex);
+      this.scorersGoalsHome.removeAt(removeIndex);
+    } else {
+      const removeIndex = this.scorersGoalsAway.length > 0 ? this.scorersGoalsAway.length - 1 : 0;
+      this.scorersAway.removeAt(removeIndex);
+      this.scorersGoalsAway.removeAt(removeIndex);
+    }
+  }
+
+  onAddCard(newOption: ListOption, controlName: string): void {
+    const control = new FormControl(newOption);
+    (this.matchReportForm.get(controlName) as FormArray).push(control);
+  }
+
+  onRemoveCard(controlName: string): void {
+    const formArray = this.matchReportForm.get(controlName) as FormArray;
+    const length = formArray.length;
+    const removeIndex = length - 1;
+    formArray.removeAt(removeIndex);
+  }
+
   onGenerateSummary() {
-    if (this.matchReportForm.invalid) {
+    if (this.isSubmitDisabled()) {
+      this.snackbarService.displayError('Please try again!');
       this.matchReportForm.markAllAsTouched();
       return;
     }
     this.isShowSummary = true;
+    const summaryElement = document.getElementById('match-summary');
+    summaryElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
     this.assignSummary();
   }
 
   onSubmitMatchReport() {
     // on submit details
-    if (this.matchReportForm.valid) {
+    if (!this.isSubmitDisabled()) {
       this.isLoaderShown = true;
       const fixture: MatchFixture = {
         ...this.fixture,
@@ -237,14 +266,14 @@ export class UpdateMatchReportComponent implements OnInit {
 
     // Red Card Holders
     const redCardHoldersAll: IStatHolder[] = [];
-    const redCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersHome.value, 'home');
-    const redCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersAway.value, 'away');
+    const redCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersHome.value, TeamSides.home);
+    const redCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.redCardHoldersAway.value, TeamSides.away);
     redCardHoldersAll.push(...redCardHoldersH, ...redCardHoldersA);
 
     // Yellow Card Holders
     const yellowCardHoldersAll: IStatHolder[] = [];
-    const yellowCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersHome.value, 'home');
-    const yellowCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersAway.value, 'away');
+    const yellowCardHoldersH: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersHome.value, TeamSides.home);
+    const yellowCardHoldersA: IStatHolder[] = this.parseFormArrayList(this.yellowCardHoldersAway.value, TeamSides.away);
     yellowCardHoldersAll.push(...yellowCardHoldersH, ...yellowCardHoldersA);
 
     // GoalScorers
@@ -254,8 +283,8 @@ export class UpdateMatchReportComponent implements OnInit {
     const penaltiesHome: number = this.homePenScore.value || 0;
     const penaltiesAway: number = this.awayPenScore.value || 0;
     const goalScorersAll: IStatHolder[] = [];
-    const goalScorersH: IStatHolder[] = this.parseFormArrayList(this.scorersHome.value, 'home');
-    const goalScorersA: IStatHolder[] = this.parseFormArrayList(this.scorersAway.value, 'away');
+    const goalScorersH: IStatHolder[] = this.parseScorersArrayList(this.scorersHome.value, this.scorersGoalsHome.value, TeamSides.home);
+    const goalScorersA: IStatHolder[] = this.parseScorersArrayList(this.scorersAway.value, this.scorersGoalsAway.value, TeamSides.away);
     goalScorersAll.push(...goalScorersH, ...goalScorersA);
 
     // Tournament type
@@ -273,8 +302,8 @@ export class UpdateMatchReportComponent implements OnInit {
       homeWin = (penaltiesHome > penaltiesAway) ? 1 : 0;
       awayWin = 1 - homeWin;
     }
-    const playersHome: IStatHolder[] = this.parseFormArrayList(this.homeTeamPlayersList, 'home');
-    const playersAway: IStatHolder[] = this.parseFormArrayList(this.awayTeamPlayersList, 'away');
+    const playersHome: IStatHolder[] = this.parseFormArrayList(this.homeTeamPlayersList, TeamSides.home);
+    const playersAway: IStatHolder[] = this.parseFormArrayList(this.awayTeamPlayersList, TeamSides.away);
     const playersAll: IStatHolder[] = playersHome.concat(playersAway);
     let playerWinners: IStatHolder[] = homeWin ? playersHome : playersAway;
     if (homeWin === awayWin && homeWin === 0) {
@@ -288,8 +317,8 @@ export class UpdateMatchReportComponent implements OnInit {
     cols.season.push({ value: 'point', viewValue: 'Data Points' });
     cols.season.push({ value: 'update', viewValue: 'Season Stats Update' });
     cols.team.push({ value: 'point', viewValue: 'Data Points' });
-    cols.team.push({ value: 'home', viewValue: 'Team Stats Update (Home)' });
-    cols.team.push({ value: 'away', viewValue: 'Team Stats Update (Away)' });
+    cols.team.push({ value: TeamSides.home, viewValue: `${this.fixture.home.name}'s Update` });
+    cols.team.push({ value: TeamSides.away, viewValue: `${this.fixture.away.name}'s Update` });
     cols.player.push({ value: 'pointTwo', viewValue: 'Data Points' });
     cols.player.push({ value: 'applied', viewValue: 'Applied to' });
     cols.player.push({ value: 'updateTwo', viewValue: 'Player Stats Update' });
@@ -336,7 +365,7 @@ export class UpdateMatchReportComponent implements OnInit {
     dataSource.player.push({
       pointTwo: STATISTICS.GOALS,
       applied: this.getFormArrayStringList(goalScorersAll),
-      updateTwo: this.parseNumericValue(goalScorersAll.length ? 1 : 0)
+      updateTwo: '-'
     });
     dataSource.player.push({
       pointTwo: STATISTICS.WINS,
@@ -381,6 +410,21 @@ export class UpdateMatchReportComponent implements OnInit {
     return [];
   }
 
+  parseScorersArrayList(scorers: ListOption[], goals: number[], team: HomeAway): IStatHolder[] {
+    if (goals?.length && scorers?.length && scorers.length === goals.length) {
+      const result: IStatHolder[] = [];
+      for (let i = 0; i < scorers.length; i++) {
+        const scorer: ListOption = scorers[i];
+        const goalScored: number = goals[i];
+        if (scorer && goalScored > 0) {
+          result.push({ value: `${scorer.viewValue} (${goalScored})`, team });
+        }
+      }
+      return result;
+    }
+    return [];
+  }
+
   getFormArrayStringList(value: IStatHolder[]): string {
     if (value && value.length) {
       return value.map((el: IStatHolder) => el.value).join(MatchConstants.JOINING_CHARACTER);
@@ -404,19 +448,12 @@ export class UpdateMatchReportComponent implements OnInit {
     return this.matchReportForm.get('scorersAway') as FormArray;
   }
 
-  get totalGoals(): number {
-    if (this.homeScore?.value >= 0 && this.awayScore?.value >= 0) {
-      return this.homeScore?.value + this.awayScore?.value;
-    }
-    return 0;
-  }
-
   get homeScore(): AbstractControl {
-    return this.matchReportForm.get('homeScore');
+    return this.matchReportForm?.get('homeScore');
   }
 
   get awayScore(): AbstractControl {
-    return this.matchReportForm.get('awayScore');
+    return this.matchReportForm?.get('awayScore');
   }
 
   get homePenScore(): AbstractControl {
@@ -478,14 +515,20 @@ export class UpdateMatchReportComponent implements OnInit {
     return [];
   }
 
-  get isSubmitDisabled(): boolean {
-    if (!this.matchReportForm.dirty) {
-      return true;
-    } else if (this.matchReportForm.invalid) {
-      return true;
-    } else if (this.penalties?.value === 1 && this.awayPenScore?.value === this.homePenScore?.value) {
-      return true;
-    }
-    return false;
+  isSubmitDisabled(): boolean {
+    return (!this.matchReportForm.dirty
+      || this.matchReportForm.invalid
+      || (this.penalties?.value === 1 && (this.awayPenScore?.value === this.homePenScore?.value))
+      || this.totalInputGoalsAway > this.awayScore?.value
+      || this.totalInputGoalsHome > this.homeScore?.value
+    );
+  }
+
+  get totalInputGoalsHome(): number {
+    return this.scorersGoalsHome?.value?.length ? (this.scorersGoalsHome.value as number[]).reduce((a, b) => a + b) : 0;
+  }
+
+  get totalInputGoalsAway(): number {
+    return this.scorersGoalsAway?.value?.length ? (this.scorersGoalsAway.value as number[]).reduce((a, b) => a + b) : 0;
   }
 }

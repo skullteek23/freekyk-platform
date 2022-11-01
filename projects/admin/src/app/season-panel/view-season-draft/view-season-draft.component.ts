@@ -6,7 +6,9 @@ import { dummyFixture, MatchFixture } from 'src/app/shared/interfaces/match.mode
 import { SeasonAbout, SeasonDraft } from 'src/app/shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from 'src/app/shared/utils/array-sorting';
-import { DELETE_SEASON_SUBHEADING, DUMMY_FIXTURE_TABLE_COLUMNS, LOADING_STATUS, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING } from '../../shared/constants/constants';
+import {
+  DELETE_SEASON_SUBHEADING, DUMMY_FIXTURE_TABLE_COLUMNS, LOADING_STATUS, MatchConstants, REVOKE_MATCH_UPDATE_SUBHEADING
+} from '../../shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { forkJoin, Observable } from 'rxjs';
@@ -17,7 +19,7 @@ import { UpdateMatchReportComponent } from '../update-match-report/update-match-
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BIO } from 'src/app/shared/Constants/REGEX';
-import { FormsMessages } from '../../shared/constants/messages';
+import { formsMessages } from '../../shared/constants/messages';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -26,9 +28,9 @@ import { FormsMessages } from '../../shared/constants/messages';
 })
 export class ViewSeasonDraftComponent implements OnInit {
 
-  readonly DEFAULT = LOADING_STATUS.DEFAULT;
-  readonly LOADING = LOADING_STATUS.LOADING;
-  readonly DONE = LOADING_STATUS.DONE;
+  readonly default = LOADING_STATUS.DEFAULT;
+  readonly loading = LOADING_STATUS.LOADING;
+  readonly done = LOADING_STATUS.DONE;
   readonly descriptionLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
   readonly rulesLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
 
@@ -46,7 +48,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   isEditMode = false;
   loadingStatus = 0;
   lastRegistrationDate = new Date();
-  messages = FormsMessages;
+  messages = formsMessages;
   seasonDraftData: SeasonDraft;
   seasonFixtures: dummyFixture[] = [];
   updateEntriesForm = new FormGroup({});
@@ -71,8 +73,12 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   initForm() {
     this.updateEntriesForm = new FormGroup({
-      description: new FormControl(this.seasonDraftData?.basicInfo?.description, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
-      rules: new FormControl(this.seasonDraftData?.basicInfo?.rules, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
+      description: new FormControl(this.seasonDraftData?.basicInfo?.description,
+        [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]
+      ),
+      rules: new FormControl(this.seasonDraftData?.basicInfo?.rules,
+        [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]
+      ),
     });
   }
 
@@ -116,7 +122,8 @@ export class ViewSeasonDraftComponent implements OnInit {
       return;
     }
     const updatedTextFields: Partial<SeasonAbout> = {};
-    if (this.description.valid && this.description.dirty && this.description.value && (this.description.value !== this.seasonDraftData?.basicInfo?.description)) {
+    if (this.description.valid && this.description.dirty && this.description.value
+      && (this.description.value !== this.seasonDraftData?.basicInfo?.description)) {
       updatedTextFields.description = this.description.value.trim();
     }
     if (this.rules.valid && this.rules.dirty && this.rules.value && (this.rules.value !== this.seasonDraftData?.basicInfo?.rules)) {
@@ -241,27 +248,34 @@ export class ViewSeasonDraftComponent implements OnInit {
       this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
     } else if (this.isSeasonFinished || this.isSeasonPublished) {
       this.setLoadingStatus(LOADING_STATUS.LOADING);
-      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name)).snapshotChanges().subscribe(
-        (response) => {
-          if (response.length) {
-            this.seasonFixtures = response.map(fixture => {
-              const fixtureData = fixture.payload.doc.data() as MatchFixture;
-              const id = fixture.payload.doc.id;
-              return ({
-                home: fixtureData.home.name,
-                away: fixtureData.away.name,
-                date: fixtureData.date,
-                concluded: fixtureData.concluded,
-                premium: fixtureData.premium,
-                season: fixtureData.season,
-                type: fixtureData.type,
-                locCity: fixtureData.locCity,
-                locState: fixtureData.locState,
-                stadium: fixtureData.stadium,
-                id,
-              } as dummyFixture);
-            });
-            this.setLoadingStatus(LOADING_STATUS.DEFAULT);
+      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name))
+        .snapshotChanges()
+        .subscribe({
+          next: (response) => {
+            if (response.length) {
+              this.seasonFixtures = response.map(fixture => {
+                const fixtureData = fixture.payload.doc.data() as MatchFixture;
+                const id = fixture.payload.doc.id;
+                return ({
+                  home: fixtureData.home.name,
+                  away: fixtureData.away.name,
+                  date: fixtureData.date,
+                  concluded: fixtureData.concluded,
+                  premium: fixtureData.premium,
+                  season: fixtureData.season,
+                  type: fixtureData.type,
+                  locCity: fixtureData.locCity,
+                  locState: fixtureData.locState,
+                  stadium: fixtureData.stadium,
+                  id,
+                } as dummyFixture);
+              });
+              this.setLoadingStatus(LOADING_STATUS.DEFAULT);
+            }
+          },
+          error: () => {
+            this.seasonFixtures = [];
+            this.snackbarService.displayError();
           }
         });
     } else {
@@ -288,7 +302,10 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   isInvalidUpdate(matchID: string): Observable<boolean> {
     if (matchID) {
-      return this.ngFire.collection('allMatches').doc(matchID).get().pipe(map(resp => resp.exists ? (resp.data() as MatchFixture).concluded === true : true));
+      return this.ngFire.collection('allMatches')
+        .doc(matchID)
+        .get()
+        .pipe(map(resp => resp.exists ? (resp.data() as MatchFixture).concluded === true : true));
     }
   }
 
@@ -329,7 +346,9 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   get isRequestExists$(): Observable<boolean> {
     if (this.seasonDraftData?.draftID) {
-      return this.ngFire.collection('adminRequests', query => query.where('seasonId', '==', this.seasonDraftData.draftID)).get().pipe(map(resp => !resp.empty), share());
+      return this.ngFire.collection('adminRequests', query => query.where('seasonId', '==', this.seasonDraftData.draftID))
+        .get()
+        .pipe(map(resp => !resp.empty), share());
     }
   }
 
@@ -338,7 +357,8 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   get payableFees(): number {
-    const fees = (this.seasonDraftData?.basicInfo?.fees - ((this.seasonDraftData?.basicInfo?.discount / 100) * this.seasonDraftData?.basicInfo?.fees));
+    const feesTemp = this.seasonDraftData?.basicInfo?.fees;
+    const fees = (feesTemp - ((this.seasonDraftData?.basicInfo?.discount / 100) * feesTemp));
     return fees || 0;
   }
 

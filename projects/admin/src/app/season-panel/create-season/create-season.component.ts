@@ -24,6 +24,11 @@ import { SelectGroundsComponent } from '../select-grounds/select-grounds.compone
 })
 export class CreateSeasonComponent implements OnDestroy {
 
+  @ViewChild(MatHorizontalStepper) stepper: MatHorizontalStepper;
+  @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
+  @ViewChild(SelectGroundsComponent) selectGroundsComponent: SelectGroundsComponent;
+  @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
+
   availableGroundsList: GroundPrivateInfo[] = [];
   selectedGroundsList: GroundPrivateInfo[] = [];
   dataForGroundStep: any = null;
@@ -31,11 +36,6 @@ export class CreateSeasonComponent implements OnDestroy {
   draftID = '';
   isLoaderShown = false;
   subscriptions = new Subscription();
-
-  @ViewChild(MatHorizontalStepper) stepper: MatHorizontalStepper;
-  @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
-  @ViewChild(SelectGroundsComponent) selectGroundsComponent: SelectGroundsComponent;
-  @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,22 +69,27 @@ export class CreateSeasonComponent implements OnDestroy {
 
   getGrounds(city: string, state: string, startDate: number) {
     this.isLoaderShown = true;
-    this.subscriptions.add(this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim()).where('contractStartDate', '<', startDate))
-      .snapshotChanges()
-      .pipe(
-        map(response => response.map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo)),
-        map(response => response.sort(ArraySorting.sortObjectByKey('name'))),
-        map(resp => resp.filter(res => res.contractEndDate > startDate))
-      )
-      .subscribe(
-        (response) => {
-          this.availableGroundsList = response;
-          this.isLoaderShown = false;
-        }, (err) => {
-          this.isLoaderShown = false;
-          this.snackBarService.displayError('Unable to get grounds!');
-        }
-      ));
+    this.subscriptions.add(
+      this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim())
+        .where('contractStartDate', '<', startDate))
+        .snapshotChanges()
+        .pipe(
+          map(response => response
+            .map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo)
+          ),
+          map(response => response.sort(ArraySorting.sortObjectByKey('name'))),
+          map(resp => resp.filter(res => res.contractEndDate > startDate))
+        )
+        .subscribe(
+          (response) => {
+            this.availableGroundsList = response;
+            this.isLoaderShown = false;
+          }, (err) => {
+            this.isLoaderShown = false;
+            this.snackBarService.displayError('Unable to get grounds!');
+          }
+        )
+    );
   }
 
   onNavigateAway() {
@@ -257,6 +262,10 @@ export class CreateSeasonComponent implements OnDestroy {
   }
 
   get isFixtureFormValid(): boolean {
-    return this.fixtureForm && this.fixtureForm.valid && this.fixtureForm.value && this.fixtureForm.value.fixtures && this.fixtureForm.value.fixtures.length;
+    return this.fixtureForm
+      && this.fixtureForm.valid
+      && this.fixtureForm.value
+      && this.fixtureForm.value.fixtures
+      && this.fixtureForm.value.fixtures.length;
   }
 }

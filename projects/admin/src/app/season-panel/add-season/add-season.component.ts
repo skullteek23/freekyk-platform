@@ -4,7 +4,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { ALPHA_NUM_SPACE, BIO } from 'src/app/shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstants, MatchConstantsSecondary } from '../../shared/constants/constants';
-import { FormsMessages } from '../../shared/constants/messages';
+import { formsMessages } from '../../shared/constants/messages';
 
 @Component({
   selector: 'app-add-season',
@@ -13,10 +13,11 @@ import { FormsMessages } from '../../shared/constants/messages';
 })
 export class AddSeasonComponent implements OnInit {
 
+  @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
+
   readonly seasonImageUrl: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
   readonly descriptionLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
   readonly rulesLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
-
 
   cities = ['Ghaziabad'];
   currentDateTemp1 = new Date();
@@ -32,9 +33,8 @@ export class AddSeasonComponent implements OnInit {
   teamsList = MatchConstants.ALLOWED_PARTICIPATION_COUNT;
   tourTypes = MatchConstants.MATCH_TYPES;
   tourTypesFiltered = MatchConstants.MATCH_TYPES;
-  messages = FormsMessages;
+  messages = formsMessages;
 
-  @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
 
   constructor() { }
 
@@ -64,7 +64,9 @@ export class AddSeasonComponent implements OnInit {
       description: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
       rules: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
       startDate: new FormControl(this.minDate, [Validators.required]),
-      fees: new FormControl(0, [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]),
+      fees: new FormControl(0,
+        [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
+      ),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
       participatingTeamsCount: new FormControl(2, [Validators.required]),
       containingTournaments: new FormControl(['FCP'], [Validators.required]),

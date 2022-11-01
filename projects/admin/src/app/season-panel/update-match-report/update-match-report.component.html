@@ -79,23 +79,24 @@
 
     <mat-card fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
       <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
-        <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
-        <app-chip-selection-input [max]="totalGoals" #scorerSelectionHome label="Select {{homeTeam}} Goal Scorers"
-          [autoCompleteList]="homeTeamPlayersList" (onAddItem)="onAdd($event, 'scorersHome')">
+        <mat-hint *ngIf="homeScore?.value === 0">Add a {{homeTeam}}'s goal to enable this.</mat-hint>
+        <app-chip-selection-input [max]="homeScore?.value" #scorerSelectionHome label="Select {{homeTeam}} Goal Scorers"
+          [autoCompleteList]="homeTeamPlayersList" (remove)="onRemoveScorerGoal(home)"
+          (addOption)="onAddScorer($event, home)">
         </app-chip-selection-input>
 
-        <div fxLayout="row wrap" formArrayName="scorersGoalsHome" fxLayoutGap="16px"
-          fxLayoutAlign="space-between center">
-          <mat-form-field fxFlex="45%" *ngFor="let scorer of chipSelectionListHome; let i = index" appearance="outline">
+        <div fxLayout="column" formArrayName="scorersGoalsHome" fxLayoutAlign="space-between center">
+          <mat-form-field *ngFor="let scorer of chipSelectionListHome; let i = index" appearance="outline">
             <mat-label>Goals Scored by {{ scorer.viewValue }}</mat-label>
             <input type="number" min="1" matInput [formControlName]="i">
           </mat-form-field>
         </div>
       </div>
       <div class="text-container" fxLayout="column" fxLayoutAlign="start stretch">
-        <mat-hint *ngIf="totalGoals === 0">To add a goalscorer, at least one goal must be filled above.</mat-hint>
-        <app-chip-selection-input [max]="totalGoals" #scorerSelectionAway label="Select {{awayTeam}} Goal Scorers"
-          [autoCompleteList]="awayTeamPlayersList" (onAddItem)="onAdd($event, 'scorersAway')">
+        <mat-hint *ngIf="awayScore?.value === 0">Add a {{awayTeam}}'s goal to enable this.</mat-hint>
+        <app-chip-selection-input [max]="awayScore?.value" #scorerSelectionAway label="Select {{awayTeam}} Goal Scorers"
+          [autoCompleteList]="awayTeamPlayersList" (remove)="onRemoveScorerGoal(away)"
+          (addOption)="onAddScorer($event, away)">
         </app-chip-selection-input>
 
         <div fxLayout="row wrap" formArrayName="scorersGoalsAway" fxLayoutGap="16px"
@@ -112,11 +113,11 @@
       <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
         <app-chip-selection-input fxFlex="45%" [max]="5" chipClass="red-card-holder"
           label="Red Card Holders ({{homeTeam}})" [autoCompleteList]="homeTeamPlayersList"
-          (onAddItem)="onAdd($event, 'redCardHoldersHome')">
+          (addOption)="onAddCard($event, 'redCardHoldersHome')" (remove)="onRemoveCard('redCardHoldersHome')">
         </app-chip-selection-input>
         <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="red-card-holder"
           label="Red Card Holders ({{awayTeam}})" [autoCompleteList]="awayTeamPlayersList"
-          (onAddItem)="onAdd($event, 'redCardHoldersAway')">
+          (addOption)="onAddCard($event, 'redCardHoldersAway')" (remove)="onRemoveCard('redCardHoldersAway')">
         </app-chip-selection-input>
       </div>
     </mat-card>
@@ -125,11 +126,11 @@
       <div class="text-container" fxLayout fxLayoutGap="16px" fxLayoutAlign="space-between center">
         <app-chip-selection-input fxFlex="45%" [max]="homeTeamPlayersList.length" chipClass="yellow-card-holder"
           label="Yellow Card Holders ({{homeTeam}})" [autoCompleteList]="homeTeamPlayersList"
-          (onAddItem)="onAdd($event, 'yellowCardHoldersHome')">
+          (addOption)="onAddCard($event, 'yellowCardHoldersHome')" (remove)="onRemoveCard('yellowCardHoldersHome')">
         </app-chip-selection-input>
         <app-chip-selection-input fxFlex="45%" [max]="awayTeamPlayersList.length" chipClass="yellow-card-holder"
           label="Yellow Card Holders ({{awayTeam}})" [autoCompleteList]="awayTeamPlayersList"
-          (onAddItem)="onAdd($event, 'yellowCardHoldersAway')">
+          (addOption)="onAddCard($event, 'yellowCardHoldersAway')" (remove)="onRemoveCard('yellowCardHoldersAway')">
         </app-chip-selection-input>
       </div>
     </mat-card>
@@ -170,25 +171,22 @@
       </div>
     </mat-card>
     <div class="buttons-container" fxLayoutAlign="center center">
-      <button [disabled]="isSubmitDisabled" type="button" (click)="onGenerateSummary()"
+      <button [disabled]="isSubmitDisabled()" type="button" (click)="onGenerateSummary()"
         class="primaryButton buttonText">
         Generate Summary
       </button>
     </div>
   </form>
 
-  <ng-container *ngIf="isShowSummary">
-    <div fxLayout="column" id="match-summary" fxLayoutAlign="center stretch" fxLayoutGap="16px"
-      class="summary-container">
-      <span class="mat-body-2">Match Summary</span>
-      <app-match-report-summary [data]="reportSummary?.season"></app-match-report-summary>
-      <app-match-report-summary [data]="reportSummary?.team"></app-match-report-summary>
-      <app-match-report-summary [data]="reportSummary?.player"></app-match-report-summary>
-    </div>
-  </ng-container>
+  <div fxLayout="column" id="match-summary" fxLayoutAlign="center stretch" fxLayoutGap="16px" class="summary-container">
+    <span class="mat-body-2">Match Summary</span>
+    <app-match-report-summary [title]="'Season'" [data]="reportSummary?.season"></app-match-report-summary>
+    <app-match-report-summary [title]="'Team'" [data]="reportSummary?.team"></app-match-report-summary>
+    <app-match-report-summary [title]="'Player'" [data]="reportSummary?.player"></app-match-report-summary>
+  </div>
 
   <div *ngIf="isShowSummary">
-    <button type="button" [disabled]="matchReportForm.invalid" (click)="onSubmitMatchReport()"
+    <button type="button" [disabled]="isSubmitDisabled()" (click)="onSubmitMatchReport()"
       class="buttonText primaryButton">
       Submit
     </button>

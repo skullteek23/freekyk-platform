@@ -1,5 +1,5 @@
-<app-loading *ngIf="loadingStatus === LOADING"></app-loading>
-<ng-container *ngIf="loadingStatus === DONE">
+<app-loading *ngIf="loadingStatus === loading"></app-loading>
+<ng-container *ngIf="loadingStatus === done">
   <app-tick-animation></app-tick-animation>
   <div>
     <p class="mat-body" style="text-align: center">
@@ -7,7 +7,7 @@
     </p>
   </div>
 </ng-container>
-<ng-container *ngIf="loadingStatus === DEFAULT">
+<ng-container *ngIf="loadingStatus === default">
   <div fxLayoutAlign="start center" class="back-button">
     <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
     <a [routerLink]="['/seasons/list']">Go Back to All Seasons</a>

@@ -1,5 +1,5 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, Output, ViewChild } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Subject } from 'rxjs';
 import { ListOption } from 'src/app/shared/interfaces/others.model';
@@ -9,23 +9,19 @@ import { ListOption } from 'src/app/shared/interfaces/others.model';
   templateUrl: './chip-selection-input.component.html',
   styleUrls: ['./chip-selection-input.component.css']
 })
-export class ChipSelectionInputComponent implements OnInit {
-
-  list: ListOption[] = [];
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+export class ChipSelectionInputComponent {
 
   @Input() label = '';
   @Input() autoCompleteList: ListOption[] = [];
   @Input() chipClass = '';
   @Input() max = 0;
-  @Output() onAddItem = new Subject<ListOption[]>();
+  @Output() addOption = new Subject<ListOption>();
+  @Output() remove = new Subject<number>();
 
   @ViewChild('scorerInput') scorerInput: ElementRef<HTMLInputElement>;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  list: ListOption[] = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   add(ev: MatAutocompleteSelectedEvent) {
     if (this.isMax) {
@@ -34,21 +30,19 @@ export class ChipSelectionInputComponent implements OnInit {
     if (this.list.findIndex(value => value.value === ev.option.value.value) === -1) {
       this.list.push(ev.option.value);
     }
-    this.onAddItem.next(this.list);
+    this.addOption.next(ev.option.value);
     this.scorerInput.nativeElement.value = '';
   }
 
-  remove(item: ListOption) {
-    const index = this.list.findIndex(value => value.value === item.value);
-
-    if (index >= 0) {
-      this.list.splice(index, 1);
+  removeFromLast() {
+    if (this.list.length) {
+      const removeIndex = this.list.length - 1;
+      this.list.splice(removeIndex, 1);
     }
-    this.onAddItem.next(this.list);
   }
 
   get isMax(): boolean {
-    return this.max === this.list.length;
+    return this.max && (this.max === this.list.length);
   }
 
 }

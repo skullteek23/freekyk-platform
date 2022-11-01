@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FileUploadMessages } from '../../constants/messages';
+import { fileUploadMessages } from '../../constants/messages';
 
 @Component({
   selector: 'app-file-uploader',
@@ -8,12 +8,12 @@ import { FileUploadMessages } from '../../constants/messages';
 })
 export class FileUploaderComponent {
 
-  fileName = 'Select File';
-  uploadedImageFile$: File = null;
-  messages = FileUploadMessages;
-
   @Input() error = false;
   @Output() changeUpload = new EventEmitter<File>();
+
+  fileName = 'Select File';
+  uploadedImageFile$: File = null;
+  messages = fileUploadMessages;
 
   onSelectFile(fileEvent) {
     this.uploadedImageFile$ = fileEvent.target.files[0];

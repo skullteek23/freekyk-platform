@@ -9,10 +9,7 @@ import { ReportData } from 'src/app/shared/interfaces/match.model';
 })
 export class MatchReportSummaryComponent {
 
-  cols: any[] = [];
-  dataSource = new MatTableDataSource<any>([]);
-  displayCols: string[] = [];
-
+  @Input() title = '';
   @Input() set data(value: ReportData) {
     if (value) {
       this.cols = value.cols;
@@ -24,6 +21,10 @@ export class MatchReportSummaryComponent {
       this.setDataSource([]);
     }
   }
+
+  cols: any[] = [];
+  dataSource = new MatTableDataSource<any>([]);
+  displayCols: string[] = [];
 
   setDataSource(data: any) {
     this.dataSource = new MatTableDataSource<any>(data);
