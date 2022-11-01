@@ -60,6 +60,7 @@ import {
 import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
+import { ActionStripComponent } from './components/action-strip/action-strip.component';
 
 const customConfig: ShareButtonsConfig = {
   include: ['facebook', 'twitter', 'google'],
@@ -124,6 +125,7 @@ const customConfig: ShareButtonsConfig = {
     PhotoUploaderComponent,
     FileUploaderComponent,
     NumberToAMPMPipe,
+    ActionStripComponent
   ],
   imports: [
     CommonModule,
@@ -186,7 +188,8 @@ const customConfig: ShareButtonsConfig = {
     IllustrationHeroSectionAlternateComponent,
     SearchAutocompleteComponent,
     PhotoUploaderComponent,
-    FileUploaderComponent
+    FileUploaderComponent,
+    ActionStripComponent,
   ],
 })
 export class SharedModule { }

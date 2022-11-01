@@ -34,7 +34,6 @@ import { TeMembersComponent } from './play/profile-pages/team-profile/te-members
 import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
 import { NgImageSliderModule } from 'ng-image-slider';
-import { ActionStripComponent } from './footer/action-strip/action-strip.component';
 import { SharedModule } from '@shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
@@ -43,7 +42,6 @@ import { environment } from 'environments/environment';
   declarations: [
     AppComponent,
     AboutComponent,
-    ActionStripComponent,
     PrivacyComponent,
     TermsComponent,
     HeaderComponent,

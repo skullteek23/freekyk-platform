@@ -11,7 +11,6 @@ import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.comp
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
-import { DashboardMaterialModule } from './dashboard-material.module';
 import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
 import { DaHoAllFixturesComponent } from './dash-home/da-ho-all-fixtures/da-ho-all-fixtures.component';
 import { DaHoAllContestsComponent } from './dash-home/da-ho-all-contests/da-ho-all-contests.component';
@@ -54,6 +53,8 @@ import { PaymentService } from '../services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 import { PlayerService } from '../services/player.service';
 import { TeamService } from '../services/team.service';
+import { MaterialModule } from '@shared/material.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -103,8 +104,9 @@ import { TeamService } from '../services/team.service';
   ],
   imports: [
     SharedModule,
+    CommonModule,
+    MaterialModule,
     DashboardRoutingModule,
-    DashboardMaterialModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,

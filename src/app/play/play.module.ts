@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PlayComponent } from './play.component';
 import { PlayRoutingModule } from './play-routing.module';
 import { PlHomeComponent } from './pl-home/pl-home.component';
@@ -14,8 +15,9 @@ import { PlStKnockoutComponent } from './pl-standings/pl-st-knockout/pl-st-knock
 import { PlStCommunityPlayComponent } from './pl-standings/pl-st-community-play/pl-st-community-play.component';
 import { KnockoutSmComponent } from './pl-standings/pl-st-knockout/knockout-sm/knockout-sm.component';
 import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
-import { PlayMaterialModule } from './play-material.module';
 import { KnockoutStripComponent } from './pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
+import { MaterialModule } from '@shared/material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { KnockoutStripComponent } from './pl-standings/pl-st-knockout/knockout-s
     PlGroundsComponent,
     KnockoutStripComponent,
   ],
-  imports: [SharedModule, PlayMaterialModule, PlayRoutingModule],
+  imports: [MaterialModule, CommonModule, SharedModule, PlayRoutingModule, FlexLayoutModule],
   exports: [],
 })
 export class PlayModule { }

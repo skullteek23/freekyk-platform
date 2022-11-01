@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { PlFixturesComponent } from './pl-fixtures/pl-fixtures.component';
 import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
 import { PlHomeComponent } from './pl-home/pl-home.component';
