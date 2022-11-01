@@ -10,7 +10,6 @@ import { ArraySorting } from 'src/app/shared/utils/array-sorting';
   styleUrls: ['./notifications-list.component.css'],
 })
 export class NotificationsListComponent implements OnInit {
-  // tslint:disable-next-line: no-input-rename
   @Input('data') set data(value: NotificationBasic[]) {
     this.notifications = value.sort(ArraySorting.sortObjectByKey('date'));
   }

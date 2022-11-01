@@ -11,7 +11,6 @@ import {
   styleUrls: ['./action-strip.component.css'],
 })
 export class ActionStripComponent implements OnInit {
-  // tslint:disable: no-input-rename
   @Input() elementSpacing = 'space-between center';
   @Input('compact') isCompact = false;
   @Input('heading') headingText = 'ready to play football?';
@@ -20,8 +19,8 @@ export class ActionStripComponent implements OnInit {
   @Input() enableFreestyleTrainingForm = false;
   private partnerForm = LANDING_PAGE.partnerWithUsFormLink;
   private trainingForm = FREESTYLE_PAGE.trainingFormLink;
-  constructor(private router: Router) {}
-  ngOnInit(): void {}
+  constructor(private router: Router) { }
+  ngOnInit(): void { }
   onNavigate(route: string): void {
     this.router.navigate([route]);
   }

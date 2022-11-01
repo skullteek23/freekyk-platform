@@ -8,7 +8,6 @@ import { FilterData } from '../../interfaces/others.model';
   styleUrls: ['./filters-lg.component.css'],
 })
 export class FiltersLgComponent implements OnInit {
-  // tslint:disable: no-input-rename
   @Input('filterArray') filters: string[] = [];
   @Input('margin') addSpacing = true;
 
@@ -19,8 +18,8 @@ export class FiltersLgComponent implements OnInit {
   @Output() changeFilter = new EventEmitter();
   defaultQuery = '';
 
-  constructor(private snackServ: SnackbarService) {}
-  ngOnInit(): void {}
+  constructor(private snackServ: SnackbarService) { }
+  ngOnInit(): void { }
   onResetFilter(): void {
     this.changeFilter.emit(null);
   }

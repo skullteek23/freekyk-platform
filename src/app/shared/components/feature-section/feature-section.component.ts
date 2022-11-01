@@ -9,7 +9,6 @@ import { FeatureSectionContent } from '../../interfaces/others.model';
   styleUrls: ['./feature-section.component.css'],
 })
 export class FeatureSectionComponent implements OnInit {
-  // tslint:disable: no-input-rename
   @Input('invert') flexOrderInvert = false;
   @Input('featureContent') content: FeatureSectionContent = {
     subHeading: 'Heading',
@@ -21,8 +20,8 @@ export class FeatureSectionComponent implements OnInit {
   };
   @Input() svg = 'assets/svgs/Banner/play_banner_small.svg';
 
-  constructor(private router: Router) {}
-  ngOnInit(): void {}
+  constructor(private router: Router) { }
+  ngOnInit(): void { }
   onNavigate(route: string): void {
     this.router.navigate([route]);
   }

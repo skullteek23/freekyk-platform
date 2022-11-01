@@ -8,8 +8,6 @@ import { SocialMediaLinks } from '../../interfaces/user.model';
   styleUrls: ['./social-media-links.component.css'],
 })
 export class SocialMediaLinksComponent implements OnInit {
-  // tslint:disable: no-input-rename
-  // tslint:disable: no-output-rename
   @Input('links') socials: SocialMediaLinks | null;
   @Input('mode') type: 'player' | 'freestyler' | 'team' = 'player';
   @Output('addLink') Addlink = new EventEmitter<true>();
@@ -18,9 +16,9 @@ export class SocialMediaLinksComponent implements OnInit {
   readonly TwitterUrl = SOCIAL_MEDIA_PRE.tw;
   readonly youtubeUrl = SOCIAL_MEDIA_PRE.yt;
   readonly ADD_THIS_LINK = LINK_NOT_ADDED;
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   onAddLinks(): void {
     this.Addlink.emit(true);
   }

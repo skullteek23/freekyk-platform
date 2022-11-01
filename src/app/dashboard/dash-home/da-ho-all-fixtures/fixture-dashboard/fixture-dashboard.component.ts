@@ -9,7 +9,6 @@ import { MatchFixture } from 'src/app/shared/interfaces/match.model';
   styleUrls: ['./fixture-dashboard.component.css'],
 })
 export class FixtureDashboardComponent implements OnInit {
-  // tslint:disable: no-input-rename
   @Input('matchData') fixture: MatchFixture | null = null;
   @Input('premium') isPremium = false;
   @Input('resultMode') isResult = false;

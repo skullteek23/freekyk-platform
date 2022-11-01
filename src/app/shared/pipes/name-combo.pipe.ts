@@ -15,10 +15,9 @@ export class NameComboPipe implements PipeTransform {
     const lastName: string = name.slice(firstName.length + 1);
     return (
       firstName
-        // tslint:disable: quotemark
-        .concat(" '")
+        .concat(` '`)
         .concat(nickname)
-        .concat("' ")
+        .concat(`' `)
         .concat(lastName)
     );
   }
