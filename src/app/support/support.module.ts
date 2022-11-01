@@ -9,7 +9,7 @@ import { MaterialModule } from '@shared/material.module';
 
 @NgModule({
   declarations: [SupportComponent, FaqsComponent],
-  imports: [SharedModule, SupportRoutingModule, ReactiveFormsModule,
+  imports: [CommonModule, SharedModule, SupportRoutingModule, ReactiveFormsModule,
     MaterialModule],
 })
 export class SupportModule { }
