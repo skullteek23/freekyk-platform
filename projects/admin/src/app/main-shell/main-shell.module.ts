@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 import { RouterModule } from '@angular/router';
 import { MainShellComponent } from './main-shell.component';
@@ -12,7 +12,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
-import { AdminHomeComponent } from '../admin-home/admin-home.component';
 import { AdminConfigPanelComponent } from './components/admin-config-panel/admin-config-panel.component';
 import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
@@ -36,8 +35,9 @@ import { MatchReportSummaryComponent } from './components/season-panel/match-rep
 
 const routes = [
   {
-    path: 'seasons',
+    path: '',
     component: SeasonPanelComponent,
+    pathMatch: 'full',
     children: [
       { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
       { path: 'list', component: ViewSeasonsTableComponent },
@@ -55,7 +55,6 @@ const routes = [
 @NgModule({
   declarations: [
     MainShellComponent,
-    AdminHomeComponent,
     SeasonPanelComponent,
     AddSeasonComponent,
     GroundsPanelComponent,
@@ -91,6 +90,7 @@ const routes = [
     SnackBarModule,
     RouterModule.forChild(routes)
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [DatePipe]
 })
 export class MainShellModule { }
