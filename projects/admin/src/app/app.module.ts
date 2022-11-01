@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-// import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'environments/environment';
 import { CommonModule, DatePipe } from '@angular/common';
