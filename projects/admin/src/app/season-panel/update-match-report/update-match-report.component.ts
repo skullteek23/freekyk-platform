@@ -115,7 +115,9 @@ export class UpdateMatchReportComponent implements OnInit {
     if (control.value === this.homePenScore?.value) {
       return { notEqual: true };
     }
-    this.homePenScore?.markAsUntouched();
+    if (this.homePenScore?.value > 0) {
+      this.homePenScore?.markAsUntouched();
+    }
     return null;
   }
 
@@ -123,7 +125,9 @@ export class UpdateMatchReportComponent implements OnInit {
     if (control.value === this.awayPenScore?.value) {
       return { notEqual: true };
     }
-    this.awayPenScore?.markAsUntouched();
+    if (this.awayPenScore?.value > 0) {
+      this.awayPenScore?.markAsUntouched();
+    }
     return null;
   }
 
