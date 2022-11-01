@@ -14,9 +14,9 @@ import { FormsMessages, MatchReportMessages } from '../../shared/constants/messa
 import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
 import { SeasonAdminService } from '../season-admin.service';
 
-export type HOME_AWAY = 'home' | 'away';
+export type HomeAway = 'home' | 'away';
 export interface IStatHolder {
-  team: HOME_AWAY;
+  team: HomeAway;
   value: string;
 }
 export class IStatHolderEntity {
@@ -37,13 +37,16 @@ export class IStatHolderEntityGeneric {
 })
 export class UpdateMatchReportComponent implements OnInit {
 
+  @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
+  @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
+
   readonly messages = MatchReportMessages;
 
-  AWAY_TEAM = '';
+  awayTeam = '';
   awayTeamPlayersList: ListOption[] = [];
   fixture: MatchFixture;
   formMessages = FormsMessages;
-  HOME_TEAM = '';
+  homeTeam = '';
   homeTeamPlayersList: ListOption[] = [];
   isLoaderShown = false;
   isShowSummary = false;
@@ -51,9 +54,6 @@ export class UpdateMatchReportComponent implements OnInit {
   reportSummary: ReportSummary;
   scorersList: ListOption[] = [];
   updateStats: CloudFunctionStatsData;
-
-  @ViewChild('scorerSelectionHome') chipSelectionInputComponentHome: ChipSelectionInputComponent;
-  @ViewChild('scorerSelectionAway') chipSelectionInputComponentAway: ChipSelectionInputComponent;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateMatchReportComponent>,
@@ -96,8 +96,8 @@ export class UpdateMatchReportComponent implements OnInit {
     this.ngFire.collection('allMatches').doc(this.data).get().pipe(map(resp => resp.data() as MatchFixture)).subscribe(data => {
       if (data && data.date < new Date().getTime() && data.concluded === false) {
         this.fixture = data;
-        this.HOME_TEAM = this.fixture?.home?.name;
-        this.AWAY_TEAM = this.fixture?.away?.name;
+        this.homeTeam = this.fixture?.home?.name;
+        this.awayTeam = this.fixture?.away?.name;
         this.getInvolvedPlayersList();
       } else if (data && data.concluded === true) {
         this.isLoaderShown = false;
@@ -139,18 +139,18 @@ export class UpdateMatchReportComponent implements OnInit {
       return;
     }
     if (homeMembers && homeMembers.length) {
-      for (let k = 0; k < homeMembers.length; k++) {
+      for (const element of homeMembers) {
         this.homeTeamPlayersList.push({
-          viewValue: homeMembers[k].name,
-          value: homeMembers[k].id
+          viewValue: element.name,
+          value: element.id
         });
       }
     }
     if (awayMembers && awayMembers.length) {
-      for (let k = 0; k < awayMembers.length; k++) {
+      for (const element of awayMembers) {
         this.awayTeamPlayersList.push({
-          viewValue: awayMembers[k].name,
-          value: awayMembers[k].id
+          viewValue: element.name,
+          value: element.id
         });
       }
     }
@@ -159,13 +159,15 @@ export class UpdateMatchReportComponent implements OnInit {
 
   getTeamInfo(name: string): Observable<any> {
     if (name) {
-      return this.ngFire.collection('teams', query => query.where('tname', '==', name)).get().pipe(map(resp => resp?.docs[0]?.id));
+      return this.ngFire.collection('teams', query => query.where('tname', '==', name)).get()
+        .pipe(map(resp => resp?.docs[0]?.id));
     }
   }
 
   getMemberInfo(teamID: string): Observable<any> {
     if (teamID) {
-      return this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').get().pipe(map(resp => (resp?.data() as TeamMembers)?.members));
+      return this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').get()
+        .pipe(map(resp => (resp?.data() as TeamMembers)?.members));
     }
   }
 
@@ -183,10 +185,11 @@ export class UpdateMatchReportComponent implements OnInit {
 
   onAdd(ev: ListOption[], controlName: string): void {
     (this.matchReportForm.get(controlName) as FormArray).clear();
-    for (let i = 0; i < ev.length; i++) {
-      const control = new FormControl(ev[i]);
-      (this.matchReportForm.get(controlName) as FormArray).push(control);
-    }
+
+    ev.forEach(element => {
+      const controlTemp = new FormControl(element);
+      (this.matchReportForm.get(controlName) as FormArray).push(controlTemp);
+    });
 
     const control = new FormControl(1, [Validators.required, Validators.pattern(NUM), Validators.min(1), Validators.max(this.totalGoals)]);
     if (controlName === 'scorersHome') {
@@ -294,29 +297,69 @@ export class UpdateMatchReportComponent implements OnInit {
     dataSource.season.push({ point: STATISTICS.TOTAL_RED_CARDS, update: this.parseNumericValue(redCardHoldersAll.length) });
     dataSource.season.push({ point: STATISTICS.TOTAL_YELLOW_CARDS, update: this.parseNumericValue(yellowCardHoldersAll.length) });
     // dataSource.season.push({ point: STATISTICS.HIGHEST_GOALSCORER, update: '' });
-    dataSource.team.push({ point: STATISTICS.FCP_PLAYED, home: this.parseNumericValue(fcpPlayed), away: this.parseNumericValue(fcpPlayed) });
-    dataSource.team.push({ point: STATISTICS.FKC_PLAYED, home: this.parseNumericValue(fkcPlayed), away: this.parseNumericValue(fkcPlayed) });
-    dataSource.team.push({ point: STATISTICS.FPL_PLAYED, home: this.parseNumericValue(fplPlayed), away: this.parseNumericValue(fplPlayed) });
+    dataSource.team.push({
+      point: STATISTICS.FCP_PLAYED, home: this.parseNumericValue(fcpPlayed), away: this.parseNumericValue(fcpPlayed)
+    });
+    dataSource.team.push({
+      point: STATISTICS.FKC_PLAYED, home: this.parseNumericValue(fkcPlayed), away: this.parseNumericValue(fkcPlayed)
+    });
+    dataSource.team.push({
+      point: STATISTICS.FPL_PLAYED, home: this.parseNumericValue(fplPlayed), away: this.parseNumericValue(fplPlayed)
+    });
     dataSource.team.push({ point: STATISTICS.GOALS, home: this.parseNumericValue(goalsHome), away: this.parseNumericValue(goalsAway) });
     dataSource.team.push({ point: STATISTICS.WINS, home: this.parseNumericValue(homeWin), away: this.parseNumericValue(awayWin) });
     dataSource.team.push({ point: STATISTICS.LOSSES, home: this.parseNumericValue(awayWin), away: this.parseNumericValue(homeWin) });
-    dataSource.team.push({ point: STATISTICS.RED_CARDS, home: this.parseNumericValue(redCardHoldersH.length), away: this.parseNumericValue(redCardHoldersA.length) });
-    dataSource.team.push({ point: STATISTICS.YELLOW_CARDS, home: this.parseNumericValue(yellowCardHoldersH.length), away: this.parseNumericValue(yellowCardHoldersA.length) });
-    dataSource.team.push({ point: STATISTICS.GOALS_CONCEDED, home: this.parseNumericValue(goalsAway), away: this.parseNumericValue(goalsHome) });
-    dataSource.player.push({ pointTwo: STATISTICS.APPEARANCES, applied: this.getFormArrayStringList(playersAll), updateTwo: this.parseNumericValue(playersAll.length ? 1 : 0) });
-    dataSource.player.push({ pointTwo: STATISTICS.GOALS, applied: this.getFormArrayStringList(goalScorersAll), updateTwo: this.parseNumericValue(goalScorersAll.length ? 1 : 0) });
-    dataSource.player.push({ pointTwo: STATISTICS.WINS, applied: this.getFormArrayStringList(playerWinners), updateTwo: this.parseNumericValue(playerWinners.length ? 1 : 0) });
-    dataSource.player.push({ pointTwo: STATISTICS.RED_CARDS, applied: this.getFormArrayStringList(redCardHoldersAll), updateTwo: this.parseNumericValue(redCardHoldersAll.length ? 1 : 0) });
-    dataSource.player.push({ pointTwo: STATISTICS.YELLOW_CARDS, applied: this.getFormArrayStringList(yellowCardHoldersAll), updateTwo: this.parseNumericValue(yellowCardHoldersAll.length ? 1 : 0) });
+    dataSource.team.push({
+      point: STATISTICS.RED_CARDS,
+      home: this.parseNumericValue(redCardHoldersH.length),
+      away: this.parseNumericValue(redCardHoldersA.length)
+    });
+    dataSource.team.push({
+      point: STATISTICS.YELLOW_CARDS,
+      home: this.parseNumericValue(yellowCardHoldersH.length),
+      away: this.parseNumericValue(yellowCardHoldersA.length)
+    });
+    dataSource.team.push({
+      point: STATISTICS.GOALS_CONCEDED,
+      home: this.parseNumericValue(goalsAway),
+      away: this.parseNumericValue(goalsHome)
+    });
+    dataSource.player.push({
+      pointTwo: STATISTICS.APPEARANCES,
+      applied: this.getFormArrayStringList(playersAll),
+      updateTwo: this.parseNumericValue(playersAll.length ? 1 : 0)
+    });
+    dataSource.player.push({
+      pointTwo: STATISTICS.GOALS,
+      applied: this.getFormArrayStringList(goalScorersAll),
+      updateTwo: this.parseNumericValue(goalScorersAll.length ? 1 : 0)
+    });
+    dataSource.player.push({
+      pointTwo: STATISTICS.WINS,
+      applied: this.getFormArrayStringList(playerWinners),
+      updateTwo: this.parseNumericValue(playerWinners.length ? 1 : 0)
+    });
+    dataSource.player.push({
+      pointTwo: STATISTICS.RED_CARDS,
+      applied: this.getFormArrayStringList(redCardHoldersAll),
+      updateTwo: this.parseNumericValue(redCardHoldersAll.length ? 1 : 0)
+    });
+    dataSource.player.push({
+      pointTwo: STATISTICS.YELLOW_CARDS,
+      applied: this.getFormArrayStringList(yellowCardHoldersAll),
+      updateTwo: this.parseNumericValue(yellowCardHoldersAll.length ? 1 : 0)
+    });
 
     this.reportSummary = new ReportSummary();
     for (const property in cols) {
       // property can be season, team & player
-      this.reportSummary[property] = {
-        cols: cols[property],
-        dataSource: dataSource[property],
-        displayCols: cols[property]?.map((el: ListOption) => el.value)
-      };
+      if (cols.hasOwnProperty(property) && cols[property]) {
+        this.reportSummary[property] = {
+          cols: cols[property],
+          dataSource: dataSource[property],
+          displayCols: cols[property]?.map((el: ListOption) => el.value)
+        };
+      }
     }
   }
 
@@ -327,7 +370,7 @@ export class UpdateMatchReportComponent implements OnInit {
     return MatchConstants.LABEL_NOT_AVAILABLE;
   }
 
-  parseFormArrayList(value: ListOption[], team: HOME_AWAY): IStatHolder[] {
+  parseFormArrayList(value: ListOption[], team: HomeAway): IStatHolder[] {
     if (value && value.length) {
       return value.map((el: ListOption) => ({ team, value: el.viewValue } as IStatHolder));
     }
@@ -397,11 +440,15 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   get chipSelectionListHome() {
-    return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : [];
+    return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list
+      ? this.chipSelectionInputComponentHome.list
+      : [];
   }
 
   get chipSelectionListAway() {
-    return this.chipSelectionInputComponentAway && this.chipSelectionInputComponentAway.list ? this.chipSelectionInputComponentAway.list : [];
+    return this.chipSelectionInputComponentAway && this.chipSelectionInputComponentAway.list
+      ? this.chipSelectionInputComponentAway.list
+      : [];
   }
 
   get redCardHoldersAway(): FormArray {
