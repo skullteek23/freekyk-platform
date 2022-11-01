@@ -3,10 +3,19 @@ import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { ErrorComponent } from './error/error.component';
+import { MainShellComponent } from './main-shell/main-shell.component';
 
 const redirectLoggedUserTo = () => redirectLoggedInTo(['/seasons']);
 
 const routes: Routes = [
+  {
+    path: '',
+    component: MainShellComponent
+  },
+  {
+    path: 'play',
+    loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
+  },
   {
     path: 'register',
     component: AdminHomeComponent,

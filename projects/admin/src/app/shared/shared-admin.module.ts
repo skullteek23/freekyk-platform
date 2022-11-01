@@ -23,7 +23,9 @@ import { TextShortenPipe } from './pipes/text-shorten.pipe';
     ConfirmationBoxComponent,
     TextShortenPipe
   ],
-  imports: [CommonModule, AppMaterialModule, ReactiveFormsModule, FlexLayoutModule],
+  imports: [
+    CommonModule, AppMaterialModule, ReactiveFormsModule, FlexLayoutModule
+  ],
   exports: [
     NoItemsMessageComponent,
     LoadingComponent,
