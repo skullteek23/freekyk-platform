@@ -82,7 +82,7 @@ export class InvitePlayersComponent implements OnInit {
         .then(() => {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
-        })
+        });
       // .catch((error) => console.log(error));
     } else {
       this.ngFire.firestore
@@ -91,7 +91,7 @@ export class InvitePlayersComponent implements OnInit {
         .then(() => {
           this.snackServ.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
-        })
+        });
       // .catch((error) => console.log(error));
     }
   }

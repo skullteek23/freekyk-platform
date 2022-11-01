@@ -7,8 +7,8 @@ import { LOREM_IPSUM_VERY_SHORT } from '../../Constants/WEBSITE_CONTENT';
   styleUrls: ['./why-choose-section.component.css'],
 })
 export class WhyChooseSectionComponent implements OnInit {
-  @Input('videoEditing') isVeSteps: boolean = false;
-  @Input('name') serviceName: string = '';
+  @Input('videoEditing') isVeSteps = false;
+  @Input('name') serviceName = '';
   @Input() content: { subHeading: string; listPoints: string[] } = {
     subHeading: LOREM_IPSUM_VERY_SHORT,
     listPoints: [

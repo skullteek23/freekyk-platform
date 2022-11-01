@@ -28,9 +28,7 @@ export class TeamService implements OnDestroy {
     this.store
       .select('dash')
       .pipe(
-        map((currState) => {
-          return { team: currState.hasTeam, isCaptain: currState.isCaptain };
-        }),
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
         take(1)
       )
       .subscribe((state) => {
@@ -86,9 +84,7 @@ export class TeamService implements OnDestroy {
     this.store
       .select('dash')
       .pipe(
-        map((currState) => {
-          return { team: currState.hasTeam, isCaptain: currState.isCaptain };
-        }),
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
         take(1)
       )
       .subscribe((state) => {
@@ -164,9 +160,7 @@ export class TeamService implements OnDestroy {
       .doc('members')
       .valueChanges()
       .pipe(
-        map((resp) => {
-          return resp as TeamMembers;
-        })
+        map((resp) => resp as TeamMembers)
       )
       .subscribe((members) =>
         this.store.dispatch(new TeamActions.AddMembers(members))

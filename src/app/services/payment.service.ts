@@ -6,7 +6,7 @@ import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../dashboard/con
 import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS, RazorPayAPI } from '../shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from '../shared/interfaces/season.model';
-declare var Razorpay: any;
+declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 
 @Injectable({
@@ -40,7 +40,7 @@ export class PaymentService {
       .toPromise()
       .then(() => this.onLoadingStatusChange('success'))
       .catch((err) => {
-        this.onLoadingStatusChange('home')
+        this.onLoadingStatusChange('home');
         err == null
           ? this.handleFailure({
             description: 'Payment Failed! Unauthorized payment source.',
@@ -49,7 +49,7 @@ export class PaymentService {
           : this.handleFailure({
             description: 'Payment Failed! Try again later',
             code: '401',
-          })
+          });
       }
       );
   }

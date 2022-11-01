@@ -27,14 +27,14 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
     if (!value) {
       return;
     }
-    this.seasonStartDate = value ? value['startDate'] : null;
-    const teams = value ? value['participatingTeamsCount'] : null;
-    const tournaments = value ? this.getTournaments(teams, value['containingTournaments']) : null;
-    const startDate = value ? value['startDate'] : null;
+    this.seasonStartDate = value ? value.startDate : null;
+    const teams = value ? value.participatingTeamsCount : null;
+    const tournaments = value ? this.getTournaments(teams, value.containingTournaments) : null;
+    const startDate = value ? value.startDate : null;
     this.location = {
-      state: value['state'],
-      city: value['city']
-    }
+      state: value.state,
+      city: value.city
+    };
     if (tournaments && startDate && teams) {
       this.lines = [
         {
@@ -49,7 +49,7 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
           heading: 'Start Date',
           content: startDate
         },
-      ]
+      ];
     } else {
       this.lines = [];
       this.location = {};
@@ -83,15 +83,15 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
       if (bookings && bookings.length) {
         this.bookingsList = bookings;
       } else {
-        this.bookingsList = []
+        this.bookingsList = [];
       }
-    }))
+    }));
   }
 
   initForm(): void {
     this.groundsForm = new FormGroup({
       groundsList: new FormControl(null, Validators.required)
-    })
+    });
   }
 
   onChooseGround() {
@@ -133,7 +133,7 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
         availDays.push(days[i]);
       }
     }
-    const lastElement = availDays.splice(availDays.length - 1, 1)
+    const lastElement = availDays.splice(availDays.length - 1, 1);
     return availDays.slice().join(', ').concat(' & ').concat(lastElement[0]);
   }
 
@@ -151,6 +151,6 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
     const booking = this.getBooking(groundID);
     const unavailableFrom = this.datePipe.transform(booking.bookingFrom, 'mediumDate');
     const unavailableTo = this.datePipe.transform(booking.bookingTo, 'mediumDate');
-    return `Ground not available from ${unavailableFrom} till ${unavailableTo}`
+    return `Ground not available from ${unavailableFrom} till ${unavailableTo}`;
   }
 }

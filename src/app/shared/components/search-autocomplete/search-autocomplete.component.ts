@@ -4,7 +4,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ArraySorting } from '../../utils/array-sorting';
-export interface ListOption { viewValue: string, data: any };
+export interface ListOption { viewValue: string; data: any };
 @Component({
   selector: 'app-search-autocomplete',
   templateUrl: './search-autocomplete.component.html',
@@ -29,12 +29,10 @@ export class SearchAutocompleteComponent implements OnInit {
   ngOnInit(): void {
     this.searchForm = new FormGroup({
       searchKey: new FormControl(null, Validators.pattern('^[a-zA-Z0-9- ]*$'))
-    })
+    });
     fromEvent(this.searchInputEvent.nativeElement, 'keyup')
       .pipe(
-        map((event: any) => {
-          return event.target.value.toLowerCase();
-        }),
+        map((event: any) => event.target.value.toLowerCase()),
       )
       .subscribe((searchValue: string) => {
         // subscription for response

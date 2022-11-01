@@ -45,7 +45,7 @@ export class ProductProfileComponent implements OnInit {
           if (resp.exists) {
             this.getProdAddiInfo();
             this.imgPath = (resp.data() as ProdBasicInfo).imgpath;
-          } else this.router.navigate(['/error']);
+          } else {this.router.navigate(['/error']);}
         }),
         map((resp) => resp.data() as ProdBasicInfo),
         share()

@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   screen = '';
   dataImg$: Observable<string>;
   dataPos$: Observable<string>;
-  playerName: string = 'NA';
+  playerName = 'NA';
   subscriptions = new Subscription();
   sidenavOpenState: boolean;
   constructor(

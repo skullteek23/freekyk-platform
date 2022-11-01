@@ -176,9 +176,7 @@ export class NotificationsService implements OnDestroy {
                       : null
                   )
                 )
-                .subscribe((response: 'accept' | 'reject' | null) => {
-                  return this.updTeamInviteByNotif(response, id);
-                })
+                .subscribe((response: 'accept' | 'reject' | null) => this.updTeamInviteByNotif(response, id))
             );
           }
         })

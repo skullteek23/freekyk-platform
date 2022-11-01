@@ -44,7 +44,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     DUMMY_FIXTURE_TABLE_COLUMNS.ACTIONS,
   ];
   isEditMode = false;
-  loadingStatus: number = 0;
+  loadingStatus = 0;
   lastRegistrationDate = new Date();
   messages = FormsMessages;
   seasonDraftData: SeasonDraft;
@@ -63,7 +63,7 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   ngOnInit(): void {
     const params = this.route.snapshot.params;
-    this.draftID = params['draftid'];
+    this.draftID = params.draftid;
     if (this.draftID) {
       this.getDraftInfo();
     }
@@ -73,7 +73,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.updateEntriesForm = new FormGroup({
       description: new FormControl(this.seasonDraftData?.basicInfo?.description, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
       rules: new FormControl(this.seasonDraftData?.basicInfo?.rules, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
-    })
+    });
   }
 
   getDraftInfo(): void {
@@ -108,7 +108,7 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.updateEntriesForm.setValue({
       description: this.seasonDraftData?.basicInfo?.description,
       rules: this.seasonDraftData?.basicInfo?.rules
-    })
+    });
   }
 
   updateSeason() {
@@ -124,14 +124,14 @@ export class ViewSeasonDraftComponent implements OnInit {
     }
     if (Object.keys(updatedTextFields).length) {
       this.setLoadingStatus(LOADING_STATUS.LOADING);
-      let allPromises = [];
+      const allPromises = [];
       allPromises.push(this.ngFire.collection('seasonDrafts').doc(this.seasonDraftData.draftID).update({
         lastUpdated: new Date().getTime(),
         basicInfo: {
           ...this.seasonDraftData?.basicInfo,
           ...updatedTextFields
         }
-      }))
+      }));
       if (this.isSeasonPublished) {
         allPromises.push(this.ngFire.collection(`seasons/${this.seasonDraftData.draftID}/additionalInfo`).doc('moreInfo').update({
           ...updatedTextFields
@@ -174,7 +174,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         }).afterClosed().subscribe(userResponse => {
           if (userResponse && Object.keys(userResponse).length === 4) {
             this.setLoadingStatus(LOADING_STATUS.LOADING);
-            this.ngFire.collection('adminRequests').doc(userResponse['id']).set(userResponse)
+            this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
               .then(
                 () => {
                   this.setLoadingStatus(LOADING_STATUS.DEFAULT);
@@ -184,7 +184,7 @@ export class ViewSeasonDraftComponent implements OnInit {
                   this.setLoadingStatus(LOADING_STATUS.DEFAULT);
                   this.snackbarService.displayError('Request raise failed!');
                 }
-              )
+              );
           }
         });
       } else {
@@ -203,7 +203,7 @@ export class ViewSeasonDraftComponent implements OnInit {
             .then(() => this.snackbarService.displayCustomMsg('Draft deleted successfully!'))
             .catch(err => this.snackbarService.displayCustomMsg(err));
         }
-      })
+      });
   }
 
   onConfirmPublish() {
@@ -215,7 +215,7 @@ export class ViewSeasonDraftComponent implements OnInit {
             seasonDraft: this.seasonDraftData,
             fixturesDraft: this.seasonFixtures,
             lastRegTimestamp: this.lastRegistrationDate.getTime()
-          }
+          };
           this.seasonAdminService.publishSeason(data)
             .then(() => {
               this.setLoadingStatus(LOADING_STATUS.DONE);
@@ -226,9 +226,9 @@ export class ViewSeasonDraftComponent implements OnInit {
             .catch(error => {
               this.snackbarService.displayError(error?.message);
               this.setLoadingStatus(LOADING_STATUS.DEFAULT);
-            })
+            });
         }
-      })
+      });
   }
 
   onConfirm(): Observable<any> {
@@ -260,7 +260,7 @@ export class ViewSeasonDraftComponent implements OnInit {
                 stadium: fixtureData.stadium,
                 id,
               } as dummyFixture);
-            })
+            });
             this.setLoadingStatus(LOADING_STATUS.DEFAULT);
           }
         });
@@ -282,7 +282,7 @@ export class ViewSeasonDraftComponent implements OnInit {
           });
         }
         this.setLoadingStatus(LOADING_STATUS.DEFAULT);
-      })
+      });
     }
   }
 
@@ -298,7 +298,7 @@ export class ViewSeasonDraftComponent implements OnInit {
         map(response => response.docs.map(doc => doc.data() as dummyFixture)),
         map(response => response.sort(ArraySorting.sortObjectByKey('date'))),
         map(response => response as dummyFixture[])
-      )
+      );
   }
 
   setLoadingStatus(value: LOADING_STATUS) {
@@ -307,12 +307,12 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   goToURL() {
     if (this.seasonDraftData?.basicInfo?.name) {
-      window.open(`${MatchConstants.SEASON_URL}${this.seasonDraftData.basicInfo.name}`, "_blank");
+      window.open(`${MatchConstants.SEASON_URL}${this.seasonDraftData.basicInfo.name}`, '_blank');
     }
   }
 
   get containingTournaments(): string {
-    return this.seasonDraftData?.basicInfo?.containingTournaments.join(', ')
+    return this.seasonDraftData?.basicInfo?.containingTournaments.join(', ');
   }
 
   get groundAvailable$(): Observable<boolean> {

@@ -35,7 +35,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
           const filter = {
             queryItem: Object.keys(params)[0],
             queryValue: Object.values(params)[0]
-          }
+          };
           this.onQueryResults(filter);
         } else {
           this.onQueryResults(null);
@@ -79,7 +79,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
         tap(() => {
           this.isLoading = false;
         }),
-      )
+      );
   }
 
   onQueryData(queryInfo): void {

@@ -16,7 +16,7 @@ import { PlayConstants } from '../play.constants';
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
-  activeIndex: number = 0;
+  activeIndex = 0;
   cpStandings: CommunityLeaderboard[] = [];
   filterData: FilterData;
   knockoutFixtures: MatchFixture[] = [];
@@ -110,7 +110,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
                 },
                 winner,
                 stadium: element.stadium,
-              }
+              };
               return CPdata;
             });
             return this.ngFire.collection('leagues').doc(resp[2]).get();
@@ -127,7 +127,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         });
     } else {
       this.cpStandings = [];
-      this.knockoutFixtures = []
+      this.knockoutFixtures = [];
       this.leagueData = [];
     }
   }
@@ -143,10 +143,10 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   }
 
   getSeasonID(): Observable<string> {
-    return this.ngFire.collection('seasons', (query) => query.where('name', '==', this.seasonChosen)).get().pipe(map((res) => !res.empty ? res.docs[0].id : null))
+    return this.ngFire.collection('seasons', (query) => query.where('name', '==', this.seasonChosen)).get().pipe(map((res) => !res.empty ? res.docs[0].id : null));
   }
 
   getMatchesByType(matchType: TournamentTypes): Observable<any> {
-    return this.ngFire.collection('allMatches', (query) => query.where('season', '==', this.seasonChosen).where('type', '==', matchType)).get().pipe(map((res) => !res.empty ? res.docs.map(doc => doc.data() as MatchFixture[]) : []))
+    return this.ngFire.collection('allMatches', (query) => query.where('season', '==', this.seasonChosen).where('type', '==', matchType)).get().pipe(map((res) => !res.empty ? res.docs.map(doc => doc.data() as MatchFixture[]) : []));
   }
 }

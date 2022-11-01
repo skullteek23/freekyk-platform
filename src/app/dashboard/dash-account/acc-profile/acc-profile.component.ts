@@ -313,7 +313,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       }
       if (this.personalInfoForm.get('name').dirty && this.personalInfoForm.get('name').value) {
         newBasicDetails.name = this.personalInfoForm.get('name').value;
-        this.authService.updateAuthDisplayName(newBasicDetails['name'])
+        this.authService.updateAuthDisplayName(newBasicDetails.name);
       }
 
       const uid = localStorage.getItem('uid');

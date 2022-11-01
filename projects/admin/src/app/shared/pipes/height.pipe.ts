@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class HeightPipe implements PipeTransform {
   transform(value: number): string | number {
-    if (!!value) return value.toString() + ' cms';
+    if (!!value) {return value.toString() + ' cms';}
     return value;
   }
 }

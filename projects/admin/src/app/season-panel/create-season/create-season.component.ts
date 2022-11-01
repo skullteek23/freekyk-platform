@@ -47,8 +47,8 @@ export class CreateSeasonComponent implements OnDestroy {
   ) {
     this.draftID = ngFire.createId();
     const qParams = route.snapshot.queryParams;
-    if (qParams && qParams['draft']) {
-      const draftID = qParams['draft'];
+    if (qParams && qParams.draft) {
+      const draftID = qParams.draft;
       this.navigateToDraftAndClose(draftID);
     }
   }
@@ -84,11 +84,11 @@ export class CreateSeasonComponent implements OnDestroy {
           this.isLoaderShown = false;
           this.snackBarService.displayError('Unable to get grounds!');
         }
-      ))
+      ));
   }
 
   onNavigateAway() {
-    this.router.navigate(['/seasons/list'])
+    this.router.navigate(['/seasons/list']);
   }
 
   saveDetails() {
@@ -147,7 +147,7 @@ export class CreateSeasonComponent implements OnDestroy {
       const imgpath = this.seasonImage ? await this.getImageURL(this.seasonImage) : MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
       const formData = {
         ...this.seasonForm.value,
-        startDate: new Date(this.seasonForm.value['startDate']).getTime(),
+        startDate: new Date(this.seasonForm.value.startDate).getTime(),
         imgpath
       };
       this.saveDraftDetails(formData);
@@ -159,21 +159,21 @@ export class CreateSeasonComponent implements OnDestroy {
   onUpdateDraft(): void {
     if (this.isGroundFormValid) {
       this.isLoaderShown = true;
-      this.selectedGroundsList = (this.groundForm.value['groundsList'] as GroundPrivateInfo[]);
+      this.selectedGroundsList = (this.groundForm.value.groundsList as GroundPrivateInfo[]);
       this.dataForFixtureStep = {
         season: this.dataForGroundStep,
         grounds: this.selectedGroundsList
-      }
+      };
       if (this.selectedGroundsList.length) {
         const result = this.ngFire.collection('seasonDrafts').doc(this.draftID).update({
           grounds: this.selectedGroundsList
-        } as Partial<SeasonDraft>)
+        } as Partial<SeasonDraft>);
         result.then(() => {
           this.snackBarService.displayCustomMsg('draft updated successfully!');
-          this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } })
+          this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } });
           this.onNextStep();
           this.isLoaderShown = false;
-        })
+        });
       } else {
         this.isLoaderShown = false;
       }
@@ -192,7 +192,7 @@ export class CreateSeasonComponent implements OnDestroy {
     const batch = this.ngFire.firestore.batch();
 
     fixtures.forEach(element => {
-      if (element && element.hasOwnProperty('id') && element['id']) {
+      if (element && element.hasOwnProperty('id') && element.id) {
         const colRef = this.ngFire.collection('seasonFixturesDrafts').doc(element?.id).ref;
         batch.set(colRef, { draftID: this.draftID, ...element });
       }
@@ -218,7 +218,7 @@ export class CreateSeasonComponent implements OnDestroy {
       basicInfo: formData,
       lastUpdated: new Date().getTime(),
       status: 'DRAFTED'
-    }
+    };
     this.ngFire.collection('seasonDrafts').doc(this.draftID).get().subscribe(val => {
       let result: Promise<any>;
       if (val.exists) {
@@ -231,13 +231,13 @@ export class CreateSeasonComponent implements OnDestroy {
         if (seasonDraft?.basicInfo?.city && seasonDraft?.basicInfo?.state && seasonDraft?.basicInfo?.startDate) {
           this.isLoaderShown = false;
           this.getGrounds(seasonDraft.basicInfo.city, seasonDraft.basicInfo.state, seasonDraft.basicInfo.startDate);
-          this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } })
+          this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } });
           this.onNextStep();
         }
       }, (err) => {
         this.isLoaderShown = false;
       });
-    })
+    });
   }
 
   async getImageURL(fileObj: File): Promise<string> {
@@ -257,6 +257,6 @@ export class CreateSeasonComponent implements OnDestroy {
   }
 
   get isFixtureFormValid(): boolean {
-    return this.fixtureForm && this.fixtureForm.valid && this.fixtureForm.value && this.fixtureForm.value['fixtures'] && this.fixtureForm.value['fixtures'].length;
+    return this.fixtureForm && this.fixtureForm.valid && this.fixtureForm.value && this.fixtureForm.value.fixtures && this.fixtureForm.value.fixtures.length;
   }
 }

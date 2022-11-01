@@ -1,4 +1,4 @@
-import { ListOption } from "./others.model";
+import { ListOption } from './others.model';
 
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export type KnockoutRounds = 2 | 4 | 8 | 16;
@@ -6,14 +6,14 @@ export interface MatchFixture {
   date: number;
   concluded: boolean;
   home: {
-    name: string,
-    logo: string,
-    score?: number
+    name: string;
+    logo: string;
+    score?: number;
   };
   away: {
-    name: string,
-    logo: string,
-    score?: number
+    name: string;
+    logo: string;
+    score?: number;
   };
   teams: string[];
   season: string;
@@ -90,7 +90,7 @@ export interface dummyFixture {
 export class ReportSummary {
   team: ReportData = { cols: [], displayCols: [], dataSource: [] };
   player: ReportData = { cols: [], displayCols: [], dataSource: [] };
-  season: ReportData = { cols: [], displayCols: [], dataSource: [] }
+  season: ReportData = { cols: [], displayCols: [], dataSource: [] };
 }
 
 export class ReportUpdates {
@@ -134,22 +134,22 @@ export interface MatchReportFormData {
 
 export interface MatchDayReport {
   score: {
-    home: number,
-    away: number,
+    home: number;
+    away: number;
   };
   referee: string;
   specialNotes?: string;
   scorers?: {
-    home: string[],
-    away: string[]
+    home: string[];
+    away: string[];
   };
   cards?: {
-    red: string[],
-    yellow: string[],
+    red: string[];
+    yellow: string[];
   };
   penalities?: {
-    home: number,
-    away: number
+    home: number;
+    away: number;
   };
 }
 

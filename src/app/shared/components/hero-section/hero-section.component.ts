@@ -10,14 +10,14 @@ import { heroCallToAction } from '../../interfaces/others.model';
   styleUrls: ['./hero-section.component.css'],
 })
 export class HeroSectionComponent implements OnInit {
-  @Input('headline') headline: boolean = false;
+  @Input('headline') headline = false;
   @Input('overline') overline: string | false = 'Play';
   @Input('title') title: string | false = 'freekyk play';
   @Input('CTA') button: heroCallToAction | false = {
     name: 'get started',
     route: '/signup',
   };
-  @Input('landingPage') largeBanner: boolean = false;
+  @Input('landingPage') largeBanner = false;
   @Input() imageSource: string;
   @Input() description: string = LOREM_IPSUM_SHORT;
   @Input() useAltLayout = false;

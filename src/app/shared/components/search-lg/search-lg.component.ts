@@ -32,9 +32,7 @@ export class SearchLgComponent implements OnInit {
     fromEvent(this.searchInputEvent.nativeElement, 'keyup')
       .pipe(
         // get value
-        map((event: any) => {
-          return event.target.value.toLowerCase();
-        }),
+        map((event: any) => event.target.value.toLowerCase()),
         // if character length greater then 2
         filter((res) => res.length > 2 || res === ''),
 

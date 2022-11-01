@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LineInfoDisplayComponent implements OnInit {
 
   @Input() heading = '';
-  @Input() content = ''
+  @Input() content = '';
 
   constructor() { }
 

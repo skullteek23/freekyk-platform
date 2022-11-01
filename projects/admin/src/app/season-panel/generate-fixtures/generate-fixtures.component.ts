@@ -19,7 +19,7 @@ export class GenerateFixturesComponent implements OnInit {
     DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
     DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
     DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
-  ]
+  ];
   lines = [];
   fixturesForm = new FormGroup({});
   fixturesList: dummyFixture[] = [];
@@ -29,9 +29,9 @@ export class GenerateFixturesComponent implements OnInit {
       return;
     }
     const seasonInfo = value.season;
-    const teams = seasonInfo ? seasonInfo['participatingTeamsCount'] : null;
-    const tournaments = seasonInfo ? this.getTournaments(teams, seasonInfo['containingTournaments']) : null;
-    const startDate = seasonInfo ? new Date(seasonInfo['startDate']) : null;
+    const teams = seasonInfo ? seasonInfo.participatingTeamsCount : null;
+    const tournaments = seasonInfo ? this.getTournaments(teams, seasonInfo.containingTournaments) : null;
+    const startDate = seasonInfo ? new Date(seasonInfo.startDate) : null;
     const groundNamesArray: string[] = value.grounds.map(ground => ground.name);
     const groundNamesString: string = groundNamesArray.length ? groundNamesArray.join(', ') : 'NA';
     const data: fixtureGenerationData = {
@@ -41,7 +41,7 @@ export class GenerateFixturesComponent implements OnInit {
       matches: tournaments?.value,
       startDate: new Date(seasonInfo?.startDate).getTime(),
       oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
-    }
+    };
     if (tournaments && startDate && teams) {
       this.fixturesList = this.seasonAdminService.onGenerateDummyFixtures(data);
       const endDate = this.fixturesList && this.fixturesList.length ? this.fixturesList[this.fixturesList.length - 1].date : '';
@@ -81,7 +81,7 @@ export class GenerateFixturesComponent implements OnInit {
   initForm(value: any[]): void {
     this.fixturesForm = new FormGroup({
       fixtures: new FormControl(value, [Validators.required])
-    })
+    });
   }
 
   getTournaments(participatingTeams: number, containingTournaments: string[]): { viewValue: string; value: any } {

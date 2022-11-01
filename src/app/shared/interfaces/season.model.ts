@@ -1,5 +1,5 @@
-import { GroundPrivateInfo } from "./ground.model";
-import { TournamentTypes } from "./match.model";
+import { GroundPrivateInfo } from './ground.model';
+import { TournamentTypes } from './match.model';
 
 export type statusType = 'PUBLISHED' | 'DRAFTED' | 'FINISHED' | 'READY TO PUBLISH';
 export interface SeasonBasicInfo {
@@ -34,9 +34,9 @@ export class SeasonStats {
   // FKC_winner?: string;
   // FPL_winner?: string;
   // awards: string;
-  g: number = 0;
-  rcards: number = 0;
-  ycards: number = 0;
+  g = 0;
+  rcards = 0;
+  ycards = 0;
   // highestScorer: string;
 }
 export interface SeasonParticipants {

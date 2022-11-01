@@ -14,8 +14,7 @@ export class FixtureTableComponent {
 
   @Input() set data(value: dummyFixture[]) {
     const currentDate = new Date().getTime();
-    const dummyFixturesTemp = value.map(val => {
-      return {
+    const dummyFixturesTemp = value.map(val => ({
         [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
         [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: val.home,
         [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: val.away,
@@ -25,14 +24,11 @@ export class FixtureTableComponent {
         occurred: currentDate > val.date,
         concluded: val.concluded,
         action: val.concluded ? 'Submitted' : 'Update Match'
-      }
-    }, this);
+      }), this);
     dummyFixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
     this.tableLength = value.length;
-    this.dataSource.sortingDataAccessor = (data, sortHeaderId) => {
-      return data[sortHeaderId].toLowerCase();
-    }
+    this.dataSource.sortingDataAccessor = (data, sortHeaderId) => data[sortHeaderId].toLowerCase();
   }
 
   @Input() displayedCols: string[] = [];

@@ -1,4 +1,4 @@
-import { LeagueTableModel } from "../interfaces/others.model";
+import { LeagueTableModel } from '../interfaces/others.model';
 
 export class ArraySorting {
 
@@ -7,8 +7,8 @@ export class ArraySorting {
       const isTypescriptProperty = key in a || key in b;
       if (isTypescriptProperty || a.hasOwnProperty(key) || b.hasOwnProperty(key)) {
         if (Array.isArray(a[key])) {
-          const valueA = a[key].join(", ").toUpperCase();
-          const valueB = b[key].join(", ").toUpperCase();
+          const valueA = a[key].join(', ').toUpperCase();
+          const valueB = b[key].join(', ').toUpperCase();
           return ArraySorting.getSortedElement(valueA, valueB, order);
         } else {
           let valueA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
@@ -25,7 +25,7 @@ export class ArraySorting {
       }
       // property doesn't exist on either object
       return 0;
-    }
+    };
   }
 
   static getSortedElement(valueA: any, valueB: any, order: string): number {

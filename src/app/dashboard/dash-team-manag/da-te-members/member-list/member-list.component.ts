@@ -32,12 +32,10 @@ export class MemberListComponent implements OnInit {
       .doc(pid)
       .get()
       .pipe(
-        map((resp) => {
-          return {
+        map((resp) => ({
             id: pid,
             ...(resp.data() as PlayerBasicInfo),
-          } as PlayerBasicInfo;
-        })
+          } as PlayerBasicInfo))
       )
       .toPromise();
     const dialogRef = this.dialog.open(PlayerCardComponent, {

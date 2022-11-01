@@ -18,13 +18,13 @@ export class SeasonAdminService {
   constructor(private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions) { }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
-    let fcpMatches = data.matches.fcp;
-    let fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
-    let fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
+    const fcpMatches = data.matches.fcp;
+    const fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
+    const fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
     const totalMatches: number = fcpMatches + fkcMatches + fplMatches;
     const grounds = data.grounds;
-    const availableSlotList: { date: Date, groundName: string, locCity: string, locState: string }[] = [];
-    let initialDate = new Date(data.startDate);
+    const availableSlotList: { date: Date; groundName: string; locCity: string; locState: string }[] = [];
+    const initialDate = new Date(data.startDate);
     while (availableSlotList.length < totalMatches) {
       const day = initialDate.getDay();
       for (let k = 0; k < grounds.length; k++) {
@@ -66,7 +66,7 @@ export class SeasonAdminService {
     availableSlotList.sort(ArraySorting.sortObjectByKey('date'));
     const fixturesTemp: dummyFixture[] = [];
     for (let index = 0; index < availableSlotList.length; index++) {
-      let matchType: "FKC" | "FCP" | "FPL" = 'FCP';
+      let matchType: 'FKC' | 'FCP' | 'FPL' = 'FCP';
       if (fcpMatches && index < fcpMatches) {
         matchType = 'FCP';
       }
@@ -95,8 +95,8 @@ export class SeasonAdminService {
       return {
         ...element,
         id: this.getMID(element.type, i)
-      }
-    })
+      };
+    });
     return fixtures && fixtures.length ? fixtures : [];
   }
 
@@ -141,7 +141,7 @@ export class SeasonAdminService {
         response.forEach(deleteDocID => {
           const draftRef = this.ngFire.collection('seasonFixturesDrafts').doc(deleteDocID).ref;
           batch.delete(draftRef);
-        })
+        });
       }
 
       if (deleteFixturesOnly === false) {
@@ -165,7 +165,7 @@ export class SeasonAdminService {
     if (draftID) {
       return this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', draftID))
         .get()
-        .pipe(map(resp => resp.docs.map(doc => doc.exists ? doc.id : null)))
+        .pipe(map(resp => resp.docs.map(doc => doc.exists ? doc.id : null)));
     }
   }
 
@@ -196,13 +196,13 @@ export class SeasonAdminService {
 
   getStatusClass(status: statusType): any {
     if (this.isSeasonLive(status)) {
-      return { 'green': true };
+      return { green: true };
     } else if (status === 'READY TO PUBLISH') {
-      return { 'yellow': true };
+      return { yellow: true };
     } else if (status === 'DRAFTED') {
-      return { 'grey': true };
+      return { grey: true };
     } else if (this.isSeasonFinished(status)) {
-      return { 'greenLight': true };
+      return { greenLight: true };
     }
     return {};
   }

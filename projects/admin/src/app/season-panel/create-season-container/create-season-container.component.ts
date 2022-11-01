@@ -23,7 +23,7 @@ export class CreateSeasonContainerComponent implements OnInit, canComponentDeact
       disableClose: true,
       closeOnNavigation: true,
       data: params
-    })
+    });
   }
 
   canDeactivate(): Guard {

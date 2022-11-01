@@ -16,7 +16,7 @@ export class RequestDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<RequestDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { season: string, heading: string, isShowMatch: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { season: string; heading: string; isShowMatch: boolean },
     private ngFire: AngularFirestore
   ) { }
 
@@ -36,9 +36,9 @@ export class RequestDialogComponent implements OnInit {
         seasonId: this.data.season,
         timestamp,
         reason: this.reason,
-      }
+      };
       if (this.data.isShowMatch) {
-        requestData['mid'] = this.mid;
+        requestData.mid = this.mid;
       }
       this.reason = null;
       this.mid = null;
@@ -47,7 +47,7 @@ export class RequestDialogComponent implements OnInit {
   }
 
   onCloseDialogWithData(data) {
-    this.dialogRef.close(data)
+    this.dialogRef.close(data);
   }
 
   get isReasonValid(): boolean {

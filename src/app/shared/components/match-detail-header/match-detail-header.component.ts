@@ -8,14 +8,14 @@ import { matchData } from '../../interfaces/others.model';
 })
 export class MatchDetailHeaderComponent {
 
-  isFixture: boolean = true;
+  isFixture = true;
   matchData: matchData;
   resultStatus = '';
 
   @Input() set data(value: matchData) {
     if (value) {
       this.matchData = value;
-      this.isFixture = value['concluded'] === false;
+      this.isFixture = value.concluded === false;
       this.resultStatus = this.getResultStatus(value);
     }
   }

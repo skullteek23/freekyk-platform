@@ -23,7 +23,7 @@ export class GroundsPanelComponent implements OnInit {
   err;
   groundAdded: boolean;
   isLoading = false;
-  groundTypes = ['public', 'private']
+  groundTypes = ['public', 'private'];
   timingsPreferences = {};
   hours: number[] = MatchConstants.GROUND_HOURS;
   dayArrayMap = new Map<string, number>();
@@ -56,7 +56,7 @@ export class GroundsPanelComponent implements OnInit {
       contractFilePath: new FormControl(null),
       contractStartDate: new FormControl(today, Validators.required),
       contractEndDate: new FormControl(null, Validators.required),
-    })
+    });
     this.dayArrayMap.set('Sun', 0);
     this.dayArrayMap.set('Mon', 1);
     this.dayArrayMap.set('Tues', 2);
@@ -72,7 +72,7 @@ export class GroundsPanelComponent implements OnInit {
       4: [],
       5: [],
       6: [],
-    }
+    };
   }
   ngOnInit(): void { }
   onSelectImageUpload($event: File) {
@@ -102,7 +102,7 @@ export class GroundsPanelComponent implements OnInit {
         contractFilePath: paths[1],
       });
       this.saveFormToServer();
-    })
+    });
   }
 
   saveFormToServer() {
@@ -116,47 +116,47 @@ export class GroundsPanelComponent implements OnInit {
     }
     const newGroundId = this.ngFire.createId();
     const newGround: GroundBasicInfo = {
-      name: this.groundForm.value['name'],
-      imgpath: this.groundForm.value['imgpath'],
-      locState: this.groundForm.value['locState'],
-      locCity: this.groundForm.value['locCity'],
+      name: this.groundForm.value.name,
+      imgpath: this.groundForm.value.imgpath,
+      locState: this.groundForm.value.locState,
+      locCity: this.groundForm.value.locCity,
       fieldType: 'TURF',
-      own_type: this.groundForm.value['type'] === 'public' ? 'PUBLIC' : 'PRIVATE',
+      own_type: this.groundForm.value.type === 'public' ? 'PUBLIC' : 'PRIVATE',
       playLvl: 'best',
-    }
+    };
     const privateInfo: GroundPrivateInfo = {
-      name: this.groundForm.value['name'],
-      signedContractFileLink: this.groundForm.value['contractFilePath'],
-      locState: this.groundForm.value['locState'],
-      locCity: this.groundForm.value['locCity'],
-      contractStartDate: new Date(this.groundForm.value['contractStartDate']).getTime(),
-      contractEndDate: new Date(this.groundForm.value['contractEndDate']).getTime(),
+      name: this.groundForm.value.name,
+      signedContractFileLink: this.groundForm.value.contractFilePath,
+      locState: this.groundForm.value.locState,
+      locCity: this.groundForm.value.locCity,
+      contractStartDate: new Date(this.groundForm.value.contractStartDate).getTime(),
+      contractEndDate: new Date(this.groundForm.value.contractEndDate).getTime(),
       timings: this.timingsPreferences
-    }
-    let AllPromises = [];
-    AllPromises.push(this.ngFire.collection('grounds').doc(newGroundId).set(newGround))
-    AllPromises.push(this.ngFire.collection('groundsPvt').doc(newGroundId).set(privateInfo))
+    };
+    const AllPromises = [];
+    AllPromises.push(this.ngFire.collection('grounds').doc(newGroundId).set(newGround));
+    AllPromises.push(this.ngFire.collection('groundsPvt').doc(newGroundId).set(privateInfo));
     Promise.all(AllPromises).then(() => {
       this.isLoading = false;
       this.snackServ.displayCustomMsg('Ground added successfully!');
       this.imgUploadFile$ = null;
       this.contractFile$ = null;
       // this.router.navigate(['/grounds', 'more', newGroundId])
-      this.router.navigate(['/seasons'])
-    })
+      this.router.navigate(['/seasons']);
+    });
   }
 
   isSelected(day: string, hour: number): boolean {
     const dayStr = this.dayArrayMap.get(day);
-    return (this.timingsPreferences[dayStr] && (this.timingsPreferences[dayStr].findIndex(val => val === hour) > -1))
+    return (this.timingsPreferences[dayStr] && (this.timingsPreferences[dayStr].findIndex(val => val === hour) > -1));
   }
   onSelectBox(day: string, hour: number): void {
     const dayStr = this.dayArrayMap.get(day);
-    const Index = (this.timingsPreferences[dayStr] as any[]).findIndex(val => val === hour)
+    const Index = (this.timingsPreferences[dayStr] as any[]).findIndex(val => val === hour);
     if (this.timingsPreferences[dayStr] && Index === -1) {
       (this.timingsPreferences[dayStr] as any[]).push(hour);
     } else {
-      (this.timingsPreferences[dayStr] as any[]).splice(Index, 1)
+      (this.timingsPreferences[dayStr] as any[]).splice(Index, 1);
     }
   }
   get isSubmitDisabled(): boolean {

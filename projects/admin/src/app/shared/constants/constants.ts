@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 
 export class MatchConstants {
   public static GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
@@ -50,7 +50,7 @@ export const MatchConstantsSecondary = {
   DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png',
   DEFAULT_PLACEHOLDER: 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg',
   DEFAULT_IMAGE_URL: 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
-}
+};
 
 export const DUMMY_FIXTURE_TABLE_COLUMNS = {
   MATCH_ID: 'id',
@@ -60,7 +60,7 @@ export const DUMMY_FIXTURE_TABLE_COLUMNS = {
   LOCATION: 'location',
   GROUND: 'ground',
   ACTIONS: 'actions',
-}
+};
 export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   MATCH_ID: 'Unique Match ID',
   HOME: 'Home Team',
@@ -68,12 +68,12 @@ export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   DATE: 'Date & Time',
   LOCATION: 'Location',
   GROUND: 'Ground',
-}
+};
 
 export const DELETE_SEASON_SUBHEADING = `Deletion request will disable all <strong>update match data</strong> button for you. Please provide us the reason
 below: [max characters: 1000]`;
 export const REVOKE_MATCH_UPDATE_SUBHEADING = `Please note that reverting the match update will revert all the numbers shown in match summaries. please provide us the reason below: [max characters: 1000]`;
-export const UNIQUE_DELETION_REQUEST_CODE = 'FK-SEASON'
+export const UNIQUE_DELETION_REQUEST_CODE = 'FK-SEASON';
 
 export enum LOADING_STATUS {
   DEFAULT,

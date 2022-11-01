@@ -11,7 +11,7 @@ import { ListOption } from 'src/app/shared/interfaces/others.model';
 })
 export class ChipSelectionInputComponent implements OnInit {
 
-  list: ListOption[] = []
+  list: ListOption[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   @Input() label = '';
@@ -31,7 +31,7 @@ export class ChipSelectionInputComponent implements OnInit {
     if (this.isMax) {
       return;
     }
-    if (this.list.findIndex(value => value['value'] === ev.option.value.value) === -1) {
+    if (this.list.findIndex(value => value.value === ev.option.value.value) === -1) {
       this.list.push(ev.option.value);
     }
     this.onAddItem.next(this.list);
@@ -39,7 +39,7 @@ export class ChipSelectionInputComponent implements OnInit {
   }
 
   remove(item: ListOption) {
-    const index = this.list.findIndex(value => value['value'] === item.value);
+    const index = this.list.findIndex(value => value.value === item.value);
 
     if (index >= 0) {
       this.list.splice(index, 1);

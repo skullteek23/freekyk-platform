@@ -100,8 +100,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     this.isListLoading = true;
     this.myFixtures$ = this.store.select('dash').pipe(
       map((resp) => (resp.hasTeam ? resp.hasTeam.name : null)),
-      switchMap((teamName) => {
-        return this.ngFire
+      switchMap((teamName) => this.ngFire
           .collection('allMatches', (query) =>
             query
               .where('teams', 'array-contains', teamName)
@@ -114,8 +113,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
             map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
             map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
             tap(() => (this.isListLoading = false))
-          );
-      })
+          ))
     );
   }
   getAllFixtures(): void {

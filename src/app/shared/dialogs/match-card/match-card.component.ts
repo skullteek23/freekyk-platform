@@ -70,7 +70,7 @@ export class MatchCardComponent implements OnInit {
     }
 
     if (this.data?.tie_breaker) {
-      this.matchHeaderData['penalties'] = this.data?.tie_breaker;
+      this.matchHeaderData.penalties = this.data?.tie_breaker;
     }
 
     this.overViewData$ = this.ngFirestore

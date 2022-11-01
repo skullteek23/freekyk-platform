@@ -108,7 +108,7 @@ export class UpdateMatchReportComponent implements OnInit {
         this.snackbarService.displayError('Match day has not occurred yet!');
         this.onCloseDialog();
       }
-    })
+    });
   }
 
   isAwayEqualScoreValidator(control: AbstractControl): ValidationErrors {
@@ -212,7 +212,7 @@ export class UpdateMatchReportComponent implements OnInit {
       const fixture: MatchFixture = {
         ...this.fixture,
         id: this.data
-      }
+      };
       this.seasonAdminService.updateMatchReport(this.matchReportForm.value, fixture, this.homeTeamPlayersList, this.awayTeamPlayersList)
         .then(() => {
           this.snackbarService.displayCustomMsg('Match report will be updated shortly!');
@@ -257,8 +257,8 @@ export class UpdateMatchReportComponent implements OnInit {
     const fplPlayed: number = this.fixture.type === 'FPL' ? 1 : 0;
 
     // Players & Winners
-    let homeWin: number = 0;
-    let awayWin: number = 0;
+    let homeWin = 0;
+    let awayWin = 0;
     if (goalsHome !== goalsAway) {
       homeWin = (goalsHome > goalsAway) ? 1 : 0;
       awayWin = 1 - homeWin;
@@ -316,7 +316,7 @@ export class UpdateMatchReportComponent implements OnInit {
         cols: cols[property],
         dataSource: dataSource[property],
         displayCols: cols[property]?.map((el: ListOption) => el.value)
-      }
+      };
     }
   }
 
@@ -397,11 +397,11 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   get chipSelectionListHome() {
-    return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : []
+    return this.chipSelectionInputComponentHome && this.chipSelectionInputComponentHome.list ? this.chipSelectionInputComponentHome.list : [];
   }
 
   get chipSelectionListAway() {
-    return this.chipSelectionInputComponentAway && this.chipSelectionInputComponentAway.list ? this.chipSelectionInputComponentAway.list : []
+    return this.chipSelectionInputComponentAway && this.chipSelectionInputComponentAway.list ? this.chipSelectionInputComponentAway.list : [];
   }
 
   get redCardHoldersAway(): FormArray {

@@ -52,12 +52,10 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           }),
           filter((resp) => resp.basicInfo.captainId === this.uid),
           take(1),
-          switchMap(() => {
-            return this.dialog
+          switchMap(() => this.dialog
               .open(ConfirmationBoxComponent)
               .afterClosed()
-              .pipe(filter((resp) => !!resp === true));
-          })
+              .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() => this.teamServ.onDeleteTeam())
     );
@@ -74,12 +72,10 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           }),
           filter((resp) => resp.basicInfo.captainId === this.uid),
           take(1),
-          switchMap(() => {
-            return this.dialog
+          switchMap(() => this.dialog
               .open(ConfirmationBoxComponent)
               .afterClosed()
-              .pipe(filter((resp) => !!resp === true));
-          })
+              .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
           this.teamServ
@@ -99,12 +95,10 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
         .pipe(
           filter((resp) => resp.basicInfo.captainId != this.uid),
           take(1),
-          switchMap(() => {
-            return this.dialog
+          switchMap(() => this.dialog
               .open(ConfirmationBoxComponent)
               .afterClosed()
-              .pipe(filter((resp) => !!resp === true));
-          })
+              .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
           this.teamServ.onLeaveTeam(this.membersArray).then(() => {

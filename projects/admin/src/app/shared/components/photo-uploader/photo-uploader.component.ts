@@ -19,9 +19,9 @@ export class PhotoUploaderComponent implements OnInit {
   onBrowsePhoto(ev): void {
     if (ev && ev.target && ev.target.files) {
       const src = URL.createObjectURL(ev.target.files[0]);
-      const preview = document.getElementById("preview-image");
+      const preview = document.getElementById('preview-image');
       const file = ev.target.files[0];
-      preview['src'] = src;
+      preview.src = src;
       this.emitSelection(file);
     }
   }

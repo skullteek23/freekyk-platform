@@ -52,14 +52,12 @@ export class PlStLeagueComponent implements OnInit, OnDestroy {
 
   setDataSource(value: LeagueTableModel[]) {
     const tableData = value
-      .map((val) => {
-        return {
+      .map((val) => ({
           ...val,
           p: val.w + val.d + val.l,
           pts: 3 * val.w + val.d,
           gd: val.gf - val.ga,
-        } as LeagueTableModel;
-      })
+        } as LeagueTableModel))
       .sort((a, b) => b.pts - a.pts);
     this.LeagueDataSource = tableData;
   }

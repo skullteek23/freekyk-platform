@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class StrongFootPipe implements PipeTransform {
   transform(value: 'L' | 'R'): string {
-    if (!!value) return value == 'L' ? 'Left Footed' : 'Right Footed';
+    if (!!value) {return value == 'L' ? 'Left Footed' : 'Right Footed';}
     return value;
   }
 }

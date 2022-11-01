@@ -83,7 +83,7 @@ export class BasicStats {
   l = 0;
 }
 export class FsStats {
-  sk_lvl: number = 0;
+  sk_lvl = 0;
   br_colb?: BrandCollabInfo[] = [];
   top_vids?: string[] = [];
   tr_a?: number = 0;

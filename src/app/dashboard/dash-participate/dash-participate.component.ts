@@ -80,7 +80,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
             if (data.status === 'PUBLISHED') {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
-          })
+          });
           return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
         }
         ),
@@ -141,13 +141,13 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   goToSeason(name?: string): void {
     this.paymentServ.onLoadingStatusChange('home');
     if (name) {
-      this.router.navigate(['/s', name])
+      this.router.navigate(['/s', name]);
     }
   }
   isParticipated(seasonid: string): boolean {
     return this.participatedTournaments.includes(seasonid);
   }
   getContainingTournaments(list: string[]) {
-    return list.length ? list.join(', ') : "NA";
+    return list.length ? list.join(', ') : 'NA';
   }
 }

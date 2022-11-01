@@ -14,8 +14,8 @@ import {
 })
 export class FixtureBasicComponent implements OnInit {
   @Input('matchData') fixture: MatchFixture;
-  @Input('premium') isPremium: boolean = false;
-  @Input('resultMode') isResult: boolean = false;
+  @Input('premium') isPremium = false;
+  @Input('resultMode') isResult = false;
   todaysDate = new Date();
   constructor(private dialog: MatDialog) { }
   ngOnInit(): void { }

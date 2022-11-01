@@ -25,7 +25,7 @@ export class SnackbarService {
     config.horizontalPosition = SNACKBAR_HORIZONTAL_POSITION;
     config.duration = SNACKBAR_AUTO_HIDE;
     config.panelClass = isError === false ? ['snack-bar-success'] : ['snack-bar-error'];
-    config.data = { 'msg': message };
+    config.data = { msg: message };
 
     this.matSnack.openFromComponent(SnackBarComponent, config);
   }

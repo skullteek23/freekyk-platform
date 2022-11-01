@@ -9,8 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./update-info.component.css'],
 })
 export class UpdateInfoComponent implements OnInit {
-  pass: string = '';
-  rePass: string = '';
+  pass = '';
+  rePass = '';
   newPassForm: FormGroup = new FormGroup({});
   newEmailForm: FormGroup = new FormGroup({});
   constructor(
@@ -48,8 +48,8 @@ export class UpdateInfoComponent implements OnInit {
 
   onChangeSubmit() {
     if (this.data == 'email')
-      this.authServ.onChangeEmail(this.newEmailForm.get('email')?.value);
-    else this.authServ.onChangePassword(this.newPassForm.get('pass')?.value);
+      {this.authServ.onChangeEmail(this.newEmailForm.get('email')?.value);}
+    else {this.authServ.onChangePassword(this.newPassForm.get('pass')?.value);}
     this.onDialogClose();
   }
 }
