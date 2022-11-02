@@ -5,7 +5,7 @@ import { TeamMoreInfo } from '@shared/interfaces/team.model';
 @Component({
   selector: 'app-te-overview',
   templateUrl: './te-overview.component.html',
-  styleUrls: ['./te-overview.component.css'],
+  styleUrls: ['./te-overview.component.scss'],
 })
 export class TeOverviewComponent implements OnInit {
   @Input() data: TeamMoreInfo;

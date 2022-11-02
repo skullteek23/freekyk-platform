@@ -11,7 +11,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 @Component({
   selector: 'app-uploadphoto',
   templateUrl: './uploadphoto.component.html',
-  styleUrls: ['./uploadphoto.component.css'],
+  styleUrls: ['./uploadphoto.component.scss'],
 })
 export class UploadphotoComponent implements OnInit, OnDestroy {
   $file: File = null;

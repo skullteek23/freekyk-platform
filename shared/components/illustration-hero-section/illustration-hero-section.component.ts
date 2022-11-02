@@ -4,7 +4,7 @@ import { PAGE_VIEWS_MAIN } from 'src/app/dashboard/constants/constants';
 @Component({
   selector: 'app-illustration-hero-section',
   templateUrl: './illustration-hero-section.component.html',
-  styleUrls: ['./illustration-hero-section.component.css'],
+  styleUrls: ['./illustration-hero-section.component.scss'],
 })
 export class IllustrationHeroSectionComponent implements OnInit {
   @Input() svgSrc: string;

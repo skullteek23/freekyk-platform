@@ -6,7 +6,7 @@ import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-card-loading-shimmer',
   templateUrl: './card-loading-shimmer.component.html',
-  styleUrls: ['./card-loading-shimmer.component.css'],
+  styleUrls: ['./card-loading-shimmer.component.scss'],
 })
 export class CardLoadingShimmerComponent implements OnInit, OnDestroy {
   dummyArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];

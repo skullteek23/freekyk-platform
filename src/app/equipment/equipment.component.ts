@@ -8,7 +8,7 @@ import { ProdBasicInfo } from '@shared/interfaces/product.model';
 @Component({
   selector: 'app-equipment',
   templateUrl: './equipment.component.html',
-  styleUrls: ['./equipment.component.css'],
+  styleUrls: ['./equipment.component.scss'],
 })
 export class EquipmentComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();

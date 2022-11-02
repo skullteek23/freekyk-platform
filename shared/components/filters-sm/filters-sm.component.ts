@@ -5,7 +5,7 @@ import { FilterDialogComponent } from '../../dialogs/filter-dialog/filter-dialog
 @Component({
   selector: 'app-filters-sm',
   templateUrl: './filters-sm.component.html',
-  styleUrls: ['./filters-sm.component.css'],
+  styleUrls: ['./filters-sm.component.scss'],
 })
 export class FiltersSmComponent implements OnInit {
   @Input('filterArray') filters: string[] = [];

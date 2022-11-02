@@ -6,7 +6,7 @@ import { ShareData } from '../../interfaces/others.model';
 @Component({
   selector: 'app-sharesheet',
   templateUrl: './sharesheet.component.html',
-  styleUrls: ['./sharesheet.component.css'],
+  styleUrls: ['./sharesheet.component.scss'],
 })
 export class SharesheetComponent implements OnInit {
   constructor(

@@ -4,7 +4,7 @@ import { LOREM_IPSUM_LONG } from '../../Constants/WEBSITE_CONTENT';
 @Component({
   selector: 'app-feature-info',
   templateUrl: './feature-info.component.html',
-  styleUrls: ['./feature-info.component.css'],
+  styleUrls: ['./feature-info.component.scss'],
 })
 export class FeatureInfoComponent implements OnInit {
   readonly dummyParagraph = LOREM_IPSUM_LONG;

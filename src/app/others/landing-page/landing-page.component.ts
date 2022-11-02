@@ -4,7 +4,7 @@ import { LANDING_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css'],
+  styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements OnInit {
   readonly mainContent = LANDING_PAGE.banner;

@@ -16,7 +16,7 @@ import { userAddress } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-acc-addresses',
   templateUrl: './acc-addresses.component.html',
-  styleUrls: ['./acc-addresses.component.css'],
+  styleUrls: ['./acc-addresses.component.scss'],
 })
 export class AccAddressesComponent implements OnInit {
   noSavedAddress = false;

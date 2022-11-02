@@ -9,7 +9,7 @@ import { TeamState } from '../store/team.reducer';
 @Component({
   selector: 'app-da-te-members',
   templateUrl: './da-te-members.component.html',
-  styleUrls: ['./da-te-members.component.css'],
+  styleUrls: ['./da-te-members.component.scss'],
 })
 export class DaTeMembersComponent implements OnInit, OnDestroy {
   ind: number;

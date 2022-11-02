@@ -8,7 +8,7 @@ import { AppState } from 'src/app/store/app.reducer';
 @Component({
   selector: 'app-da-te-gallery',
   templateUrl: './da-te-gallery.component.html',
-  styleUrls: ['./da-te-gallery.component.css'],
+  styleUrls: ['./da-te-gallery.component.scss'],
 })
 export class DaTeGalleryComponent implements OnInit, OnDestroy {
   noImages: boolean;

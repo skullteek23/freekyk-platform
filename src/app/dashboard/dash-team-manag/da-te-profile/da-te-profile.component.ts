@@ -12,7 +12,7 @@ import { AppState } from 'src/app/store/app.reducer';
 @Component({
   selector: 'app-da-te-profile',
   templateUrl: './da-te-profile.component.html',
-  styleUrls: ['./da-te-profile.component.css'],
+  styleUrls: ['./da-te-profile.component.scss'],
   providers: [DatePipe],
 })
 export class DaTeProfileComponent implements OnInit, OnDestroy {

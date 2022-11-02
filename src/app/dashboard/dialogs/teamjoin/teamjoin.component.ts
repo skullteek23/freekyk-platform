@@ -13,7 +13,7 @@ import { TeamBasicInfo } from '@shared/interfaces/team.model';
 @Component({
   selector: 'app-teamjoin',
   templateUrl: './teamjoin.component.html',
-  styleUrls: ['./teamjoin.component.css'],
+  styleUrls: ['./teamjoin.component.scss'],
 })
 export class TeamjoinComponent implements OnInit {
   @ViewChild('stepper') private myStepper: MatStepper;

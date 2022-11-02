@@ -13,7 +13,7 @@ import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confi
 @Component({
   selector: 'app-da-te-mang-players',
   templateUrl: './da-te-mang-players.component.html',
-  styleUrls: ['./da-te-mang-players.component.css'],
+  styleUrls: ['./da-te-mang-players.component.scss'],
 })
 export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
   @Input() margin = false;

@@ -11,7 +11,7 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
 @Component({
   selector: 'app-da-ho-profile',
   templateUrl: './da-ho-profile.component.html',
-  styleUrls: ['./da-ho-profile.component.css'],
+  styleUrls: ['./da-ho-profile.component.scss'],
 })
 export class DaHoProfileComponent implements OnInit, OnDestroy {
   @Input() profile: 'player' | 'freestyler' = 'player';

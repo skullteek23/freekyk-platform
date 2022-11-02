@@ -12,7 +12,7 @@ import { PlayConstants } from '../play.constants';
 @Component({
   selector: 'app-pl-seasons',
   templateUrl: './pl-seasons.component.html',
-  styleUrls: ['./pl-seasons.component.css'],
+  styleUrls: ['./pl-seasons.component.scss'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
   readonly LIVE = PlayConstants.SEASON_STATUS_LIVE;

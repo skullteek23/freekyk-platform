@@ -6,7 +6,7 @@ import { MatchFixture } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-current-match',
   templateUrl: './current-match.component.html',
-  styleUrls: ['./current-match.component.css'],
+  styleUrls: ['./current-match.component.scss'],
 })
 export class CurrentMatchComponent {
   @Input() data: MatchFixture;

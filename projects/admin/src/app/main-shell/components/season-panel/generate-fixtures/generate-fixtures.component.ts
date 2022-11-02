@@ -8,7 +8,7 @@ import { SeasonAdminService } from '../season-admin.service';
 @Component({
   selector: 'app-generate-fixtures',
   templateUrl: './generate-fixtures.component.html',
-  styleUrls: ['./generate-fixtures.component.css']
+  styleUrls: ['./generate-fixtures.component.scss']
 })
 export class GenerateFixturesComponent implements OnInit {
 

@@ -11,7 +11,7 @@ import { TeamBasicInfo } from '@shared/interfaces/team.model';
 @Component({
   selector: 'app-pl-teams',
   templateUrl: './pl-teams.component.html',
-  styleUrls: ['./pl-teams.component.css'],
+  styleUrls: ['./pl-teams.component.scss'],
 })
 export class PlTeamsComponent implements OnInit, OnDestroy {
   filterTerm: string = null;

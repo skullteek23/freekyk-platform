@@ -12,7 +12,7 @@ import {
 @Component({
   selector: 'app-product-profile',
   templateUrl: './product-profile.component.html',
-  styleUrls: ['./product-profile.component.css'],
+  styleUrls: ['./product-profile.component.scss'],
 })
 export class ProductProfileComponent implements OnInit {
   prodInfo$: Observable<ProdBasicInfo>;

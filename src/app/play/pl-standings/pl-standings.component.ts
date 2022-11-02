@@ -12,7 +12,7 @@ import { PlayConstants } from '../play.constants';
 @Component({
   selector: 'app-pl-standings',
   templateUrl: './pl-standings.component.html',
-  styleUrls: ['./pl-standings.component.css'],
+  styleUrls: ['./pl-standings.component.scss'],
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
 

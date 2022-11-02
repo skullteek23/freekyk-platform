@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-exit-dashboard',
   templateUrl: './exit-dashboard.component.html',
-  styleUrls: ['./exit-dashboard.component.css'],
+  styleUrls: ['./exit-dashboard.component.scss'],
 })
 export class ExitDashboardComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ExitDashboardComponent>) {}

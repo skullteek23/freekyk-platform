@@ -14,7 +14,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',
-  styleUrls: ['./dash-participate.component.css'],
+  styleUrls: ['./dash-participate.component.scss'],
 })
 export class DashParticipateComponent implements OnInit, OnDestroy {
 

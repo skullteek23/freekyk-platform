@@ -7,7 +7,7 @@ import { CreateSeasonComponent } from '../create-season/create-season.component'
 @Component({
   selector: 'app-create-season-container',
   templateUrl: './create-season-container.component.html',
-  styleUrls: ['./create-season-container.component.css']
+  styleUrls: ['./create-season-container.component.scss']
 })
 export class CreateSeasonContainerComponent implements OnInit, CanComponentDeactivate {
 

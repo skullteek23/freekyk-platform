@@ -7,7 +7,7 @@ import { ListOption } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-chip-selection-input',
   templateUrl: './chip-selection-input.component.html',
-  styleUrls: ['./chip-selection-input.component.css']
+  styleUrls: ['./chip-selection-input.component.scss']
 })
 export class ChipSelectionInputComponent {
 

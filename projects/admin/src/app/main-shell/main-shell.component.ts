@@ -7,7 +7,7 @@ import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-main-shell',
   templateUrl: './main-shell.component.html',
-  styleUrls: ['./main-shell.component.css']
+  styleUrls: ['./main-shell.component.scss']
 })
 export class MainShellComponent implements OnDestroy {
   activeLink = 'seasons';

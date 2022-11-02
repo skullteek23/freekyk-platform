@@ -7,7 +7,7 @@ import { SeasonStats } from '@shared/interfaces/season.model';
 @Component({
   selector: 'app-se-stats',
   templateUrl: './se-stats.component.html',
-  styleUrls: ['./se-stats.component.css'],
+  styleUrls: ['./se-stats.component.scss'],
 })
 export class SeStatsComponent implements OnInit, OnDestroy {
   @Input() stats = new SeasonStats();

@@ -12,7 +12,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-invite-players',
   templateUrl: './invite-players.component.html',
-  styleUrls: ['./invite-players.component.css'],
+  styleUrls: ['./invite-players.component.scss'],
 })
 export class InvitePlayersComponent implements OnInit {
   invitesList: Invite[] = [];

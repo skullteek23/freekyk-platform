@@ -8,7 +8,7 @@ export interface ListOption { viewValue: string; data: any };
 @Component({
   selector: 'app-search-autocomplete',
   templateUrl: './search-autocomplete.component.html',
-  styleUrls: ['./search-autocomplete.component.css']
+  styleUrls: ['./search-autocomplete.component.scss']
 })
 export class SearchAutocompleteComponent implements OnInit {
   @Input() placeholder = '';

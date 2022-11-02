@@ -12,7 +12,7 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 @Component({
   selector: 'app-te-members',
   templateUrl: './te-members.component.html',
-  styleUrls: ['./te-members.component.css'],
+  styleUrls: ['./te-members.component.scss'],
 })
 export class TeMembersComponent implements OnInit, OnDestroy {
   @Input() members: Tmember[] = [];

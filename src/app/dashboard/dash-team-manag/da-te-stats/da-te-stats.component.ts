@@ -10,7 +10,7 @@ import { AppState } from 'src/app/store/app.reducer';
 @Component({
   selector: 'app-da-te-stats',
   templateUrl: './da-te-stats.component.html',
-  styleUrls: ['./da-te-stats.component.css'],
+  styleUrls: ['./da-te-stats.component.scss'],
 })
 export class DaTeStatsComponent implements OnInit, OnDestroy {
   Stats: statsIcon[];

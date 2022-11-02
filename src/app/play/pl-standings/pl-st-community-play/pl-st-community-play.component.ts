@@ -7,7 +7,7 @@ import { CommunityLeaderboard } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-pl-st-community-play',
   templateUrl: './pl-st-community-play.component.html',
-  styleUrls: ['./pl-st-community-play.component.css'],
+  styleUrls: ['./pl-st-community-play.component.scss'],
 })
 export class PlStCommunityPlayComponent implements OnInit, OnDestroy {
 

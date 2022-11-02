@@ -37,7 +37,7 @@ export class IStatHolderEntityGeneric {
 @Component({
   selector: 'app-update-match-report',
   templateUrl: './update-match-report.component.html',
-  styleUrls: ['./update-match-report.component.css']
+  styleUrls: ['./update-match-report.component.scss']
 })
 export class UpdateMatchReportComponent implements OnInit {
 

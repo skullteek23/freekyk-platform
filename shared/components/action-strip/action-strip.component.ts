@@ -5,7 +5,7 @@ import { FREESTYLE_PAGE, LANDING_PAGE, } from '@shared/Constants/WEBSITE_CONTENT
 @Component({
   selector: 'app-action-strip',
   templateUrl: './action-strip.component.html',
-  styleUrls: ['./action-strip.component.css'],
+  styleUrls: ['./action-strip.component.scss'],
 })
 export class ActionStripComponent implements OnInit {
   @Input() elementSpacing = 'space-between center';

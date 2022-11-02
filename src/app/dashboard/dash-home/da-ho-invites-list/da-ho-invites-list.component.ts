@@ -6,7 +6,7 @@ import { Invite } from '@shared/interfaces/notification.model';
 @Component({
   selector: 'app-da-ho-invites-list',
   templateUrl: './da-ho-invites-list.component.html',
-  styleUrls: ['./da-ho-invites-list.component.css'],
+  styleUrls: ['./da-ho-invites-list.component.scss'],
 })
 export class DaHoInvitesListComponent implements OnInit {
   emptyInvites$: Observable<boolean>;

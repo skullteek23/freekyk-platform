@@ -6,7 +6,7 @@ import { FeatureInfoComponent } from '../../dialogs/feature-info/feature-info.co
 @Component({
   selector: 'app-covid-section',
   templateUrl: './covid-section.component.html',
-  styleUrls: ['./covid-section.component.css'],
+  styleUrls: ['./covid-section.component.scss'],
 })
 export class CovidSectionComponent implements OnInit {
   readonly covidContent = COVID_PRECAUTIONS;

@@ -10,7 +10,7 @@ import { AppState } from 'src/app/store/app.reducer';
 @Component({
   selector: 'app-dash-team-manag',
   templateUrl: './dash-team-manag.component.html',
-  styleUrls: ['./dash-team-manag.component.css'],
+  styleUrls: ['./dash-team-manag.component.scss'],
 })
 export class DashTeamManagComponent implements OnInit, OnDestroy {
   isLoading = true;

@@ -7,7 +7,7 @@ import { Invite } from '@shared/interfaces/notification.model';
 @Component({
   selector: 'app-da-te-join-requests',
   templateUrl: './da-te-join-requests.component.html',
-  styleUrls: ['./da-te-join-requests.component.css'],
+  styleUrls: ['./da-te-join-requests.component.scss'],
 })
 export class DaTeJoinRequestsComponent implements OnInit {
   teamInvites$: Observable<Invite[]>;

@@ -4,7 +4,7 @@ import { matchData } from '../../interfaces/others.model';
 @Component({
   selector: 'app-match-detail-header',
   templateUrl: './match-detail-header.component.html',
-  styleUrls: ['./match-detail-header.component.css'],
+  styleUrls: ['./match-detail-header.component.scss'],
 })
 export class MatchDetailHeaderComponent {
 

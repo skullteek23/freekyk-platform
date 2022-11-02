@@ -6,7 +6,7 @@ import { UNIQUE_DELETION_REQUEST_CODE } from '@shared/constants/constants';
 @Component({
   selector: 'app-request-dialog',
   templateUrl: './request-dialog.component.html',
-  styleUrls: ['./request-dialog.component.css']
+  styleUrls: ['./request-dialog.component.scss']
 })
 export class RequestDialogComponent {
 

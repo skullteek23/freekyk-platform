@@ -4,7 +4,7 @@ import { PLAY_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 @Component({
   selector: 'app-pl-home',
   templateUrl: './pl-home.component.html',
-  styleUrls: ['./pl-home.component.css'],
+  styleUrls: ['./pl-home.component.scss'],
 })
 export class PlHomeComponent implements OnInit {
   readonly findTeamContent = PLAY_PAGE.findTeam;

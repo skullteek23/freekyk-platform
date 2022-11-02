@@ -9,7 +9,7 @@ import { TeamCommState } from '../store/teamComm.reducer';
 @Component({
   selector: 'app-team-activity',
   templateUrl: './team-activity.component.html',
-  styleUrls: ['./team-activity.component.css'],
+  styleUrls: ['./team-activity.component.scss'],
 })
 export class TeamActivityComponent implements OnInit, OnDestroy {
   teamActivityListLogs$: Observable<MemberResponseNotification[]>;

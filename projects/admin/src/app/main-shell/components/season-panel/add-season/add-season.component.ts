@@ -9,7 +9,7 @@ import { formsMessages } from '@shared/constants/messages';
 @Component({
   selector: 'app-add-season',
   templateUrl: './add-season.component.html',
-  styleUrls: ['./add-season.component.css'],
+  styleUrls: ['./add-season.component.scss'],
 })
 export class AddSeasonComponent implements OnInit {
 

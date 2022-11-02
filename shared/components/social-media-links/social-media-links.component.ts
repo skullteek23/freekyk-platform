@@ -5,7 +5,7 @@ import { SocialMediaLinks } from '../../interfaces/user.model';
 @Component({
   selector: 'app-social-media-links',
   templateUrl: './social-media-links.component.html',
-  styleUrls: ['./social-media-links.component.css'],
+  styleUrls: ['./social-media-links.component.scss'],
 })
 export class SocialMediaLinksComponent implements OnInit {
   @Input('links') socials: SocialMediaLinks | null;

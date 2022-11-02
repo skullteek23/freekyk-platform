@@ -7,7 +7,7 @@ import { MatchFixture } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-knockout-strip',
   templateUrl: './knockout-strip.component.html',
-  styleUrls: ['./knockout-strip.component.css'],
+  styleUrls: ['./knockout-strip.component.scss'],
   providers: [DatePipe],
 })
 export class KnockoutStripComponent implements OnInit {

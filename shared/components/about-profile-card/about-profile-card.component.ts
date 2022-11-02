@@ -4,7 +4,7 @@ import { profile } from '../../interfaces/others.model';
 @Component({
   selector: 'app-about-profile-card',
   templateUrl: './about-profile-card.component.html',
-  styleUrls: ['./about-profile-card.component.css'],
+  styleUrls: ['./about-profile-card.component.scss'],
 })
 export class AboutProfileCardComponent implements OnInit {
   @Input('data') profile: profile;

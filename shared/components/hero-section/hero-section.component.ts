@@ -7,7 +7,7 @@ import { heroCallToAction } from '../../interfaces/others.model';
 @Component({
   selector: 'app-hero-section',
   templateUrl: './hero-section.component.html',
-  styleUrls: ['./hero-section.component.css'],
+  styleUrls: ['./hero-section.component.scss'],
 })
 export class HeroSectionComponent implements OnInit {
   @Input('headline') headline = false;

@@ -11,7 +11,7 @@ import { SeasonAdminService } from '../season-admin.service';
 @Component({
   selector: 'app-select-grounds',
   templateUrl: './select-grounds.component.html',
-  styleUrls: ['./select-grounds.component.css'],
+  styleUrls: ['./select-grounds.component.scss'],
 })
 export class SelectGroundsComponent implements OnInit, OnDestroy {
 

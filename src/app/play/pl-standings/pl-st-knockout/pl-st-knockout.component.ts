@@ -3,7 +3,7 @@ import { MatchFixture } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-pl-st-knockout',
   templateUrl: './pl-st-knockout.component.html',
-  styleUrls: ['./pl-st-knockout.component.css'],
+  styleUrls: ['./pl-st-knockout.component.scss'],
 })
 export class PlStKnockoutComponent {
 

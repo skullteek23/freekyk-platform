@@ -7,7 +7,7 @@ import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 @Component({
   selector: 'app-freestyle',
   templateUrl: './freestyle.component.html',
-  styleUrls: ['./freestyle.component.css'],
+  styleUrls: ['./freestyle.component.scss'],
 })
 export class FreestyleComponent implements OnInit, OnDestroy {
   readonly fsBannerContent = FREESTYLE_PAGE.banner;

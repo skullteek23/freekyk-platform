@@ -10,7 +10,7 @@ import {
 @Component({
   selector: 'app-se-overview',
   templateUrl: './se-overview.component.html',
-  styleUrls: ['./se-overview.component.css'],
+  styleUrls: ['./se-overview.component.scss'],
 })
 export class SeOverviewComponent implements OnInit {
   @Input() data: SeasonAbout;

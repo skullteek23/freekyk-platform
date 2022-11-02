@@ -9,7 +9,7 @@ import { AcadBasicInfo } from '@shared/interfaces/academy.model';
 @Component({
   selector: 'app-academies',
   templateUrl: './academies.component.html',
-  styleUrls: ['./academies.component.css'],
+  styleUrls: ['./academies.component.scss'],
 })
 export class AcademiesComponent implements OnInit, OnDestroy {
   readonly academiesBanner = ACADEMIES_PAGE.banner;

@@ -7,7 +7,7 @@ import { StatsTeam } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-te-stats',
   templateUrl: './te-stats.component.html',
-  styleUrls: ['./te-stats.component.css'],
+  styleUrls: ['./te-stats.component.scss'],
 })
 export class TeStatsComponent implements OnInit, OnDestroy {
   @Input() data: StatsTeam;

@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-invite-accept-card',
   templateUrl: './invite-accept-card.component.html',
-  styleUrls: ['./invite-accept-card.component.css'],
+  styleUrls: ['./invite-accept-card.component.scss'],
 })
 export class InviteAcceptCardComponent implements OnInit {
   constructor(

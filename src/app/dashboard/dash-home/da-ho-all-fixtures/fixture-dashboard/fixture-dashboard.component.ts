@@ -6,7 +6,7 @@ import { MatchFixture } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-fixture-dashboard',
   templateUrl: './fixture-dashboard.component.html',
-  styleUrls: ['./fixture-dashboard.component.css'],
+  styleUrls: ['./fixture-dashboard.component.scss'],
 })
 export class FixtureDashboardComponent implements OnInit {
   @Input('matchData') fixture: MatchFixture | null = null;

@@ -5,7 +5,7 @@ import { ReportData } from '@shared/interfaces/match.model';
 @Component({
   selector: 'app-match-report-summary',
   templateUrl: './match-report-summary.component.html',
-  styleUrls: ['./match-report-summary.component.css']
+  styleUrls: ['./match-report-summary.component.scss']
 })
 export class MatchReportSummaryComponent {
 

@@ -9,7 +9,7 @@ import { ShareData } from '../../interfaces/others.model';
 @Component({
   selector: 'app-sharesheetmobile',
   templateUrl: './sharesheetmobile.component.html',
-  styleUrls: ['./sharesheetmobile.component.css'],
+  styleUrls: ['./sharesheetmobile.component.scss'],
 })
 export class SharesheetmobileComponent implements OnInit {
   socials = ['facebook', 'twitter', 'linkedin', 'whatsapp', 'pinterest'];

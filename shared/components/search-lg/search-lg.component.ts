@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'app-search-lg',
   templateUrl: './search-lg.component.html',
-  styleUrls: ['./search-lg.component.css'],
+  styleUrls: ['./search-lg.component.scss'],
 })
 export class SearchLgComponent implements OnInit {
   @Output() searchItem = new EventEmitter<string>();

@@ -6,7 +6,7 @@ import { FeatureSectionContent } from '../../interfaces/others.model';
 @Component({
   selector: 'app-feature-section',
   templateUrl: './feature-section.component.html',
-  styleUrls: ['./feature-section.component.css'],
+  styleUrls: ['./feature-section.component.scss'],
 })
 export class FeatureSectionComponent implements OnInit {
   @Input('invert') flexOrderInvert = false;

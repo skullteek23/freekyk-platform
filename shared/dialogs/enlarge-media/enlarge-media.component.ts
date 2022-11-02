@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-enlarge-media',
   templateUrl: './enlarge-media.component.html',
-  styleUrls: ['./enlarge-media.component.css'],
+  styleUrls: ['./enlarge-media.component.scss'],
 })
 export class EnlargeMediaComponent implements OnInit {
   constructor(

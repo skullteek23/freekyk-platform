@@ -10,7 +10,7 @@ import { SeasonAdminService } from '../season-admin.service';
 @Component({
   selector: 'app-view-seasons-table',
   templateUrl: './view-seasons-table.component.html',
-  styleUrls: ['./view-seasons-table.component.css']
+  styleUrls: ['./view-seasons-table.component.scss']
 })
 export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 

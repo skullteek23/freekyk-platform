@@ -23,7 +23,7 @@ import { formsMessages } from '@shared/constants/messages';
 @Component({
   selector: 'app-view-season-draft',
   templateUrl: './view-season-draft.component.html',
-  styleUrls: ['./view-season-draft.component.css']
+  styleUrls: ['./view-season-draft.component.scss']
 })
 export class ViewSeasonDraftComponent implements OnInit {
 

@@ -8,7 +8,7 @@ import { TeamCommState } from '../store/teamComm.reducer';
 @Component({
   selector: 'app-active-squad',
   templateUrl: './active-squad.component.html',
-  styleUrls: ['./active-squad.component.css'],
+  styleUrls: ['./active-squad.component.scss'],
 })
 export class ActiveSquadComponent implements OnInit {
   // @Input('data') sqNumber: number;

@@ -21,7 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',
-  styleUrls: ['./acc-profile.component.css'],
+  styleUrls: ['./acc-profile.component.scss'],
 })
 export class AccProfileComponent implements OnInit, OnDestroy {
   readonly BIO_MAX_LIMIT = BIO_MAX_LIMIT;

@@ -14,7 +14,7 @@ import { TeamState } from '../store/team.reducer';
 @Component({
   selector: 'app-da-te-communication',
   templateUrl: './da-te-communication.component.html',
-  styleUrls: ['./da-te-communication.component.css'],
+  styleUrls: ['./da-te-communication.component.scss'],
 })
 export class DaTeCommunicationComponent implements OnInit, OnDestroy {
   noMatch = 0;

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-illustration-hero-section-alternate',
   templateUrl: './illustration-hero-section-alternate.component.html',
-  styleUrls: ['./illustration-hero-section-alternate.component.css'],
+  styleUrls: ['./illustration-hero-section-alternate.component.scss'],
 })
 export class IllustrationHeroSectionAlternateComponent implements OnInit {
   @Input() svgSrc: string;

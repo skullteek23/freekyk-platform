@@ -6,7 +6,7 @@ import { MatchFixture, } from '../../interfaces/match.model';
 @Component({
   selector: 'app-fixture-basic',
   templateUrl: './fixture-basic.component.html',
-  styleUrls: ['./fixture-basic.component.css'],
+  styleUrls: ['./fixture-basic.component.scss'],
 })
 export class FixtureBasicComponent implements OnInit {
   @Input('matchData') fixture: MatchFixture;

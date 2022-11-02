@@ -10,7 +10,7 @@ import { TeamState } from '../../dash-team-manag/store/team.reducer';
 @Component({
   selector: 'app-da-ho-upcoming-match',
   templateUrl: './da-ho-upcoming-match.component.html',
-  styleUrls: ['./da-ho-upcoming-match.component.css'],
+  styleUrls: ['./da-ho-upcoming-match.component.scss'],
 })
 export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
   noUpcomingMatch = false;

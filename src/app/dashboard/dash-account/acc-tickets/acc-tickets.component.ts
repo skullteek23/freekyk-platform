@@ -10,7 +10,7 @@ import { BasicTicket } from '@shared/interfaces/ticket.model';
 @Component({
   selector: 'app-acc-tickets',
   templateUrl: './acc-tickets.component.html',
-  styleUrls: ['./acc-tickets.component.css'],
+  styleUrls: ['./acc-tickets.component.scss'],
 })
 export class AccTicketsComponent implements OnInit {
   ticketStatus = true;

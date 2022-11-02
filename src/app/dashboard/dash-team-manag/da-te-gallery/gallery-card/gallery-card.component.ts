@@ -4,7 +4,7 @@ import { TeamService } from 'src/app/services/team.service';
 @Component({
   selector: 'app-gallery-card',
   templateUrl: './gallery-card.component.html',
-  styleUrls: ['./gallery-card.component.css'],
+  styleUrls: ['./gallery-card.component.scss'],
 })
 export class GalleryCardComponent implements OnInit {
   @Input() photos: string[] = [];

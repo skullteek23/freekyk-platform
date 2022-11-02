@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-update-info',
   templateUrl: './update-info.component.html',
-  styleUrls: ['./update-info.component.css'],
+  styleUrls: ['./update-info.component.scss'],
 })
 export class UpdateInfoComponent implements OnInit {
   pass = '';

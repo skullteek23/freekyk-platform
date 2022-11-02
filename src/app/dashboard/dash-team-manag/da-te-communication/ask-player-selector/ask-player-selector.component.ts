@@ -12,7 +12,7 @@ import { TeamCommState } from '../store/teamComm.reducer';
 @Component({
   selector: 'app-ask-player-selector',
   templateUrl: './ask-player-selector.component.html',
-  styleUrls: ['./ask-player-selector.component.css'],
+  styleUrls: ['./ask-player-selector.component.scss'],
 })
 export class AskPlayerSelectorComponent implements OnInit, OnDestroy {
   members$: Observable<Tmember[]>;

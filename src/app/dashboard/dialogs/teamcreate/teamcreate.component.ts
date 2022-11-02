@@ -28,7 +28,7 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 @Component({
   selector: 'app-teamcreate',
   templateUrl: './teamcreate.component.html',
-  styleUrls: ['./teamcreate.component.css'],
+  styleUrls: ['./teamcreate.component.scss'],
 })
 export class TeamcreateComponent implements OnInit {
   @ViewChild('stepper') myStepper: MatStepper;

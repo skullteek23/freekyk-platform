@@ -16,7 +16,7 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 @Component({
   selector: 'app-pl-players',
   templateUrl: './pl-players.component.html',
-  styleUrls: ['./pl-players.component.css'],
+  styleUrls: ['./pl-players.component.scss'],
 })
 export class PlPlayersComponent implements OnInit, OnDestroy {
   filterTerm: string = null;

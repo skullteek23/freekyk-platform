@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-line-info-display',
   templateUrl: './line-info-display.component.html',
-  styleUrls: ['./line-info-display.component.css']
+  styleUrls: ['./line-info-display.component.scss']
 })
 export class LineInfoDisplayComponent {
 

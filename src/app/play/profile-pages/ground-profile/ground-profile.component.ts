@@ -12,7 +12,7 @@ import {
 @Component({
   selector: 'app-ground-profile',
   templateUrl: './ground-profile.component.html',
-  styleUrls: ['./ground-profile.component.css'],
+  styleUrls: ['./ground-profile.component.scss'],
 })
 export class GroundProfileComponent implements OnInit {
   groundInfo$: Observable<GroundBasicInfo>;

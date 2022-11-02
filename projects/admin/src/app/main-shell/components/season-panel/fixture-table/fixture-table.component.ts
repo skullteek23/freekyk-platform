@@ -8,7 +8,7 @@ import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from
 @Component({
   selector: 'app-fixture-table',
   templateUrl: './fixture-table.component.html',
-  styleUrls: ['./fixture-table.component.css']
+  styleUrls: ['./fixture-table.component.scss']
 })
 export class FixtureTableComponent {
 

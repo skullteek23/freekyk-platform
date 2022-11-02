@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-pl-fixtures',
   templateUrl: './pl-fixtures.component.html',
-  styleUrls: ['./pl-fixtures.component.css'],
+  styleUrls: ['./pl-fixtures.component.scss'],
 })
 export class PlFixturesComponent implements OnInit, OnDestroy {
   isLoading = true;

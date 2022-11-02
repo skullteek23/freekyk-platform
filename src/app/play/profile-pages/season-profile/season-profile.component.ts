@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
-  styleUrls: ['./season-profile.component.css'],
+  styleUrls: ['./season-profile.component.scss'],
 })
 export class SeasonProfileComponent implements OnInit {
   isLoading = true;

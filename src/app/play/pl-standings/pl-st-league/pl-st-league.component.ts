@@ -9,7 +9,7 @@ import { PlayConstants } from '../../play.constants';
 @Component({
   selector: 'app-pl-st-league',
   templateUrl: './pl-st-league.component.html',
-  styleUrls: ['./pl-st-league.component.css'],
+  styleUrls: ['./pl-st-league.component.scss'],
 })
 export class PlStLeagueComponent implements OnInit, OnDestroy {
 

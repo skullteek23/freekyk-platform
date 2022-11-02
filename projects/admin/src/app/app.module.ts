@@ -1,9 +1,8 @@
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { REGION } from '@angular/fire/functions';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -13,34 +12,37 @@ import { SignupComponent } from './signup/signup.component';
 import { ErrorComponent } from './error/error.component';
 import { MaterialModule } from '@shared/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthGuard } from './guards/auth.guard';
+import { LoggedUserRedirectGuard } from './guards/logged-user-redirect.guard';
 
-const loginRedirect = () =>
-  redirectLoggedInTo(['/']);
-
-const routes = [
+const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
-  },
-  {
-    path: 'register',
-    component: SignupComponent,
-    ...canActivate(loginRedirect),
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
     component: LoginComponent,
-    ...canActivate(loginRedirect),
+    canActivate: [
+      LoggedUserRedirectGuard
+    ]
   },
   {
-    path: 'error',
+    path: 'register',
+    component: SignupComponent,
+    canActivate: [
+      LoggedUserRedirectGuard
+    ]
+  },
+  {
+    path: '**',
     component: ErrorComponent,
     data: {
       message: 'We are sorry, but the page you requested was not found!',
       code: '404',
     },
   },
-  { path: '**', redirectTo: 'error' },
 ];
 
 @NgModule({

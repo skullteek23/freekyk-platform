@@ -12,7 +12,7 @@ import { TeamMedia } from '@shared/interfaces/team.model';
 @Component({
   selector: 'app-teamgallery',
   templateUrl: './teamgallery.component.html',
-  styleUrls: ['./teamgallery.component.css'],
+  styleUrls: ['./teamgallery.component.scss'],
 })
 export class TeamgalleryComponent implements OnInit {
   noGallery = false;

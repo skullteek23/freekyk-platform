@@ -27,7 +27,7 @@ import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';
 @Component({
   selector: 'app-teamsettings',
   templateUrl: './teamsettings.component.html',
-  styleUrls: ['./teamsettings.component.css'],
+  styleUrls: ['./teamsettings.component.scss'],
 })
 export class TeamsettingsComponent implements OnInit, OnDestroy {
   readonly ig = SOCIAL_MEDIA_PRE.ig;

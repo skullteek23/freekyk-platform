@@ -11,7 +11,7 @@ import { FilterData } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-pl-grounds',
   templateUrl: './pl-grounds.component.html',
-  styleUrls: ['./pl-grounds.component.css'],
+  styleUrls: ['./pl-grounds.component.scss'],
 })
 export class PlGroundsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();

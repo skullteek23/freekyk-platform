@@ -13,7 +13,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-pl-results',
   templateUrl: './pl-results.component.html',
-  styleUrls: ['./pl-results.component.css'],
+  styleUrls: ['./pl-results.component.scss'],
 })
 export class PlResultsComponent implements OnInit, OnDestroy {
   isLoading = true;

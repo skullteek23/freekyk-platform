@@ -4,7 +4,7 @@ import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 @Component({
   selector: 'app-fs-home',
   templateUrl: './fs-home.component.html',
-  styleUrls: ['./fs-home.component.css'],
+  styleUrls: ['./fs-home.component.scss'],
 })
 export class FsHomeComponent implements OnInit {
   readonly journey = FREESTYLE_PAGE.journey;

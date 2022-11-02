@@ -9,7 +9,7 @@ import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/const
 @Component({
   selector: 'app-grounds-panel',
   templateUrl: './grounds-panel.component.html',
-  styleUrls: ['./grounds-panel.component.css'],
+  styleUrls: ['./grounds-panel.component.scss'],
 })
 export class GroundsPanelComponent implements OnInit {
 

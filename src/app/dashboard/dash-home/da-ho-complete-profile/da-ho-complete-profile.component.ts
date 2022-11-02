@@ -9,7 +9,7 @@ import { DashState } from '../../store/dash.reducer';
 @Component({
   selector: 'app-da-ho-complete-profile',
   templateUrl: './da-ho-complete-profile.component.html',
-  styleUrls: ['./da-ho-complete-profile.component.css'],
+  styleUrls: ['./da-ho-complete-profile.component.scss'],
 })
 export class DaHoCompleteProfileComponent implements OnInit {
   @Output() profileComplete = new Subject<boolean>();

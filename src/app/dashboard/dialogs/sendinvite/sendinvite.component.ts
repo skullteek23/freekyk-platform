@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-sendinvite',
   templateUrl: './sendinvite.component.html',
-  styleUrls: ['./sendinvite.component.css'],
+  styleUrls: ['./sendinvite.component.scss'],
 })
 export class SendinviteComponent implements OnInit {
   constructor(

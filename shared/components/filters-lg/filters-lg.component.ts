@@ -5,7 +5,7 @@ import { FilterData } from '../../interfaces/others.model';
 @Component({
   selector: 'app-filters-lg',
   templateUrl: './filters-lg.component.html',
-  styleUrls: ['./filters-lg.component.css'],
+  styleUrls: ['./filters-lg.component.scss'],
 })
 export class FiltersLgComponent implements OnInit {
   @Input('filterArray') filters: string[] = [];

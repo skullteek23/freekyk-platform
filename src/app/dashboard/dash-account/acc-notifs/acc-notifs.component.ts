@@ -7,7 +7,7 @@ import { NotificationBasic } from '@shared/interfaces/notification.model';
 @Component({
   selector: 'app-acc-notifs',
   templateUrl: './acc-notifs.component.html',
-  styleUrls: ['./acc-notifs.component.css'],
+  styleUrls: ['./acc-notifs.component.scss'],
 })
 export class AccNotifsComponent implements OnInit {
   isLoading = true;

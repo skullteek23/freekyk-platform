@@ -11,7 +11,7 @@ import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   @Output() menOpen = new Subject<boolean>();

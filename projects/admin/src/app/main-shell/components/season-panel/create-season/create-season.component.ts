@@ -20,7 +20,7 @@ import { SelectGroundsComponent } from '../select-grounds/select-grounds.compone
 @Component({
   selector: 'app-create-season',
   templateUrl: './create-season.component.html',
-  styleUrls: ['./create-season.component.css']
+  styleUrls: ['./create-season.component.scss']
 })
 export class CreateSeasonComponent implements OnDestroy {
 

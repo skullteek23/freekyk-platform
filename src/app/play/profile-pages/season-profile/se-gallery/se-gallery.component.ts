@@ -9,7 +9,7 @@ import { SeasonMedia } from '@shared/interfaces/season.model';
 @Component({
   selector: 'app-se-gallery',
   templateUrl: './se-gallery.component.html',
-  styleUrls: ['./se-gallery.component.css'],
+  styleUrls: ['./se-gallery.component.scss'],
 })
 export class SeGalleryComponent implements OnInit, OnDestroy {
   @Input() photos: string[] = [];

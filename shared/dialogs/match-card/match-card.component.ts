@@ -8,7 +8,7 @@ import { matchData } from '../../interfaces/others.model';
 @Component({
   selector: 'app-match-card',
   templateUrl: './match-card.component.html',
-  styleUrls: ['./match-card.component.css'],
+  styleUrls: ['./match-card.component.scss'],
 })
 export class MatchCardComponent implements OnInit {
 

@@ -7,7 +7,7 @@ import { NotificationBasic } from '@shared/interfaces/notification.model';
 @Component({
   selector: 'app-da-ho-notifs',
   templateUrl: './da-ho-notifs.component.html',
-  styleUrls: ['./da-ho-notifs.component.css'],
+  styleUrls: ['./da-ho-notifs.component.scss'],
 })
 export class DaHoNotifsComponent implements OnInit {
   isLoading = true;

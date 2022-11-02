@@ -7,7 +7,7 @@ import { AskPlayerSelectorComponent } from '../ask-player-selector/ask-player-se
 @Component({
   selector: 'app-upcoming-match-tab',
   templateUrl: './upcoming-match-tab.component.html',
-  styleUrls: ['./upcoming-match-tab.component.css'],
+  styleUrls: ['./upcoming-match-tab.component.scss'],
 })
 export class UpcomingMatchTabComponent implements OnInit {
   @Input() captain: boolean;

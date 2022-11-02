@@ -19,7 +19,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
-  styleUrls: ['./da-ho-all-fixtures.component.css'],
+  styleUrls: ['./da-ho-all-fixtures.component.scss'],
 })
 export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;

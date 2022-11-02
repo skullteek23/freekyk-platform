@@ -9,7 +9,7 @@ import { TeamMedia } from '@shared/interfaces/team.model';
 @Component({
   selector: 'app-te-gallery',
   templateUrl: './te-gallery.component.html',
-  styleUrls: ['./te-gallery.component.css'],
+  styleUrls: ['./te-gallery.component.scss'],
 })
 export class TeGalleryComponent implements OnInit, OnDestroy {
   @Input() photos: string[] = [];

@@ -7,7 +7,7 @@ import { statsIcon } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-da-ho-stats-card',
   templateUrl: './da-ho-stats-card.component.html',
-  styleUrls: ['./da-ho-stats-card.component.css'],
+  styleUrls: ['./da-ho-stats-card.component.scss'],
 })
 export class DaHoStatsCardComponent implements OnInit {
   isLoading = true;
