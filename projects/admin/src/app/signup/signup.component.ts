@@ -8,7 +8,9 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { CanComponentDeactivate, Guard } from '@shared/guards/can-deactivate-guard.service';
 import { RegistrationRequest } from '@shared/interfaces/admin.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { off } from 'process';
 
 @Component({
   selector: 'app-signup',
@@ -77,16 +79,29 @@ export class SignupComponent implements OnInit, CanComponentDeactivate {
       };
 
       this.referenceID = this.ngFirestore.createId();
-
-      this.ngFirestore.collection('adminRegistrationRequests').add(request)
+      this.ngFirestore.collection('adminRegistrationRequests', query => query.where('email', '==', request.email))
+        .get()
+        .pipe(
+          switchMap(resp => {
+            if (resp.empty) {
+              return this.ngFirestore.collection('adminRegistrationRequests').add(request);
+            }
+            this.snackbarService.displayError('Email already registered. Please use another email!');
+            return of(null);
+          })
+        )
+        .toPromise()
         .then((resp) => {
-          this.isLoaderShown = false;
-          this.isRegistrationSent = true;
-          this.referenceID = resp.id;
+          if (resp) {
+            this.isRegistrationSent = true;
+            this.referenceID = resp.id;
+          }
         })
         .catch(() => {
-          this.isLoaderShown = false;
           this.snackbarService.displayError();
+        })
+        .finally(() => {
+          this.isLoaderShown = false;
         });
     }
   }
