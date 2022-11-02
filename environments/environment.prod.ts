@@ -12,9 +12,13 @@ export const environment = {
     measurementId: 'G-K55NRR7QXM',
     url: 'https://freekyk-prod.web.app'
   },
-  // live api keys
   razorPay: {
     key_id: 'rzp_live_ow8sSR7ZCWKSST',
     key_secret: 'ObgEc8yFbtkmCkrexJcedhju',
   },
+  // https://www.universal-tutorial.com/api/getaccesstoken
+  location: {
+    token: 'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo',
+    email: 'pgoel681@gmail.com'
+  }
 };

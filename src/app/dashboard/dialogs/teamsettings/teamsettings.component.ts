@@ -7,7 +7,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { LocationCitiesService } from 'src/app/services/location-cities.service';
+import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import {
@@ -50,7 +50,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
-    private locationServ: LocationCitiesService,
+    private locationServ: LocationService,
     private store: Store<{
       team: TeamState;
     }>,

@@ -11,7 +11,7 @@ import { FsProfileVideos, PlayerMoreInfo, SocialMediaLinks, } from '@shared/inte
 import { DashState } from '../../store/dash.reducer';
 import { ALPHA_W_SPACE, ALPHA_NUM_SPACE, BIO, YOUTUBE_REGEX, ALPHA_LINK, } from '@shared/Constants/REGEX';
 import { PLAYING_POSITIONS } from '@shared/Constants/PLAYING_POSITIONS';
-import { LocationCitiesService } from 'src/app/services/location-cities.service';
+import { LocationService } from '@shared/services/location-cities.service';
 import { MatSelectChange } from '@angular/material/select';
 import { BIO_MAX_LIMIT } from '../../constants/constants';
 import { map } from 'rxjs/operators';
@@ -57,7 +57,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     }>,
     private ngFire: AngularFirestore,
     private snackServ: SnackbarService,
-    private locationServ: LocationCitiesService,
+    private locationServ: LocationService,
     private authService: AuthService
   ) { }
   ngOnInit(): void {

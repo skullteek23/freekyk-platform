@@ -1,37 +1,49 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import {
-  URL_AUTH,
-  URL_COUNTRIES,
-  URL_STATES,
-  URL_CITIES,
-  API_TOKEN,
-  USER_EMAIL,
-} from '@shared/Constants/UNIVERSAL_TUTORIAL';
+import { Observable, of, Subscription } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocationCitiesService implements OnDestroy {
-  private URL_AUTH = URL_AUTH;
-  private URL_COUNTRIES = URL_COUNTRIES;
-  private URL_STATES = URL_STATES;
-  private URL_CITIES = URL_CITIES;
-  private API_TOKEN = API_TOKEN;
-  private USER_EMAIL = USER_EMAIL;
+export class LocationService implements OnDestroy {
+
   subscriptions = new Subscription();
 
+  private token: string = null;
+  private URL_AUTH = 'https://www.universal-tutorial.com/api/getaccesstoken';
+  private URL_COUNTRIES = 'https://www.universal-tutorial.com/api/countries/';
+  private URL_STATES = 'https://www.universal-tutorial.com/api/states/';
+  private URL_CITIES = 'https://www.universal-tutorial.com/api/cities/';
+  private API_TOKEN = environment.location.token;
+  private USER_EMAIL = environment.location.email;
+
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  ngOnDestroy(): void {
+    this.token = null;
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+
   getAuthToken(): Observable<any> {
+    if (this.token) {
+      return of(this.token);
+    }
     return this.http.get(this.URL_AUTH, {
       headers: {
         Accept: 'application/json',
         'api-token': this.API_TOKEN,
         'user-email': this.USER_EMAIL,
       },
-    });
+    }).pipe(tap(res => this.token = res));
   }
+
   getCountry(): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_COUNTRIES, {
@@ -40,11 +52,10 @@ export class LocationCitiesService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) =>
-        (Object.values(resp) as Array<{}>).map((val: any) => val.country_name)
-      )
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.country_name))
     );
   }
+
   getStateByCountry(country: string = 'India'): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_STATES + country, {
@@ -53,11 +64,10 @@ export class LocationCitiesService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) =>
-        (Object.values(resp) as Array<{}>).map((val: any) => val.state_name)
-      )
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.state_name))
     );
   }
+
   getCityByState(state: string): Observable<string[]> {
     return this.getAuthToken().pipe(
       switchMap((res) => this.http.get(this.URL_CITIES + state, {
@@ -66,17 +76,7 @@ export class LocationCitiesService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) =>
-        (Object.values(resp) as Array<{}>).map((val: any) => val.city_name)
-      )
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.city_name))
     );
-  }
-  constructor(private http: HttpClient) {
-    // console.log('location service started');
-  }
-  ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
   }
 }

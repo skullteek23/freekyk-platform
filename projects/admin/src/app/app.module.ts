@@ -14,6 +14,11 @@ import { MaterialModule } from '@shared/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedUserRedirectGuard } from './guards/logged-user-redirect.guard';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '@shared/shared.module';
+import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
+import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 
 const routes: Routes = [
   {
@@ -31,8 +36,8 @@ const routes: Routes = [
   {
     path: 'register',
     component: SignupComponent,
-    canActivate: [
-      LoggedUserRedirectGuard
+    canDeactivate: [
+      CanDeactivateGuardService
     ]
   },
   {
@@ -60,6 +65,10 @@ const routes: Routes = [
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
+    FlexLayoutModule,
+    SharedModule,
+    SnackBarModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [

@@ -9,7 +9,7 @@ import {
 import { MatSelectChange } from '@angular/material/select';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { LocationCitiesService } from 'src/app/services/location-cities.service';
+import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { userAddress } from '@shared/interfaces/others.model';
 
@@ -31,7 +31,7 @@ export class AccAddressesComponent implements OnInit {
   constructor(
     private snackServ: SnackbarService,
     private ngFire: AngularFirestore,
-    private locationServ: LocationCitiesService
+    private locationServ: LocationService
   ) { }
 
   ngOnInit(): void {

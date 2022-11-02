@@ -15,7 +15,7 @@ export class LoggedUserRedirectGuard implements CanActivate {
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/seasons']);
       return false;
     } else {
       return true;

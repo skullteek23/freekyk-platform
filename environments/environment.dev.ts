@@ -11,9 +11,14 @@ export const environment = {
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
     url: 'https://freekyk-development.web.app'
   },
-  // live api keys
+  // Razorpay
   razorPay: {
     key_id: 'rzp_test_mQuopCCsNb542F',
     key_secret: 'r7Y2JQ4n3VJkTquSn9lO6yHw',
   },
+  // https://www.universal-tutorial.com/api/getaccesstoken
+  location: {
+    token: 'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo',
+    email: 'pgoel681@gmail.com'
+  }
 };

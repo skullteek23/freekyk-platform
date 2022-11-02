@@ -46,7 +46,7 @@ import { DaTeMangPlayersComponent } from './dash-team-manag/da-te-members/da-te-
 import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.component';
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
 import { HttpClientModule } from '@angular/common/http';
-import { LocationCitiesService } from '../services/location-cities.service';
+import { LocationService } from '../../../shared/services/location-cities.service';
 import { environment } from 'environments/environment';
 import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
 import { PaymentService } from '../services/payment.service';
@@ -115,7 +115,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   exports: [],
   providers: [
-    LocationCitiesService,
+    LocationService,
     { provide: RazorPayAPI, useValue: environment.razorPay },
     PaymentService,
   ],
