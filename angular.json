@@ -53,7 +53,7 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -124,7 +124,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -203,7 +203,7 @@
             ],
             "styles": [
               "projects/admin/src/custom-theme.scss",
-              "projects/admin/src/styles.css"
+              "projects/admin/src/styles.scss"
             ],
             "scripts": []
           },
@@ -275,7 +275,7 @@
             ],
             "styles": [
               "projects/admin/src/custom-theme.scss",
-              "projects/admin/src/styles.css"
+              "projects/admin/src/styles.scss"
             ],
             "scripts": []
           }
@@ -304,5 +304,14 @@
       }
     }
   },
-  "defaultProject": "football-platform-v1"
+  "defaultProject": "football-platform-v1",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
 }
