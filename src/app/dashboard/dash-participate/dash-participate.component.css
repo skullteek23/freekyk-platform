@@ -2,6 +2,7 @@
   padding: 20px;
   border-radius: var(--borderRadiusCard);
   overflow: hidden;
+  min-height: 60vh;
 }
 
 .list-container {

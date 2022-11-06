@@ -151,6 +151,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Referee</mat-label>
           <input type="text" matInput formControlName="referee">
+          <mat-hint *ngIf="!referee.hasError('required')">Required field</mat-hint>
           <mat-error *ngIf="referee.hasError('required')">{{formMessages.error.requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -163,7 +164,7 @@
       </div>
     </mat-card>
     <div class="buttons-container" fxLayoutAlign="center center">
-      <button [disabled]="matchReportForm.invalid" type="button" (click)="onGenerateSummary()"
+      <button [disabled]="!matchReportForm.dirty" type="button" (click)="onGenerateSummary()"
         class="primaryButton buttonText">
         Generate Match Summary
       </button>

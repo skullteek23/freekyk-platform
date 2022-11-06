@@ -161,6 +161,7 @@ export class UpdateMatchReportComponent implements OnInit {
 
   onGenerateSummary() {
     if (this.matchReportForm.invalid) {
+      this.matchReportForm.markAllAsTouched();
       return;
     }
     this.isViewSummary = true;
