@@ -364,7 +364,8 @@ export class ViewSeasonDraftComponent implements OnInit {
   }
 
   get maxRegisDate(): Date {
-    return this.seasonDraftData && this.seasonDraftData.basicInfo ? new Date(this.seasonDraftData?.basicInfo?.startDate) : new Date();
+    const config = this.seasonAdminService.getAdminConfig();
+    return new Date(this.seasonAdminService.getMappedDateRange(this.seasonDraftData?.basicInfo?.startDate));
   }
 
   get payableFees(): number {

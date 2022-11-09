@@ -5,6 +5,8 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
+import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
+import { LastParticipationDate } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-admin-config-panel',
@@ -16,10 +18,10 @@ export class AdminConfigPanelComponent implements OnInit {
 
   readonly messages = formsMessages;
   readonly allowedParticipationDate = [
-    'Same as Tournament Start Date',
-    '1 day before Start Date',
-    '3 days before Start Date',
-    '1 week before Start Date',
+    LastParticipationDate.sameDate,
+    LastParticipationDate.oneDayBefore,
+    LastParticipationDate.threeDayBefore,
+    LastParticipationDate.oneWeekBefore,
   ];
 
   configForm: FormGroup;
@@ -62,7 +64,10 @@ export class AdminConfigPanelComponent implements OnInit {
 
   saveConfig() {
     if (this.configForm.valid && this.configForm.value) {
-      const config = this.configForm.value;
+      const config: AdminConfigurationSeason = {
+        duration: this.duration?.value,
+        lastParticipationDate: this.lastParticipationDate?.value?.trim()
+      };
       this.isLoaderShown = true;
       this.ngFire.collection('adminConfigs').doc('season').set({
         ...config

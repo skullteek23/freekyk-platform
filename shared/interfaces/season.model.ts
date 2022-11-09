@@ -52,3 +52,10 @@ export interface SeasonDraft {
   basicInfo?: any;
   grounds?: GroundPrivateInfo[];
 }
+
+export enum LastParticipationDate {
+  sameDate = 'Same as Tournament Start Date',
+  oneDayBefore = '1 day before Start Date',
+  threeDayBefore = '3 days before Start Date',
+  oneWeekBefore = '1 week before Start Date',
+};

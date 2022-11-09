@@ -30,6 +30,7 @@ export class MatchConstants {
   public static LABEL_NOT_AVAILABLE = 'N/A';
   public static JOINING_CHARACTER = ', ';
   public static LARGE_TEXT_CHARACTER_LIMIT = 2000;
+  public static ONE_DAY_IN_MILLIS = 86400000;
 }
 export const STATISTICS = {
   FKC_PLAYED: 'FKC Played',

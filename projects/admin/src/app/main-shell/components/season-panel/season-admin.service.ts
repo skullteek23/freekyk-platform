@@ -7,16 +7,17 @@ import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking } from '@shared/interfaces/ground.model';
 import { dummyFixture, MatchFixture, } from '@shared/interfaces/match.model';
 import { fixtureGenerationData } from '@shared/interfaces/others.model';
-import { statusType } from '@shared/interfaces/season.model';
+import { LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
+import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SeasonAdminService {
 
-  private adminConfigs: any = {};
+  private adminConfigs: AdminConfigurationSeason;
 
   constructor(
     private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions
@@ -116,12 +117,32 @@ export class SeasonAdminService {
       .get()
       .subscribe({
         next: (response) => {
-          this.adminConfigs = response && response.exists ? response : {};
+          this.adminConfigs = response && response.exists ? response.data() as AdminConfigurationSeason : null;
         },
         error: (error) => {
-          this.adminConfigs = {};
+          this.adminConfigs = null;
         }
       });
+  }
+
+  getAdminConfig() {
+    return this.adminConfigs;
+  }
+
+  getMappedDateRange(comparatorTimestamp: number): number {
+    if (this.adminConfigs && this.adminConfigs.hasOwnProperty('lastParticipationDate') && this.adminConfigs.lastParticipationDate) {
+      switch (this.adminConfigs.lastParticipationDate) {
+        case LastParticipationDate.sameDate:
+          return comparatorTimestamp;
+        case LastParticipationDate.oneDayBefore:
+          return comparatorTimestamp - MatchConstants.ONE_DAY_IN_MILLIS;
+        case LastParticipationDate.threeDayBefore:
+          return comparatorTimestamp - (3 * MatchConstants.ONE_DAY_IN_MILLIS);
+        case LastParticipationDate.oneWeekBefore:
+          return comparatorTimestamp - (7 * MatchConstants.ONE_DAY_IN_MILLIS);
+      }
+    }
+    return comparatorTimestamp;
   }
 
   getPublishableFixture(data: dummyFixture[]) {

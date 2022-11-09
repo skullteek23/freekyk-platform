@@ -34,3 +34,7 @@ export interface RegistrationRequest {
   gst?: number;
 }
 
+export interface AdminConfigurationSeason {
+  duration: number;
+  lastParticipationDate: string;
+};
