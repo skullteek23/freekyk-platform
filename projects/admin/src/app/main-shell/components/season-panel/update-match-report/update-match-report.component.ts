@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ALPHA_W_SPACE, BIO, NUM } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { CloudFunctionStatsData, MatchFixture, ReportSummary } from '@shared/interfaces/match.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { TeamMembers } from '@shared/interfaces/team.model';
@@ -76,11 +76,15 @@ export class UpdateMatchReportComponent implements OnInit {
 
   initForm(): void {
     this.matchReportForm = new FormGroup({
-      homeScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
-      awayScore: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
+      homeScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
+      awayScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
       penalties: new FormControl(0),
-      homePenScore: new FormControl(null, [Validators.pattern(NUM), Validators.min(1), this.isHomeEqualScoreValidator.bind(this)]),
-      awayPenScore: new FormControl(null, [Validators.pattern(NUM), Validators.min(1), this.isAwayEqualScoreValidator.bind(this)]),
+      homePenScore: new FormControl(null, [
+        Validators.pattern(RegexPatterns.num), Validators.min(1), this.isHomeEqualScoreValidator.bind(this)
+      ]),
+      awayPenScore: new FormControl(null, [
+        Validators.pattern(RegexPatterns.num), Validators.min(1), this.isAwayEqualScoreValidator.bind(this)
+      ]),
       scorersHome: new FormArray([]),
       scorersAway: new FormArray([]),
       scorersGoalsHome: new FormArray([]),
@@ -91,9 +95,9 @@ export class UpdateMatchReportComponent implements OnInit {
       yellowCardHoldersAway: new FormArray([]),
       billsFile: new FormControl(null),
       matchReportFile: new FormControl(null, [Validators.required]),
-      moneySpent: new FormControl(0, [Validators.required, Validators.pattern(NUM)]),
-      referee: new FormControl(null, [Validators.required, Validators.pattern(ALPHA_W_SPACE)]),
-      specialNotes: new FormControl(null, [Validators.pattern(BIO), Validators.maxLength(200)]),
+      moneySpent: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
+      referee: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
+      specialNotes: new FormControl(null, [Validators.pattern(RegexPatterns.bio), Validators.maxLength(200)]),
     });
   }
 
@@ -195,7 +199,7 @@ export class UpdateMatchReportComponent implements OnInit {
 
   onAddScorer(newOption: ListOption, team: HomeAway): void {
     const control = new FormControl(newOption);
-    const controlGoal = new FormControl(null, [Validators.required, Validators.pattern(NUM), Validators.min(1)]);
+    const controlGoal = new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.num), Validators.min(1)]);
     if (team === TeamSides.home) {
       this.scorersHome.push(control);
       this.scorersGoalsHome.push(controlGoal);

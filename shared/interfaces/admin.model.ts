@@ -1,18 +1,27 @@
 import { LocationDetails } from './others.model';
+import firebase from 'firebase/app';
 
+export enum AssignedRoles {
+  superAdmin = 'super-admin',
+  admin = 'admin',
+}
+export type FirebaseUserCredential = firebase.auth.UserCredential;
+
+export type FirebaseUser = firebase.User;
 export interface Admin {
   name: string;
-  company: string;
-  managedBy: string;
   email: string;
   contactNumber: number;
-  altContactNumber: number;
   location: LocationDetails;
-  gst: number;
-  selfGround: boolean;
-  website: string;
-  imgPathLogo: string;
   status: number;
+  role: string;
+  managedBy?: string;
+  altContactNumber?: number;
+  gst?: number;
+  selfGround?: boolean;
+  website?: string;
+  imgPathLogo?: string;
+  company?: string;
 }
 
 export interface RegistrationRequest {

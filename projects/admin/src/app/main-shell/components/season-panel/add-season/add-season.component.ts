@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { ALPHA_NUM_SPACE, BIO } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
@@ -58,11 +58,13 @@ export class AddSeasonComponent implements OnInit {
 
   initForm() {
     this.seasonForm = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.pattern(ALPHA_NUM_SPACE), Validators.maxLength(50)]),
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)]),
       city: new FormControl(null, [Validators.required]),
       state: new FormControl(null, [Validators.required]),
-      description: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]),
-      rules: new FormControl(null, [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]),
+      description: new FormControl(null, [
+        Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)
+      ]),
+      rules: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.rulesLimit)]),
       startDate: new FormControl(this.minDate, [Validators.required]),
       fees: new FormControl(0,
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]

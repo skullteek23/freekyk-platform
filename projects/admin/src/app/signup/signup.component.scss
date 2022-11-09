@@ -12,6 +12,7 @@ section {
     width: 100%;
   }
 }
+
 .form-container,
 .success-container {
   width: 100%;
@@ -20,6 +21,12 @@ section {
     text-align: center;
   }
 }
+
+.shortcut {
+  text-align: center;
+  margin-top: 16px;
+}
+
 @media screen and (min-width: 959px) {
   .placeholder {
     height: 432px !important;

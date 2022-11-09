@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { Router } from '@angular/router';
 import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
@@ -10,7 +9,6 @@ import { CanComponentDeactivate, Guard } from '@shared/guards/can-deactivate-gua
 import { RegistrationRequest } from '@shared/interfaces/admin.model';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { off } from 'process';
 
 @Component({
   selector: 'app-signup',
@@ -41,8 +39,11 @@ export class SignupComponent implements OnInit, CanComponentDeactivate {
   }
 
   canDeactivate(): Guard {
-    const response = window.confirm('Are you sure you want to exit? (Reference ID will be lost!)').valueOf();
-    return response;
+    if (this.isRegistrationSent) {
+      const response = window.confirm('Are you sure you want to exit? (Reference ID will be lost!)').valueOf();
+      return response;
+    }
+    return true;
   }
 
   initForm() {

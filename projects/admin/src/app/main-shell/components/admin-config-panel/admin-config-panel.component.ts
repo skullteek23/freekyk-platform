@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { MatchConstants } from '@shared/constants/constants';
+import { formsMessages } from '@shared/constants/messages';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 
 @Component({
   selector: 'app-admin-config-panel',
@@ -7,9 +13,78 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminConfigPanelComponent implements OnInit {
 
-  constructor() { }
+
+  readonly messages = formsMessages;
+  readonly allowedParticipationDate = [
+    'Same as Tournament Start Date',
+    '1 day before Start Date',
+    '3 days before Start Date',
+    '1 week before Start Date',
+  ];
+
+  configForm: FormGroup;
+  isLoaderShown = false;
+
+  constructor(
+    private ngFire: AngularFirestore,
+    private snackbarService: SnackbarService
+  ) { }
 
   ngOnInit(): void {
+    this.intiForm();
+    this.getConfigurations();
   }
 
+  intiForm() {
+    this.configForm = new FormGroup({
+      duration: new FormControl(MatchConstants.ONE_MATCH_DURATION, [Validators.required, Validators.pattern(RegexPatterns.matchDuration)]),
+      lastParticipationDate: new FormControl('Same as Tournament Start Date', [Validators.required]),
+    });
+  }
+
+  getConfigurations() {
+    this.isLoaderShown = true;
+    this.ngFire.collection('adminConfigs').doc('season').get().subscribe({
+      next: (response) => {
+        if (response && response.exists) {
+          const data = response.data() as any;
+          this.configForm.patchValue({
+            ...data
+          });
+        }
+        this.isLoaderShown = false;
+      },
+      error: () => {
+        this.isLoaderShown = false;
+      }
+    });
+  }
+
+  saveConfig() {
+    if (this.configForm.valid && this.configForm.value) {
+      const config = this.configForm.value;
+      this.isLoaderShown = true;
+      this.ngFire.collection('adminConfigs').doc('season').set({
+        ...config
+      })
+        .then(() => {
+          this.configForm.reset();
+          this.getConfigurations();
+          this.snackbarService.displayCustomMsg('Updated successfully');
+          this.isLoaderShown = false;
+        })
+        .catch(() => {
+          this.snackbarService.displayError('Update failed');
+          this.isLoaderShown = false;
+        });
+    }
+  }
+
+  get duration() {
+    return this.configForm.get('duration');
+  }
+
+  get lastParticipationDate() {
+    return this.configForm.get('lastParticipationDate');
+  }
 }

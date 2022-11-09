@@ -1,24 +1,41 @@
-import { Component, OnDestroy } from '@angular/core';
+import { AuthService } from '@admin/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { Admin, AssignedRoles, FirebaseUser } from '@shared/interfaces/admin.model';
+import { Observable, Subscription } from 'rxjs';
+import { filter, map, share, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main-shell',
   templateUrl: './main-shell.component.html',
   styleUrls: ['./main-shell.component.scss']
 })
-export class MainShellComponent implements OnDestroy {
+export class MainShellComponent implements OnDestroy, OnInit {
+
   activeLink = 'seasons';
   cols: number;
+  isLoading = false;;
   links: any[] = [
-    { name: 'seasons', route: '/seasons' },
-    { name: 'grounds', route: '/grounds' }
+    { name: 'seasons', route: 'seasons', disabled: false },
+    { name: 'grounds', route: 'grounds', disabled: false },
+    { name: 'my account', route: 'account', disabled: false }
   ];
   subscriptions = new Subscription();
+  user$: Observable<FirebaseUser>;
 
-  constructor(private mediaObs: MediaObserver, private router: Router) {
+  constructor(
+    private mediaObs: MediaObserver,
+    private router: Router,
+    private authService: AuthService,
+    private ngFire: AngularFirestore,
+    private snackbarService: SnackbarService
+  ) { }
+
+  ngOnInit(): void {
+    this.getUser();
     this.subscriptions.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         const route = event.url.split('/');
@@ -45,9 +62,46 @@ export class MainShellComponent implements OnDestroy {
         }
       }));
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
+    }
+  }
+
+  onLogout() {
+    this.authService.logOut();
+  }
+
+  getUser() {
+    this.isLoading = true;
+    this.user$ = this.authService.getUserDetails().pipe(take(1), tap(
+      (response => {
+        if (response) {
+          this.getUserDetails(response.uid);
+        }
+      })
+    ), share());
+  }
+
+  getUserDetails(uid: string) {
+    if (uid) {
+      this.ngFire.collection('admins').doc(uid).get().subscribe({
+        next: (response) => {
+          if (response) {
+            const adminData = response.data() as Admin;
+            if (adminData.role === AssignedRoles.superAdmin) {
+              this.links.push({ name: 'manage admins', route: 'manage-requests', disabled: false });
+              this.links.push({ name: 'configurations', route: 'configurations', disabled: false });
+            }
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.snackbarService.displayError();
+        }
+      });
     }
   }
 

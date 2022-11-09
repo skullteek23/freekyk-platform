@@ -2,6 +2,14 @@
   height: 100px;
 }
 
+.logged-user {
+  cursor: pointer;
+}
+
+.logged-user:hover {
+  opacity: 0.8;
+}
+
 @media only screen and (max-width: 959px) {
   .strip {
     height: 150px;

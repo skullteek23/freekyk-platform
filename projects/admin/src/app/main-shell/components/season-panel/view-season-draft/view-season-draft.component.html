@@ -146,6 +146,25 @@
       [displayedCols]="cols"> </app-fixture-table>
 
   </mat-card>
+  <mat-card class="info-card">
+    <h4>Season Participant Teams List</h4>
+    <div fxLayout="column">
+      <span *ngIf="!seasonParticipants.length" class="mat-caption">
+        No Participants yet!
+      </span>
+      <mat-list *ngIf="seasonParticipants.length">
+        <a mat-list-item *ngFor="let participant of seasonParticipants">
+          <img matListAvatar [src]="participant.logo" alt="Team Image" />
+          <p matLine fxLayoutAlign="start center" fxLayoutGap="8px">
+            <span>{{ participant.name }}</span>
+            <mat-chip-list>
+              <mat-chip selected>Paid</mat-chip>
+            </mat-chip-list>
+          </p>
+        </a>
+      </mat-list>
+    </div>
+  </mat-card>
   <mat-card class="last-date-card" *ngIf="!isSeasonFinished && !isSeasonPublished">
     <h4>
       Select last date to participate:

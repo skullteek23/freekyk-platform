@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, share } from 'rxjs/operators';
 import { dummyFixture, MatchFixture } from '@shared/interfaces/match.model';
-import { SeasonAbout, SeasonDraft } from '@shared/interfaces/season.model';
+import { SeasonAbout, SeasonDraft, SeasonParticipants } from '@shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import {
@@ -17,8 +17,8 @@ import { GroundPrivateInfo } from '@shared/interfaces/ground.model';
 import { ConfirmationBoxComponent } from '@shared/components/confirmation-box/confirmation-box.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BIO } from '@shared/Constants/REGEX';
 import { formsMessages } from '@shared/constants/messages';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -50,6 +50,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   messages = formsMessages;
   seasonDraftData: SeasonDraft;
   seasonFixtures: dummyFixture[] = [];
+  seasonParticipants: SeasonParticipants[] = [];
   updateEntriesForm = new FormGroup({});
 
   constructor(
@@ -66,16 +67,17 @@ export class ViewSeasonDraftComponent implements OnInit {
     this.draftID = params.draftid;
     if (this.draftID) {
       this.getDraftInfo();
+      this.getParticipants();
     }
   }
 
   initForm() {
     this.updateEntriesForm = new FormGroup({
       description: new FormControl(this.seasonDraftData?.basicInfo?.description,
-        [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.descriptionLimit)]
+        [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)]
       ),
       rules: new FormControl(this.seasonDraftData?.basicInfo?.rules,
-        [Validators.required, Validators.pattern(BIO), Validators.maxLength(this.rulesLimit)]
+        [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.rulesLimit)]
       ),
     });
   }
@@ -97,7 +99,19 @@ export class ViewSeasonDraftComponent implements OnInit {
           this.seasonDraftData = null;
         }
       });
+  }
 
+  getParticipants() {
+    this.ngFire.collection('seasons').doc(this.draftID).collection('participants').get().subscribe({
+      next: (response) => {
+        if (response) {
+          this.seasonParticipants = response.docs.map(el => el.data() as SeasonParticipants);
+        }
+      },
+      error: (error) => {
+        this.snackbarService.displayError('Unable to get participants!');
+      },
+    });
   }
 
   getStatusClass() {

@@ -1,1 +1,50 @@
-<p>login works!</p>
+<header class="section-space-top">
+  <span ngClass.gt-sm="mat-headline" ngClass.lt-md="mat-subheading-2">LOGIN TO FREEKYK ADMIN CONSOLE</span>
+</header>
+<section fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutAlign.gt-sm="space-evenly center"
+  class="section-space-top">
+  <div class="placeholder" fxLayoutAlign="center center">
+    <img src="../../assets/placeholder_product.png" alt="Illustration" />
+  </div>
+  <div class="form-container">
+    <form [formGroup]="loginForm" fxLayout="column" autocomplete="off">
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Enter your Freekyk Organizer's ID</mat-label>
+        <input type="text" matInput formControlName="organizerID" />
+        <mat-error *ngIf="organizerID.hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
+        <mat-error *ngIf="organizerID.hasError('pattern')">
+          {{messages.error.notAllowedCharacter}}
+        </mat-error>
+        <mat-error *ngIf="organizerID.hasError('minLength') || organizerID.hasError('maxLength')">
+          {{adminMessages.error.invalidOrganizerIDLength}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Enter your Registered Email ID</mat-label>
+        <input type="text" matInput formControlName="email" />
+        <mat-error *ngIf="email.hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
+        <mat-error *ngIf="email.hasError('email')">
+          {{messages.error.email}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Enter your Password</mat-label>
+        <input type="password" matInput formControlName="password" />
+        <mat-error *ngIf="password.hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
+        <mat-error *ngIf="password.hasError('pattern')">
+          {{messages.error.notAllowedCharacter}}
+        </mat-error>
+      </mat-form-field>
+      <button [disabled]="loginForm.invalid || !loginForm.dirty" type="button"
+        class="submit-button primaryButton buttonText" (click)="onSubmit()">Login</button>
+      <span class="mat-caption shortcut"> Don't have an account yet? <a [routerLink]="['/register']">Sign up</a> </span>
+    </form>
+  </div>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

@@ -3,11 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { logDetails } from '@shared/interfaces/others.model';
-import {
-  EMAIL,
-  ALPHA_W_SPACE,
-  PASS_STRONG,
-} from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 @Component({
   selector: 'app-login-ui',
   templateUrl: './login-ui.component.html',
@@ -35,7 +31,7 @@ export class LoginUiComponent implements OnInit {
       this.formData = new FormGroup({
         email: new FormControl(null, [
           Validators.required,
-          Validators.pattern(EMAIL),
+          Validators.pattern(RegexPatterns.email),
         ]),
         pass: new FormControl(null, Validators.required),
       });
@@ -43,15 +39,15 @@ export class LoginUiComponent implements OnInit {
       this.formData = new FormGroup({
         name: new FormControl(null, [
           Validators.required,
-          Validators.pattern(ALPHA_W_SPACE),
+          Validators.pattern(RegexPatterns.alphaWithSpace),
         ]),
         email: new FormControl(null, [
           Validators.required,
-          Validators.pattern(EMAIL),
+          Validators.pattern(RegexPatterns.email),
         ]),
         pass: new FormControl(null, [
           Validators.required,
-          Validators.pattern(PASS_STRONG),
+          Validators.pattern(RegexPatterns.passwordStrong),
         ]),
       });
     }
