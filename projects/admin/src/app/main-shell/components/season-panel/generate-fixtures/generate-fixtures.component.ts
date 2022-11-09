@@ -39,8 +39,7 @@ export class GenerateFixturesComponent implements OnInit {
       grounds: value?.grounds,
       teamParticipating: seasonInfo?.participatingTeamsCount,
       matches: tournaments?.value,
-      startDate: new Date(seasonInfo?.startDate).getTime(),
-      oneMatchDur: MatchConstants.ONE_MATCH_DURATION,
+      startDate: new Date(seasonInfo?.startDate).getTime()
     };
     if (tournaments && startDate && teams) {
       this.fixturesList = this.seasonAdminService.onGenerateDummyFixtures(data);

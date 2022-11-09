@@ -15,7 +15,14 @@ import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/const
   providedIn: 'root'
 })
 export class SeasonAdminService {
-  constructor(private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions) { }
+
+  private adminConfigs: any = {};
+
+  constructor(
+    private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions
+  ) {
+    this.getAdminConfigs();
+  }
 
   onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
     const fcpMatches = data.matches.fcp;
@@ -25,6 +32,7 @@ export class SeasonAdminService {
     const grounds = data.grounds;
     const availableSlotList: { date: Date; groundName: string; locCity: string; locState: string }[] = [];
     const initialDate = new Date(data.startDate);
+    const oneMatchDuration = this.adminConfigs?.duration || MatchConstants.ONE_MATCH_DURATION;
     while (availableSlotList.length < totalMatches) {
       const day = initialDate.getDay();
       for (const ground of grounds) {
@@ -50,9 +58,9 @@ export class SeasonAdminService {
             const currentGround = groundName;
             const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
             if (
-              this.getDifference(currentHour, lastDateHour) >= data.oneMatchDur && currentDay === lastDateDay
-              || this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay !== lastDateDay
-              || (this.getDifference(currentHour, lastDateHour) <= data.oneMatchDur && currentDay === lastDateDay
+              this.getDifference(currentHour, lastDateHour) >= oneMatchDuration && currentDay === lastDateDay
+              || this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay !== lastDateDay
+              || (this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay === lastDateDay
                 && lastGround !== currentGround)
             ) {
               const date = new Date(JSON.parse(JSON.stringify(initialDate)));
@@ -101,6 +109,19 @@ export class SeasonAdminService {
       };
     });
     return fixtures && fixtures.length ? fixtures : [];
+  }
+
+  getAdminConfigs() {
+    this.ngFire.collection('adminConfigs').doc('season')
+      .get()
+      .subscribe({
+        next: (response) => {
+          this.adminConfigs = response && response.exists ? response : {};
+        },
+        error: (error) => {
+          this.adminConfigs = {};
+        }
+      });
   }
 
   getPublishableFixture(data: dummyFixture[]) {

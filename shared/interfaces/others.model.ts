@@ -205,7 +205,6 @@ export interface fixtureGenerationData {
   grounds: GroundPrivateInfo[];
   matches: any;
   startDate: number;
-  oneMatchDur: number;
   teamParticipating: number;
 }
 export interface GroundTimings {
