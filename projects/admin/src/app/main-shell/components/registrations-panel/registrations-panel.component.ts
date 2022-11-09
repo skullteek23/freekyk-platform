@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { RegistrationRequest } from '@shared/interfaces/admin.model';
+import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 
 @Component({
   selector: 'app-registrations-panel',
@@ -29,7 +30,7 @@ export class RegistrationsPanelComponent implements OnInit {
     status: 'Status',
   };
 
-  readonly displayedCols = ['id', 'company', 'name', 'phone', 'location', 'status'];
+  readonly displayedCols = ['id', 'company', 'name', 'phone', 'location', 'status', 'actions'];
 
   dataSource = new MatTableDataSource<any>([]);
   isLoaderShown = false;
@@ -45,10 +46,17 @@ export class RegistrationsPanelComponent implements OnInit {
 
   getRequests() {
     this.isLoaderShown = true;
-    this.ngFire.collection('adminRegistrationRequests').get().subscribe({
+    this.ngFire.collection('admins').get().subscribe({
       next: (response) => {
         if (response) {
-          const data = response.docs.map(element => ({ id: element.id, ...element.data() as RegistrationRequest }));
+          const data: Admin[] = [];
+          response.docs.forEach(element => {
+            const adminData = element.data() as Admin;
+            const id = element.id;
+            if (adminData.role !== AssignedRoles.superAdmin) {
+              data.push({ id, ...adminData });
+            }
+          });
           this.setDataSource(data);
         } else {
           this.setDataSource([]);
@@ -62,12 +70,34 @@ export class RegistrationsPanelComponent implements OnInit {
     });
   }
 
-  setDataSource(data: RegistrationRequest[]) {
+  onDelete(element: Admin) {
+    this.isLoaderShown = true;
+    this.ngFire.collection('admins').doc(element.id).delete()
+      .then(() => {
+        this.snackbarService.displayCustomMsg('Request deleted successfully!');
+        this.getRequests();
+      })
+      .catch(err => {
+        this.isLoaderShown = false;
+        this.snackbarService.displayError('Delete operation failed');
+      });
+  }
+
+  setDataSource(data: Admin[]) {
     this.dataSource = new MatTableDataSource<any>(data);
   }
 
-  onTriggerAction(element) {
-
+  onChangeStatus(element: any, selection: MatSelectChange) {
+    this.isLoaderShown = true;
+    this.ngFire.collection('admins').doc(element.id).update({ status: selection.value })
+      .then(() => {
+        this.snackbarService.displayCustomMsg('Request status changed successfully!');
+        this.getRequests();
+      })
+      .catch(err => {
+        this.isLoaderShown = false;
+        this.snackbarService.displayError('Update operation failed');
+      });
   }
 
 }

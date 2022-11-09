@@ -14,7 +14,8 @@ export interface Admin {
   contactNumber: number;
   location: LocationDetails;
   status: number;
-  role: string;
+  role: AssignedRoles;
+  id?: string;
   managedBy?: string;
   altContactNumber?: number;
   gst?: number;

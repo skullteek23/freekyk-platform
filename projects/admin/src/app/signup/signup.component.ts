@@ -5,8 +5,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
-import { CanComponentDeactivate, Guard } from '@shared/guards/can-deactivate-guard.service';
-import { RegistrationRequest } from '@shared/interfaces/admin.model';
+import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MatchConstants } from '@shared/constants/constants';
@@ -57,7 +56,7 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     if (this.signupForm.valid && this.signupForm.value) {
       this.isLoaderShown = true;
-      const request: RegistrationRequest = {
+      const request: Admin = {
         name: this.signupForm?.value?.name,
         email: this.signupForm?.value?.email,
         contactNumber: this.signupForm?.value?.contactNumber,
@@ -69,16 +68,18 @@ export class SignupComponent implements OnInit {
         company: this.signupForm?.value?.company,
         gst: this.signupForm?.value?.gst,
         selfGround: this.signupForm?.value?.selfGround,
+        status: 0,
+        role: AssignedRoles.admin
       };
 
-      const organizerID = MatchConstants.UNIQUE_ORGANIZER_CODE + this.ngFirestore.createId().slice(0, 8);
-      this.ngFirestore.collection('adminRegistrationRequests', query => query.where('email', '==', request.email))
+      const organizerID = MatchConstants.UNIQUE_ORGANIZER_CODE + this.ngFirestore.createId().slice(0, 8).toUpperCase();
+      this.ngFirestore.collection('admins', query => query.where('email', '==', request.email))
         .get()
         .pipe(
           switchMap(resp => {
             if (resp.empty) {
               // email triggered when this document is written
-              return this.ngFirestore.collection('adminRegistrationRequests').doc(organizerID).set(request);
+              return this.ngFirestore.collection('admins').doc(organizerID).set(request);
             }
             this.snackbarService.displayError('Email already registered. Please use another email!');
             return of(null);
