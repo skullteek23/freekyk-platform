@@ -35,10 +35,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: SignupComponent,
-    canDeactivate: [
-      CanDeactivateGuardService
-    ]
+    component: SignupComponent
   },
   {
     path: '**',

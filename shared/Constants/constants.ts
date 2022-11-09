@@ -14,6 +14,7 @@ export class MatchConstants {
     FCP: 'FK-FCP',
     FPL: 'FK-FPL'
   };
+  public static UNIQUE_ORGANIZER_CODE = 'FKYK2022';
   public static TO_BE_DECIDED: 'TBD';
   public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
   public static ALLOWED_KNOCKOUT_BRACKETS = [4, 8, 16];

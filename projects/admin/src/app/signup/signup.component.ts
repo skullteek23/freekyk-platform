@@ -9,13 +9,14 @@ import { CanComponentDeactivate, Guard } from '@shared/guards/can-deactivate-gua
 import { RegistrationRequest } from '@shared/interfaces/admin.model';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { MatchConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit, CanComponentDeactivate {
+export class SignupComponent implements OnInit {
 
   readonly messages = formsMessages;
 
@@ -23,7 +24,6 @@ export class SignupComponent implements OnInit, CanComponentDeactivate {
   cities$: Observable<string[]>;
   isLoaderShown = false;
   isRegistrationSent = false;
-  referenceID = '';
   signupForm: FormGroup;
   states$: Observable<string[]>;
 
@@ -36,14 +36,6 @@ export class SignupComponent implements OnInit, CanComponentDeactivate {
   ngOnInit(): void {
     this.initForm();
     this.getCountries();
-  }
-
-  canDeactivate(): Guard {
-    if (this.isRegistrationSent) {
-      const response = window.confirm('Are you sure you want to exit? (Reference ID will be lost!)').valueOf();
-      return response;
-    }
-    return true;
   }
 
   initForm() {
@@ -79,30 +71,28 @@ export class SignupComponent implements OnInit, CanComponentDeactivate {
         selfGround: this.signupForm?.value?.selfGround,
       };
 
-      this.referenceID = this.ngFirestore.createId();
+      const organizerID = MatchConstants.UNIQUE_ORGANIZER_CODE + this.ngFirestore.createId().slice(0, 8);
       this.ngFirestore.collection('adminRegistrationRequests', query => query.where('email', '==', request.email))
         .get()
         .pipe(
           switchMap(resp => {
             if (resp.empty) {
-              return this.ngFirestore.collection('adminRegistrationRequests').add(request);
+              // email triggered when this document is written
+              return this.ngFirestore.collection('adminRegistrationRequests').doc(organizerID).set(request);
             }
             this.snackbarService.displayError('Email already registered. Please use another email!');
             return of(null);
           })
         )
-        .toPromise()
-        .then((resp) => {
-          if (resp) {
+        .subscribe({
+          next: (response) => {
+            this.isLoaderShown = false;
             this.isRegistrationSent = true;
-            this.referenceID = resp.id;
-          }
-        })
-        .catch(() => {
-          this.snackbarService.displayError();
-        })
-        .finally(() => {
-          this.isLoaderShown = false;
+          },
+          error: (error) => {
+            this.isLoaderShown = false;
+            this.snackbarService.displayError();
+          },
         });
     }
   }

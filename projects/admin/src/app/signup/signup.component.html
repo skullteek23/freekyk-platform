@@ -92,10 +92,9 @@
   <ng-template #successBox>
     <div class="success-container" fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="center center">
       <app-tick-animation></app-tick-animation>
-      <p *ngIf="referenceID">
+      <p>
         Thank you for submitting your details!!<br>
-        Your reference ID is FK-<strong>{{referenceID}}</strong>.<br>
-        Please check your email for further steps.
+        Please check your email to get your Organizer ID.
       </p>
       <button type="button" class="submit-button primaryButton buttonText" [routerLink]="['/login']">
         Login to Admin Panel</button>
