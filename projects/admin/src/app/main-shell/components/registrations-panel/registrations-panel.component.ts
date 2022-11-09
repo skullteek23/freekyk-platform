@@ -48,8 +48,8 @@ export class RegistrationsPanelComponent implements OnInit {
     this.isLoaderShown = true;
     this.ngFire.collection('admins').get().subscribe({
       next: (response) => {
+        const data: Admin[] = [];
         if (response) {
-          const data: Admin[] = [];
           response.docs.forEach(element => {
             const adminData = element.data() as Admin;
             const id = element.id;
@@ -57,10 +57,8 @@ export class RegistrationsPanelComponent implements OnInit {
               data.push({ id, ...adminData });
             }
           });
-          this.setDataSource(data);
-        } else {
-          this.setDataSource([]);
         }
+        this.setDataSource(data);
         this.isLoaderShown = false;
       },
       error: () => {
