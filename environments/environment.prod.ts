@@ -10,7 +10,8 @@ export const environment = {
     messagingSenderId: '678320827100',
     appId: '1:678320827100:web:d14c29c405b86b825a2219',
     measurementId: 'G-K55NRR7QXM',
-    url: 'https://freekyk-prod.web.app'
+    url: 'https://freekyk-prod.web.app',
+    adminUrl: 'https://admin-freekyk.web.app'
   },
   razorPay: {
     key_id: 'rzp_live_ow8sSR7ZCWKSST',
@@ -20,5 +21,9 @@ export const environment = {
   location: {
     token: 'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo',
     email: 'pgoel681@gmail.com'
+  },
+  // https://us8.admin.mailchimp.com/account/api/
+  mailchimp: {
+    apiKey: ''
   }
 };

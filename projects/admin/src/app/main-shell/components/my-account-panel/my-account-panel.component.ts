@@ -61,19 +61,21 @@ export class MyAccountPanelComponent implements OnInit {
       this.isLoaderShown = true;
       this.ngFirestore.collection('admins').doc(orgID).get().subscribe({
         next: (response) => {
-          const adminData = { id: response.id, ...response.data() as Admin };
-          const country = adminData.location.country;
-          const state = adminData.location.state;
-          const city = adminData.location.city;
-          if (country && state && city) {
-            this.onSelectCountry(country);
-            this.onSelectState(state);
+          if (response.exists) {
+            const adminData = { id: response.id, ...response.data() as Admin };
+            const country = adminData.location.country;
+            const state = adminData.location.state;
+            const city = adminData.location.city;
+            if (country && state && city) {
+              this.onSelectCountry(country);
+              this.onSelectState(state);
+            }
+            this.personalInfoForm.patchValue({
+              ...adminData
+            });
+            this.disableControls();
+            this.isLoaderShown = false;
           }
-          this.personalInfoForm.patchValue({
-            ...adminData
-          });
-          this.disableControls();
-          this.isLoaderShown = false;
         },
         error: () => {
           this.isLoaderShown = false;

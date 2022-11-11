@@ -6,9 +6,8 @@ import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { MatchConstants } from '@shared/constants/constants';
+import { Observable } from 'rxjs';
+import { AuthService } from '@admin/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -29,7 +28,8 @@ export class SignupComponent implements OnInit {
   constructor(
     private locationService: LocationService,
     private ngFirestore: AngularFirestore,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -53,48 +53,55 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit(): Promise<any> {
     if (this.signupForm.valid && this.signupForm.value) {
       this.isLoaderShown = true;
-      const request: Admin = {
-        name: this.signupForm?.value?.name,
-        email: this.signupForm?.value?.email,
-        contactNumber: this.signupForm?.value?.contactNumber,
-        location: {
-          country: this.signupForm?.value?.location.country,
-          state: this.signupForm?.value?.location.state,
-          city: this.signupForm?.value?.location.city,
-        },
-        company: this.signupForm?.value?.company,
-        gst: this.signupForm?.value?.gst,
-        selfGround: this.signupForm?.value?.selfGround,
-        status: 0,
-        role: AssignedRoles.admin
-      };
-
-      const organizerID = MatchConstants.UNIQUE_ORGANIZER_CODE + this.ngFirestore.createId().slice(0, 8).toUpperCase();
-      this.ngFirestore.collection('admins', query => query.where('email', '==', request.email))
+      const email = this.email?.value;
+      const isEmailUnique = (await this.ngFirestore
+        .collection('admins', query => query.where('email', '==', email))
         .get()
-        .pipe(
-          switchMap(resp => {
-            if (resp.empty) {
-              // email triggered when this document is written
-              return this.ngFirestore.collection('admins').doc(organizerID).set(request);
+        .toPromise())
+        .empty;
+      if (isEmailUnique && email) {
+        const passKey = this.ngFirestore.createId().slice(0, 10);
+        this.authService.registerUser(email, passKey)
+          .then((user) => {
+            if (user?.user?.uid) {
+              const organizerID = this.authService.getOrganizerID(user.user.uid);
+              const request: Admin = {
+                name: this.signupForm?.value?.name,
+                email: this.signupForm?.value?.email,
+                contactNumber: this.signupForm?.value?.contactNumber,
+                location: {
+                  country: this.signupForm?.value?.location.country,
+                  state: this.signupForm?.value?.location.state,
+                  city: this.signupForm?.value?.location.city,
+                },
+                company: this.signupForm?.value?.company,
+                gst: this.signupForm?.value?.gst,
+                selfGround: this.signupForm?.value?.selfGround,
+                status: 0,
+                role: AssignedRoles.organizer,
+                passKey
+              };
+              this.ngFirestore.collection('admins').doc(organizerID).set(request)
+                .then(() => {
+                  this.isLoaderShown = false;
+                  this.isRegistrationSent = true;
+                })
+                .catch(() => {
+                  this.isLoaderShown = false;
+                  this.snackbarService.displayError('Unexpected error occurred!');
+                });
             }
-            this.snackbarService.displayError('Email already registered. Please use another email!');
-            return of(null);
           })
-        )
-        .subscribe({
-          next: (response) => {
-            this.isLoaderShown = false;
-            this.isRegistrationSent = true;
-          },
-          error: (error) => {
-            this.isLoaderShown = false;
-            this.snackbarService.displayError();
-          },
-        });
+          .catch((error) => {
+            const errorMessage = this.authService.getErrorMessage(error.code);
+            this.snackbarService.displayError(errorMessage);
+          });
+      } else {
+        this.snackbarService.displayError('Email already registered. Please use another email!');
+      }
     }
   }
 
@@ -108,6 +115,10 @@ export class SignupComponent implements OnInit {
 
   onSelectState(state: MatSelectChange): void {
     this.cities$ = this.locationService.getCityByState(state.value);
+  }
+
+  get email() {
+    return this.signupForm?.get('email');
   }
 
 }

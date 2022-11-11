@@ -9,7 +9,8 @@ export const environment = {
     storageBucket: 'freekyk-development.appspot.com',
     messagingSenderId: '954435558889',
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
-    url: 'https://freekyk-development.web.app'
+    url: 'https://freekyk-development.web.app',
+    adminUrl: 'https://admin-freekyk-dev.web.app'
   },
   // Razorpay
   razorPay: {
@@ -20,5 +21,9 @@ export const environment = {
   location: {
     token: 'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo',
     email: 'pgoel681@gmail.com'
+  },
+  // https://us8.admin.mailchimp.com/account/api/
+  mailchimp: {
+    apiKey: 'ee3c21ca844640228a9775b31dc7036b-us8'
   }
 };

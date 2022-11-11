@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 
 export enum AssignedRoles {
   superAdmin = 'super-admin',
-  admin = 'admin',
+  organizer = 'organizer',
 }
 export type FirebaseUserCredential = firebase.auth.UserCredential;
 
@@ -23,6 +23,7 @@ export interface Admin {
   website?: string;
   imgPathLogo?: string;
   company?: string;
+  passKey?: string;
 }
 
 export interface RegistrationRequest {

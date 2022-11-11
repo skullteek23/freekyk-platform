@@ -87,11 +87,13 @@ export class ViewSeasonDraftComponent implements OnInit {
     forkJoin([this.ngFire.collection('seasonDrafts').doc(this.draftID).get(), this.getDraftFixtures(this.draftID)])
       .subscribe({
         next: (response) => {
-          this.seasonDraftData = response[0].data() as SeasonDraft;
-          this.setDraftFixtures(response[1], this.seasonDraftData?.grounds);
-          this.initForm();
-          this.setLoadingStatus(LOADING_STATUS.DEFAULT);
-          this.lastRegistrationDate = this.maxRegisDate;
+          if (response && response[0].exists && response[1]) {
+            this.seasonDraftData = response[0].data() as SeasonDraft;
+            this.setDraftFixtures(response[1], this.seasonDraftData?.grounds);
+            this.initForm();
+            this.setLoadingStatus(LOADING_STATUS.DEFAULT);
+            this.lastRegistrationDate = this.maxRegisDate;
+          }
         },
         error: () => {
           this.setLoadingStatus(LOADING_STATUS.DEFAULT);

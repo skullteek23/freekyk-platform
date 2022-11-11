@@ -16,6 +16,7 @@ import { filter, map, share, take, tap } from 'rxjs/operators';
 export class MainShellComponent implements OnDestroy, OnInit {
 
   activeLink = 'seasons';
+  role: string;
   cols: number;
   isLoading = false;;
   links: any[] = [
@@ -88,8 +89,9 @@ export class MainShellComponent implements OnDestroy, OnInit {
     if (uid) {
       this.ngFire.collection('admins').doc(uid).get().subscribe({
         next: (response) => {
-          if (response) {
+          if (response.exists) {
             const adminData = response.data() as Admin;
+            this.role = this.authService.getUserRole(adminData.role);
             if (adminData.role === AssignedRoles.superAdmin) {
               this.links.push({ name: 'manage admins', route: 'manage-requests', disabled: false });
               this.links.push({ name: 'configurations', route: 'configurations', disabled: false });

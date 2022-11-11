@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { MatchConstants } from '@shared/constants/constants';
 import { Admin, AssignedRoles, FirebaseUser, FirebaseUserCredential } from '@shared/interfaces/admin.model';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -13,6 +14,7 @@ import { map, take } from 'rxjs/operators';
 export class AuthService {
 
   private user: FirebaseUser;
+  private userRoleMap = new Map<AssignedRoles, string>();
 
   constructor(
     private ngAuth: AngularFireAuth,
@@ -31,6 +33,9 @@ export class AuthService {
         sessionStorage.setItem('name', user.displayName);
       }
     });
+
+    this.userRoleMap.set(AssignedRoles.superAdmin, 'Super Admin');
+    this.userRoleMap.set(AssignedRoles.organizer, 'Freekyk Organizer');
   }
 
   isLoggedIn(): boolean {
@@ -42,6 +47,16 @@ export class AuthService {
     if (email && password) {
       return this.ngAuth.signInWithEmailAndPassword(email, password);
     }
+  }
+
+  registerUser(email: string, password: string): Promise<FirebaseUserCredential> {
+    if (email) {
+      return this.ngAuth.createUserWithEmailAndPassword(email, password);
+    }
+  }
+
+  getOrganizerID(uid: string): string {
+    return `${MatchConstants.UNIQUE_ORGANIZER_CODE}-${uid.toUpperCase().slice(0, 6)}`;
   }
 
   logOut(): void {
@@ -83,6 +98,10 @@ export class AuthService {
       }
       return false;
     })).toPromise();
+  }
+
+  getUserRole(role: AssignedRoles) {
+    return this.userRoleMap.get(role);
   }
 
   getErrorMessage(error: string): string {

@@ -18,7 +18,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '@shared/shared.module';
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
-import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 
 const routes: Routes = [
   {
