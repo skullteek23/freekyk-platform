@@ -16,7 +16,7 @@ export async function accountVerificationEmail(snap: any, context: any): Promise
   if (accountData && organizerID && passKey) {
     // send email here
     const email = {
-      from_email: "freekyk123@gmail.com",
+      from_email: "admin@freekyk.com",
       subject: "Email Verification | Freekyk Admin",
       text: `Hello ${organizerName},
 
