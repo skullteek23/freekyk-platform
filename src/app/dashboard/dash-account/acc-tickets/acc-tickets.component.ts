@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ALPHA_W_SPACE, NUM, QUERY } from '@shared/Constants/REGEX';
 import { BasicTicket } from '@shared/interfaces/ticket.model';
 
 @Component({
@@ -79,11 +79,11 @@ export class AccTicketsComponent implements OnInit {
     this.newTicketForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
-        Validators.pattern(ALPHA_W_SPACE),
+        Validators.pattern(RegexPatterns.alphaWithSpace),
       ]),
       ph_number: new FormControl(null, [
         Validators.required,
-        Validators.pattern(NUM),
+        Validators.pattern(RegexPatterns.num),
         Validators.minLength(10),
         Validators.maxLength(10),
       ]),
@@ -91,7 +91,7 @@ export class AccTicketsComponent implements OnInit {
       query: new FormControl(null, [
         Validators.required,
         Validators.maxLength(300),
-        Validators.pattern(QUERY),
+        Validators.pattern(RegexPatterns.query),
       ]),
     });
   }

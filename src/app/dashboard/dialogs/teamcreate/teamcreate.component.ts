@@ -21,7 +21,7 @@ import {
   DEFAULT_TEAM_LOGO,
   DEFAULT_TEAM_PHOTO,
 } from '@shared/Constants/DEFAULTS';
-import { ALPHA_NUM_SPACE } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { Invite } from '@shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
@@ -65,7 +65,7 @@ export class TeamcreateComponent implements OnInit {
     this.teamBasicinfoForm = new FormGroup({
       tName: new FormControl(
         null,
-        [Validators.required, Validators.pattern(ALPHA_NUM_SPACE)],
+        [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace)],
         this.validateTNameNotTaken.bind(this)
       ),
     });

@@ -9,7 +9,7 @@ import { UpdateInfoComponent } from '@shared/components/update-info/update-info.
 import { positionGroup } from '@shared/interfaces/others.model';
 import { FsProfileVideos, PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
-import { ALPHA_W_SPACE, ALPHA_NUM_SPACE, BIO, YOUTUBE_REGEX, ALPHA_LINK, } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { PLAYING_POSITIONS } from '@shared/Constants/PLAYING_POSITIONS';
 import { LocationService } from '@shared/services/location-cities.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -46,7 +46,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   emptyControlArray = new FormControl(null, [
     Validators.required,
-    Validators.pattern(ALPHA_NUM_SPACE),
+    Validators.pattern(RegexPatterns.alphaNumberWithSpace),
   ]);
   isDisableArrayButton = true;
 
@@ -178,7 +178,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           ]),
           bio: new FormControl(data.playerMoreInfo.bio, [
             Validators.maxLength(BIO_MAX_LIMIT),
-            Validators.pattern(BIO),
+            Validators.pattern(RegexPatterns.bio),
           ]),
         });
         this.playerArrayForm = new FormGroup({
@@ -188,14 +188,14 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.socialInfoForm = new FormGroup({
           ig: new FormControl(data.socials.ig, [
             Validators.required,
-            Validators.pattern(ALPHA_LINK),
+            Validators.pattern(RegexPatterns.alphaLink),
           ]),
           fb: new FormControl(data.socials.fb, [
             Validators.required,
-            Validators.pattern(ALPHA_LINK),
+            Validators.pattern(RegexPatterns.alphaLink),
           ]),
-          yt: new FormControl(data.socials.yt, Validators.pattern(ALPHA_LINK)),
-          tw: new FormControl(data.socials.tw, Validators.pattern(ALPHA_LINK)),
+          yt: new FormControl(data.socials.yt, Validators.pattern(RegexPatterns.alphaLink)),
+          tw: new FormControl(data.socials.tw, Validators.pattern(RegexPatterns.alphaLink)),
         });
       })
     );
@@ -244,12 +244,12 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   onAddControl(controlName: string, formName: 'player' | 'fs'): void {
     let fmCtrl = new FormControl(null, [
       Validators.required,
-      Validators.pattern(ALPHA_W_SPACE),
+      Validators.pattern(RegexPatterns.alphaWithSpace),
     ]);
     if (controlName === 'top_vids' && formName === 'fs') {
       fmCtrl = new FormControl(null, [
         Validators.required,
-        Validators.pattern(YOUTUBE_REGEX),
+        Validators.pattern(RegexPatterns.youtube),
       ]);
     }
     if (formName === 'player') {

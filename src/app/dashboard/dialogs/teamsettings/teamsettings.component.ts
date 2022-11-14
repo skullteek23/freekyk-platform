@@ -11,18 +11,13 @@ import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import {
-  ALPHA_LINK,
-  ALPHA_NUM_SPACE,
-  BIO,
-  QUERY,
-} from '@shared/Constants/REGEX';
-import {
   TeamBasicInfo,
   TeamMoreInfo,
 } from '@shared/interfaces/team.model';
 import { TEAM_DESC_MAX_LIMIT } from '../../constants/constants';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 
 @Component({
   selector: 'app-teamsettings',
@@ -80,16 +75,16 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           this.TeamInfoForm = new FormGroup({
             t_name: new FormControl(
               info.main.tname,
-              Validators.pattern(ALPHA_NUM_SPACE)
+              Validators.pattern(RegexPatterns.alphaWithSpace)
             ),
             t_slogan: new FormControl(info.more.tslogan, [
               Validators.required,
-              Validators.pattern(QUERY),
+              Validators.pattern(RegexPatterns.query),
               Validators.maxLength(50),
             ]),
             t_desc: new FormControl(info.more.tdesc, [
               Validators.required,
-              Validators.pattern(BIO),
+              Validators.pattern(RegexPatterns.bio),
               Validators.maxLength(TEAM_DESC_MAX_LIMIT),
             ]),
             t_LocCity: new FormControl(info.main.locCity, Validators.required),
@@ -102,19 +97,19 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           this.socialInfoForm = new FormGroup({
             ig: new FormControl(info.more?.tSocials?.ig, [
               Validators.required,
-              Validators.pattern(ALPHA_LINK),
+              Validators.pattern(RegexPatterns.alphaLink),
             ]),
             fb: new FormControl(info.more?.tSocials?.fb, [
               Validators.required,
-              Validators.pattern(ALPHA_LINK),
+              Validators.pattern(RegexPatterns.alphaLink),
             ]),
             yt: new FormControl(info.more?.tSocials?.yt, [
               Validators.required,
-              Validators.pattern(ALPHA_LINK),
+              Validators.pattern(RegexPatterns.alphaLink),
             ]),
             tw: new FormControl(info.more?.tSocials?.tw, [
               Validators.required,
-              Validators.pattern(ALPHA_LINK),
+              Validators.pattern(RegexPatterns.alphaLink),
             ]),
           });
         })
