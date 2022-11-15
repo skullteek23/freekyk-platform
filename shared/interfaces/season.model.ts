@@ -47,6 +47,7 @@ export interface SeasonParticipants {
 
 export interface SeasonDraft {
   lastUpdated: number;
+  createdBy: string;
   draftID: string;
   status: statusType;
   basicInfo?: any;

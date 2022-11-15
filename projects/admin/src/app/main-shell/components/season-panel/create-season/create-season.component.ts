@@ -218,11 +218,13 @@ export class CreateSeasonComponent implements OnDestroy {
   }
 
   saveDraftDetails(formData: any) {
+    const uid = sessionStorage.getItem('uid');
     const seasonDraft: SeasonDraft = {
       draftID: this.draftID,
       basicInfo: formData,
       lastUpdated: new Date().getTime(),
-      status: 'DRAFTED'
+      status: 'DRAFTED',
+      createdBy: uid
     };
     this.ngFire.collection('seasonDrafts').doc(this.draftID).get().subscribe(val => {
       let result: Promise<any>;

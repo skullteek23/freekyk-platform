@@ -57,50 +57,31 @@ export class SignupComponent implements OnInit {
     if (this.signupForm.valid && this.signupForm.value) {
       this.isLoaderShown = true;
       const email = this.email?.value;
-      const isEmailUnique = (await this.ngFirestore
-        .collection('admins', query => query.where('email', '==', email))
-        .get()
-        .toPromise())
-        .empty;
-      if (isEmailUnique && email) {
-        const passKey = this.ngFirestore.createId().slice(0, 10);
-        this.authService.registerUser(email, passKey)
-          .then((user) => {
-            if (user?.user?.uid) {
-              const organizerID = this.authService.getOrganizerID(user.user.uid);
-              const request: Admin = {
-                name: this.signupForm?.value?.name,
-                email: this.signupForm?.value?.email,
-                contactNumber: this.signupForm?.value?.contactNumber,
-                location: {
-                  country: this.signupForm?.value?.location.country,
-                  state: this.signupForm?.value?.location.state,
-                  city: this.signupForm?.value?.location.city,
-                },
-                company: this.signupForm?.value?.company,
-                gst: this.signupForm?.value?.gst,
-                selfGround: this.signupForm?.value?.selfGround,
-                status: 0,
-                role: AssignedRoles.organizer,
-                passKey
-              };
-              this.ngFirestore.collection('admins').doc(organizerID).set(request)
-                .then(() => {
-                  this.isLoaderShown = false;
-                  this.isRegistrationSent = true;
-                })
-                .catch(() => {
-                  this.isLoaderShown = false;
-                  this.snackbarService.displayError('Unexpected error occurred!');
-                });
-            }
+      if (email) {
+        const request: Admin = {
+          name: this.signupForm?.value?.name.trim(),
+          email: email.trim(),
+          contactNumber: this.signupForm?.value?.contactNumber,
+          location: {
+            country: this.signupForm?.value?.location.country,
+            state: this.signupForm?.value?.location.state,
+            city: this.signupForm?.value?.location.city,
+          },
+          company: this.signupForm?.value?.company,
+          gst: this.signupForm?.value?.gst,
+          selfGround: this.signupForm?.value?.selfGround,
+          status: 0,
+          role: AssignedRoles.organizer,
+        };
+        this.authService.registerUserByEmail(request)
+          .then(() => {
+            this.isLoaderShown = false;
+            this.isRegistrationSent = true;
           })
           .catch((error) => {
-            const errorMessage = this.authService.getErrorMessage(error.code);
-            this.snackbarService.displayError(errorMessage);
+            this.isLoaderShown = false;
+            this.snackbarService.displayError(error?.message);
           });
-      } else {
-        this.snackbarService.displayError('Email already registered. Please use another email!');
       }
     }
   }

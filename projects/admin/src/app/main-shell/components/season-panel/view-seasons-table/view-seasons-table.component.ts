@@ -14,7 +14,7 @@ import { SeasonAdminService } from '../season-admin.service';
 })
 export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
-  cols = ['sno', 'season', 'startDate', 'status',];
+  cols = ['sno', 'season', 'startDate', 'status'];
   seasons: any[] = [];
   subscription = new Subscription();
 
@@ -35,12 +35,15 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   }
 
   getSeasons(): void {
-    this.subscription.add(this.ngFire.collection('seasonDrafts').snapshotChanges()
-      .pipe(
-        map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('lastUpdated', 'desc')))
-      )
-      .subscribe((resp) => (this.seasons = resp)));
+    const uid = sessionStorage.getItem('uid');
+    if (uid) {
+      this.subscription.add(this.ngFire.collection('seasonDrafts', query => query.where('createdBy', '==', uid)).snapshotChanges()
+        .pipe(
+          map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))),
+          map(resp => resp.sort(ArraySorting.sortObjectByKey('lastUpdated', 'desc')))
+        )
+        .subscribe((resp) => (this.seasons = resp)));
+    }
   }
 
   createSeason() {

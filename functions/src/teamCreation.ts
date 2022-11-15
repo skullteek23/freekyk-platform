@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
-let db = admin.firestore();
+const db = admin.firestore();
 
 export async function teamCreation(data: {
   newTeamInfo: {

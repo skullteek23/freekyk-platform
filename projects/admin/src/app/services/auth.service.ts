@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { MatchConstants } from '@shared/constants/constants';
 import { Admin, AssignedRoles, FirebaseUser, FirebaseUserCredential } from '@shared/interfaces/admin.model';
 import { Observable } from 'rxjs';
@@ -20,17 +22,14 @@ export class AuthService {
     private ngAuth: AngularFireAuth,
     private ngFirestore: AngularFirestore,
     private snackbarService: SnackbarService,
-    private router: Router
+    private router: Router,
+    private ngFunctions: AngularFireFunctions
   ) {
     // this.addSuperAdmin();
     ngAuth.onAuthStateChanged((user) => {
       if (user !== null) {
         this.user = user;
-        // user.updateProfile({
-        //   displayName: 'Ankit Singh'
-        // });
         sessionStorage.setItem('uid', user.uid);
-        sessionStorage.setItem('name', user.displayName);
       }
     });
 
@@ -49,14 +48,11 @@ export class AuthService {
     }
   }
 
-  registerUser(email: string, password: string): Promise<FirebaseUserCredential> {
-    if (email) {
-      return this.ngAuth.createUserWithEmailAndPassword(email, password);
+  registerUserByEmail(formData: Admin): Promise<any> {
+    if (formData && Object.keys(formData).length) {
+      const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.CREATE_ADMIN_USER);
+      return callable(formData).toPromise();
     }
-  }
-
-  getOrganizerID(uid: string): string {
-    return `${MatchConstants.UNIQUE_ORGANIZER_CODE}-${uid.toUpperCase().slice(0, 6)}`;
   }
 
   logOut(): void {
@@ -176,7 +172,7 @@ export class AuthService {
           status: 1,
           role: AssignedRoles.superAdmin,
           altContactNumber: 0,
-          selfGround: true,
+          selfGround: 1,
           website: 'www.freekyk.com',
           imgPathLogo: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png',
           company: 'Freekyk India',

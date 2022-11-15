@@ -12,5 +12,6 @@ export const CLOUD_FUNCTIONS = {
   INIT_LEAGUE_TABLE: 'initLeagueTable',
   UPDATE_LEAGUE_TABLE: 'updateLeagueTable',
   UPDATE_MATCH_REPORT: 'updateMatchReport',
-  PUBLISH_SEASON: 'publishSeason'
+  PUBLISH_SEASON: 'publishSeason',
+  CREATE_ADMIN_USER: 'addAdminUser'
 };

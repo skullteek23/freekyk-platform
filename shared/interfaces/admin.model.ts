@@ -19,21 +19,10 @@ export interface Admin {
   managedBy?: string;
   altContactNumber?: number;
   gst?: number;
-  selfGround?: boolean;
+  selfGround?: number;
   website?: string;
   imgPathLogo?: string;
   company?: string;
-  passKey?: string;
-}
-
-export interface RegistrationRequest {
-  name: string;
-  email: string;
-  contactNumber: number;
-  location: LocationDetails;
-  selfGround: boolean;
-  company?: string;
-  gst?: number;
 }
 
 export interface AdminConfigurationSeason {
