@@ -18,8 +18,9 @@ export async function createAdminUser(data: Admin, context: any) {
     const displayName = data.name;
     const email = data.email;
     const password = getRandomString(8);
-    console.log(uid);
-    console.log(password);
+    console.log('organizerID', uid);
+    console.log('email', email);
+    console.log('password', password);
     // const emailWrapper = {
     //   from_email: "freekyk123@gmail.com",
     //   subject: "Email Verification | Freekyk Admin",
