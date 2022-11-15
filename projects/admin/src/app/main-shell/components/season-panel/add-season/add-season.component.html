@@ -5,14 +5,14 @@
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Season Name</mat-label>
-          <input type="text" matInput formControlName="name" />
+          <input type="text" matInput formControlName="name" required />
           <mat-error *ngIf="seasonForm.get('name').hasError('required')">
             {{messages.error.requiredField}}
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select State</mat-label>
-          <mat-select formControlName="state">
+          <mat-select formControlName="state" required>
             <mat-option *ngFor="let state of states" [value]="state">
               {{ state }}
             </mat-option>
@@ -23,7 +23,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Select City</mat-label>
-          <mat-select formControlName="city">
+          <mat-select formControlName="city" required>
             <mat-option *ngFor="let city of cities" [value]="city">
               {{ city }}
             </mat-option>
@@ -36,7 +36,8 @@
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Tournament Start Date</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" formControlName="startDate" [matDatepicker]="startDate" />
+          <input matInput [min]="minDate" [max]="maxDate" formControlName="startDate" [matDatepicker]="startDate"
+            required />
           <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
           <mat-datepicker #startDate></mat-datepicker>
           <mat-error *ngIf="seasonForm.get('startDate').hasError('required')">
@@ -45,14 +46,14 @@
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Season Fees (per team)</mat-label>
-          <input type="number" matInput formControlName="fees" />
+          <input type="number" matInput formControlName="fees" required />
           <mat-error *ngIf="seasonForm.get('fees').hasError('required')">
             {{messages.error.requiredField}}
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Discount (in %)</mat-label>
-          <input type="number" matInput formControlName="discount" />
+          <input type="number" matInput formControlName="discount" required />
           <mat-error *ngIf="seasonForm.get('discount').hasError('required')">
             {{messages.error.requiredField}}
           </mat-error>
@@ -62,7 +63,7 @@
         <mat-form-field class="text-area-field" appearance="outline" color="primary">
           <mat-label>Mention Season Description</mat-label>
           <textarea [maxLength]="descriptionLimit" matInput formControlName="description"
-            placeholder="Mention season description"></textarea>
+            placeholder="Mention season description" required></textarea>
           <mat-hint align="end">{{description?.value?.length}} / {{descriptionLimit}}</mat-hint>
           <mat-error *ngIf="description?.hasError('required')">
             {{messages.error.requiredField}}
@@ -73,8 +74,8 @@
         </mat-form-field>
         <mat-form-field class="text-area-field" appearance="outline" color="primary">
           <mat-label>Mention Season Rules</mat-label>
-          <textarea [maxLength]="rulesLimit" matInput formControlName="rules"
-            placeholder="Mention season rules"></textarea>
+          <textarea [maxLength]="rulesLimit" matInput formControlName="rules" placeholder="Mention season rules"
+            required></textarea>
           <mat-hint align="end">{{rules?.value?.length}} / {{rulesLimit}}</mat-hint>
           <mat-error *ngIf="rules?.hasError('required')">
             {{messages.error.requiredField}}
@@ -91,7 +92,8 @@
     <div fxLayoutAlign="center center" fxLayout fxLayout.lt-md="column" class="team-selection" fxLayoutGap="20px">
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Select Participating Teams</mat-label>
-        <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event)">
+        <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event)"
+          required>
           <mat-option *ngFor="let team of teamsList" [value]="team">
             {{ team }} teams
           </mat-option>
@@ -104,7 +106,7 @@
         <mat-label>Select Containing Tournaments</mat-label>
         <mat-select
           [disabled]="!seasonForm.get('participatingTeamsCount').value || !seasonForm.get('participatingTeamsCount').dirty"
-          formControlName="containingTournaments" multiple>
+          formControlName="containingTournaments" multiple required>
           <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
             {{ type }}
           </mat-option>

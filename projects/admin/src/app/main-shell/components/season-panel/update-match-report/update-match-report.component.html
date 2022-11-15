@@ -31,7 +31,7 @@
     <mat-card fxLayoutAlign="space-between center" fxLayoutGap="16px">
       <mat-form-field appearance="outline">
         <mat-label>{{homeTeam}}'s Final Score</mat-label>
-        <input matInput [min]="0" type="number" formControlName="homeScore">
+        <input matInput [min]="0" type="number" formControlName="homeScore" required>
         <mat-error *ngIf="homeScore.hasError('required')">
           {{formMessages.error.requiredField}}
         </mat-error>
@@ -41,7 +41,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>{{awayTeam}}'s Final Score</mat-label>
-        <input matInput [min]="0" type="number" formControlName="awayScore">
+        <input matInput [min]="0" type="number" formControlName="awayScore" required>
         <mat-error *ngIf="awayScore.hasError('required')">
           {{formMessages.error.requiredField}}
         </mat-error>
@@ -157,7 +157,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Referee</mat-label>
-          <input type="text" matInput formControlName="referee">
+          <input type="text" matInput formControlName="referee" required>
           <mat-hint *ngIf="!referee.hasError('required')">Required field</mat-hint>
           <mat-error *ngIf="referee.hasError('required')">{{formMessages.error.requiredField}}</mat-error>
         </mat-form-field>

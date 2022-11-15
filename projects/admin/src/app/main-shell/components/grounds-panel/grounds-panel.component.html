@@ -5,12 +5,12 @@
       <div fxLayout="column">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Ground Name</mat-label>
-          <input type="text" matInput formControlName="name" />
+          <input type="text" matInput formControlName="name" required />
         </mat-form-field>
         <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Select State</mat-label>
-            <mat-select formControlName="locState">
+            <mat-select formControlName="locState" required>
               <mat-option *ngFor="let state of states" [value]="state">
                 {{ state }}
               </mat-option>
@@ -18,7 +18,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Select City</mat-label>
-            <mat-select formControlName="locCity">
+            <mat-select formControlName="locCity" required>
               <mat-option *ngFor="let city of cities" [value]="city">
                 {{ city }}
               </mat-option>
@@ -27,27 +27,27 @@
         </div>
         <div fxLayout>
           <mat-label id="ground-type">Select Ground Type:</mat-label>
-          <mat-radio-group color="primary" aria-labelledby="ground-type" matInput formControlName="type">
+          <mat-radio-group color="primary" aria-labelledby="ground-type" matInput formControlName="type" required>
             <mat-radio-button *ngFor="let type of groundTypes" [value]="type">
               {{ type | titlecase }}
             </mat-radio-button>
           </mat-radio-group>
         </div>
         <div class="contract-container" fxLayout fxLayoutAlign="start center" fxLayoutGap="20px">
-          <mat-label>Upload Contract File:</mat-label>
+          <mat-label>Upload Contract File (*) :</mat-label>
           <app-file-uploader (changeUpload)="onSelectFileUpload($event)"></app-file-uploader>
         </div>
         <div class="contract-container" fxLayout.lt-md="column" fxLayout fxLayoutAlign="start center"
           fxLayoutGap="20px">
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Contract Start Date</mat-label>
-            <input matInput formControlName="contractStartDate" [matDatepicker]="startDate" />
+            <input matInput formControlName="contractStartDate" [matDatepicker]="startDate" required />
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
           </mat-form-field>
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Contract End Date</mat-label>
-            <input matInput formControlName="contractEndDate" [matDatepicker]="endDate" />
+            <input matInput formControlName="contractEndDate" [matDatepicker]="endDate" required />
             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
             <mat-datepicker #endDate></mat-datepicker>
           </mat-form-field>
@@ -63,7 +63,7 @@
 </form>
 <form [formGroup]="timingsForm" id="timingsForm" *ngIf="!isLoading">
   <div class="form-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
-    <mat-label> Select hourly availability for your ground in a week </mat-label>
+    <mat-label> Select hourly availability for your ground in a week (*) </mat-label>
     <div fxLayout="row wrap" fxLayoutAlign="center center">
       <div *ngFor="let day of days">
         <div class="mat-body-2" class="unselectable-box" fxLayoutAlign="center center">{{day}}</div>

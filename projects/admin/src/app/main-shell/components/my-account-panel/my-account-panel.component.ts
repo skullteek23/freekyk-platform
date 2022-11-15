@@ -40,9 +40,9 @@ export class MyAccountPanelComponent implements OnInit {
   initForm() {
     this.personalInfoForm = new FormGroup({
       id: new FormControl(null),
-      company: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace)]),
+      company: new FormControl(null, [Validators.pattern(RegexPatterns.alphaNumberWithSpace)]),
       managedBy: new FormControl(null, Validators.pattern(RegexPatterns.alphaNumberWithSpace)),
-      contactNumber: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
+      contactNumber: new FormControl(null, [Validators.pattern(RegexPatterns.phoneNumber)]),
       altContactNumber: new FormControl(null, Validators.pattern(RegexPatterns.phoneNumber)),
       location: new FormGroup({
         country: new FormControl(null),
@@ -51,7 +51,7 @@ export class MyAccountPanelComponent implements OnInit {
       }),
       gst: new FormControl(null),
       website: new FormControl(null, Validators.pattern(RegexPatterns.website)),
-      selfGround: new FormControl(0, [Validators.required]),
+      selfGround: new FormControl(0),
     });
   }
 
