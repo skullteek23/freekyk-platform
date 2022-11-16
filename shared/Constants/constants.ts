@@ -15,7 +15,7 @@ export class MatchConstants {
     FPL: 'FK-FPL'
   };
   public static TO_BE_DECIDED: 'TBD';
-  public static ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
+  public static ALLOWED_PARTICIPATION_COUNT = [8, 10, 12, 14, 16, 18, 20, 24];
   public static ALLOWED_KNOCKOUT_BRACKETS = [4, 8, 16];
   public static DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
   public static SEASON_PRICE = {
@@ -23,15 +23,23 @@ export class MatchConstants {
     MAX: 20000,
   };
   public static START_DATE_DIFF = {
+    // in milliseconds
     MIN: 1,
-    MAX: 365,
+    MAX: 90,
   };
   public static SEASON_URL = environment?.firebase?.url + '/s/';
   public static LABEL_NOT_AVAILABLE = 'N/A';
   public static JOINING_CHARACTER = ', ';
   public static LARGE_TEXT_CHARACTER_LIMIT = 2000;
   public static ONE_DAY_IN_MILLIS = 86400000;
+  public static CREATE_TEXT = 'I Want to Create!';
 }
+export enum MATCH_TYPES_PACKAGES {
+  PackageOne = 'One match of 2 teams',
+  PackageTwo = 'One knockout of 4 Teams',
+  PackageThree = 'One league of 4 Teams',
+  PackageCustom = 'Full Season of 4+ Teams'
+};
 export const STATISTICS = {
   FKC_PLAYED: 'FKC Played',
   FCP_PLAYED: 'FCP Played',

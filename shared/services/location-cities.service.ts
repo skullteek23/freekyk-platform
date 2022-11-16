@@ -2,8 +2,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'environments/environment';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class LocationService implements OnDestroy {
   private USER_EMAIL = environment.location.email;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnDestroy(): void {
@@ -52,7 +54,11 @@ export class LocationService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.country_name))
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.country_name)),
+      catchError(err => {
+        this.snackBarService.displayError('Unable to fetch countries!');
+        return of(null);
+      })
     );
   }
 
@@ -64,7 +70,11 @@ export class LocationService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.state_name))
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.state_name)),
+      catchError(err => {
+        this.snackBarService.displayError('Unable to fetch states!');
+        return of(null);
+      })
     );
   }
 
@@ -76,7 +86,11 @@ export class LocationService implements OnDestroy {
           Accept: 'application/json',
         },
       })),
-      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.city_name))
+      map((resp) => (Object.values(resp) as any[]).map((val: any) => val.city_name)),
+      catchError(err => {
+        this.snackBarService.displayError('Unable to fetch cities!');
+        return of(null);
+      })
     );
   }
 }

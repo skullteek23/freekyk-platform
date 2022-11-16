@@ -17,7 +17,6 @@ import { RegistrationsPanelComponent } from './components/registrations-panel/re
 import { MainShellComponent } from './main-shell.component';
 import { AddSeasonComponent } from './components/season-panel/add-season/add-season.component';
 import { ChipSelectionInputComponent } from './components/season-panel/chip-selection-input/chip-selection-input.component';
-import { CreateSeasonContainerComponent } from './components/season-panel/create-season-container/create-season-container.component';
 import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
 import { FixtureTableComponent } from './components/season-panel/fixture-table/fixture-table.component';
 import { GenerateFixturesComponent } from './components/season-panel/generate-fixtures/generate-fixtures.component';
@@ -31,6 +30,9 @@ import { ViewSeasonsTableComponent } from './components/season-panel/view-season
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/material.module';
 import { MatchReportSummaryComponent } from './components/season-panel/match-report-summary/match-report-summary.component';
+import {
+  SelectMatchTypeComponent
+} from './components/season-panel/create-season/step-components/select-match-type/select-match-type.component';
 
 const routes: Routes = [
   {
@@ -44,9 +46,10 @@ const routes: Routes = [
         children: [
           { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
           { path: 'list', component: ViewSeasonsTableComponent },
-          { path: 'create', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
-          { path: 'create/:draftID', component: CreateSeasonContainerComponent, canDeactivate: [CanDeactivateGuardService] },
-          { path: 's/:draftid', component: ViewSeasonDraftComponent }
+          { path: 'create', component: CreateSeasonComponent },
+          { path: 'create/:draftID', component: CreateSeasonComponent },
+          // { path: 's/:draftid', component: ViewSeasonDraftComponent },
+          { path: 'drafts/:draftid', component: ViewSeasonDraftComponent },
         ],
       },
       { path: 'grounds', component: GroundsPanelComponent },
@@ -66,7 +69,6 @@ const routes: Routes = [
     FixtureTableComponent,
     ViewSeasonsTableComponent,
     CreateSeasonComponent,
-    CreateSeasonContainerComponent,
     SelectGroundsComponent,
     LineInfoDisplayComponent,
     ViewSeasonDraftComponent,
@@ -77,7 +79,8 @@ const routes: Routes = [
     MyAccountPanelComponent,
     RegistrationsPanelComponent,
     AdminConfigPanelComponent,
-    MatchReportSummaryComponent
+    MatchReportSummaryComponent,
+    SelectMatchTypeComponent
   ],
   imports: [
     CommonModule,

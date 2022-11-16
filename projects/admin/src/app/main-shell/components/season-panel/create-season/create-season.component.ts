@@ -1,8 +1,7 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,19 +11,22 @@ import { GroundPrivateInfo } from '@shared/interfaces/ground.model';
 import { dummyFixture } from '@shared/interfaces/match.model';
 import { SeasonDraft } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { MatchConstantsSecondary } from '@shared/constants/constants';
+import { MatchConstants, MatchConstantsSecondary, MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { AddSeasonComponent } from '../add-season/add-season.component';
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
 import { SelectGroundsComponent } from '../select-grounds/select-grounds.component';
+import { RegexPatterns } from '@shared/Constants/REGEX';
+import { SelectMatchTypeComponent } from './step-components/select-match-type/select-match-type.component';
 
 @Component({
   selector: 'app-create-season',
   templateUrl: './create-season.component.html',
   styleUrls: ['./create-season.component.scss']
 })
-export class CreateSeasonComponent implements OnDestroy {
+export class CreateSeasonComponent implements OnDestroy, OnInit {
 
   @ViewChild(MatHorizontalStepper) stepper: MatHorizontalStepper;
+  @ViewChild(SelectMatchTypeComponent) selectMatchTypeComponent: SelectMatchTypeComponent;
   @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
   @ViewChild(SelectGroundsComponent) selectGroundsComponent: SelectGroundsComponent;
   @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
@@ -40,22 +42,32 @@ export class CreateSeasonComponent implements OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    public dialogRef: MatDialogRef<CreateSeasonComponent>,
     private router: Router,
     private snackBarService: SnackbarService,
     private ngStorage: AngularFireStorage
   ) {
-    this.draftID = ngFire.createId();
-    const qParams = route.snapshot.queryParams;
-    if (qParams && qParams.draft) {
-      const draftID = qParams.draft;
-      this.navigateToDraftAndClose(draftID);
-    }
+
+  }
+  ngOnInit(): void {
+    // this.initForm();
+    // this.draftID = ngFire.createId();
+    // const qParams = route.snapshot.queryParams;
+    // if (qParams && qParams.draft) {
+    //   const draftID = qParams.draft;
+    //   this.navigateToDraftAndClose(draftID);
+    // }
   }
 
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
+    }
+  }
+
+  onSaveMatchType() {
+    if (this.matchSelectForm?.valid) {
+      sessionStorage.setItem('selectMatchType', JSON.stringify(this.matchSelectForm.value));
+      this.stepper.next();
     }
   }
 
@@ -98,11 +110,10 @@ export class CreateSeasonComponent implements OnDestroy {
 
   saveDetails() {
     this.onNavigateAway();
-    this.onCloseDialog();
   }
 
-  onCloseDialog() {
-    this.dialogRef.close();
+  get matchSelectForm(): FormGroup {
+    return this.selectMatchTypeComponent?.matchSelectForm;
   }
 
   get seasonForm(): FormGroup {
@@ -138,7 +149,7 @@ export class CreateSeasonComponent implements OnDestroy {
   }
 
   onCancel() {
-    this.onCloseDialog();
+
   }
 
   onNextStep(): void {

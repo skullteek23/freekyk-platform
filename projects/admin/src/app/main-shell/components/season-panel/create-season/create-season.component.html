@@ -1,42 +1,51 @@
-<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
-  <button matTooltip="Close" mat-icon-button (click)="onNavigateAway()">
-    <mat-icon class="material-icons-round"> close </mat-icon>
-  </button>
-  <span class="mat-body-1">
-    Create Season
-  </span>
-</mat-toolbar>
-<div class="container-2 create-season-container" fxLayout="column" fxLayoutGap="20px">
-  <div class="season-heading mat-subheading-2" *ngIf="seasonName">
+<div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
+  <div class="season-heading mat-subheading-2">
     {{seasonName}}
   </div>
   <mat-horizontal-stepper [linear]="true">
-    <mat-step label="Add Season" [stepControl]="seasonForm" [editable]="true">
-      <app-add-season></app-add-season>
+    <mat-step label="Select Match Type" [stepControl]="matchSelectForm" [editable]="true">
+      <app-select-match-type></app-select-match-type>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <span class="mat-caption center info">
+          To save your response and move to the next step, select Next
+        </span>
+        <button type="button" [disabled]="!matchSelectForm?.valid" class="primaryButton buttonText"
+          (click)="onSaveMatchType()">Next</button>
+
+      </div>
+    </mat-step>
+    <mat-step label="Select Teams" [editable]="true">
+      <!-- <app-select-match-type [formGroup]="matchSelectForm" (onSubmit)="submitMatchTypeForm()"></app-select-match-type> -->
+    </mat-step>
+    <mat-step label="Select Ground" [editable]="true">
+      <!-- <app-select-match-type [formGroup]="matchSelectForm" (onSubmit)="submitMatchTypeForm()"></app-select-match-type> -->
+    </mat-step>
+    <mat-step label="Add Details" [stepControl]="seasonForm" [editable]="true">
+      <!-- <app-add-season></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>
         <button type="button" [disabled]="!isSeasonFormValid" class="primaryButton buttonText"
           (click)="onSaveDraft()">Save & Next</button>
-      </div>
+      </div> -->
     </mat-step>
-    <mat-step label="Select Ground(s)" [stepControl]="groundForm" [editable]="false">
-      <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
+    <mat-step label="Generate Fixtures" [stepControl]="groundForm" [editable]="false">
+      <!-- <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
         <button type="button" [disabled]="!isGroundFormValid" class="primaryButton buttonText"
           (click)="onUpdateDraft()">Save & Next</button>
-      </div>
+      </div> -->
     </mat-step>
-    <mat-step label="Generate Fixtures" [stepControl]="fixtureForm" [editable]="false">
-      <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
+    <mat-step label="Payment" [stepControl]="fixtureForm" [editable]="false">
+      <!-- <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
         <button type="button" [disabled]="!isFixtureFormValid" class="primaryButton buttonText"
           (click)="onConfirmFixtures()">Confirm Fixtures</button>
-      </div>
+      </div> -->
     </mat-step>
-    <mat-step label="Done" [editable]="false">
-      <div class="success-container">
+    <mat-step label="Publish" [editable]="false">
+      <!-- <div class="success-container">
         <p class="mat-body-1 center">
           Your season draft is ready to publish.
         </p>
@@ -54,7 +63,7 @@
         <p class="mat-caption center section-space-top">
           Please contact freekyk123@gmail.com in case of any queries.
         </p>
-      </div>
+      </div> -->
     </mat-step>
   </mat-horizontal-stepper>
 </div>

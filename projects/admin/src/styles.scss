@@ -81,16 +81,12 @@ a:hover {
 }
 
 .greenLight {
-  color: var(--primaryColor)
+  color: var(--primaryColor);
 }
 
 .shine {
   background: #f6f7f8;
-  background-image: linear-gradient(to right,
-      #f6f7f8 0%,
-      #edeef1 20%,
-      #f6f7f8 40%,
-      #f6f7f8 100%);
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
   background-size: 800px 104px;
   display: inline-block;
   position: relative;
@@ -461,7 +457,6 @@ app-fixture-table {
 
 /* media queries - (max-width: 599px) */
 @media only screen and (max-width: 599px) {
-
   .mat-list-item,
   .mat-list-item-content,
   .mat-table,
@@ -907,7 +902,6 @@ app-fixture-table {
   color: black !important;
 }
 
-
 /* Custom snack-bars */
 .snack-bar-success {
   background: var(--primaryColor);
@@ -918,3 +912,17 @@ app-fixture-table {
 }
 
 /* Custom snack-bars */
+
+.select-match-type {
+  mat-option {
+    .mat-option-text {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mat-chip-list {
+        display: inline-flex;
+        margin-left: auto;
+      }
+    }
+  }
+}

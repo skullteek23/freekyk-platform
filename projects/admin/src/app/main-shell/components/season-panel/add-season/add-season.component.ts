@@ -46,12 +46,8 @@ export class AddSeasonComponent implements OnInit {
   setDates() {
     this.currentDateTemp1.setDate(this.currentDateTemp1.getDate() + MatchConstants.START_DATE_DIFF.MIN);
     this.currentDateTemp2.setDate(this.currentDateTemp2.getDate() + MatchConstants.START_DATE_DIFF.MAX);
-    this.currentDateTemp1.setHours(0);
-    this.currentDateTemp1.setMinutes(0);
-    this.currentDateTemp1.setSeconds(0);
-    this.currentDateTemp2.setHours(0);
-    this.currentDateTemp2.setMinutes(0);
-    this.currentDateTemp2.setSeconds(0);
+    this.currentDateTemp1.setHours(0, 0, 0, 0);
+    this.currentDateTemp2.setHours(0, 0, 0, 0);
     this.minDate = new Date(this.currentDateTemp1);
     this.maxDate = new Date(this.currentDateTemp2);
   }
