@@ -1,26 +1,40 @@
 <div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
   <div class="season-heading mat-subheading-2">
-    {{seasonName}}
+    <!-- {{seasonName}} -->
   </div>
-  <mat-horizontal-stepper [linear]="true">
+  <mat-horizontal-stepper #seasonStepper [linear]="true">
+
     <mat-step label="Select Match Type" [stepControl]="matchSelectForm" [editable]="true">
-      <app-select-match-type></app-select-match-type>
+      <app-select-match-type (stepper)="seasonStepper"></app-select-match-type>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center info">
           To save your response and move to the next step, select Next
         </span>
         <button type="button" [disabled]="!matchSelectForm?.valid" class="primaryButton buttonText"
-          (click)="onSaveMatchType()">Next</button>
-
+          (click)="onSaveMatchType(seasonStepper)">Next</button>
       </div>
     </mat-step>
-    <mat-step label="Select Teams" [editable]="true">
-      <!-- <app-select-match-type [formGroup]="matchSelectForm" (onSubmit)="submitMatchTypeForm()"></app-select-match-type> -->
+
+    <mat-step label="Choose Participants" [stepControl]="teamSelectForm" [editable]="true">
+      <app-select-teams (stepper)="seasonStepper"></app-select-teams>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
+        <button type="button" class="secondaryButton buttonText" matStepperNext>Skip</button>
+        <button type="button" [disabled]="!teamSelectForm?.valid" class="primaryButton buttonText"
+          (click)="onSaveTeam(seasonStepper)">Next</button>
+      </div>
     </mat-step>
-    <mat-step label="Select Ground" [editable]="true">
-      <!-- <app-select-match-type [formGroup]="matchSelectForm" (onSubmit)="submitMatchTypeForm()"></app-select-match-type> -->
+
+    <mat-step label="Select Ground" [stepControl]="groundForm" [editable]="true">
+      <app-select-ground></app-select-ground>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
+        <button type="button" [disabled]="!groundForm?.valid" class="primaryButton buttonText"
+          (click)="onSaveGround(seasonStepper)">Next</button>
+      </div>
     </mat-step>
-    <mat-step label="Add Details" [stepControl]="seasonForm" [editable]="true">
+
+    <mat-step label="Add Details" [editable]="true">
       <!-- <app-add-season></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>
@@ -28,7 +42,8 @@
           (click)="onSaveDraft()">Save & Next</button>
       </div> -->
     </mat-step>
-    <mat-step label="Generate Fixtures" [stepControl]="groundForm" [editable]="false">
+
+    <mat-step label="Generate Fixtures" [editable]="false">
       <!-- <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
@@ -36,7 +51,8 @@
           (click)="onUpdateDraft()">Save & Next</button>
       </div> -->
     </mat-step>
-    <mat-step label="Payment" [stepControl]="fixtureForm" [editable]="false">
+
+    <mat-step label="Payment" [editable]="false">
       <!-- <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
@@ -44,6 +60,7 @@
           (click)="onConfirmFixtures()">Confirm Fixtures</button>
       </div> -->
     </mat-step>
+
     <mat-step label="Publish" [editable]="false">
       <!-- <div class="success-container">
         <p class="mat-body-1 center">

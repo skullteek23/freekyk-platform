@@ -1,0 +1,16 @@
+.select-team-form-container {
+  border: 1px solid var(--grey1);
+  padding: 20px 20px 10px;
+  margin-top: 20px;
+  border-radius: 20px;
+  section {
+    width: 50%;
+    margin: 0px auto 0;
+    .error {
+      color: var(--red);
+      display: block;
+      margin: 10px 0 10px;
+      text-align: center;
+    }
+  }
+}

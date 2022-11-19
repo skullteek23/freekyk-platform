@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import { MatHorizontalStepper } from '@angular/material/stepper';
 import { MatchConstants, MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { TournamentTypes } from '@shared/interfaces/match.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
 
@@ -15,6 +14,8 @@ import { Observable } from 'rxjs';
 })
 export class SelectMatchTypeComponent implements OnInit {
 
+  @Input() stepper: MatHorizontalStepper;
+
   readonly messages = formsMessages;
   readonly matchPackages = [
     { value: MATCH_TYPES_PACKAGES.PackageOne, chipText: 'Most Popular' },
@@ -24,6 +25,7 @@ export class SelectMatchTypeComponent implements OnInit {
   ];
   readonly oneDayInMilliseconds = 86400000;
   readonly teamsList = MatchConstants.ALLOWED_PARTICIPATION_COUNT;
+
 
   countries$: Observable<string[]>;
   cities$: Observable<string[]>;
@@ -55,9 +57,9 @@ export class SelectMatchTypeComponent implements OnInit {
         city: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
       }),
       participatingTeamsCount: new FormControl(null,
-        [Validators.min(2), Validators.max(32), Validators.pattern(RegexPatterns.num)]
+        [Validators.required, Validators.min(2), Validators.max(32), Validators.pattern(RegexPatterns.num)]
       ),
-      containingTournaments: new FormControl(null)
+      containingTournaments: new FormControl(null, [Validators.required])
     });
   }
 
@@ -106,7 +108,20 @@ export class SelectMatchTypeComponent implements OnInit {
   }
 
   onCustomPackage(value: MATCH_TYPES_PACKAGES) {
-    this.showAdditionFields = this.isPackageCustom(value);
+    if (value === MATCH_TYPES_PACKAGES.PackageOne) {
+      this.matchSelectForm.get('participatingTeamsCount').setValue(2);
+      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+    } else if (value === MATCH_TYPES_PACKAGES.PackageTwo) {
+      this.matchSelectForm.get('participatingTeamsCount').setValue(4);
+      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+    } else if (value === MATCH_TYPES_PACKAGES.PackageThree) {
+      this.matchSelectForm.get('participatingTeamsCount').setValue(4);
+      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+    } else {
+      this.matchSelectForm.get('participatingTeamsCount').reset();
+      this.matchSelectForm.get('containingTournaments').reset();
+      this.showAdditionFields = true;
+    }
   }
 
   getCountries() {

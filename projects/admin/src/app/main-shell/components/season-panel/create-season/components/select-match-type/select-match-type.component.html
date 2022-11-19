@@ -71,8 +71,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Containing Tournaments</mat-label>
-      <mat-select [disabled]="!matchSelectForm?.get('participatingTeamsCount')?.value"
-        formControlName="containingTournaments" multiple>
+      <mat-select formControlName="containingTournaments" multiple>
         <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
           {{ type }}
         </mat-option>

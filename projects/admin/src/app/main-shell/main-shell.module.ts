@@ -32,7 +32,10 @@ import { MaterialModule } from '@shared/material.module';
 import { MatchReportSummaryComponent } from './components/season-panel/match-report-summary/match-report-summary.component';
 import {
   SelectMatchTypeComponent
-} from './components/season-panel/create-season/step-components/select-match-type/select-match-type.component';
+} from './components/season-panel/create-season/components/select-match-type/select-match-type.component';
+import { SelectTeamsComponent } from './components/season-panel/create-season/components/select-teams/select-teams.component';
+import { TeamSelectionListComponent } from './components/season-panel/team-selection-list/team-selection-list.component';
+import { SelectGroundComponent } from './components/season-panel/create-season/components/select-ground/select-ground.component';
 
 const routes: Routes = [
   {
@@ -80,7 +83,10 @@ const routes: Routes = [
     RegistrationsPanelComponent,
     AdminConfigPanelComponent,
     MatchReportSummaryComponent,
-    SelectMatchTypeComponent
+    SelectMatchTypeComponent,
+    SelectTeamsComponent,
+    TeamSelectionListComponent,
+    SelectGroundComponent
   ],
   imports: [
     CommonModule,
