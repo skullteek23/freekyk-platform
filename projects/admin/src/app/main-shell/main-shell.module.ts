@@ -25,7 +25,6 @@ import { RequestDialogComponent } from './components/season-panel/request-dialog
 import { SeasonPanelComponent } from './components/season-panel/season-panel.component';
 import { SelectGroundsComponent } from './components/season-panel/select-grounds/select-grounds.component';
 import { UpdateMatchReportComponent } from './components/season-panel/update-match-report/update-match-report.component';
-import { ViewSeasonDraftComponent } from './components/season-panel/view-season-draft/view-season-draft.component';
 import { ViewSeasonsTableComponent } from './components/season-panel/view-seasons-table/view-seasons-table.component';
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/material.module';
@@ -43,6 +42,7 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { AdminPaymentComponent } from './components/season-panel/create-season/components/admin-payment/admin-payment.component';
 import { ViewSummaryComponent } from './components/season-panel/create-season/components/view-summary/view-summary.component';
+import { ViewPublishedSeasonComponent } from './components/season-panel/view-published-season/view-published-season.component';
 
 const routes: Routes = [
   {
@@ -57,7 +57,7 @@ const routes: Routes = [
           { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
           { path: 'list', component: ViewSeasonsTableComponent },
           { path: 'create', component: CreateSeasonComponent },
-          { path: ':seasonid', component: ViewSeasonDraftComponent },
+          { path: ':seasonid', component: ViewPublishedSeasonComponent },
         ],
       },
       { path: 'grounds', component: GroundsPanelComponent },
@@ -79,7 +79,6 @@ const routes: Routes = [
     CreateSeasonComponent,
     SelectGroundsComponent,
     LineInfoDisplayComponent,
-    ViewSeasonDraftComponent,
     GenerateFixturesComponent,
     RequestDialogComponent,
     UpdateMatchReportComponent,
@@ -96,7 +95,8 @@ const routes: Routes = [
     GroundSlotsComponent,
     GroundSlotSelectionComponent,
     AdminPaymentComponent,
-    ViewSummaryComponent
+    ViewSummaryComponent,
+    ViewPublishedSeasonComponent
   ],
   imports: [
     CommonModule,

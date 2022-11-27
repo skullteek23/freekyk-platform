@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SeasonDraft, statusType } from '@shared/interfaces/season.model';
+import { SeasonBasicInfo, SeasonDraft, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAdminService } from '../season-admin.service';
 
@@ -15,8 +15,8 @@ import { SeasonAdminService } from '../season-admin.service';
 export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
   cols = ['sno', 'season', 'startDate', 'status'];
-  seasons: any[] = [];
-  subscription = new Subscription();
+  seasons: SeasonBasicInfo[] = [];
+  subscriptions = new Subscription();
 
   constructor(
     private ngFire: AngularFirestore,
@@ -29,17 +29,17 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
 
   getSeasons(): void {
     const uid = sessionStorage.getItem('uid');
     if (uid) {
-      this.subscription.add(this.ngFire.collection('seasonDrafts', query => query.where('createdBy', '==', uid)).snapshotChanges()
+      this.subscriptions.add(this.ngFire.collection('seasons', query => query.where('createdBy', '==', uid)).snapshotChanges()
         .pipe(
-          map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonDraft), } as SeasonDraft))),
+          map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonBasicInfo), } as SeasonBasicInfo))),
           map(resp => resp.sort(ArraySorting.sortObjectByKey('lastUpdated', 'desc')))
         )
         .subscribe((resp) => (this.seasons = resp)));
