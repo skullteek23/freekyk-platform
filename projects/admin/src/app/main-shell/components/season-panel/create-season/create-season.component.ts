@@ -106,17 +106,21 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     this.isLoaderShown = true;
     this.seasonAdminService.publishSeason(this.seasonID)
       .then(() => {
-        this.seasonAdminService.clearSavedData();
-        this.isLoaderShown = false;
-        this.isSeasonLive = true;
+        this.seasonAdminService.uploadSeasonPhoto(this.seasonID)
+          .then(() => {
+            this.seasonAdminService.clearSavedData();
+            this.isLoaderShown = false;
+            this.isSeasonLive = true;
+          })
+          .catch(this.handleError.bind(this));
       })
-      .catch(error => {
-        this.isLoaderShown = false;
-        this.isSeasonLive = false;
-        if (error?.message) {
-          this.snackbarService.displayError(error?.message);
-        }
-      });
+      .catch(this.handleError.bind(this));
+  }
+
+  handleError(error) {
+    this.isLoaderShown = false;
+    this.isSeasonLive = false;
+    this.snackbarService.displayError(error?.message);
   }
 
   isValidGroundSelection(): boolean {

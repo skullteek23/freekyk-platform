@@ -6,7 +6,6 @@ import { ITeamInfo } from './team.model';
 export type statusType = 'PUBLISHED' | 'FINISHED';
 export interface SeasonBasicInfo {
   name: string;
-  imgpath: string;
   locCity: string;
   locState: string;
   premium: boolean;
@@ -20,6 +19,7 @@ export interface SeasonBasicInfo {
   leftOverMatchCount: number;
   lastUpdated: number;
   createdBy: string;
+  imgpath?: string;
   id?: string;
 }
 export interface SeasonAbout {
@@ -81,7 +81,6 @@ export interface ISelectMatchType {
 
 export interface ISeasonDetails {
   name: string;
-  imgpath: string;
   description: string;
   rules: string;
   fees: number;

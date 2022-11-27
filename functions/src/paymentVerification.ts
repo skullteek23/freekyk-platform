@@ -46,7 +46,7 @@ export async function paymentVerification(data: any, context: any): Promise<any>
     placedOn: admin.firestore.Timestamp.now().toMillis(),
     itemsDescSnap: {
       prodName: season.name,
-      prodImgpath: season.imgpath,
+      prodImgpath: season.imgpath || '',
       prodPrice: season.feesPerTeam,
       prodId: seasonID,
       prodType: 'season',

@@ -38,7 +38,6 @@ export class AddSeasonComponent implements OnInit {
   initForm() {
     this.detailsForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)]),
-      imgpath: new FormControl(this.defaultImage),
       description: new FormControl(null, [
         Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)
       ]),
@@ -66,8 +65,7 @@ export class AddSeasonComponent implements OnInit {
 
   onChangeImage(file: File) {
     if (file) {
-      const url = URL.createObjectURL(file);
-      this.detailsForm.get('imgpath').setValue(url);
+      this.seasonAdminService.setSelectedFile(file);
     }
   }
 

@@ -14,7 +14,6 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
   const fixturesTemp = data.fixtures;
   const fixtures: MatchFixture[] = getPublishableFixture(fixturesTemp.fixtures);
   const firstFixtureTimestamp = fixtures[0].date;
-  const blob = await fetch(data.seasonDetails.imgpath).then(r => r.blob());
 
   if (!fixtures || !fixtures.length || !data.grounds?.length) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
@@ -23,7 +22,6 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
   const lastUpdated = new Date().getTime();
   const season: SeasonBasicInfo = {
     name: data?.seasonDetails?.name,
-    imgpath: data?.seasonDetails?.imgpath,
     locCity: data?.matchType?.location?.city,
     locState: data?.matchType?.location?.state,
     premium: data?.grounds?.length !== 0 && data?.grounds[0].ownType === 'PRIVATE',

@@ -30,7 +30,7 @@
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Last date to participate</mat-label>
           <input matInput [min]="currentDate" [max]="maxRegisDate" formControlName="lastRegistrationDate"
-            [matDatepicker]="startDate" />
+            [matDatepicker]="startDate" required />
           <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
           <mat-datepicker #startDate></mat-datepicker>
         </mat-form-field>

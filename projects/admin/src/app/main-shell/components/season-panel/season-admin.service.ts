@@ -10,6 +10,7 @@ import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtur
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 
@@ -20,9 +21,12 @@ export class SeasonAdminService {
 
   private adminConfigs: AdminConfigurationSeason;
   private selectedGrounds: IGroundSelection[] = [];
+  private selectedFile: File;
 
   constructor(
-    private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions
+    private ngFire: AngularFirestore,
+    private ngFunctions: AngularFireFunctions,
+    private ngStorage: AngularFireStorage
   ) {
     this.getAdminConfigs();
   }
@@ -107,6 +111,23 @@ export class SeasonAdminService {
         adminID: uid
       }
       return callable(data).toPromise();
+    }
+    return null;
+  }
+
+  setSelectedFile(fileObj: File) {
+    this.selectedFile = fileObj;
+  }
+
+  uploadSeasonPhoto(seasonID: string): Promise<any> {
+    const imgpath = this.getImageURL(this.selectedFile);
+    return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath });
+  }
+
+  async getImageURL(fileObj: File): Promise<string> {
+    if (fileObj && fileObj.name) {
+      const imageSnapshot = await this.ngStorage.upload('/seasonImages/' + fileObj.name.trim(), fileObj);
+      return imageSnapshot.ref.getDownloadURL();
     }
     return null;
   }
