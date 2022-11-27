@@ -127,7 +127,7 @@ export class SeasonAdminService {
   async getImageURL(fileObj: File): Promise<string> {
     if (fileObj && fileObj.name) {
       const imageSnapshot = await this.ngStorage.upload('/seasonImages/' + fileObj.name.trim(), fileObj);
-      return imageSnapshot.ref.getDownloadURL();
+      return await imageSnapshot.ref.getDownloadURL();
     }
     return null;
   }
