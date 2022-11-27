@@ -52,7 +52,7 @@
       </div>
       <div class="select-availabilities" id="selected-availabilities" fxFlex="47%">
         <p class="mat-body-1">
-          <strong> Selected Slots: </strong>
+          <strong> Selected Slots ({{selectedSlots.length}}): </strong>
         </p>
         <mat-chip-list id="selected-availabilities">
           <mat-chip selected *ngFor="let slot of selectedSlots">
