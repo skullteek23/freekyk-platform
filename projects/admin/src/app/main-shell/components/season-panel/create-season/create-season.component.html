@@ -83,7 +83,8 @@
       <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" *ngIf="isSeasonLive">
         <app-tick-animation></app-tick-animation>
         <span class="mat-caption center">Wuhooo! Your season is LIVE.</span>
-        <span class="mat-caption center">You will be redirected in 3 seconds</span>
+        <span class="mat-caption center">Go to <a [routerLink]="['/seasons', seasonID]"
+            routerLinkActive="router-link-active">Season</a></span>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

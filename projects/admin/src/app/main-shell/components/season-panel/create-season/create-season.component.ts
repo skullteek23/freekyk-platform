@@ -12,7 +12,6 @@ import { AdminPaymentComponent } from './components/admin-payment/admin-payment.
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-season',
@@ -35,12 +34,12 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   errorMessage = '';
   maxSlots = 0;
   subscriptions = new Subscription();
+  seasonID: string = '';
 
   constructor(
     private seasonAdminService: SeasonAdminService,
     private snackbarService: SnackbarService,
-    private ngFire: AngularFirestore,
-    private router: Router
+    private ngFire: AngularFirestore
   ) { }
 
   ngOnInit(): void {
@@ -103,14 +102,13 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   }
 
   onPublishSeason() {
-    const seasonID = this.ngFire.createId();
-    this.seasonAdminService.publishSeason(seasonID)
+    this.seasonID = this.ngFire.createId();
+    this.isLoaderShown = true;
+    this.seasonAdminService.publishSeason(this.seasonID)
       .then(() => {
+        this.seasonAdminService.clearSavedData();
         this.isLoaderShown = false;
         this.isSeasonLive = true;
-        setTimeout(() => {
-          this.router.navigate(['/seasons', seasonID]);
-        }, 4000);
       })
       .catch(error => {
         this.isLoaderShown = false;

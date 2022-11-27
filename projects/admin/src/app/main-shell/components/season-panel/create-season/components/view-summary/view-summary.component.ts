@@ -79,7 +79,7 @@ export class ViewSummaryComponent implements OnInit {
       data.push({ label: 'Season Name', value: this.summaryData.name });
       data.push({ label: 'Location', value: this.summaryData.location });
       data.push({ label: 'Season Starts on', value: this.summaryData.startDate });
-      data.push({ label: 'Selected Participants', value: this.summaryData.participants });
+      data.push({ label: 'Allowed Participants', value: this.summaryData.participants });
       data.push({ label: 'Discount (%)', value: this.summaryData.discount });
       data.push({ label: 'Fees per Team (After discount)', value: this.summaryData.fees });
       data.push({ label: 'Tournaments', value: this.summaryData.containingTournaments });

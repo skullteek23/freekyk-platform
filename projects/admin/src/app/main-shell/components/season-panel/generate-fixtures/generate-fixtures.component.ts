@@ -38,15 +38,15 @@ export class GenerateFixturesComponent implements OnInit {
 
     if (selectMatchTypeFormData && selectGroundFormData && seasonDetailsFormData) {
       options.grounds = selectGroundFormData;
-      if (selectMatchTypeFormData.containingTournaments.includes('FCP')) {
-        options.fcpMatches = selectMatchTypeFormData.participatingTeamsCount;
-      }
-      if (selectMatchTypeFormData.containingTournaments.includes('FKC')) {
-        options.fkcMatches = this.seasonAdminService.calculateTotalKnockoutMatches(selectMatchTypeFormData.participatingTeamsCount);
-      }
-      if (selectMatchTypeFormData.containingTournaments.includes('FPL')) {
-        options.fplMatches = this.seasonAdminService.calculateTotalLeagueMatches(selectMatchTypeFormData.participatingTeamsCount);
-      }
+      options.fcpMatches = selectMatchTypeFormData.containingTournaments.includes('FCP')
+        ? this.seasonAdminService.calculateTotalCPMatches(selectMatchTypeFormData.participatingTeamsCount)
+        : 0;
+      options.fkcMatches = selectMatchTypeFormData.containingTournaments.includes('FKC')
+        ? this.seasonAdminService.calculateTotalKnockoutMatches(selectMatchTypeFormData.participatingTeamsCount)
+        : 0;
+      options.fplMatches = selectMatchTypeFormData.containingTournaments.includes('FPL')
+        ? this.seasonAdminService.calculateTotalLeagueMatches(selectMatchTypeFormData.participatingTeamsCount)
+        : 0;
       options.season = seasonDetailsFormData.name;
     }
     this.fixturesList = this.seasonAdminService.getDummyFixtures(options);

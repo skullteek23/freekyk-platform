@@ -28,7 +28,7 @@
     <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
       <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
         <mat-label>Country</mat-label>
-        <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="country">
+        <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="country" required>
           <mat-option>--Select Country--</mat-option>
           <mat-option *ngFor="let country of countries$ | async" [value]="country">
             {{ country }}
@@ -38,7 +38,7 @@
 
       <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
         <mat-label>State</mat-label>
-        <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state">
+        <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state" required>
           <mat-option>--Select State--</mat-option>
           <mat-option *ngFor="let state of states$ | async" [value]="state">
             {{ state }}
@@ -48,7 +48,7 @@
 
       <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
         <mat-label>City</mat-label>
-        <mat-select formControlName="city">
+        <mat-select formControlName="city" required>
           <mat-option>--Select City--</mat-option>
           <mat-option *ngFor="let city of cities$ | async" [value]="city">
             {{ city }}
@@ -60,7 +60,8 @@
   <section fxLayout="column" class="team-selection" *ngIf="showAdditionFields">
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Participating Teams</mat-label>
-      <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event.value)">
+      <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event.value)"
+        required>
         <mat-option *ngFor="let team of teamsList" [value]="team">
           {{ team }} teams
         </mat-option>
@@ -71,7 +72,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Containing Tournaments</mat-label>
-      <mat-select formControlName="containingTournaments" multiple>
+      <mat-select formControlName="containingTournaments" multiple required>
         <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
           {{ type }}
         </mat-option>

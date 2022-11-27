@@ -1,17 +1,20 @@
 import { SeasonAdminService } from '@admin/main-shell/components/season-panel/season-admin.service';
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { GROUNDS_FEATURES_LIST, MatchConstants } from '@shared/constants/constants';
 import { seasonFlowMessages } from '@shared/constants/messages';
 import { GroundBooking, IGroundInfo, IGroundSelection } from '@shared/interfaces/ground.model';
+import { ListOption } from '@shared/interfaces/others.model';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ground-slot-selection',
   templateUrl: './ground-slot-selection.component.html',
-  styleUrls: ['./ground-slot-selection.component.scss']
+  styleUrls: ['./ground-slot-selection.component.scss'],
+  providers: [DatePipe]
 })
 export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
 
@@ -34,15 +37,16 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
     start: new FormControl(),
     end: new FormControl()
   });
-  slots: number[] = [];
+  slots: ListOption[] = [];
   slotSelectionFormControl = new FormControl();
-  slotsCache: number[] = [];
+  slotsCache: ListOption[] = [];
   startDateTimestamp: number = null;
   subscriptions = new Subscription();
 
   constructor(
     private ngFire: AngularFirestore,
-    private seasonAdminService: SeasonAdminService
+    private seasonAdminService: SeasonAdminService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void { }
@@ -56,7 +60,6 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
   initComponentValues(value: Partial<IGroundInfo>) {
     this.groundInfo = value;
     this.parseFeatures();
-    this.parseTimings();
 
     this.subscriptions.add(this.slotSelectionFormControl.valueChanges.subscribe((changes: number[]) => {
       this.seasonAdminService.onGroundSelectionChange(({
@@ -73,6 +76,7 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response) {
           this.bookings = response.docs.map(doc => doc.data() as GroundBooking);
+          this.parseTimings();
         }
       },
       error: (error) => {
@@ -84,7 +88,7 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
     if (this.start?.value && this.end?.value) {
       const start = new Date(this.start.value).getTime();
       const end = new Date(this.end.value).getTime();
-      this.slots = this.slotsCache.filter(slot => slot >= start && slot <= end);
+      this.slots = this.slotsCache.filter(slot => slot.value >= start && slot.value <= end);
     } else {
       this.slots = this.slotsCache;
     }
@@ -131,7 +135,7 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
     this.slots = JSON.parse(JSON.stringify(this.slotsCache));
   }
 
-  getRange(start: number, end: number, timings: any): number[] {
+  getRange(start: number, end: number, timings: any): ListOption[] {
     const range: number[] = [];
     for (let dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
       const timeArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
@@ -147,11 +151,17 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return range.sort();
+    return range.sort().map(value => ({ value, viewValue: this.parseSlot(value), disabled: this.isSlotBooked(value) }));
   };
 
   getLastDay(year: number, month: number): number {
     return new Date(year, month + 1, 0).getDate();
+  }
+
+  parseSlot(slot: number): string {
+    const date = this.datePipe.transform(slot, this.customDateFormat);
+    const suffix = this.datePipe.transform(slot + this.oneHourMilliseconds, 'h a');
+    return `${date} - ${suffix}`;
   }
 
   isSlotBooked(value: number): boolean {

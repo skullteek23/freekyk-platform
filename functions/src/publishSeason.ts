@@ -14,6 +14,7 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
   const fixturesTemp = data.fixtures;
   const fixtures: MatchFixture[] = getPublishableFixture(fixturesTemp.fixtures);
   const firstFixtureTimestamp = fixtures[0].date;
+  const blob = await fetch(data.seasonDetails.imgpath).then(r => r.blob());
 
   if (!fixtures || !fixtures.length || !data.grounds?.length) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
@@ -79,6 +80,7 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
     }
   }
 
+  // Not configured for multiple knockout in a season
   // Setting up empty knockout stage matches if season contains knockout tournament
   if (season.cont_tour.includes('FKC')) {
     const knockoutFixtures = fixtures.filter(el => el.type === 'FKC');

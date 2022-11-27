@@ -255,6 +255,7 @@ export interface CommunityNumbersContent {
 export interface ListOption {
   value: any;
   viewValue: string;
+  disabled?: boolean
 }
 
 export interface LocationDetails {

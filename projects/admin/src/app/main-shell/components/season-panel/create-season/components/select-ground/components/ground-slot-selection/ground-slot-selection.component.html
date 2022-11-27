@@ -40,10 +40,10 @@
           <div class="mat-caption" *ngIf="!slots.length">
             No Slots!
           </div>
-          <mat-list-option checkboxPosition="before" [disabled]="isSlotBooked(slot)" [value]="slot"
+          <mat-list-option checkboxPosition="before" [disabled]="slot.disabled" [value]="slot.value"
             *ngFor="let slot of slots">
             <span class="mat-body-2">
-              {{slot | date: customDateFormat}} - {{slot + oneHourMilliseconds | date: 'h a'}}
+              {{slot.viewValue}}
             </span>
           </mat-list-option>
         </mat-selection-list>

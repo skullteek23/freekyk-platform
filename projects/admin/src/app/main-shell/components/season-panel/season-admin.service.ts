@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, GROUND_TYPES, IGroundSelection } from '@shared/interfaces/ground.model';
-import { IDummyFixture, MatchFixture, TournamentTypes, } from '@shared/interfaces/match.model';
+import { IDummyFixture, TournamentTypes, } from '@shared/interfaces/match.model';
 import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
+import { MatchConstants } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 
 
@@ -80,6 +80,14 @@ export class SeasonAdminService {
     return fixtures;
   }
 
+  clearSavedData() {
+    sessionStorage.removeItem('selectMatchType');
+    sessionStorage.removeItem('selectTeam');
+    sessionStorage.removeItem('selectGround');
+    sessionStorage.removeItem('seasonFixtures');
+    sessionStorage.removeItem('seasonDetails');
+  }
+
   publishSeason(seasonID: string): Promise<any> {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
     const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
@@ -119,13 +127,13 @@ export class SeasonAdminService {
       let fkcMatches = 0;
       let fplMatches = 0;
       if (tournaments.includes('FCP')) {
-        fcpMatches = teamsCount / 2;
+        fcpMatches = this.calculateTotalCPMatches(teamsCount);
       }
       if (tournaments.includes('FKC')) {
-        fkcMatches = teamsCount - 1;
+        fkcMatches = this.calculateTotalKnockoutMatches(teamsCount);
       }
       if (tournaments.includes('FPL')) {
-        fplMatches = (teamsCount * (teamsCount - 1)) / 2;
+        fplMatches = this.calculateTotalLeagueMatches(teamsCount);
       }
       return fcpMatches + fkcMatches + fplMatches;
     }
@@ -243,7 +251,7 @@ export class SeasonAdminService {
     this.selectedGrounds = [];
   }
 
-  private getMID(type: 'FKC' | 'FPL' | 'FCP', index: number) {
+  private getMID(type: TournamentTypes, index: number) {
     const uniqueID = this.ngFire.createId().slice(0, 8).toLocaleUpperCase();
     switch (type) {
       case 'FKC': return `${uniqueID}-${MatchConstants.UNIQUE_MATCH_TYPE_CODES.FKC}-${index}`;
@@ -258,6 +266,10 @@ export class SeasonAdminService {
 
   calculateTotalKnockoutMatches(teams: number): number {
     return !teams ? 0 : teams - 1;
+  }
+
+  calculateTotalCPMatches(teams: number): number {
+    return !teams ? 0 : teams / 2;
   }
 
   getDifference(a: number, b: number): number {

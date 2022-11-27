@@ -4,7 +4,7 @@
       <ng-container *ngFor="let control of participants?.controls; let i = index">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Team {{i + 1}}</mat-label>
-          <mat-select [formControlName]="i" [compareWith]="compareFunction">
+          <mat-select [formControlName]="i" [compareWith]="compareFunction" required>
             <mat-option *ngFor="let team of teamList" [value]="team">
               {{team.name}}
             </mat-option>
