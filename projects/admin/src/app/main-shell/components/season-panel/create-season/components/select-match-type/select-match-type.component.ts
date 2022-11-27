@@ -4,9 +4,9 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { MatchConstants, MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
+import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
-import { ISelectMatchType } from '../../create-season.component';
 
 @Component({
   selector: 'app-select-match-type',
@@ -51,11 +51,11 @@ export class SelectMatchTypeComponent implements OnInit {
   initForm() {
     this.matchSelectForm = new FormGroup({
       package: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
-      startDate: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
+      startDate: new FormControl(null, [Validators.required]),
       location: new FormGroup({
-        country: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
-        state: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
-        city: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
+        country: new FormControl(null, [Validators.required]),
+        state: new FormControl(null, [Validators.required]),
+        city: new FormControl(null, [Validators.required]),
       }),
       participatingTeamsCount: new FormControl(null,
         [Validators.required, Validators.min(2), Validators.max(32), Validators.pattern(RegexPatterns.num)]

@@ -1,12 +1,12 @@
 import { Component, OnInit, SecurityContext, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { ISeasonDetails } from '../../create-season.component';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ISeasonDetails } from '@shared/interfaces/season.model';
+import { SeasonAdminService } from '../../../season-admin.service';
 
 @Component({
   selector: 'app-add-season',
@@ -23,9 +23,11 @@ export class AddSeasonComponent implements OnInit {
   defaultImage: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
   detailsForm: FormGroup = new FormGroup({});
   messages = formsMessages;
+  currentDate = new Date();
 
   constructor(
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private seasonAdminService: SeasonAdminService
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +47,7 @@ export class AddSeasonComponent implements OnInit {
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
+      lastRegistrationDate: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -57,9 +60,9 @@ export class AddSeasonComponent implements OnInit {
     }
   }
 
-  // sanitizeImageUrl(url: string): string {
-  //   return this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(url) as SafeResourceUrl)
-  // }
+  sanitizeImageUrl(url: string): string {
+    return this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(url) as SafeResourceUrl)
+  }
 
   onChangeImage(file: File) {
     if (file) {
@@ -74,5 +77,10 @@ export class AddSeasonComponent implements OnInit {
 
   get rules(): AbstractControl {
     return this.detailsForm.get('rules');
+  }
+
+  get maxRegisDate(): Date {
+    const config = this.seasonAdminService.getAdminConfig();
+    return new Date(this.seasonAdminService.getMappedDateRange());
   }
 }

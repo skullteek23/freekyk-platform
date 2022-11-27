@@ -4,45 +4,15 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
 import { AddSeasonComponent } from './components/add-season/add-season.component';
 import { SelectMatchTypeComponent } from './components/select-match-type/select-match-type.component';
-import { ITeamInfo, SelectTeamsComponent } from './components/select-teams/select-teams.component';
-import { IGroundSelection, SelectGroundComponent } from './components/select-ground/select-ground.component';
+import { SelectTeamsComponent } from './components/select-teams/select-teams.component';
+import { SelectGroundComponent } from './components/select-ground/select-ground.component';
 import { SeasonAdminService } from '../season-admin.service';
 import { seasonFlowMessages } from '@shared/constants/messages';
-import { IDummyFixture, TournamentTypes } from '@shared/interfaces/match.model';
-import { MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { AdminPaymentComponent } from './components/admin-payment/admin-payment.component';
 import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
-
-export interface ISelectMatchType {
-  package: MATCH_TYPES_PACKAGES;
-  startDate: string;
-  location: {
-    country: string;
-    state: string;
-    city: string;
-  }
-  participatingTeamsCount: number;
-  containingTournaments: TournamentTypes[]
-}
-
-export interface ISeasonDetails {
-  name: string;
-  imgpath: string;
-  description: string;
-  rules: string;
-  fees: number;
-  discount: number;
-}
-
-export interface ISeasonFixtures {
-  fixtures: IDummyFixture[]
-}
-
-export interface ISelectTeam {
-  participants: ITeamInfo[];
-}
-
-export type ISelectGrounds = IGroundSelection[];
+import { SnackbarService } from '@app/services/snackbar.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-season',
@@ -61,12 +31,16 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   readonly messages = seasonFlowMessages;
 
   isLoaderShown = false;
+  isSeasonLive = false;
   errorMessage = '';
   maxSlots = 0;
   subscriptions = new Subscription();
 
   constructor(
-    private seasonAdminService: SeasonAdminService
+    private seasonAdminService: SeasonAdminService,
+    private snackbarService: SnackbarService,
+    private ngFire: AngularFirestore,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -129,7 +103,22 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   }
 
   onPublishSeason() {
-    console.log('publishing');
+    const seasonID = this.ngFire.createId();
+    this.seasonAdminService.publishSeason(seasonID)
+      .then(() => {
+        this.isLoaderShown = false;
+        this.isSeasonLive = true;
+        setTimeout(() => {
+          this.router.navigate(['/seasons', seasonID]);
+        }, 4000);
+      })
+      .catch(error => {
+        this.isLoaderShown = false;
+        this.isSeasonLive = false;
+        if (error?.message) {
+          this.snackbarService.displayError(error?.message);
+        }
+      });
   }
 
   isValidGroundSelection(): boolean {
@@ -148,10 +137,7 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   }
 
   get matchSelectForm(): FormGroup {
-    if (this.selectMatchTypeComponent) {
-      return this.selectMatchTypeComponent.matchSelectForm;
-
-    }
+    return this.selectMatchTypeComponent?.matchSelectForm;
   }
 
   get teamSelectForm(): FormGroup {
@@ -173,214 +159,4 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   get paymentForm(): FormGroup {
     return this.adminPaymentComponent?.paymentForm;
   }
-
-  // navigateToDraftAndClose(draftID) {
-  //   this.router.navigate(['/seasons/s/' + draftID]);
-  // }
-
-  // navigateToListAndClose() {
-  //   this.onNavigateAway();
-  // }
-
-  // getGrounds(city: string, state: string, startDate: number) {
-  //   this.isLoaderShown = true;
-  //   this.subscriptions.add(
-  //     this.ngFire.collection('groundsPvt', (query) => query.where('locState', '==', state.trim()).where('locCity', '==', city.trim())
-  //       .where('contractStartDate', '<', startDate))
-  //       .snapshotChanges()
-  //       .pipe(
-  //         map(response => response
-  //           .map(docs => ({ id: docs.payload.doc.id, ...docs.payload.doc.data() as GroundPrivateInfo }) as GroundPrivateInfo)
-  //         ),
-  //         map(response => response.sort(ArraySorting.sortObjectByKey('name'))),
-  //         map(resp => resp.filter(res => res.contractEndDate > startDate))
-  //       )
-  //       .subscribe(
-  //         (response) => {
-  //           this.availableGroundsList = response;
-  //           this.isLoaderShown = false;
-  //         }, (err) => {
-  //           this.isLoaderShown = false;
-  //           this.snackBarService.displayError('Unable to get grounds!');
-  //         }
-  //       )
-  //   );
-  // }
-
-  // onNavigateAway() {
-  //   this.router.navigate(['/seasons/list']);
-  // }
-
-  // saveDetails() {
-  //   this.onNavigateAway();
-  // }
-
-
-  // get seasonForm(): FormGroup {
-  //   if (this.addSeasonComponent && this.addSeasonComponent.seasonForm) {
-  //     return this.addSeasonComponent.seasonForm;
-  //   }
-  //   return null;
-  // }
-
-  // get groundForm(): FormGroup {
-  //   if (this.selectGroundsComponent && this.selectGroundsComponent.groundsForm) {
-  //     return this.selectGroundsComponent.groundsForm;
-  //   }
-  //   return null;
-  // }
-
-  // get fixtureForm(): FormGroup {
-  //   if (this.generateFixturesComponent && this.generateFixturesComponent.fixturesForm) {
-  //     return this.generateFixturesComponent.fixturesForm;
-  //   }
-  //   return null;
-  // }
-
-  // get seasonName(): string {
-  //   if (this.addSeasonComponent && this.addSeasonComponent.seasonForm && this.addSeasonComponent.seasonForm.get('name').value) {
-  //     return `Season Name: ${this.addSeasonComponent.seasonForm.get('name').value}`;
-  //   }
-  //   return '';
-  // }
-
-  // get seasonImage(): File {
-  //   return this.addSeasonComponent && this.addSeasonComponent.selectedImageFile ? this.addSeasonComponent.selectedImageFile : null;
-  // }
-
-  // onCancel() {
-
-  // }
-
-  // nextStep() {
-  //   console.log('event received in parent!');
-  //   console.log(this.stepper);
-  //   this.stepper.next();
-  // }
-
-  // async onSaveDraft() {
-  //   if (this.isSeasonFormValid) {
-  //     this.dataForGroundStep = this.seasonForm.value;
-  //     this.isLoaderShown = true;
-  //     const imgpath = this.seasonImage ? await this.getImageURL(this.seasonImage) : MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
-  //     const formData = {
-  //       ...this.seasonForm.value,
-  //       startDate: new Date(this.seasonForm.value.startDate).getTime(),
-  //       imgpath
-  //     };
-  //     this.saveDraftDetails(formData);
-  //   } else {
-  //     this.dataForGroundStep = null;
-  //   }
-  // }
-
-  // onUpdateDraft(): void {
-  //   if (this.isGroundFormValid) {
-  //     this.isLoaderShown = true;
-  //     this.selectedGroundsList = (this.groundForm.value.groundsList as GroundPrivateInfo[]);
-  //     this.dataForFixtureStep = {
-  //       season: this.dataForGroundStep,
-  //       grounds: this.selectedGroundsList
-  //     };
-  //     if (this.selectedGroundsList.length) {
-  //       const result = this.ngFire.collection('seasonDrafts').doc(this.draftID).update({
-  //         grounds: this.selectedGroundsList
-  //       } as Partial<SeasonDraft>);
-  //       result.then(() => {
-  //         this.snackBarService.displayCustomMsg('draft updated successfully!');
-  //         this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } });
-  //         // this.onNextStep();
-  //         this.isLoaderShown = false;
-  //       });
-  //     } else {
-  //       this.isLoaderShown = false;
-  //     }
-  //   }
-  // }
-
-  // onConfirmFixtures() {
-  //   if (this.isFixtureFormValid) {
-  //     this.isLoaderShown = true;
-  //     const fixtures = this.fixtureForm.value.fixtures;
-  //     this.saveDraftFixtures(fixtures);
-  //   }
-  // }
-
-  // saveDraftFixtures(fixtures: dummyFixture[]): void {
-  //   const batch = this.ngFire.firestore.batch();
-
-  //   fixtures.forEach(element => {
-  //     if (element && element.hasOwnProperty('id') && element.id) {
-  //       const colRef = this.ngFire.collection('seasonFixturesDrafts').doc(element?.id).ref;
-  //       batch.set(colRef, { draftID: this.draftID, ...element });
-  //     }
-  //   });
-
-  //   // updating drafted season
-  //   const docRef = this.ngFire.collection('seasonDrafts').doc(this.draftID).ref;
-  //   batch.update(docRef, { status: 'READY TO PUBLISH' } as Partial<SeasonDraft>);
-
-  //   batch.commit().then(() => {
-  //     this.snackBarService.displayCustomMsg('draft fixtures saved successfully!');
-  //     // this.onNextStep();
-  //     this.isLoaderShown = false;
-  //   }, (err) => {
-  //     this.isLoaderShown = false;
-  //     this.snackBarService.displayError('Unable to save drafted fixtures');
-  //   });
-  // }
-
-  // saveDraftDetails(formData: any) {
-  //   const uid = sessionStorage.getItem('uid');
-  //   const seasonDraft: SeasonDraft = {
-  //     draftID: this.draftID,
-  //     basicInfo: formData,
-  //     lastUpdated: new Date().getTime(),
-  //     status: 'DRAFTED',
-  //     createdBy: uid
-  //   };
-  //   this.ngFire.collection('seasonDrafts').doc(this.draftID).get().subscribe(val => {
-  //     let result: Promise<any>;
-  //     if (val.exists) {
-  //       result = this.ngFire.collection('seasonDrafts').doc(this.draftID).update(seasonDraft);
-  //     } else {
-  //       result = this.ngFire.collection('seasonDrafts').doc(this.draftID).set(seasonDraft);
-  //     }
-  //     result.then(() => {
-  //       this.snackBarService.displayCustomMsg('Season drafted successfully!');
-  //       if (seasonDraft?.basicInfo?.city && seasonDraft?.basicInfo?.state && seasonDraft?.basicInfo?.startDate) {
-  //         this.isLoaderShown = false;
-  //         this.getGrounds(seasonDraft.basicInfo.city, seasonDraft.basicInfo.state, seasonDraft.basicInfo.startDate);
-  //         this.router.navigate([], { relativeTo: this.route, queryParams: { draft: this.draftID } });
-  //         // this.onNextStep();
-  //       }
-  //     }, (err) => {
-  //       this.isLoaderShown = false;
-  //     });
-  //   });
-  // }
-
-  // async getImageURL(fileObj: File): Promise<string> {
-  //   if (fileObj && fileObj.name) {
-  //     const imageSnapshot = await this.ngStorage.upload('/seasonImages/' + fileObj.name.trim(), fileObj);
-  //     return imageSnapshot.ref.getDownloadURL();
-  //   }
-  //   return null;
-  // }
-
-  // get isSeasonFormValid(): boolean {
-  //   return this.seasonForm && this.seasonForm.valid && this.seasonForm.dirty;
-  // }
-
-  // get isGroundFormValid(): boolean {
-  //   return this.groundForm && this.groundForm.valid;
-  // }
-
-  // get isFixtureFormValid(): boolean {
-  //   return this.fixtureForm
-  //     && this.fixtureForm.valid
-  //     && this.fixtureForm.value
-  //     && this.fixtureForm.value.fixtures
-  //     && this.fixtureForm.value.fixtures.length;
-  // }
 }

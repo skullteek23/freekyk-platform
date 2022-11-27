@@ -4,42 +4,12 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { GroundBasicInfo, GroundMoreInfo, GroundPrivateInfo } from '@shared/interfaces/ground.model';
+import { GroundBasicInfo, GroundMoreInfo, GroundPrivateInfo, IGroundInfo } from '@shared/interfaces/ground.model';
+import { IFilter } from '@shared/interfaces/others.model';
+import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { SeasonAdminService } from '../../../season-admin.service';
-import { ISelectMatchType } from '../../create-season.component';
-import { IFilter } from './components/ground-filters/ground-filters.component';
-
-export interface IGroundInfo {
-  name: string;
-  imgpath: string;
-  locCity: string;
-  locState: string;
-  fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
-  ownType: 'FK' | 'PUBLIC' | 'PRIVATE';
-  playLvl: 'good' | 'best' | 'fair';
-  id: string;
-  referee: boolean;
-  foodBev: boolean;
-  parking: boolean;
-  goalpost: boolean;
-  washroom: boolean;
-  staff: boolean;
-  signedContractFileLink: string;
-  contractStartDate: number;
-  contractEndDate: number;
-  timings: any;
-}
-
-export interface IGroundSelection {
-  id: string,
-  locCity: string;
-  locState: string;
-  name: string;
-  ownType: string
-  slots: number[]
-}
 
 @Component({
   selector: 'app-select-ground',

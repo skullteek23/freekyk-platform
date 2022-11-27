@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
-import { ISelectMatchType } from '../../create-season.component';
 
 @Component({
   selector: 'app-admin-payment',

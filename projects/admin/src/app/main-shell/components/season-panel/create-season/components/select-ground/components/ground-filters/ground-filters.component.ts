@@ -1,17 +1,8 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GROUNDS_FEATURES_LIST, MatchConstants } from '@shared/constants/constants';
+import { IFilter } from '@shared/interfaces/others.model';
 import { Subject } from 'rxjs';
-
-export interface IFilter {
-  city: string;
-  referee: boolean;
-  foodBev: boolean;
-  parking: boolean;
-  goalpost: boolean;
-  washroom: boolean;
-  staff: boolean;
-}
 
 @Component({
   selector: 'app-ground-filters',

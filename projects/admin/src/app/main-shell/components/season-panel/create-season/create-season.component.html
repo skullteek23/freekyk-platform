@@ -77,9 +77,15 @@
     </mat-step>
 
     <mat-step label="Publish" [editable]="seasonStepper.selectedIndex <= 4">
-      <ng-container *ngIf="seasonStepper.selectedIndex === 6">
+      <ng-container *ngIf="seasonStepper.selectedIndex === 6 && isSeasonLive === false">
         <app-view-summary (clickNext)="onPublishSeason()"></app-view-summary>
       </ng-container>
+      <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" *ngIf="isSeasonLive">
+        <app-tick-animation></app-tick-animation>
+        <span class="mat-caption center">Wuhooo! Your season is LIVE.</span>
+        <span class="mat-caption center">You will be redirected in 3 seconds</span>
+      </div>
     </mat-step>
   </mat-horizontal-stepper>
 </div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

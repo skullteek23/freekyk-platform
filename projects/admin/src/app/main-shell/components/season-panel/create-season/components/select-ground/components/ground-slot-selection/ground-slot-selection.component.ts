@@ -4,10 +4,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { GROUNDS_FEATURES_LIST, MatchConstants } from '@shared/constants/constants';
 import { seasonFlowMessages } from '@shared/constants/messages';
-import { GroundBooking } from '@shared/interfaces/ground.model';
+import { GroundBooking, IGroundInfo, IGroundSelection } from '@shared/interfaces/ground.model';
+import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { Subscription } from 'rxjs';
-import { ISelectMatchType } from '../../../../create-season.component';
-import { IGroundInfo, IGroundSelection } from '../../select-ground.component';
 
 @Component({
   selector: 'app-ground-slot-selection',

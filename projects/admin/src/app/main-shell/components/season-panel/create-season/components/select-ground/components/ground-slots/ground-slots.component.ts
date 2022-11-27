@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IGroundInfo } from '../../select-ground.component';
+import { IGroundInfo } from '@shared/interfaces/ground.model';
 
 @Component({
   selector: 'app-ground-slots',

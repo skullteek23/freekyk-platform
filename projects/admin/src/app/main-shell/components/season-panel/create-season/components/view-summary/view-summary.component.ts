@@ -4,25 +4,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatchConstants } from '@shared/constants/constants';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
+import { ISeasonSummaryData, ISummaryDataSource, ISelectMatchType, ISelectTeam, ISelectGrounds, ISeasonFixtures, ISeasonDetails } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
-import { ISelectMatchType, ISelectGrounds, ISeasonDetails, ISeasonFixtures, ISelectTeam } from '../../create-season.component';
 
-export interface ISeasonSummaryData {
-  name: string;
-  startDate: string;
-  endDate: string;
-  grounds: string;
-  location: string;
-  fees: string;
-  discount: number;
-  participants: string;
-  containingTournaments: string;
-}
 
-export interface ISummaryDataSource {
-  label: string;
-  value: string | number;
-}
 
 @Component({
   selector: 'app-view-summary',

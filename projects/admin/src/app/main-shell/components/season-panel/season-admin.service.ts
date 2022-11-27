@@ -4,22 +4,14 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { GroundBooking, GROUND_TYPES } from '@shared/interfaces/ground.model';
+import { GroundBooking, GROUND_TYPES, IGroundSelection } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchFixture, TournamentTypes, } from '@shared/interfaces/match.model';
-import { LastParticipationDate, statusType } from '@shared/interfaces/season.model';
+import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
-import { IGroundSelection } from './create-season/components/select-ground/select-ground.component';
-import { ISelectMatchType } from './create-season/create-season.component';
 
-export interface IDummyFixtureOptions {
-  grounds?: IGroundSelection[];
-  season?: string;
-  fcpMatches?: number;
-  fkcMatches?: number;
-  fplMatches?: number;
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -88,94 +80,28 @@ export class SeasonAdminService {
     return fixtures;
   }
 
-  // onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
-  //   const fcpMatches = data.matches.fcp;
-  //   const fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
-  //   const fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
-  //   const oneMatchDuration = this.adminConfigs?.duration || MatchConstants.ONE_MATCH_DURATION;
-
-
-  //   const totalMatches: number = fcpMatches + fkcMatches + fplMatches;
-  //   const grounds = data.grounds;
-  //   const initialDate = new Date(data.startDate);
-
-  //   const availableSlotList: { date: Date; groundName: string; }[] = [];
-
-  //   while (availableSlotList.length < totalMatches) {
-  //     const day = initialDate.getDay();
-  //     for (const ground of grounds) {
-  //       const grTimings = ground.timings;
-  //       const groundName = ground.id;
-  //       if (grTimings.hasOwnProperty(day)) {
-  //         const grTimingsByDay = grTimings[day] as number[];
-  //         for (const timing of grTimingsByDay) {
-  //           if (!availableSlotList.length) {
-  //             const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-  //             date.setHours(timing);
-  //             if (availableSlotList.length < totalMatches) {
-  //               availableSlotList.push({ date, groundName });
-  //             }
-  //             continue;
-  //           }
-  //           const currentHour = timing;
-  //           const lastDateHour = availableSlotList[availableSlotList.length - 1].date.getHours();
-  //           const currentDay = day;
-  //           const lastDateDay = availableSlotList[availableSlotList.length - 1].date.getDay();
-  //           const currentGround = groundName;
-  //           const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
-  //           if (
-  //             this.getDifference(currentHour, lastDateHour) >= oneMatchDuration && currentDay === lastDateDay
-  //             || this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay !== lastDateDay
-  //             || (this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay === lastDateDay
-  //               && lastGround !== currentGround)
-  //           ) {
-  //             const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-  //             date.setHours(timing);
-  //             if (availableSlotList.length < totalMatches) {
-  //               availableSlotList.push({ date, groundName });
-  //             }
-  //           }
-  //         }
-  //       }
-  //     };
-  //     initialDate.setDate(initialDate.getDate() + 1);
-  //   }
-  //   availableSlotList.sort(ArraySorting.sortObjectByKey('date'));
-  //   const fixturesTemp: dummyFixture[] = [];
-  //   for (let index = 0; index < availableSlotList.length; index++) {
-  //     let matchType: 'FKC' | 'FCP' | 'FPL' = 'FCP';
-  //     if (fcpMatches && index < fcpMatches) {
-  //       matchType = 'FCP';
-  //     }
-  //     if (fkcMatches && index >= fcpMatches) {
-  //       matchType = 'FKC';
-  //     }
-  //     if (fplMatches && index >= (fkcMatches + fcpMatches)) {
-  //       matchType = 'FPL';
-  //     }
-  //     fixturesTemp.push({
-  //       home: 'TBD',
-  //       away: 'TBD',
-  //       date: availableSlotList[index].date.getTime(),
-  //       concluded: false,
-  //       premium: true,
-  //       season: data.sName,
-  //       type: matchType,
-  //       locCity: 'availableSlotList[index].locCity',
-  //       locState: 'availableSlotList[index].locState',
-  //       stadium: availableSlotList[index].groundName,
-  //     });
-  //   }
-  //   fixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
-  //   const fixtures = fixturesTemp.map((element, index) => {
-  //     const i = index + 1;
-  //     return {
-  //       ...element,
-  //       id: this.getMID(element.type, i)
-  //     };
-  //   });
-  //   return fixtures && fixtures.length ? fixtures : [];
-  // }
+  publishSeason(seasonID: string): Promise<any> {
+    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
+    const selectGroundFormData: ISelectGrounds = JSON.parse(sessionStorage.getItem('selectGround'));
+    const seasonFixturesFormData: ISeasonFixtures = JSON.parse(sessionStorage.getItem('seasonFixtures'));
+    const seasonDetailsFormData: ISeasonDetails = JSON.parse(sessionStorage.getItem('seasonDetails'));
+    const uid = sessionStorage.getItem('uid');
+    if (selectMatchTypeFormData && selectGroundFormData && seasonFixturesFormData && seasonDetailsFormData && seasonID && uid) {
+      const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.PUBLISH_SEASON);
+      const data: ISeasonCloudFnData = {
+        matchType: selectMatchTypeFormData,
+        seasonDetails: seasonDetailsFormData,
+        fixtures: seasonFixturesFormData,
+        teams: selectTeamFormData,
+        grounds: selectGroundFormData,
+        seasonID,
+        adminID: uid
+      }
+      return callable(data).toPromise();
+    }
+    return null;
+  }
 
   getMaxSelectableSlots(): number {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
@@ -222,7 +148,9 @@ export class SeasonAdminService {
     return this.adminConfigs;
   }
 
-  getMappedDateRange(comparatorTimestamp: number): number {
+  getMappedDateRange(): number {
+    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    const comparatorTimestamp = new Date(selectMatchTypeFormData.startDate).getTime();
     if (this.adminConfigs && this.adminConfigs.hasOwnProperty('lastParticipationDate') && this.adminConfigs.lastParticipationDate) {
       switch (this.adminConfigs.lastParticipationDate) {
         case LastParticipationDate.sameDate:
@@ -236,29 +164,6 @@ export class SeasonAdminService {
       }
     }
     return comparatorTimestamp;
-  }
-
-  getPublishableFixture(data: IDummyFixture[]) {
-    return data.map(val => ({
-      id: val.id,
-      date: val.date,
-      concluded: false,
-      home: {
-        name: MatchConstantsSecondary.TO_BE_DECIDED,
-        logo: MatchConstantsSecondary.DEFAULT_LOGO
-      },
-      away: {
-        name: MatchConstantsSecondary.TO_BE_DECIDED,
-        logo: MatchConstantsSecondary.DEFAULT_LOGO
-      },
-      teams: [MatchConstantsSecondary.TO_BE_DECIDED],
-      season: val.season,
-      premium: val.premium,
-      type: val.type,
-      locCity: val.locCity,
-      locState: val.locState,
-      stadium: val.stadium,
-    } as MatchFixture));
   }
 
   isStartDateOverlap(startDate: number, booking: GroundBooking): boolean {
@@ -294,14 +199,6 @@ export class SeasonAdminService {
     })).toPromise();
   }
 
-  async publishSeason(data: any): Promise<any> {
-    if (!data || !data.hasOwnProperty('seasonDraft') || !data.hasOwnProperty('fixturesDraft') || !data.hasOwnProperty('lastRegTimestamp')) {
-      return;
-    }
-    const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.PUBLISH_SEASON);
-    return callable(data).toPromise();
-  }
-
   getSeasonFixtureDrafts(draftID): Observable<any> {
     if (draftID) {
       return this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', draftID))
@@ -312,10 +209,6 @@ export class SeasonAdminService {
 
   getStatusClass(status: statusType): any {
     switch (status) {
-      case 'READY TO PUBLISH':
-        return { yellow: true };
-      case 'DRAFTED':
-        return { grey: true };
       case 'PUBLISHED':
         return { green: true };
       case 'FINISHED':

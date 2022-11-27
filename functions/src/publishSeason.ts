@@ -1,94 +1,79 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { GroundBooking, GroundPrivateInfo } from '@shared/interfaces/ground.model';
-import { dummyFixture, KnockoutRounds, MatchFixture } from '@shared/interfaces/match.model';
+import { IDummyFixture, KnockoutRounds, MatchFixture } from '@shared/interfaces/match.model';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo, SeasonAbout, SeasonDraft } from '@shared/interfaces/season.model';
+import { SeasonBasicInfo, SeasonAbout, ISeasonCloudFnData } from '@shared/interfaces/season.model';
 import { DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
+import { GroundBooking } from '@shared/interfaces/ground.model';
 const db = admin.firestore();
 
-export async function seasonPublish(data: any, context: any): Promise<any> {
-  if (!data || !data.hasOwnProperty('seasonDraft') || !data.hasOwnProperty('fixturesDraft') || !data.hasOwnProperty('lastRegTimestamp')) {
+export async function seasonPublish(data: ISeasonCloudFnData, context: any): Promise<any> {
+  if (!data || Object.keys(data).length === 0) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
-  const draftFixtures = data['fixturesDraft'] as dummyFixture[];
-  const draftSeason = data['seasonDraft'] as SeasonDraft;
-  const startDate = draftFixtures[0].date;
-  const endDate = draftFixtures[draftFixtures.length - 1].date;
-  const fixtures: MatchFixture[] = getPublishableFixture(draftFixtures);
-  const totalTeams = Number(draftSeason.basicInfo['participatingTeamsCount']);
+  const fixturesTemp = data.fixtures;
+  const fixtures: MatchFixture[] = getPublishableFixture(fixturesTemp.fixtures);
+  const firstFixtureTimestamp = fixtures[0].date;
 
-  if (!fixtures || !fixtures.length || !totalTeams) {
+  if (!fixtures || !fixtures.length || !data.grounds?.length) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
 
-  // Checking if ground(s) is available or not
-  if (draftSeason.grounds && await isAnyGroundBooked(draftSeason.grounds, startDate, endDate)) {
-    throw new functions.https.HttpsError('failed-precondition', 'Sorry! One or more grounds you selected is already booked!');
-  }
-
+  const lastUpdated = new Date().getTime();
   const season: SeasonBasicInfo = {
-    name: draftSeason.basicInfo?.name,
-    imgpath: draftSeason.basicInfo?.imgpath,
-    locCity: draftSeason.basicInfo?.city,
-    locState: draftSeason.basicInfo?.state,
-    premium: true,
-    p_teams: draftSeason.basicInfo?.participatingTeamsCount,
-    start_date: draftSeason.basicInfo?.startDate,
-    cont_tour: draftSeason.basicInfo?.containingTournaments,
-    feesPerTeam: draftSeason.basicInfo?.fees,
-    discount: draftSeason.basicInfo?.discount,
-    lastRegDate: data['lastRegTimestamp'],
+    name: data?.seasonDetails?.name,
+    imgpath: data?.seasonDetails?.imgpath,
+    locCity: data?.matchType?.location?.city,
+    locState: data?.matchType?.location?.state,
+    premium: data?.grounds?.length !== 0 && data?.grounds[0].ownType === 'PRIVATE',
+    p_teams: data?.matchType?.participatingTeamsCount,
+    start_date: firstFixtureTimestamp,
+    cont_tour: data?.matchType?.containingTournaments,
+    feesPerTeam: data?.seasonDetails?.fees,
+    discount: data?.seasonDetails?.discount,
+    lastRegDate: new Date(data?.seasonDetails.lastRegistrationDate).getTime(),
     status: 'PUBLISHED',
-    leftOverMatchCount: fixtures.length
+    leftOverMatchCount: fixtures.length,
+    lastUpdated,
+    createdBy: data.adminID
   };
   const seasonAbout: SeasonAbout = {
-    description: draftSeason.basicInfo?.description,
-    rules: draftSeason.basicInfo?.rules,
+    description: data?.seasonDetails?.description,
+    rules: data?.seasonDetails?.rules,
     paymentMethod: 'Online',
   };
-  if (data['lastRegTimestamp'] !== season.start_date) {
-    season['lastRegDate'] = data['lastRegTimestamp'];
+
+  // When participants are pre-selected, save allowed participants
+  if (data?.teams?.participants?.length > 0) {
+    seasonAbout.allowedParticipants = data?.teams?.participants.map(p => p.id);
   }
 
-  // Post season info
+  // season info
   const batch = db.batch();
-  const seasonRef = db.collection('seasons').doc(draftSeason.draftID);
-  const seasonMoreRef = db.collection(`seasons/${draftSeason.draftID}/additionalInfo`).doc('moreInfo');
+  const seasonRef = db.collection('seasons').doc(data.seasonID);
+  const seasonMoreRef = db.collection(`seasons/${data.seasonID}/additionalInfo`).doc('moreInfo');
   batch.set(seasonRef, season);
   batch.set(seasonMoreRef, seasonAbout);
 
-  // Update draft last updated time for admin panel
-  const lastUpdated = new Date().getTime();
-  const draftRef = db.collection(`seasonDrafts`).doc(draftSeason.draftID);
-  batch.update(draftRef, { lastUpdated, status: season.status });
-
-
-  // Book used ground(s)
-  const groundIDList = (draftSeason.grounds as GroundPrivateInfo[]).map(gr => gr.id);
-  for (let i = 0; i < groundIDList.length; i++) {
-    const groundID = groundIDList[i];
-    if (groundID) {
-      const bookingsRef = db.collection('groundBookings').doc(groundID);
-      const booking: GroundBooking = { seasonID: draftSeason.draftID, groundID, bookingFrom: startDate, bookingTo: endDate };
-      const existingBooking = (await db.collection('groundBookings').doc(groundID).get()).data() as GroundBooking;
-      if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo < endDate) {
-        batch.update(bookingsRef, { bookingFrom: startDate, bookingTo: endDate });
-      } else if (existingBooking && existingBooking.bookingFrom <= startDate && existingBooking.bookingTo < endDate) {
-        batch.update(bookingsRef, { bookingTo: endDate });
-      } else if (existingBooking && existingBooking.bookingFrom > startDate && existingBooking.bookingTo >= endDate) {
-        batch.update(bookingsRef, { bookingFrom: startDate });
-      } else {
-        batch.set(bookingsRef, booking);
+  // ground slot booking
+  const groundsList = data.grounds.filter(ground => ground.slots.length);
+  groundsList.forEach(ground => {
+    ground.slots.forEach(slot => {
+      const booking: GroundBooking = {
+        by: data.adminID,
+        slotTimestamp: slot,
+        groundID: ground.id,
       }
-    }
-  }
+      const bookingRef = db.collection('groundBookings').doc();
+      batch.create(bookingRef, booking);
+    })
+  })
 
-  // Posting empty league table if season contains league
   // Not configured for multiple leagues in a season
+  // Posting empty league table if season contains league
   if (season.cont_tour.includes('FPL')) {
-    const emptyTable = getEmptyLeagueTable(draftSeason.draftID, totalTeams);
-    const tableRef = db.collection('leagues').doc(draftSeason.draftID);
+    const emptyTable = getEmptyLeagueTable(data.seasonID, data.matchType.participatingTeamsCount);
+    const tableRef = db.collection('leagues').doc(data.seasonID);
     if (emptyTable) {
       batch.set(tableRef, { ...emptyTable });
     }
@@ -98,7 +83,7 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
   if (season.cont_tour.includes('FKC')) {
     const knockoutFixtures = fixtures.filter(el => el.type === 'FKC');
     knockoutFixtures.sort(sortObjectByKey('date'));
-    const roundsList = getRoundsList(totalTeams);
+    const roundsList = getRoundsList(data.matchType.participatingTeamsCount);
     knockoutFixtures.map((fixture, index) => {
       const data: MatchFixture = fixture;
       data.fkcRound = roundsList[index] as KnockoutRounds;
@@ -121,19 +106,10 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
     }
   });
 
-  // Delete draft fixture(s)
-  draftFixtures.forEach(element => {
-    const draftFixtureID = element.id;
-    if (draftFixtureID) {
-      const draftRef = db.collection('seasonFixturesDrafts').doc(draftFixtureID);
-      batch.delete(draftRef);
-    }
-  });
-
   return batch.commit();
 }
 
-export function getPublishableFixture(data: dummyFixture[]) {
+export function getPublishableFixture(data: IDummyFixture[]) {
   return data.map(val => ({
     id: val.id,
     date: val.date,
@@ -156,20 +132,6 @@ export function getPublishableFixture(data: dummyFixture[]) {
   } as MatchFixture));
 }
 
-export async function isAnyGroundBooked(grounds: GroundPrivateInfo[], startDate: number, endDate: number): Promise<boolean> {
-  if (startDate && endDate) {
-    for (let i = 0; i < grounds.length; i++) {
-      const bookingsList: GroundBooking[] = (await getBookingsForGround(grounds[i])).docs.map(res => (res.data() as GroundBooking));
-      if (!bookingsList.length) {
-        continue;
-      } else {
-        return bookingsList.some(booking => isBookingOverlap(startDate, endDate, booking));
-      }
-    }
-  }
-  return false;
-}
-
 export function getEmptyLeagueTable(seasonID: string, teamsCount: number): LeagueTableModel[] {
   if (seasonID && teamsCount) {
     const table: LeagueTableModel[] = [];
@@ -186,14 +148,6 @@ export function getEmptyLeagueTable(seasonID: string, teamsCount: number): Leagu
     return table;
   }
   return [];
-}
-
-export function getBookingsForGround(ground: GroundPrivateInfo): Promise<FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>> {
-  return db.collection('groundBookings').where('groundID', '==', ground['id']).get();
-}
-
-export function isBookingOverlap(startDate: number, endDate: number, booking: GroundBooking): boolean {
-  return (startDate <= booking.bookingTo) && (booking.bookingFrom <= endDate);
 }
 
 export function getRoundsList(totalTeams: number): number[] {

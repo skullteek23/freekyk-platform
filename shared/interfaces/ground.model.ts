@@ -34,6 +34,36 @@ export interface GroundBooking {
   groundID: string;
 }
 
+export interface IGroundInfo {
+  name: string;
+  imgpath: string;
+  locCity: string;
+  locState: string;
+  fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
+  ownType: GROUND_TYPES;
+  playLvl: 'good' | 'best' | 'fair';
+  id: string;
+  referee: boolean;
+  foodBev: boolean;
+  parking: boolean;
+  goalpost: boolean;
+  washroom: boolean;
+  staff: boolean;
+  signedContractFileLink: string;
+  contractStartDate: number;
+  contractEndDate: number;
+  timings: any;
+}
+
+export interface IGroundSelection {
+  id: string,
+  locCity: string;
+  locState: string;
+  name: string;
+  ownType: GROUND_TYPES
+  slots: number[]
+}
+
 // grounds/{{GROUND-ID}}
 // groundContracts/{{GROUND-ID}}
 // grounds/{{GROUND-ID}}/additionalInfo/moreInfo

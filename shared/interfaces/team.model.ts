@@ -73,3 +73,8 @@ export class TeamStats {
   g_conceded = 0;
   pr_tour_wins?= 0;
 }
+
+export interface ITeamInfo {
+  id: string;
+  name: string;
+}

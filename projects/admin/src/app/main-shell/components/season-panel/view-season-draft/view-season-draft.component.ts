@@ -237,17 +237,17 @@ export class ViewSeasonDraftComponent implements OnInit {
             fixturesDraft: this.seasonFixtures,
             lastRegTimestamp: this.lastRegistrationDate.getTime()
           };
-          this.seasonAdminService.publishSeason(data)
-            .then(() => {
-              this.setLoadingStatus(LOADING_STATUS.DONE);
-              setTimeout(() => {
-                this.getDraftInfo();
-              }, 5000);
-            })
-            .catch(error => {
-              this.snackbarService.displayError(error?.message);
-              this.setLoadingStatus(LOADING_STATUS.DEFAULT);
-            });
+          // this.seasonAdminService.publishSeason(data)
+          //   .then(() => {currentDate
+          //     this.setLoadingStatus(LOADING_STATUS.DONE);
+          //     setTimeout(() => {
+          //       this.getDraftInfo();
+          //     }, 5000);
+          //   })
+          //   .catch(error => {
+          //     this.snackbarService.displayError(error?.message);
+          //     this.setLoadingStatus(LOADING_STATUS.DEFAULT);
+          //   });
         }
       });
   }
@@ -367,7 +367,7 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   get maxRegisDate(): Date {
     const config = this.seasonAdminService.getAdminConfig();
-    return new Date(this.seasonAdminService.getMappedDateRange(this.seasonDraftData?.basicInfo?.startDate));
+    return new Date();
   }
 
   get payableFees(): number {

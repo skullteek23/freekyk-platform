@@ -3,14 +3,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { TeamBasicInfo } from '@shared/interfaces/team.model';
+import { ISelectTeam, ISelectMatchType } from '@shared/interfaces/season.model';
+import { ITeamInfo, TeamBasicInfo } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
-import { ISelectMatchType, ISelectTeam } from '../../create-season.component';
 
-export interface ITeamInfo {
-  id: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-select-teams',

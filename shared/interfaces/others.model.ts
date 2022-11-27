@@ -262,3 +262,12 @@ export interface LocationDetails {
   state: string;
   country: string;
 }
+export interface IFilter {
+  city: string;
+  referee: boolean;
+  foodBev: boolean;
+  parking: boolean;
+  goalpost: boolean;
+  washroom: boolean;
+  staff: boolean;
+}
