@@ -19,6 +19,7 @@ import { UpdateMatchReportComponent } from '../update-match-report/update-match-
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-view-season-draft',
@@ -337,7 +338,8 @@ export class ViewSeasonDraftComponent implements OnInit {
 
   goToURL() {
     if (this.seasonDraftData?.basicInfo?.name) {
-      window.open(`${MatchConstants.SEASON_URL}${this.seasonDraftData.basicInfo.name}`, '_blank');
+      const SEASON_URL = environment?.firebase?.url + '/s/';
+      window.open(`${SEASON_URL}${this.seasonDraftData.basicInfo.name}`, '_blank');
     }
   }
 

@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
-import { environment } from 'environments/environment';
+import { environment } from "environments/environment";
 
 export class MatchConstants {
   static readonly GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
@@ -27,7 +25,6 @@ export class MatchConstants {
     MIN: 1,
     MAX: 90,
   };
-  static readonly SEASON_URL = environment?.firebase?.url + '/s/';
   static readonly LABEL_NOT_AVAILABLE = 'N/A';
   static readonly JOINING_CHARACTER = ', ';
   static readonly LARGE_TEXT_CHARACTER_LIMIT = 2000;
