@@ -25,7 +25,7 @@
     <!-- grounds -->
     <mat-grid-list *ngIf="noGrounds == false; else placeholder" [cols]="columns" gutterSize="20px">
       <mat-grid-tile appElevateOnHover *ngFor="let ground of grounds$ | async">
-        <div class="groundContainer" [ngClass]="{ 'premiumBorder-2': ground.ownType == 'FK' }">
+        <div class="groundContainer" [ngClass]="{ 'premiumBorder-2': ground.ownType == 'PRIVATE' }">
           <img [routerLink]="['/ground', ground.id]" class="box-image" [src]="ground.imgpath" alt="Football Ground" />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/ground', ground.id]" fxLayout="column" fxLayoutAlign="center start">
