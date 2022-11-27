@@ -19,7 +19,7 @@ import { AddSeasonComponent } from './components/season-panel/create-season/comp
 import { ChipSelectionInputComponent } from './components/season-panel/chip-selection-input/chip-selection-input.component';
 import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
 import { FixtureTableComponent } from './components/season-panel/fixture-table/fixture-table.component';
-import { GenerateFixturesComponent } from './components/season-panel/create-season/components/generate-fixtures/generate-fixtures.component';
+import { GenerateFixturesComponent } from './components/season-panel/generate-fixtures/generate-fixtures.component';
 import { LineInfoDisplayComponent } from './components/season-panel/line-info-display/line-info-display.component';
 import { RequestDialogComponent } from './components/season-panel/request-dialog/request-dialog.component';
 import { SeasonPanelComponent } from './components/season-panel/season-panel.component';
@@ -41,6 +41,8 @@ import { GroundSlotsComponent } from './components/season-panel/create-season/co
 import { GroundSlotSelectionComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slot-selection/ground-slot-selection.component';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
+import { AdminPaymentComponent } from './components/season-panel/create-season/components/admin-payment/admin-payment.component';
+import { ViewSummaryComponent } from './components/season-panel/create-season/components/view-summary/view-summary.component';
 
 const routes: Routes = [
   {
@@ -94,7 +96,9 @@ const routes: Routes = [
     SelectGroundComponent,
     GroundFiltersComponent,
     GroundSlotsComponent,
-    GroundSlotSelectionComponent
+    GroundSlotSelectionComponent,
+    AdminPaymentComponent,
+    ViewSummaryComponent
   ],
   imports: [
     CommonModule,

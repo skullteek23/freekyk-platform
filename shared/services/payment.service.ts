@@ -1,13 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../../src/app/dashboard/constants/constants';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { share } from 'rxjs/operators';
 declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
+
+export interface IRazorPayOptions {
+  key: string,
+  currency: string,
+  name: string,
+  image: string,
+  theme: {
+    color: string,
+  },
+  retry: {
+    max_count: number,
+  },
+  confirm_close: boolean,
+  description: string;
+  handler: () => Promise<any>;
+  amount: number;
+  order_id: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +34,7 @@ export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 export class PaymentService {
 
   private loadingStatusChanged = new BehaviorSubject<PAYMENT_TYPE>(HOME);
+  private paymentStatusAdmin = new Subject<any>();
 
   constructor(
     private ngFunc: AngularFireFunctions,
@@ -38,20 +58,28 @@ export class PaymentService {
     };
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
-    razorpayInstance.on('payment.failed', this.handleFailure);
+    razorpayInstance.on('payment.failed', this.handleFailure.bind(this, '/dashboard/error'));
   }
 
-  openAdminCheckoutPage(orderId: string): void {
-    const options = {
+  async openAdminCheckoutPage(orderId: string): Promise<any> {
+    const options: IRazorPayOptions = {
       ...UNIVERSAL_OPTIONS,
       description: `Tournament Organizer Fees`,
-      handler: this.handleSuccess.bind(this),
+      handler: this.handleAdminSuccess.bind(this),
       amount: 1000,
       order_id: orderId,
     };
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
-    razorpayInstance.on('payment.failed', this.handleFailure);
+    razorpayInstance.on('payment.failed', this.handleFailure.bind(this, '/error'));
+  }
+
+  handleAdminSuccess(response) {
+    if (response) {
+      setTimeout(() => {
+        this.paymentStatusAdmin.next({ ...response, status: true });
+      }, 3000);
+    }
   }
 
   handleSuccess(season, tid, response): void {
@@ -67,18 +95,18 @@ export class PaymentService {
           ? this.handleFailure({
             description: 'Payment Failed! Unauthorized payment source.',
             code: '501',
-          })
+          }, '/dashboard/error')
           : this.handleFailure({
             description: 'Payment Failed! Try again later',
             code: '401',
-          });
+          }, '/dashboard/error');
       }
       );
   }
 
-  handleFailure(error): void {
+  handleFailure(error, route: string): void {
     alert(error.description);
-    this.router.navigate(['/dashboard/error'], { state: { message: error.description, code: error.code } });
+    this.router.navigate([route], { state: { message: error.description, code: error.code } });
   }
 
   onLoadingStatusChange(status: PAYMENT_TYPE): void {
@@ -94,5 +122,9 @@ export class PaymentService {
       return 1;
     }
     return (fees - ((discount / 100) * fees));
+  }
+
+  get _paymentStatusAdmin(): Subject<any> {
+    return this.paymentStatusAdmin;
   }
 }

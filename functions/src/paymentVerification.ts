@@ -13,7 +13,6 @@ const db = admin.firestore();
 
 export async function paymentVerification(data: any, context: any): Promise<any> {
 
-
   const ORDER_ID = data && data.razorpay_order_id ? data.razorpay_order_id : null;
   const PAYMENT_ID = data && data.razorpay_payment_id ? data.razorpay_payment_id : null;
   const SIGNATURE = data && data.razorpay_signature ? data.razorpay_signature : null;

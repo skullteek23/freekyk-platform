@@ -7,6 +7,11 @@ import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
 import { ISelectMatchType, ISelectTeam } from '../../create-season.component';
 
+export interface ITeamInfo {
+  id: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-select-teams',
   templateUrl: './select-teams.component.html',
@@ -18,8 +23,7 @@ export class SelectTeamsComponent implements OnInit {
 
   isLoaderShown = false;
   teamSelectForm: FormGroup;
-  teamsCountList = [];
-  teamList: TeamBasicInfo[] = [];
+  teamList: ITeamInfo[] = [];
 
   constructor(
     private ngFire: AngularFirestore,
@@ -45,7 +49,7 @@ export class SelectTeamsComponent implements OnInit {
     this.isLoaderShown = true;
     this.ngFire.collection('teams').get()
       .pipe(
-        map(response => response.empty ? [] : response.docs.map(doc => ({ id: doc.id, ...doc.data() as TeamBasicInfo } as TeamBasicInfo)))
+        map(response => response.empty ? [] : response.docs.map(doc => ({ id: doc.id, name: (doc.data() as TeamBasicInfo).tname } as ITeamInfo)))
       )
       .subscribe({
         next: (response) => {
@@ -69,7 +73,7 @@ export class SelectTeamsComponent implements OnInit {
     this.initControls(selectMatchTypeFormData?.participatingTeamsCount, selectTeamFormData?.participants);
   }
 
-  initControls(limit: number, values: string[]): void {
+  initControls(limit: number, values: ITeamInfo[]): void {
     if (!limit) {
       this.participants.reset();
       return;
@@ -91,6 +95,10 @@ export class SelectTeamsComponent implements OnInit {
       }
       return null;
     };
+  }
+
+  compareFunction(a: ITeamInfo, b: ITeamInfo): boolean {
+    return a && b ? a.id === b.id : a === b;
   }
 
   get participants(): FormArray {

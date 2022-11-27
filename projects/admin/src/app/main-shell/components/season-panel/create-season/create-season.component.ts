@@ -4,12 +4,14 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
 import { AddSeasonComponent } from './components/add-season/add-season.component';
 import { SelectMatchTypeComponent } from './components/select-match-type/select-match-type.component';
-import { SelectTeamsComponent } from './components/select-teams/select-teams.component';
+import { ITeamInfo, SelectTeamsComponent } from './components/select-teams/select-teams.component';
 import { IGroundSelection, SelectGroundComponent } from './components/select-ground/select-ground.component';
 import { SeasonAdminService } from '../season-admin.service';
 import { seasonFlowMessages } from '@shared/constants/messages';
-import { TournamentTypes } from '@shared/interfaces/match.model';
+import { IDummyFixture, TournamentTypes } from '@shared/interfaces/match.model';
 import { MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
+import { AdminPaymentComponent } from './components/admin-payment/admin-payment.component';
+import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
 
 export interface ISelectMatchType {
   package: MATCH_TYPES_PACKAGES;
@@ -32,8 +34,12 @@ export interface ISeasonDetails {
   discount: number;
 }
 
+export interface ISeasonFixtures {
+  fixtures: IDummyFixture[]
+}
+
 export interface ISelectTeam {
-  participants: string[];
+  participants: ITeamInfo[];
 }
 
 export type ISelectGrounds = IGroundSelection[];
@@ -49,6 +55,8 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   @ViewChild(SelectTeamsComponent) selectTeamsComponent: SelectTeamsComponent;
   @ViewChild(SelectGroundComponent) selectGroundComponent: SelectGroundComponent;
   @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
+  @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
+  @ViewChild(AdminPaymentComponent) adminPaymentComponent: AdminPaymentComponent;
 
   readonly messages = seasonFlowMessages;
 
@@ -61,7 +69,8 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     private seasonAdminService: SeasonAdminService
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnDestroy(): void {
     if (this.subscriptions) {
@@ -85,6 +94,7 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   }
 
   onSkipAndSaveTeam(stepper: MatHorizontalStepper) {
+    sessionStorage.removeItem('selectTeam');
     this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
     stepper.next();
   }
@@ -97,6 +107,14 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     }
   }
 
+  onConfirmFixtures(stepper: MatHorizontalStepper) {
+    if (this.fixturesForm.valid) {
+      this.errorMessage = '';
+      sessionStorage.setItem('seasonFixtures', JSON.stringify(this.fixturesForm.value));
+      stepper.next();
+    }
+  }
+
   onSaveDetails(stepper: MatHorizontalStepper) {
     if (this.detailsForm?.valid) {
       sessionStorage.setItem('seasonDetails', JSON.stringify(this.detailsForm.value));
@@ -104,8 +122,14 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     }
   }
 
-  onConfirmFixtures(stepper: MatHorizontalStepper) {
-    stepper.next();
+  onFinishPayment(stepper: MatHorizontalStepper) {
+    if (this.paymentForm.valid) {
+      stepper.next();
+    }
+  }
+
+  onPublishSeason() {
+    console.log('publishing');
   }
 
   isValidGroundSelection(): boolean {
@@ -141,6 +165,15 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   get detailsForm(): FormGroup {
     return this.addSeasonComponent?.detailsForm;
   }
+
+  get fixturesForm(): FormGroup {
+    return this.generateFixturesComponent?.fixturesForm;
+  }
+
+  get paymentForm(): FormGroup {
+    return this.adminPaymentComponent?.paymentForm;
+  }
+
   // navigateToDraftAndClose(draftID) {
   //   this.router.navigate(['/seasons/s/' + draftID]);
   // }

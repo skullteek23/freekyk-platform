@@ -1,65 +1,26 @@
-<article
-  *ngIf="!isLoading; else loading"
-  class="container section-space-top section-space-bottom"
-  fxLayout="column"
-  fxLayoutGap="32px"
-  fxLayoutGap.lt-md="20px"
-  fxLayoutAlign="stretch center"
->
+<article *ngIf="!isLoading; else loading" class="container section-space-top section-space-bottom" fxLayout="column"
+  fxLayoutGap="32px" fxLayoutGap.lt-md="20px" fxLayoutAlign="stretch center">
   <h2 class="mat-title center">
     {{ isViewLogin() ? "Log In" : "Get Started" }}
   </h2>
-  <div
-    class="signin-buttons"
-    fxLayout="column"
-    fxLayoutGap="8px"
-    fxLayoutAlign="stretch center"
-  >
-    <button
-      (click)="onGoogleLogin()"
-      [disabled]="disableAllButtons"
-      class="buttonText secondaryButton wb"
-      fxLayoutAlign="center center"
-      fxLayoutGap="8px"
-      fxLayout
-    >
+  <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+    <button (click)="onGoogleLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
       <img class="iconSize" src="../../assets/svgs/google.svg" alt="Google" />
       <span> Continue with Google </span>
     </button>
-    <button
-      (click)="onFacebookLogin()"
-      [disabled]="disableAllButtons"
-      class="buttonText secondaryButton wb"
-      fxLayoutAlign="center center"
-      fxLayoutGap="8px"
-      fxLayout
-    >
-      <img
-        class="iconSize"
-        src="../../assets/svgs/facebook.svg"
-        alt="Facebook"
-      />
+    <button (click)="onFacebookLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" />
       <span> Continue with Facebook </span>
     </button>
   </div>
   <mat-divider></mat-divider>
-  <form
-    [formGroup]="formData"
-    (ngSubmit)="onSubmit()"
-    fxLayout="column"
-    fxLayoutGap="8px"
-    fxLayoutAlign="stretch center"
-    class="auth-form"
-  >
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutGap="8px"
+    fxLayoutAlign="stretch center" class="auth-form">
     <mat-form-field *ngIf="!isViewLogin()" appearance="outline" color="primary">
       <mat-label>Enter full name</mat-label>
-      <input
-        type="text"
-        autocomplete="name"
-        matInput
-        name="name"
-        formControlName="name"
-      />
+      <input type="text" autocomplete="name" matInput name="name" formControlName="name" />
       <mat-error *ngIf="formData.get('name')?.hasError('pattern')">
         Invalid Name! Please try again
       </mat-error>
@@ -69,13 +30,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Enter email address</mat-label>
-      <input
-        type="email"
-        matInput
-        name="email"
-        autocomplete="email"
-        formControlName="email"
-      />
+      <input type="email" matInput name="email" autocomplete="email" formControlName="email" />
       <mat-error *ngIf="formData.get('email')?.hasError('pattern')">
         Invalid email! Please try again
       </mat-error>
@@ -85,21 +40,12 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Choose a password</mat-label>
-      <input
-        autocomplete="current-password"
-        type="password"
-        matInput
-        name="pass"
-        formControlName="pass"
-      />
-      <mat-hint
-        *ngIf="!isViewLogin() && formData.get('pass')?.value?.length < 8"
-        align="end"
-      >
+      <input autocomplete="current-password" type="password" matInput name="pass" formControlName="pass" />
+      <mat-hint *ngIf="!isViewLogin() && formData.get('pass')?.value?.length < 8" align="end">
         {{
-          formData.get("pass")?.value?.length > 0
-            ? formData.get("pass")?.value?.length
-            : 0
+        formData.get("pass")?.value?.length > 0
+        ? formData.get("pass")?.value?.length
+        : 0
         }}
         / 8
       </mat-hint>
@@ -111,19 +57,12 @@
         Required Field!
       </mat-error>
     </mat-form-field>
-    <a
-      *ngIf="isViewLogin()"
-      (click)="onForgotPassword()"
-      class="forgot_password center"
-    >
+    <a *ngIf="isViewLogin()" (click)="onForgotPassword()" class="forgot_password center">
       Forgot Password?
     </a>
     <app-loading *ngIf="isLoading"></app-loading>
-    <button
-      type="submit"
-      [disabled]="!formData.valid || isLoading || disableAllButtons"
-      class="buttonText primaryButton wb"
-    >
+    <button type="submit" [disabled]="!formData.valid || isLoading || disableAllButtons"
+      class="buttonText primaryButton wb">
       {{ isViewLogin() ? "Login" : "Take me to Dashboard" }}
     </button>
     <span *ngIf="isViewLogin(); else signinShortcut" class="mat-caption center">
@@ -139,9 +78,9 @@
   </form>
   <p class="mat-caption center">
     {{
-      "By clicking 'Continue with Google/Facebook' or '" +
-        (isViewLogin() ? "Login" : "Take me to Dashboard") +
-        "' above, you acknowledge that you have read and understood, and agree to"
+    "By clicking 'Continue with Google/Facebook' or '" +
+    (isViewLogin() ? "Login" : "Take me to Dashboard") +
+    "' above, you acknowledge that you have read, understood and agree to"
     }}
     <a [routerLink]="['/terms']">Freekyk's Terms & Conditions</a> and
     <a [routerLink]="['/privacypolicy']">Privacy Policy</a> .
