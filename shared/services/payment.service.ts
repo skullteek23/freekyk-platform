@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../dashboard/constants/constants';
+import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../../src/app/dashboard/constants/constants';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { UNIVERSAL_OPTIONS, RazorPayAPI } from '@shared/Constants/RAZORPAY';
+import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
@@ -13,13 +13,21 @@ export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
   providedIn: 'root',
 })
 export class PaymentService {
+
   private loadingStatusChanged = new BehaviorSubject<PAYMENT_TYPE>(HOME);
+
+  constructor(
+    private ngFunc: AngularFireFunctions,
+    private router: Router
+  ) { }
+
   generateOrder(amount: number): Promise<any> {
     // order generation can only be handled from backend, confirmed by razorpay team
     const generatorFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER);
     return generatorFunc({ amount }).toPromise();
   }
-  openCheckoutPage(orderId: string, season: SeasonBasicInfo, teamId: string): void {
+
+  openCaptainCheckoutPage(orderId: string, season: SeasonBasicInfo, teamId: string): void {
     const fees = this.getFeesAfterDiscount(season.feesPerTeam, season.discount)?.toString();
     const options = {
       ...UNIVERSAL_OPTIONS,
@@ -32,6 +40,20 @@ export class PaymentService {
     razorpayInstance.open();
     razorpayInstance.on('payment.failed', this.handleFailure);
   }
+
+  openAdminCheckoutPage(orderId: string): void {
+    const options = {
+      ...UNIVERSAL_OPTIONS,
+      description: `Tournament Organizer Fees`,
+      handler: this.handleSuccess.bind(this),
+      amount: 1000,
+      order_id: orderId,
+    };
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+    razorpayInstance.on('payment.failed', this.handleFailure);
+  }
+
   handleSuccess(season, tid, response): void {
     this.onLoadingStatusChange('loading');
     const uid = localStorage.getItem('uid');
@@ -53,24 +75,24 @@ export class PaymentService {
       }
       );
   }
+
   handleFailure(error): void {
     alert(error.description);
     this.router.navigate(['/dashboard/error'], { state: { message: error.description, code: error.code } });
   }
+
   onLoadingStatusChange(status: PAYMENT_TYPE): void {
     this.loadingStatusChanged.next(status);
   }
+
   getLoadingStatus(): BehaviorSubject<PAYMENT_TYPE> {
     return this.loadingStatusChanged;
   }
+
   getFeesAfterDiscount(fees: number, discount: number): number {
     if (fees === 0) {
       return 1;
     }
     return (fees - ((discount / 100) * fees));
   }
-  constructor(
-    private ngFunc: AngularFireFunctions,
-    private router: Router
-  ) { }
 }

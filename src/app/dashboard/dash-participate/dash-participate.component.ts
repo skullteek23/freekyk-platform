@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, share, take } from 'rxjs/operators';
-import { PaymentService, PAYMENT_TYPE } from 'src/app/services/payment.service';
+import { PaymentService, PAYMENT_TYPE } from '@shared/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { OrderBasic } from '@shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants } from '@shared/interfaces/season.model';
@@ -124,7 +124,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       .then((res) => {
         if (res) {
           this.paymentServ.onLoadingStatusChange('home');
-          this.paymentServ.openCheckoutPage(res.id, season, teamId);
+          this.paymentServ.openCaptainCheckoutPage(res.id, season, teamId);
         }
       })
       .catch(() => {

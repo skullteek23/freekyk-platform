@@ -1,8 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { environment } from 'environments/environment';
 
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
 export const RazorPayAPI = new InjectionToken<any>('razorPay');
 export const UNIVERSAL_OPTIONS = {
   key: environment.razorPay.key_id,

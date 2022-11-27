@@ -49,7 +49,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from '../../../shared/services/location-cities.service';
 import { environment } from 'environments/environment';
 import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
-import { PaymentService } from '../services/payment.service';
+import { PaymentService } from '../../../shared/services/payment.service';
 import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 import { PlayerService } from '../services/player.service';
 import { TeamService } from '../services/team.service';
