@@ -1,7 +1,7 @@
 import { Component, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { dummyFixture } from '@shared/interfaces/match.model';
+import { IDummyFixture } from '@shared/interfaces/match.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from '@shared/constants/constants';
 
@@ -12,7 +12,7 @@ import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from
 })
 export class FixtureTableComponent {
 
-  @Input() set data(value: dummyFixture[]) {
+  @Input() set data(value: IDummyFixture[]) {
     const currentDate = new Date().getTime();
     const dummyFixturesTemp = value.map(val => ({
       [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,

@@ -15,11 +15,11 @@ import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
 import { RegistrationsPanelComponent } from './components/registrations-panel/registrations-panel.component';
 import { MainShellComponent } from './main-shell.component';
-import { AddSeasonComponent } from './components/season-panel/add-season/add-season.component';
+import { AddSeasonComponent } from './components/season-panel/create-season/components/add-season/add-season.component';
 import { ChipSelectionInputComponent } from './components/season-panel/chip-selection-input/chip-selection-input.component';
 import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
 import { FixtureTableComponent } from './components/season-panel/fixture-table/fixture-table.component';
-import { GenerateFixturesComponent } from './components/season-panel/generate-fixtures/generate-fixtures.component';
+import { GenerateFixturesComponent } from './components/season-panel/create-season/components/generate-fixtures/generate-fixtures.component';
 import { LineInfoDisplayComponent } from './components/season-panel/line-info-display/line-info-display.component';
 import { RequestDialogComponent } from './components/season-panel/request-dialog/request-dialog.component';
 import { SeasonPanelComponent } from './components/season-panel/season-panel.component';
@@ -36,6 +36,11 @@ import {
 import { SelectTeamsComponent } from './components/season-panel/create-season/components/select-teams/select-teams.component';
 import { TeamSelectionListComponent } from './components/season-panel/team-selection-list/team-selection-list.component';
 import { SelectGroundComponent } from './components/season-panel/create-season/components/select-ground/select-ground.component';
+import { GroundFiltersComponent } from './components/season-panel/create-season/components/select-ground/components/ground-filters/ground-filters.component';
+import { GroundSlotsComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slots/ground-slots.component';
+import { GroundSlotSelectionComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slot-selection/ground-slot-selection.component';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 
 const routes: Routes = [
   {
@@ -86,7 +91,10 @@ const routes: Routes = [
     SelectMatchTypeComponent,
     SelectTeamsComponent,
     TeamSelectionListComponent,
-    SelectGroundComponent
+    SelectGroundComponent,
+    GroundFiltersComponent,
+    GroundSlotsComponent,
+    GroundSlotSelectionComponent
   ],
   imports: [
     CommonModule,
@@ -103,6 +111,10 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule],
-  providers: [DatePipe]
+  providers: [
+    DatePipe,
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS }
+  ]
 })
 export class MainShellModule { }

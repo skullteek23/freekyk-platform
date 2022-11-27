@@ -1,0 +1,16 @@
+.slot-container {
+  max-height: 700px;
+  overflow-y: auto;
+  padding: 8px;
+  ul {
+    li {
+      height: 400px;
+      background-color: var(--grey5);
+      border-radius: var(--borderRadiusCard);
+      overflow: hidden;
+    }
+    li:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+}

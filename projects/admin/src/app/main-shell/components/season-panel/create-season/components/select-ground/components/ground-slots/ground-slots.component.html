@@ -1,0 +1,8 @@
+<div class="slot-container">
+  <ul>
+    <li *ngFor="let ground of groundsList">
+      <app-ground-slot-selection [ground]="ground"></app-ground-slot-selection>
+    </li>
+  </ul>
+  <app-no-items-message items="grounds" *ngIf="!groundsList.length"></app-no-items-message>
+</div>

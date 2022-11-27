@@ -61,12 +61,6 @@
   </div>
 
   <div>
-    <h4>Maintenance Facility</h4>
-    <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.mainten ? "Yes" : "No" }}
-    </p>
-  </div>
-  <div>
     <h4>Play Level</h4>
     <p class="mat-body-1">
       {{ (groundInfo$ | async)?.playLvl | titlecase }}
@@ -75,17 +69,7 @@
   <div>
     <h4>Goalpost Available</h4>
     <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.goalp ? "Yes" : "No" }}
-    </p>
-  </div>
-  <div>
-    <h4>Optimum Time To Play Football</h4>
-    <p class="mat-body-1">
-      {{
-      ((groundMoreInfo$ | async)?.opmTimeStart | date: "shortTime") +
-      " - " +
-      ((groundMoreInfo$ | async)?.opmTimeEnd | date: "shortTime")
-      }}
+      {{ (groundMoreInfo$ | async)?.goalpost ? "Yes" : "No" }}
     </p>
   </div>
 </section>

@@ -824,7 +824,7 @@ app-fixture-table {
 
 .create-season-container .fixture-table-container {
   height: 100%;
-  max-height: 280px;
+  max-height: 500px;
   padding: 0px;
   overflow: hidden;
   overflow-y: auto;
@@ -923,6 +923,35 @@ app-fixture-table {
         display: inline-flex;
         margin-left: auto;
       }
+    }
+  }
+}
+
+.mat-tab-group {
+  .mat-tab-label-container {
+    .mat-tab-label-active {
+      background-color: var(--primaryColor);
+      color: white;
+      border-radius: 10px 10px 0px 0px;
+    }
+  }
+}
+
+#admin-select-ground-filter-form {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+#selected-availabilities {
+  mat-chip-list {
+    .mat-chip-list-wrapper {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-y: auto;
+      height: 140px;
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 }

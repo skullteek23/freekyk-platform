@@ -18,6 +18,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '@shared/shared.module';
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 
 const routes: Routes = [
   {
@@ -69,7 +71,9 @@ const routes: Routes = [
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },
-    DatePipe
+    DatePipe,
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS }
   ],
   bootstrap: [AppComponent],
 })

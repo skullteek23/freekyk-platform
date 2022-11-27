@@ -173,7 +173,6 @@ const customConfig: ShareButtonsConfig = {
     SharesheetmobileComponent,
     SharesheetComponent,
     WeightPipe,
-    NumberToAMPMPipe,
     StrongFootPipe,
     HeightPipe,
     GenderPipe,
@@ -189,7 +188,8 @@ const customConfig: ShareButtonsConfig = {
     SearchAutocompleteComponent,
     PhotoUploaderComponent,
     FileUploaderComponent,
-    ActionStripComponent,
+    NumberToAMPMPipe,
+    ActionStripComponent
   ],
 })
 export class SharedModule { }

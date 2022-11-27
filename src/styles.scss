@@ -49,7 +49,7 @@ ul {
   list-style: none;
 }
 
-p>ul {
+p > ul {
   list-style: disc !important;
   padding-left: 16px !important;
 }
@@ -59,7 +59,7 @@ button:disabled {
 }
 
 @media only screen and (max-width: 959px) {
-  p>ul {
+  p > ul {
     display: none;
   }
 }
@@ -82,11 +82,7 @@ a:hover {
 
 .shine {
   background: #f6f7f8;
-  background-image: linear-gradient(to right,
-      #f6f7f8 0%,
-      #edeef1 20%,
-      #f6f7f8 40%,
-      #f6f7f8 100%);
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
   background-size: 800px 104px;
   display: inline-block;
   position: relative;
@@ -430,7 +426,6 @@ mat-table {
 
 /* media queries - (max-width: 599px) */
 @media only screen and (max-width: 599px) {
-
   .mat-list-item,
   .mat-list-item-content,
   .mat-table,

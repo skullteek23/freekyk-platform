@@ -24,7 +24,7 @@ export interface MatchFixture {
   id?: string;
   tie_breaker?: string;
   stadium?: string;
-  fkcRound?: KnockoutRounds; // can be 2, 4, 8, 16
+  fkcRound?: KnockoutRounds;
 }
 export interface MatchFixtureOverview {
   ref: string;
@@ -71,7 +71,7 @@ export interface tempFullFixtureData {
   overview: MatchFixtureOverview;
   lineup: MatchLineup;
 }
-export interface dummyFixture {
+export interface IDummyFixture {
   date: number;
   concluded: boolean;
   season: string;

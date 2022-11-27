@@ -6,6 +6,7 @@ import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
+import { ISelectMatchType } from '../../create-season.component';
 
 @Component({
   selector: 'app-select-match-type',
@@ -64,20 +65,20 @@ export class SelectMatchTypeComponent implements OnInit {
   }
 
   getLastSavedData() {
-    const formValue = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    if (formValue) {
+    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    if (selectMatchTypeFormData) {
       this.matchSelectForm?.patchValue({
-        ...formValue
+        ...selectMatchTypeFormData
       });
-      if (formValue.hasOwnProperty('location')) {
-        this.onSelectCountry(formValue?.location?.country);
-        this.onSelectState(formValue?.location?.state);
+      if (selectMatchTypeFormData.hasOwnProperty('location')) {
+        this.onSelectCountry(selectMatchTypeFormData?.location?.country);
+        this.onSelectState(selectMatchTypeFormData?.location?.state);
       }
-      if (formValue.hasOwnProperty('package')) {
-        this.showAdditionFields = this.isPackageCustom(formValue.package);
+      if (selectMatchTypeFormData.hasOwnProperty('package')) {
+        this.showAdditionFields = this.isPackageCustom(selectMatchTypeFormData.package);
       }
-      if (formValue.hasOwnProperty('participatingTeamsCount')) {
-        this.evaluateAvailableMatchType(formValue.participatingTeamsCount);
+      if (selectMatchTypeFormData.hasOwnProperty('participatingTeamsCount')) {
+        this.evaluateAvailableMatchType(selectMatchTypeFormData.participatingTeamsCount);
       }
     }
   }
@@ -111,12 +112,15 @@ export class SelectMatchTypeComponent implements OnInit {
     if (value === MATCH_TYPES_PACKAGES.PackageOne) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(2);
       this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+      this.showAdditionFields = false;
     } else if (value === MATCH_TYPES_PACKAGES.PackageTwo) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(4);
-      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+      this.matchSelectForm.get('containingTournaments').setValue(['FKC']);
+      this.showAdditionFields = false;
     } else if (value === MATCH_TYPES_PACKAGES.PackageThree) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(4);
-      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+      this.matchSelectForm.get('containingTournaments').setValue(['FPL']);
+      this.showAdditionFields = false;
     } else {
       this.matchSelectForm.get('participatingTeamsCount').reset();
       this.matchSelectForm.get('containingTournaments').reset();

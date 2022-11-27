@@ -149,9 +149,10 @@ export class SelectGroundsComponent implements OnInit, OnDestroy {
   }
 
   getUnavailability(groundID: string): string {
-    const booking = this.getBooking(groundID);
-    const unavailableFrom = this.datePipe.transform(booking.bookingFrom, 'mediumDate');
-    const unavailableTo = this.datePipe.transform(booking.bookingTo, 'mediumDate');
-    return `Ground not available from ${unavailableFrom} till ${unavailableTo}`;
+    // const booking = this.getBooking(groundID);
+    // const unavailableFrom = this.datePipe.transform(booking.bookingFrom, 'mediumDate');
+    // const unavailableTo = this.datePipe.transform(booking.bookingTo, 'mediumDate');
+    // return `Ground not available from ${unavailableFrom} till ${unavailableTo}`;
+    return '';
   }
 }

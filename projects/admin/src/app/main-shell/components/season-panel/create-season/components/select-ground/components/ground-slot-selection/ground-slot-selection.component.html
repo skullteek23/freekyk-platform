@@ -1,0 +1,65 @@
+<ng-container *ngIf="groundInfo">
+  <div class="box" fxLayout="column" fxLayoutGap="8px">
+    <p class="mat-body-1">
+      <strong> Ground Name: </strong> &nbsp; {{ groundInfo.name || labelNA }}
+    </p>
+    <p class="mat-body-1">
+      <strong> Full Address: </strong> &nbsp; {{ groundInfo.locCity }}, {{ groundInfo.locState }}
+    </p>
+    <p class="mat-body-1">
+      <strong> Location: </strong> &nbsp; {{ labelNA }}
+    </p>
+    <div class="features-container">
+      <p class="mat-body-1" fxLayout fxLayoutGap="4px" fxLayoutAlign="start center">
+        <strong> Features: </strong> &nbsp;
+        {{features.length === 0 ? labelNA : ''}}
+        <mat-chip-list>
+          <mat-chip selected *ngFor="let feature of features">
+            {{feature}}
+          </mat-chip>
+        </mat-chip-list>
+      </p>
+    </div>
+    <div class="date-range-container">
+      <mat-form-field appearance="fill" color="primary">
+        <mat-label>Select Date Range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker (closed)="onChooseDate()" #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <div class="selection-container" fxLayout="row" fxLayoutGap="16px">
+      <div class="availabilities" fxFlex="50%">
+        <p class="mat-body-1">
+          <strong> Availabilities: </strong>
+        </p>
+        <mat-selection-list [formControl]="slotSelectionFormControl" class="list" color="primary" multiple>
+          <div class="mat-caption" *ngIf="!slots.length">
+            No Slots!
+          </div>
+          <mat-list-option checkboxPosition="before" [disabled]="isSlotBooked(slot)" [value]="slot"
+            *ngFor="let slot of slots">
+            <span class="mat-body-2">
+              {{slot | date: customDateFormat}} - {{slot + oneHourMilliseconds | date: 'h a'}}
+            </span>
+          </mat-list-option>
+        </mat-selection-list>
+        <mat-error *ngIf="isInvalidStartDate">{{messages.selectGround.error.invalidStartDate}}</mat-error>
+        <mat-error *ngIf="isAboveMaxSlot">{{messages.selectGround.error.slotsOverflow}}</mat-error>
+      </div>
+      <div class="select-availabilities" id="selected-availabilities" fxFlex="47%">
+        <p class="mat-body-1">
+          <strong> Selected Slots: </strong>
+        </p>
+        <mat-chip-list id="selected-availabilities">
+          <mat-chip selected *ngFor="let slot of selectedSlots">
+            {{slot | date: customDateFormat}} - {{slot + oneHourMilliseconds | date: 'h a'}}
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,13 +1,11 @@
 <div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
-  <div class="season-heading mat-subheading-2">
-    <!-- {{seasonName}} -->
-  </div>
   <mat-horizontal-stepper #seasonStepper [linear]="true">
 
-    <mat-step label="Select Match Type" [stepControl]="matchSelectForm" [editable]="true">
-      <app-select-match-type (stepper)="seasonStepper"></app-select-match-type>
+    <mat-step label="Match Type" [stepControl]="matchSelectForm" [editable]="seasonStepper.selectedIndex < 4">
+      <app-select-match-type *ngIf="seasonStepper.selectedIndex === 0" (stepper)="seasonStepper">
+      </app-select-match-type>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
-        <span class="mat-caption center info">
+        <span class="mat-caption center">
           To save your response and move to the next step, select Next
         </span>
         <button type="button" [disabled]="!matchSelectForm?.valid" class="primaryButton buttonText"
@@ -15,50 +13,57 @@
       </div>
     </mat-step>
 
-    <mat-step label="Choose Participants" [stepControl]="teamSelectForm" [editable]="true">
-      <app-select-teams (stepper)="seasonStepper"></app-select-teams>
+    <mat-step label="Participants" [stepControl]="teamSelectForm" [optional]="true"
+      [editable]="seasonStepper.selectedIndex < 4">
+      <app-select-teams *ngIf="seasonStepper.selectedIndex === 1" (stepper)="seasonStepper">
+      </app-select-teams>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
-        <button type="button" class="secondaryButton buttonText" matStepperNext>Skip</button>
+        <button type="button" class="secondaryButton buttonText"
+          (click)="onSkipAndSaveTeam(seasonStepper)">Skip</button>
         <button type="button" [disabled]="!teamSelectForm?.valid" class="primaryButton buttonText"
           (click)="onSaveTeam(seasonStepper)">Next</button>
       </div>
     </mat-step>
 
-    <mat-step label="Select Ground" [stepControl]="groundForm" [editable]="true">
-      <app-select-ground></app-select-ground>
+    <mat-step label="Ground(s)" [stepControl]="groundForm" [editable]="seasonStepper.selectedIndex < 4">
+      <app-select-ground *ngIf="seasonStepper.selectedIndex === 2"></app-select-ground>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <span class="mat-caption center error" *ngIf="errorMessage">
+          {{errorMessage}}
+        </span>
+        <span class="mat-caption center">
+          Required slots - {{maxSlots}}
+        </span>
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
-        <button type="button" [disabled]="!groundForm?.valid" class="primaryButton buttonText"
-          (click)="onSaveGround(seasonStepper)">Next</button>
+        <button type="button" class="primaryButton buttonText" (click)="onSaveGround(seasonStepper)">Next</button>
       </div>
     </mat-step>
 
-    <mat-step label="Add Details" [editable]="true">
-      <!-- <app-add-season></app-add-season>
-      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
-        <button type="button" class="secondaryButton buttonText" (click)="onCancel()">Cancel</button>
-        <button type="button" [disabled]="!isSeasonFormValid" class="primaryButton buttonText"
-          (click)="onSaveDraft()">Save & Next</button>
-      </div> -->
-    </mat-step>
-
-    <mat-step label="Generate Fixtures" [editable]="false">
-      <!-- <app-select-grounds [data]="dataForGroundStep" [grounds]="availableGroundsList"></app-select-grounds>
+    <mat-step label="More Details" [editable]="seasonStepper.selectedIndex < 4" [stepControl]="detailsForm">
+      <app-add-season *ngIf="seasonStepper.selectedIndex === 3"></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
-        <button type="button" [disabled]="!isGroundFormValid" class="primaryButton buttonText"
-          (click)="onUpdateDraft()">Save & Next</button>
-      </div> -->
+        <button type="button" class="primaryButton buttonText" [disabled]="detailsForm?.invalid"
+          (click)="onSaveDetails(seasonStepper)">Next</button>
+      </div>
+    </mat-step>
+
+    <mat-step label="Fixtures" [editable]="false">
+      <app-generate-fixtures *ngIf="seasonStepper.selectedIndex === 4"></app-generate-fixtures>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <span class="mat-caption center">
+          For selected participants, each participant will be allocated in these fixtures after completing payment from
+          the team captain.
+        </span>
+        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
+        <button type="button" class="primaryButton buttonText" (click)="onConfirmFixtures(seasonStepper)">
+          Confirm Fixtures
+        </button>
+      </div>
     </mat-step>
 
     <mat-step label="Payment" [editable]="false">
-      <!-- <app-generate-fixtures [data]="dataForFixtureStep"></app-generate-fixtures>
-      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
-        <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
-        <button type="button" [disabled]="!isFixtureFormValid" class="primaryButton buttonText"
-          (click)="onConfirmFixtures()">Confirm Fixtures</button>
-      </div> -->
     </mat-step>
 
     <mat-step label="Publish" [editable]="false">

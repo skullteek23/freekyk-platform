@@ -1,23 +1,42 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { FormGroup } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { GroundPrivateInfo } from '@shared/interfaces/ground.model';
-import { dummyFixture } from '@shared/interfaces/match.model';
-import { SeasonDraft } from '@shared/interfaces/season.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
-import { MatchConstantsSecondary, MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
-import { AddSeasonComponent } from '../add-season/add-season.component';
-import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
-import { SelectGroundsComponent } from '../select-grounds/select-grounds.component';
+import { AddSeasonComponent } from './components/add-season/add-season.component';
 import { SelectMatchTypeComponent } from './components/select-match-type/select-match-type.component';
 import { SelectTeamsComponent } from './components/select-teams/select-teams.component';
-import { SelectGroundComponent } from './components/select-ground/select-ground.component';
+import { IGroundSelection, SelectGroundComponent } from './components/select-ground/select-ground.component';
+import { SeasonAdminService } from '../season-admin.service';
+import { seasonFlowMessages } from '@shared/constants/messages';
+import { TournamentTypes } from '@shared/interfaces/match.model';
+import { MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
+
+export interface ISelectMatchType {
+  package: MATCH_TYPES_PACKAGES;
+  startDate: string;
+  location: {
+    country: string;
+    state: string;
+    city: string;
+  }
+  participatingTeamsCount: number;
+  containingTournaments: TournamentTypes[]
+}
+
+export interface ISeasonDetails {
+  name: string;
+  imgpath: string;
+  description: string;
+  rules: string;
+  fees: number;
+  discount: number;
+}
+
+export interface ISelectTeam {
+  participants: string[];
+}
+
+export type ISelectGrounds = IGroundSelection[];
 
 @Component({
   selector: 'app-create-season',
@@ -29,38 +48,20 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   @ViewChild(SelectMatchTypeComponent) selectMatchTypeComponent: SelectMatchTypeComponent;
   @ViewChild(SelectTeamsComponent) selectTeamsComponent: SelectTeamsComponent;
   @ViewChild(SelectGroundComponent) selectGroundComponent: SelectGroundComponent;
+  @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
 
-  // @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
-  // @ViewChild(SelectGroundsComponent) selectGroundsComponent: SelectGroundsComponent;
-  // @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
+  readonly messages = seasonFlowMessages;
 
   isLoaderShown = false;
-  // availableGroundsList: GroundPrivateInfo[] = [];
-  // selectedGroundsList: GroundPrivateInfo[] = [];
-  // dataForGroundStep: any = null;
-  // dataForFixtureStep: any = null;
-  // draftID = '';
-  // maxTeams = 0;
+  errorMessage = '';
+  maxSlots = 0;
   subscriptions = new Subscription();
 
   constructor(
-    private route: ActivatedRoute,
-    private ngFire: AngularFirestore,
-    private router: Router,
-    private snackBarService: SnackbarService,
-    private ngStorage: AngularFireStorage
-  ) {
+    private seasonAdminService: SeasonAdminService
+  ) { }
 
-  }
-  ngOnInit(): void {
-    // this.initForm();
-    // this.draftID = ngFire.createId();
-    // const qParams = route.snapshot.queryParams;
-    // if (qParams && qParams.draft) {
-    //   const draftID = qParams.draft;
-    //   this.navigateToDraftAndClose(draftID);
-    // }
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     if (this.subscriptions) {
@@ -71,7 +72,6 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   onSaveMatchType(stepper: MatHorizontalStepper) {
     if (this.matchSelectForm?.valid) {
       sessionStorage.setItem('selectMatchType', JSON.stringify(this.matchSelectForm.value));
-      this.selectTeamsComponent?.initComponentValues();
       stepper.next();
     }
   }
@@ -79,17 +79,68 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   onSaveTeam(stepper: MatHorizontalStepper) {
     if (this.teamSelectForm?.valid) {
       sessionStorage.setItem('selectTeam', JSON.stringify(this.teamSelectForm.value));
+      this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
       stepper.next();
     }
+  }
+
+  onSkipAndSaveTeam(stepper: MatHorizontalStepper) {
+    this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
+    stepper.next();
   }
 
   onSaveGround(stepper: MatHorizontalStepper) {
-    if (this.groundForm?.valid) {
-      sessionStorage.setItem('selectGround', JSON.stringify(this.groundForm.value));
+    if (this.isValidGroundSelection()) {
+      this.errorMessage = '';
+      sessionStorage.setItem('selectGround', JSON.stringify(this.seasonAdminService._selectedGrounds));
       stepper.next();
     }
   }
 
+  onSaveDetails(stepper: MatHorizontalStepper) {
+    if (this.detailsForm?.valid) {
+      sessionStorage.setItem('seasonDetails', JSON.stringify(this.detailsForm.value));
+      stepper.next();
+    }
+  }
+
+  onConfirmFixtures(stepper: MatHorizontalStepper) {
+    stepper.next();
+  }
+
+  isValidGroundSelection(): boolean {
+    let totalSelectionLength: number = 0;
+    this.seasonAdminService._selectedGrounds.forEach(ground => {
+      totalSelectionLength += ground.slots.length;
+    });
+    if (totalSelectionLength < this.maxSlots) {
+      this.errorMessage = this.messages.selectGround.error.slotsUnderflow;
+    } else if (totalSelectionLength > this.maxSlots) {
+      this.errorMessage = this.messages.selectGround.error.slotsOverflow;
+    } else if (this.maxSlots === 0 || totalSelectionLength === 0) {
+      this.errorMessage = this.messages.selectGround.error.noSelection;
+    }
+    return (totalSelectionLength === this.maxSlots) && this.groundForm.valid && this.maxSlots > 0;
+  }
+
+  get matchSelectForm(): FormGroup {
+    if (this.selectMatchTypeComponent) {
+      return this.selectMatchTypeComponent.matchSelectForm;
+
+    }
+  }
+
+  get teamSelectForm(): FormGroup {
+    return this.selectTeamsComponent?.teamSelectForm;
+  }
+
+  get groundForm(): FormGroup {
+    return this.selectGroundComponent?.groundForm;
+  }
+
+  get detailsForm(): FormGroup {
+    return this.addSeasonComponent?.detailsForm;
+  }
   // navigateToDraftAndClose(draftID) {
   //   this.router.navigate(['/seasons/s/' + draftID]);
   // }
@@ -131,20 +182,6 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
   //   this.onNavigateAway();
   // }
 
-  get matchSelectForm(): FormGroup {
-    if (this.selectMatchTypeComponent) {
-      return this.selectMatchTypeComponent.matchSelectForm;
-
-    }
-  }
-
-  get teamSelectForm(): FormGroup {
-    return this.selectTeamsComponent?.teamSelectForm;
-  }
-
-  get groundForm(): FormGroup {
-    return this.selectGroundComponent?.groundForm;
-  }
 
   // get seasonForm(): FormGroup {
   //   if (this.addSeasonComponent && this.addSeasonComponent.seasonForm) {

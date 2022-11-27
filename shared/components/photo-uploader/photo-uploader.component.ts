@@ -9,9 +9,9 @@ import { MatchConstantsSecondary } from '../../constants/constants';
 export class PhotoUploaderComponent {
 
   @Output() changeUpload = new EventEmitter<File>();
-  @Input() defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
+  @Input() defaultImgUrl: string = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
 
-  preview = null;
+  preview: string = null;
   $uploadedImageFile: File = null;
 
   onBrowsePhoto(ev): void {

@@ -1,38 +1,41 @@
+export type GROUND_TYPES = 'PUBLIC' | 'PRIVATE';
+
 export interface GroundBasicInfo {
   name: string;
   imgpath: string;
   locCity: string;
   locState: string;
   fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
-  ownType: 'FK' | 'PUBLIC' | 'PRIVATE';
+  ownType: GROUND_TYPES;
   playLvl: 'good' | 'best' | 'fair';
   id?: string;
 }
 export interface GroundMoreInfo {
-  parking: boolean;
-  mainten: boolean;
-  goalp: boolean;
-  opmTimeStart: number;
-  opmTimeEnd: number;
-  washroom: boolean;
+  referee: boolean;
   foodBev: boolean;
-  avgRating: number;
+  parking: boolean;
+  goalpost: boolean;
+  washroom: boolean;
+  staff: boolean;
+  id?: string;
 }
 
 export interface GroundPrivateInfo {
-  name: string;
-  locCity: string;
-  locState: string;
   signedContractFileLink: string;
   contractStartDate: number;
   contractEndDate: number;
-  timings: {};
+  timings: any;
   id?: string;
 }
 
 export interface GroundBooking {
+  by: string;
+  slotTimestamp: number;
   groundID: string;
-  seasonID: string;
-  bookingFrom: number;
-  bookingTo: number;
 }
+
+// grounds/{{GROUND-ID}}
+// groundContracts/{{GROUND-ID}}
+// grounds/{{GROUND-ID}}/additionalInfo/moreInfo
+// grounds/{{GROUND-ID}}/additionalInfo/moreInfo
+// groundBookings/{{BOOKING-ID}}

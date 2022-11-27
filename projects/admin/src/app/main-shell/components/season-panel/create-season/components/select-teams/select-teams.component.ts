@@ -5,6 +5,7 @@ import { MatHorizontalStepper } from '@angular/material/stepper';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
+import { ISelectMatchType, ISelectTeam } from '../../create-season.component';
 
 @Component({
   selector: 'app-select-teams',
@@ -63,9 +64,9 @@ export class SelectTeamsComponent implements OnInit {
   }
 
   getLastSavedData() {
-    const formValue = JSON.parse(sessionStorage.getItem('selectTeam'));
-    const formValueTemp = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    this.initControls(formValueTemp?.participatingTeamsCount, formValue?.participants);
+    const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
+    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    this.initControls(selectMatchTypeFormData?.participatingTeamsCount, selectTeamFormData?.participants);
   }
 
   initControls(limit: number, values: string[]): void {

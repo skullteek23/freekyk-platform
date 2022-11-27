@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, share } from 'rxjs/operators';
-import { dummyFixture, MatchFixture } from '@shared/interfaces/match.model';
+import { IDummyFixture, MatchFixture } from '@shared/interfaces/match.model';
 import { SeasonAbout, SeasonDraft, SeasonParticipants } from '@shared/interfaces/season.model';
 import { SeasonAdminService } from '../season-admin.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -49,7 +49,7 @@ export class ViewSeasonDraftComponent implements OnInit {
   lastRegistrationDate = new Date();
   messages = formsMessages;
   seasonDraftData: SeasonDraft;
-  seasonFixtures: dummyFixture[] = [];
+  seasonFixtures: IDummyFixture[] = [];
   seasonParticipants: SeasonParticipants[] = [];
   updateEntriesForm = new FormGroup({});
 
@@ -256,45 +256,45 @@ export class ViewSeasonDraftComponent implements OnInit {
     return this.dialog.open(ConfirmationBoxComponent).afterClosed();
   }
 
-  setDraftFixtures(fixtures: dummyFixture[], groundsList: GroundPrivateInfo[]): void {
-    if (fixtures && groundsList && groundsList.length && fixtures.length) {
-      const groundsListNames = groundsList.map(ground => ground.name);
-      this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
-    } else if (this.isSeasonFinished || this.isSeasonPublished) {
-      this.setLoadingStatus(LOADING_STATUS.LOADING);
-      this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name))
-        .snapshotChanges()
-        .subscribe({
-          next: (response) => {
-            if (response.length) {
-              this.seasonFixtures = response.map(fixture => {
-                const fixtureData = fixture.payload.doc.data() as MatchFixture;
-                const id = fixture.payload.doc.id;
-                return ({
-                  home: fixtureData.home.name,
-                  away: fixtureData.away.name,
-                  date: fixtureData.date,
-                  concluded: fixtureData.concluded,
-                  premium: fixtureData.premium,
-                  season: fixtureData.season,
-                  type: fixtureData.type,
-                  locCity: fixtureData.locCity,
-                  locState: fixtureData.locState,
-                  stadium: fixtureData.stadium,
-                  id,
-                } as dummyFixture);
-              });
-              this.setLoadingStatus(LOADING_STATUS.DEFAULT);
-            }
-          },
-          error: () => {
-            this.seasonFixtures = [];
-            this.snackbarService.displayError();
-          }
-        });
-    } else {
-      this.seasonFixtures = [];
-    }
+  setDraftFixtures(fixtures: IDummyFixture[], groundsList: GroundPrivateInfo[]): void {
+    // if (fixtures && groundsList && groundsList.length && fixtures.length) {
+    //   const groundsListNames = groundsList.map(ground => ground.name);
+    //   this.seasonFixtures = fixtures.filter(fixture => groundsListNames.indexOf(fixture.stadium) > -1);
+    // } else if (this.isSeasonFinished || this.isSeasonPublished) {
+    //   this.setLoadingStatus(LOADING_STATUS.LOADING);
+    //   this.ngFire.collection('allMatches', query => query.where('season', '==', this.seasonDraftData?.basicInfo?.name))
+    //     .snapshotChanges()
+    //     .subscribe({
+    //       next: (response) => {
+    //         if (response.length) {
+    //           this.seasonFixtures = response.map(fixture => {
+    //             const fixtureData = fixture.payload.doc.data() as MatchFixture;
+    //             const id = fixture.payload.doc.id;
+    //             return ({
+    //               home: fixtureData.home.name,
+    //               away: fixtureData.away.name,
+    //               date: fixtureData.date,
+    //               concluded: fixtureData.concluded,
+    //               premium: fixtureData.premium,
+    //               season: fixtureData.season,
+    //               type: fixtureData.type,
+    //               locCity: fixtureData.locCity,
+    //               locState: fixtureData.locState,
+    //               stadium: fixtureData.stadium,
+    //               id,
+    //             } as IDummyFixture);
+    //           });
+    //           this.setLoadingStatus(LOADING_STATUS.DEFAULT);
+    //         }
+    //       },
+    //       error: () => {
+    //         this.seasonFixtures = [];
+    //         this.snackbarService.displayError();
+    //       }
+    //     });
+    // } else {
+    //   this.seasonFixtures = [];
+    // }
   }
 
   onUpdateMatchData(matchID: any) {
@@ -322,12 +322,12 @@ export class ViewSeasonDraftComponent implements OnInit {
     }
   }
 
-  getDraftFixtures(draftID): Observable<dummyFixture[]> {
+  getDraftFixtures(draftID): Observable<IDummyFixture[]> {
     return this.ngFire.collection('seasonFixturesDrafts', query => query.where('draftID', '==', draftID)).get()
       .pipe(
-        map(response => response.docs.map(doc => doc.data() as dummyFixture)),
+        map(response => response.docs.map(doc => doc.data() as IDummyFixture)),
         map(response => response.sort(ArraySorting.sortObjectByKey('date'))),
-        map(response => response as dummyFixture[])
+        map(response => response as IDummyFixture[])
       );
   }
 

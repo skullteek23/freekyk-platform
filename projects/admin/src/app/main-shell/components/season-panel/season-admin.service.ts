@@ -4,13 +4,22 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { GroundBooking } from '@shared/interfaces/ground.model';
-import { dummyFixture, MatchFixture, } from '@shared/interfaces/match.model';
-import { fixtureGenerationData } from '@shared/interfaces/others.model';
+import { GroundBooking, GROUND_TYPES } from '@shared/interfaces/ground.model';
+import { IDummyFixture, MatchFixture, TournamentTypes, } from '@shared/interfaces/match.model';
 import { LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
+import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
+import { IGroundSelection } from './create-season/components/select-ground/select-ground.component';
+import { ISelectMatchType } from './create-season/create-season.component';
+
+export interface IDummyFixtureOptions {
+  grounds?: IGroundSelection[];
+  season?: string;
+  fcpMatches?: number;
+  fkcMatches?: number;
+  fplMatches?: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +27,7 @@ import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 export class SeasonAdminService {
 
   private adminConfigs: AdminConfigurationSeason;
+  private selectedGrounds: IGroundSelection[] = [];
 
   constructor(
     private ngFire: AngularFirestore, private ngFunctions: AngularFireFunctions
@@ -25,91 +35,174 @@ export class SeasonAdminService {
     this.getAdminConfigs();
   }
 
-  onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
-    const fcpMatches = data.matches.fcp;
-    const fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
-    const fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
-    const totalMatches: number = fcpMatches + fkcMatches + fplMatches;
-    const grounds = data.grounds;
-    const availableSlotList: { date: Date; groundName: string; locCity: string; locState: string }[] = [];
-    const initialDate = new Date(data.startDate);
-    const oneMatchDuration = this.adminConfigs?.duration || MatchConstants.ONE_MATCH_DURATION;
-    while (availableSlotList.length < totalMatches) {
-      const day = initialDate.getDay();
-      for (const ground of grounds) {
-        const grTimings = ground.timings;
-        const groundName = ground.name;
-        const locCity = ground.locCity;
-        const locState = ground.locState;
-        if (grTimings.hasOwnProperty(day)) {
-          const grTimingsByDay = grTimings[day] as number[];
-          for (const timing of grTimingsByDay) {
-            if (!availableSlotList.length) {
-              const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-              date.setHours(timing);
-              if (availableSlotList.length < totalMatches) {
-                availableSlotList.push({ date, groundName, locCity, locState });
-              }
-              continue;
-            }
-            const currentHour = timing;
-            const lastDateHour = availableSlotList[availableSlotList.length - 1].date.getHours();
-            const currentDay = day;
-            const lastDateDay = availableSlotList[availableSlotList.length - 1].date.getDay();
-            const currentGround = groundName;
-            const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
-            if (
-              this.getDifference(currentHour, lastDateHour) >= oneMatchDuration && currentDay === lastDateDay
-              || this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay !== lastDateDay
-              || (this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay === lastDateDay
-                && lastGround !== currentGround)
-            ) {
-              const date = new Date(JSON.parse(JSON.stringify(initialDate)));
-              date.setHours(timing);
-              if (availableSlotList.length < totalMatches) {
-                availableSlotList.push({ date, groundName, locCity, locState });
-              }
-            }
-          }
-        }
-      };
-      initialDate.setDate(initialDate.getDate() + 1);
+  getDummyFixtures(options: IDummyFixtureOptions): IDummyFixture[] {
+    if (!options || Object.keys(options).length === 0) {
+      return [];
     }
-    availableSlotList.sort(ArraySorting.sortObjectByKey('date'));
-    const fixturesTemp: dummyFixture[] = [];
-    for (let index = 0; index < availableSlotList.length; index++) {
-      let matchType: 'FKC' | 'FCP' | 'FPL' = 'FCP';
-      if (fcpMatches && index < fcpMatches) {
+    const fixtures: IDummyFixture[] = [];
+    const groundSlots: {
+      name: string;
+      locState: string;
+      locCity: string;
+      ownType: GROUND_TYPES;
+      slot: number;
+    }[] = [];
+    options.grounds.map(ground => {
+      const groundInfo: any = {
+        name: ground.name,
+        locState: ground.locState,
+        locCity: ground.locCity,
+        ownType: ground.ownType
+      }
+      ground.slots.forEach(slot => {
+        groundSlots.push({ ...groundInfo, slot });
+      })
+    });
+    groundSlots.sort(ArraySorting.sortObjectByKey('slot'));
+    for (let i = 0; i < groundSlots.length; i++) {
+      let matchType: TournamentTypes = 'FCP';
+      if (options.fcpMatches && i < options.fcpMatches) {
         matchType = 'FCP';
       }
-      if (fkcMatches && index >= fcpMatches) {
+      if (options.fkcMatches && i >= options.fcpMatches) {
         matchType = 'FKC';
       }
-      if (fplMatches && index >= (fkcMatches + fcpMatches)) {
+      if (options.fplMatches && i >= (options.fkcMatches + options.fcpMatches)) {
         matchType = 'FPL';
       }
-      fixturesTemp.push({
+      const fixture: IDummyFixture = {
         home: 'TBD',
         away: 'TBD',
-        date: availableSlotList[index].date.getTime(),
+        id: this.getMID(matchType, i),
+        date: groundSlots[i].slot,
         concluded: false,
-        premium: true,
-        season: data.sName,
+        premium: groundSlots[i].ownType === 'PRIVATE',
+        season: options.season,
         type: matchType,
-        locCity: availableSlotList[index].locCity,
-        locState: availableSlotList[index].locState,
-        stadium: availableSlotList[index].groundName,
-      });
+        locCity: groundSlots[i].locCity,
+        locState: groundSlots[i].locState,
+        stadium: groundSlots[i].name
+      }
+      fixtures.push(fixture);
     }
-    fixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
-    const fixtures = fixturesTemp.map((element, index) => {
-      const i = index + 1;
-      return {
-        ...element,
-        id: this.getMID(element.type, i)
-      };
-    });
-    return fixtures && fixtures.length ? fixtures : [];
+    return fixtures;
+  }
+
+  // onGenerateDummyFixtures(data: fixtureGenerationData): dummyFixture[] {
+  //   const fcpMatches = data.matches.fcp;
+  //   const fkcMatches = this.calculateTotalKnockoutMatches(data.matches.fkc ? data.teamParticipating : 0);
+  //   const fplMatches = this.calculateTotalLeagueMatches(data.matches.fpl ? data.teamParticipating : 0);
+  //   const oneMatchDuration = this.adminConfigs?.duration || MatchConstants.ONE_MATCH_DURATION;
+
+
+  //   const totalMatches: number = fcpMatches + fkcMatches + fplMatches;
+  //   const grounds = data.grounds;
+  //   const initialDate = new Date(data.startDate);
+
+  //   const availableSlotList: { date: Date; groundName: string; }[] = [];
+
+  //   while (availableSlotList.length < totalMatches) {
+  //     const day = initialDate.getDay();
+  //     for (const ground of grounds) {
+  //       const grTimings = ground.timings;
+  //       const groundName = ground.id;
+  //       if (grTimings.hasOwnProperty(day)) {
+  //         const grTimingsByDay = grTimings[day] as number[];
+  //         for (const timing of grTimingsByDay) {
+  //           if (!availableSlotList.length) {
+  //             const date = new Date(JSON.parse(JSON.stringify(initialDate)));
+  //             date.setHours(timing);
+  //             if (availableSlotList.length < totalMatches) {
+  //               availableSlotList.push({ date, groundName });
+  //             }
+  //             continue;
+  //           }
+  //           const currentHour = timing;
+  //           const lastDateHour = availableSlotList[availableSlotList.length - 1].date.getHours();
+  //           const currentDay = day;
+  //           const lastDateDay = availableSlotList[availableSlotList.length - 1].date.getDay();
+  //           const currentGround = groundName;
+  //           const lastGround = availableSlotList[availableSlotList.length - 1].groundName;
+  //           if (
+  //             this.getDifference(currentHour, lastDateHour) >= oneMatchDuration && currentDay === lastDateDay
+  //             || this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay !== lastDateDay
+  //             || (this.getDifference(currentHour, lastDateHour) <= oneMatchDuration && currentDay === lastDateDay
+  //               && lastGround !== currentGround)
+  //           ) {
+  //             const date = new Date(JSON.parse(JSON.stringify(initialDate)));
+  //             date.setHours(timing);
+  //             if (availableSlotList.length < totalMatches) {
+  //               availableSlotList.push({ date, groundName });
+  //             }
+  //           }
+  //         }
+  //       }
+  //     };
+  //     initialDate.setDate(initialDate.getDate() + 1);
+  //   }
+  //   availableSlotList.sort(ArraySorting.sortObjectByKey('date'));
+  //   const fixturesTemp: dummyFixture[] = [];
+  //   for (let index = 0; index < availableSlotList.length; index++) {
+  //     let matchType: 'FKC' | 'FCP' | 'FPL' = 'FCP';
+  //     if (fcpMatches && index < fcpMatches) {
+  //       matchType = 'FCP';
+  //     }
+  //     if (fkcMatches && index >= fcpMatches) {
+  //       matchType = 'FKC';
+  //     }
+  //     if (fplMatches && index >= (fkcMatches + fcpMatches)) {
+  //       matchType = 'FPL';
+  //     }
+  //     fixturesTemp.push({
+  //       home: 'TBD',
+  //       away: 'TBD',
+  //       date: availableSlotList[index].date.getTime(),
+  //       concluded: false,
+  //       premium: true,
+  //       season: data.sName,
+  //       type: matchType,
+  //       locCity: 'availableSlotList[index].locCity',
+  //       locState: 'availableSlotList[index].locState',
+  //       stadium: availableSlotList[index].groundName,
+  //     });
+  //   }
+  //   fixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
+  //   const fixtures = fixturesTemp.map((element, index) => {
+  //     const i = index + 1;
+  //     return {
+  //       ...element,
+  //       id: this.getMID(element.type, i)
+  //     };
+  //   });
+  //   return fixtures && fixtures.length ? fixtures : [];
+  // }
+
+  getMaxSelectableSlots(): number {
+    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    if (selectMatchTypeFormData && Object.keys(selectMatchTypeFormData).length) {
+      return this.getTotalMatches(selectMatchTypeFormData.containingTournaments, selectMatchTypeFormData.participatingTeamsCount);
+    }
+    return 0;
+  }
+
+  getTotalMatches(tournaments: TournamentTypes[], teamsCount: number): number {
+    if (!tournaments?.length || !teamsCount) {
+      return 0;
+    } else {
+      let fcpMatches = 0;
+      let fkcMatches = 0;
+      let fplMatches = 0;
+      if (tournaments.includes('FCP')) {
+        fcpMatches = teamsCount / 2;
+      }
+      if (tournaments.includes('FKC')) {
+        fkcMatches = teamsCount - 1;
+      }
+      if (tournaments.includes('FPL')) {
+        fplMatches = (teamsCount * (teamsCount - 1)) / 2;
+      }
+      return fcpMatches + fkcMatches + fplMatches;
+    }
   }
 
   getAdminConfigs() {
@@ -145,7 +238,7 @@ export class SeasonAdminService {
     return comparatorTimestamp;
   }
 
-  getPublishableFixture(data: dummyFixture[]) {
+  getPublishableFixture(data: IDummyFixture[]) {
     return data.map(val => ({
       id: val.id,
       date: val.date,
@@ -169,7 +262,8 @@ export class SeasonAdminService {
   }
 
   isStartDateOverlap(startDate: number, booking: GroundBooking): boolean {
-    return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
+    // return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
+    return false;
   }
 
   updateMatchReport(options: any): Promise<any> {
@@ -216,10 +310,6 @@ export class SeasonAdminService {
     }
   }
 
-  calculateTotalTournamentMatches(teams: number): number {
-    return this.calculateTotalLeagueMatches(teams) + this.calculateTotalKnockoutMatches(teams);
-  }
-
   getStatusClass(status: statusType): any {
     switch (status) {
       case 'READY TO PUBLISH':
@@ -243,6 +333,23 @@ export class SeasonAdminService {
     return status === 'FINISHED';
   }
 
+  onGroundSelectionChange(selection: IGroundSelection): void {
+    const groundIndex = this.selectedGrounds.findIndex(value => value.id === selection.id);
+    if (groundIndex > -1) {
+      this.selectedGrounds[groundIndex] = selection;
+    } else {
+      this.selectedGrounds.push(selection);
+    }
+  }
+
+  get _selectedGrounds(): IGroundSelection[] {
+    return this.selectedGrounds;
+  }
+
+  resetSelectedGrounds() {
+    this.selectedGrounds = [];
+  }
+
   private getMID(type: 'FKC' | 'FPL' | 'FCP', index: number) {
     const uniqueID = this.ngFire.createId().slice(0, 8).toLocaleUpperCase();
     switch (type) {
@@ -252,15 +359,15 @@ export class SeasonAdminService {
     }
   }
 
-  private calculateTotalLeagueMatches(teams: number): number {
+  calculateTotalLeagueMatches(teams: number): number {
     return !teams ? 0 : (teams * (teams - 1)) / 2;
   }
 
-  private calculateTotalKnockoutMatches(teams: number): number {
+  calculateTotalKnockoutMatches(teams: number): number {
     return !teams ? 0 : teams - 1;
   }
 
-  private getDifference(a: number, b: number): number {
+  getDifference(a: number, b: number): number {
     return a - b;
   }
 }

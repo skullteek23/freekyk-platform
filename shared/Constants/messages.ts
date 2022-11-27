@@ -25,3 +25,13 @@ export const adminLoginMessages = {
     invalidOrganizerIDLength: 'Organizer ID must be 20 characters long!'
   }
 };
+export const seasonFlowMessages = {
+  selectGround: {
+    error: {
+      invalidStartDate: 'Selected date can not be before start date.',
+      slotsUnderflow: 'Please choose more slots & select Next',
+      slotsOverflow: 'Please unselect a few slots & select Next',
+      noSelection: 'No slots are selected!'
+    }
+  }
+};

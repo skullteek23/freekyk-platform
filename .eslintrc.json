@@ -46,7 +46,14 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "max-len": [
+          false
+        ],
+        "max-line-length": [
+          false
+        ]
+      }
     }
   ]
 }

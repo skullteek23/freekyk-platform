@@ -4,7 +4,7 @@
   margin-top: 20px;
   border-radius: 20px;
   section {
-    width: 50%;
+    width: 100%;
     margin: 0px auto 0;
   }
   .section-container {
@@ -13,4 +13,7 @@
   .info {
     margin-bottom: 10px;
   }
+}
+mat-chip-list {
+  margin-left: 12px;
 }

@@ -121,10 +121,10 @@ export class GroundsPanelComponent implements OnInit {
       playLvl: 'best',
     };
     const privateInfo: GroundPrivateInfo = {
-      name: this.groundForm.value.name,
+      // name: this.groundForm.value.name,
       signedContractFileLink: this.groundForm.value.contractFilePath,
-      locState: this.groundForm.value.locState,
-      locCity: this.groundForm.value.locCity,
+      // locState: this.groundForm.value.locState,
+      // locCity: this.groundForm.value.locCity,
       contractStartDate: new Date(this.groundForm.value.contractStartDate).getTime(),
       contractEndDate: new Date(this.groundForm.value.contractEndDate).getTime(),
       timings: this.timingsPreferences
