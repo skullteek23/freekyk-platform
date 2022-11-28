@@ -6,7 +6,7 @@ import { map, share, take } from 'rxjs/operators';
 import { PaymentService, PAYMENT_TYPE } from '@shared/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { OrderBasic } from '@shared/interfaces/order.model';
-import { SeasonBasicInfo, SeasonParticipants } from '@shared/interfaces/season.model';
+import { SeasonAbout, SeasonBasicInfo, SeasonParticipants } from '@shared/interfaces/season.model';
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
@@ -94,25 +94,31 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     this.selectedSeason = season.name;
     const teamInfo = await this.store.select('team').pipe(take(1)).toPromise();
     const uid = localStorage.getItem('uid');
-    if (teamInfo && teamInfo.basicInfo && teamInfo.basicInfo.captainId && teamInfo.basicInfo.tname) {
+    if (teamInfo?.basicInfo?.captainId && teamInfo?.basicInfo?.tname) {
+      let restrictedParticipants = await this.getParticipantsInfo(season.id);
       if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount >= 8) {
         this.paymentServ.onLoadingStatusChange('loading');
+        if (!restrictedParticipants?.includes(teamInfo?.basicInfo?.id)) {
+          this.snackServ.displayError('Participants are restricted!');
+          this.paymentServ.onLoadingStatusChange('home');
+          return;
+        }
         const isSlotEmpty: boolean = await this.isSlotEmpty(season.p_teams, season.id);
         if (isSlotEmpty) {
           this.initPayment(season, teamInfo.basicInfo.id);
         } else {
-          this.snackServ.displayCustomMsg('Participation is full!');
+          this.snackServ.displayError('Participation is full!');
           this.paymentServ.onLoadingStatusChange('home');
         }
         return;
       } else if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount < 8) {
-        this.snackServ.displayCustomMsg('Not enough players in Team!');
+        this.snackServ.displayError('Not enough players in Team!');
         return;
       }
-      this.snackServ.displayCustomMsg('Please contact your team captain!');
+      this.snackServ.displayError('Only captains are allowed to make payment!');
       return;
     } else {
-      this.snackServ.displayCustomMsg('Join or Create a team to participate!');
+      this.snackServ.displayError('Join or Create a team to participate!');
       return;
     }
   }
@@ -133,11 +139,14 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       });
   }
   async isSlotEmpty(maxTeams: number, sid: string): Promise<boolean> {
-    const participants: SeasonParticipants[] = (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.map((doc) => doc.data() as SeasonParticipants);
-    if (participants.length < maxTeams) {
-      return true;
-    }
+    return (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.length < maxTeams;
   }
+
+  async getParticipantsInfo(sid: string): Promise<string[]> {
+    const data = (await this.ngFire.collection('seasons').doc(sid).collection('additionalInfo').doc('moreInfo').get().toPromise()).data() as SeasonAbout;
+    return data?.allowedParticipants?.length > 0 ? data?.allowedParticipants : null;
+  }
+
   goToSeason(name?: string): void {
     this.paymentServ.onLoadingStatusChange('home');
     if (name) {

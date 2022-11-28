@@ -32,4 +32,8 @@ export class SeOverviewComponent implements OnInit {
         share()
       );
   }
+
+  get isRestrictedParticipants(): boolean {
+    return this.data?.allowedParticipants?.length > 0;
+  }
 }
