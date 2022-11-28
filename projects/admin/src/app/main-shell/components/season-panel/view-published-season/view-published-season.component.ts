@@ -297,7 +297,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   get payableFees(): number {
-    return this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount);
+    return Number(this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount));
   }
 
   get description(): AbstractControl {

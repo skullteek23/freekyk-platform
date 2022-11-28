@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 import { createAdminUser } from './createAdminUser';
+import { seasonParticipation } from './seasonParticipation';
 
 
 // callable functions
@@ -26,6 +27,7 @@ export const createTeam = functions.region('asia-south1').https.onCall(teamCreat
 export const deleteTeam = functions.region('asia-south1').https.onCall(onDelete);
 export const generateRazorpayOrder = functions.region('asia-south1').https.onCall(generateOrder);
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
+export const participateSeason = functions.region('asia-south1').https.onCall(seasonParticipation);
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
 export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
 export const addAdminUser = functions.region('asia-south1').https.onCall(createAdminUser);

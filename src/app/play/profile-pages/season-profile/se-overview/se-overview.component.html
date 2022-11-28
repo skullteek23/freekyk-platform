@@ -26,7 +26,7 @@
     </div>
   </div>
   <div fxLayout="column" fxFlex.gt-sm="50%">
-    <h4>Participants ({{isRestrictedParticipants ? 'Restricted Participants allowed' : ''}})</h4>
+    <h4>Participants ({{isRestrictedParticipants ? 'Restricted' : 'Open For All'}})</h4>
     <span *ngIf="(participants$ | async)?.length === 0" class="mat-caption">
       No Participants yet!
     </span>

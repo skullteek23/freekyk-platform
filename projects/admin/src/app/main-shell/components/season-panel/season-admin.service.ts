@@ -119,9 +119,16 @@ export class SeasonAdminService {
     this.selectedFile = fileObj;
   }
 
-  uploadSeasonPhoto(seasonID: string): Promise<any> {
-    const imgpath = this.getImageURL(this.selectedFile);
-    return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath });
+  async uploadSeasonPhoto(seasonID: string): Promise<any> {
+    if (!this.selectedFile) {
+      return Promise.reject({
+        message: 'Unable to upload Season Photo!'
+      });
+    }
+    const imgpath: string = await this.getImageURL(this.selectedFile);
+    if (imgpath) {
+      return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath });
+    }
   }
 
   async getImageURL(fileObj: File): Promise<string> {

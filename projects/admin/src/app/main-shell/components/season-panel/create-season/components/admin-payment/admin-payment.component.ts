@@ -1,8 +1,9 @@
+import { ThrowStmt } from '@angular/compiler';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
-import { PaymentService } from '@shared/services/payment.service';
+import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -59,18 +60,25 @@ export class AdminPaymentComponent implements OnInit {
   }
 
   intiPayment(): void {
-    this.paymentService.generateOrder(Number(this.amount.value))
-      .then((response) => {
-        if (response) {
-          this.paymentService.openAdminCheckoutPage(response.id);
-        } else {
+    const fees = this.amount.value;
+    if (fees) {
+      this.paymentService.generateOrder(fees)
+        .then((response) => {
+          if (response) {
+            this.isLoaderShown = false;
+            const options: ICheckoutOptions = this.paymentService.getAdminCheckoutOptions(fees);
+            options.order_id = response['id'];
+            options.failureRoute = '/error';
+            this.paymentService.openCheckoutPage(options);
+          } else {
+            this.reset();
+          }
+        })
+        .catch((err) => {
           this.reset();
-        }
-      })
-      .catch((err) => {
-        this.reset();
-        this.snackbarService.displayError('Order not generated due to an error');
-      })
+          this.snackbarService.displayError('Order not generated due to an error');
+        })
+    }
   }
 
   reset() {

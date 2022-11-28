@@ -31,7 +31,7 @@
           {{ season.name | textShorten: 30 }}
           ( Includes {{ getContainingTournaments(season.cont_tour) }} )
         </span>
-        <div fxLayoutGap="8px" fxLayout.lt-md="column" matTooltip="Pay Now">
+        <div fxLayoutGap="8px" fxLayout.lt-md="column" matTooltip="Pay Now" *ngIf="season.feesPerTeam > 0">
           <button fxFlexOrder.lt-md="0" fxFlexOrder.gt-sm="1" [disabled]="isParticipated(season.id)"
             (click)="onPayNow(season)" class="buttonText secondaryButtonInv">
             {{ isParticipated(season.id) ? "Paid" : "Pay Now" }}

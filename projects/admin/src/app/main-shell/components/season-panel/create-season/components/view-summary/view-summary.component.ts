@@ -51,7 +51,7 @@ export class ViewSummaryComponent implements OnInit {
       data.discount = seasonDetailsFormData.discount;
       data.containingTournaments = selectMatchTypeFormData.containingTournaments.join(", ");
 
-      let finalFees = seasonDetailsFormData.fees;
+      let finalFees = seasonDetailsFormData.fees.toString();
       if (seasonDetailsFormData.discount > 0) {
         finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount);
       }

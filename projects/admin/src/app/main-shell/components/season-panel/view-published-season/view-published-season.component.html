@@ -137,7 +137,7 @@
 
 </mat-card>
 <mat-card class="info-card">
-  <h4>Participants ({{isRestrictedParticipants ? 'Restricted Participants allowed' : ''}})</h4>
+  <h4>Participants ({{isRestrictedParticipants ? 'Restricted' : 'Open For All'}})</h4>
   <div fxLayout="column">
     <span *ngIf="!seasonParticipants.length" class="mat-caption">
       No Participants yet!

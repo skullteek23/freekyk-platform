@@ -107,12 +107,12 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     this.seasonAdminService.publishSeason(this.seasonID)
       .then(() => {
         this.seasonAdminService.uploadSeasonPhoto(this.seasonID)
-          .then(() => {
+          .catch(this.handleError.bind(this))
+          .finally(() => {
             this.seasonAdminService.clearSavedData();
             this.isLoaderShown = false;
             this.isSeasonLive = true;
-          })
-          .catch(this.handleError.bind(this));
+          });
       })
       .catch(this.handleError.bind(this));
   }
