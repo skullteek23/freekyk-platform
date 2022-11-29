@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { GROUNDS_FEATURES_LIST, MatchConstants } from '@shared/constants/constants';
+import { GROUNDS_FEATURES_LIST } from '@shared/constants/constants';
 import { IFilter } from '@shared/interfaces/others.model';
 import { Subject } from 'rxjs';
 

@@ -1,4 +1,4 @@
-import { SeasonAdminService } from '@admin/main-shell/components/season-panel/season-admin.service';
+import { SeasonAdminService } from '@admin/main-shell/services/season-admin.service';
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';

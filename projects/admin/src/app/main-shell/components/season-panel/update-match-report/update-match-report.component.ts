@@ -11,8 +11,8 @@ import { ListOption } from '@shared/interfaces/others.model';
 import { TeamMembers } from '@shared/interfaces/team.model';
 import { MatchConstants, STATISTICS } from '@shared/constants/constants';
 import { formsMessages, matchReportMessages } from '@shared/constants/messages';
-import { ChipSelectionInputComponent } from '../chip-selection-input/chip-selection-input.component';
-import { SeasonAdminService } from '../season-admin.service';
+import { ChipSelectionInputComponent } from './components/chip-selection-input/chip-selection-input.component';
+import { SeasonAdminService } from '../../../services/season-admin.service';
 
 export type HomeAway = 'home' | 'away';
 export enum TeamSides {

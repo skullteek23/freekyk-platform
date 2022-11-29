@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IGroundInfo } from '@shared/interfaces/ground.model';
 
 @Component({
@@ -6,13 +6,7 @@ import { IGroundInfo } from '@shared/interfaces/ground.model';
   templateUrl: './ground-slots.component.html',
   styleUrls: ['./ground-slots.component.scss']
 })
-export class GroundSlotsComponent implements OnInit {
+export class GroundSlotsComponent {
 
   @Input() groundsList: Partial<IGroundInfo>[] = [];
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

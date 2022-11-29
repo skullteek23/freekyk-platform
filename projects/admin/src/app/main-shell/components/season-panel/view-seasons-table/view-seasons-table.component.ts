@@ -3,9 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SeasonBasicInfo, SeasonDraft, statusType } from '@shared/interfaces/season.model';
+import { SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { SeasonAdminService } from '../season-admin.service';
+import { SeasonAdminService } from '../../../services/season-admin.service';
 
 @Component({
   selector: 'app-view-seasons-table',

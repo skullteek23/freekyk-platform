@@ -2,22 +2,21 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { GroundPrivateInfo } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchFixture } from '@shared/interfaces/match.model';
-import { SeasonDraft, SeasonParticipants, SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { SeasonParticipants, SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment.dev';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
-import { SeasonAdminService } from '../season-admin.service';
+import { SeasonAdminService } from '../../../services/season-admin.service';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 
 @Component({

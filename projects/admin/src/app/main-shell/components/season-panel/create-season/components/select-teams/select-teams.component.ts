@@ -7,7 +7,6 @@ import { ISelectTeam, ISelectMatchType } from '@shared/interfaces/season.model';
 import { ITeamInfo, TeamBasicInfo } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-select-teams',
   templateUrl: './select-teams.component.html',

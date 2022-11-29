@@ -1,5 +1,5 @@
 import { MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
-import { GroundPrivateInfo, IGroundSelection } from './ground.model';
+import { IGroundSelection } from './ground.model';
 import { IDummyFixture, TournamentTypes } from './match.model';
 import { ITeamInfo } from './team.model';
 
@@ -48,15 +48,6 @@ export interface SeasonParticipants {
   tid: string;
   name: string;
   logo: string;
-}
-
-export interface SeasonDraft {
-  lastUpdated: number;
-  createdBy: string;
-  draftID: string;
-  status: statusType;
-  basicInfo?: any;
-  grounds?: GroundPrivateInfo[];
 }
 
 export enum LastParticipationDate {

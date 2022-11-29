@@ -1,8 +1,0 @@
-<mat-form-field>
-  <mat-label>Team </mat-label>
-  <mat-select (selectionChange)="onSelectTeam($event.value)">
-    <mat-option *ngFor="let team of teamList" [value]="team">
-      {{team.tname}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>

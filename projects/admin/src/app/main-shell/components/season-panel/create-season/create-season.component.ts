@@ -6,10 +6,10 @@ import { AddSeasonComponent } from './components/add-season/add-season.component
 import { SelectMatchTypeComponent } from './components/select-match-type/select-match-type.component';
 import { SelectTeamsComponent } from './components/select-teams/select-teams.component';
 import { SelectGroundComponent } from './components/select-ground/select-ground.component';
-import { SeasonAdminService } from '../season-admin.service';
+import { SeasonAdminService } from '../../../services/season-admin.service';
 import { seasonFlowMessages } from '@shared/constants/messages';
 import { AdminPaymentComponent } from './components/admin-payment/admin-payment.component';
-import { GenerateFixturesComponent } from '../generate-fixtures/generate-fixtures.component';
+import { GenerateFixturesComponent } from './components/generate-fixtures/generate-fixtures.component';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 

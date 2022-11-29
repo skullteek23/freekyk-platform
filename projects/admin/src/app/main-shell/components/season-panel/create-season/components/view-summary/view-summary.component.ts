@@ -7,8 +7,6 @@ import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confi
 import { ISeasonSummaryData, ISummaryDataSource, ISelectMatchType, ISelectTeam, ISelectGrounds, ISeasonFixtures, ISeasonDetails } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 
-
-
 @Component({
   selector: 'app-view-summary',
   templateUrl: './view-summary.component.html',

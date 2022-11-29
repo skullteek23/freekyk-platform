@@ -6,7 +6,7 @@ import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/const
 import { formsMessages } from '@shared/constants/messages';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ISeasonDetails } from '@shared/interfaces/season.model';
-import { SeasonAdminService } from '../../../season-admin.service';
+import { SeasonAdminService } from '../../../../../services/season-admin.service';
 
 @Component({
   selector: 'app-add-season',
