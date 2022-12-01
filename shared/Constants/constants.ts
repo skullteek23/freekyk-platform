@@ -1,6 +1,5 @@
 export class MatchConstants {
   static readonly GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
-  static readonly DAYS_LIST: string[] = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
   static readonly DAYS_LIST_FULL = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   // match duration and on-field operations should finish within 1 hour
   static readonly ONE_MATCH_DURATION = 1;
@@ -29,6 +28,7 @@ export class MatchConstants {
   static readonly ONE_DAY_IN_MILLIS = 86400000;
   static readonly CREATE_TEXT = 'I Want to Create!';
   static readonly GROUND_SLOT_DATE_FORMAT = 'd/M/yy, h a'; // results in `15/6/21, 9 AM`
+  static readonly GROUND_CONTRACT_DATE_FORMAT = 'd/M/yy'; // results in `15/6/21, 9 AM`
 
 }
 export const GROUNDS_FEATURES_LIST = {
@@ -45,6 +45,15 @@ export enum MATCH_TYPES_PACKAGES {
   PackageThree = 'One league of 4 Teams',
   PackageCustom = 'Full Season of 4+ Teams'
 };
+export enum DAYS {
+  'Sun',
+  'Mon',
+  'Tues',
+  'Wed',
+  'Thurs',
+  'Fri',
+  'Sat',
+}
 export const STATISTICS = {
   FKC_PLAYED: 'FKC Played',
   FCP_PLAYED: 'FCP Played',

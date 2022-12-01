@@ -1,13 +1,18 @@
-export type GROUND_TYPES = 'PUBLIC' | 'PRIVATE';
+import { MatchConstants } from '@shared/constants/constants';
+import { LocationDetails } from './others.model';
+import { ITiming } from '@shared/interfaces/others.model';
+
+export type OWNERSHIP_TYPES = 'PUBLIC' | 'PRIVATE';
+export type TURF_TYPES = 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'
 
 export interface GroundBasicInfo {
   name: string;
-  imgpath: string;
   locCity: string;
   locState: string;
-  fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
-  ownType: GROUND_TYPES;
+  fieldType: TURF_TYPES;
+  ownType: OWNERSHIP_TYPES;
   playLvl: 'good' | 'best' | 'fair';
+  imgpath?: string;
   id?: string;
 }
 export interface GroundMoreInfo {
@@ -21,10 +26,10 @@ export interface GroundMoreInfo {
 }
 
 export interface GroundPrivateInfo {
-  signedContractFileLink: string;
   contractStartDate: number;
   contractEndDate: number;
   timings: any;
+  signedContractFileLink?: string;
   id?: string;
 }
 
@@ -39,8 +44,8 @@ export interface IGroundInfo {
   imgpath: string;
   locCity: string;
   locState: string;
-  fieldType: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
-  ownType: GROUND_TYPES;
+  fieldType: TURF_TYPES;
+  ownType: OWNERSHIP_TYPES;
   playLvl: 'good' | 'best' | 'fair';
   id: string;
   referee: boolean;
@@ -60,7 +65,7 @@ export interface IGroundSelection {
   locCity: string;
   locState: string;
   name: string;
-  ownType: GROUND_TYPES
+  ownType: OWNERSHIP_TYPES;
   slots: number[]
 }
 
@@ -69,3 +74,36 @@ export interface IGroundSelection {
 // grounds/{{GROUND-ID}}/additionalInfo/moreInfo
 // grounds/{{GROUND-ID}}/additionalInfo/moreInfo
 // groundBookings/{{BOOKING-ID}}
+
+export const turfFormatter = {
+  format: (val: TURF_TYPES) => {
+    const turfTypes = {
+      FG: 'Football Ground',
+      SG: 'Soft Ground',
+      HG: 'Hard Ground',
+      AG: 'Artificial Ground',
+      TURF: 'Turf',
+    }
+    return turfTypes[val] ? turfTypes[val] : MatchConstants.LABEL_NOT_AVAILABLE;
+  }
+}
+
+export interface IGroundDetails {
+  name: string;
+  type: OWNERSHIP_TYPES;
+  location: LocationDetails;
+  contract: {
+    start: string;
+    end: string
+  };
+}
+
+export type IGroundAvailability = ITiming[];
+
+export interface IGroundSummaryData {
+  name: string;
+  type: OWNERSHIP_TYPES;
+  location: string;
+  timings: string;
+  contractRange: string;
+}

@@ -138,11 +138,11 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
   getRange(start: number, end: number, timings: any): ListOption[] {
     const range: number[] = [];
     for (let dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
-      const timeArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+      const hours = MatchConstants.GROUND_HOURS;
       const day = dt.getDay();
       if (timings.hasOwnProperty(day)) {
-        for (let i = 0; i < timeArray.length; i++) {
-          const hour = timeArray[i];
+        for (let i = 0; i < hours.length; i++) {
+          const hour = hours[i];
           if ((timings[day] as number[]).includes(hour)) {
             const dtCopy = new Date(JSON.parse(JSON.stringify(dt)));
             dtCopy.setHours(hour);

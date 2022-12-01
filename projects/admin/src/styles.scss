@@ -956,3 +956,19 @@ app-fixture-table {
     }
   }
 }
+
+.ground-availability-container {
+  mat-chip-list {
+    max-height: 400px;
+    overflow-y: auto;
+    .mat-chip-list-wrapper {
+      width: 616px;
+      margin: auto;
+      .mat-chip-selected {
+        span {
+          color: white;
+        }
+      }
+    }
+  }
+}

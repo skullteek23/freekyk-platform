@@ -1,4 +1,10 @@
 <div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
+  <div class="title-heading">
+    <span class="mat-subheading-1">
+      Create Season
+    </span>
+  </div>
+
   <mat-horizontal-stepper #seasonStepper [linear]="true">
 
     <mat-step label="Match Type" [stepControl]="matchSelectForm" [editable]="seasonStepper.selectedIndex <= 4">

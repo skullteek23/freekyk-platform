@@ -35,3 +35,10 @@ export const seasonFlowMessages = {
     }
   }
 };
+export const groundFlowMessages = {
+  availability: {
+    error: {
+      noSelection: 'No availability slots are selected!'
+    }
+  }
+};

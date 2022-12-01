@@ -81,7 +81,7 @@ export class SelectGroundComponent implements OnInit, OnDestroy {
     forkJoin([
       this.ngFire.collection('grounds', query => query.where('locCity', '==', this.selectedCity).where('ownType', '==', groundType)).get(),
       this.ngFire.collection('groundDetails').get(),
-      this.ngFire.collection('groundsPvt').get()
+      this.ngFire.collection('groundContracts').get()
     ])
       .subscribe({
         next: (response) => {

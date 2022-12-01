@@ -4,7 +4,7 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { GroundBooking, GROUND_TYPES, IGroundSelection } from '@shared/interfaces/ground.model';
+import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, TournamentTypes, } from '@shared/interfaces/match.model';
 import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -12,7 +12,13 @@ import { MatchConstants } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 
-
+export interface Slot {
+  name: string;
+  locState: string;
+  locCity: string;
+  ownType: OWNERSHIP_TYPES;
+  slot: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -36,13 +42,7 @@ export class SeasonAdminService {
       return [];
     }
     const fixtures: IDummyFixture[] = [];
-    const groundSlots: {
-      name: string;
-      locState: string;
-      locCity: string;
-      ownType: GROUND_TYPES;
-      slot: number;
-    }[] = [];
+    const groundSlots: Slot[] = [];
     options.grounds.map(ground => {
       const groundInfo: any = {
         name: ground.name,

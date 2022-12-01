@@ -59,7 +59,7 @@ import {
 } from './components/illustration-hero-section-alternate/illustration-hero-section-alternate.component';
 import { PhotoUploaderComponent } from './components/photo-uploader/photo-uploader.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
-import { NumberToAMPMPipe } from './pipes/number-to-ampm.pipe';
+import { HourToDate } from './pipes/hour-to-date.pipe';
 import { ActionStripComponent } from './components/action-strip/action-strip.component';
 
 const customConfig: ShareButtonsConfig = {
@@ -124,7 +124,7 @@ const customConfig: ShareButtonsConfig = {
     SearchAutocompleteComponent,
     PhotoUploaderComponent,
     FileUploaderComponent,
-    NumberToAMPMPipe,
+    HourToDate,
     ActionStripComponent
   ],
   imports: [
@@ -188,7 +188,7 @@ const customConfig: ShareButtonsConfig = {
     SearchAutocompleteComponent,
     PhotoUploaderComponent,
     FileUploaderComponent,
-    NumberToAMPMPipe,
+    HourToDate,
     ActionStripComponent
   ],
 })

@@ -1,0 +1,47 @@
+.table-container {
+  height: 500px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 959px) {
+  .table-container {
+    height: 450px;
+  }
+}
+
+.selected-row:hover {
+  background-color: var(--grey4);
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border: 1px solid var(--grey5);
+}
+
+.mat-column-season {
+  width: 300px;
+  text-align: left;
+}
+
+.mat-column-actions,
+.mat-column-sno {
+  text-align: center;
+}
+
+a.disabled {
+  cursor: not-allowed !important;
+  color: grey !important;
+}
+
+.row:hover span,
+.row:hover div .material-icons-round {
+  color: var(--primaryDarkColor);
+}
+
+.button-container {
+  margin-top: 20px;
+  margin-bottom: 8px !important;
+}

@@ -1,0 +1,35 @@
+.photo-container {
+  width: 100%;
+}
+
+.form-container {
+  border: 1px solid var(--grey1);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 20px;
+}
+
+// .field-container,
+// .contract-container,
+// .contract-container div mat-form-field,
+// .state-city-container div mat-form-field {
+//   width: 100%;
+// }
+
+section.section-container div,
+section.section-container div mat-form-field,
+section.section-container {
+  width: 100%;
+}
+
+mat-radio-button {
+  margin: 0 8px;
+}
+
+.contract-container {
+  margin-top: 20px;
+}
+
+// .buttons-container {
+//   margin-top: 20px;
+// }

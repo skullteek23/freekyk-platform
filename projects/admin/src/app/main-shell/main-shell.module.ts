@@ -40,6 +40,12 @@ import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { AdminPaymentComponent } from './components/season-panel/create-season/components/admin-payment/admin-payment.component';
 import { ViewSummaryComponent } from './components/season-panel/create-season/components/view-summary/view-summary.component';
 import { ViewPublishedSeasonComponent } from './components/season-panel/view-published-season/view-published-season.component';
+import { RegisterGroundComponent } from './components/grounds-panel/register-ground/register-ground.component';
+import { ViewGroundsTableComponent } from './components/grounds-panel/view-grounds-table/view-grounds-table.component';
+import { ViewRegisteredGroundComponent } from './components/grounds-panel/view-registered-ground/view-registered-ground.component';
+import { GroundDetailsComponent } from './components/grounds-panel/register-ground/components/ground-details/ground-details.component';
+import { GroundAvailabilityComponent } from './components/grounds-panel/register-ground/components/ground-availability/ground-availability.component';
+import { GroundFormSummaryComponent } from './components/grounds-panel/register-ground/components/ground-form-summary/ground-form-summary.component';
 
 const routes: Routes = [
   {
@@ -57,7 +63,15 @@ const routes: Routes = [
           { path: ':seasonid', component: ViewPublishedSeasonComponent },
         ],
       },
-      { path: 'grounds', component: GroundsPanelComponent },
+      {
+        path: 'grounds', component: GroundsPanelComponent,
+        children: [
+          { path: '', component: ViewGroundsTableComponent, pathMatch: 'full' },
+          { path: 'list', component: ViewGroundsTableComponent },
+          { path: 'register', component: RegisterGroundComponent },
+          { path: ':groundid', component: ViewRegisteredGroundComponent },
+        ],
+      },
       { path: 'account', component: MyAccountPanelComponent },
       { path: 'manage-requests', component: RegistrationsPanelComponent },
       { path: 'configurations', component: AdminConfigPanelComponent },
@@ -90,7 +104,13 @@ const routes: Routes = [
     GroundSlotSelectionComponent,
     AdminPaymentComponent,
     ViewSummaryComponent,
-    ViewPublishedSeasonComponent
+    ViewPublishedSeasonComponent,
+    RegisterGroundComponent,
+    ViewGroundsTableComponent,
+    ViewRegisteredGroundComponent,
+    GroundDetailsComponent,
+    GroundAvailabilityComponent,
+    GroundFormSummaryComponent
   ],
   imports: [
     CommonModule,

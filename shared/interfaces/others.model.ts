@@ -261,7 +261,7 @@ export interface ListOption {
 export interface LocationDetails {
   city: string;
   state: string;
-  country: string;
+  country?: string;
 }
 export interface IFilter {
   city: string;
@@ -271,4 +271,10 @@ export interface IFilter {
   goalpost: boolean;
   washroom: boolean;
   staff: boolean;
+}
+
+export interface ITiming {
+  hour: number;
+  day: string;
+  selected: boolean;
 }
