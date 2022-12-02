@@ -88,7 +88,7 @@ export class GroundDetailsComponent implements OnInit {
   }
 
   selectContract($event: File) {
-    this.groundAdminService._selectedImageFile = $event;
+    this.groundAdminService._selectedContractFile = $event;
   }
 
   get contract(): FormGroup {

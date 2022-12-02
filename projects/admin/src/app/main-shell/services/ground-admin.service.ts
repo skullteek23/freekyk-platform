@@ -67,7 +67,7 @@ export class GroundAdminService {
       return Promise.reject({
         message: 'Unable to upload Ground Photo!'
       });
-    } else if (this.selectedContractFile) {
+    } else if (!this.selectedContractFile) {
       return Promise.reject({
         message: 'Unable to upload Ground Contract File!'
       });
