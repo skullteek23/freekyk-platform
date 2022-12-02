@@ -56,7 +56,7 @@
   <div>
     <h4>Field Type</h4>
     <p class="mat-body-1">
-      {{ getFieldType((groundInfo$ | async)?.fieldType) }}
+      {{ formatter.formatTurf((groundInfo$ | async)?.fieldType) }}
     </p>
   </div>
 

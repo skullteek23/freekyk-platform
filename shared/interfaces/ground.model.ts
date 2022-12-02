@@ -6,11 +6,11 @@ export type OWNERSHIP_TYPES = 'PUBLIC' | 'PRIVATE';
 export type TURF_TYPES = 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'
 export type PLAY_LEVELS = 'good' | 'best' | 'fair';
 export const turfTypes = {
-  FG: 'Football Ground',
-  SG: 'Soft Ground',
-  HG: 'Hard Ground',
-  AG: 'Artificial Ground',
-  TURF: 'Turf',
+  FG: 'Full Ground',
+  SG: 'Short Ground',
+  HG: 'Huge Ground',
+  AG: 'Agile Ground',
+  TURF: 'Football Turf',
 }
 export const ownershipTypes = [
   'PUBLIC',

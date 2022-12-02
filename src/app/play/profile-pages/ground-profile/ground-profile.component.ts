@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import {
+  Formatters,
   GroundBasicInfo,
   GroundMoreInfo,
 } from '@shared/interfaces/ground.model';
@@ -21,6 +22,7 @@ export class GroundProfileComponent implements OnInit {
   grImgpath: string;
   grId: string;
   isLoading = true;
+  formatter: any;
   error = false;
   constructor(
     private ngFire: AngularFirestore,
@@ -29,6 +31,7 @@ export class GroundProfileComponent implements OnInit {
     private router: Router
   ) { }
   ngOnInit(): void {
+    this.formatter = Formatters;
     const GroundId = this.route.snapshot.params.groundid;
     this.getGroundInfo(GroundId);
   }
@@ -55,8 +58,8 @@ export class GroundProfileComponent implements OnInit {
   }
   getGroundMoreInfo(gid: string): void {
     this.groundMoreInfo$ = this.ngFire
-      .collection('grounds/' + gid + '/additionalInfo')
-      .doc('moreInfo')
+      .collection('groundDetails')
+      .doc(gid)
       .get()
       .pipe(
         tap(() => (this.isLoading = false)),
@@ -64,22 +67,7 @@ export class GroundProfileComponent implements OnInit {
         share()
       );
   }
-  getFieldType(type: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'): string {
-    switch (type) {
-      case 'FG':
-        return 'Full Ground';
-      case 'SG':
-        return 'Short Ground';
-      case 'HG':
-        return 'Huge Ground';
-      case 'AG':
-        return 'Agile Ground';
-      case 'TURF':
-        return 'Football Turf';
-      default:
-        return 'Not Available';
-    }
-  }
+
   onEnlargePhoto(): void {
     this.enlServ.onOpenPhoto(this.grImgpath);
   }
