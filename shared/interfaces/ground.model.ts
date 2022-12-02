@@ -4,6 +4,23 @@ import { ITiming } from '@shared/interfaces/others.model';
 
 export type OWNERSHIP_TYPES = 'PUBLIC' | 'PRIVATE';
 export type TURF_TYPES = 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'
+export type PLAY_LEVELS = 'good' | 'best' | 'fair';
+export const turfTypes = {
+  FG: 'Football Ground',
+  SG: 'Soft Ground',
+  HG: 'Hard Ground',
+  AG: 'Artificial Ground',
+  TURF: 'Turf',
+}
+export const ownershipTypes = [
+  'PUBLIC',
+  'PRIVATE'
+]
+export const playLevels = [
+  'fair',
+  'good',
+  'best',
+];
 
 export interface GroundBasicInfo {
   name: string;
@@ -11,7 +28,7 @@ export interface GroundBasicInfo {
   locState: string;
   fieldType: TURF_TYPES;
   ownType: OWNERSHIP_TYPES;
-  playLvl: 'good' | 'best' | 'fair';
+  playLvl: PLAY_LEVELS;
   imgpath?: string;
   id?: string;
 }
@@ -46,7 +63,7 @@ export interface IGroundInfo {
   locState: string;
   fieldType: TURF_TYPES;
   ownType: OWNERSHIP_TYPES;
-  playLvl: 'good' | 'best' | 'fair';
+  playLvl: PLAY_LEVELS;
   id: string;
   referee: boolean;
   foodBev: boolean;
@@ -75,15 +92,8 @@ export interface IGroundSelection {
 // grounds/{{GROUND-ID}}/additionalInfo/moreInfo
 // groundBookings/{{BOOKING-ID}}
 
-export const turfFormatter = {
-  format: (val: TURF_TYPES) => {
-    const turfTypes = {
-      FG: 'Football Ground',
-      SG: 'Soft Ground',
-      HG: 'Hard Ground',
-      AG: 'Artificial Ground',
-      TURF: 'Turf',
-    }
+export const Formatters = {
+  formatTurf: (val: TURF_TYPES) => {
     return turfTypes[val] ? turfTypes[val] : MatchConstants.LABEL_NOT_AVAILABLE;
   }
 }
@@ -96,6 +106,14 @@ export interface IGroundDetails {
     start: string;
     end: string
   };
+  playLvl: PLAY_LEVELS;
+  fieldType: TURF_TYPES;
+  referee: boolean;
+  foodBev: boolean;
+  parking: boolean;
+  goalpost: boolean;
+  washroom: boolean;
+  staff: boolean;
 }
 
 export type IGroundAvailability = ITiming[];
@@ -106,4 +124,22 @@ export interface IGroundSummaryData {
   location: string;
   timings: string;
   contractRange: string;
+  playLvl: string;
+  fieldType: string;
+  referee: string;
+  foodBev: string;
+  parking: string;
+  goalpost: string;
+  washroom: string;
+  staff: string;
+}
+
+export interface GroundTimings {
+  0: number[];
+  1: number[];
+  2: number[];
+  3: number[];
+  4: number[];
+  5: number[];
+  6: number[];
 }

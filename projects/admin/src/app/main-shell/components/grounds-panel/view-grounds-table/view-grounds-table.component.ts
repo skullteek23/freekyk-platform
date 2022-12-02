@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { GroundBasicInfo, turfFormatter } from '@shared/interfaces/ground.model';
+import { Formatters, GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class ViewGroundsTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.formatter = turfFormatter;
+    this.formatter = Formatters;
     this.getGrounds();
   }
 

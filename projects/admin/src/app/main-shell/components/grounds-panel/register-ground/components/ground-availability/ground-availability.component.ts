@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DAYS, MatchConstants } from '@shared/constants/constants';
+import { IGroundAvailability } from '@shared/interfaces/ground.model';
 import { ITiming } from '@shared/interfaces/others.model';
 
 @Component({
@@ -9,7 +9,6 @@ import { ITiming } from '@shared/interfaces/others.model';
   styleUrls: ['./ground-availability.component.scss']
 })
 export class GroundAvailabilityComponent implements OnInit {
-  availabilityForm: FormGroup;
   allowedHours: number[] = MatchConstants.GROUND_HOURS;
   days = [
     DAYS[0], DAYS[1], DAYS[2], DAYS[3], DAYS[4], DAYS[5], DAYS[6]
@@ -20,14 +19,8 @@ export class GroundAvailabilityComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.initForm();
     this.createTimingArray();
-  }
-
-  initForm() {
-    this.availabilityForm = new FormGroup({
-      timingsPreferences: new FormControl(null, Validators.required)
-    })
+    this.getLastSavedData();
   }
 
   onSelectionChange(change: ITiming) {
@@ -47,5 +40,16 @@ export class GroundAvailabilityComponent implements OnInit {
         })
       });
     });
+  }
+
+  getLastSavedData() {
+    const groundAvailability: IGroundAvailability = JSON.parse(sessionStorage.getItem('groundAvailability'));
+    if (groundAvailability && groundAvailability.length) {
+      this.timingArray.forEach(element => {
+        if (groundAvailability.findIndex(el => el.day === element.day && el.hour === element.hour) > -1) {
+          element.selected = true;
+        }
+      });
+    }
   }
 }

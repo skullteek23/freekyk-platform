@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatchConstants } from '@shared/constants/constants';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IGroundAvailability, IGroundDetails, IGroundSummaryData } from '@shared/interfaces/ground.model';
+import { IGroundAvailability, IGroundDetails, IGroundSummaryData, Formatters } from '@shared/interfaces/ground.model';
 import { ISummaryDataSource } from '@shared/interfaces/season.model';
 import * as _ from 'lodash';
 
@@ -33,6 +33,7 @@ export class GroundFormSummaryComponent implements OnInit {
   }
 
   initSummary() {
+    const formatter = Formatters;
     const groundDetails: IGroundDetails = JSON.parse(sessionStorage.getItem('groundDetails'));
     const groundAvailability: IGroundAvailability = JSON.parse(sessionStorage.getItem('groundAvailability'));
     const data: Partial<IGroundSummaryData> = {};
@@ -45,8 +46,20 @@ export class GroundFormSummaryComponent implements OnInit {
       data.location = groundDetails.location.city + ", " + groundDetails.location.state;
       data.timings = _.uniq(daysArray).join(", ");
       data.contractRange = `${start} - ${end}`;
+      data.playLvl = groundDetails.playLvl;
+      data.fieldType = formatter.formatTurf(groundDetails.fieldType);
+      data.referee = this.getTruthyValue(groundDetails.referee);
+      data.foodBev = this.getTruthyValue(groundDetails.foodBev);
+      data.parking = this.getTruthyValue(groundDetails.parking);
+      data.goalpost = this.getTruthyValue(groundDetails.goalpost);
+      data.washroom = this.getTruthyValue(groundDetails.washroom);
+      data.staff = this.getTruthyValue(groundDetails.staff);
     }
     this.summaryData = data;
+  }
+
+  getTruthyValue(value: boolean): string {
+    return value ? 'Yes' : 'No';
   }
 
   getDate(value: number, format: string) {
@@ -61,8 +74,16 @@ export class GroundFormSummaryComponent implements OnInit {
       const data: ISummaryDataSource[] = [];
       data.push({ label: 'Ground Name', value: this.summaryData.name });
       data.push({ label: 'Location', value: this.summaryData.location });
-      data.push({ label: 'Ground Type', value: this.summaryData.type });
+      data.push({ label: 'Ground Ownership', value: this.summaryData.type });
       data.push({ label: 'Selected Days', value: this.summaryData.timings });
+      data.push({ label: 'Playability Level', value: this.summaryData.playLvl });
+      data.push({ label: 'Field Type', value: this.summaryData.fieldType });
+      data.push({ label: 'Referee', value: this.summaryData.referee });
+      data.push({ label: 'Food & Beverages', value: this.summaryData.foodBev });
+      data.push({ label: 'Parking Available', value: this.summaryData.parking });
+      data.push({ label: 'Goalpost', value: this.summaryData.goalpost });
+      data.push({ label: 'Washroom Available', value: this.summaryData.washroom });
+      data.push({ label: 'Ball Boy (Staff)', value: this.summaryData.staff });
       this.dataSource = new MatTableDataSource<ISummaryDataSource>(data);
     }
   }

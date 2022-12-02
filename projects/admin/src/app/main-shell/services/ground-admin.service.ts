@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { GroundBasicInfo, GroundPrivateInfo, IGroundAvailability, IGroundDetails } from '@shared/interfaces/ground.model';
+import { DAYS } from '@shared/constants/constants';
+import { GroundBasicInfo, GroundMoreInfo, GroundPrivateInfo, GroundTimings, IGroundAvailability, IGroundDetails } from '@shared/interfaces/ground.model';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,6 @@ export class GroundAdminService {
   ) { }
 
   registerGround(groundID: string): Promise<any> {
-    console.log('registering', groundID);
     const groundDetails: IGroundDetails = JSON.parse(sessionStorage.getItem('groundDetails'));
     const groundAvailability: IGroundAvailability = JSON.parse(sessionStorage.getItem('groundAvailability'));
     const uid = sessionStorage.getItem('uid');
@@ -25,21 +26,40 @@ export class GroundAdminService {
         name: groundDetails.name,
         locCity: groundDetails.location.city,
         locState: groundDetails.location.state,
-        fieldType: 'TURF',
+        fieldType: groundDetails.fieldType,
         ownType: groundDetails.type,
-        playLvl: 'fair',
+        playLvl: groundDetails.playLvl,
       }
-      const timings: any = {};
-      const groundMore: GroundPrivateInfo = {
+      const groundContract: GroundPrivateInfo = {
         contractStartDate: new Date(groundDetails.contract.start).getTime(),
         contractEndDate: new Date(groundDetails.contract.end).getTime(),
-        timings: timings
+        timings: this.getTimings(groundAvailability)
+      }
+      const groundMore: GroundMoreInfo = {
+        referee: groundDetails.referee,
+        foodBev: groundDetails.foodBev,
+        parking: groundDetails.parking,
+        goalpost: groundDetails.goalpost,
+        washroom: groundDetails.washroom,
+        staff: groundDetails.staff,
       }
       const allPromises = [];
       allPromises.push(this.ngFire.collection('grounds').doc(groundID).set(ground));
-      allPromises.push(this.ngFire.collection('groundContracts').doc(groundID).set(groundMore));
+      allPromises.push(this.ngFire.collection('groundDetails').doc(groundID).set(groundMore));
+      allPromises.push(this.ngFire.collection('groundContracts').doc(groundID).set(groundContract));
       return Promise.all(allPromises);
     }
+  }
+
+  getTimings(value: IGroundAvailability): any {
+    const timings: Partial<GroundTimings> = {};
+    const groupedObj = _.groupBy(value, 'day');
+    for (let i = 0; i < 7; i++) {
+      if (groupedObj.hasOwnProperty(DAYS[i])) {
+        (timings[i] as number[]) = groupedObj[DAYS[i]].map(el => el.hour);
+      }
+    }
+    return timings;
   }
 
   async uploadGroundDocs(groundID: string): Promise<any> {
