@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { MatchDayReport, MatchFixture, MatchReportFormData } from '@shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo, SeasonDraft } from '@shared/interfaces/season.model';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { FKC_ROUND_MULTIPLIER, isFixtureAvailableHome, isFixtureAvailableHomeOrAway } from './utils/utilities';
 const db = admin.firestore();
 
@@ -28,7 +28,6 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   const ycards: number = (formData.yellowCardHoldersHome.length + formData.yellowCardHoldersAway.length);
 
   const seasonRef = db.collection('seasons').doc(seasonID);
-  const draftSeasonRef = db.collection('seasonDrafts').doc(seasonID);
   const seasonStatsRef = db.collection(`seasons/${seasonID}/additionalInfo`).doc('statistics');
 
   if ((await seasonStatsRef.get()).exists) {
@@ -313,14 +312,6 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
   }
   updateSeason.leftOverMatchCount = season.leftOverMatchCount - 1;
   batch.update(seasonRef, updateSeason);
-
-  // Draft Season Update
-  const updateDraft: Partial<SeasonDraft> = {};
-  updateDraft.lastUpdated = new Date().getTime();
-  if (isLastFixture) {
-    updateDraft.status = 'FINISHED';
-  }
-  batch.update(draftSeasonRef, updateDraft);
 
   return batch.commit();
 }
