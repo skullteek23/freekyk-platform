@@ -7,7 +7,8 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
+  <app-filters-lg *ngIf="!season" fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)">
+  </app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->

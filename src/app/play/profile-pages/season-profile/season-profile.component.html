@@ -29,19 +29,19 @@
           </div>
         </button>
       </div>
-      <div fxLayoutAlign="start center" class="nav-links">
+      <!-- <div fxLayoutAlign="start center" class="nav-links">
         Go to&nbsp;<a [routerLink]="['/play', 'fixtures']" [queryParams]="{Season: this.seasonName}"
           *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'"> Fixtures /&nbsp;</a><a
           [routerLink]="['/play', 'results']" [queryParams]="{Season: this.seasonName}">Results /&nbsp;</a><a
           [routerLink]="['/play', 'standings']" [queryParams]="{Season: this.seasonName}">Standings</a>
-      </div>
+      </div> -->
     </div>
   </section>
 </div>
 <!-- intro-section -->
 
 <!-- content -->
-<mat-tab-group class="container section-space-bottom">
+<mat-tab-group class="container section-space-bottom season-fixtures-container">
   <mat-tab label="Overview">
     <ng-template matTabContent>
       <app-se-overview [seasonId]="sid" [venue]="{
@@ -58,6 +58,22 @@
   <mat-tab label="Statistics">
     <ng-template matTabContent>
       <app-se-stats [stats]="stats$ | async"></app-se-stats>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Fixtures">
+    <ng-template matTabContent>
+      <app-se-fixtures [seasonName]="seasonInfo.name"></app-se-fixtures>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Results">
+    <ng-template matTabContent>
+      <app-se-fixtures [showResults]="true" [seasonName]="seasonInfo.name">
+      </app-se-fixtures>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Standings">
+    <ng-template matTabContent>
+      <app-pl-standings [seasonChosen]="seasonInfo.name"></app-pl-standings>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   leagueData: LeagueTableModel[] = [];
   onMobile = false;
   subscriptions = new Subscription();
-  seasonChosen = null;
+  @Input() seasonChosen = null;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -38,15 +38,19 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       defaultFilterPath: '',
       filtersObj: {},
     };
-    this.subscriptions.add(
-      this.route.queryParams.subscribe((params) => {
-        if (params && Object.keys(params).length) {
-          this.onQuerySeason(Object.values(params)[0]);
-        } else {
-          this.onQuerySeason(null);
-        }
-      })
-    );
+    if (this.seasonChosen) {
+      this.onQuerySeason(this.seasonChosen);
+    } else {
+      this.subscriptions.add(
+        this.route.queryParams.subscribe((params) => {
+          if (params && Object.keys(params).length) {
+            this.onQuerySeason(Object.values(params)[0]);
+          } else {
+            this.onQuerySeason(null);
+          }
+        })
+      );
+    }
     this.ngFire
       .collection('seasons')
       .get()

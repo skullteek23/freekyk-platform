@@ -800,3 +800,10 @@ mat-table {
 }
 
 /* Custom Mat-menu Panels */
+
+.season-fixtures-container {
+  .mat-tab-body-active {
+    min-height: 300px;
+    padding-top: 20px;
+  }
+}

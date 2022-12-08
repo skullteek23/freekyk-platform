@@ -37,6 +37,8 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { SharedModule } from '@shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
+import { SeStandingsComponent } from './play/profile-pages/season-profile/se-standings/se-standings.component';
+import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { environment } from 'environments/environment';
     SeOverviewComponent,
     SeGalleryComponent,
     SeStatsComponent,
+    SeFixturesComponent,
+    SeStandingsComponent,
   ],
   imports: [
     BrowserModule,

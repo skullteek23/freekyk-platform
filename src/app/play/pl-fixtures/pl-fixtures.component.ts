@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { Observable, Subscription } from 'rxjs';
@@ -16,6 +16,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./pl-fixtures.component.scss'],
 })
 export class PlFixturesComponent implements OnInit, OnDestroy {
+
+  @Input() season: string = '';
+
   isLoading = true;
   noFixtures = false;
   fixtures$: Observable<MatchFixture[]>;
@@ -28,20 +31,22 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
     private router: Router
   ) { }
   ngOnInit(): void {
-    this.initSeasonFilter();
-    this.subscriptions.add(
-      this.route.queryParams.subscribe((params) => {
-        if (params && Object.keys(params).length) {
-          const filter = {
-            queryItem: Object.keys(params)[0],
-            queryValue: Object.values(params)[0]
-          };
-          this.onQueryFixtures(filter);
-        } else {
-          this.onQueryFixtures(null);
-        }
-      })
-    );
+    if (!this.season) {
+      this.initSeasonFilter();
+      this.subscriptions.add(
+        this.route.queryParams.subscribe((params) => {
+          if (params && Object.keys(params).length) {
+            const filter = {
+              queryItem: Object.keys(params)[0],
+              queryValue: Object.values(params)[0]
+            };
+            this.onQueryFixtures(filter);
+          } else {
+            this.onQueryFixtures(null);
+          }
+        })
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -51,19 +56,30 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   }
 
   initSeasonFilter() {
-    this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
-      .subscribe((resp) => {
-        this.filterData = {
-          defaultFilterPath: 'allMatches',
-          filtersObj: {
-            ...MatchFilters,
-            Season: resp,
-          },
-        };
-      });
+    if (this.season) {
+      this.filterData = {
+        defaultFilterPath: 'allMatches',
+        filtersObj: {
+          ...MatchFilters,
+          Season: [this.season],
+        },
+      };
+    } else {
+      this.ngFire
+        .collection('seasons')
+        .get()
+        .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+        .subscribe((resp) => {
+          this.filterData = {
+            defaultFilterPath: 'allMatches',
+            filtersObj: {
+              ...MatchFilters,
+              Season: resp,
+            },
+          };
+        });
+
+    }
   }
 
   onQueryFixtures(queryInfo): void {
