@@ -303,7 +303,31 @@ mat-table {
   color: var(--primaryDarkColor);
 }
 
-.sticky {
+.sub-header-container {
+  width: 100%;
+  margin-left: 16px;
+  margin-right: 16px;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.sticky-sub-header {
+  .mat-tab-header {
+    position: fixed;
+    top: 72px;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    z-index: 98;
+    height: 48px;
+
+    -webkit-transition: 0.15s ease-in-out all;
+    -moz-transition: 0.15s ease-in-out all;
+    -o-transition: 0.15s ease-in-out all;
+    transition: 0.15s ease-in-out all;
+  }
+}
+.sticky-header {
   position: fixed;
   top: 0px;
   width: 100%;

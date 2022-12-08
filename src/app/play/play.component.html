@@ -1,20 +1,11 @@
 <div>
-  <app-hero-section
-    [useAltLayout]="true"
-    imageSource="assets/svgs/Banner/play_banner.svg"
-    [description]="mainContent"
-    [CTA]="{ name: 'get started', route: '/dashboard/home' }"
-  ></app-hero-section>
+  <app-hero-section [useAltLayout]="true" imageSource="assets/svgs/Banner/play_banner.svg" [description]="mainContent"
+    [CTA]="{ name: 'get started', route: '/dashboard/home' }"></app-hero-section>
 </div>
-<div class="container">
+<div class="sub-header-container" appStickyNav [offset]="550" panelClass="sticky-sub-header" fxHide.lt-md>
   <nav mat-tab-nav-bar color="primary">
-    <a
-      mat-tab-link
-      *ngFor="let link of playLinks"
-      (click)="activeLink = link"
-      [routerLink]="[link]"
-      [active]="activeLink == link"
-    >
+    <a mat-tab-link *ngFor="let link of playLinks" (click)="activeLink = link" [routerLink]="[link]"
+      [active]="activeLink == link">
       {{ link | titlecase }}
     </a>
   </nav>
