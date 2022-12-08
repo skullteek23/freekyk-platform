@@ -245,5 +245,5 @@ export const FOOTER = {
     { name: 'raise a ticket', route: 'support' },
     { name: 'help & support', route: 'support' },
   ],
-  copyright: `Copyright © 2021. Freekyk. All rights reserved.`,
+  copyright: `Copyright © 2023. Freekyk. All rights reserved.`,
 };

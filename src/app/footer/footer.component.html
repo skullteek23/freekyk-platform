@@ -1,18 +1,9 @@
-<div
-  fxLayout="column"
-  class="container upper_space"
-  fxLayout.gt-sm="row"
-  fxLayoutGap.lt-md="20px"
-  fxLayoutAlign.gt-sm="space-between start"
->
+<div fxLayout="column" class="container upper_space" fxLayout.gt-sm="row" fxLayoutGap.lt-md="20px"
+  fxLayoutAlign.gt-sm="space-between start">
   <!-- product links -->
   <ul fxFlexOrder="1">
     <h4 matSubheader>Products</h4>
-    <a
-      *ngFor="let link of productLinks"
-      [routerLink]="[link.route]"
-      fxLayoutAlign="start center"
-    >
+    <a *ngFor="let link of productLinks" [routerLink]="[link.route]" fxLayoutAlign="start center">
       <span class="mat-body-1">{{ link.name | titlecase }}</span>
     </a>
   </ul>
@@ -21,11 +12,7 @@
   <!-- about links -->
   <ul fxFlexOrder="2">
     <h4 matSubheader>About</h4>
-    <a
-      *ngFor="let link of aboutLinks"
-      [routerLink]="[link.route]"
-      fxLayoutAlign="start center"
-    >
+    <a *ngFor="let link of aboutLinks" [routerLink]="[link.route]" fxLayoutAlign="start center">
       <span class="mat-body-1">{{ link.name | titlecase }}</span>
     </a>
   </ul>
@@ -40,19 +27,13 @@
       </div>
       <span class="mat-body-1"> Facebook </span>
     </a>
-    <a
-      href="https://www.instagram.com/freekyk_india"
-      fxLayoutAlign="start center"
-    >
+    <a href="https://www.instagram.com/freekyk_india" fxLayoutAlign="start center">
       <div class="iconSize">
         <img src="../../assets/svgs/instagram.svg" alt="instagram" />
       </div>
       <span class="mat-body-1"> Instagram </span>
     </a>
-    <a
-      href="https://www.twitter.com/freekyk_india"
-      fxLayoutAlign="start center"
-    >
+    <a href="https://www.twitter.com/freekyk_india" fxLayoutAlign="start center">
       <div class="iconSize">
         <img src="../../assets/svgs/twitter.svg" alt="twitter" />
       </div>
@@ -64,10 +45,7 @@
       </div>
       <span class="mat-body-1"> Youtube </span>
     </a>
-    <a
-      href="https://www.linkedin.com/company/freekyk-india"
-      fxLayoutAlign="start center"
-    >
+    <a href="https://www.linkedin.com/company/freekyk-india" fxLayoutAlign="start center">
       <div class="iconSize">
         <img src="../../assets/svgs/linkedin.svg" alt="linkedin" />
       </div>
@@ -79,15 +57,8 @@
   <mat-divider fxHide.gt-sm="true"></mat-divider>
 
   <!-- freekyk intro -->
-  <div
-    fxFlexOrder.gt-sm="0"
-    fxFlexOrder="4"
-    fxFlex.gt-sm="25%"
-    fxLayout="column"
-    fxLayoutAlign="space-evenly start"
-    fxLayoutGap="20px"
-    class="gap-bottom"
-  >
+  <div fxFlexOrder.gt-sm="0" fxFlexOrder="4" fxFlex.gt-sm="25%" fxLayout="column" fxLayoutAlign="space-evenly start"
+    fxLayoutGap="20px" class="gap-bottom">
     <a class="logo" [routerLink]="['/']" fxLayoutAlign="start center">
       <img src="../../assets/images/brand_logo_2.png" alt="Freekyk Logo" />
     </a>
@@ -95,7 +66,7 @@
       Freekyk is an online platform which facilitates end-to-end football for
       all passionate football lovers without any interruptions.
     </p>
-    <p class="mat-caption">Copyright © 2021. Freekyk. All rights reserved.</p>
+    <p class="mat-caption">Copyright © 2023. Freekyk. All rights reserved.</p>
     <div fxLayoutGap="20px">
       <a [routerLink]="['/terms']" class="mat-caption"> Terms & Conditions </a>
       <a [routerLink]="['/privacypolicy']" class="mat-caption">
