@@ -38,9 +38,9 @@ import { TextShortenPipe } from './pipes/text-shorten.pipe';
 import { SocialMediaLinksComponent } from './components/social-media-links/social-media-links.component';
 import { EnlargeMediaComponent } from './dialogs/enlarge-media/enlarge-media.component';
 import { AboutProfileCardComponent } from './components/about-profile-card/about-profile-card.component';
-import { SharesheetmobileComponent } from './components/sharesheetmobile/sharesheetmobile.component';
-import { SharesheetComponent } from './components/sharesheet/sharesheet.component';
-import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
+// import { SharesheetmobileComponent } from './components/sharesheetmobile/sharesheetmobile.component';
+// import { SharesheetComponent } from './components/sharesheet/sharesheet.component';
+// import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
 import { WeightPipe } from './pipes/weight.pipe';
 import { StrongFootPipe } from './pipes/strong-foot.pipe';
 import { HeightPipe } from './pipes/height.pipe';
@@ -68,14 +68,14 @@ import { KnockoutStripComponent } from '@app/play/pl-standings/pl-st-knockout/kn
 import { PlStKnockoutComponent } from '@app/play/pl-standings/pl-st-knockout/pl-st-knockout.component';
 import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-league.component';
 
-const customConfig: ShareButtonsConfig = {
-  include: ['facebook', 'twitter', 'google'],
-  exclude: ['tumblr', 'stumble', 'vk'],
-  theme: 'modern-light',
-  gaTracking: true,
-  twitterAccount: 'twitterUsername',
-  autoSetMeta: true,
-};
+// const customConfig: ShareButtonsConfig = {
+//   include: ['facebook', 'twitter', 'google'],
+//   exclude: ['tumblr', 'stumble', 'vk'],
+//   theme: 'modern-light',
+//   gaTracking: true,
+//   twitterAccount: 'twitterUsername',
+//   autoSetMeta: true,
+// };
 
 @NgModule({
   declarations: [
@@ -112,8 +112,8 @@ const customConfig: ShareButtonsConfig = {
     SocialMediaLinksComponent,
     EnlargeMediaComponent,
     AboutProfileCardComponent,
-    SharesheetmobileComponent,
-    SharesheetComponent,
+    // SharesheetmobileComponent,
+    // SharesheetComponent,
     WeightPipe,
     StrongFootPipe,
     HeightPipe,
@@ -145,7 +145,7 @@ const customConfig: ShareButtonsConfig = {
     FlexLayoutModule,
     ReactiveFormsModule,
     YouTubePlayerModule,
-    ShareModule.withConfig(customConfig),
+    // ShareModule.withConfig(customConfig),
     ClipboardModule,
   ],
   exports: [
@@ -182,8 +182,8 @@ const customConfig: ShareButtonsConfig = {
     SocialMediaLinksComponent,
     EnlargeMediaComponent,
     AboutProfileCardComponent,
-    SharesheetmobileComponent,
-    SharesheetComponent,
+    // SharesheetmobileComponent,
+    // SharesheetComponent,
     WeightPipe,
     StrongFootPipe,
     HeightPipe,
