@@ -1,4 +1,4 @@
-<img matTooltip="Settings" fxFlex="center" class="prof_pic" *ngIf="dataImg !== null; else accountCircle" [src]="dataImg"
+<img fxFlex="center" class="prof_pic" *ngIf="dataImg !== null; else accountCircle" [src]="dataImg"
   [ngClass]="{ margin: margins, pointer: !margins }" alt="Profile Picture" />
 <ng-template #accountCircle>
   <span fxFlex="center" [ngClass]="{ margin: margins, pointer: !margins }"

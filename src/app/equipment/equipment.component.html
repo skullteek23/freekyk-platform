@@ -5,11 +5,11 @@
 
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filters -->
-  <app-filters-sm fxHide.gt-sm="true" [filterArray]="prodFilters"></app-filters-sm>
+  <app-filters-sm fxHide.gt-sm="true" *ngIf="!noProducts" [filterArray]="prodFilters"></app-filters-sm>
   <!-- mobile filters -->
 
   <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [filterArray]="prodFilters"></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" *ngIf="!noProducts" [filterArray]="prodFilters"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->

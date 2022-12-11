@@ -1,12 +1,8 @@
 <div fxLayoutGap="20px" class="filter-spacing littleSpace" fxLayout="column">
   <!-- for players -->
   <mat-card *ngIf="!captain; else CaptainCard" class="normal mat-elevation-z8">
-    <div
-      fxLayout.gt-md="row"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutAlign.gt-md="space-between center"
-    >
+    <div fxLayout.gt-md="row" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutAlign.gt-md="space-between center">
       <div fxLayout="column">
         <span class="mat-body-1 left"> Are you going for this match </span>
         <span class="mat-body-2 left">
@@ -14,18 +10,10 @@
         </span>
       </div>
       <div fxLayout="row" fxLayoutGap="8px">
-        <button
-          (click)="onRespond(false)"
-          [disabled]="disableButton"
-          class="noResponseButton buttonText"
-        >
+        <button (click)="onRespond(false)" [disabled]="disableButton" class="noResponseButton buttonText">
           No
         </button>
-        <button
-          (click)="onRespond(true)"
-          [disabled]="disableButton"
-          class="yesResponseButton buttonText"
-        >
+        <button (click)="onRespond(true)" [disabled]="disableButton" class="yesResponseButton buttonText">
           Yes
         </button>
       </div>
@@ -54,11 +42,7 @@
         </mat-checkbox>
       </div> -->
       <div fxLayoutAlign="start center">
-        <button
-          (click)="onOpenAskPlayersDialog()"
-          style="max-width: 100%"
-          class="buttonText secondaryButton"
-        >
+        <button (click)="onOpenAskPlayersDialog()" style="max-width: 100%" class="buttonText secondaryButton">
           Ask selected players for their availability
         </button>
       </div>
@@ -67,7 +51,7 @@
   <!-- for captains -->
 
   <!-- activity logs -->
-  <mat-card class="activityCard grey-bg">
+  <mat-card class="activityCard grey-bg mat-elevation-z0">
     <mat-card-title>
       <span class="mat-body-2"> Team Activity </span>
     </mat-card-title>

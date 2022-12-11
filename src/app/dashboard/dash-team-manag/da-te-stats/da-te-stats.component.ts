@@ -68,7 +68,7 @@ export class DaTeStatsComponent implements OnInit, OnDestroy {
     const tid = sessionStorage.getItem('tid');
     if (tid) {
       this.teamService.getTeamStats(tid);
-      this.snackbarService.displayCustomMsg('Team Stats refreshed just now!');
+      this.snackbarService.displayCustomMsg('Team Statistics refreshed just now!');
     }
   }
   ngOnDestroy(): void {

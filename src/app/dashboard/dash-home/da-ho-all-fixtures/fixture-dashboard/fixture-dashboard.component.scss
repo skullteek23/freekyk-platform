@@ -2,17 +2,17 @@
   color: var(--primaryColor);
 }
 .fixture {
-  height: 72px;
+  height: 56px;
   width: 100%;
   margin: 8px 0;
-  padding: 0 16px;
   box-sizing: border-box;
-  background-color: white;
+  border: 1px solid var(--grey3);
   border-radius: var(--borderRadiusCard);
+  padding: 0 20px;
+  background-color: white;
 }
 .premiumFixture {
   border: 2px solid var(--premiumServiceColor);
-  border-radius: var(--borderRadiusCard);
 }
 .versus {
   height: 24px;

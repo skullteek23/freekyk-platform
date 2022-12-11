@@ -1,48 +1,21 @@
 <div>
-  <app-hero-section
-    [imageSource]="activePage.svg"
-    [title]="activePage.title"
-    [overline]="false"
-    [CTA]="activePage.CTA"
-  ></app-hero-section>
+  <app-hero-section [imageSource]="activePage.svg" [title]="activePage.title" [overline]="false"
+    [CTA]="activePage.CTA"></app-hero-section>
 </div>
 <div style="margin-top: 20px" class="container section-space-bottom">
-  <mat-tab-group
-    (selectedTabChange)="onChangeTab($event)"
-    [(selectedIndex)]="activeIndex"
-  >
+  <mat-tab-group (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="activeIndex">
     <mat-tab label="Help & Support">
       <ng-template matTabContent>
-        <div
-          style="padding: 20px 8px"
-          fxLayout="column"
-          fxLayoutGap.lt-md="16px"
-          fxLayoutGap.gt-sm="20px"
-        >
+        <div style="padding: 20px 8px" fxLayout="column" fxLayoutGap.lt-md="16px" fxLayoutGap.gt-sm="20px">
           <!-- faq jump button -->
-          <div
-            ngClass.gt-sm="section-space-bottom"
-            fxLayout.lt-md="column"
-            fxLayout.gt-sm="row"
-            fxLayoutGap="8px"
-            fxLayoutAlign.gt-sm="space-between center"
-            fxLayoutAlign.lt-md="center stretch"
-          >
-            <span
-              class="mat-caption center"
-              fxFlexOrder.gt-sm="1"
-              fxFlexOrder.lt-md="2"
-            >
+          <div ngClass.gt-sm="section-space-bottom" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px"
+            fxLayoutAlign.gt-sm="space-between center" fxLayoutAlign.lt-md="center stretch">
+            <span class="mat-caption center" fxFlexOrder.gt-sm="1" fxFlexOrder.lt-md="2">
               Check our FAQs Section to see if your question or issue has
               already been addressed.
             </span>
-            <button
-              fxFlexOrder.gt-sm="2"
-              fxFlexOrder.lt-md="1"
-              fxFlex.gt-sm="50%"
-              (click)="activeIndex = 1"
-              class="buttonText secondaryButton"
-            >
+            <button fxFlexOrder.gt-sm="2" fxFlexOrder.lt-md="1" fxFlex.gt-sm="50%" (click)="activeIndex = 1"
+              class="buttonText secondaryButton">
               Go to FAQs
             </button>
           </div>
@@ -50,64 +23,31 @@
 
           <mat-divider fxHide.gt-sm="true"></mat-divider>
 
-          <div
-            fxLayout.lt-md="column"
-            fxLayout="row"
-            fxLayout.gt-sm="space-evenly center"
-            ngClass.gt-sm="section-space-bottom section-space-top"
-            fxLayoutGap.lt-md="20px"
-          >
+          <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign.gt-sm="space-between center"
+            ngClass.gt-sm="section-space-bottom section-space-top" fxLayoutGap.lt-md="20px">
             <!-- Ticket Form -->
             <aside fxFlex.gt-sm="45%" fxLayout="column" fxLayoutGap="16px">
               <span class="mat-subheading-1 center"> Raise an Enquiry </span>
-              <form
-                [formGroup]="ticketForm"
-                (ngSubmit)="onSubmitTicket()"
-                fxLayout="column"
-              >
+              <form [formGroup]="ticketForm" (ngSubmit)="onSubmitTicket()" fxLayout="column">
                 <mat-form-field appearance="outline" color="primary">
                   <mat-label>Enter your name</mat-label>
-                  <input
-                    type="text"
-                    matInput
-                    name="name"
-                    formControlName="name"
-                  />
+                  <input type="text" matInput name="name" formControlName="name" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary">
                   <mat-label>Enter your mobile number</mat-label>
-                  <input
-                    type="text"
-                    matInput
-                    name="ph_number"
-                    formControlName="ph_number"
-                  />
+                  <input type="text" matInput name="ph_number" formControlName="ph_number" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary">
                   <mat-label>Enter your email address</mat-label>
-                  <input
-                    type="text"
-                    matInput
-                    name="email"
-                    formControlName="email"
-                  />
+                  <input type="text" matInput name="email" formControlName="email" />
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary">
                   <mat-label>Tell us your query/message</mat-label>
-                  <textarea
-                    type="text"
-                    matInput
-                    name="query"
-                    formControlName="query"
-                  ></textarea>
+                  <textarea type="text" matInput name="query" formControlName="query"></textarea>
                 </mat-form-field>
                 <div fxLayout="column" fxLayoutAlign="center center">
-                  <button
-                    [disabled]="!ticketForm.valid"
-                    type="button"
-                    (click)="onSubmitTicket()"
-                    class="buttonText primaryButton"
-                  >
+                  <button [disabled]="!ticketForm.valid" type="button" (click)="onSubmitTicket()"
+                    class="buttonText primaryButton">
                     Submit
                   </button>
                 </div>
@@ -116,23 +56,14 @@
             <!-- Ticket Form -->
 
             <mat-divider fxHide.gt-sm="true"></mat-divider>
-            <mat-divider
-              fxFlex.gt-sm="5%"
-              fxHide.lt-md="true"
-              [vertical]="true"
-            ></mat-divider>
+            <mat-divider fxFlex.gt-sm="5%" fxHide.lt-md="true" [vertical]="true"></mat-divider>
 
             <!-- Other Information -->
-            <aside
-              fxFlex.gt-sm="45%"
-              fxLayout="column"
-              fxLayoutAlign="center center"
-              fxLayoutGap="24px"
-            >
+            <aside fxFlex.gt-sm="45%" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
               <p fxLayout="column">
                 <span class="mat-body-1 center"> Call us at </span>
                 <span class="mat-subheading-2 center highlight">
-                  +91-9876543210
+                  +91-9999999999
                 </span>
                 <span class="mat-caption center">
                   (Mon - Sat, 10am to 9pm)
@@ -142,53 +73,29 @@
               <p fxLayout="column">
                 <span class="mat-body-1 center"> Email us at </span>
                 <span class="mat-subheading-2 highlight center">
-                  contact@freekyk.com
+                  admin@freekyk.com
                 </span>
               </p>
 
-              <div
-                fxLayout="column"
-                fxLayoutAlign="center center"
-                fxLayoutGap="20px"
-              >
+              <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
                 <span class="mat-body-1 center">
                   You can also reach out to us on our social media platforms
                 </span>
                 <div fxLayout fxLayoutAlign="center center" fxLayoutGap="16px">
-                  <a href="http://www.facebook.com/freekyk">
-                    <img
-                      class="iconSize"
-                      src="../../assets/svgs/facebook.svg"
-                      alt="facebook"
-                    />
+                  <a href="http://www.facebook.com/freekyk" target="_blank">
+                    <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="facebook" />
                   </a>
-                  <a href="http://www.instagram.com/freekyk_india">
-                    <img
-                      class="iconSize"
-                      src="../../assets/svgs/instagram.svg"
-                      alt="instagram"
-                    />
+                  <a href="http://www.instagram.com/freekyk_india" target="_blank">
+                    <img class="iconSize" src="../../assets/svgs/instagram.svg" alt="instagram" />
                   </a>
                   <a href="http://www.twitter.com">
-                    <img
-                      class="iconSize"
-                      src="../../assets/svgs/twitter.svg"
-                      alt="twitter"
-                    />
+                    <img class="iconSize" src="../../assets/svgs/twitter.svg" alt="twitter" target="_blank" />
                   </a>
                   <a href="http://www.youtube.com">
-                    <img
-                      class="iconSize"
-                      src="../../assets/svgs/youtube.svg"
-                      alt="youtube"
-                    />
+                    <img class="iconSize" src="../../assets/svgs/youtube.svg" alt="youtube" target="_blank" />
                   </a>
                   <a href="http://www.linkedin.com/company/freekyk-india/">
-                    <img
-                      class="iconSize"
-                      src="../../assets/svgs/linkedin.svg"
-                      alt="linkedin"
-                    />
+                    <img class="iconSize" src="../../assets/svgs/linkedin.svg" alt="linkedin" target="_blank" />
                   </a>
                 </div>
               </div>

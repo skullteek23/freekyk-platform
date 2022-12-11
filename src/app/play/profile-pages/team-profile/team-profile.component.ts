@@ -176,6 +176,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             receiverId: this.id,
             date: new Date().getTime(),
             title: 'Team Challenge Recieved',
+            read: false,
             senderName: team.hasTeam.name,
           };
           this.ngFire

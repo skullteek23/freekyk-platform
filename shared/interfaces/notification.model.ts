@@ -9,6 +9,7 @@ export interface NotificationBasic {
   date: number;
   title: string;
   senderName?: string | null;
+  read: boolean;
   id?: string;
 }
 export interface Invite {

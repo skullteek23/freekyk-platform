@@ -1,7 +1,7 @@
 <form [formGroup]="searchForm" class="container">
   <mat-form-field appearance="outline" color="primary">
     <mat-label>{{ placeholder }}</mat-label>
-    <input formControlName="searchKey" #searchinputAutocompleteElement [disabled]="isDisabled" type="text" matInput
+    <input formControlName="searchKey" #searchInputAutocompleteElement [disabled]="isDisabled" type="text" matInput
       [matAutocomplete]="options" />
     <mat-autocomplete (optionSelected)="onSelectionChange($event)" #options="matAutocomplete">
       <mat-option *ngFor="let option of optionsList" [value]="option">

@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
       if (user !== null) {
         this.isLogged = true;
         this.notifCount$ = this.notifServ.notifsCountChanged.pipe(
-          map((resp) => (!!resp ? resp : 0)),
+          map((resp) => (!!resp ? resp : null)),
           map((resp) => (resp > 5 ? '5+' : resp)),
           share()
         );

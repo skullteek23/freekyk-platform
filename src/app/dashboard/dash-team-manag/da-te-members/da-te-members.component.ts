@@ -3,8 +3,9 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
-import { TeamMembers } from '@shared/interfaces/team.model';
+import { Tmember } from '@shared/interfaces/team.model';
 import { TeamState } from '../store/team.reducer';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-da-te-members',
@@ -14,7 +15,7 @@ import { TeamState } from '../store/team.reducer';
 export class DaTeMembersComponent implements OnInit, OnDestroy {
   ind: number;
   noTeam = true;
-  teamMembers: TeamMembers;
+  membersList: Tmember[] = [];
   isLoading = true;
   capId$: Observable<string>;
   subscriptions = new Subscription();
@@ -38,7 +39,12 @@ export class DaTeMembersComponent implements OnInit, OnDestroy {
           }),
           map((info) => info.teamMembers)
         )
-        .subscribe((members) => (this.teamMembers = members))
+        .subscribe((members) => {
+          if (members) {
+            this.membersList = members.members.slice();
+            this.membersList.sort(ArraySorting.sortObjectByKey('name'));
+          }
+        })
     );
   }
   ngOnDestroy(): void {

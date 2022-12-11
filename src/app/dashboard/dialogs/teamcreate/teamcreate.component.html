@@ -58,7 +58,7 @@
 
           <div fxLayout="column" fxLayoutGap="16px">
             <app-search-autocomplete [isDisabled]="noPlayers" [options]="(players$ | async)"
-              placeholder="Type any name or playing position" (selectionChange)="onAddSelection($event)">
+              placeholder="Enter Player Name or Position to Get Started" (selectionChange)="onAddSelection($event)">
             </app-search-autocomplete>
             <span class="mat-body-2 left">
               {{selectedPlayers.length}}/8 players
@@ -67,7 +67,7 @@
           <mat-hint *ngIf="selectedPlayers.length > 15">
             Maximum players selected!
           </mat-hint>
-          <mat-list class="list" dense color="primary">
+          <mat-list class="list" dense color="primary" *ngIf="selectedPlayers.length">
             <i *ngIf="noPlayers">
               Currently, there are no players available to join any team! Please
               try again later

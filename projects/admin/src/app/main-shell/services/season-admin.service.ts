@@ -8,7 +8,7 @@ import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interf
 import { IDummyFixture, TournamentTypes, } from '@shared/interfaces/match.model';
 import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { MatchConstants } from '@shared/constants/constants';
+import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -128,6 +128,8 @@ export class SeasonAdminService {
     const imgpath: string = await this.getImageURL(this.selectedFile);
     if (imgpath) {
       return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath });
+    } else {
+      return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath: MatchConstantsSecondary.DEFAULT_IMAGE_URL });
     }
   }
 
@@ -269,6 +271,17 @@ export class SeasonAdminService {
     } else {
       this.selectedGrounds.push(selection);
     }
+  }
+
+  checkSeasonName(input: string) {
+    return this.ngFire
+      .collection('seasons', (query) =>
+        query.where('name', '==', input).limit(1)
+      )
+      .get()
+      .pipe(
+        map((responseData) => (responseData.empty ? null : { nameTaken: true }))
+      );
   }
 
   get _selectedGrounds(): IGroundSelection[] {

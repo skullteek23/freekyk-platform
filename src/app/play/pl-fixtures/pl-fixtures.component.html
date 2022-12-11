@@ -20,7 +20,6 @@
     <app-no-items-message *ngIf="noFixtures" items="fixtures"></app-no-items-message>
     <li *ngFor="let fixture of fixtures$ | async; last as last">
       <app-fixture-basic [resultMode]="false" [premium]="fixture.premium" [matchData]="fixture"></app-fixture-basic>
-      <mat-divider *ngIf="!last"></mat-divider>
     </li>
   </ul>
   <!-- fixtures list -->

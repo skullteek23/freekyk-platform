@@ -7,6 +7,7 @@ import { QueryService } from 'src/app/services/query.service';
 import { GroundsFilters } from '@shared/Constants/FILTERS';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { FilterData } from '@shared/interfaces/others.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-grounds',
@@ -71,7 +72,8 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
               ...(doc.data() as GroundBasicInfo),
             } as GroundBasicInfo)
           )
-        )
+        ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
   onQueryData(queryInfo): void {
@@ -81,7 +83,8 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
     this.grounds$ = this.queryServ
       .onQueryData(queryInfo, 'grounds')
       .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo))
+        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
 }

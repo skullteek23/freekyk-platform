@@ -63,6 +63,13 @@ export class NotificationsService implements OnDestroy {
       .doc(notifId)
       .delete();
   }
+  markNotificationAsRead(notificationID: string): void {
+    const uid = localStorage.getItem('uid');
+    this.ngFire
+      .collection('players/' + uid + '/Notifications')
+      .doc(notificationID)
+      .update({ read: true });
+  }
   deleteInvite(invId: string): void {
     this.subscriptions.add(
       this.store
@@ -256,7 +263,7 @@ export class NotificationsService implements OnDestroy {
         .subscribe((notifs) => {
           this.notifications = notifs;
           this.notifsChanged.next(this.notifications.slice());
-          this.notifsCountChanged.next(this.notifications.length);
+          this.notifsCountChanged.next(this.notifications.filter(el => !el.read).length);
         })
     );
   }

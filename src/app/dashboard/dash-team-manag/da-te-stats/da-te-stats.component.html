@@ -2,7 +2,7 @@
   <mat-tab-group>
     <mat-tab>
       <ng-template mat-tab-label>
-        Team stats
+        Statistics
         <span matTooltip="Refresh Stats" class="refresh material-icons-round"
           (click)="refreshStats(); $event.stopPropagation()">
           refresh
@@ -32,7 +32,7 @@
         </div>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Premium Stats">
+    <!-- <mat-tab label="Premium Stats">
       <ng-template matTabContent>
         <div class="grey-bg placeholde" *ngIf="noPremiumWon" fxLayoutAlign="center center">
           <p class="mat-body-1" fxLayoutAlign="center center">
@@ -45,6 +45,6 @@
           </mat-icon>
         </div>
       </ng-template>
-    </mat-tab>
+    </mat-tab> -->
   </mat-tab-group>
 </mat-card>

@@ -20,7 +20,7 @@
           <span class="mat-body-2">
             {{ data.name }}
           </span>
-          <mat-chip-list>
+          <mat-chip-list *ngIf="data.ownType === 'PRIVATE'">
             <mat-chip>{{data.ownType | uppercase}}</mat-chip>
           </mat-chip-list>
         </div>

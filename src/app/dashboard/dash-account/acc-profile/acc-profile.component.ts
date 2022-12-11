@@ -300,9 +300,9 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
   onSavePersonalInfo(): Promise<any> {
     if (this.personalInfoForm.dirty) {
-      const newDetails: any = {};
+      const newDetails: Partial<PlayerMoreInfo> = {};
       if (this.personalInfoForm.get('birthdate').dirty && this.personalInfoForm.get('birthdate').value) {
-        newDetails.born = this.personalInfoForm.get('birthdate').value;
+        newDetails.born = new Date(this.personalInfoForm.get('birthdate').value).getTime();
       }
       if (this.personalInfoForm.get('nickname').dirty && this.personalInfoForm.get('nickname').value) {
         newDetails.nickname = this.personalInfoForm.get('nickname').value;

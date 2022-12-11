@@ -14,13 +14,15 @@ export class SearchAutocompleteComponent implements OnInit {
   @Input() placeholder = '';
   @Input() isDisabled = false;
   @Input() set options(value: ListOption[]) {
-    value.sort(ArraySorting.sortObjectByKey('viewValue'));
-    this.optionsList = value;
-    this.optionsListCache = value;
+    if (value) {
+      value.sort(ArraySorting.sortObjectByKey('viewValue'));
+      this.optionsList = value;
+      this.optionsListCache = value;
+    }
   }
   @Output() selectionChange = new EventEmitter<ListOption>();
 
-  @ViewChild('searchinputAutocompleteElement', { static: true }) searchInputEvent: ElementRef;
+  @ViewChild('searchInputAutocompleteElement', { static: true }) searchInputEvent: ElementRef;
   optionsList: ListOption[] = [];
   optionsListCache: ListOption[] = [];
   searchForm: FormGroup;

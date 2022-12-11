@@ -16,8 +16,8 @@ export class AccNotifsComponent implements OnInit {
   constructor(private notifServ: NotificationsService) { }
   ngOnInit(): void {
     this.notifications$ = this.notifServ.notifsChanged;
-    this.noNotif$ = this.notifServ.notifsCountChanged.pipe(
-      map((resp) => resp === 0)
+    this.noNotif$ = this.notifications$.pipe(
+      map((resp) => resp?.length === 0)
     );
     setTimeout(() => {
       this.isLoading = false;

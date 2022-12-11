@@ -12,6 +12,7 @@ import { PlayersFilters } from '@shared/Constants/FILTERS';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { FilterData } from '@shared/interfaces/others.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-players',
@@ -72,6 +73,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
             } as PlayerBasicInfo)
           )
         ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
         share()
       );
   }
@@ -82,7 +84,8 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     this.players$ = this.queryServ
       .onQueryData(queryInfo, 'players')
       .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo))
+        map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
       );
   }
   onOpenPlayerProfile(player: PlayerBasicInfo): void {

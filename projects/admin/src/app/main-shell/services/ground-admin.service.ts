@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { DAYS } from '@shared/constants/constants';
+import { DAYS, MatchConstantsSecondary } from '@shared/constants/constants';
 import { GroundBasicInfo, GroundMoreInfo, GroundPrivateInfo, GroundTimings, IGroundAvailability, IGroundDetails } from '@shared/interfaces/ground.model';
 import * as _ from 'lodash';
 
@@ -77,6 +77,8 @@ export class GroundAdminService {
     const allPromises = [];
     if (imgpath) {
       allPromises.push(this.ngFire.collection('grounds').doc(groundID).update({ imgpath }));
+    } else {
+      allPromises.push(this.ngFire.collection('grounds').doc(groundID).update({ imgpath: MatchConstantsSecondary.DEFAULT_IMAGE_URL }));
     }
     if (signedContractFileLink) {
       allPromises.push(this.ngFire.collection('groundContracts').doc(groundID).update({ signedContractFileLink }));

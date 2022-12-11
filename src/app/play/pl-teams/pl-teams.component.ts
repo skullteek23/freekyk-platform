@@ -7,6 +7,7 @@ import { QueryService } from 'src/app/services/query.service';
 import { TeamsFilters } from '@shared/Constants/FILTERS';
 import { FilterData } from '@shared/interfaces/others.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-teams',
@@ -75,6 +76,7 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
             } as TeamBasicInfo)
           )
         ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
         share()
       );
   }
@@ -84,6 +86,9 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
     }
     this.teams$ = this.queryServ
       .onQueryData(queryInfo, 'teams')
-      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)));
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
+      );
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, SecurityContext, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
@@ -7,6 +7,7 @@ import { formsMessages } from '@shared/constants/messages';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ISeasonDetails } from '@shared/interfaces/season.model';
 import { SeasonAdminService } from '../../../../../services/season-admin.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-season',
@@ -37,7 +38,7 @@ export class AddSeasonComponent implements OnInit {
 
   initForm() {
     this.detailsForm = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)]),
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)], this.validateNameNotTaken.bind(this)),
       description: new FormControl(null, [
         Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)
       ]),
@@ -67,6 +68,13 @@ export class AddSeasonComponent implements OnInit {
     if (file) {
       this.seasonAdminService.setSelectedFile(file);
     }
+  }
+
+  validateNameNotTaken(
+    control: AbstractControl
+  ): Observable<ValidationErrors | null> {
+    const input: string = (control.value as string).trim();
+    return this.seasonAdminService.checkSeasonName(input);
   }
 
   get description(): AbstractControl {

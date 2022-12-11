@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatchFixture } from '@shared/interfaces/match.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -28,12 +29,12 @@ export class SeFixturesComponent implements OnInit {
     const concluded: boolean = this.showResults ? true : false;
     if (season) {
       this.matches$ = this.ngFire.collection('allMatches', query => query.where('concluded', '==', concluded).where('season', '==', season))
-        .valueChanges()
+        .get()
         .pipe(
-          map(resp => resp as MatchFixture[]),
-          tap(resp => this.noMatches = !resp || !resp.length ? true : false)
+          tap(resp => this.noMatches = resp.empty),
+          map(resp => resp.docs.map(doc => doc.data() as MatchFixture)),
+          map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
         )
-
     }
   }
 }

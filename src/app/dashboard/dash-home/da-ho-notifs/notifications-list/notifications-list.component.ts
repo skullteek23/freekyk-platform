@@ -11,7 +11,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 })
 export class NotificationsListComponent implements OnInit {
   @Input('data') set data(value: NotificationBasic[]) {
-    this.notifications = value.sort(ArraySorting.sortObjectByKey('date'));
+    this.notifications = value.sort(ArraySorting.sortObjectByKey('date', 'desc'));
   }
   notifications: NotificationBasic[];
   noNotif$: Observable<boolean>;
@@ -19,5 +19,11 @@ export class NotificationsListComponent implements OnInit {
   ngOnInit(): void { }
   onSelNotif(selectedNotif: NotificationBasic): void {
     this.notifServ.onSelNotif(selectedNotif);
+  }
+
+  markAsRead(notif: NotificationBasic) {
+    if (!notif.read) {
+      this.notifServ.markNotificationAsRead(notif.id);
+    }
   }
 }

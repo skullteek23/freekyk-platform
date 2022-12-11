@@ -60,4 +60,8 @@ export class ArraySorting {
     }
     return order === 'desc' ? comparison * -1 : comparison;
   }
+
+  static sortObject(o) {
+    return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
+  }
 }

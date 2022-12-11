@@ -28,6 +28,7 @@ export class MatchConstants {
   static readonly ONE_DAY_IN_MILLIS = 86400000;
   static readonly CREATE_TEXT = 'I Want to Create!';
   static readonly GROUND_SLOT_DATE_FORMAT = 'd/M/yy, h a'; // results in `15/6/21, 9 AM`
+  static readonly TEAM_ACTIVITY_DATE_FORMAT = 'd/M/yy, hh:mm a'; // results in `15/6/21, 9 AM`
   static readonly GROUND_CONTRACT_DATE_FORMAT = 'd/M/yy'; // results in `15/6/21, 9 AM`
 
 }

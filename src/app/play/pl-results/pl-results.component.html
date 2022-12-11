@@ -19,7 +19,6 @@
     <app-no-items-message *ngIf="noResults" items="results"></app-no-items-message>
     <li *ngFor="let result of results$ | async; last as last">
       <app-fixture-basic [resultMode]="true" [premium]="result.premium" [matchData]="result"></app-fixture-basic>
-      <mat-divider *ngIf="!last"></mat-divider>
     </li>
   </ul>
   <!-- results list -->

@@ -69,8 +69,12 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCreationDate(date: number): string {
-    return date ? this.datePipe.transform(date, 'mediumDate') : null;
+  getCreationDate(date: any): string {
+    if (date && date.hasOwnProperty('seconds')) {
+      return date ? this.datePipe.transform(date['seconds'] * 1000, 'mediumDate') : null;
+    } else {
+      return date ? this.datePipe.transform(date, 'mediumDate') : null;
+    }
   }
   getAgeCategory(category: number): string {
     return category ? `U-${category.toString()}` : null;

@@ -24,6 +24,7 @@ import {
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { Invite } from '@shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-teamcreate',
@@ -207,6 +208,7 @@ export class TeamcreateComponent implements OnInit {
   onAddSelection(value: ListOption): void {
     if (this.selectedPlayers.findIndex(player => player.viewValue === value.viewValue) === -1) {
       this.selectedPlayers.push(value);
+      this.selectedPlayers.sort(ArraySorting.sortObjectByKey('viewValue'))
     }
   }
   onRemoveSelection(delIndex: number): void {

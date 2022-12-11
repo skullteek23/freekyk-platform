@@ -6,10 +6,12 @@
   width: 100%;
   margin: 8px 0;
   box-sizing: border-box;
+  border: 1px solid var(--grey3);
+  border-radius: var(--borderRadiusCard);
+  padding: 0 20px;
 }
 .premiumFixture {
   border: 2px solid var(--premiumServiceColor);
-  border-radius: var(--borderRadiusCard);
 }
 .versus {
   height: 40px;
@@ -24,9 +26,6 @@
 .team_name {
   width: 200px;
   max-width: 200px;
-}
-.side-space {
-  padding: 0 20px;
 }
 .scoreColor {
   color: white;

@@ -9,6 +9,9 @@
           <mat-error *ngIf="detailsForm.get('name').hasError('required')">
             {{messages.error.requiredField}}
           </mat-error>
+          <mat-error *ngIf="detailsForm.get('name').errors?.nameTaken">
+            Season name is already taken! Please choose another name
+          </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">

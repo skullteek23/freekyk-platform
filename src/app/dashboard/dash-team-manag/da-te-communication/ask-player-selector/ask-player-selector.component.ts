@@ -8,6 +8,7 @@ import { TeamCommunicationService } from 'src/app/services/team-communication.se
 import { Tmember } from '@shared/interfaces/team.model';
 import { TeamState } from '../../store/team.reducer';
 import { TeamCommState } from '../store/teamComm.reducer';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-ask-player-selector',
@@ -27,8 +28,10 @@ export class AskPlayerSelectorComponent implements OnInit, OnDestroy {
     this.members$ = this.store2.select('team').pipe(
       // tap((resp) => console.log(resp)),
       map((resp) => resp?.teamMembers.members as Tmember[]),
-      map((resp) =>
-        resp.filter((respDoc) => respDoc.id !== localStorage.getItem('uid'))
+      map((resp) => {
+        const slice = resp.filter((respDoc) => respDoc.id !== localStorage.getItem('uid'));
+        return slice.sort(ArraySorting.sortObjectByKey('name'));
+      }
       )
     );
     this.subscriptions.add(

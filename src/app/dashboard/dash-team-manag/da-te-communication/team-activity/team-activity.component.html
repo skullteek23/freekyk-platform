@@ -2,19 +2,14 @@
   <li *ngIf="(teamActivityListLogs$ | async)?.length == 0 || noLogs">
     No Activity yet!
   </li>
-  <li
-    class="log mat-elevation-z4"
-    *ngFor="let log of teamActivityListLogs$ | async"
-    fxLayout="column"
-    fxLayoutGap="0px"
-    fxLayoutAlign="center"
-  >
+  <li class="log mat-elevation-z4" *ngFor="let log of teamActivityListLogs$ | async" fxLayout="column" fxLayoutGap="0px"
+    fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <span class="mat-body-1">
         {{ log.content | textShorten: 60 }}
       </span>
       <span class="mat-body-2 time">
-        {{ log.time | date: "shortTime" | lowercase }}
+        {{ log.time | date: CUSTOM_DATE_FORMAT }}
       </span>
     </div>
   </li>

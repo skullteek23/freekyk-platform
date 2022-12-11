@@ -8,6 +8,7 @@ import { SeasonsFilters } from '@shared/Constants/FILTERS';
 import { FilterData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-seasons',
@@ -61,13 +62,14 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   getSeasons(): void {
     this.seasons$ = this.ngFire
       .collection('seasons')
-      .valueChanges()
+      .get()
       .pipe(
         tap((val) => {
-          this.noSeasons = val.length === 0;
+          this.noSeasons = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => resp.map((doc) => doc as SeasonBasicInfo)),
+        map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
         share()
       );
   }
@@ -81,7 +83,8 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
         this.noSeasons = resp.empty;
         this.isLoading = false;
       }),
-      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
+      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
+      map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
     );
   }
 }

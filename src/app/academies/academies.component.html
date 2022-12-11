@@ -5,11 +5,11 @@
 
 <div fxLayout="column" fxLayoutGap="20px">
   <!-- mobile filters -->
-  <app-filters-sm fxHide.gt-sm="true" [filterArray]="acFilter"></app-filters-sm>
+  <app-filters-sm fxHide.gt-sm="true" *ngIf="!noAcademies" [filterArray]="acFilter"></app-filters-sm>
   <!-- mobile filters -->
 
   <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [filterArray]="acFilter"></app-filters-lg>
+  <app-filters-lg fxHide.lt-md="true" *ngIf="!noAcademies" [filterArray]="acFilter"></app-filters-lg>
   <!-- desktop filters -->
 
   <!-- loading -->

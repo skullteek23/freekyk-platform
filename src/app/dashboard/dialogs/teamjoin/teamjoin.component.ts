@@ -9,6 +9,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-teamjoin',
@@ -85,6 +86,7 @@ export class TeamjoinComponent implements OnInit {
   onAddSelection(value: ListOption): void {
     if (this.selectedTeams.findIndex(team => team.viewValue === value.viewValue) === -1) {
       this.selectedTeams.push(value);
+      this.selectedTeams.sort(ArraySorting.sortObjectByKey('viewValue'))
     }
   }
   onRemoveSelection(delIndex: number): void {

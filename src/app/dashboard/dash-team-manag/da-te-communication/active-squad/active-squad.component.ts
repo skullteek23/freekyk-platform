@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActiveSquadMember } from '@shared/interfaces/team.model';
 import { TeamCommState } from '../store/teamComm.reducer';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-active-squad',
@@ -17,6 +18,12 @@ export class ActiveSquadComponent implements OnInit {
   ngOnInit(): void {
     this.sqData$ = this.store
       .select('teamComms')
-      .pipe(map((resp) => resp.activeSquad as ActiveSquadMember[]));
+      .pipe(
+        map((resp) => resp.activeSquad as ActiveSquadMember[]),
+        map((resp) => {
+          const sorted = resp.slice();
+          return sorted.sort(ArraySorting.sortObjectByKey('name'));
+        })
+      );
   }
 }
