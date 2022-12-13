@@ -37,8 +37,7 @@ export class LoginComponent implements OnInit {
         Validators.pattern(RegexPatterns.adminID), Validators.minLength(10), Validators.maxLength(10)
       ]),
       email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required,
-      Validators.pattern(RegexPatterns.passwordStrong)
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)
       ]),
     });
   }

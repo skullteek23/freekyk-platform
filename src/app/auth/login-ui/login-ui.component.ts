@@ -36,7 +36,7 @@ export class LoginUiComponent implements OnInit {
           Validators.required,
           Validators.pattern(RegexPatterns.email),
         ]),
-        pass: new FormControl(null, [Validators.required]),
+        pass: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       });
     } else {
       this.authForm = new FormGroup({
