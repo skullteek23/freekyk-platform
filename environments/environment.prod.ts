@@ -11,7 +11,8 @@ export const environment = {
     appId: '1:678320827100:web:d14c29c405b86b825a2219',
     measurementId: 'G-K55NRR7QXM',
     url: 'https://freekyk-prod.web.app',
-    adminUrl: 'https://admin-freekyk.web.app'
+    adminUrl: 'https://admin-freekyk.web.app',
+    adminRegister: 'https://admin-freekyk.web.app/register'
   },
   razorPay: {
     key_id: 'rzp_live_ow8sSR7ZCWKSST',

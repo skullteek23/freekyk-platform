@@ -7,6 +7,7 @@ import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,8 @@ import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+
+  readonly adminURL = environment?.firebase?.adminRegister || '';
   @Output() menOpen = new Subject<boolean>();
   isLoading = true;
   isLogged = false;
@@ -57,7 +60,7 @@ export class HeaderComponent implements OnInit {
     this.morelinks = [
       { name: RouteLinks.OTHERS[0], route: `/${RouteLinks.OTHERS[0]}` },
 
-      { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` },
+      { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` }
     ];
   }
   onToggleMenu(): void {
