@@ -8,8 +8,8 @@ export async function inviteCreationTrigger(snap: any, context: any): Promise<an
   const invite: Invite = snap.data() as Invite;
   const notificationID = snap.id;
 
-  console.log(invite);
-  console.log(notificationID);
+  // console.log(invite);
+  // console.log(notificationID);
 
   if (invite && notificationID) {
     const notification: NotificationBasic = {

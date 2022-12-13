@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
-import { PLAYING_POSITIONS_LIST } from './PLAYING_POSITIONS';
+import { PLAYING_POSITIONS_LIST } from "@shared/constants/constants";
 
 export const SeasonsFilters: any = {
   Premium: ['Yes', 'No'],

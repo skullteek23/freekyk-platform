@@ -76,14 +76,14 @@ export class UpdateMatchReportComponent implements OnInit {
 
   initForm(): void {
     this.matchReportForm = new FormGroup({
-      homeScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
-      awayScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
+      homeScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num), Validators.min(0), Validators.max(99)]),
+      awayScore: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num), Validators.min(0), Validators.max(99)]),
       penalties: new FormControl(0),
       homePenScore: new FormControl(null, [
-        Validators.pattern(RegexPatterns.num), Validators.min(1), this.isHomeEqualScoreValidator.bind(this)
+        Validators.pattern(RegexPatterns.num), Validators.min(1), Validators.max(99), this.isHomeEqualScoreValidator.bind(this)
       ]),
       awayPenScore: new FormControl(null, [
-        Validators.pattern(RegexPatterns.num), Validators.min(1), this.isAwayEqualScoreValidator.bind(this)
+        Validators.pattern(RegexPatterns.num), Validators.min(1), Validators.max(99), this.isAwayEqualScoreValidator.bind(this)
       ]),
       scorersHome: new FormArray([]),
       scorersAway: new FormArray([]),
@@ -95,7 +95,7 @@ export class UpdateMatchReportComponent implements OnInit {
       yellowCardHoldersAway: new FormArray([]),
       billsFile: new FormControl(null),
       matchReportFile: new FormControl(null, [Validators.required]),
-      moneySpent: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num)]),
+      moneySpent: new FormControl(0, [Validators.required, Validators.pattern(RegexPatterns.num), Validators.min(0)]),
       referee: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
       specialNotes: new FormControl(null, [Validators.pattern(RegexPatterns.bio), Validators.maxLength(200)]),
     });

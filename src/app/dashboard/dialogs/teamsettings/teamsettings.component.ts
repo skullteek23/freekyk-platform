@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { Store } from '@ngrx/store';
@@ -14,10 +14,10 @@ import {
   TeamBasicInfo,
   TeamMoreInfo,
 } from '@shared/interfaces/team.model';
-import { TEAM_DESC_MAX_LIMIT } from '../../constants/constants';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';
 import { RegexPatterns } from '@shared/Constants/REGEX';
+import { ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-teamsettings',
@@ -25,10 +25,13 @@ import { RegexPatterns } from '@shared/Constants/REGEX';
   styleUrls: ['./teamsettings.component.scss'],
 })
 export class TeamsettingsComponent implements OnInit, OnDestroy {
+
   readonly ig = SOCIAL_MEDIA_PRE.ig;
   readonly fb = SOCIAL_MEDIA_PRE.fb;
   readonly tw = SOCIAL_MEDIA_PRE.tw;
   readonly yt = SOCIAL_MEDIA_PRE.yt;
+  readonly sloganLimit = ProfileConstants.TEAM_SLOGAN_MAX_LIMIT;
+  readonly descriptionLimit = ProfileConstants.TEAM_DESC_MAX_LIMIT;
 
   $teamPhoto: File;
   $teamLogo: File;
@@ -36,8 +39,8 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
   file2Selected = false;
   cities$: Observable<string[]>;
   states$: Observable<string[]>;
-  TeamInfoForm: FormGroup = new FormGroup({});
-  socialInfoForm: FormGroup = new FormGroup({});
+  teamInfoForm: FormGroup;
+  socialInfoForm: FormGroup;
   subscriptions = new Subscription();
 
   constructor(
@@ -46,12 +49,17 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
     private locationServ: LocationService,
-    private store: Store<{
-      team: TeamState;
-    }>,
+    private store: Store<{ team: TeamState; }>,
     private dialog: MatDialog
   ) { }
+
   ngOnInit(): void {
+    this.initForm();
+    this.getStates();
+    this.getSavedInfo();
+  }
+
+  getSavedInfo() {
     this.subscriptions.add(
       this.store
         .select('team')
@@ -65,67 +73,62 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
           )
         )
         .subscribe((info) => {
-          this.initStatesList();
-          // for location
-          if (info.main.locState && info.main.locCity) {
-            this.states$ = this.locationServ.getStateByCountry();
-            this.cities$ = this.locationServ.getCityByState(info.main.locState);
+          const location = {
+            locCity: info.main.locCity || null,
+            locState: info.main.locState || null
           }
-          // for location
-          this.TeamInfoForm = new FormGroup({
-            t_name: new FormControl(
-              info.main.tname,
-              Validators.pattern(RegexPatterns.alphaWithSpace)
-            ),
-            t_slogan: new FormControl(info.more.tslogan, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.query),
-              Validators.maxLength(50),
-            ]),
-            t_desc: new FormControl(info.more.tdesc, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.bio),
-              Validators.maxLength(TEAM_DESC_MAX_LIMIT),
-            ]),
-            t_LocCity: new FormControl(info.main.locCity, Validators.required),
-            t_LocState: new FormControl(
-              info.main.locState,
-              Validators.required
-            ),
+          const formData = {
+            tslogan: info.more.tslogan || null,
+            tdesc: info.more.tdesc || null,
+            location
+          }
+          this.teamInfoForm.patchValue({
+            ...formData
           });
-
-          this.socialInfoForm = new FormGroup({
-            ig: new FormControl(info.more?.tSocials?.ig, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.alphaLink),
-            ]),
-            fb: new FormControl(info.more?.tSocials?.fb, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.alphaLink),
-            ]),
-            yt: new FormControl(info.more?.tSocials?.yt, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.alphaLink),
-            ]),
-            tw: new FormControl(info.more?.tSocials?.tw, [
-              Validators.required,
-              Validators.pattern(RegexPatterns.alphaLink),
-            ]),
-          });
+          this.socialInfoForm.patchValue({
+            ...info.more.tSocials
+          })
+          this.teamInfoForm.get('location').markAsUntouched();
+          if (location.locState) {
+            this.onSelectState(location.locState);
+          }
         })
     );
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
-  initStatesList(): void {
+
+  initForm() {
+    this.teamInfoForm = new FormGroup({
+      // t_name: new FormControl(info.main.tname, Validators.pattern(RegexPatterns.alphaWithSpace)),
+      tslogan: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.sloganLimit)]),
+      tdesc: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)]),
+      location: new FormGroup({
+        locCity: new FormControl(null),
+        locState: new FormControl(null),
+      }),
+    });
+
+    this.socialInfoForm = new FormGroup({
+      ig: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink)]),
+      yt: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink)]),
+      fb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink)]),
+      tw: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink)]),
+    });
+  }
+
+  getStates(): void {
     this.states$ = this.locationServ.getStateByCountry();
   }
-  onSelectState(selection: MatSelectChange): void {
-    this.cities$ = this.locationServ.getCityByState(selection.value);
+
+  onSelectState(state: string): void {
+    this.cities$ = this.locationServ.getCityByState(state);
   }
+
   async onSaveImages(): Promise<any> {
     const logo = await this.onUploadTeamLogo();
     const image = await this.onUploadTeamPhoto();
@@ -139,18 +142,22 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       })
       .then(this.onFinishOp.bind(this));
   }
+
   onAddControl(): void {
     const fmCtrl = new FormControl(null, Validators.required);
-    (this.TeamInfoForm.get('t_Gallery') as FormArray).push(fmCtrl);
+    (this.teamInfoForm.get('t_Gallery') as FormArray).push(fmCtrl);
   }
+
   onChooseTeamImage(ev: any): void {
     this.file1Selected = true;
     this.$teamPhoto = ev.target.files[0];
   }
+
   onChooseTeamLogoImage(ev: any): void {
     this.file2Selected = true;
     this.$teamLogo = ev.target.files[0];
   }
+
   onOpenTeamGalleryDialog(): void {
     this.dialog.open(TeamgalleryComponent, {
       panelClass: 'fk-dialogs',
@@ -158,6 +165,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     });
     this.onCloseDialog();
   }
+
   async onUploadTeamLogo(): Promise<any> {
     const tid = sessionStorage.getItem('tid');
     // backend code here
@@ -182,21 +190,19 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
   }
 
   getFormArray(): any {
-    return (this.TeamInfoForm.get('t_Gallery') as FormArray).controls;
+    return (this.teamInfoForm.get('t_Gallery') as FormArray).controls;
   }
-  onSubmitTeamInfo(): Promise<any[]> {
-    // do something
-    if (this.TeamInfoForm.dirty && this.TeamInfoForm.valid) {
-      // console.log(logo);
-      // console.log(image);
+
+  onSubmitTeamInfo(): void {
+    if (this.teamInfoForm.dirty && this.teamInfoForm.valid) {
       const newDetails: {} = {
-        tname: this.TeamInfoForm.value.t_name,
-        locState: this.TeamInfoForm.value.t_LocCity,
-        locCity: this.TeamInfoForm.value.t_LocState,
+        // tname: this.teamInfoForm.value.t_name,
+        locState: this.teamInfoForm.value.location.locState,
+        locCity: this.teamInfoForm.value.location.locCity,
       };
       const newMoreDetails: {} = {
-        tslogan: this.TeamInfoForm.value.t_slogan,
-        tdesc: this.TeamInfoForm.value.t_desc,
+        tslogan: this.teamInfoForm.value.tslogan,
+        tdesc: this.teamInfoForm.value.tdesc,
       };
       const tid = sessionStorage.getItem('tid');
       const allPromises: any = [];
@@ -216,15 +222,15 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
             ...newDetails,
           })
       );
-      return Promise.all(allPromises).then(this.onFinishOp.bind(this));
-    } else {
-      // console.log('nothing changed');
+      Promise.all(allPromises).then(this.onFinishOp.bind(this));
     }
   }
+
   onFinishOp(): void {
     this.snackServ.displayCustomMsg('Updated Successfully!');
     location.reload();
   }
+
   onSubmitTeamSocial(): void {
     // do something
     // console.log(this.socialInfoForm);
@@ -239,7 +245,16 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       })
       .then(this.onFinishOp.bind(this));
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
+  }
+
+  get tdesc(): AbstractControl {
+    return this.teamInfoForm?.get('tdesc');
+  }
+
+  get tslogan(): AbstractControl {
+    return this.teamInfoForm?.get('tslogan');
   }
 }

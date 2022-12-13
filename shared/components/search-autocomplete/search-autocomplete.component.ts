@@ -30,7 +30,7 @@ export class SearchAutocompleteComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
-      searchKey: new FormControl(null, Validators.pattern('^[a-zA-Z0-9- ]*$'))
+      searchKey: new FormControl(null)
     });
     fromEvent(this.searchInputEvent.nativeElement, 'keyup')
       .pipe(

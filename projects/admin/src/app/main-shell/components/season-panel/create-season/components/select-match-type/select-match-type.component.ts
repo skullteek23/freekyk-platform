@@ -58,7 +58,7 @@ export class SelectMatchTypeComponent implements OnInit {
         city: new FormControl(null, [Validators.required]),
       }),
       participatingTeamsCount: new FormControl(null,
-        [Validators.required, Validators.min(2), Validators.max(32), Validators.pattern(RegexPatterns.num)]
+        [Validators.required, Validators.min(MatchConstants.PARTICIPANTS_COUNT.MIN), Validators.max(MatchConstants.PARTICIPANTS_COUNT.MAX), Validators.pattern(RegexPatterns.num)]
       ),
       containingTournaments: new FormControl(null, [Validators.required])
     });

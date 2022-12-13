@@ -6,6 +6,7 @@ import { RegexPatterns } from '@shared/Constants/REGEX';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { BasicTicket } from '@shared/interfaces/ticket.model';
+import { ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-acc-tickets',
@@ -83,14 +84,12 @@ export class AccTicketsComponent implements OnInit {
       ]),
       ph_number: new FormControl(null, [
         Validators.required,
-        Validators.pattern(RegexPatterns.num),
-        Validators.minLength(10),
-        Validators.maxLength(10),
+        Validators.pattern(RegexPatterns.phoneNumber),
       ]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       query: new FormControl(null, [
         Validators.required,
-        Validators.maxLength(300),
+        Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT),
         Validators.pattern(RegexPatterns.query),
       ]),
     });

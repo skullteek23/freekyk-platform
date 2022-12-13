@@ -64,11 +64,7 @@ export class TeamcreateComponent implements OnInit {
   ngOnInit(): void {
     this.newTeamId = this.ngFire.createId();
     this.teamBasicinfoForm = new FormGroup({
-      tName: new FormControl(
-        null,
-        [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace)],
-        this.validateTNameNotTaken.bind(this)
-      ),
+      tName: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace)], this.validateTNameNotTaken.bind(this)),
     });
     this.invitesList = [];
   }

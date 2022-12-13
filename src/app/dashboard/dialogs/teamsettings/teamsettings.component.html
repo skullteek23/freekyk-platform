@@ -14,52 +14,53 @@
     </div>
     <mat-divider></mat-divider>
     <p class="mat-body-1">Team Info</p>
-    <form [formGroup]="TeamInfoForm" (ngSubmit)="onSubmitTeamInfo()" fxLayout="column">
-      <mat-form-field appearance="outline" color="primary">
+    <form [formGroup]="teamInfoForm" (ngSubmit)="onSubmitTeamInfo()" fxLayout="column">
+      <!-- <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Name</mat-label>
         <input type="text" matInput name="t_name" formControlName="t_name" />
-        <mat-error *ngIf="TeamInfoForm.get('t_name').hasError('pattern')">Only letters and numebrs are allowed!
+        <mat-error *ngIf="teamInfoForm.get('t_name').hasError('pattern')">Only letters and numbers are allowed!
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Slogan</mat-label>
-        <input type="text" matInput name="t_slogan" formControlName="t_slogan" />
-        <mat-error *ngIf="TeamInfoForm.get('t_slogan').hasError('pattern')">
+        <input type="text" matInput name="tslogan" formControlName="tslogan" />
+        <mat-hint align="end">{{tslogan?.value?.length}} / {{sloganLimit}}</mat-hint>
+        <mat-error *ngIf="tslogan?.hasError('pattern')">
           Certain characters aren't allowed!
-        </mat-error>
-        <mat-error *ngIf="TeamInfoForm.get('t_slogan').hasError('maxlength')">
-          Only 300 characters are allowed!
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Description</mat-label>
-        <textarea name="t_desc" formControlName="t_desc" matInput></textarea>
-        <mat-error *ngIf="TeamInfoForm.get('t_desc').hasError('pattern')">
+        <textarea name="tdesc" formControlName="tdesc" matInput></textarea>
+        <mat-hint align="end">{{tdesc?.value?.length}} / {{descriptionLimit}}</mat-hint>
+        <mat-error *ngIf="tdesc?.hasError('pattern')">
           Certain characters aren't allowed!
         </mat-error>
-        <mat-error *ngIf="TeamInfoForm.get('t_desc').hasError('maxlength')">
-          Only 300 characters are allowed!
-        </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Team Location State</mat-label>
-        <mat-select (selectionChange)="onSelectState($event)" formControlName="t_LocState">
-          <mat-option *ngFor="let state of states$ | async" [value]="state">
-            {{ state }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline" color="primary">
-        <mat-label>Select Team Location City</mat-label>
-        <mat-select formControlName="t_LocCity">
-          <mat-option *ngFor="let city of cities$ | async" [value]="city">
-            {{ city }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div formGroupName="location" fxLayout="column">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Add Team State</mat-label>
+          <mat-select (selectionChange)="onSelectState($event.value)" formControlName="locState">
+            <mat-option>--Select State--</mat-option>
+            <mat-option *ngFor="let state of states$ | async" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Add Team City</mat-label>
+          <mat-select formControlName="locCity">
+            <mat-option>--Select City--</mat-option>
+            <mat-option *ngFor="let city of cities$ | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center center">
-        <button class="primaryButton buttonText" [disabled]="!TeamInfoForm.valid || !TeamInfoForm.dirty" type="button"
+        <button class="primaryButton buttonText" [disabled]="!teamInfoForm.valid || !teamInfoForm.dirty" type="button"
           (click)="onSubmitTeamInfo()">
           Save Changes
         </button>

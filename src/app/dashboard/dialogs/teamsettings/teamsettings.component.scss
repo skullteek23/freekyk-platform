@@ -8,10 +8,10 @@
 .ng-dirty .mat-input-element {
   opacity: 1 !important;
 }
-.ng-untouched .mat-input-element,
-.ng-touched .mat-input-element {
-  opacity: 0.5;
-}
+// .ng-untouched .mat-input-element,
+// .ng-touched .mat-input-element {
+//   opacity: 0.5;
+// }
 .wider {
   min-width: 100%;
 }

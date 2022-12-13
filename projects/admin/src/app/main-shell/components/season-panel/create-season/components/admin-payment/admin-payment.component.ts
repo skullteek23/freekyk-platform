@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
@@ -44,7 +45,7 @@ export class AdminPaymentComponent implements OnInit {
 
   initForm() {
     this.paymentForm = new FormGroup({
-      amount: new FormControl(null, [Validators.required, Validators.min(0)]),
+      amount: new FormControl(null, [Validators.required, Validators.min(0), Validators.max(50000), Validators.pattern(RegexPatterns.num)]),
       isSuccess: new FormControl(null, Validators.requiredTrue),
     })
   }

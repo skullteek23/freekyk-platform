@@ -6,11 +6,12 @@ import { map, share, take } from 'rxjs/operators';
 import { ICheckoutOptions, PaymentService, PAYMENT_TYPE } from '@shared/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { OrderBasic } from '@shared/interfaces/order.model';
-import { SeasonAbout, SeasonBasicInfo, SeasonParticipants } from '@shared/interfaces/season.model';
-import { HOME, LOADING, MIN_TEAM_ELIGIBLE_PLAYER_LIMIT, SUCCESS, } from '../constants/constants';
+import { SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { ProfileConstants } from '@shared/constants/constants';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',
@@ -99,8 +100,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     let errorMessage = '';
     if (!teamInfo || !teamInfo.basicInfo || !teamInfo.basicInfo.tname) {
       errorMessage = 'Join or Create a team to participate!';
-    } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < MIN_TEAM_ELIGIBLE_PLAYER_LIMIT) {
-      errorMessage = `Minimum ${MIN_TEAM_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
+    } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT) {
+      errorMessage = `Minimum ${ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
     } else if (!uid || !teamInfo.basicInfo || uid !== teamInfo.basicInfo.captainId) {
       errorMessage = 'Only captains are allowed to make payment!';
     } else if (restrictedParticipants && restrictedParticipants.includes(teamInfo?.basicInfo?.id) === false) {

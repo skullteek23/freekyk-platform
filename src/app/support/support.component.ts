@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
 import { heroCallToAction } from '@shared/interfaces/others.model';
 import { BasicTicket } from '@shared/interfaces/ticket.model';
+import { RegexPatterns } from '@shared/Constants/REGEX';
+import { ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-support',
@@ -46,22 +48,10 @@ export class SupportComponent implements OnInit {
   }
   initForm(): void {
     this.ticketForm = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.pattern('^[a-zA-Z ]*$'),
-      ]),
-      ph_number: new FormControl(null, [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(10),
-        Validators.maxLength(10),
-      ]),
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
+      ph_number: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
-      query: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(300),
-        Validators.pattern('^[a-zA-Z"0-9 ,:!.?\'/]*$'),
-      ]),
+      query: new FormControl(null, [Validators.required, Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT), Validators.pattern(RegexPatterns.query)]),
     });
   }
   onSubmitTicket(): void {

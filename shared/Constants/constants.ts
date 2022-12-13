@@ -22,6 +22,10 @@ export class MatchConstants {
     MIN: 1,
     MAX: 90,
   };
+  static readonly PARTICIPANTS_COUNT = {
+    MIN: 2,
+    MAX: 32,
+  }
   static readonly LABEL_NOT_AVAILABLE = 'N/A';
   static readonly JOINING_CHARACTER = ', ';
   static readonly LARGE_TEXT_CHARACTER_LIMIT = 2000;
@@ -30,6 +34,42 @@ export class MatchConstants {
   static readonly GROUND_SLOT_DATE_FORMAT = 'd/M/yy, h a'; // results in `15/6/21, 9 AM`
   static readonly TEAM_ACTIVITY_DATE_FORMAT = 'd/M/yy, hh:mm a'; // results in `15/6/21, 9 AM`
   static readonly GROUND_CONTRACT_DATE_FORMAT = 'd/M/yy'; // results in `15/6/21, 9 AM`
+}
+export const PLAYING_POSITIONS = [
+  {
+    position: 'Attacker',
+    pos_name: ['Striker', 'Left Winger', 'Right Winger', 'Center Forward'],
+  },
+  {
+    position: 'Midfielder',
+    pos_name: ['Center Midfielder', 'Right Midfielder', 'Left Midfielder'],
+  },
+  {
+    position: 'Defender',
+    pos_name: ['Center Back', 'Left Back', 'Right Back', 'GoalKeeper'],
+  },
+];
+export const PLAYING_POSITIONS_LIST = [
+  'Striker',
+  'Left Winger',
+  'Right Winger',
+  'Center Forward',
+  'Center Midfielder',
+  'Right Midfielder',
+  'Left Midfielder',
+  'Center Back',
+  'Left Back',
+  'Right Back',
+  'GoalKeeper',
+];
+
+export class ProfileConstants {
+  static readonly MAX_BIRTH_DATE_ALLOWED = '1 January 2016';
+  static readonly BIO_MAX_LIMIT = 129;
+  static readonly TEAM_DESC_MAX_LIMIT = 300;
+  static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
+  static readonly MIN_TEAM_ELIGIBLE_PLAYER_LIMIT = 8;
+  static readonly SUPPORT_QUERY_LIMIT = 300;
 
 }
 export const GROUNDS_FEATURES_LIST = {

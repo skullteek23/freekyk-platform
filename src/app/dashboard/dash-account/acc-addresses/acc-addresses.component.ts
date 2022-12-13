@@ -12,6 +12,7 @@ import { map, tap } from 'rxjs/operators';
 import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { userAddress } from '@shared/interfaces/others.model';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 
 @Component({
   selector: 'app-acc-addresses',
@@ -40,7 +41,7 @@ export class AccAddressesComponent implements OnInit {
     this.onGetStates();
   }
   onGetStates(): void {
-    this.states$ = this.locationServ.getStateByCountry('India');
+    this.states$ = this.locationServ.getStateByCountry();
   }
   onSelectState(state: MatSelectChange): void {
     this.cities$ = this.locationServ.getCityByState(state.value);
@@ -68,33 +69,15 @@ export class AccAddressesComponent implements OnInit {
     this.newAddressForm = new FormGroup({
       addr_name: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[a-zA-Z ]*$'),
+        Validators.pattern(RegexPatterns.alphaNumberWithSpace),
       ]),
-      addr_line1: new FormControl(null, Validators.required),
-      addr_line2: new FormControl(null),
-      landmark: new FormControl(null),
+      addr_line1: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.query)]),
+      addr_line2: new FormControl(null, Validators.pattern(RegexPatterns.query)),
+      landmark: new FormControl(null, Validators.pattern(RegexPatterns.query)),
       city: new FormControl(null, Validators.required),
       state: new FormControl(null, Validators.required),
-      pincode: new FormControl(
-        null,
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(6),
-          Validators.minLength(6),
-        ],
-        this.FirstDigitNotZero.bind(this)
-      ),
-      ph_numb: new FormControl(
-        null,
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(10),
-          Validators.minLength(10),
-        ],
-        this.FirstDigitNotZero.bind(this)
-      ),
+      pincode: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.pincode)]),
+      ph_numb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
     });
   }
   onDeleteAddress(formid: string): void {

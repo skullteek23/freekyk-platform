@@ -27,13 +27,14 @@ export class LoginUiComponent implements OnInit {
   }
 
   initForm(): void {
+    console.log(RegexPatterns.passwordStrong)
     if (this.isViewLogin()) {
       this.formData = new FormGroup({
         email: new FormControl(null, [
           Validators.required,
           Validators.pattern(RegexPatterns.email),
         ]),
-        pass: new FormControl(null, Validators.required),
+        pass: new FormControl(null, [Validators.required]),
       });
     } else {
       this.formData = new FormGroup({

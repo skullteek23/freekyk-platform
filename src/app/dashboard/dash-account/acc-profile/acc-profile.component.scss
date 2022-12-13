@@ -15,10 +15,10 @@
 .ng-dirty .mat-input-element {
   opacity: 1 !important;
 }
-.ng-untouched .mat-input-element,
-.ng-touched .mat-input-element {
-  opacity: 0.5;
-}
+// .ng-untouched .mat-input-element,
+// .ng-touched .mat-input-element {
+//   opacity: 0.5;
+// }
 .center-button {
   max-width: 32px;
   max-height: 32px;
