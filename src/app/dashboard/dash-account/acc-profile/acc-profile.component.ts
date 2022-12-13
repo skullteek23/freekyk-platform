@@ -86,13 +86,13 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       jer_no: new FormControl(null, [
         Validators.required, Validators.min(1), Validators.max(99), Validators.pattern(RegexPatterns.num)]),
       location: new FormGroup({
-        locCountry: new FormControl(null),
-        locState: new FormControl(null),
-        locCity: new FormControl(null),
+        locCountry: new FormControl(null, Validators.required),
+        locState: new FormControl(null, Validators.required),
+        locCity: new FormControl(null, Validators.required),
       }),
       height: new FormControl(null, [Validators.pattern(RegexPatterns.num), Validators.required]),
       weight: new FormControl(null, [Validators.pattern(RegexPatterns.num), Validators.required]),
-      bio: new FormControl(null, [Validators.maxLength(this.BIO_MAX_LIMIT), Validators.pattern(RegexPatterns.bio)]),
+      bio: new FormControl(null, [Validators.required, Validators.maxLength(this.BIO_MAX_LIMIT), Validators.pattern(RegexPatterns.bio)]),
     });
 
     this.socialInfoForm = new FormGroup({
@@ -120,7 +120,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           name: data.playerBasicInfo.name,
           nickname: data.playerMoreInfo.nickname,
           gen: data.playerBasicInfo.gen,
-          born: new Date(data.playerMoreInfo.born),
+          born: data.playerMoreInfo.born ? new Date(data.playerMoreInfo.born) : null,
         }
         const playingInfoData = {
           str_ft: data.playerMoreInfo.str_ft,

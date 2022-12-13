@@ -11,8 +11,6 @@ export class RegexPatterns {
   static readonly email = `^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$`;
   // Minimum eight characters, at least one letter, one number and one special character:
   // static readonly passwordStrong = `^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$`;
-  // static readonly passwordStrong = `d{8,}`;
-  // static readonly passwordStrong = `^[a-zA-Z ]*$`;
   static readonly url = `https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#()?&//=]*)`;
   static readonly pincode = `d{6}`;
   static readonly bio = `^(.|\s)*[a-zA-Z]+(.|\s)*$`;
