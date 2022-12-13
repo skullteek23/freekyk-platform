@@ -34,11 +34,11 @@ export class AuthService {
   }
 
   onlogin(logData: logDetails): Promise<any> {
-    return this.loginOnFirebase(logData.email, logData.pass);
+    return this.loginOnFirebase(logData.email.trim(), logData.pass.trim());
   }
 
   onSignup(logData: logDetails): Promise<any> {
-    return this.signupOnFirebase(logData.email, logData.pass);
+    return this.signupOnFirebase(logData.email.trim(), logData.pass.trim());
   }
 
   onError(error: string): void {

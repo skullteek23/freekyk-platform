@@ -22,7 +22,7 @@ export class InvitePlayersComponent implements OnInit {
     public dialogRef: MatDialogRef<InvitePlayersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     private ngFire: AngularFirestore,
-    private snackServ: SnackbarService
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class InvitePlayersComponent implements OnInit {
       batch
         .commit()
         .then(() => {
-          this.snackServ.displayCustomMsg('Invites sent successfully!');
+          this.snackBarService.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         });
       // .catch((error) => console.log(error));
@@ -89,7 +89,7 @@ export class InvitePlayersComponent implements OnInit {
         .collection('invites')
         .add(this.invitesList[0])
         .then(() => {
-          this.snackServ.displayCustomMsg('Invites sent successfully!');
+          this.snackBarService.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         });
       // .catch((error) => console.log(error));

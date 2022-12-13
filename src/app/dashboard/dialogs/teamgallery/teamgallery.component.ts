@@ -25,7 +25,7 @@ export class TeamgalleryComponent implements OnInit {
     public dialogRef: MatDialogRef<TeamgalleryComponent>,
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
-    private snackServ: SnackbarService
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -62,13 +62,13 @@ export class TeamgalleryComponent implements OnInit {
         }
         photoSnap
           .then(() => this.cleanUp('Photo uploaded successfully!'))
-          .catch((err => this.snackServ.displayError()));
+          .catch((err => this.snackBarService.displayError()));
       });
     }
   }
   cleanUp(message: string): void {
     this.isLoading = false;
-    this.snackServ.displayCustomMsg(message);
+    this.snackBarService.displayCustomMsg(message);
     this.onCloseDialog();
   }
   onHover(state: boolean): void {

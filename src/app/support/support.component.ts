@@ -23,7 +23,7 @@ export class SupportComponent implements OnInit {
     CTA: heroCallToAction | false;
   };
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     private router: Router,
     private route: ActivatedRoute
@@ -67,11 +67,11 @@ export class SupportComponent implements OnInit {
           tkt_status: 'Recieved',
         } as BasicTicket)
         .then(() => {
-          this.snackServ.displayCustomMsg('Ticket registered successfully!');
+          this.snackBarService.displayCustomMsg('Ticket registered successfully!');
           this.ticketForm.reset();
         });
     } else {
-      this.snackServ.displayError('Unable to register ticket!');
+      this.snackBarService.displayError('Unable to register ticket!');
     }
     window.scrollTo(0, 0);
   }

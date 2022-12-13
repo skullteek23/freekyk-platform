@@ -31,7 +31,7 @@ export class TeamjoinComponent implements OnInit {
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackServ: SnackbarService
+    private snackBarService: SnackbarService
   ) { }
   ngOnInit(): void {
     this.getTeams();
@@ -48,7 +48,7 @@ export class TeamjoinComponent implements OnInit {
       this.state = 'complete';
       this.success = true;
       this.error = false;
-      this.snackServ.displayCustomMsg('Requests sent successfully!');
+      this.snackBarService.displayCustomMsg('Requests sent successfully!');
     }
   }
   async sendRequests(capIds: string[], playerName: string): Promise<any> {

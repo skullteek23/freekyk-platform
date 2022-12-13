@@ -24,7 +24,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   constructor(
     private dialog: MatDialog,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private router: Router,
     private teamServ: TeamService,
     private store: Store<{ team: TeamState }>
@@ -81,7 +81,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
           this.teamServ
             .onRemovePlayer(pid, this.membersArray)
             .then(() =>
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Player successfully removed from the team!'
               )
             )
@@ -102,7 +102,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
         )
         .subscribe(() =>
           this.teamServ.onLeaveTeam(this.membersArray).then(() => {
-            this.snackServ.displayCustomMsg(
+            this.snackBarService.displayCustomMsg(
               'You have successfully left the team!'
             );
             location.reload();

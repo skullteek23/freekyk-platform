@@ -38,7 +38,7 @@ export class SeasonProfileComponent implements OnInit {
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<DashState>,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
@@ -144,7 +144,7 @@ export class SeasonProfileComponent implements OnInit {
       .pipe(take(1))
       .subscribe((team) => {
         if (!uid) {
-          this.snackServ.displayCustomMsg('Please login to continue!');
+          this.snackBarService.displayCustomMsg('Please login to continue!');
           this.router.navigate(['/login']);
         } else if (team === null) {
           this.router.navigate(['/dashboard/participate']);

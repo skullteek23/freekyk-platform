@@ -49,7 +49,7 @@ export class NotificationsService implements OnDestroy {
         break;
 
       default:
-        this.snackServ.displayError('Error Occurred! Please try again later');
+        this.snackBarService.displayError('Error Occurred! Please try again later');
         break;
     }
   }
@@ -77,7 +77,7 @@ export class NotificationsService implements OnDestroy {
         .pipe(
           tap((resp) => {
             if (!!resp.isCaptain === false) {
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Only a Captain can perform this action!'
               );
             }
@@ -91,13 +91,13 @@ export class NotificationsService implements OnDestroy {
             .collection('invites')
             .doc(invId)
             .delete()
-            .then(() => this.snackServ.displayCustomMsg('Invite deleted successfully!'))
+            .then(() => this.snackBarService.displayCustomMsg('Invite deleted successfully!'))
         )
     );
   }
   async sendTeamInviteByInv(inv: Invite): Promise<any> {
     if (inv.status !== 'reject') {
-      this.snackServ.displayCustomMsg(
+      this.snackBarService.displayCustomMsg(
         'Only invites rejected by player can be resent!'
       );
     } else {
@@ -112,7 +112,7 @@ export class NotificationsService implements OnDestroy {
         .collection('invites')
         .doc()
         .set(newInvite)
-        .then(() => this.snackServ.displayCustomMsg('Invite Sent!'));
+        .then(() => this.snackBarService.displayCustomMsg('Invite Sent!'));
     }
   }
   async sendTeamInviteByNotif(data: NotificationBasic): Promise<any> {
@@ -159,11 +159,11 @@ export class NotificationsService implements OnDestroy {
         .pipe(map(checkProfileComplete), take(1))
         .subscribe((data) => {
           if (data === 1) {
-            this.snackServ.displayCustomMsg(
+            this.snackBarService.displayCustomMsg(
               'Complete your profile to proceed!'
             );
           } else if (data === 2) {
-            this.snackServ.displayCustomMsg('Upload your Photo to proceed!');
+            this.snackBarService.displayCustomMsg('Upload your Photo to proceed!');
           } else {
             const dialogRef = this.dialog.open(InviteAcceptCardComponent, {
               data: teamName,
@@ -274,7 +274,7 @@ export class NotificationsService implements OnDestroy {
         .pipe(
           tap((resp) => {
             if (!resp.isCaptain) {
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Only a Captain can perform this action!'
               );
             }
@@ -296,7 +296,7 @@ export class NotificationsService implements OnDestroy {
     private ngFire: AngularFirestore,
     private dialog: MatDialog,
     private router: Router,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<{ dash: DashState }>
   ) {
     const uid = localStorage.getItem('uid');

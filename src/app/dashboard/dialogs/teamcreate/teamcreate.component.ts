@@ -57,7 +57,7 @@ export class TeamcreateComponent implements OnInit {
     public dialogRef: MatDialogRef<TeamcreateComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngStorage: AngularFireStorage,
     private router: Router
   ) { }
@@ -133,7 +133,7 @@ export class TeamcreateComponent implements OnInit {
       .commit()
       .then(() => {
         this.success = true;
-        this.snackServ.displayCustomMsg('Invites sent successfully!');
+        this.snackBarService.displayCustomMsg('Invites sent successfully!');
       });
     // .catch((error) => console.log(error));
   }

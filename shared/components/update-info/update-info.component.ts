@@ -17,7 +17,7 @@ export class UpdateInfoComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<UpdateInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: 'email' | 'password',
-    private authServ: AuthService
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -25,7 +25,7 @@ export class UpdateInfoComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
     });
     this.newPassForm = new FormGroup({
-      pass: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.passwordStrong)]),
+      pass: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       conf_pass: new FormControl(null, [Validators.required, this.validateAreEqual.bind(this)]),
     });
   }
@@ -40,9 +40,9 @@ export class UpdateInfoComponent implements OnInit {
 
   onChangeSubmit() {
     if (this.data == 'email') {
-      this.authServ.onChangeEmail(this.newEmailForm.get('email')?.value);
+      this.authService.onChangeEmail(this.newEmailForm.get('email')?.value);
     } else {
-      this.authServ.onChangePassword(this.newPassForm.get('pass')?.value);
+      this.authService.onChangePassword(this.newPassForm.get('pass')?.value);
     }
     this.onDialogClose();
   }

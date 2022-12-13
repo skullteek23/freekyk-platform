@@ -9,10 +9,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LogoutComponent implements OnInit {
   constructor(
-    private authServ: AuthService,
+    private authService: AuthService,
     public dialogRef: MatDialogRef<LogoutComponent>
-  ) {}
-  ngOnInit(): void {}
+  ) { }
+  ngOnInit(): void { }
   onCloseDialog(): void {
     this.dialogRef.close();
   }
@@ -20,7 +20,7 @@ export class LogoutComponent implements OnInit {
     this.onCloseDialog();
   }
   onLogout(): void {
-    this.authServ.onLogout();
+    this.authService.onLogout();
     this.onCloseDialog();
   }
 }

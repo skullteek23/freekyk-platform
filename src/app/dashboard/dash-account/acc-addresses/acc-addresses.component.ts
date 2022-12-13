@@ -30,7 +30,7 @@ export class AccAddressesComponent implements OnInit {
   uid: string;
 
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     private locationServ: LocationService
   ) { }
@@ -85,7 +85,7 @@ export class AccAddressesComponent implements OnInit {
       .collection(`players/${this.uid}/Addresses`)
       .doc(formid)
       .delete()
-      .then(() => this.snackServ.displayCustomMsg('Address deleted successfully!'));
+      .then(() => this.snackBarService.displayCustomMsg('Address deleted successfully!'));
   }
   resetAll(): void {
     this.additionAvailable = true;
@@ -99,7 +99,7 @@ export class AccAddressesComponent implements OnInit {
       .then(this.finishSubmit.bind(this));
   }
   finishSubmit(): void {
-    this.snackServ.displayCustomMsg('Address saved successfully!');
+    this.snackBarService.displayCustomMsg('Address saved successfully!');
     this.resetAll();
   }
   FirstDigitNotZero(control: AbstractControl): Observable<any> {

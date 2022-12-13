@@ -35,7 +35,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private store: Store<fromApp.AppState>,
     private paymentServ: PaymentService,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private router: Router
   ) { }
   ngOnInit(): void {
@@ -113,7 +113,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       this.initPayment(season, teamInfo.basicInfo.id);
     }
     if (errorMessage) {
-      this.snackServ.displayError(errorMessage);
+      this.snackBarService.displayError(errorMessage);
       this.paymentServ.onLoadingStatusChange('home');
     }
   }
@@ -133,7 +133,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       })
       .catch((err) => {
         this.paymentServ.onLoadingStatusChange('home');
-        this.snackServ.displayError();
+        this.snackBarService.displayError();
       });
   }
   async isAvailableSlot(maxTeams: number, sid: string): Promise<boolean> {

@@ -55,7 +55,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       dash: DashState;
     }>,
     private ngFire: AngularFirestore,
-    private snackService: SnackbarService,
+    private snackBarService: SnackbarService,
     private locationService: LocationService,
     private authService: AuthService
   ) { }
@@ -246,7 +246,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.playerArrayForm.get(controlName).value.length === 1 &&
         !this.playerArrayForm.get(controlName).value[0]
       ) {
-        this.snackService.displayCustomMsg(`Empty fields cannot be removed!`);
+        this.snackBarService.displayCustomMsg(`Empty fields cannot be removed!`);
       } else {
         (this.playerArrayForm.get(controlName) as FormArray).removeAt(
           (this.playerArrayForm.get(controlName) as FormArray).length - 1
@@ -257,7 +257,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.fsArrayForm.get(controlName).value.length === 1 &&
         !this.fsArrayForm.get(controlName).value[0]
       ) {
-        this.snackService.displayCustomMsg(`Empty fields cannot be removed!`);
+        this.snackBarService.displayCustomMsg(`Empty fields cannot be removed!`);
       } else {
         (this.fsArrayForm.get(controlName) as FormArray).removeAt(
           (this.fsArrayForm.get(controlName) as FormArray).length - 1
@@ -329,7 +329,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       }
       if (allPromises.length) {
         return Promise.all(allPromises).then(() =>
-          this.snackService.displayCustomMsg('Updated Successfully!')
+          this.snackBarService.displayCustomMsg('Updated Successfully!')
         );
       }
     }
@@ -384,7 +384,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       //     })
       // );
       return Promise.all(allPromises).then(() =>
-        this.snackService.displayCustomMsg('Updated Successfully!')
+        this.snackBarService.displayCustomMsg('Updated Successfully!')
       );
     }
     this.playingInfoForm.reset();
@@ -410,7 +410,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         .doc('otherInfo')
         .set({ ...newArrayDetails, }, { merge: true })
         .then(() => {
-          this.snackService.displayCustomMsg('Updated Successfully!');
+          this.snackBarService.displayCustomMsg('Updated Successfully!');
           location.reload();
         });
     }
@@ -444,7 +444,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   //         { merge: true }
   //       )
   //       .then(() => {
-  //         this.snackService.displayCustomMsg('Updated Successfully!');
+  //         this.snackBarService.displayCustomMsg('Updated Successfully!');
   //         location.reload();
   //       });
   //   }
@@ -484,7 +484,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     // );
     this.socialInfoForm.reset();
     return Promise.all(allPromises).then(() =>
-      this.snackService.displayCustomMsg('Updated Successfully!')
+      this.snackBarService.displayCustomMsg('Updated Successfully!')
     );
     // backend code here
   }

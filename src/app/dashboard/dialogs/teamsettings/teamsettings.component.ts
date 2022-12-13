@@ -45,7 +45,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<TeamsettingsComponent>,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
     private locationServ: LocationService,
@@ -170,7 +170,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     const tid = sessionStorage.getItem('tid');
     // backend code here
     if (this.$teamLogo == null) {
-      this.snackServ.displayError();
+      this.snackBarService.displayError();
       return Promise.reject();
     }
     return (
@@ -181,7 +181,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     const tid = sessionStorage.getItem('tid');
     // backend code here
     if (this.$teamPhoto == null) {
-      this.snackServ.displayError();
+      this.snackBarService.displayError();
       return Promise.reject();
     }
     return (
@@ -227,7 +227,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
   }
 
   onFinishOp(): void {
-    this.snackServ.displayCustomMsg('Updated Successfully!');
+    this.snackBarService.displayCustomMsg('Updated Successfully!');
     location.reload();
   }
 

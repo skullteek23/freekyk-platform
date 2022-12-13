@@ -36,7 +36,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   uid: string;
   subscriptions = new Subscription();
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<{ dash: DashState }>,
     private router: Router,
     private route: ActivatedRoute,
@@ -166,9 +166,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
       .pipe(take(1), map((resp) => resp))
       .subscribe(async (team) => {
         if (team && team.hasTeam == null) {
-          this.snackServ.displayCustomMsg('Join or create a team to perform this action!');
+          this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');
         } else if (team.hasTeam.capId !== this.uid) {
-          this.snackServ.displayCustomMsg('Only a Captain can perform this action!');
+          this.snackBarService.displayCustomMsg('Only a Captain can perform this action!');
         } else {
           const notif: NotificationBasic = {
             type: 'team challenge',
@@ -183,7 +183,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             .collection(`players/${this.id}/Notifications`)
             .add(notif)
             .then(() =>
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Challenge Notification sent to team captain.'
               )
             );

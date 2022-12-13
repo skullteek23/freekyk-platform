@@ -275,7 +275,7 @@ export class TeamService implements OnDestroy {
     callable({ teamId: tid })
       .toPromise()
       .then(() => {
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Your Team will be deleted shortly!'
         );
         location.reload();
@@ -308,29 +308,29 @@ export class TeamService implements OnDestroy {
   handlePermissionErrors(error: string): void {
     switch (error) {
       case NO_TEAM:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Join or create a team to perform this action!'
         );
         break;
       case CAPTAIN_ONLY:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Only a Captain can perform this action!'
         );
         break;
       case MEMBER_ONLY:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Only Non-Captain Member can perform this action!'
         );
         break;
       case INCOMPLETE_PROFILE:
-        this.snackServ.displayCustomMsg('Complete your profile to proceed!');
+        this.snackBarService.displayCustomMsg('Complete your profile to proceed!');
         break;
       case PHOTO_NOT_UPLOADED:
-        this.snackServ.displayCustomMsg('Upload your Photo to proceed!');
+        this.snackBarService.displayCustomMsg('Upload your Photo to proceed!');
         break;
 
       case ALREADY_IN_TEAM:
-        this.snackServ.displayCustomMsg('You are already a team member!');
+        this.snackBarService.displayCustomMsg('You are already a team member!');
         break;
 
       default:
@@ -343,7 +343,7 @@ export class TeamService implements OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private dialog: MatDialog,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<fromApp.AppState>,
     private ngFunc: AngularFireFunctions,
     private router: Router

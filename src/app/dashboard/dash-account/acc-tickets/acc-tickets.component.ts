@@ -21,7 +21,7 @@ export class AccTicketsComponent implements OnInit {
   myTickets$: Observable<BasicTicket[]>;
   noTickets = false;
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore
   ) { }
   ngOnInit(): void {
@@ -100,7 +100,7 @@ export class AccTicketsComponent implements OnInit {
       .collection('tickets')
       .doc(ticketID)
       .delete()
-      .then(() => this.snackServ.displayCustomMsg('Ticket deleted successfully!'));
+      .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'));
   }
   resetAll(): void {
     this.additionAvailable = true;
@@ -123,6 +123,6 @@ export class AccTicketsComponent implements OnInit {
   }
   finishSubmission(): void {
     this.resetAll();
-    this.snackServ.displayCustomMsg('Ticket submitted successfully!');
+    this.snackBarService.displayCustomMsg('Ticket submitted successfully!');
   }
 }

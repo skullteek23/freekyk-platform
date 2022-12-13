@@ -23,7 +23,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<UploadphotoComponent>,
     private ngStorage: AngularFireStorage,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     @Inject(MAT_DIALOG_DATA) public data: string
   ) { }
@@ -64,9 +64,9 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(() => {
         this.selectedImage = null;
-        this.snackServ.displayCustomMsg('Photo removed Successfully!');
+        this.snackBarService.displayCustomMsg('Photo removed Successfully!');
       })
-      .catch(() => this.snackServ.displayError())
+      .catch(() => this.snackBarService.displayError())
       .finally(() => {
         this.isLoading = false;
         this.onCloseDialog();
@@ -76,7 +76,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (this.$file == null) {
       this.isLoading = false;
-      this.snackServ.displayError();
+      this.snackBarService.displayError();
       return this.onCloseDialog();
     }
     const uid = localStorage.getItem('uid');
@@ -94,7 +94,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .then(() => {
         this.isUploadComplete = true;
       })
-      .catch(() => this.snackServ.displayError())
+      .catch(() => this.snackBarService.displayError())
       .finally(() => {
         this.isLoading = false;
         this.onCloseDialog();
