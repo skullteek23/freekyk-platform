@@ -58,6 +58,7 @@ export class AuthService {
   logOut(): void {
     this.ngAuth.signOut()
       .then(() => {
+        this.user = null;
         sessionStorage.clear();
         localStorage.clear();
         this.router.navigate(['/login']);
@@ -83,6 +84,13 @@ export class AuthService {
     } else {
       return sessionStorage.getItem('uid');
     }
+  }
+
+  getToken(): string {
+    if (this.user?.refreshToken) {
+      return this.user?.refreshToken;
+    }
+    return null;
   }
 
   isValidAndActivatedAccount(id: string, email: string): Promise<boolean> {

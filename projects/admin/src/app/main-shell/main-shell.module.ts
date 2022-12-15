@@ -46,6 +46,8 @@ import { ViewRegisteredGroundComponent } from './components/grounds-panel/view-r
 import { GroundDetailsComponent } from './components/grounds-panel/register-ground/components/ground-details/ground-details.component';
 import { GroundAvailabilityComponent } from './components/grounds-panel/register-ground/components/ground-availability/ground-availability.component';
 import { GroundFormSummaryComponent } from './components/grounds-panel/register-ground/components/ground-form-summary/ground-form-summary.component';
+import { AuthInterceptor } from '@admin/interceptors/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -130,7 +132,8 @@ const routes: Routes = [
   providers: [
     DatePipe,
     { provide: DateAdapter, useClass: AppDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 })
 export class MainShellModule { }

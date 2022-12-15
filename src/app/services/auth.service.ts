@@ -158,6 +158,13 @@ export class AuthService {
     return this.currentUser?.name;
   }
 
+  getToken(): string {
+    if (this.currentUser?.refreshToken) {
+      return this.currentUser?.refreshToken;
+    }
+    return null;
+  }
+
   updateAuthDisplayName(name: string) {
     this.updateName(name);
   }

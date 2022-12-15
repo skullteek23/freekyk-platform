@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { REGION } from '@angular/fire/functions';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -39,6 +39,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
 import { SeStandingsComponent } from './play/profile-pages/season-profile/se-standings/se-standings.component';
 import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixt
     NgImageSliderModule,
   ],
   providers: [
-    { provide: REGION, useValue: 'asia-south1' }
+    { provide: REGION, useValue: 'asia-south1' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
 })

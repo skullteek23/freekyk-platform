@@ -328,9 +328,9 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         );
       }
       if (allPromises.length) {
-        return Promise.all(allPromises).then(() =>
-          this.snackBarService.displayCustomMsg('Updated Successfully!')
-        );
+        return Promise.all(allPromises)
+          .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+          .catch(error => this.snackBarService.displayError())
       }
     }
     this.personalInfoForm.reset();
@@ -383,9 +383,9 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       //       ...newFsDetails,
       //     })
       // );
-      return Promise.all(allPromises).then(() =>
-        this.snackBarService.displayCustomMsg('Updated Successfully!')
-      );
+      return Promise.all(allPromises)
+        .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+        .catch(error => this.snackBarService.displayError())
     }
     this.playingInfoForm.reset();
     // backend code here
@@ -412,7 +412,8 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         .then(() => {
           this.snackBarService.displayCustomMsg('Updated Successfully!');
           location.reload();
-        });
+        })
+        .catch(error => this.snackBarService.displayError());
     }
     this.playerArrayForm.reset();
   }
@@ -483,9 +484,9 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     //   })
     // );
     this.socialInfoForm.reset();
-    return Promise.all(allPromises).then(() =>
-      this.snackBarService.displayCustomMsg('Updated Successfully!')
-    );
+    return Promise.all(allPromises)
+      .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+      .catch(error => this.snackBarService.displayError())
     // backend code here
   }
 
