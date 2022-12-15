@@ -69,7 +69,8 @@ export class SupportComponent implements OnInit {
         .then(() => {
           this.snackBarService.displayCustomMsg('Ticket registered successfully!');
           this.ticketForm.reset();
-        });
+        })
+        .catch(() => this.snackBarService.displayError());
     } else {
       this.snackBarService.displayError('Unable to register ticket!');
     }

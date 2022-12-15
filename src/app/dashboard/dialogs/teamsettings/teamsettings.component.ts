@@ -140,7 +140,8 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
         imgpath: image,
         imgpath_logo: logo,
       })
-      .then(this.onFinishOp.bind(this));
+      .then(this.onFinishOp.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
 
   onAddControl(): void {
@@ -222,7 +223,9 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
             ...newDetails,
           })
       );
-      Promise.all(allPromises).then(this.onFinishOp.bind(this));
+      Promise.all(allPromises)
+        .then(this.onFinishOp.bind(this))
+        .catch(() => this.snackBarService.displayError());
     }
   }
 
@@ -243,7 +246,8 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
       .update({
         tSocials: this.socialInfoForm.value,
       })
-      .then(this.onFinishOp.bind(this));
+      .then(this.onFinishOp.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
 
   onCloseDialog(): void {

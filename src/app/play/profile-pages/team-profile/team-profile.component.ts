@@ -182,11 +182,8 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
           this.ngFire
             .collection(`players/${this.id}/Notifications`)
             .add(notif)
-            .then(() =>
-              this.snackBarService.displayCustomMsg(
-                'Challenge Notification sent to team captain.'
-              )
-            );
+            .then(() => this.snackBarService.displayCustomMsg('Challenge Notification sent to team captain.'))
+            .catch(() => this.snackBarService.displayError());
         }
       }));
   }

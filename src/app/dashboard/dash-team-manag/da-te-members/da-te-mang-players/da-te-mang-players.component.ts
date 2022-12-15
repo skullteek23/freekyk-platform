@@ -85,6 +85,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
                 'Player successfully removed from the team!'
               )
             )
+            .catch(() => this.snackBarService.displayError())
         )
     );
   }
@@ -101,12 +102,14 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
             .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
-          this.teamServ.onLeaveTeam(this.membersArray).then(() => {
-            this.snackBarService.displayCustomMsg(
-              'You have successfully left the team!'
-            );
-            location.reload();
-          })
+          this.teamServ.onLeaveTeam(this.membersArray)
+            .then(() => {
+              this.snackBarService.displayCustomMsg(
+                'You have successfully left the team!'
+              );
+              location.reload();
+            })
+            .catch(() => this.snackBarService.displayError())
         )
     );
   }

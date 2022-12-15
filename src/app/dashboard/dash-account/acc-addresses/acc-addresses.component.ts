@@ -85,7 +85,8 @@ export class AccAddressesComponent implements OnInit {
       .collection(`players/${this.uid}/Addresses`)
       .doc(formid)
       .delete()
-      .then(() => this.snackBarService.displayCustomMsg('Address deleted successfully!'));
+      .then(() => this.snackBarService.displayCustomMsg('Address deleted successfully!'))
+      .catch(() => this.snackBarService.displayError());
   }
   resetAll(): void {
     this.additionAvailable = true;
@@ -96,7 +97,8 @@ export class AccAddressesComponent implements OnInit {
     this.ngFire
       .collection(`players/${this.uid}/Addresses`)
       .add(this.newAddressForm.value)
-      .then(this.finishSubmit.bind(this));
+      .then(this.finishSubmit.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
   finishSubmit(): void {
     this.snackBarService.displayCustomMsg('Address saved successfully!');

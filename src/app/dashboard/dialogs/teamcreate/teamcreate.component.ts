@@ -134,7 +134,8 @@ export class TeamcreateComponent implements OnInit {
       .then(() => {
         this.success = true;
         this.snackBarService.displayCustomMsg('Invites sent successfully!');
-      });
+      })
+      .catch(() => this.snackBarService.displayError());
     // .catch((error) => console.log(error));
   }
   validateTNameNotTaken(

@@ -203,7 +203,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
                   this.isLoaderShown = false;
                   this.snackbarService.displayError('Request raise failed!');
                 }
-              );
+              )
+              .catch(err => this.snackbarService.displayError());
           }
         });
       } else {

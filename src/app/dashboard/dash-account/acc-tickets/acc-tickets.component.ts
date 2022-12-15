@@ -100,7 +100,8 @@ export class AccTicketsComponent implements OnInit {
       .collection('tickets')
       .doc(ticketID)
       .delete()
-      .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'));
+      .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'))
+      .catch(() => this.snackBarService.displayError());
   }
   resetAll(): void {
     this.additionAvailable = true;
@@ -119,7 +120,8 @@ export class AccTicketsComponent implements OnInit {
         tkt_date: new Date(),
         tkt_status: 'Recieved',
       } as BasicTicket)
-      .then(this.finishSubmission.bind(this));
+      .then(this.finishSubmission.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
   finishSubmission(): void {
     this.resetAll();

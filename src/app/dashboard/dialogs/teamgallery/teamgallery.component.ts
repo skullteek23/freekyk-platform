@@ -43,27 +43,29 @@ export class TeamgalleryComponent implements OnInit {
         `/teamGallery/${tid}${teamPhoto.name}`,
         teamPhoto
       );
-      uploadRef.ref.getDownloadURL().then((url) => {
-        let photoSnap;
-        if (!this.noGallery) {
-          photoSnap = this.ngFire
-            .collection(`teams/${tid}/additionalInfo`)
-            .doc('media')
-            .update({
-              media: firebase.firestore.FieldValue.arrayUnion(url),
-            });
-        } else {
-          photoSnap = this.ngFire
-            .collection(`teams/${tid}/additionalInfo`)
-            .doc('media')
-            .set({
-              media: [url],
-            });
-        }
-        photoSnap
-          .then(() => this.cleanUp('Photo uploaded successfully!'))
-          .catch((err => this.snackBarService.displayError()));
-      });
+      uploadRef.ref.getDownloadURL()
+        .then((url) => {
+          let photoSnap;
+          if (!this.noGallery) {
+            photoSnap = this.ngFire
+              .collection(`teams/${tid}/additionalInfo`)
+              .doc('media')
+              .update({
+                media: firebase.firestore.FieldValue.arrayUnion(url),
+              });
+          } else {
+            photoSnap = this.ngFire
+              .collection(`teams/${tid}/additionalInfo`)
+              .doc('media')
+              .set({
+                media: [url],
+              });
+          }
+          photoSnap
+            .then(() => this.cleanUp('Photo uploaded successfully!'))
+            .catch((err => this.snackBarService.displayError()));
+        })
+        .catch(() => this.snackBarService.displayError());
     }
   }
   cleanUp(message: string): void {

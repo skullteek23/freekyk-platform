@@ -82,7 +82,8 @@ export class InvitePlayersComponent implements OnInit {
         .then(() => {
           this.snackBarService.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
-        });
+        })
+        .catch(() => this.snackBarService.displayError());
       // .catch((error) => console.log(error));
     } else {
       this.ngFire.firestore
@@ -91,7 +92,8 @@ export class InvitePlayersComponent implements OnInit {
         .then(() => {
           this.snackBarService.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
-        });
+        })
+        .catch(() => this.snackBarService.displayError());
       // .catch((error) => console.log(error));
     }
   }
