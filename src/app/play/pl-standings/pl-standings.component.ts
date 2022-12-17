@@ -63,7 +63,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
         this.filterData = {
           defaultFilterPath: 'standings',
           filtersObj: {
-            Season: resp,
+            'Select Season': resp,
           },
         };
       });

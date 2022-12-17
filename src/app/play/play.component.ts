@@ -21,6 +21,8 @@ export class PlayComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.activeLink = event.url.slice('/play/'.length);
+        const contentElement = document.getElementById('content-container');
+        contentElement.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
       }
     });
   }

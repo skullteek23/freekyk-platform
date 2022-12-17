@@ -2,7 +2,7 @@
   <app-hero-section [useAltLayout]="true" imageSource="assets/svgs/Banner/play_banner.svg" [description]="mainContent"
     [CTA]="{ name: 'get started', route: '/dashboard/home' }"></app-hero-section>
 </div>
-<div class="sub-header-container" appStickyNav [offset]="550" panelClass="sticky-sub-header" fxHide.lt-md>
+<div class="sub-header-container" appStickyNav [offset]="420" panelClass="sticky-sub-header" fxHide.lt-md>
   <nav mat-tab-nav-bar color="primary">
     <a mat-tab-link *ngFor="let link of playLinks" (click)="activeLink = link" [routerLink]="[link]"
       [active]="activeLink == link">
@@ -10,4 +10,6 @@
     </a>
   </nav>
 </div>
-<router-outlet></router-outlet>
+<ng-container id="content-container">
+  <router-outlet></router-outlet>
+</ng-container>
