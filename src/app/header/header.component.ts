@@ -17,6 +17,7 @@ import { environment } from 'environments/environment';
 export class HeaderComponent implements OnInit {
 
   readonly adminURL = environment?.firebase?.adminRegister || '';
+  readonly partnerFormURL = environment?.forms?.partner || '';
   @Output() menOpen = new Subject<boolean>();
   isLoading = true;
   isLogged = false;

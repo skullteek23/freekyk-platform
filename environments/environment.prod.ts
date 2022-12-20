@@ -26,5 +26,8 @@ export const environment = {
   // https://us8.admin.mailchimp.com/account/api/
   mailchimp: {
     apiKey: 'd58079aa2ee39de14d79cfc6ed10a880-us21'
+  },
+  forms: {
+    partner: 'https://forms.gle/2jA3qxTJgRkUuKREA'
   }
 };
