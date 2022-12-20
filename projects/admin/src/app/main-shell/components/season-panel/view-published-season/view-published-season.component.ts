@@ -15,7 +15,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment.dev';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
-import { RequestDialogComponent } from '../request-dialog/request-dialog.component';
+import { IRequestData, RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { SeasonAdminService } from '../../../services/season-admin.service';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 
@@ -186,12 +186,12 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
         this.dialog.open(RequestDialogComponent, {
           panelClass: 'fk-dialogs',
           data: {
-            season: this.seasonID,
+            seasonID: this.seasonID,
             heading: isDeleteRequest ? DELETE_SEASON_SUBHEADING : REVOKE_MATCH_UPDATE_SUBHEADING,
             isShowMatch: !isDeleteRequest
-          }
+          } as IRequestData
         }).afterClosed().subscribe(userResponse => {
-          if (userResponse && Object.keys(userResponse).length === 4) {
+          if (userResponse) {
             this.isLoaderShown = true;
             this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
               .then(
@@ -290,7 +290,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
 
   get isRequestExists$(): Observable<boolean> {
     if (this.seasonID) {
-      return this.ngFire.collection('adminRequests', query => query.where('seasonId', '==', this.seasonID))
+      return this.ngFire.collection('adminRequests', query => query.where('referenceID', '==', this.seasonID))
         .get()
         .pipe(map(resp => !resp.empty), share());
     }

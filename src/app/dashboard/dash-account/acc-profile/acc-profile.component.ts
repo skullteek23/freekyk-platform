@@ -11,11 +11,11 @@ import { PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model
 import { DashState } from '../../store/dash.reducer';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { LocationService } from '@shared/services/location-cities.service';
-import { MatSelectChange } from '@angular/material/select';
-import { DeactivateAccountComponent } from '../../dialogs/deactivate-account/deactivate-account.component';
 import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import { AuthService } from 'src/app/services/auth.service';
 import { PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
+import { DeactivateProfileRequestComponent } from '@app/dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
+import { map, share } from 'rxjs/operators';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',
@@ -507,8 +507,34 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
 
   onDeactivateAccount(): void {
-    this.dialog.open(DeactivateAccountComponent, {
-      panelClass: 'large-dialogs',
+    this.isRequestExists$.subscribe(response => {
+      if (!response) {
+        this.dialog.open(DeactivateProfileRequestComponent, {
+          panelClass: 'fk-dialogs',
+        }).afterClosed().subscribe(userResponse => {
+          if (userResponse) {
+            this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
+              .then(
+                () => {
+                  this.snackBarService.displayCustomMsg('Account Deactivation Request Submitted!');
+                  this.authService.onLogout();
+                }, err => {
+                  this.snackBarService.displayError('Request raise failed!');
+                }
+              )
+              .catch(err => this.snackBarService.displayError());
+          }
+        });
+      } else {
+        this.snackBarService.displayCustomMsg('Request already submitted!');
+      }
     });
+  }
+
+  get isRequestExists$(): Observable<boolean> {
+    const uid = localStorage.getItem('uid');
+    return this.ngFire.collection('adminRequests', query => query.where('referenceID', '==', uid))
+      .get()
+      .pipe(map(resp => !resp.empty), share());
   }
 }

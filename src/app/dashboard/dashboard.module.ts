@@ -50,12 +50,12 @@ import { LocationService } from '../../../shared/services/location-cities.servic
 import { environment } from 'environments/environment';
 import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
 import { PaymentService } from '../../../shared/services/payment.service';
-import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
 import { PlayerService } from '../services/player.service';
 import { TeamService } from '../services/team.service';
 import { MaterialModule } from '@shared/material.module';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +101,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     DaTeMangPlayersComponent,
     InvitePlayersComponent,
     TeamgalleryComponent,
-    DeactivateAccountComponent,
+    DeactivateProfileRequestComponent,
   ],
   imports: [
     SharedModule,

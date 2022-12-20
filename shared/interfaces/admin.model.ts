@@ -29,3 +29,11 @@ export interface AdminConfigurationSeason {
   duration: number;
   lastParticipationDate: string;
 };
+
+export interface ActionRequest {
+  id: string;
+  uid: string;
+  timestamp: number;
+  reason: string;
+  referenceID: string;
+}
