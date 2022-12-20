@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { MatchConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-notifications-list',
@@ -10,6 +11,9 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./notifications-list.component.scss'],
 })
 export class NotificationsListComponent implements OnInit {
+
+  readonly CUSTOM_FORMAT = MatchConstants.NOTIFICATION_DATE_FORMAT;
+
   @Input('data') set data(value: NotificationBasic[]) {
     this.notifications = value.sort(ArraySorting.sortObjectByKey('date', 'desc'));
   }
@@ -22,8 +26,6 @@ export class NotificationsListComponent implements OnInit {
   }
 
   changeStatus(notif: NotificationBasic, status: boolean) {
-    if (!notif.read) {
-      this.notifServ.markNotification(notif.id, status);
-    }
+    this.notifServ.markNotification(notif.id, status);
   }
 }

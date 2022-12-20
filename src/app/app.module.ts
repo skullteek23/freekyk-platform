@@ -40,6 +40,8 @@ import { environment } from 'environments/environment';
 import { SeStandingsComponent } from './play/profile-pages/season-profile/se-standings/se-standings.component';
 import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 
 @NgModule({
   declarations: [
@@ -88,7 +90,9 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
   ],
   bootstrap: [AppComponent],
 })
