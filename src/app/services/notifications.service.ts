@@ -25,14 +25,7 @@ export class NotificationsService implements OnDestroy {
   notifsCountChanged = new BehaviorSubject<number>(0);
   emptyInvites = new BehaviorSubject<boolean>(true);
   subscriptions = new Subscription();
-  onSendNotif(
-    recieverId: string,
-    notif: NotificationBasic
-  ): Promise<DocumentReference<unknown>> {
-    return this.ngFire
-      .collection('players/' + recieverId + '/Notifications')
-      .add(notif);
-  }
+
   onSelNotif(notif: NotificationBasic): void {
     switch (notif.type) {
       case 'team welcome':
@@ -191,9 +184,7 @@ export class NotificationsService implements OnDestroy {
   }
   fetchAndGetAllNotifs(uid: string): Observable<NotificationBasic[]> {
     return this.ngFire
-      .collection('players/' + uid + '/Notifications', (query) =>
-        query.orderBy('date', 'asc')
-      )
+      .collection('players/' + uid + '/Notifications')
       .snapshotChanges()
       .pipe(
         map((resp) =>
@@ -245,9 +236,7 @@ export class NotificationsService implements OnDestroy {
   private fetchtNotifications(pid: string): void {
     this.subscriptions.add(
       this.ngFire
-        .collection('players/' + pid + '/Notifications', (query) =>
-          query.orderBy('date', 'asc').limit(8)
-        )
+        .collection('players/' + pid + '/Notifications', (query) => query.limit(8))
         .snapshotChanges()
         .pipe(
           map((resp) =>
