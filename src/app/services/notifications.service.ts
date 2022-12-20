@@ -63,12 +63,12 @@ export class NotificationsService implements OnDestroy {
       .doc(notifId)
       .delete();
   }
-  markNotificationAsRead(notificationID: string): void {
+  markNotification(notificationID: string, status: boolean): void {
     const uid = localStorage.getItem('uid');
     this.ngFire
       .collection('players/' + uid + '/Notifications')
       .doc(notificationID)
-      .update({ read: true });
+      .update({ read: status });
   }
   deleteInvite(invId: string): void {
     this.subscriptions.add(

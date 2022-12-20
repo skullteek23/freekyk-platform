@@ -21,9 +21,9 @@ export class NotificationsListComponent implements OnInit {
     this.notifServ.onSelNotif(selectedNotif);
   }
 
-  markAsRead(notif: NotificationBasic) {
+  changeStatus(notif: NotificationBasic, status: boolean) {
     if (!notif.read) {
-      this.notifServ.markNotificationAsRead(notif.id);
+      this.notifServ.markNotification(notif.id, status);
     }
   }
 }

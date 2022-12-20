@@ -10,8 +10,12 @@
         </span>
       </div>
       <div fxLayout="column" fxLayoutAlign="center end">
-        <a *ngIf="!notification.read" (click)="markAsRead(notification); $event.stopPropagation()" class="action">
+        <a *ngIf="!notification.read" (click)="changeStatus(notification, true); $event.stopPropagation()"
+          class="action">
           Mark as Read</a>
+        <a *ngIf="notification.read" (click)="changeStatus(notification, false); $event.stopPropagation()"
+          class="action">
+          Mark as Unread</a>
         <span class="mat-body-2 notif_time">
           {{ notification.date | date: "shortTime" | lowercase }}
         </span>
