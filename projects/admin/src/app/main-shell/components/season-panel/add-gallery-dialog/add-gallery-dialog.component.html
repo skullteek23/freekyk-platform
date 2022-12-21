@@ -1,0 +1,31 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Add Season Gallery Photos</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="dialogData">
+    <div class="uploaded-photos-container" fxLayout="column" fxLayoutGap="16px" *ngIf="!isAddNew">
+      <div class="add-new-button-container">
+        <button class="primaryButton buttonText" (click)="onAddNew()">Add Photo</button>
+      </div>
+      <app-no-items-message items="photos" *ngIf="!photosList?.length"></app-no-items-message>
+      <mat-grid-list cols="2" gutterSize="16px" rowHeight="2:1" *ngIf="photosList?.length">
+        <mat-grid-tile *ngFor="let photo of photosList; let i = index">
+          <img [src]="photo" class="image-season-gallery" alt="photo_{{i}}">
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="isAddNew">
+      <app-photo-uploader (changeUpload)="onSelectPhoto($event)" actionBtnLabel="Browse Photo">
+      </app-photo-uploader>
+      <div class="add-new-button-container" *ngIf="selectedPhoto$">
+        <button class="primaryButton buttonText" (click)="uploadPhoto(); $event.stopPropagation()" type="button">
+          Upload
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

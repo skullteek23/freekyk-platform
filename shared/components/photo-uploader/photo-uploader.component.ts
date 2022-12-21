@@ -9,17 +9,18 @@ import { MatchConstantsSecondary } from '../../constants/constants';
 export class PhotoUploaderComponent {
 
   @Output() changeUpload = new EventEmitter<File>();
-  @Input() defaultImgUrl: string = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
+  @Input() actionBtnLabel = 'Browse Photo';
+  @Input() url: string = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
+  // defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
 
   preview: string = null;
   $uploadedImageFile: File = null;
 
-  onBrowsePhoto(ev): void {
+  onBrowsePhoto(ev, previewEl: HTMLElement): void {
+    // const preview: any = document.getElementById('preview-image');
     if (ev && ev.target && ev.target.files) {
-      const src = URL.createObjectURL(ev.target.files[0]);
-      const preview: any = document.getElementById('preview-image');
       const file = ev.target.files[0];
-      preview.src = src;
+      previewEl['src'] = URL.createObjectURL(file);
       this.emitSelection(file);
     }
   }

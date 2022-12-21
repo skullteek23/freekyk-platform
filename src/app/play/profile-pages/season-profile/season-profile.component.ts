@@ -110,13 +110,7 @@ export class SeasonProfileComponent implements OnInit {
         }),
         map((media: SeasonMedia) => {
           if (media) {
-            return [
-              media.photo_1,
-              media.photo_2,
-              media.photo_3,
-              media.photo_4,
-              media.photo_5,
-            ];
+            return media.photos;
           }
           return [];
         })

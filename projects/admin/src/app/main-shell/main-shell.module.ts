@@ -48,6 +48,7 @@ import { GroundAvailabilityComponent } from './components/grounds-panel/register
 import { GroundFormSummaryComponent } from './components/grounds-panel/register-ground/components/ground-form-summary/ground-form-summary.component';
 import { AuthInterceptor } from '@admin/interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AddGalleryDialogComponent } from './components/season-panel/add-gallery-dialog/add-gallery-dialog.component';
 
 const routes: Routes = [
   {
@@ -112,7 +113,8 @@ const routes: Routes = [
     ViewRegisteredGroundComponent,
     GroundDetailsComponent,
     GroundAvailabilityComponent,
-    GroundFormSummaryComponent
+    GroundFormSummaryComponent,
+    AddGalleryDialogComponent
   ],
   imports: [
     CommonModule,

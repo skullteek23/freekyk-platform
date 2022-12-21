@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -18,8 +17,7 @@ export class SeGalleryComponent implements OnInit, OnDestroy {
   photos$: Observable<SeasonMedia>;
   constructor(
     private mediaObs: MediaObserver,
-    private enServ: EnlargeService,
-    private ngFire: AngularFirestore
+    private enServ: EnlargeService
   ) { }
   ngOnInit(): void {
     this.subscriptions.add(

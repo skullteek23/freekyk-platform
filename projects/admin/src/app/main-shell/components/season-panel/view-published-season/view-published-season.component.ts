@@ -18,6 +18,7 @@ import { map, share } from 'rxjs/operators';
 import { IRequestData, RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { SeasonAdminService } from '../../../services/season-admin.service';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
+import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dialog.component';
 
 @Component({
   selector: 'app-view-published-season',
@@ -267,6 +268,15 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       ).subscribe(response => {
         this.seasonFixtures = response;
       });
+  }
+
+  onAddGallery() {
+    if (this.seasonID) {
+      this.dialog.open(AddGalleryDialogComponent, {
+        panelClass: 'large-dialogs',
+        data: this.seasonID
+      })
+    }
   }
 
   goToURL() {

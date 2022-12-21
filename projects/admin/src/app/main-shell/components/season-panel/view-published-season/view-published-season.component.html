@@ -125,8 +125,15 @@
         </div>
       </form>
     </div>
-    <app-photo-uploader [defaultImgUrl]="seasonData?.imgpath">
-    </app-photo-uploader>
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="">
+      </app-photo-uploader>
+      <div class="button-container">
+        <button (click)="onAddGallery()" class="buttonText secondaryButton">
+          Add Gallery Photos
+        </button>
+      </div>
+    </div>
   </div>
 </mat-card>
 <mat-card class="info-card season-page-container">
