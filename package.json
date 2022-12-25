@@ -45,7 +45,7 @@
     "firebase": "^8.5.0",
     "lodash": "^4.17.21",
     "ng-image-slider": "^2.8.0",
-    "ngx-sharebuttons": "^8.0.5",
+    "ngx-sharebuttons": "8.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"

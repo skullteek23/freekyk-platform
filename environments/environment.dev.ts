@@ -11,7 +11,8 @@ export const environment = {
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
     url: 'https://freekyk-development.web.app',
     adminUrl: 'https://admin-freekyk-dev.web.app',
-    adminRegister: 'https://admin-freekyk-dev.web.app/register'
+    adminRegister: 'https://admin-freekyk-dev.web.app/register',
+    logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
   },
   // Razorpay
   razorPay: {
@@ -29,5 +30,13 @@ export const environment = {
   },
   forms: {
     partner: 'https://forms.gle/2jA3qxTJgRkUuKREA'
+  },
+  socialShare: {
+    include: ['facebook', 'twitter', 'google'],
+    exclude: ['tumblr', 'stumble', 'vk'],
+    theme: 'modern-light',
+    gaTracking: true,
+    twitterAccount: 'twitterUsername',
+    autoSetMeta: true,
   }
 };

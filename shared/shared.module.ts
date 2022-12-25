@@ -38,9 +38,8 @@ import { TextShortenPipe } from './pipes/text-shorten.pipe';
 import { SocialMediaLinksComponent } from './components/social-media-links/social-media-links.component';
 import { EnlargeMediaComponent } from './dialogs/enlarge-media/enlarge-media.component';
 import { AboutProfileCardComponent } from './components/about-profile-card/about-profile-card.component';
-// import { SharesheetmobileComponent } from './components/sharesheetmobile/sharesheetmobile.component';
-// import { SharesheetComponent } from './components/sharesheet/sharesheet.component';
-// import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
+import { SharesheetmobileComponent } from './components/sharesheetmobile/sharesheetmobile.component';
+import { SharesheetComponent } from './components/sharesheet/sharesheet.component';
 import { WeightPipe } from './pipes/weight.pipe';
 import { StrongFootPipe } from './pipes/strong-foot.pipe';
 import { HeightPipe } from './pipes/height.pipe';
@@ -67,15 +66,10 @@ import { KnockoutSmComponent } from '@app/play/pl-standings/pl-st-knockout/knock
 import { KnockoutStripComponent } from '@app/play/pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
 import { PlStKnockoutComponent } from '@app/play/pl-standings/pl-st-knockout/pl-st-knockout.component';
 import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-league.component';
+import { environment } from 'environments/environment';
+import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
 
-// const customConfig: ShareButtonsConfig = {
-//   include: ['facebook', 'twitter', 'google'],
-//   exclude: ['tumblr', 'stumble', 'vk'],
-//   theme: 'modern-light',
-//   gaTracking: true,
-//   twitterAccount: 'twitterUsername',
-//   autoSetMeta: true,
-// };
+const customConfig: ShareButtonsConfig = environment.socialShare;
 
 @NgModule({
   declarations: [
@@ -112,8 +106,8 @@ import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-l
     SocialMediaLinksComponent,
     EnlargeMediaComponent,
     AboutProfileCardComponent,
-    // SharesheetmobileComponent,
-    // SharesheetComponent,
+    SharesheetmobileComponent,
+    SharesheetComponent,
     WeightPipe,
     StrongFootPipe,
     HeightPipe,
@@ -145,8 +139,8 @@ import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-l
     FlexLayoutModule,
     ReactiveFormsModule,
     YouTubePlayerModule,
-    // ShareModule.withConfig(customConfig),
     ClipboardModule,
+    ShareModule.withConfig(customConfig),
   ],
   exports: [
     HeroSectionComponent,
@@ -183,7 +177,7 @@ import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-l
     EnlargeMediaComponent,
     AboutProfileCardComponent,
     // SharesheetmobileComponent,
-    // SharesheetComponent,
+    SharesheetComponent,
     WeightPipe,
     StrongFootPipe,
     HeightPipe,

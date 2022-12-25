@@ -13,6 +13,7 @@ import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
 import { MaterialModule } from '@shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+
 @NgModule({
   declarations: [
     PlayComponent,
@@ -24,7 +25,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PlResultsComponent,
     PlGroundsComponent,
   ],
-  imports: [MaterialModule, CommonModule, SharedModule, PlayRoutingModule, FlexLayoutModule],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    SharedModule,
+    PlayRoutingModule,
+    FlexLayoutModule,
+  ],
   exports: [],
 })
 export class PlayModule { }

@@ -38,7 +38,7 @@
                 {{ season.locCity + ", " + season.locState }}
               </span>
             </div>
-            <button disabled mat-icon-button color="primary">
+            <button (click)="onShareSeason(season); $event.stopPropagation()" mat-icon-button color="primary">
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>

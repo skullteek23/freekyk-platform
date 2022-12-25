@@ -5,10 +5,11 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { SeasonsFilters } from '@shared/Constants/FILTERS';
-import { FilterData } from '@shared/interfaces/others.model';
+import { FilterData, ShareData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { SocialShareService } from '@app/services/social-share.service';
 
 @Component({
   selector: 'app-pl-seasons',
@@ -31,7 +32,8 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private queryService: QueryService
+    private queryService: QueryService,
+    private socialShareService: SocialShareService
   ) { }
 
   ngOnInit(): void {
@@ -93,5 +95,14 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
       map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
       map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
     );
+  }
+
+  onShareSeason(element: SeasonBasicInfo) {
+    console.log(element);
+    const data = new ShareData();
+    data.share_url = `/s/${element.name}`;
+    data.share_title = element.name;
+    data.share_imgpath = element.imgpath;
+    this.socialShareService.onShare(data);
   }
 }

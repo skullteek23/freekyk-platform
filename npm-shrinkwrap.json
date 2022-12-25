@@ -11944,9 +11944,9 @@
       }
     },
     "ngx-sharebuttons": {
-      "version": "8.1.0",
-      "resolved": "https://registry.npmjs.org/ngx-sharebuttons/-/ngx-sharebuttons-8.1.0.tgz",
-      "integrity": "sha512-EA4/Uj8yKVkPKI54oLWaZADb7PxgtJtRCjeFPiy0RmLHPifDOix915hvWJPAY6WeoENgaPNqx2i5KMh85+cMAA==",
+      "version": "8.0.1",
+      "resolved": "https://registry.npmjs.org/ngx-sharebuttons/-/ngx-sharebuttons-8.0.1.tgz",
+      "integrity": "sha512-oht6OZj+9KKyupI+MWmXI6g9jVi/INSUjy8Ym8eo3L7N4/UuWNnXkafj345OhucnWzye3LYdVUM08XZrVWnHnw==",
       "requires": {
         "tslib": "^2.0.0"
       }

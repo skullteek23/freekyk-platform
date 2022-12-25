@@ -12,7 +12,8 @@ export const environment = {
     measurementId: 'G-K55NRR7QXM',
     url: 'https://freekyk-prod.web.app',
     adminUrl: 'https://admin-freekyk.web.app',
-    adminRegister: 'https://admin-freekyk.web.app/register'
+    adminRegister: 'https://admin-freekyk.web.app/register',
+    logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
   },
   razorPay: {
     key_id: 'rzp_live_ow8sSR7ZCWKSST',
@@ -29,5 +30,13 @@ export const environment = {
   },
   forms: {
     partner: 'https://forms.gle/2jA3qxTJgRkUuKREA'
+  },
+  socialShare: {
+    include: ['facebook', 'twitter', 'google'],
+    exclude: ['tumblr', 'stumble', 'vk'],
+    theme: 'modern-light',
+    gaTracking: true,
+    twitterAccount: 'twitterUsername',
+    autoSetMeta: true,
   }
 };

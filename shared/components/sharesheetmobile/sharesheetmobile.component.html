@@ -1,7 +1,7 @@
 <h4>Share on social media</h4>
 <mat-nav-list>
   <mat-list-item>
-    <button mat-icon-button (click)="onCopyLink(data.share_url)">
+    <button mat-icon-button (click)="onCopyLink(url + data.share_url)">
       <div class="iconSize" fxLayoutAlign="start center">
         <mat-icon class="icon material-icons-round"> content_copy </mat-icon>
         <span class="mat-body-1">
@@ -11,8 +11,8 @@
     </button>
   </mat-list-item>
   <mat-list-item *ngFor="let social of socials">
-    <button mat-icon-button [shareButton]="social" [url]="data.share_url" [title]="data.share_title"
-      [description]="data.share_desc" [image]="data.share_imgpath">
+    <button mat-icon-button [shareButton]="social" [url]="url + data.share_url" [title]="data.share_title"
+      [description]="data.share_desc" [image]="imageUrl">
       <div class="iconSize" fxLayoutAlign="start center">
         <img class="icon" [src]="'assets/svgs/' + social + '.svg'" [alt]="social" />
         <span class="mat-body-1">
