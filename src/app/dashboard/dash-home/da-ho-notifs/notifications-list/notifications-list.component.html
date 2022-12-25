@@ -1,7 +1,7 @@
 <ul>
   <li class="notification mat-elevation-z4" [style.opacity]="notification.read ? '0.6' : '1'"
-    *ngFor="let notification of notifications" (click)="onSelNotif(notification)" fxLayout="column" fxLayoutGap="0px"
-    fxLayoutAlign="center">
+    *ngFor="let notification of notifications" (click)="onSelectNotification(notification)" fxLayout="column"
+    fxLayoutGap="0px" fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="mat-body-1"> {{ notification.title }} </span>

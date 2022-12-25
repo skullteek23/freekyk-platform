@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -19,7 +18,6 @@ export class NotificationsListComponent implements OnInit {
   }
 
   notifications: NotificationBasic[];
-  noNotif$: Observable<boolean>;
 
   constructor(
     private notificationService: NotificationsService
