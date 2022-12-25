@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SocialShareService } from '@app/services/social-share.service';
 
 import { Observable } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
-import { Stats } from '../../interfaces/others.model';
+import { ShareData, Stats } from '../../interfaces/others.model';
 import {
   PlayerMoreInfo,
   PlayerBasicInfo,
@@ -28,8 +29,9 @@ export class PlayerCardComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PlayerCardComponent>,
+    private ngFire: AngularFirestore,
+    private socialShareService: SocialShareService,
     @Inject(MAT_DIALOG_DATA) public data: PlayerBasicInfo,
-    private ngFire: AngularFirestore
   ) { }
 
   ngOnInit(): void {
@@ -80,5 +82,10 @@ export class PlayerCardComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onShare(pl: PlayerBasicInfo): void { }
+  onShare(element: PlayerBasicInfo): void {
+    const data = new ShareData();
+    data.share_url = `/p/${element.id}`;
+    data.share_title = element.name;
+    this.socialShareService.onShare(data);
+  }
 }

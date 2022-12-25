@@ -28,6 +28,7 @@
             {{ (teamInfo$ | async)?.tname }}
           </span>
         </div>
+        <button (click)="onShare()" class="primaryButton buttonText">Share</button>
       </div>
 
       <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">

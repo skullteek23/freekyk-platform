@@ -98,11 +98,9 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   }
 
   onShareSeason(element: SeasonBasicInfo) {
-    console.log(element);
     const data = new ShareData();
     data.share_url = `/s/${element.name}`;
     data.share_title = element.name;
-    data.share_imgpath = element.imgpath;
     this.socialShareService.onShare(data);
   }
 }

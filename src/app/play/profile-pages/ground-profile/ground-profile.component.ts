@@ -9,6 +9,8 @@ import {
   GroundBasicInfo,
   GroundMoreInfo,
 } from '@shared/interfaces/ground.model';
+import { ShareData } from '@shared/interfaces/others.model';
+import { SocialShareService } from '@app/services/social-share.service';
 
 @Component({
   selector: 'app-ground-profile',
@@ -25,32 +27,37 @@ export class GroundProfileComponent implements OnInit {
   isLoading = true;
   formatter: any;
   error = false;
+  groundID: string = '';
 
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute,
     private enlargeService: EnlargeService,
-    private router: Router
+    private router: Router,
+    private socialShareService: SocialShareService
   ) { }
 
   ngOnInit(): void {
     this.formatter = Formatters;
-    const GroundId = this.route.snapshot.params.groundid;
-    this.getGroundInfo(GroundId);
+    this.groundID = this.route.snapshot.params.groundid;
+    this.getGroundInfo();
   }
 
-  getGroundInfo(gid: string): void {
+  getGroundInfo(): void {
+    if (!this.groundID) {
+      return;
+    }
     this.groundInfo$ = this.ngFire
       .collection('grounds')
-      .doc(gid)
+      .doc(this.groundID)
       .get()
       .pipe(
         tap((resp) => {
           if (resp.exists) {
-            this.getGroundMoreInfo(gid);
+            this.getGroundMoreInfo(this.groundID);
             this.grName = (resp.data() as GroundBasicInfo).name;
             this.grImgpath = (resp.data() as GroundBasicInfo).imgpath;
-            this.grId = gid;
+            this.grId = this.groundID;
           } else {
             this.error = !resp.exists;
             this.router.navigate(['error']);
@@ -75,5 +82,11 @@ export class GroundProfileComponent implements OnInit {
 
   onEnlargePhoto(): void {
     this.enlargeService.onOpenPhoto(this.grImgpath);
+  }
+
+  onShare() {
+    const data = new ShareData();
+    data.share_url = `/ground/${this.groundID}`;
+    this.socialShareService.onShare(data);
   }
 }

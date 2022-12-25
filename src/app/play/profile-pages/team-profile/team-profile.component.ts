@@ -8,14 +8,9 @@ import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
-import { StatsTeam } from '@shared/interfaces/others.model';
-import {
-  TeamBasicInfo,
-  TeamMedia,
-  TeamMembers,
-  TeamMoreInfo,
-  TeamStats,
-} from '@shared/interfaces/team.model';
+import { ShareData, StatsTeam } from '@shared/interfaces/others.model';
+import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
+import { SocialShareService } from '@app/services/social-share.service';
 
 @Component({
   selector: 'app-team-profile',
@@ -27,6 +22,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   isLoading = true;
   teamInfo$: Observable<TeamBasicInfo>;
   teamMoreInfo$: Observable<TeamMoreInfo>;
+  teamName = '';
   stats$: Observable<StatsTeam>;
   members$: Observable<TeamMembers>;
   media$: Observable<string[]>;
@@ -43,13 +39,14 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlargeService: EnlargeService
+    private enlargeService: EnlargeService,
+    private socialShareService: SocialShareService
   ) { }
 
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid');
-    const teamName = this.route.snapshot.params.teamName;
-    this.getTeamInfo(teamName);
+    this.teamName = this.route.snapshot.params.teamName;
+    this.getTeamInfo(this.teamName);
   }
 
   ngOnDestroy(): void {
@@ -204,5 +201,11 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
 
   get isOwnTeam(): boolean {
     return this.id === this.uid;
+  }
+
+  onShare() {
+    const data = new ShareData();
+    data.share_url = `/t/${this.teamName}`;
+    this.socialShareService.onShare(data);
   }
 }

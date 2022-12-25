@@ -19,7 +19,7 @@
         <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
           (groundInfo$ | async)?.name }}</span>
       </div>
-      <button disabled class="primaryButton buttonText">Share</button>
+      <button (click)="onShare()" class="primaryButton buttonText">Share</button>
     </div>
   </section>
 </div>

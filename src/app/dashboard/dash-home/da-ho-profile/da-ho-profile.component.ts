@@ -8,6 +8,8 @@ import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
+import { ShareData } from '@shared/interfaces/others.model';
+import { SocialShareService } from '@app/services/social-share.service';
 @Component({
   selector: 'app-da-ho-profile',
   templateUrl: './da-ho-profile.component.html',
@@ -30,6 +32,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     private enlargeService: EnlargeService,
     private dialog: MatDialog,
     private router: Router,
+    private socialShareService: SocialShareService,
     private store: Store<{ dash: DashState; }>
   ) { }
 
@@ -160,6 +163,9 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     if (!shareStatus) {
       localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
     }
-    this.router.navigate(['/p', uid]);
+    const data = new ShareData();
+    data.share_url = `/p/${uid}`;
+    data.share_title = this.playerName;
+    this.socialShareService.onShare(data);
   }
 }
