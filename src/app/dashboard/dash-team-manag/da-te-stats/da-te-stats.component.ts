@@ -13,11 +13,18 @@ import { AppState } from 'src/app/store/app.reducer';
   styleUrls: ['./da-te-stats.component.scss'],
 })
 export class DaTeStatsComponent implements OnInit, OnDestroy {
+
   Stats: statsIcon[];
   tournamentWins: any[];
   noPremiumWon = true;
   subscriptions = new Subscription();
-  constructor(private store: Store<AppState>, private teamService: TeamService, private snackbarService: SnackbarService) { }
+
+  constructor(
+    private store: Store<AppState>,
+    private teamService: TeamService,
+    private snackbarService: SnackbarService
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -64,16 +71,18 @@ export class DaTeStatsComponent implements OnInit, OnDestroy {
         .subscribe((stats) => (this.Stats = stats))
     );
   }
+
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+
   refreshStats() {
     const tid = sessionStorage.getItem('tid');
     if (tid) {
       this.teamService.getTeamStats(tid);
       this.snackbarService.displayCustomMsg('Team Statistics refreshed just now!');
-    }
-  }
-  ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
     }
   }
 }

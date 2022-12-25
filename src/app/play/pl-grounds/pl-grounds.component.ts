@@ -15,17 +15,20 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./pl-grounds.component.scss'],
 })
 export class PlGroundsComponent implements OnInit, OnDestroy {
+
   subscriptions = new Subscription();
   columns: any;
   isLoading = true;
   noGrounds = false;
   grounds$: Observable<GroundBasicInfo[]>;
   filterData: FilterData;
+
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore,
-    private queryServ: QueryService
+    private queryService: QueryService
   ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'grounds',
@@ -52,9 +55,11 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
     );
     this.getGrounds();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getGrounds(): void {
     this.grounds$ = this.ngFire
       .collection('grounds')
@@ -76,11 +81,12 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
         map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo == null) {
       return this.getGrounds();
     }
-    this.grounds$ = this.queryServ
+    this.grounds$ = this.queryService
       .onQueryData(queryInfo, 'grounds')
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo)),

@@ -10,11 +10,18 @@ import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
   styleUrls: ['./freestyle.component.scss'],
 })
 export class FreestyleComponent implements OnInit, OnDestroy {
+
   readonly fsBannerContent = FREESTYLE_PAGE.banner;
+
   fsLinks: string[] = RouteLinks.FREESTYLE;
   routeSubscription: Subscription;
   activeLink = 'home';
-  constructor(private router: Router) {
+
+  constructor(
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
     if (window.location.href.endsWith('freestyle')) {
       this.router.navigate(['/freestyle/home']);
     }
@@ -27,7 +34,7 @@ export class FreestyleComponent implements OnInit, OnDestroy {
       }
     });
   }
-  ngOnInit(): void { }
+
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }

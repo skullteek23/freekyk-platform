@@ -11,20 +11,10 @@
     </button>
   </mat-list-item>
   <mat-list-item *ngFor="let social of socials">
-    <button
-      mat-icon-button
-      [shareButton]="social"
-      [url]="data.share_url"
-      [title]="data.share_title"
-      [description]="data.share_desc"
-      [image]="data.share_imgpath"
-    >
+    <button mat-icon-button [shareButton]="social" [url]="data.share_url" [title]="data.share_title"
+      [description]="data.share_desc" [image]="data.share_imgpath">
       <div class="iconSize" fxLayoutAlign="start center">
-        <img
-          class="icon"
-          [src]="'../../../../assets/svgs/' + social + '.svg'"
-          [alt]="social"
-        />
+        <img class="icon" [src]="'assets/svgs/' + social + '.svg'" [alt]="social" />
         <span class="mat-body-1">
           {{ social | titlecase }}
         </span>

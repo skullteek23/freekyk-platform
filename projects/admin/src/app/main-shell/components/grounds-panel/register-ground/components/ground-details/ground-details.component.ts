@@ -23,7 +23,6 @@ export class GroundDetailsComponent implements OnInit {
   readonly playLevels = playLevels;
   readonly groundTypes = ownershipTypes;
 
-
   cities$: Observable<string[]>;
   groundDetailsForm: FormGroup = new FormGroup({});
   states$: Observable<string[]>;

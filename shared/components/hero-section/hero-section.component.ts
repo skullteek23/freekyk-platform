@@ -10,6 +10,7 @@ import { heroCallToAction } from '../../interfaces/others.model';
   styleUrls: ['./hero-section.component.scss'],
 })
 export class HeroSectionComponent implements OnInit {
+
   @Input('headline') headline = false;
   @Input('overline') overline: string | false = 'Play';
   @Input('title') title: string | false = 'freekyk play';
@@ -21,11 +22,17 @@ export class HeroSectionComponent implements OnInit {
   @Input() imageSource: string;
   @Input() description: string = LOREM_IPSUM_SHORT;
   @Input() useAltLayout = false;
-  constructor(private router: Router, private dialog: MatDialog) {}
-  ngOnInit(): void {}
+
+  constructor(
+    private router: Router,
+  ) { }
+
+  ngOnInit(): void { }
+
   onNavigate(nav: string): void {
     this.router.navigate([nav]);
   }
+
   isFloatText(): string {
     return this.useAltLayout ? 'absolute' : 'block';
   }

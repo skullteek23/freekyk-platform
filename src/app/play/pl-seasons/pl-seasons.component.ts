@@ -16,8 +16,10 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./pl-seasons.component.scss'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
+
   readonly LIVE = PlayConstants.SEASON_STATUS_LIVE;
   readonly UPCOMING = PlayConstants.SEASON_STATUS_UPCOMING;
+
   isLoading = true;
   noSeasons = false;
   filterTerm: string = null;
@@ -25,11 +27,13 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   subscriptions = new Subscription();
   columns: number;
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private queryServ: QueryService
+    private queryService: QueryService
   ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'seasons',
@@ -56,9 +60,11 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     );
     this.getSeasons();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getSeasons(): void {
     this.seasons$ = this.ngFire
       .collection('seasons')
@@ -73,12 +79,13 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     this.isLoading = true;
     if (queryInfo === null) {
       return this.getSeasons();
     }
-    this.seasons$ = this.queryServ.onQueryData(queryInfo, 'seasons').pipe(
+    this.seasons$ = this.queryService.onQueryData(queryInfo, 'seasons').pipe(
       tap((resp) => {
         this.noSeasons = resp.empty;
         this.isLoading = false;

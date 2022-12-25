@@ -10,21 +10,27 @@ import { NotificationBasic } from '@shared/interfaces/notification.model';
   styleUrls: ['./da-ho-notifs.component.scss'],
 })
 export class DaHoNotifsComponent implements OnInit {
+
   isLoading = true;
   notifications$: Observable<NotificationBasic[]>;
-  noNotif$: Observable<boolean>;
-  constructor(private notifServ: NotificationsService) {
-    this.notifications$ = this.notifServ.notifsChanged;
-    this.noNotif$ = this.notifications$.pipe(
+  noNotification$: Observable<boolean>;
+
+  constructor(
+    private notificationService: NotificationsService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.notifications$ = this.notificationService.notifsChanged;
+    this.noNotification$ = this.notifications$.pipe(
       map((resp) => resp?.length === 0)
     );
-  }
-  ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
   }
+
   getNotifications(): void {
-    this.notifServ.getNotifications();
+    this.notificationService.getNotifications();
   }
 }

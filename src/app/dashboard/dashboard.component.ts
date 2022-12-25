@@ -16,6 +16,7 @@ import { DashState } from './store/dash.reducer';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+
   watcher: Subscription;
   onMobile = false;
   screen = '';
@@ -24,15 +25,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   playerName = 'NA';
   subscriptions = new Subscription();
   sidenavOpenState: boolean;
+
   constructor(
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
     private router: Router,
     private avatarServ: AccountAvatarService,
-    private store: Store<{
-      dash: DashState;
-    }>
+    private store: Store<{ dash: DashState; }>
   ) { }
+
   ngOnInit(): void {
     if (window.location.href.endsWith('dashboard')) {
       this.router.navigate(['/dashboard/home']);
@@ -71,15 +72,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onResizeScreen(): void {
     this.sidenavOpenState = window.innerWidth >= 1489;
   }
+
   getMode(): MatDrawerMode {
     return this.screen === 'md' ? 'over' : 'side';
   }
+
   onLogout(): void {
     this.dialog.open(LogoutComponent);
   }

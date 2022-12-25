@@ -16,6 +16,8 @@ import { PlayConstants } from '../play.constants';
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
+  @Input() seasonChosen = null;
+
   activeIndex = 0;
   cpStandings: CommunityLeaderboard[] = [];
   filterData: FilterData;
@@ -23,7 +25,6 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   leagueData: LeagueTableModel[] = [];
   onMobile = false;
   subscriptions = new Subscription();
-  @Input() seasonChosen = null;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 

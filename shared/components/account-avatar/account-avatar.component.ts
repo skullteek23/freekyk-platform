@@ -6,9 +6,12 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./account-avatar.component.scss'],
 })
 export class AccountAvatarComponent implements OnInit {
+
   @Input() dataImg: string = null;
   @Input() margins = true;
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor() { }
+
+
+  ngOnInit(): void { }
 }

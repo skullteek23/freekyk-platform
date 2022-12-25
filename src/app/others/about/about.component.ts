@@ -12,6 +12,7 @@ export class AboutComponent implements OnInit {
   ankit: profile;
   aboutFreekyk: string;
   ourJourney: string;
+
   constructor() { }
 
   ngOnInit(): void {

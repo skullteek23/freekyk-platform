@@ -8,17 +8,22 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./logout.component.scss'],
 })
 export class LogoutComponent implements OnInit {
+
   constructor(
     private authService: AuthService,
     public dialogRef: MatDialogRef<LogoutComponent>
   ) { }
+
   ngOnInit(): void { }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onCancel(): void {
     this.onCloseDialog();
   }
+
   onLogout(): void {
     this.authService.onLogout();
     this.onCloseDialog();

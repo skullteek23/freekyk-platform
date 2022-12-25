@@ -23,6 +23,7 @@ import {
   styleUrls: ['./team-profile.component.scss'],
 })
 export class TeamProfileComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   teamInfo$: Observable<TeamBasicInfo>;
   teamMoreInfo$: Observable<TeamMoreInfo>;
@@ -35,24 +36,28 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   id: string;
   uid: string;
   subscriptions = new Subscription();
+
   constructor(
     private snackBarService: SnackbarService,
     private store: Store<{ dash: DashState }>,
     private router: Router,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlServ: EnlargeService
+    private enlargeService: EnlargeService
   ) { }
+
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid');
     const teamName = this.route.snapshot.params.teamName;
     this.getTeamInfo(teamName);
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   getTeamInfo(tName: string): void {
     this.teamInfo$ = this.ngFire
       .collection('teams', (query) =>
@@ -89,6 +94,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   getTeamMoreInfo(tid: string): void {
     this.teamMoreInfo$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -103,6 +109,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   getStats(tid: string): void {
     this.stats$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -130,6 +137,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         )
       );
   }
+
   getTeamMedia(tid: string): void {
     this.media$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -144,6 +152,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         })
       );
   }
+
   getTeamMembers(tid: string): void {
     this.members$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -157,6 +166,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         })
       );
   }
+
   onChallengeTeam(): void {
     if (this.isOwnTeam) {
       return;
@@ -187,8 +197,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         }
       }));
   }
+
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.imgPath);
+    this.enlargeService.onOpenPhoto(this.imgPath);
   }
 
   get isOwnTeam(): boolean {

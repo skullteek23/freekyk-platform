@@ -7,10 +7,16 @@ import { TeamService } from 'src/app/services/team.service';
   styleUrls: ['./gallery-card.component.scss'],
 })
 export class GalleryCardComponent implements OnInit {
+
   @Input() photos: string[] = [];
-  constructor(private teServ: TeamService) {}
-  ngOnInit(): void {}
+
+  constructor(
+    private teamService: TeamService
+  ) { }
+
+  ngOnInit(): void { }
+
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
 }

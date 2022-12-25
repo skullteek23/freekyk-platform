@@ -17,6 +17,7 @@ import { TeamState } from '../store/team.reducer';
   styleUrls: ['./da-te-communication.component.scss'],
 })
 export class DaTeCommunicationComponent implements OnInit, OnDestroy {
+
   noMatch = 0;
   currMatch = 0;
   upmMatches: MatchFixture[] = [];
@@ -27,11 +28,13 @@ export class DaTeCommunicationComponent implements OnInit, OnDestroy {
   storeSub$: Observable<MatchFixture[]>;
   captainStatus$: Observable<boolean>;
   subscriptions = new Subscription();
+
   constructor(
     private store: Store<{ team: TeamState }>,
     private commServ: TeamCommunicationService,
     private ngFire: AngularFirestore
   ) { }
+
   ngOnInit(): void {
     this.storeSub$ = this.store.select('team').pipe(
       tap(() => {
@@ -74,14 +77,17 @@ export class DaTeCommunicationComponent implements OnInit, OnDestroy {
         .subscribe()
     );
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   getSquad(sqNumber: number): void {
     this.commServ.getActiveSquad(sqNumber);
   }
+
   onChangeTab(newTabNumber: MatTabChangeEvent): void {
     this.subscriptions.add(
       this.storeSub$

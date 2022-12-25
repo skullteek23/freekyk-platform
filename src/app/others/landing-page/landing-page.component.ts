@@ -15,12 +15,15 @@ export class LandingPageComponent implements OnInit {
   readonly whyChoose = LANDING_PAGE.whyChooseFreekyk;
   readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   readonly sliderContent = LANDING_PAGE.communityMedia;
+
   responsiveSize;
+
   constructor() { }
 
   ngOnInit(): void {
     this.onResizeSlider();
   }
+
   onResizeSlider(): void {
     if (window.innerWidth > 599) {
       this.responsiveSize = { width: 350, height: 300, space: 16 };

@@ -20,9 +20,15 @@ export class SeOverviewComponent implements OnInit {
     }
   }
   @Input() venue: { city: string; state: string };
+
   participants$: Observable<SeasonParticipants[]>;
-  constructor(private ngFire: AngularFirestore) { }
+
+  constructor(
+    private ngFire: AngularFirestore
+  ) { }
+
   ngOnInit(): void { }
+
   getSeasonParticipants(sid: string): void {
     this.participants$ = this.ngFire
       .collection(`seasons/${sid}/participants`)

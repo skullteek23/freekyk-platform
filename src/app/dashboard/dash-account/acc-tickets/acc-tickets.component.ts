@@ -14,19 +14,23 @@ import { ProfileConstants } from '@shared/constants/constants';
   styleUrls: ['./acc-tickets.component.scss'],
 })
 export class AccTicketsComponent implements OnInit {
+
   ticketStatus = true;
   newTicketForm: FormGroup = new FormGroup({});
   additionAvailable = true;
   showForm = false;
   myTickets$: Observable<BasicTicket[]>;
   noTickets = false;
+
   constructor(
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore
   ) { }
+
   ngOnInit(): void {
     this.getTickets();
   }
+
   getTickets(): void {
     this.myTickets$ = this.ngFire
       .collection('tickets')
@@ -44,6 +48,7 @@ export class AccTicketsComponent implements OnInit {
         )
       );
   }
+
   getColor(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -54,6 +59,7 @@ export class AccTicketsComponent implements OnInit {
         return 'grey';
     }
   }
+
   getIcon(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -64,6 +70,7 @@ export class AccTicketsComponent implements OnInit {
         return 'inventory';
     }
   }
+
   getStatus(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -74,6 +81,7 @@ export class AccTicketsComponent implements OnInit {
         return 'request recieved';
     }
   }
+
   onOpenTicketForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
@@ -94,6 +102,7 @@ export class AccTicketsComponent implements OnInit {
       ]),
     });
   }
+
   onDeleteTicket(ticketID: string): void {
     // backend code goes here
     this.ngFire
@@ -103,10 +112,12 @@ export class AccTicketsComponent implements OnInit {
       .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'))
       .catch(() => this.snackBarService.displayError());
   }
+
   resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
+
   onSubmitTicket(): void {
     // backend code goes here
     // console.log(this.newTicketForm);
@@ -123,6 +134,7 @@ export class AccTicketsComponent implements OnInit {
       .then(this.finishSubmission.bind(this))
       .catch(() => this.snackBarService.displayError());
   }
+
   finishSubmission(): void {
     this.resetAll();
     this.snackBarService.displayCustomMsg('Ticket submitted successfully!');

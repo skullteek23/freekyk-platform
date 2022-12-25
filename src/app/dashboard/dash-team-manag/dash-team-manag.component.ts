@@ -13,6 +13,7 @@ import { AppState } from 'src/app/store/app.reducer';
   styleUrls: ['./dash-team-manag.component.scss'],
 })
 export class DashTeamManagComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   noTeam = false;
   showMobile = false;
@@ -20,10 +21,11 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
 
   constructor(
     private mediaObs: MediaObserver,
-    private teServ: TeamService,
-    private plServ: PlayerService,
+    private teamService: TeamService,
+    private playerService: PlayerService,
     private store: Store<AppState>
-  ) {}
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -51,19 +53,24 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   joinTeam(): void {
-    this.teServ.onOpenJoinTeamDialog();
+    this.teamService.onOpenJoinTeamDialog();
   }
+
   createTeam(): void {
-    this.teServ.onOpenCreateTeamDialog();
+    this.teamService.onOpenCreateTeamDialog();
   }
+
   onTCommsMobile(): void {
-    this.teServ.onOpenTeamCommsMobileDialog();
+    this.teamService.onOpenTeamCommsMobileDialog();
   }
+
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
 }

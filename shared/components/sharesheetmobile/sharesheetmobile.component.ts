@@ -12,18 +12,22 @@ import { ShareData } from '../../interfaces/others.model';
   styleUrls: ['./sharesheetmobile.component.scss'],
 })
 export class SharesheetmobileComponent implements OnInit {
+
   socials = ['facebook', 'twitter', 'linkedin', 'whatsapp', 'pinterest'];
+
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<SharesheetmobileComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: ShareData,
     public _clipboard: Clipboard
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
   openLink(event: MouseEvent): void {
     this._bottomSheetRef.dismiss();
     event.preventDefault();
   }
+
   onCopyLink(link: string) {
     this._clipboard.copy(link);
   }

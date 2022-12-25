@@ -279,6 +279,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return [];
     }
   }
+
   onSavePersonalInfo(): Promise<any> {
     if (this.personalInfoForm.dirty) {
       const newDetails: Partial<PlayerMoreInfo> = {};

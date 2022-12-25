@@ -11,6 +11,7 @@ import { ProdBasicInfo } from '@shared/interfaces/product.model';
   styleUrls: ['./equipment.component.scss'],
 })
 export class EquipmentComponent implements OnInit, OnDestroy {
+
   subscriptions = new Subscription();
   columns: any;
   cardHeight = '';
@@ -19,10 +20,12 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   allProducts$: Observable<ProdBasicInfo[]>;
   tempProductsArr: number[] = [];
   prodFilters = ['Product Type', 'Product Category', 'Brand', 'Price'];
+
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -46,9 +49,11 @@ export class EquipmentComponent implements OnInit, OnDestroy {
     );
     this.getProducts();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getProducts(): void {
     this.allProducts$ = this.ngFire
       .collection('products')
@@ -69,8 +74,10 @@ export class EquipmentComponent implements OnInit, OnDestroy {
         )
       );
   }
+
   getDate(): Date {
     return new Date();
   }
+
   onShare(prod: ProdBasicInfo): void { }
 }

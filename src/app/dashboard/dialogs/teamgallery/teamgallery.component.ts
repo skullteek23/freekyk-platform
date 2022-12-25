@@ -15,12 +15,14 @@ import { TeamMedia } from '@shared/interfaces/team.model';
   styleUrls: ['./teamgallery.component.scss'],
 })
 export class TeamgalleryComponent implements OnInit {
+
   noGallery = false;
   isLoading = false;
   teamGallery$: Observable<TeamMedia>;
   showEditButtons = false;
   newSub: Subscription;
   deleteInProgress$: Observable<boolean>;
+
   constructor(
     public dialogRef: MatDialogRef<TeamgalleryComponent>,
     private ngFire: AngularFirestore,
@@ -31,9 +33,11 @@ export class TeamgalleryComponent implements OnInit {
   ngOnInit(): void {
     this.getGalleryPhotos();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   async onChoosePhoto(ev: any): Promise<any> {
     this.isLoading = true;
     const teamPhoto = ev.target.files[0];
@@ -68,14 +72,17 @@ export class TeamgalleryComponent implements OnInit {
         .catch(() => this.snackBarService.displayError());
     }
   }
+
   cleanUp(message: string): void {
     this.isLoading = false;
     this.snackBarService.displayCustomMsg(message);
     this.onCloseDialog();
   }
+
   onHover(state: boolean): void {
     this.showEditButtons = state;
   }
+
   onRemovePhoto(photoUrl: string): void {
     const tid = sessionStorage.getItem('tid');
     this.deleteInProgress$ = this.ngFire
@@ -100,6 +107,7 @@ export class TeamgalleryComponent implements OnInit {
         map(() => true)
       );
   }
+
   getGalleryPhotos(): void {
     const tid = sessionStorage.getItem('tid');
     this.teamGallery$ = this.ngFire

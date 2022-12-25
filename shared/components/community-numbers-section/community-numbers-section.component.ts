@@ -7,12 +7,14 @@ import { CommunityNumbersContent } from '../../interfaces/others.model';
   styleUrls: ['./community-numbers-section.component.scss'],
 })
 export class CommunityNumbersSectionComponent implements OnInit {
+
   @Input() content: CommunityNumbersContent = {
     heading: '',
     desc: '',
     numbers: {},
   };
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor() { }
+
+  ngOnInit(): void { }
 }

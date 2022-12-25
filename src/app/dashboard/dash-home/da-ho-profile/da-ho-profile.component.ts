@@ -14,7 +14,9 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
   styleUrls: ['./da-ho-profile.component.scss'],
 })
 export class DaHoProfileComponent implements OnInit, OnDestroy {
+
   @Input() profile: 'player' | 'freestyler' = 'player';
+
   playerName = 'Your Name';
   isLoading = true;
   defaultString = '-';
@@ -23,14 +25,14 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   profilePhoto: string;
   nickname: string;
   subscriptions = new Subscription();
+
   constructor(
-    private enlServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private dialog: MatDialog,
     private router: Router,
-    private store: Store<{
-      dash: DashState;
-    }>
+    private store: Store<{ dash: DashState; }>
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -79,6 +81,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
@@ -86,6 +89,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   getTeam(team: { name: string; id: string; capId: string } | null): string {
     return team ? team.name : 'No Team';
   }
+
   getAge(birthdate: number): any {
     if (birthdate === null) {
       return birthdate;
@@ -94,22 +98,22 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     const ageDate = new Date(diffInMilliseconds);
     return Math.abs(ageDate.getUTCFullYear() - 1970).toString() + ' yrs';
   }
+
   getGender(g: 'M' | 'F'): string {
     if (!g) {
       return null;
     }
     return g === 'M' ? 'Male' : 'Female';
   }
+
   getStrongFoot(Str: 'L' | 'R'): string {
     if (!Str) {
       return null;
     }
     return Str === 'L' ? 'Left' : 'Right';
   }
-  getLocation(
-    city: string | null | undefined,
-    state: string | null | undefined
-  ): string {
+
+  getLocation(city: string | null | undefined, state: string | null | undefined): string {
     if (city == null) {
       return state;
     } else if (state == null) {
@@ -118,21 +122,27 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
       return `${city}, ${state}`;
     }
   }
+
   getHeight(height: number): string | undefined {
     return height ? `${height.toString()} cms` : null;
   }
+
   getWeight(weight: number): string | undefined {
     return weight ? `${weight.toString()} kgs` : null;
   }
+
   onEnlargePhoto(imageUrl: string): any {
-    this.enlServ.onOpenPhoto(imageUrl);
+    this.enlargeService.onOpenPhoto(imageUrl);
   }
+
   getHeading(): string {
     return this.profile === 'player' ? 'basic info' : 'freestyler info';
   }
+
   onOpenAccountSettings(): void {
     this.router.navigate(['/dashboard', 'account', 'profile']);
   }
+
   onUploadPhoto(): void {
     const dialogRef = this.dialog
       .open(UploadphotoComponent, {
@@ -143,6 +153,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe(() => location.reload());
   }
+
   onShareProfile(): void {
     const uid = localStorage.getItem('uid');
     const shareStatus = JSON.parse(localStorage.getItem(uid));

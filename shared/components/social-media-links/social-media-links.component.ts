@@ -8,20 +8,25 @@ import { SocialMediaLinks } from '../../interfaces/user.model';
   styleUrls: ['./social-media-links.component.scss'],
 })
 export class SocialMediaLinksComponent implements OnInit {
+
   @Input('links') socials: SocialMediaLinks | null;
   @Input('mode') type: 'player' | 'freestyler' | 'team' = 'player';
   @Output('addLink') Addlink = new EventEmitter<true>();
+
   readonly facebookUrl = SOCIAL_MEDIA_PRE.fb;
   readonly InstaUrl = SOCIAL_MEDIA_PRE.ig;
   readonly TwitterUrl = SOCIAL_MEDIA_PRE.tw;
   readonly youtubeUrl = SOCIAL_MEDIA_PRE.yt;
   readonly ADD_THIS_LINK = LINK_NOT_ADDED;
+
   constructor() { }
 
   ngOnInit(): void { }
+
   onAddLinks(): void {
     this.Addlink.emit(true);
   }
+
   onOpenSocialMedia(sm: string): void {
     switch (sm) {
       case 'facebook':

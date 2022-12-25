@@ -7,12 +7,16 @@ import { LOREM_IPSUM_LONG } from '../../Constants/WEBSITE_CONTENT';
   styleUrls: ['./feature-info.component.scss'],
 })
 export class FeatureInfoComponent implements OnInit {
+
   readonly dummyParagraph = LOREM_IPSUM_LONG;
+
   constructor(
     public dialogRef: MatDialogRef<FeatureInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
+
   ngOnInit(): void { }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }

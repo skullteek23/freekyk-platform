@@ -17,6 +17,7 @@ import {
   styleUrls: ['./player-card.component.scss'],
 })
 export class PlayerCardComponent implements OnInit {
+
   stats: {} = {};
   defaultvalue = 0;
   addiInfo$: Observable<PlayerMoreInfo>;
@@ -24,15 +25,17 @@ export class PlayerCardComponent implements OnInit {
   isLoading = true;
   userTours: string[] = [];
   userTeams: string[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<PlayerCardComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: PlayerBasicInfo,
+    @Inject(MAT_DIALOG_DATA) public data: PlayerBasicInfo,
     private ngFire: AngularFirestore
   ) { }
+
   ngOnInit(): void {
     this.getAdditionalInfo();
   }
+
   getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
       .collection(`players/${this.data.id}/additionalInfo`)
@@ -52,6 +55,7 @@ export class PlayerCardComponent implements OnInit {
         share()
       );
   }
+
   onLoadStats(): void {
     this.plStats$ = this.ngFire
       .collection(`players/${this.data.id}/additionalInfo`)
@@ -71,8 +75,10 @@ export class PlayerCardComponent implements OnInit {
         )
       );
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onShare(pl: PlayerBasicInfo): void { }
 }

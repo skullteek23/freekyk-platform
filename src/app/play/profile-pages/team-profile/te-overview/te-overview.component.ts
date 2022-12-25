@@ -8,11 +8,14 @@ import { TeamMoreInfo } from '@shared/interfaces/team.model';
   styleUrls: ['./te-overview.component.scss'],
 })
 export class TeOverviewComponent implements OnInit {
+
   @Input() data: TeamMoreInfo;
   @Input() loc: { city: string; state: string };
+
   constructor() { }
 
   ngOnInit(): void { }
+
   onRedirectSocialMedia(loc: string): void {
     if (loc != null) {
       window.location.href = loc;

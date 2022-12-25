@@ -16,6 +16,7 @@ import { AppState } from 'src/app/store/app.reducer';
   providers: [DatePipe],
 })
 export class DaTeProfileComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   tName: string;
   defaultString = '-';
@@ -24,13 +25,15 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
   logoUrl: string;
   photoUrl: string;
   subscriptions = new Subscription();
+
   constructor(
-    private enlServ: EnlargeService,
-    private teServ: TeamService,
+    private enlargeService: EnlargeService,
+    private teamService: TeamService,
     private datePipe: DatePipe,
     private store: Store<AppState>,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -63,6 +66,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
@@ -76,13 +80,12 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
       return date ? this.datePipe.transform(date, 'mediumDate') : null;
     }
   }
+
   getAgeCategory(category: number): string {
     return category ? `U-${category.toString()}` : null;
   }
-  getLocation(
-    city: string | null | undefined,
-    state: string | null | undefined
-  ): string {
+
+  getLocation(city: string | null | undefined, state: string | null | undefined): string {
     if (city == null) {
       return state;
     } else if (state == null) {
@@ -91,15 +94,18 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
       return `${city}, ${state}`;
     }
   }
+
   onEnlargePhoto(imageUrl: string): void {
-    this.enlServ.onOpenPhoto(imageUrl);
+    this.enlargeService.onOpenPhoto(imageUrl);
   }
+
   onNavigateToTeamPage(): void {
     if (this.tName) {
       this.router.navigate(['/t', this.tName]);
     }
   }
+
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
 }

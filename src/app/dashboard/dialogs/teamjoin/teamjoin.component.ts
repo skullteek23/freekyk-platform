@@ -17,7 +17,9 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./teamjoin.component.scss'],
 })
 export class TeamjoinComponent implements OnInit {
+
   @ViewChild('stepper') private myStepper: MatStepper;
+
   teamsList$: Observable<ListOption[]>;
   selectedTeams: ListOption[] = [];
   noTeams = false;
@@ -27,18 +29,22 @@ export class TeamjoinComponent implements OnInit {
   success = false;
   filterTerm = '';
   isStepOneComplete = false;
+
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
     private snackBarService: SnackbarService
   ) { }
+
   ngOnInit(): void {
     this.getTeams();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onSubmit(plSelected: ListOption[]): void {
     this.myStepper.next();
     this.isStepOneComplete = true;
@@ -51,6 +57,7 @@ export class TeamjoinComponent implements OnInit {
       this.snackBarService.displayCustomMsg('Requests sent successfully!');
     }
   }
+
   async sendRequests(capIds: string[], playerName: string): Promise<any> {
     const FunctionData = {
       capId: capIds,
@@ -62,6 +69,7 @@ export class TeamjoinComponent implements OnInit {
     );
     return await callable(FunctionData).toPromise();
   }
+
   getTeams(): void {
     this.teamsList$ = this.ngFire
       .collection('teams')
@@ -89,6 +97,7 @@ export class TeamjoinComponent implements OnInit {
       this.selectedTeams.sort(ArraySorting.sortObjectByKey('viewValue'))
     }
   }
+
   onRemoveSelection(delIndex: number): void {
     this.selectedTeams.splice(delIndex, 1);
   }

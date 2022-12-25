@@ -20,6 +20,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./pl-players.component.scss'],
 })
 export class PlPlayersComponent implements OnInit, OnDestroy {
+
   filterTerm: string = null;
   selectedRowIndex;
   onMobile = false;
@@ -28,12 +29,14 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
   cols = ['jersey', 'player', 'Team', 'Location', 'PlayingPos'];
   lastDoc: QueryDocumentSnapshot<PlayerBasicInfo> = null;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
-    private queryServ: QueryService
+    private queryService: QueryService
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -56,9 +59,11 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     };
     this.getPlayers();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getPlayers(): void {
     this.players$ = this.ngFire
       .collection('players')
@@ -77,17 +82,19 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo == null) {
       return this.getPlayers();
     }
-    this.players$ = this.queryServ
+    this.players$ = this.queryService
       .onQueryData(queryInfo, 'players')
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo)),
         map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
       );
   }
+
   onOpenPlayerProfile(player: PlayerBasicInfo): void {
     this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',

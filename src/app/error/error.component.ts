@@ -8,9 +8,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./error.component.scss'],
 })
 export class ErrorComponent implements OnInit {
+
   errorMessage: string;
   errorCode: string;
-  constructor(private route: ActivatedRoute, private location: Location) {}
+
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
     this.errorMessage = this.route.snapshot.data.message;

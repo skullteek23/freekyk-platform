@@ -11,10 +11,16 @@ import { AppState } from 'src/app/store/app.reducer';
   styleUrls: ['./da-te-gallery.component.scss'],
 })
 export class DaTeGalleryComponent implements OnInit, OnDestroy {
+
   noImages: boolean;
   galleryImages$: Observable<string[]>;
   subscriptions = new Subscription();
-  constructor(private teServ: TeamService, private store: Store<AppState>) {}
+
+  constructor(
+    private teamService: TeamService,
+    private store: Store<AppState>
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -23,15 +29,17 @@ export class DaTeGalleryComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           this.noImages = data === null;
           if (data) {
-            this.galleryImages$ = this.teServ.getTeamGallery(data.id);
+            this.galleryImages$ = this.teamService.getTeamGallery(data.id);
           }
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
 }

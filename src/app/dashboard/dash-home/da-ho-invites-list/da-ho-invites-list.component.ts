@@ -9,20 +9,27 @@ import { Invite } from '@shared/interfaces/notification.model';
   styleUrls: ['./da-ho-invites-list.component.scss'],
 })
 export class DaHoInvitesListComponent implements OnInit {
+
   emptyInvites$: Observable<boolean>;
   invites$: Observable<Invite[]>;
-  constructor(private notifServ: NotificationsService) {
+
+  constructor(
+    private notificationService: NotificationsService
+  ) { }
+
+  ngOnInit(): void {
     this.getInvites();
   }
-  ngOnInit(): void { }
+
   getInvites(): void {
-    this.emptyInvites$ = this.notifServ.emptyInvites;
+    this.emptyInvites$ = this.notificationService.emptyInvites;
     const uid = localStorage.getItem('uid');
     if (!!uid) {
-      this.invites$ = this.notifServ.fetchInvites(uid);
+      this.invites$ = this.notificationService.fetchInvites(uid);
     }
   }
+
   onViewInvite(inv: Invite): void {
-    this.notifServ.openTeamOffer(inv.id, inv.teamName);
+    this.notificationService.openTeamOffer(inv.id, inv.teamName);
   }
 }

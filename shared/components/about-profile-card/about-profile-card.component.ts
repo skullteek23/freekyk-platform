@@ -7,8 +7,10 @@ import { profile } from '../../interfaces/others.model';
   styleUrls: ['./about-profile-card.component.scss'],
 })
 export class AboutProfileCardComponent implements OnInit {
-  @Input('data') profile: profile;
-  constructor() {}
 
-  ngOnInit(): void {}
+  @Input('data') profile: profile;
+
+  constructor() { }
+
+  ngOnInit(): void { }
 }

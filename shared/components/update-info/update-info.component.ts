@@ -10,10 +10,12 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./update-info.component.scss'],
 })
 export class UpdateInfoComponent implements OnInit {
+
   pass = '';
   rePass = '';
   newPassForm: FormGroup = new FormGroup({});
   newEmailForm: FormGroup = new FormGroup({});
+
   constructor(
     public dialogRef: MatDialogRef<UpdateInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: 'email' | 'password',
@@ -29,9 +31,11 @@ export class UpdateInfoComponent implements OnInit {
       conf_pass: new FormControl(null, [Validators.required, this.validateAreEqual.bind(this)]),
     });
   }
+
   onDialogClose() {
     this.dialogRef.close();
   }
+
   validateAreEqual(fieldControl: FormControl) {
     return fieldControl.value === this.newPassForm.get('pass')?.value
       ? null

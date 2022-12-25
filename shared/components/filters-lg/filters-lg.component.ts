@@ -16,13 +16,19 @@ export class FiltersLgComponent implements OnInit {
     filtersObj: {},
   };
   @Output() changeFilter = new EventEmitter();
+
   defaultQuery = '';
 
-  constructor(private snackBarService: SnackbarService) { }
+  constructor(
+    private snackBarService: SnackbarService
+  ) { }
+
   ngOnInit(): void { }
+
   onResetFilter(): void {
     this.changeFilter.emit(null);
   }
+
   onQueryDefault(queryItem: string, queryValue: string | boolean): void {
     this.snackBarService.displayCustomMsg('Filter Applied!');
     this.changeFilter.emit({ queryItem, queryValue });

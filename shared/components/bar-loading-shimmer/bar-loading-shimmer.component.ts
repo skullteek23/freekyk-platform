@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bar-loading-shimmer.component.scss'],
 })
 export class BarLoadingShimmerComponent implements OnInit {
-  dummies = [1, 1, 1, 1, 1, 1, 1, 1, 1];
-  constructor() {}
 
-  ngOnInit(): void {}
+  dummies = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+  constructor() { }
+
+  ngOnInit(): void { }
 }

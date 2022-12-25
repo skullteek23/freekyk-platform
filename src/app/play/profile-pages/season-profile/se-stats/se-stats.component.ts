@@ -11,11 +11,16 @@ import { SeasonStats } from '@shared/interfaces/season.model';
 })
 export class SeStatsComponent implements OnInit, OnDestroy {
   @Input() stats = new SeasonStats();
+
   subscriptions = new Subscription();
   columns = '4';
   height = '0';
   gutter = '0';
-  constructor(private mediaObs: MediaObserver) { }
+
+  constructor(
+    private mediaObs: MediaObserver
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -37,6 +42,7 @@ export class SeStatsComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

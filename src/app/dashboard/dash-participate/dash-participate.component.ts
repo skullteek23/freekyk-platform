@@ -38,6 +38,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private snackBarService: SnackbarService,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(this.paymentServ.getLoadingStatus().subscribe((status) => {
       this.loadingStatus = status;
@@ -69,6 +70,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   getSeasons() {
     const currentTimestamp = new Date().getTime();
     this.seasons$ = this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
@@ -88,6 +90,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   async onPayNow(season: SeasonBasicInfo): Promise<any> {
     if (!season.id) {
       return;
@@ -117,6 +120,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       this.paymentServ.onLoadingStatusChange('home');
     }
   }
+
   initPayment(season: SeasonBasicInfo, teamId: string): void {
     // minimum fees
     const fees = this.paymentServ.getFeesAfterDiscount(season.feesPerTeam, season.discount);
@@ -136,6 +140,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         this.snackBarService.displayError();
       });
   }
+
   async isAvailableSlot(maxTeams: number, sid: string): Promise<boolean> {
     return (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.length < maxTeams;
   }
@@ -151,9 +156,11 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       this.router.navigate(['/s', name]);
     }
   }
+
   isParticipated(seasonid: string): boolean {
     return this.participatedTournaments.includes(seasonid);
   }
+
   getContainingTournaments(list: string[]) {
     return list.length ? list.join(', ') : 'NA';
   }

@@ -10,18 +10,23 @@ import { statsIcon } from '@shared/interfaces/others.model';
   styleUrls: ['./da-ho-stats-card.component.scss'],
 })
 export class DaHoStatsCardComponent implements OnInit {
+
   isLoading = true;
   statsIconsFs: statsIcon[] = [];
   plStats$: Observable<statsIcon[]>;
   fsStats$: Observable<statsIcon[]>;
-  constructor(private plServ: PlayerService) { }
+
+  constructor(
+    private playerService: PlayerService
+  ) { }
+
   ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
     const uid = localStorage.getItem('uid');
     if (uid) {
-      this.plStats$ = this.plServ.fetchPlayerStats(uid).pipe(
+      this.plStats$ = this.playerService.fetchPlayerStats(uid).pipe(
         map((stats) => {
           let newArray: statsIcon[] = [];
           newArray = [
@@ -39,7 +44,7 @@ export class DaHoStatsCardComponent implements OnInit {
           return newArray;
         })
       );
-      this.fsStats$ = this.plServ.fetchFsStats(uid).pipe(
+      this.fsStats$ = this.playerService.fetchFsStats(uid).pipe(
         map((stats) => {
           const newArray: statsIcon[] = [
             { icon: 'stars', name: 'Skill Level', value: stats.sk_lvl },

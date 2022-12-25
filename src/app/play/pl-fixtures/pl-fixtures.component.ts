@@ -24,12 +24,14 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   fixtures$: Observable<MatchFixture[]>;
   filterData: FilterData;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
-    private queryServ: QueryService,
+    private queryService: QueryService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     if (!this.season) {
       this.initSeasonFilter();
@@ -84,7 +86,7 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
 
   onQueryFixtures(queryInfo): void {
     this.isLoading = true;
-    this.fixtures$ = this.queryServ
+    this.fixtures$ = this.queryService
       .onQueryMatches(queryInfo, 'allMatches', false)
       .pipe(
         tap((val) => {

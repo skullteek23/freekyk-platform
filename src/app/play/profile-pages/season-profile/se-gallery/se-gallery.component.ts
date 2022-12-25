@@ -11,14 +11,18 @@ import { SeasonMedia } from '@shared/interfaces/season.model';
   styleUrls: ['./se-gallery.component.scss'],
 })
 export class SeGalleryComponent implements OnInit, OnDestroy {
+
   @Input() photos: string[] = [];
+
   subscriptions = new Subscription();
   columns: any;
   photos$: Observable<SeasonMedia>;
+
   constructor(
     private mediaObs: MediaObserver,
-    private enServ: EnlargeService
+    private enlargeService: EnlargeService
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -38,10 +42,12 @@ export class SeGalleryComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onEnlargeView(imagePath: string): void {
-    this.enServ.onOpenPhoto(imagePath);
+    this.enlargeService.onOpenPhoto(imagePath);
   }
 }

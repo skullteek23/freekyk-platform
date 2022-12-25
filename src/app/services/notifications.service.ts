@@ -26,16 +26,16 @@ export class NotificationsService implements OnDestroy {
   emptyInvites = new BehaviorSubject<boolean>(true);
   subscriptions = new Subscription();
 
-  onSelNotif(notif: NotificationBasic): void {
-    switch (notif.type) {
+  onSelectNotification(notification: NotificationBasic): void {
+    switch (notification.type) {
       case 'team welcome':
         this.router.navigate(['/dashboard', 'team-management']);
         break;
       case 'request':
-        this.sendTeamInviteByNotif(notif);
+        this.sendTeamInviteByNotif(notification);
         break;
       case 'invite':
-        this.openTeamOffer(notif.id, notif.senderName);
+        this.openTeamOffer(notification.id, notification.senderName);
         break;
       case 'team challenge':
         this.router.navigate(['/dashboard', 'participate']);
@@ -225,7 +225,7 @@ export class NotificationsService implements OnDestroy {
     statusUpdate: 'wait' | 'accept' | 'reject' | null,
     notifId: string
   ): Promise<any> {
-    // notif id is same as invite id for team invites
+    // notification id is same as invite id for team invites
     if (statusUpdate == null) {
       return;
     }

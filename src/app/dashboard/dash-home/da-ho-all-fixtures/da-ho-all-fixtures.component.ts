@@ -22,7 +22,9 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./da-ho-all-fixtures.component.scss'],
 })
 export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
+
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   isLoading = true;
   myFixtures$: Observable<MatchFixture[]>;
   allFixtures$: Observable<MatchFixture[]>;
@@ -30,10 +32,11 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   subscriptions = new Subscription();
   isListLoading: boolean;
+
   constructor(
     private ngFire: AngularFirestore,
     private store: Store<AppState>,
-    private queryServ: QueryService
+    private queryService: QueryService
   ) { }
 
   ngOnInit(): void {
@@ -46,11 +49,13 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     };
     this.getPlayerFixtures();
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onChangeIndex(changeState: MatTabChangeEvent): void {
     switch (changeState.index) {
       case 0:
@@ -61,6 +66,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         return this.getAllResults();
     }
   }
+
   onQueryMyFixtures(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
@@ -72,30 +78,33 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       tap(() => (this.isListLoading = false))
     );
   }
+
   onQueryAllFixtures(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
       return this.getAllFixtures();
     }
-    this.allFixtures$ = this.queryServ
+    this.allFixtures$ = this.queryService
       .onQueryMatchesForDashboard(queryInfo, 'allMatches', false)
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         tap(() => (this.isListLoading = false))
       );
   }
+
   onQueryResults(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
       return this.getAllResults();
     }
-    this.allResults$ = this.queryServ
+    this.allResults$ = this.queryService
       .onQueryMatchesForDashboard(queryInfo, 'allMatches', true)
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         tap(() => (this.isListLoading = false))
       );
   }
+
   getPlayerFixtures(): void {
     this.isListLoading = true;
     this.myFixtures$ = this.store.select('dash').pipe(
@@ -116,6 +125,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         ))
     );
   }
+
   getAllFixtures(): void {
     this.isListLoading = true;
     this.allFixtures$ = this.ngFire
@@ -131,6 +141,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         tap(() => (this.isListLoading = false))
       );
   }
+
   getAllResults(): void {
     this.isListLoading = true;
     this.allResults$ = this.ngFire
@@ -146,6 +157,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         tap(() => (this.isListLoading = false))
       );
   }
+
   onQueryToFirebase(queryInfo, teamName: string): Observable<MatchFixture[]> {
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],

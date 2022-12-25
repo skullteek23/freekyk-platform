@@ -9,13 +9,20 @@ import { MatchFixture } from '@shared/interfaces/match.model';
   styleUrls: ['./fixture-dashboard.component.scss'],
 })
 export class FixtureDashboardComponent implements OnInit {
+
   @Input('matchData') fixture: MatchFixture | null = null;
   @Input('premium') isPremium = false;
   @Input('resultMode') isResult = false;
   @Input('addSticker') myTeam: string = null;
+
   todaysDate = new Date();
-  constructor(private dialog: MatDialog) { }
+
+  constructor(
+    private dialog: MatDialog
+  ) { }
+
   ngOnInit(): void { }
+
   onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',

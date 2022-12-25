@@ -12,4 +12,5 @@ export const SOCIAL_MEDIA_PRE = {
   fb: 'https://www.facebook.com/',
   tw: 'https://twitter.com/',
   yt: 'https://www.youtube.com/channel/',
+  linkedIn: 'https://www.linkedin.com/',
 };

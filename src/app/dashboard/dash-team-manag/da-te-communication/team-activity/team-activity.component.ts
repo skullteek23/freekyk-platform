@@ -20,6 +20,7 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
   teamActivityListLogs$: Observable<MemberResponseNotification[]>;
   noLogs = false;
   subscriptions = new Subscription();
+
   constructor(
     private store: Store<{ teamComms: TeamCommState }>,
     private ngFireDb: AngularFireDatabase
@@ -58,6 +59,7 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

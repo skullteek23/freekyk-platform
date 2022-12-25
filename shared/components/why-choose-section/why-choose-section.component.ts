@@ -18,7 +18,8 @@ export class WhyChooseSectionComponent implements OnInit {
       LOREM_IPSUM_VERY_SHORT,
     ],
   };
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor() { }
+
+  ngOnInit(): void { }
 }

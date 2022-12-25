@@ -8,60 +8,20 @@
     <h4 class="title">{{ profile.designation }}</h4>
   </div>
 
-  <div
-    class="social"
-    fxLayoutGap="16px"
-    fxLayoutAlign.lt-md="center center"
-    fxLayoutAlign.gt-sm="center center"
-    fxLayout
-  >
-    <a
-      *ngIf="profile.links?.linkedin"
-      [href]="profile?.links?.linkedin"
-      target="_blank"
-      fxLayoutAlign="center center"
-    >
-      <img
-        src="../../../../assets/svgs/linkedin.svg"
-        alt="LinkedIn"
-        class="icon"
-      />
+  <div class="social" fxLayoutGap="16px" fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center center"
+    fxLayout>
+    <a *ngIf="profile.links?.linkedin" [href]="profile?.links?.linkedin" target="_blank" fxLayoutAlign="center center">
+      <img src="assets/svgs/linkedin.svg" alt="LinkedIn" class="icon" />
     </a>
-    <a
-      *ngIf="profile.links?.twitter"
-      [href]="profile?.links?.twitter"
-      target="_blank"
-      fxLayoutAlign="center center"
-    >
-      <img
-        src="../../../../assets/svgs/twitter.svg"
-        alt="twitter"
-        class="icon"
-      />
+    <a *ngIf="profile.links?.twitter" [href]="profile?.links?.twitter" target="_blank" fxLayoutAlign="center center">
+      <img src="assets/svgs/twitter.svg" alt="twitter" class="icon" />
     </a>
-    <a
-      *ngIf="profile.links?.instagram"
-      [href]="profile?.links?.instagram"
-      target="_blank"
-      fxLayoutAlign="center center"
-    >
-      <img
-        src="../../../../assets/svgs/instagram.svg"
-        alt="instagram"
-        class="icon"
-      />
+    <a *ngIf="profile.links?.instagram" [href]="profile?.links?.instagram" target="_blank"
+      fxLayoutAlign="center center">
+      <img src="assets/svgs/instagram.svg" alt="instagram" class="icon" />
     </a>
-    <a
-      *ngIf="profile.links?.facebook"
-      [href]="profile?.links?.facebook"
-      target="_blank"
-      fxLayoutAlign="center center"
-    >
-      <img
-        src="../../../../assets/svgs/facebook.svg"
-        alt="facebook"
-        class="icon"
-      />
+    <a *ngIf="profile.links?.facebook" [href]="profile?.links?.facebook" target="_blank" fxLayoutAlign="center center">
+      <img src="assets/svgs/facebook.svg" alt="facebook" class="icon" />
     </a>
   </div>
 </div>

@@ -20,8 +20,12 @@ export class FeatureSectionComponent implements OnInit {
   };
   @Input() svg = 'assets/svgs/Banner/play_banner_small.svg';
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router
+  ) { }
+
   ngOnInit(): void { }
+
   onNavigate(route: string): void {
     this.router.navigate([route]);
   }

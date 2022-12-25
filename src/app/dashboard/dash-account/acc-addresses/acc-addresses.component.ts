@@ -20,6 +20,7 @@ import { RegexPatterns } from '@shared/Constants/REGEX';
   styleUrls: ['./acc-addresses.component.scss'],
 })
 export class AccAddressesComponent implements OnInit {
+
   noSavedAddress = false;
   newAddressForm: FormGroup = new FormGroup({});
   addr$: Observable<userAddress[]>;
@@ -32,7 +33,7 @@ export class AccAddressesComponent implements OnInit {
   constructor(
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
-    private locationServ: LocationService
+    private locationService: LocationService
   ) { }
 
   ngOnInit(): void {
@@ -40,12 +41,15 @@ export class AccAddressesComponent implements OnInit {
     this.getAddresses();
     this.onGetStates();
   }
+
   onGetStates(): void {
-    this.states$ = this.locationServ.getStateByCountry();
+    this.states$ = this.locationService.getStateByCountry();
   }
+
   onSelectState(state: MatSelectChange): void {
-    this.cities$ = this.locationServ.getCityByState(state.value);
+    this.cities$ = this.locationService.getCityByState(state.value);
   }
+
   getAddresses(): void {
     this.addr$ = this.ngFire
       .collection(`players/${this.uid}/Addresses`)
@@ -63,6 +67,7 @@ export class AccAddressesComponent implements OnInit {
         )
       );
   }
+
   onOpenAddressForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
@@ -80,6 +85,7 @@ export class AccAddressesComponent implements OnInit {
       ph_numb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
     });
   }
+
   onDeleteAddress(formid: string): void {
     this.ngFire
       .collection(`players/${this.uid}/Addresses`)
@@ -88,10 +94,12 @@ export class AccAddressesComponent implements OnInit {
       .then(() => this.snackBarService.displayCustomMsg('Address deleted successfully!'))
       .catch(() => this.snackBarService.displayError());
   }
+
   resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
+
   onSaveAddress(): void {
     // console.log(this.newAddressForm);
     this.ngFire
@@ -100,10 +108,12 @@ export class AccAddressesComponent implements OnInit {
       .then(this.finishSubmit.bind(this))
       .catch(() => this.snackBarService.displayError());
   }
+
   finishSubmit(): void {
     this.snackBarService.displayCustomMsg('Address saved successfully!');
     this.resetAll();
   }
+
   FirstDigitNotZero(control: AbstractControl): Observable<any> {
     return (control.value as string).charAt(0) === '0'
       ? of({ invalidCode: true })

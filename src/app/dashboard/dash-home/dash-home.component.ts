@@ -25,7 +25,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private mediaObs: MediaObserver,
-    private teServ: TeamService,
+    private teamService: TeamService,
     private store: Store<{
       dash: DashState;
     }>
@@ -70,9 +70,9 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     }
   }
   joinTeam(): void {
-    this.teServ.onOpenJoinTeamDialog();
+    this.teamService.onOpenJoinTeamDialog();
   }
   createTeam(): void {
-    this.teServ.onOpenCreateTeamDialog();
+    this.teamService.onOpenCreateTeamDialog();
   }
 }

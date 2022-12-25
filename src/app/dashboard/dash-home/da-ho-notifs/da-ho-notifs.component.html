@@ -22,14 +22,15 @@
       Feed</a>
   </div>
   <!-- list -->
-  <ng-template #nonotif>
+  <ng-template #noNotification>
     <ul>
       <li class="nofi">
         <p class="mat-body-1 grey-bg line">No notifications!</p>
       </li>
     </ul>
   </ng-template>
-  <app-notifications-list [data]="notifications$ | async | slice:0:5" *ngIf="!(noNotif$ | async) as val; else nonotif">
+  <app-notifications-list [data]="notifications$ | async | slice:0:5"
+    *ngIf="!(noNotification$ | async) as val; else noNotification">
   </app-notifications-list>
   <!-- list -->
 </div>

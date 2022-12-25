@@ -12,12 +12,17 @@ import { PLAY_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 export class PlayComponent implements OnInit, OnDestroy {
 
   readonly SCROLL_HEIGHT = 420;
-
   readonly mainContent = PLAY_PAGE.banner;
+
   playLinks: string[] = RouteLinks.PLAY;
   subscriptions = new Subscription();
   activeLink = '';
-  constructor(private router: Router) {
+
+  constructor(
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
     if (window.location.href.endsWith('play')) {
       this.router.navigate(['/play/home']);
     }
@@ -30,7 +35,7 @@ export class PlayComponent implements OnInit, OnDestroy {
       })
     )
   }
-  ngOnInit(): void { }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

@@ -22,10 +22,12 @@ import {
   styleUrls: ['./search-lg.component.scss'],
 })
 export class SearchLgComponent implements OnInit {
+
   @Output() searchItem = new EventEmitter<string>();
   @ViewChild('searchInput', { static: true }) searchInputEvent: ElementRef;
   @Input('searchPlaceholder') placeholder = 'Search any item...';
   @Input() isDisabled = false;
+
   constructor() { }
 
   ngOnInit(): void {

@@ -12,9 +12,13 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./active-squad.component.scss'],
 })
 export class ActiveSquadComponent implements OnInit {
-  // @Input('data') sqNumber: number;
+
   sqData$: Observable<ActiveSquadMember[]>;
-  constructor(private store: Store<{ teamComms: TeamCommState }>) { }
+
+  constructor(
+    private store: Store<{ teamComms: TeamCommState }>
+  ) { }
+
   ngOnInit(): void {
     this.sqData$ = this.store
       .select('teamComms')

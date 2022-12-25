@@ -15,7 +15,6 @@ import { LastParticipationDate } from '@shared/interfaces/season.model';
 })
 export class AdminConfigPanelComponent implements OnInit {
 
-
   readonly messages = formsMessages;
   readonly allowedParticipationDate = [
     LastParticipationDate.sameDate,

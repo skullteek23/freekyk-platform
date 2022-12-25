@@ -18,28 +18,32 @@ import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confi
 export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
   @Input() margin = false;
   @Input() membersArray: Tmember[] = [];
+
   plFilters = ['Playing Position'];
   capId$: Observable<string>;
   uid: string;
   subscriptions = new Subscription();
+
   constructor(
     private dialog: MatDialog,
     private snackBarService: SnackbarService,
-    private router: Router,
-    private teamServ: TeamService,
+    private teamService: TeamService,
     private store: Store<{ team: TeamState }>
   ) { }
+
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid');
     this.capId$ = this.store
       .select('team')
       .pipe(map((resp) => resp.basicInfo.captainId));
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onDeleteTeam(): void {
     this.subscriptions.add(
       this.store
@@ -47,7 +51,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
         .pipe(
           tap((resp) => {
             if (resp.basicInfo.captainId != this.uid) {
-              this.teamServ.handlePermissionErrors(CAPTAIN_ONLY);
+              this.teamService.handlePermissionErrors(CAPTAIN_ONLY);
             }
           }),
           filter((resp) => resp.basicInfo.captainId === this.uid),
@@ -57,9 +61,10 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
             .afterClosed()
             .pipe(filter((resp) => !!resp === true)))
         )
-        .subscribe(() => this.teamServ.onDeleteTeam())
+        .subscribe(() => this.teamService.onDeleteTeam())
     );
   }
+
   onRemovePlayer(pid: string): void {
     this.subscriptions.add(
       this.store
@@ -67,7 +72,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
         .pipe(
           tap((resp) => {
             if (resp.basicInfo.captainId !== this.uid) {
-              this.teamServ.handlePermissionErrors(CAPTAIN_ONLY);
+              this.teamService.handlePermissionErrors(CAPTAIN_ONLY);
             }
           }),
           filter((resp) => resp.basicInfo.captainId === this.uid),
@@ -78,7 +83,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
             .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
-          this.teamServ
+          this.teamService
             .onRemovePlayer(pid, this.membersArray)
             .then(() =>
               this.snackBarService.displayCustomMsg(
@@ -89,6 +94,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
         )
     );
   }
+
   onLeaveTeam(): void {
     this.subscriptions.add(
       this.store
@@ -102,7 +108,7 @@ export class DaTeMangPlayersComponent implements OnInit, OnDestroy {
             .pipe(filter((resp) => !!resp === true)))
         )
         .subscribe(() =>
-          this.teamServ.onLeaveTeam(this.membersArray)
+          this.teamService.onLeaveTeam(this.membersArray)
             .then(() => {
               this.snackBarService.displayCustomMsg(
                 'You have successfully left the team!'

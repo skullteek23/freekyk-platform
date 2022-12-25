@@ -13,15 +13,16 @@ import { TeamState } from '../../dash-team-manag/store/team.reducer';
   styleUrls: ['./da-ho-upcoming-match.component.scss'],
 })
 export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
+
   noUpcomingMatch = false;
   upFixture: MatchFixture;
   subscriptions = new Subscription();
+
   constructor(
     private dialog: MatDialog,
-    private store: Store<{
-      team: TeamState;
-    }>
+    private store: Store<{ team: TeamState; }>
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -34,9 +35,11 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',

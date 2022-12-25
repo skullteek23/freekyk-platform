@@ -8,6 +8,7 @@ import { heroCallToAction } from '@shared/interfaces/others.model';
 import { BasicTicket } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ProfileConstants } from '@shared/constants/constants';
+import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 
 @Component({
   selector: 'app-support',
@@ -15,6 +16,13 @@ import { ProfileConstants } from '@shared/constants/constants';
   styleUrls: ['./support.component.scss'],
 })
 export class SupportComponent implements OnInit {
+
+  readonly fb = SOCIAL_MEDIA_PRE.fb;
+  readonly ig = SOCIAL_MEDIA_PRE.ig;
+  readonly tw = SOCIAL_MEDIA_PRE.tw;
+  readonly yt = SOCIAL_MEDIA_PRE.yt;
+  readonly linkedIn = SOCIAL_MEDIA_PRE.linkedIn;
+
   ticketForm: FormGroup;
   activeIndex = 0;
   activePage: {
@@ -22,12 +30,14 @@ export class SupportComponent implements OnInit {
     title: string;
     CTA: heroCallToAction | false;
   };
+
   constructor(
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     private router: Router,
     private route: ActivatedRoute
   ) { }
+
   ngOnInit(): void {
     if (this.router.url.includes('faqs')) {
       this.activeIndex = 1;
@@ -46,6 +56,7 @@ export class SupportComponent implements OnInit {
     }
     this.initForm();
   }
+
   initForm(): void {
     this.ticketForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
@@ -54,6 +65,7 @@ export class SupportComponent implements OnInit {
       query: new FormControl(null, [Validators.required, Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT), Validators.pattern(RegexPatterns.query)]),
     });
   }
+
   onSubmitTicket(): void {
     if (this.ticketForm.valid) {
       this.ngFire
@@ -76,6 +88,7 @@ export class SupportComponent implements OnInit {
     }
     window.scrollTo(0, 0);
   }
+
   onChangeTab(ev: MatTabChangeEvent): void {
     if (ev.index === 1) {
       this.router.navigate(['/support', 'faqs']);

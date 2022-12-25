@@ -7,12 +7,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./invite-accept-card.component.scss'],
 })
 export class InviteAcceptCardComponent implements OnInit {
+
   constructor(
     public dialogRef: MatDialogRef<InviteAcceptCardComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
   onCloseDialog(response: 'accept' | 'reject'): void {
     this.dialogRef.close(response);
   }

@@ -15,6 +15,7 @@ import {
   styleUrls: ['./product-profile.component.scss'],
 })
 export class ProductProfileComponent implements OnInit {
+
   prodInfo$: Observable<ProdBasicInfo>;
   prodMoreInfo$: Observable<ProdMoreInfo>;
   isLoading = true;
@@ -22,19 +23,21 @@ export class ProductProfileComponent implements OnInit {
   prodId: string;
   imgPath: string;
   disableButton = true;
+
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private router: Router
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     const uid = localStorage.getItem('uid');
     this.disableButton = !!uid === false;
-  }
-  ngOnInit(): void {
     this.prodId = this.route.snapshot.params.productid;
     this.getProdBasicInfo();
   }
+
   getProdBasicInfo(): void {
     this.prodInfo$ = this.ngFire
       .collection('products')
@@ -51,6 +54,7 @@ export class ProductProfileComponent implements OnInit {
         share()
       );
   }
+
   getProdAddiInfo(): void {
     this.prodMoreInfo$ = this.ngFire
       .collection(`products/${this.prodId}/additionalInfo`)
@@ -62,13 +66,16 @@ export class ProductProfileComponent implements OnInit {
         share()
       );
   }
+
   onAddToCart(): void {
     // cart code here
   }
+
   onSelectSize(size: number): void {
     this.selectedSize = size;
   }
+
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.imgPath);
+    this.enlargeService.onOpenPhoto(this.imgPath);
   }
 }

@@ -10,13 +10,15 @@ import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
   styleUrls: ['./dash-account.component.scss'],
 })
 export class DashAccountComponent implements OnInit, OnDestroy {
+
   accountLinks: string[] = RouteLinks.DASHBOARD_ACCOUNT;
   routeSubscription: Subscription;
   activeLink = '';
+
   constructor(
     private router: Router,
-    private plServ: PlayerService,
-    private teServ: TeamService
+    private playerService: PlayerService,
+    private teamService: TeamService
   ) {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -24,7 +26,9 @@ export class DashAccountComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   ngOnInit(): void { }
+
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }

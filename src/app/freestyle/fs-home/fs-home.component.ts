@@ -7,11 +7,14 @@ import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
   styleUrls: ['./fs-home.component.scss'],
 })
 export class FsHomeComponent implements OnInit {
+
   readonly journey = FREESTYLE_PAGE.journey;
   readonly leaderboard = FREESTYLE_PAGE.leaderboard;
   readonly contests = FREESTYLE_PAGE.contests;
   readonly whyChooseContent = FREESTYLE_PAGE.whyChooseFreestyle;
   readonly communityNumbers = FREESTYLE_PAGE.communityNumbers;
+
   constructor() { }
+
   ngOnInit(): void { }
 }

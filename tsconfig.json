@@ -25,6 +25,9 @@
       ],
       "@shared/*": [
         "shared/*"
+      ],
+      "@assets/*": [
+        "src/app/assets/*"
       ]
     },
   },

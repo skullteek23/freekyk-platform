@@ -17,10 +17,12 @@ export class LoginUiComponent implements OnInit {
   authForm: FormGroup;
   disableAllButtons = false;
   isLoading = false;
+
   constructor(
     private authService: AuthService,
     private snackBarService: SnackbarService
   ) { }
+
   ngOnInit(): void {
     this.initForm();
   }
@@ -143,6 +145,7 @@ export class LoginUiComponent implements OnInit {
       })
       .catch((error) => this.onErrorAfterSignin(error));
   }
+
   cleanUpAfterSignin(hideLoading = false): void {
     this.authForm.reset();
     this.authForm.markAsUntouched();
@@ -151,6 +154,7 @@ export class LoginUiComponent implements OnInit {
       this.isLoading = false;
     }
   }
+
   onErrorAfterSignin(error): void {
     this.authService.onError(error.code);
     this.cleanUpAfterSignin(true);

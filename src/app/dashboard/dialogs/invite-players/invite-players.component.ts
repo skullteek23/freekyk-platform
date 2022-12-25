@@ -15,9 +15,11 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./invite-players.component.scss'],
 })
 export class InvitePlayersComponent implements OnInit {
+
   invitesList: Invite[] = [];
   players$: Observable<PlayerBasicInfo[]>;
   noPlayers = true;
+
   constructor(
     public dialogRef: MatDialogRef<InvitePlayersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
@@ -28,9 +30,11 @@ export class InvitePlayersComponent implements OnInit {
   ngOnInit(): void {
     this.getPlayers();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   getPlayers(): void {
     const uid = localStorage.getItem('uid');
     this.players$ = this.ngFire
@@ -53,9 +57,11 @@ export class InvitePlayersComponent implements OnInit {
         map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
+
   onSendInvites(plSelected: MatListOption[]): void {
     this.createInvites(plSelected.map((sel) => sel.value));
   }
+
   createInvites(selArray: { name: string; id: string }[]): void {
     const tid = sessionStorage.getItem('tid');
     selArray.forEach((selection) => {
@@ -69,6 +75,7 @@ export class InvitePlayersComponent implements OnInit {
     });
     this.sendInvites();
   }
+
   sendInvites(): void {
     if (this.invitesList.length > 1) {
       const batch = this.ngFire.firestore.batch();

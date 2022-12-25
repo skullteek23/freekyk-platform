@@ -18,12 +18,14 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 export class AskPlayerSelectorComponent implements OnInit, OnDestroy {
   members$: Observable<Tmember[]>;
   subscriptions = new Subscription();
+
   constructor(
     public dialogRef: MatDialogRef<AskPlayerSelectorComponent>,
     private store2: Store<{ team: TeamState }>,
     private store3: Store<{ teamComms: TeamCommState }>,
     private commServ: TeamCommunicationService
   ) { }
+
   ngOnInit(): void {
     this.members$ = this.store2.select('team').pipe(
       // tap((resp) => console.log(resp)),
@@ -40,12 +42,15 @@ export class AskPlayerSelectorComponent implements OnInit, OnDestroy {
       })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onConfirmPlayers(selections: MatListOption[]): void {
     this.commServ
       .createActiveSquadByCaptain(selections.map((sel) => sel.value))

@@ -121,5 +121,5 @@ import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactiva
   ],
 })
 export class DashboardModule {
-  constructor(plServ: PlayerService, teServ: TeamService) { }
+  constructor(playerService: PlayerService, teamService: TeamService) { }
 }

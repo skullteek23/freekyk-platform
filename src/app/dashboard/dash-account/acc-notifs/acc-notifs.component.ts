@@ -10,20 +10,26 @@ import { NotificationBasic } from '@shared/interfaces/notification.model';
   styleUrls: ['./acc-notifs.component.scss'],
 })
 export class AccNotifsComponent implements OnInit {
+
   isLoading = true;
   notifications$: Observable<NotificationBasic[]>;
-  noNotif$: Observable<boolean>;
-  constructor(private notifServ: NotificationsService) { }
+  noNotification$: Observable<boolean>;
+
+  constructor(
+    private notificationService: NotificationsService
+  ) { }
+
   ngOnInit(): void {
-    this.notifications$ = this.notifServ.notifsChanged;
-    this.noNotif$ = this.notifications$.pipe(
+    this.notifications$ = this.notificationService.notifsChanged;
+    this.noNotification$ = this.notifications$.pipe(
       map((resp) => resp?.length === 0)
     );
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
   }
+
   getNotifications(): void {
-    this.notifServ.getNotifications();
+    this.notificationService.getNotifications();
   }
 }

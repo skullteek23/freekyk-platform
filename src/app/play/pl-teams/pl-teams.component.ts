@@ -23,10 +23,11 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   cols = 1;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private queryServ: QueryService
+    private queryService: QueryService
   ) { }
 
   ngOnInit(): void {
@@ -55,9 +56,11 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
     );
     this.getTeams();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getTeams(): void {
     this.teams$ = this.ngFire
       .collection('teams', (ref) => ref.orderBy('tname'))
@@ -80,11 +83,12 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo === null) {
       return this.getTeams();
     }
-    this.teams$ = this.queryServ
+    this.teams$ = this.queryService
       .onQueryData(queryInfo, 'teams')
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)),

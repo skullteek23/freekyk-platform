@@ -9,15 +9,19 @@ import { ShareData } from '../../interfaces/others.model';
   styleUrls: ['./sharesheet.component.scss'],
 })
 export class SharesheetComponent implements OnInit {
+
   constructor(
     public dialogRef: MatDialogRef<SharesheetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ShareData,
     public _clipboard: Clipboard
-  ) {}
+  ) { }
+
   onCloseDialog() {
     this.dialogRef.close();
   }
-  ngOnInit(): void {}
+
+  ngOnInit(): void { }
+
   onCopyLink(link: string) {
     this._clipboard.copy(link);
   }

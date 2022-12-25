@@ -11,16 +11,23 @@ import { MatchFixture } from '@shared/interfaces/match.model';
   providers: [DatePipe],
 })
 export class KnockoutStripComponent implements OnInit {
+
   @Input() match: MatchFixture;
-  constructor(private datePipe: DatePipe, private dialog: MatDialog) { }
+
+  constructor(
+    private datePipe: DatePipe,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void { }
+
   checkTBD(date: number): string {
     if (new Date(date).getHours() === 0) {
       return 'TBD';
     }
     return this.datePipe.transform(date, 'shortTime');
   }
+
   openFixture() {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',

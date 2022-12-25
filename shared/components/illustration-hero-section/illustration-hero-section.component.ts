@@ -7,12 +7,15 @@ import { PAGE_VIEWS_MAIN } from 'src/app/dashboard/constants/constants';
   styleUrls: ['./illustration-hero-section.component.scss'],
 })
 export class IllustrationHeroSectionComponent implements OnInit {
+
   @Input() svgSrc: string;
   @Input() pageView = PAGE_VIEWS_MAIN.LANDING_PAGE;
   @Input() isEnlarge = false;
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor() { }
+
+  ngOnInit(): void { }
+
   getClass(): string {
     if (!this.pageView) {
       return;
@@ -38,7 +41,6 @@ export class IllustrationHeroSectionComponent implements OnInit {
         return;
       case PAGE_VIEWS_MAIN.PRIVACY_PAGE:
         return;
-
       default:
         return;
     }

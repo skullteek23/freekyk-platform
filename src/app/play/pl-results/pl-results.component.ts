@@ -16,17 +16,20 @@ import { ArraySorting } from '@shared/utils/array-sorting';
   styleUrls: ['./pl-results.component.scss'],
 })
 export class PlResultsComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   noResults = false;
   results$: Observable<MatchFixture[]>;
   filterData: FilterData;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
-    private queryServ: QueryService,
+    private queryService: QueryService,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
+
   ngOnInit(): void {
     this.initSeasonFilter();
     this.subscriptions.add(
@@ -68,7 +71,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
 
   onQueryResults(queryInfo): void {
     this.isLoading = true;
-    this.results$ = this.queryServ
+    this.results$ = this.queryService
       .onQueryMatches(queryInfo, 'allMatches', true)
       .pipe(
         tap((val) => {

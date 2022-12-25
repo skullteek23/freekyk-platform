@@ -16,6 +16,7 @@ import {
   styleUrls: ['./ground-profile.component.scss'],
 })
 export class GroundProfileComponent implements OnInit {
+
   groundInfo$: Observable<GroundBasicInfo>;
   groundMoreInfo$: Observable<GroundMoreInfo>;
   grName: string;
@@ -24,17 +25,20 @@ export class GroundProfileComponent implements OnInit {
   isLoading = true;
   formatter: any;
   error = false;
+
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute,
-    private enlServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.formatter = Formatters;
     const GroundId = this.route.snapshot.params.groundid;
     this.getGroundInfo(GroundId);
   }
+
   getGroundInfo(gid: string): void {
     this.groundInfo$ = this.ngFire
       .collection('grounds')
@@ -56,6 +60,7 @@ export class GroundProfileComponent implements OnInit {
         share()
       );
   }
+
   getGroundMoreInfo(gid: string): void {
     this.groundMoreInfo$ = this.ngFire
       .collection('groundDetails')
@@ -69,6 +74,6 @@ export class GroundProfileComponent implements OnInit {
   }
 
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.grImgpath);
+    this.enlargeService.onOpenPhoto(this.grImgpath);
   }
 }

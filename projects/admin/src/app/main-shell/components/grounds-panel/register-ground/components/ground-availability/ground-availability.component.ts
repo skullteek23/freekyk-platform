@@ -9,12 +9,12 @@ import { ITiming } from '@shared/interfaces/others.model';
   styleUrls: ['./ground-availability.component.scss']
 })
 export class GroundAvailabilityComponent implements OnInit {
+
   allowedHours: number[] = MatchConstants.GROUND_HOURS;
   days = [
     DAYS[0], DAYS[1], DAYS[2], DAYS[3], DAYS[4], DAYS[5], DAYS[6]
   ];
   timingArray: ITiming[] = [];
-
 
   constructor() { }
 

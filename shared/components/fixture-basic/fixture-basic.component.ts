@@ -9,12 +9,19 @@ import { MatchFixture, } from '../../interfaces/match.model';
   styleUrls: ['./fixture-basic.component.scss'],
 })
 export class FixtureBasicComponent implements OnInit {
+
   @Input('matchData') fixture: MatchFixture;
   @Input('premium') isPremium = false;
   @Input('resultMode') isResult = false;
+
   todaysDate = new Date();
-  constructor(private dialog: MatDialog) { }
+
+  constructor(
+    private dialog: MatDialog
+  ) { }
+
   ngOnInit(): void { }
+
   onOpenFixture() {
     this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',

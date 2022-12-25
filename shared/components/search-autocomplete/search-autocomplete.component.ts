@@ -11,6 +11,9 @@ export interface ListOption { viewValue: string; data: any };
   styleUrls: ['./search-autocomplete.component.scss']
 })
 export class SearchAutocompleteComponent implements OnInit {
+
+  @ViewChild('searchInputAutocompleteElement', { static: true }) searchInputEvent: ElementRef;
+
   @Input() placeholder = '';
   @Input() isDisabled = false;
   @Input() set options(value: ListOption[]) {
@@ -22,10 +25,10 @@ export class SearchAutocompleteComponent implements OnInit {
   }
   @Output() selectionChange = new EventEmitter<ListOption>();
 
-  @ViewChild('searchInputAutocompleteElement', { static: true }) searchInputEvent: ElementRef;
   optionsList: ListOption[] = [];
   optionsListCache: ListOption[] = [];
   searchForm: FormGroup;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -52,6 +55,7 @@ export class SearchAutocompleteComponent implements OnInit {
     // this.searchForm.markAsUntouched();
     this.searchForm.markAsPristine();
   }
+
   resetForm() {
     this.searchForm.get('searchKey').setValue(null);
   }

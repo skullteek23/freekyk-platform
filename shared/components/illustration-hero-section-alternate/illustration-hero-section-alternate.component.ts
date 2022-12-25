@@ -6,10 +6,13 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./illustration-hero-section-alternate.component.scss'],
 })
 export class IllustrationHeroSectionAlternateComponent implements OnInit {
+
   @Input() svgSrc: string;
+
   constructor() { }
 
   ngOnInit(): void { }
+
   checkSvg(): boolean {
     // console.log(this.svgSrc.includes('equipment'));
     return this.svgSrc.includes('academy') || this.svgSrc.includes('equipment');

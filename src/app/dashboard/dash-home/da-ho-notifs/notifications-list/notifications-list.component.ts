@@ -17,15 +17,21 @@ export class NotificationsListComponent implements OnInit {
   @Input('data') set data(value: NotificationBasic[]) {
     this.notifications = value.sort(ArraySorting.sortObjectByKey('date', 'desc'));
   }
+
   notifications: NotificationBasic[];
   noNotif$: Observable<boolean>;
-  constructor(private notifServ: NotificationsService) { }
+
+  constructor(
+    private notificationService: NotificationsService
+  ) { }
+
   ngOnInit(): void { }
-  onSelNotif(selectedNotif: NotificationBasic): void {
-    this.notifServ.onSelNotif(selectedNotif);
+
+  onSelectNotification(notification: NotificationBasic): void {
+    this.notificationService.onSelectNotification(notification);
   }
 
-  changeStatus(notif: NotificationBasic, status: boolean) {
-    this.notifServ.markNotification(notif.id, status);
+  changeStatus(notification: NotificationBasic, status: boolean) {
+    this.notificationService.markNotification(notification.id, status);
   }
 }

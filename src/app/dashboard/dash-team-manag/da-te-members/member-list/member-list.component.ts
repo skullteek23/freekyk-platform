@@ -14,18 +14,26 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
   styleUrls: ['./member-list.component.scss'],
 })
 export class MemberListComponent implements OnInit {
+
   @Input() margin = false;
   @Input() membersArray: Tmember[] = [];
   @Input() capId: string;
+
   filterData: FilterData;
   term: string = null;
-  constructor(private dialog: MatDialog, private ngFire: AngularFirestore) { }
+
+  constructor(
+    private dialog: MatDialog,
+    private ngFire: AngularFirestore
+  ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: '',
       filtersObj: TeamMemberListFilter,
     };
   }
+
   async onOpenPlayerProfile(pid: string): Promise<any> {
     const playersnap = await this.ngFire
       .collection('players')
@@ -43,6 +51,7 @@ export class MemberListComponent implements OnInit {
       data: playersnap,
     });
   }
+
   onChangeFilter(queryInfo: QueryInfo): void {
     if (queryInfo) {
       this.term = queryInfo.queryValue;

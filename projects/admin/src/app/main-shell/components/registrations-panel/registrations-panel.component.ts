@@ -20,7 +20,6 @@ export class RegistrationsPanelComponent implements OnInit {
     location: 'location',
     status: 'status',
   };
-
   readonly tableUIColumns = {
     id: 'Organizer ID',
     company: 'Company',
@@ -29,7 +28,6 @@ export class RegistrationsPanelComponent implements OnInit {
     location: 'Location',
     status: 'Status',
   };
-
   readonly displayedCols = ['id', 'company', 'name', 'phone', 'location', 'status', 'actions'];
 
   dataSource = new MatTableDataSource<any>([]);

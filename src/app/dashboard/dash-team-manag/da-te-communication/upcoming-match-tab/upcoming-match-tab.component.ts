@@ -10,15 +10,20 @@ import { AskPlayerSelectorComponent } from '../ask-player-selector/ask-player-se
   styleUrls: ['./upcoming-match-tab.component.scss'],
 })
 export class UpcomingMatchTabComponent implements OnInit {
+
   @Input() captain: boolean;
+
   memberNames$: Observable<{ id: string; name: string }[]>;
   disableButton: boolean;
   disableCheck: boolean;
+
   constructor(
     private dialog: MatDialog,
     private commServ: TeamCommunicationService
-  ) {}
-  ngOnInit(): void {}
+  ) { }
+
+  ngOnInit(): void { }
+
   onOpenAskPlayersDialog(): void {
     this.dialog.open(AskPlayerSelectorComponent, {
       panelClass: 'large-dialogs',

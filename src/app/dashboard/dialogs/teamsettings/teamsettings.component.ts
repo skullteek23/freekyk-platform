@@ -48,7 +48,7 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
-    private locationServ: LocationService,
+    private locationService: LocationService,
     private store: Store<{ team: TeamState; }>,
     private dialog: MatDialog
   ) { }
@@ -122,11 +122,11 @@ export class TeamsettingsComponent implements OnInit, OnDestroy {
   }
 
   getStates(): void {
-    this.states$ = this.locationServ.getStateByCountry();
+    this.states$ = this.locationService.getStateByCountry();
   }
 
   onSelectState(state: string): void {
-    this.cities$ = this.locationServ.getCityByState(state);
+    this.cities$ = this.locationService.getCityByState(state);
   }
 
   async onSaveImages(): Promise<any> {

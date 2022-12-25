@@ -9,9 +9,11 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./card-loading-shimmer.component.scss'],
 })
 export class CardLoadingShimmerComponent implements OnInit, OnDestroy {
+
   dummyArray = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   watcher: Subscription;
   columns: any;
+
   constructor(private mediaObs: MediaObserver) {
     this.watcher = this.mediaObs
       .asObservable()
@@ -32,7 +34,8 @@ export class CardLoadingShimmerComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
   ngOnDestroy() {
     this.watcher.unsubscribe();
   }

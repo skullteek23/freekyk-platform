@@ -25,15 +25,18 @@ export class PlayerProfileComponent implements OnInit {
   isLoading = true;
   userTours: string[] = [];
   userTeams: string[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.playerId = this.route.snapshot.params.playerid;
     this.getBasicInfo();
   }
+
   getBasicInfo(): void {
     this.plInfo$ = this.ngFire
       .collection('players')
@@ -51,6 +54,7 @@ export class PlayerProfileComponent implements OnInit {
         share()
       );
   }
+
   getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)
@@ -67,6 +71,7 @@ export class PlayerProfileComponent implements OnInit {
         share()
       );
   }
+
   onLoadStats(): void {
     this.plStats$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)

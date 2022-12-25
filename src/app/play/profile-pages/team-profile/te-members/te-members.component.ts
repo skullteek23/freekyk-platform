@@ -15,22 +15,31 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
   styleUrls: ['./te-members.component.scss'],
 })
 export class TeMembersComponent implements OnInit, OnDestroy {
+
   @Input() members: Tmember[] = [];
+
   subscriptions = new Subscription();
   filterData: FilterData;
   term: string = null;
-  constructor(private dialog: MatDialog, private ngFire: AngularFirestore) { }
+
+  constructor(
+    private dialog: MatDialog,
+    private ngFire: AngularFirestore
+  ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: '',
       filtersObj: TeamMemberListFilter,
     };
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onOpenPlayerProfile(pid: string): void {
     this.subscriptions.add(
       this.ngFire
@@ -51,6 +60,7 @@ export class TeMembersComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   onChangeFilter(queryInfo: QueryInfo): void {
     if (queryInfo) {
       this.term = queryInfo.queryValue;

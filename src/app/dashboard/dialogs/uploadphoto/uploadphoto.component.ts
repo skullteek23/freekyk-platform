@@ -14,12 +14,14 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
   styleUrls: ['./uploadphoto.component.scss'],
 })
 export class UploadphotoComponent implements OnInit, OnDestroy {
+
   $file: File = null;
   selectedImage = null;
   isLoading = false;
   isUploadComplete = false;
   uploadImageTask: AngularFireUploadTask;
   subscriptions = new Subscription();
+
   constructor(
     public dialogRef: MatDialogRef<UploadphotoComponent>,
     private ngStorage: AngularFireStorage,
@@ -33,18 +35,22 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       this.selectedImage = this.data;
     }
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onChooseImage(ev: any): void {
     this.$file = ev.target.files[0];
     this.onShowPreview();
   }
+
   onShowPreview(): void {
     const reader = new FileReader();
     reader.onload = () => {
@@ -52,6 +58,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     };
     reader.readAsDataURL(this.$file);
   }
+
   onRemovePhoto(): Promise<any> {
     if (!this.selectedImage) {
       return;
@@ -72,6 +79,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
         this.onCloseDialog();
       });
   }
+
   async onUploadImage(): Promise<any> {
     this.isLoading = true;
     if (this.$file == null) {

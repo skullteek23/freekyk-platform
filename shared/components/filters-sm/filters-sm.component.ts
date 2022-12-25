@@ -9,9 +9,11 @@ import { FilterDialogComponent } from '../../dialogs/filter-dialog/filter-dialog
 })
 export class FiltersSmComponent implements OnInit {
   @Input('filterArray') filters: string[] = [];
-  constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {}
+  constructor(private dialog: MatDialog) { }
+
+  ngOnInit(): void { }
+
   onOpenFilter() {
     const dialogRef = this.dialog.open(FilterDialogComponent, {
       panelClass: 'fk-dialogs',

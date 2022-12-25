@@ -18,7 +18,9 @@ export class HeaderComponent implements OnInit {
 
   readonly adminURL = environment?.firebase?.adminRegister || '';
   readonly partnerFormURL = environment?.forms?.partner || '';
+
   @Output() menOpen = new Subject<boolean>();
+
   isLoading = true;
   isLogged = false;
   menuState: boolean;
@@ -31,12 +33,14 @@ export class HeaderComponent implements OnInit {
   selectedSubLinks: string[] = [];
   selected: 'dashboard' | 'play' | 'freestyle' | null = null;
   notifCount$: Observable<number | string>;
+
   constructor(
     private dialog: MatDialog,
     private ngAuth: AngularFireAuth,
-    private notifServ: NotificationsService,
+    private notificationService: NotificationsService,
     private avatarServ: AccountAvatarService
   ) { }
+
   ngOnInit(): void {
     this.menuState = false;
     this.sidenavOpen = false;
@@ -44,7 +48,7 @@ export class HeaderComponent implements OnInit {
     this.ngAuth.user.subscribe((user) => {
       if (user !== null) {
         this.isLogged = true;
-        this.notifCount$ = this.notifServ.notifsCountChanged.pipe(
+        this.notifCount$ = this.notificationService.notifsCountChanged.pipe(
           map((resp) => (!!resp ? resp : null)),
           map((resp) => (resp > 5 ? '5+' : resp)),
           share()
@@ -64,16 +68,19 @@ export class HeaderComponent implements OnInit {
       { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` }
     ];
   }
+
   onToggleMenu(): void {
     this.sidenavOpen = false;
     this.menuState = !this.menuState;
     this.menOpen.next(this.menuState);
   }
+
   onCloseMenu(): void {
     this.sidenavOpen = false;
     this.menuState = false;
     this.menOpen.next(this.menuState);
   }
+
   onLogout(): void {
     this.sidenavOpen = false;
     this.assignSelected(null);

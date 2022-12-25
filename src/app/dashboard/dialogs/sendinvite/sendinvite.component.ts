@@ -7,12 +7,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./sendinvite.component.scss'],
 })
 export class SendinviteComponent implements OnInit {
+
   constructor(
     public dialogRef: MatDialogRef<SendinviteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { name: string; id: string }
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
   onCloseDialog(response = false): void {
     this.dialogRef.close(response);
   }

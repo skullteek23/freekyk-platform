@@ -22,6 +22,7 @@ import {
   styleUrls: ['./season-profile.component.scss'],
 })
 export class SeasonProfileComponent implements OnInit {
+
   isLoading = true;
   isPremium = false;
   noPhotos = false;
@@ -37,18 +38,21 @@ export class SeasonProfileComponent implements OnInit {
   imgPath: string;
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
+
   constructor(
     private snackBarService: SnackbarService,
     private store: Store<DashState>,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.seasonName = this.route.snapshot.params.seasonid;
     this.getSeasonInfo();
   }
+
   getSeasonInfo(): void {
     this.seasonInfo$ = this.ngFire
       .collection('seasons', (query) =>
@@ -83,6 +87,7 @@ export class SeasonProfileComponent implements OnInit {
         share()
       );
   }
+
   getSeasonMoreInfo(sid: string): void {
     this.seasonMoreInfo$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -97,6 +102,7 @@ export class SeasonProfileComponent implements OnInit {
         share()
       );
   }
+
   getPhotos(sid: string): void {
     this.photos$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -116,6 +122,7 @@ export class SeasonProfileComponent implements OnInit {
         })
       );
   }
+
   getStats(sid: string): void {
     this.stats$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -145,7 +152,8 @@ export class SeasonProfileComponent implements OnInit {
         }
       });
   }
+
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.imgPath);
+    this.enlargeService.onOpenPhoto(this.imgPath);
   }
 }
