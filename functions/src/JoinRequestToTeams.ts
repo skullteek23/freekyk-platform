@@ -19,6 +19,7 @@ export async function joinRequests(data: { capId: string[]; name: string }, cont
         receiverId: ID,
         date: admin.firestore.Timestamp.now().toMillis(),
         title: 'Join Request',
+        read: false,
         senderName: requesterName,
       };
       const notificationRef = db.collection(`players/${ID}/Notifications`).doc();

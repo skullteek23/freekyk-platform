@@ -20,6 +20,7 @@ export async function inviteUpdationTrigger(change: any, context: any): Promise<
         receiverId: update.inviteeId,
         date: admin.firestore.Timestamp.now().toMillis(),
         title: 'Team Join Invite',
+        read: false,
         senderName: update.teamName,
       };
       return db.collection(`players/${notification.receiverId}/Notifications`).doc(updateID).set(notification);
@@ -54,6 +55,7 @@ export async function joinTeam(invite: Invite, inviteID: string): Promise<any> {
       date: new Date().getTime(),
       title: 'Welcome to our Team',
       senderName: invite.teamName,
+      read: false
     };
     const newMember: Tmember = {
       id: invite.inviteeId,

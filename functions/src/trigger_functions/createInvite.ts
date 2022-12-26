@@ -18,6 +18,7 @@ export async function inviteCreationTrigger(snap: any, context: any): Promise<an
       receiverId: invite.inviteeId,
       date: admin.firestore.Timestamp.now().toMillis(),
       title: 'Team Join Invite',
+      read: false,
       senderName: invite.teamName,
     };
     return db.collection(`players/${invite.inviteeId}/Notifications`).doc(notificationID).set(notification);
