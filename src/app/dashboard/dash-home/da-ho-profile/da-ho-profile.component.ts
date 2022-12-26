@@ -8,8 +8,7 @@ import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { UploadphotoComponent } from '../../dialogs/uploadphoto/uploadphoto.component';
 import { DashState } from '../../store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { ShareData } from '@shared/interfaces/others.model';
-import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData, SocialShareService } from '@app/services/social-share.service';
 @Component({
   selector: 'app-da-ho-profile',
   templateUrl: './da-ho-profile.component.html',

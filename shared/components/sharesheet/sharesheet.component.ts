@@ -1,8 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ShareData } from '@app/services/social-share.service';
 import { environment } from 'environments/environment';
-import { ShareData } from '../../interfaces/others.model';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({

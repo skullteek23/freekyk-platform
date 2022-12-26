@@ -5,11 +5,11 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { SeasonsFilters } from '@shared/Constants/FILTERS';
-import { FilterData, ShareData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData, SocialShareService } from '@app/services/social-share.service';
+import { FilterData } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-pl-seasons',
