@@ -1,10 +1,21 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ShareData } from '@app/services/social-share.service';
 import { environment } from 'environments/environment';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+export function replaceAll(search: string, replacement: string, target: string): string {
+  return target.replace(new RegExp(search, 'g'), replacement);
+};
+export class ShareData {
+  share_url: string;
+  share_title: string;
+  share_desc: string;
+  share_imgpath: string;
 
+  get url(): any {
+    return replaceAll(" ", "%20", this.share_url.trim())
+  }
+}
 @Component({
   selector: 'app-sharesheet',
   templateUrl: './sharesheet.component.html',

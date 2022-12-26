@@ -8,8 +8,9 @@ import { SeasonsFilters } from '@shared/Constants/FILTERS';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { ShareData, SocialShareService } from '@app/services/social-share.service';
+import { SocialShareService } from '@app/services/social-share.service';
 import { FilterData } from '@shared/interfaces/others.model';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-pl-seasons',

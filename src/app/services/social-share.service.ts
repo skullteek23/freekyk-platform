@@ -1,22 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { SharesheetComponent } from '@shared/components/sharesheet/sharesheet.component';
+import { ShareData, SharesheetComponent } from '@shared/components/sharesheet/sharesheet.component';
 import { SharesheetmobileComponent } from '@shared/components/sharesheetmobile/sharesheetmobile.component';
 
-export function replaceAll(search: string, replacement: string, target: string): string {
-  return target.replace(new RegExp(search, 'g'), replacement);
-};
-export class ShareData {
-  share_url: string;
-  share_title: string;
-  share_desc: string;
-  share_imgpath: string;
-
-  get url(): any {
-    return replaceAll(" ", "%20", this.share_url.trim())
-  }
-}
 @Injectable({
   providedIn: 'root',
 })

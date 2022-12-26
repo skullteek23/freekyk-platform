@@ -8,9 +8,10 @@ import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
-import { ShareData, StatsTeam } from '@shared/interfaces/others.model';
+import { StatsTeam } from '@shared/interfaces/others.model';
 import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-team-profile',

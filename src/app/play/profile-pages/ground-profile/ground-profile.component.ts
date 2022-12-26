@@ -9,7 +9,8 @@ import {
   GroundBasicInfo,
   GroundMoreInfo,
 } from '@shared/interfaces/ground.model';
-import { ShareData, SocialShareService } from '@app/services/social-share.service';
+import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-ground-profile',
