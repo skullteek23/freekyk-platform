@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ShareData, SocialShareService } from '@app/services/social-share.service';
+import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 import { Stats } from '@shared/interfaces/others.model';
 
 import { Observable } from 'rxjs';
