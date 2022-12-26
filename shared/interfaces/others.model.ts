@@ -4,19 +4,7 @@ export interface heroCallToAction {
   name: string;
   route: string;
 }
-export function replaceAll(search: string, replacement: string, target: string): string {
-  return target.replace(new RegExp(search, 'g'), replacement);
-};
-export class ShareData {
-  share_url: string;
-  share_title: string;
-  share_desc: string;
-  share_imgpath: string;
 
-  get url(): any {
-    return replaceAll(" ", "%20", this.share_url.trim())
-  }
-}
 export interface fr {
   id: string;
   name: string;
