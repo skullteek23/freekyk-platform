@@ -16,7 +16,7 @@
       <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
         {{ fixture.home.name }}
       </span>
-      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" />
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" loading="lazy" />
     </div>
     <ng-template #score>
       <div fxLayoutAlign="center center" fxLayoutGap="8px">
@@ -37,7 +37,7 @@
       </span>
     </div>
     <div fxLayoutAlign="start center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
-      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" />
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" loading="lazy" />
 
       <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
         {{ fixture.away.name }}

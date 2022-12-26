@@ -28,7 +28,8 @@
       <mat-grid-tile appCardElevate
         *ngFor="let season of seasons$ | async | filterList: 'locCity,locState,name':filterTerm">
         <div class="seasonContainer">
-          <img [routerLink]="['/s', season.name]" class="box-image" [src]="season.imgpath" [alt]="season.name" />
+          <img [routerLink]="['/s', season.name]" class="box-image" [src]="season.imgpath" [alt]="season.name"
+            loading="lazy" />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/s', season.name]" fxLayout="column" fxLayoutAlign="center start">
               <span matTooltip="{{season.name}}" class="mat-body-1 left text-container">
