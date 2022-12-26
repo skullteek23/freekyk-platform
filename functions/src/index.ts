@@ -11,7 +11,6 @@ import { inviteDeletionTrigger } from './trigger_functions/inviteDelete';
 import { inviteUpdationTrigger } from './trigger_functions/updateInvite';
 import { generateOrder } from './generateOrder';
 import { generateThumbnail } from './trigger_functions/generateThumbnail';
-import { removeThumbnail } from './trigger_functions/removeThumbnail';
 import { environment } from '../../environments/environment';
 import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
@@ -38,5 +37,5 @@ export const onCreateInvite = functions.region('asia-south1').firestore.document
 export const onUpdateInvite = functions.region('asia-south1').firestore.document('invites/{inviteId}').onUpdate(inviteUpdationTrigger);
 export const onDeleteInvite = functions.region('asia-south1').firestore.document('invites/{inviteId}').onDelete(inviteDeletionTrigger);
 export const onUploadProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
-export const onDeleteProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onDelete(removeThumbnail);
+// export const onDeleteProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onDelete(removeThumbnail);
 // trigger functions

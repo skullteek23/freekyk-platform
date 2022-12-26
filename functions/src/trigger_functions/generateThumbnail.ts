@@ -12,17 +12,17 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
 
   const SIZE = 64;
   const allPromises: any[] = [];
-  const filePath = object.name;
-  const contentType = object && object.contentType ? object.contentType : '';
+  const filePath = object?.name;
+  const contentType = object?.contentType;
 
-  if (!object || !filePath || !contentType.includes('image')) {
+  if (!object || !filePath || !contentType?.includes('image')) {
     return false;
   }
 
   const bucketRef = gcs.bucket(object.bucket);
   const fileName = filePath.split('/').pop() || '';
 
-  if (fileName.includes('thumb')) {
+  if (fileName.includes('thumb') || !filePath.includes('profileimage')) {
     return false;
   }
 

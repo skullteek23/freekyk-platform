@@ -5,6 +5,7 @@ import {
   AngularFireUploadTask,
 } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
@@ -59,19 +60,19 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(this.$file);
   }
 
-  onRemovePhoto(): Promise<any> {
+  onRemovePhoto(): void {
     if (!this.selectedImage) {
       return;
     }
     this.isLoading = true;
     const uid = localStorage.getItem('uid');
-    return this.ngStorage
-      .refFromURL(this.selectedImage)
-      .delete()
-      .toPromise()
+    const allPromises = [];
+    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: firebase.firestore.FieldValue.delete() }));
+    allPromises.push(this.ngFire.collection('players').doc(uid).update({ imgpath_sm: firebase.firestore.FieldValue.delete() }));
+    Promise.all(allPromises)
       .then(() => {
         this.selectedImage = null;
-        this.snackBarService.displayCustomMsg('Photo removed Successfully!');
+        this.snackBarService.displayCustomMsg('Photo removed successfully!');
       })
       .catch(() => this.snackBarService.displayError())
       .finally(() => {
@@ -82,30 +83,27 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
 
   async onUploadImage(): Promise<any> {
     this.isLoading = true;
-    if (this.$file == null) {
+    if (this.$file === null) {
       this.isLoading = false;
       this.snackBarService.displayError();
       return this.onCloseDialog();
     }
     const uid = localStorage.getItem('uid');
-    this.uploadImageTask = this.ngStorage.upload('/profileImages/image_' + uid, this.$file);
+    this.uploadImageTask = this.ngStorage.upload('/profileImages/profileimage_' + uid, this.$file);
     const downloadURL: string = await this.uploadImageTask.then((res) => res.ref.getDownloadURL());
-    return this.ngFire
-      .collection(`players/${uid}/additionalInfo`)
-      .doc('otherInfo')
-      .set(
-        {
-          imgpath_lg: downloadURL || null,
-        },
-        { merge: true }
-      )
-      .then(() => {
-        this.isUploadComplete = true;
-      })
-      .catch(() => this.snackBarService.displayError())
-      .finally(() => {
-        this.isLoading = false;
-        this.onCloseDialog();
-      });
+    if (downloadURL) {
+      return this.ngFire
+        .collection(`players/${uid}/additionalInfo`)
+        .doc('otherInfo')
+        .set({ imgpath_lg: downloadURL, }, { merge: true })
+        .then(() => {
+          this.isUploadComplete = true;
+        })
+        .catch(() => this.snackBarService.displayError())
+        .finally(() => {
+          this.isLoading = false;
+          this.onCloseDialog();
+        });
+    }
   }
 }
