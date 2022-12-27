@@ -11,7 +11,7 @@
 <div class="container-2">
   <div class="name" fxLayout="row" fxLayoutGap="20px">
     <div class="profile-image">
-      <img [src]="(addiInfo$ | async)?.imgpath_lg" [alt]="data.name" appFallbackImg />
+      <img [src]="(addiInfo$ | async)?.imgpath_lg" [alt]="data?.name" appFallbackImg />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">
@@ -34,11 +34,11 @@
             <span class="dash-h5 align">{{ "Basic info" | titlecase }}</span>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Position</span>
-              <span class="mat-body-1 right">{{ data.pl_pos }}</span>
+              <span class="mat-body-1 right">{{ data?.pl_pos }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Team</span><span class="mat-body-1 right">{{
-                data.team != null ? data.team.name : "No Team"
+                data?.team != null ? data?.team.name : "No Team"
                 }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
@@ -57,7 +57,7 @@
                 }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Gender</span><span class="mat-body-1 right">{{ data.gen | gender }}</span>
+              <span class="mat-body-2">Gender</span><span class="mat-body-1 right">{{ data?.gen | gender }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Height</span><span class="mat-body-1 right">{{

@@ -36,66 +36,67 @@
 
     <!-- for large screens -->
     <ng-template #lgScreen>
-      <table mat-table [dataSource]="
-          players$ | async | filterList: 'name,locCity,pl_pos':filterTerm
-        " class="full-width-table mat-elevation-z8">
-        <ng-container matColumnDef="jersey">
-          <th mat-header-cell *matHeaderCellDef>Jersey #</th>
-          <td mat-cell *matCellDef="let pl; let i = index">
-            <span class="mat-body-1">
-              {{ pl.jer_no ? pl.jer_no : "-" }}
-            </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="player">
-          <th mat-header-cell *matHeaderCellDef>Player</th>
-          <td mat-cell *matCellDef="let pl; let i = index">
-            <div fxLayoutAlign="start center" fxLayoutGap="8px">
-              <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name"
-                loading="lazy" appFallbackImg />
-              <span class="mat-body-1 left">
-                {{ pl.name | textShorten: 30 }}
+      <div class="table-container">
+        <table mat-table [dataSource]="players$ | async | filterList: 'name,locCity,pl_pos':filterTerm"
+          class="full-width-table mat-elevation-z8 players-table">
+          <ng-container matColumnDef="jersey">
+            <th mat-header-cell *matHeaderCellDef>Jersey #</th>
+            <td mat-cell *matCellDef="let pl; let i = index">
+              <span class="mat-body-1">
+                {{ pl.jer_no ? pl.jer_no : "-" }}
               </span>
-            </div>
-          </td>
-        </ng-container>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="player">
+            <th mat-header-cell *matHeaderCellDef>Player</th>
+            <td mat-cell *matCellDef="let pl; let i = index">
+              <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name"
+                  loading="lazy" appFallbackImg />
+                <span class="mat-body-1 left">
+                  {{ pl.name | textShorten: 30 }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="Team">
-          <th mat-header-cell *matHeaderCellDef>Team</th>
-          <td mat-cell *matCellDef="let pl">
-            <span class="mat-body-1">
-              {{ pl.team ? pl.team.name : "No Team" }}
-            </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="Location">
-          <th mat-header-cell *matHeaderCellDef>Location</th>
-          <td mat-cell *matCellDef="let pl">
-            <span class="mat-body-1">
-              {{ pl.locCity || "-" }}
-            </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="PlayingPos">
-          <th mat-header-cell *matHeaderCellDef>Playing Position</th>
-          <td mat-cell *matCellDef="let pl">
-            <span class="mat-body-1">
-              {{ pl.pl_pos || "-" }}
-            </span>
-          </td>
-        </ng-container>
-        <tr mat-header-row class="green-table-header" *matHeaderRowDef="cols"></tr>
-        <tr mat-row *matRowDef="let row; columns: cols" [ngClass]="{ underline: row === selectedRowIndex }"
-          (mouseenter)="selectedRowIndex = selectedRowIndex === row ? -1 : row"
-          (click)="selectedRowIndex = -1; selectRow(row)" (mouseleave)="selectedRowIndex = -1"></tr>
+          <ng-container matColumnDef="Team">
+            <th mat-header-cell *matHeaderCellDef>Team</th>
+            <td mat-cell *matCellDef="let pl">
+              <span class="mat-body-1">
+                {{ pl.team ? pl.team.name : "No Team" }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Location">
+            <th mat-header-cell *matHeaderCellDef>Location</th>
+            <td mat-cell *matCellDef="let pl">
+              <span class="mat-body-1">
+                {{ pl.locCity || "-" }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="PlayingPos">
+            <th mat-header-cell *matHeaderCellDef>Playing Position</th>
+            <td mat-cell *matCellDef="let pl">
+              <span class="mat-body-1">
+                {{ pl.pl_pos || "-" }}
+              </span>
+            </td>
+          </ng-container>
+          <tr mat-header-row class="green-table-header" *matHeaderRowDef="cols"></tr>
+          <tr mat-row *matRowDef="let row; columns: cols" [ngClass]="{ underline: row === selectedRowIndex }"
+            (mouseenter)="selectedRowIndex = selectedRowIndex === row ? -1 : row"
+            (click)="selectedRowIndex = -1; selectRow(row)" (mouseleave)="selectedRowIndex = -1"></tr>
 
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="5">
-            <div class="box"></div>
-            <app-no-items-message items="players"></app-no-items-message>
-          </td>
-        </tr>
-      </table>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="5">
+              <div class="box"></div>
+              <app-no-items-message items="players"></app-no-items-message>
+            </td>
+          </tr>
+        </table>
+      </div>
     </ng-template>
     <!-- for large screens -->
   </div>
