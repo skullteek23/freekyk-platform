@@ -50,7 +50,7 @@ ul {
   list-style: none;
 }
 
-p > ul {
+p>ul {
   list-style: disc !important;
   padding-left: 16px !important;
 }
@@ -60,7 +60,7 @@ button:disabled {
 }
 
 @media only screen and (max-width: 959px) {
-  p > ul {
+  p>ul {
     display: none;
   }
 }
@@ -326,6 +326,7 @@ mat-table {
     transition: 0.15s ease-in-out all;
   }
 }
+
 .sticky-header {
   position: fixed;
   top: 0px;
@@ -449,6 +450,7 @@ mat-table {
 
 /* media queries - (max-width: 599px) */
 @media only screen and (max-width: 599px) {
+
   .mat-list-item,
   .mat-list-item-content,
   .mat-table,
@@ -829,4 +831,13 @@ mat-table {
     min-height: 300px;
     padding-top: 20px;
   }
+}
+
+
+.clickable {
+  cursor: pointer;
+}
+
+.non-clickable {
+  cursor: not-allowed;
 }

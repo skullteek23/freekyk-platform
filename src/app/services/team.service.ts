@@ -20,11 +20,12 @@ import { DashState } from '../dashboard/store/dash.reducer';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import { Observable } from 'rxjs';
+import { TeamgalleryComponent } from '@app/dashboard/dialogs/teamgallery/teamgallery.component';
 @Injectable({
   providedIn: 'root',
 })
 export class TeamService implements OnDestroy {
-  public onOpenTeamSettingsDialog(): void {
+  onOpenTeamSettingsDialog(): void {
     this.store
       .select('dash')
       .pipe(
@@ -44,7 +45,15 @@ export class TeamService implements OnDestroy {
         }
       });
   }
-  public onOpenCreateTeamDialog(): void {
+
+  onOpenTeamGalleryDialog(): void {
+    this.dialog.open(TeamgalleryComponent, {
+      panelClass: 'fk-dialogs',
+      disableClose: true,
+    });
+  }
+
+  onOpenCreateTeamDialog(): void {
     this.store
       .select('dash')
       .pipe(
@@ -74,13 +83,13 @@ export class TeamService implements OnDestroy {
         }
       });
   }
-  public onIncompleteProfile(section: 'player' | 'freestyle'): void {
+  onIncompleteProfile(section: 'player' | 'freestyle'): void {
     this.handlePermissionErrors(INCOMPLETE_PROFILE);
     this.router.navigate(['/dashboard', 'account', 'profile'], {
       fragment: section,
     });
   }
-  public onOpenTeamCommsMobileDialog(): void {
+  onOpenTeamCommsMobileDialog(): void {
     this.store
       .select('dash')
       .pipe(
@@ -93,7 +102,7 @@ export class TeamService implements OnDestroy {
         });
       });
   }
-  public onOpenJoinTeamDialog(): void {
+  onOpenJoinTeamDialog(): void {
     this.store
       .select('dash')
       .pipe(
@@ -123,7 +132,7 @@ export class TeamService implements OnDestroy {
         }
       });
   }
-  public getTeamGallery(tid: string): Observable<string[]> {
+  getTeamGallery(tid: string): Observable<string[]> {
     return this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
       .doc('media')
@@ -138,7 +147,7 @@ export class TeamService implements OnDestroy {
       );
   }
 
-  public getTeamInvites(tid: string): Observable<Invite[]> {
+  getTeamInvites(tid: string): Observable<Invite[]> {
     return this.ngFire
       .collection('invites', (query) => query.where('teamId', '==', tid))
       .snapshotChanges()

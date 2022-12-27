@@ -71,7 +71,7 @@ export class AddGalleryDialogComponent implements OnInit {
       return this.ngFire
         .collection(`seasons/${this.seasonID}/additionalInfo`)
         .doc('media')
-        .update({ photos: this.photosList })
+        .set({ photos: this.photosList })
         .then(() => {
           this.snackbarService.displayCustomMsg('Photo Uploaded successfully!')
         })

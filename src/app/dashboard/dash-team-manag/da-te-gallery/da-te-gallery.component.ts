@@ -39,7 +39,7 @@ export class DaTeGalleryComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onOpenTeamSettings(): void {
-    this.teamService.onOpenTeamSettingsDialog();
+  onOpenTeamGallery(): void {
+    this.teamService.onOpenTeamGalleryDialog();
   }
 }

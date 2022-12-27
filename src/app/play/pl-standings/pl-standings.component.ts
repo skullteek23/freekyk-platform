@@ -81,7 +81,6 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       const queryParamKey = queryInfo?.queryItem;
       this.router.navigate(['/play', 'standings'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
     } else {
-      this.seasonChosen = null;
       this.cpStandings = [];
       this.knockoutFixtures = [];
       this.leagueData = [];
