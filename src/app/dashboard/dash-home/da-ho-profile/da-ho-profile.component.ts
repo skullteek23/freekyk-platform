@@ -27,6 +27,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   profilePhoto: string;
   nickname: string;
   subscriptions = new Subscription();
+  playerID = '';
 
   constructor(
     private enlargeService: EnlargeService,
@@ -37,6 +38,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.playerID = localStorage.getItem('uid');
     this.subscriptions.add(
       this.store
         .select('dash')
@@ -168,4 +170,5 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
     data.share_title = this.playerName;
     this.socialShareService.onShare(data);
   }
+
 }

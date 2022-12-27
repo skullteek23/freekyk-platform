@@ -39,9 +39,15 @@
     <!-- data -->
     <div fxFlex="<grow>" fxFlexOrder="1" class="prof_data" fxLayout="column" fxLayoutGap="20px"
       fxLayoutAlign.gt-sm="center">
-      <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-subheading-1" class="primaryColor align">
-        {{ tName != null ? tName : "Team Name" }}
-      </span>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
+        <a [matTooltip]="tName" ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-subheading-1"
+          class="ellipsis team-name" [routerLink]="['/t', tName]">
+          {{ tName != null ? tName : "Team Name" }}
+        </a>
+        <a (click)="onShare()" fxHide.lt-md="true" matTooltip="Share Team Profile" class="material-icons-round">
+          share
+        </a>
+      </div>
 
       <div fxLayoutAlign="center center">
         <button fxHide.gt-sm="true" (click)="onOpenTeamSettings()" class="buttonText secondaryButton">
@@ -56,10 +62,6 @@
           <a (click)="onOpenTeamSettings()" fxHide.lt-md="true" matTooltip="Edit Team Profile"
             class="material-icons-round">
             edit
-          </a>
-          <a (click)="onNavigateToTeamPage()" fxHide.lt-md="true" matTooltip="Share Team Profile"
-            class="material-icons-round">
-            share
           </a>
         </div>
 

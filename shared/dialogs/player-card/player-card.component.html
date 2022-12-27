@@ -17,8 +17,11 @@
       <p class="mat-caption left">
         {{ data?.jer_no | jersey }}
       </p>
-      <p class="mat-subheading-1 left">
-        {{ data?.name | nameCombo: (addiInfo$ | async)?.nickname | titlecase }}
+      <p class="mat-subheading-1 left ellipsis player-name" [matTooltip]=" data?.name | titlecase">
+        {{ data?.name | titlecase }}
+      </p>
+      <p class="mat-subheading-1 left ellipsis player-name" [matTooltip]="(addiInfo$ | async)?.nickname | titlecase">
+        {{ (addiInfo$ | async)?.nickname | titlecase }}
       </p>
     </div>
   </div>

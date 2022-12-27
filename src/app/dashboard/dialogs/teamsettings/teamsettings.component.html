@@ -6,14 +6,7 @@
 </mat-toolbar>
 <div class="container-2">
   <div class="dialogData seperator">
-    <div fxLayout="column">
-      <p class="mat-body-1 top_padding">Team Gallery</p>
-      <button type="button" (click)="onOpenTeamGalleryDialog()" class="buttonText wider secondaryButton">
-        Open Team Gallery Photos
-      </button>
-    </div>
-    <mat-divider></mat-divider>
-    <p class="mat-body-1">Team Info</p>
+    <p class="dash-h5 align">Team Info</p>
     <form [formGroup]="teamInfoForm" (ngSubmit)="onSubmitTeamInfo()" fxLayout="column">
       <!-- <mat-form-field appearance="outline" color="primary">
         <mat-label>Add Team Name</mat-label>
@@ -37,8 +30,8 @@
           Certain characters aren't allowed!
         </mat-error>
       </mat-form-field>
-      <div formGroupName="location" fxLayout="column">
-        <mat-form-field appearance="outline" color="primary">
+      <div formGroupName="location" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <mat-form-field appearance="outline" color="primary" fxFlex.gt-sm="50%">
           <mat-label>Add Team State</mat-label>
           <mat-select (selectionChange)="onSelectState($event.value)" formControlName="locState">
             <mat-option>--Select State--</mat-option>
@@ -48,7 +41,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" color="primary">
+        <mat-form-field appearance="outline" color="primary" fxFlex="auto">
           <mat-label>Add Team City</mat-label>
           <mat-select formControlName="locCity">
             <mat-option>--Select City--</mat-option>
@@ -59,58 +52,32 @@
         </mat-form-field>
       </div>
 
-      <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center center">
-        <button class="primaryButton buttonText" [disabled]="!teamInfoForm.valid || !teamInfoForm.dirty" type="button"
-          (click)="onSubmitTeamInfo()">
-          Save Changes
-        </button>
-      </div>
-    </form>
+      <p class="dash-h5 align">Team Social Media</p>
+      <div [formGroup]="socialInfoForm" fxLayout="column">
+        <mat-form-field color="primary">
+          <span matPrefix>{{ ig }}</span>
+          <input type="text" matInput name="ig" formControlName="ig" />
+        </mat-form-field>
+        <mat-form-field color="primary">
+          <span matPrefix>{{ fb }}</span>
+          <input type="text" matInput name="fb" formControlName="fb" />
+        </mat-form-field>
 
-    <mat-divider></mat-divider>
-    <!-- <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
-      <button type="button" (click)="fileInputImage.click()" class="buttonText secondaryButton wider">
-        Upload Team Photo
-      </button>
-      <input hidden type="file" name="fileInput1" accept="image/*" #fileInputImage (change)="onChooseTeamImage($event)"
-        id="file1" />
-      <button type="button" (click)="fileInputLogo.click()" class="buttonText secondaryButton wider">
-        Upload Team Logo
-      </button>
-      <input hidden type="file" name="fileInput2" accept="image/*" #fileInputLogo
-        (change)="onChooseTeamLogoImage($event)" id="file2" />
-      <button [disabled]="!file1Selected || !file2Selected" (click)="onSaveImages()" class="primaryButton buttonText"
-        type="button">
-        Save Changes
-      </button>
-    </div>
-    <mat-divider></mat-divider> -->
+        <mat-form-field color="primary">
+          <span matPrefix>{{ tw }}</span>
+          <input type="text" matInput name="tw" formControlName="tw" />
+        </mat-form-field>
 
-    <p class="mat-body-1 top_padding">Team Social Media Links</p>
-    <form [formGroup]="socialInfoForm" (ngSubmit)="onSubmitTeamSocial()" fxLayout="column">
-      <mat-form-field color="primary">
-        <span matPrefix>{{ ig }}</span>
-        <input type="text" matInput name="ig" formControlName="ig" />
-      </mat-form-field>
-      <mat-form-field color="primary">
-        <span matPrefix>{{ fb }}</span>
-        <input type="text" matInput name="fb" formControlName="fb" />
-      </mat-form-field>
-
-      <mat-form-field color="primary">
-        <span matPrefix>{{ tw }}</span>
-        <input type="text" matInput name="tw" formControlName="tw" />
-      </mat-form-field>
-
-      <mat-form-field color="primary">
-        <span matPrefix>{{ yt }}</span>
-        <input type="text" matInput name="yt" formControlName="yt" />
-      </mat-form-field>
-      <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column">
-        <button [disabled]="!socialInfoForm.valid && !socialInfoForm.dirty" class="primaryButton buttonText"
-          type="button" (click)="onSubmitTeamSocial()">
-          Save Changes
-        </button>
+        <mat-form-field color="primary">
+          <span matPrefix>{{ yt }}</span>
+          <input type="text" matInput name="yt" formControlName="yt" />
+        </mat-form-field>
+        <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column">
+          <button [disabled]="!teamInfoForm.valid && !teamInfoForm.dirty" class="primaryButton buttonText" type="button"
+            (click)="onSubmitTeamInfo()">
+            Save Changes
+          </button>
+        </div>
       </div>
     </form>
   </div>

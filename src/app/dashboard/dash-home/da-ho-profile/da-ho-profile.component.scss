@@ -3,6 +3,7 @@
   width: auto;
   object-fit: contain;
 }
+
 .photo_container {
   overflow: hidden;
   border-radius: var(--borderRadiusCard);
@@ -12,25 +13,31 @@
   max-height: 400px;
   background-color: var(--grey4);
 }
+
 .mat-card {
   border-radius: var(--dashCardBorder);
   overflow: hidden;
 }
+
 .mat-subheading-2 {
   margin-bottom: 0 !important;
   padding-bottom: 0px !important;
 }
+
 .overlay-button {
   opacity: 0.3;
   height: 100%;
   width: 100%;
 }
+
 .overlay-button:hover {
   opacity: 1;
 }
+
 .addInfo {
   color: var(--grey1);
 }
+
 ._profile {
   box-shadow: none;
   height: 470px;
@@ -42,20 +49,24 @@
   overflow: hidden;
   background-color: white;
 }
+
 ._inside {
   height: 100%;
   width: 100%;
 }
+
 ._text {
   width: 100%;
   height: 24px;
 }
+
 ._box {
   min-height: 400px;
   height: 100%;
   min-width: 250px;
   width: 100%;
 }
+
 ._circle {
   height: 40px;
   min-width: 40px;
@@ -65,11 +76,13 @@
   border-radius: 50%;
   margin: 8px;
 }
+
 ._bar {
   height: 72px;
   width: 100%;
   max-width: 740px;
 }
+
 ._fixture {
   height: 100%;
   background-color: white;
@@ -80,6 +93,7 @@
   padding: 16px;
   margin: 0px;
 }
+
 ._stats {
   height: 100%;
   width: 100%;
@@ -90,14 +104,17 @@
   height: 48px;
   width: 100%;
 }
+
 ._progress {
   height: 32px;
   width: 100%;
 }
+
 ._step {
   height: 24px;
   width: 100%;
 }
+
 ._circle-small {
   height: 24px;
   min-width: 24px;
@@ -106,16 +123,23 @@
   margin-right: 16px;
   border-radius: 50%;
 }
+
 ._notif {
   width: 100%;
   background-color: white;
   border-radius: var(--borderRadiusCard);
   padding: 16px;
 }
+
 ._button {
   height: 48px;
   width: 100%;
 }
+
+.player-name {
+  max-width: 300px;
+}
+
 @media only screen and (max-width: 599px) {
   .photo_container {
     overflow: hidden;
@@ -137,19 +161,23 @@
     max-height: 350px;
   }
 }
+
 @media only screen and (min-width: 960px) and (max-width: 1279px) {
   .cards-l {
     max-width: 100%;
   }
 }
+
 @media only screen and (min-width: 1280px) {
   .prof_data {
     padding: 20px;
   }
+
   .cards-l {
     max-width: 100%;
   }
 }
+
 @media only screen and (max-width: 1279px) {
   .overlay-button {
     max-height: 32px !important;

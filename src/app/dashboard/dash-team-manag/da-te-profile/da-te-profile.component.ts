@@ -8,6 +8,8 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
 import { TeamService } from 'src/app/services/team.service';
 import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { AppState } from 'src/app/store/app.reducer';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
+import { SocialShareService } from '@app/services/social-share.service';
 
 @Component({
   selector: 'app-da-te-profile',
@@ -31,7 +33,8 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private datePipe: DatePipe,
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private socialShareService: SocialShareService
   ) { }
 
   ngOnInit(): void {
@@ -99,13 +102,13 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     this.enlargeService.onOpenPhoto(imageUrl);
   }
 
-  onNavigateToTeamPage(): void {
-    if (this.tName) {
-      this.router.navigate(['/t', this.tName]);
-    }
-  }
-
   onOpenTeamSettings(): void {
     this.teamService.onOpenTeamSettingsDialog();
+  }
+
+  onShare() {
+    const data = new ShareData();
+    data.share_url = `/t/${this.tName}`;
+    this.socialShareService.onShare(data);
   }
 }

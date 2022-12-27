@@ -5,13 +5,19 @@
   overflow: hidden;
   border-radius: var(--borderRadiusCard);
 }
+
 .profile-image img {
   height: 100%;
   width: 100%;
   object-fit: contain;
 }
+
 .name {
   height: 150px;
   max-height: 180px;
   margin-bottom: 8px;
+}
+
+.player-name {
+  max-width: 150px;
 }

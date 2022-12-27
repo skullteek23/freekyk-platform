@@ -1,31 +1,39 @@
 .mat-sidenav-content {
   background-color: var(--grey4);
 }
+
 .gap {
   margin: 0 16px;
 }
+
 .icon {
   font-size: 48px;
 }
+
 .icon-small {
   font-size: 32px;
 }
+
 .second_divider {
   width: 100%;
   margin: 20px 0;
 }
+
 .mat-divider {
   width: 100%;
 }
+
 .mat-nav-list {
   width: 100%;
 }
+
 .mat-nav-list a {
   color: black;
   margin: 8px 0;
   width: 100%;
   border-radius: var(--borderRadiusCard);
 }
+
 .mat-nav-list a:hover,
 .mat-nav-list a:active,
 .active {
@@ -36,6 +44,11 @@
   color: var(--primaryColor) !important;
 }
 
+.player-name {
+  max-width: 300px;
+  text-align: center;
+}
+
 .sidepanel {
   padding: 8px 4px;
   width: 56px;
@@ -44,23 +57,28 @@
   height: 100%;
   background-color: white;
 }
+
 .router-link-active-md {
   width: 100% !important;
   border-radius: var(--borderRadiusCard) !important;
   background-color: #bfdfc3 !important;
   color: var(--primaryColor) !important;
 }
+
 .sidenavCloseButton {
   margin-top: 8px;
 }
+
 .box {
   height: 150px;
   width: 100%;
   margin-top: 20px;
 }
+
 .red {
   color: var(--secondaryColor);
 }
+
 .bottom-nav {
   position: fixed;
   bottom: 0px;
@@ -68,6 +86,7 @@
   width: 100%;
   z-index: 99;
 }
+
 .bottom-nav a {
   color: white;
   opacity: 0.5;
@@ -78,12 +97,14 @@
   opacity: 1 !important;
   color: white !important;
 }
+
 @media only screen and (min-width: 960px) and (max-width: 1279px) {
   mat-sidenav {
     max-width: 350px;
     width: 350px;
     padding: 0 8px;
   }
+
   .prof_pic {
     height: 64px;
     width: 64px;
@@ -99,6 +120,7 @@
     width: 250px;
     padding: 0 8px;
   }
+
   .prof_pic {
     height: 48px;
     width: 48px;
@@ -107,12 +129,14 @@
     margin-bottom: 16px;
   }
 }
+
 @media only screen and (min-width: 1920px) and (max-width: 5000px) {
   mat-sidenav {
     max-width: 350px;
     width: 350px;
     padding: 0 8px;
   }
+
   .prof_pic {
     height: 56px;
     width: 56px;

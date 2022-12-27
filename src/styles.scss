@@ -841,3 +841,9 @@ mat-table {
 .non-clickable {
   cursor: not-allowed;
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

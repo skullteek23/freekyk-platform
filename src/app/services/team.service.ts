@@ -39,7 +39,7 @@ export class TeamService implements OnDestroy {
           this.handlePermissionErrors(CAPTAIN_ONLY);
         } else {
           this.dialog.open(TeamsettingsComponent, {
-            panelClass: 'fk-dialogs',
+            panelClass: 'large-dialogs',
             disableClose: true,
           });
         }

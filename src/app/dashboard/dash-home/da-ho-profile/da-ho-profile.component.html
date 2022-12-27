@@ -29,9 +29,15 @@
     <!-- data -->
     <div fxFlex="<grow>" fxFlexOrder="1" class="prof_data" fxLayout="column" fxLayoutGap="20px"
       fxLayoutAlign.gt-sm="center">
-      <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-subheading-1" class="align">
-        {{ playerName | nameCombo: nickname | titlecase }}
-      </span>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
+        <a matTooltip="{{ playerName | nameCombo: nickname | titlecase }}" ngClass.gt-sm="mat-subheading-2"
+          ngClass.lt-md="mat-subheading-1" class="ellipsis player-name" [routerLink]="['/play/players', playerID]">
+          {{ playerName | nameCombo: nickname | titlecase }}
+        </a>
+        <a matTooltip="Share Profile" (click)="onShareProfile()" class="material-icons-round">
+          share
+        </a>
+      </div>
       <div fxLayoutAlign="center center">
         <button fxHide.gt-sm="true" [routerLink]="['/dashboard', 'account', 'profile']"
           class="buttonText secondaryButton">
@@ -48,9 +54,6 @@
           <a [routerLink]="['/dashboard', 'account', 'profile']" fxHide.lt-md="true" matTooltip="Edit Profile"
             class="material-icons-round">
             edit
-          </a>
-          <a matTooltip="Share Profile" (click)="onShareProfile()" class="material-icons-round">
-            share
           </a>
         </div>
 

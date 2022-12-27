@@ -20,21 +20,15 @@
           <div class="circle" fxLayoutAlign="center center">
             <img [src]="(teamInfo$ | async)?.imgpath_logo" alt="Logo" appFallbackImg />
           </div>
-          <span [ngClass]="{
-              shine: isLoading,
-              _bar: isLoading,
-              hideText: isLoading
-            }" class="mat-title align">
+          <span [ngClass]="{shine: isLoading,_bar: isLoading,hideText: isLoading}" class="mat-title align">
             {{ (teamInfo$ | async)?.tname }}
           </span>
         </div>
-        <button (click)="onShare()" class="primaryButton buttonText">Share</button>
+        <!-- <button (click)="onShare()" class="primaryButton buttonText">Share</button> -->
       </div>
 
       <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">
-        {{
-        ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100
-        }}
+        {{ ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100 }}
       </p>
       <button *ngIf="!isOwnTeam" (click)="onChallengeTeam()" class="primaryButton buttonText">
         Challenge Team
