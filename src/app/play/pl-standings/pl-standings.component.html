@@ -5,11 +5,11 @@
     [filterArray]="stFilters"
   ></app-filters-sm> -->
   <!-- mobile filter -->
-  <ng-container *ngIf="!seasonChosen">
+  <ng-container *ngIf="showFilters">
     <!-- desktop filters -->
     <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
     <!-- desktop filters -->
-    <div class="container">
+    <div class="container" *ngIf="!seasonChosen">
       <span class="mat-body-1 no-items">
         No season selected! Please select a season
       </span>

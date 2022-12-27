@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MatchFixture, TournamentTypes } from '@shared/interfaces/match.model';
@@ -17,6 +16,7 @@ import { PlayConstants } from '../play.constants';
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
   @Input() seasonChosen = null;
+  @Input() showFilters = true;
 
   activeIndex = 0;
   cpStandings: CommunityLeaderboard[] = [];
@@ -29,9 +29,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   constructor(
-    private ngFire: AngularFirestore,
-    private route: ActivatedRoute,
-    private router: Router
+    private ngFire: AngularFirestore
   ) { }
 
   ngOnInit(): void {
@@ -41,16 +39,6 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     };
     if (this.seasonChosen) {
       this.onQuerySeason(this.seasonChosen);
-    } else {
-      this.subscriptions.add(
-        this.route.queryParams.subscribe((params) => {
-          if (params && Object.keys(params).length) {
-            this.onQuerySeason(Object.values(params)[0]);
-          } else {
-            this.onQuerySeason(null);
-          }
-        })
-      );
     }
     this.ngFire
       .collection('seasons')
@@ -78,8 +66,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
 
   onQueryData(queryInfo): void {
     if (queryInfo) {
-      const queryParamKey = queryInfo?.queryItem;
-      this.router.navigate(['/play', 'standings'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
+      this.onQuerySeason(queryInfo.queryValue);
     } else {
       this.cpStandings = [];
       this.knockoutFixtures = [];
