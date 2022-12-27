@@ -1,802 +1,795 @@
 export const DUMMY_USERS = [
   {
-    uid: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2',
-    name: 'Andrew Goodman', // captain Team Andrew Diggers
+    uid: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2',
+    name: 'Andrew Goodman', // captain Team Gifted Outlaws
     nickname: 'Ullamco',
     email: 'acronin@gmail.com',
     password: 'i^o2Sd03',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: 'AtJVy95rpVTBF5oIKpMGY9yN0fv2',
-    name: 'William Bennett', // Team Andrew Diggers
+    uid: 'V5X9yzDAPNWmhUq8alQ5jbgJNeq2',
+    name: 'William Bennett', // Team Gifted Outlaws
     nickname: 'Officia',
     email: 'alexanne.thiel@gmail.com',
     password: '6wcdxYq%',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: '4yrGdwrESKMs0cPdIVv0Bkh0dzv1',
-    name: 'Daniel Martin', // Team Andrew Diggers
+    uid: 'wgbntg1t2zLglG7vLl7EY12OUKr1',
+    name: 'Daniel Martin', // Team Gifted Outlaws
     nickname: 'Officia',
     email: 'balistreri.evangeline@gmail.com',
     password: '41st@e5H',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: 'hX8OsbWrg4dJ9LKwYCaZ7tSl4rl2',
-    name: 'Henry White', // Team Andrew Diggers
+    uid: '3IkjjyT189TgpXP8En8in4d1O7W2',
+    name: 'Henry White', // Team Gifted Outlaws
     nickname: 'Officia',
     email: 'bednar.emmalee@gmail.com',
     password: 'JzmgSt*C',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: '72OPMo3LsYSeOmDuz7AswPa7tVw2',
-    name: 'Matthew Smith', // Team Andrew Diggers
+    uid: '6TXdIEV9qwN8gR5I3YRsZmTp0uL2',
+    name: 'Matthew Smith', // Team Gifted Outlaws
     nickname: 'Esse',
     email: 'bernhard.funk@gmail.com',
     password: 'oCjUu8HG',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: 'ygihPRcCQohLx4Vs9PqdUjr7mzQ2',
-    name: 'Hunter Hamilton', // Team Andrew Diggers
+    uid: 'U7qVgj6CCJNP3C4fKV2mbNQkdsl1',
+    name: 'Hunter Hamilton', // Team Gifted Outlaws
     nickname: 'Officia',
     email: 'birdie.feil@gmail.com',
     password: 'u$Y25M0&',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: 'AvRW7hEqEedWfptgSSUqs6GXlp52',
-    name: 'Nicholas Spencer', // Team Andrew Diggers
+    uid: 'GedYAiPewSbABo6N9gy3Ae1bTjm2',
+    name: 'Nicholas Spencer', // Team Gifted Outlaws
     nickname: 'Dolore',
     email: 'bogan.keith@gmail.com',
     password: 'AAiZPyrx',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: '1nondsTE1RPuXWVuBsIm9MsOvSy2',
-    name: 'Brandon West', // Team Andrew Diggers
+    uid: 'Kdyxbty6OLQulVOISzeryeoc6GH3',
+    name: 'Brandon West', // Team Gifted Outlaws
     nickname: 'Pariatur',
     email: 'bondricka@gmail.com',
     password: 'DtDt*nB3',
-    teamId: 'karrMGuMgyDFWWnFZJRT',
-    teamName: 'Andrew Diggers',
-    capId: 'fnVzJwVy4tSitUzqzbhmAiEq0bI2'
+    teamId: '5rxIXXpBfe4rrhVnTyLT',
+    teamName: 'Gifted Outlaws',
+    capId: '9nfTKI5dsJdFoGbA8D1iRYJJbSP2'
   },
   {
-    uid: 'aT1gpwmmPbP5vionOsAk9kYh2PR2',
-    name: 'Jonathan Cohen', // captain Team Jonathan Healers
+    uid: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2',
+    name: 'Jonathan Cohen', // captain Team Chronic Ambassadors
     nickname: 'Aute',
     email: 'brennon.mccullough@gmail.com',
     password: 'AVul$6jE',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: '2q3G8cwwAVXsCsHH1CcaKp7gPIz2',
-    name: 'Vincent Stewart', // Team Jonathan Healers
+    uid: 'LRJkaWi6kMb6DuCUQpgJoR72rWC2',
+    name: 'Vincent Stewart', // Team Chronic Ambassadors
     nickname: 'Sed',
     email: 'carson.donnelly@gmail.com',
     password: 'nNAhzOPr',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'LVG5oiEwTNaZpqcWkTt8YavOdcf1',
-    name: 'Michael Chung', // Team Jonathan Healers
+    uid: 'bkJO3fda9ihOWsYWWq7LahyZrHt2',
+    name: 'Michael Chung', // Team Chronic Ambassadors
     nickname: 'Nostrud',
     email: 'clare.sporer@gmail.com',
     password: 'm8ixf3Z0',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'iqndBhjFYpdqfFHw29xbbQpxCya2',
-    name: 'Andrew Webb', // Team Jonathan Healers
+    uid: 'O455TgAGh0OxZjjR1lhMbPtYj4m2',
+    name: 'Andrew Webb', // Team Chronic Ambassadors
     nickname: 'Dolor',
     email: 'crist.winifred@gmail.com',
     password: '#V4^PRI2',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'H9e4j51SWyRImVXFHXlZ1VInB7z1',
-    name: 'Jason Santana', // Team Jonathan Healers
+    uid: 'mcbi5q8UkFRhBndIpfjRm7YXbO23',
+    name: 'Jason Santana', // Team Chronic Ambassadors
     nickname: 'Ut',
     email: 'cruickshank.hassan@gmail.com',
     password: 'ZawIPQdT',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'ESoZ06huo1hznNrthlxatpzSNSm2',
-    name: 'Hector Burgess Jr', // Team Jonathan Healers
+    uid: '5jKRn340TKc6nVShuL57lQf27xr2',
+    name: 'Hector Burgess Jr', // Team Chronic Ambassadors
     nickname: 'Cillum',
     email: 'dino36@gmail.com',
     password: 'O80vU!j4',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: '4nOykhszu7YYB6OGwbrTUTVohnk1',
-    name: 'Jeffrey Gordon', // Team Jonathan Healers
+    uid: 'erR41bQkZGUwS5usdjBvINfbuw53',
+    name: 'Jeffrey Gordon', // Team Chronic Ambassadors
     nickname: 'Sed',
     email: 'dpurdy@gmail.com',
     password: 'l9sbbWIl',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'dehvzGaYCPhEsOK629nopJboM7h2',
-    name: 'Justin Stokes', // Team Jonathan Healers
+    uid: 'uoBQB0c1qZNel5ShY7BM1BwkB0u1',
+    name: 'Justin Stokes', // Team Chronic Ambassadors
     nickname: 'Ut',
     email: 'enoch.schumm@gmail.com',
     password: 'ezl1Z1vm',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'bDZtUvJ22WMU72HVsbt9bLipBv32',
-    name: 'Joseph Brown', // Team Jonathan Healers
+    uid: 'L03SroeZ13eB6ypuwPiwpdrymp53',
+    name: 'Joseph Brown', // Team Chronic Ambassadors
     nickname: 'Esse',
     email: 'eokuneva@gmail.com',
     password: 'Sbp5@P3V',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'AXFz9ZE2KgOWEpYJL4ypoupKa532',
-    name: 'Steve Dean DVM', // Team Jonathan Healers
+    uid: 'kT7bzib02iZhgoD5NzhIt2RR0yG2',
+    name: 'Steve Dean DVM', // Team Chronic Ambassadors
     nickname: 'Amet',
     email: 'ernser.quinten@gmail.com',
     password: 'Ml%PZbM&',
-    teamId: '6417QtzjebPNWPlU0fvP',
-    teamName: 'Jonathan Healers',
-    capId: 'aT1gpwmmPbP5vionOsAk9kYh2PR2'
+    teamId: 'sAyQ1A2QqAZUnjkbKrTQ',
+    teamName: 'Chronic Ambassadors',
+    capId: 'VXbYrx0w4dOHaoXoYjU7Cpf9bGs2'
   },
   {
-    uid: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    name: 'Dakota Tyler', // captain Team North Dakota
+    uid: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    name: 'Dakota Tyler', // captain Team Death Heroes
     nickname: 'Dolor',
     email: 'ezekiel.welch@gmail.com',
     password: 'n*HG1Xl!',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'vc0Jq1TZBGhLrR4XXNeMspDYkr52',
-    name: 'Robert Carroll', // Team North Dakota
+    uid: 'tq4jUPUcFcTewhiN9LB8DXdr3uZ2',
+    name: 'Robert Carroll', // Team Death Heroes
     nickname: 'Labore',
     email: 'felicia82@gmail.com',
     password: '&7teyzLd',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'oOZemlPHwaTgj8D0dDowvRaqGL43',
-    name: 'Anthony Richardson', // Team North Dakota
+    uid: 'T6o639Lcx4hBTNAMHQpUbrSGQuJ2',
+    name: 'Anthony Richardson', // Team Death Heroes
     nickname: 'Ex',
     email: 'flang@gmail.com',
     password: '%Px8p^hH',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'v1cw5ZPT2ZSNLdfBEOJrIghhSaj1',
-    name: 'Caleb Miller', // Team North Dakota
+    uid: 'zRHglp5zn0OwM8dSEz49TxdRSRB3',
+    name: 'Caleb Miller', // Team Death Heroes
     nickname: 'Id',
     email: 'fritsch.travon@gmail.com',
     password: 'YKxyP&PO',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'NrL8l6vS66SOkAizFSfIvaBcV6r2',
-    name: 'David Jackson', // Team North Dakota
+    uid: 'DyrsYQomAEUHynFhV53fSrOABmM2',
+    name: 'David Jackson', // Team Death Heroes
     nickname: 'Lorem',
     email: 'funk.catherine@gmail.com',
     password: 'khNxMHYg',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'lJ1g7F6gPvhhSqCioIXyQ7bReFE2',
-    name: 'Gregory Barajas', // Team North Dakota
+    uid: 'AqQXNUFy3AUZBiBIzQar9LHjsF63',
+    name: 'Gregory Barajas', // Team Death Heroes
     nickname: 'Dolore',
     email: 'gkutch@gmail.com',
     password: 'J*d@SlYc',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: 'UTpd0Na5EJT7ABz1wcXv4XdanMf2',
-    name: 'Andrew Hernandez', // Team North Dakota
+    uid: 'sXE58fDPM4fzerM6o81OprussGE3',
+    name: 'Andrew Hernandez', // Team Death Heroes
     nickname: 'Aliquip',
     email: 'gleason.eleanore@gmail.com',
     password: '&@T9l^$b',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: '6SHdRu7k5rUSCZ1YfO5raz4fIDP2',
-    name: 'Robert Rice', // Team North Dakota
+    uid: 'BLn4ZX5yHUgHURacnzZm6h4YMMP2',
+    name: 'Robert Rice', // Team Death Heroes
     nickname: 'Adipiscing',
     email: 'glebsack@gmail.com',
     password: 'fMOULf&8',
-    capId: 'DGO48QrK6rSdIzI11UUIy5Lpgj42',
-    teamId: 'nHlbPa0mer5xdxH8LgXu',
-    teamName: 'North Dakota'
+    capId: 'YxovHkWra2ceWsnLxw29NaigICq2',
+    teamId: 'd9vvS03c3xTyOLUHkilp',
+    teamName: 'Death Heroes'
   },
   {
-    uid: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
-    name: 'Douglas Palmer', // captain Team South Park United
+    uid: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3',
+    name: 'Douglas Palmer', // captain Team Feeble Invaders
     nickname: 'Cillum',
     email: 'gus.schaefer@gmail.com',
     password: 'EV87oRbB',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'VJzhhl9O1Eerav1qR6SIH67GQ1K2',
-    name: 'John Wilkerson', // Team South Park United
+    uid: 'C6LGoSsOhOWcmCBDY0BSMtGvhYH2',
+    name: 'John Wilkerson', // Team Feeble Invaders
     nickname: 'Veniam',
     email: 'hannah.harber@gmail.com',
     password: 'Q4Lt!ID0',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'kEC8lzonTFey4jLA798fQe0XHBv1',
-    name: 'James Vance', // Team South Park United
+    uid: 'CgIFHtzTgQX4V7P1YkD2iDvsMFO2',
+    name: 'James Vance', // Team Feeble Invaders
     nickname: 'Ipsum',
     email: 'irving.mayert@gmail.com',
     password: '@tgj*U2W',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'Chi3xkyldRcsP9tEdThOkbUBffa2',
-    name: 'David Allen', // Team South Park United
+    uid: '16t924bW6qeIGyloCKGew25lYRa2',
+    name: 'David Allen', // Team Feeble Invaders
     nickname: 'Commodo',
     email: 'iryan@gmail.com',
     password: 'JGWU2cxW',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'EdOItpqXmFdFLqCHo45gYzFJzRQ2',
-    name: 'Andrew Fischer', // Team South Park United
+    uid: '7mUWgQ4MKffiOegyNcyVIdBvPdV2',
+    name: 'Andrew Fischer', // Team Feeble Invaders
     nickname: 'Fugiat',
     email: 'jacobi.nettie@gmail.com',
     password: 'oc1Inbuv',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'uBw8TjNm54gedqAh2WLFWqXGnqt1',
-    name: 'Kevin Hughes', // Team South Park United
+    uid: '6IH80NDkCDNlE5WVZjYbEyUCZlI2',
+    name: 'Kevin Hughes', // Team Feeble Invaders
     nickname: 'Excepteur',
     email: 'jadon.conn@gmail.com',
     password: 'NkpVw&CO',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: '91TtWPndI2STeBvrLPjmgXB1MKv2',
-    name: 'Matthew Christian', // Team South Park United
+    uid: 'CzEzvvAYFYatWvK626sC4Wpaq0b2',
+    name: 'Matthew Christian', // Team Feeble Invaders
     nickname: 'Labore',
     email: 'jakubowski.hortense@gmail.com',
     password: '0wN2aHHN',
-    teamId: '07rVPWq6x6ewtdlCAi6J',
-    teamName: 'South Park United',
-    capId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2'
+    teamId: 'Xy7KiziLGOFR5BOfBdej',
+    teamName: 'Feeble Invaders',
+    capId: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3'
   },
   {
-    uid: 'aVawqyz9b3b0Lz3ReHubk7qqPvp1',
+    uid: '1f9sVob7rub2hre1uj7Mq4o1JiO2',
     name: 'Robert Harris',
     nickname: 'Aliqua',
     email: 'jamel65@gmail.com',
     password: 'NE7c2D5U'
   },
   {
-    uid: '5WtevJi4MVUjkKkHb1TrMeP777d2',
+    uid: '91H6LiVl4OgcC2vxW96grRPvYQC2',
     name: 'Steven Kelley',
     nickname: 'Excepteur',
     email: 'jaylon61@gmail.com',
     password: 'R4am1NDL'
   },
   {
-    uid: 'O608maiUgrd11coojA9OtMfsD6B3',
+    uid: 'PPAemp89bARkGhkUvTMEyDSORUw2',
     name: 'Justin Henderson',
     nickname: 'Culpa',
     email: 'jeramie.swaniawski@gmail.com',
     password: '10$Sh*wI'
   },
   {
-    uid: '9TG5tR6s05T4IcoiTHy8jwXpSk12',
+    uid: 'anwV9P71oAgtNzO5AJ9s3xYq4iC2',
     name: 'Thomas Elliott',
     nickname: 'Minim',
     email: 'jeramy03@gmail.com',
     password: 'E49^Ggy$'
   },
   {
-    uid: '8wgup9JIeSXrpI1HcVTpaeoWE4H3',
+    uid: 'O2POX93p57UM1hTjylhaWYXbPl32',
     name: 'Matthew King',
     nickname: 'Consectetur',
     email: 'jermain52@gmail.com',
     password: 'CBhA*%PQ'
   },
   {
-    uid: 'uqhMtJq725RoR2nTRLCYWqsKeF63',
+    uid: 'cYFQtJOzcMdidiCVHI9jvGBdlGq1',
     name: 'Tony Knight',
     nickname: 'Qui',
     email: 'jerome.abbott@gmail.com',
     password: 'eFUkH!vB'
   },
   {
-    uid: 'aIn1s40hC9gBurCQKx7u2DldL572',
+    uid: 'C8gFAPaSxxSUaRD3FSXLhpmcUYC2',
     name: 'Nicholas Ayers',
     nickname: 'Eiusmod',
     email: 'johnson.llewellyn@gmail.com',
     password: 'b4ETNO!a'
   },
   {
-    uid: '9aU1mMKufyPW83EbeZbQllLUO4T2',
+    uid: 'Dbt5hhJ8P4TFfIsx5LV3PLl473C3',
     name: 'Joshua Jennings',
     nickname: 'Nisi',
     email: 'joshua.thompson@gmail.com',
     password: 'Z@WrGZwv'
   },
   {
-    uid: '3BGQQNzmFMPODkE6qr0S3ENLJYj1',
+    uid: 'cPar7q4xHTSspouvU06R9mysNIB3',
     name: 'Donald Harris',
     nickname: 'Fugiat',
     email: 'justine.kunde@gmail.com',
     password: 'btoszS02'
   },
   {
-    uid: 'LMt66Tigr3d6PX9f69KOx0FcwvY2',
+    uid: '8xtM9xceQkOAvdeNK7CCjnUoPNk1',
     name: 'Christopher Saunders',
     nickname: 'In',
     email: 'kaelyn63@gmail.com',
     password: '9x5I00t&'
   },
   {
-    uid: 'Wg54a0tgyoe9nE2eIBuRLrMXBvX2',
+    uid: 'DNE7Qf0T8GeIO33eW4c9swn9PXr1',
     name: 'Gerald Miller',
     nickname: 'Ad',
     email: 'kassandra.harber@gmail.com',
     password: '9Vqz@RbK'
   },
   {
-    uid: 'xysBb7yiMwYHGUyt1kqPqdksbsN2',
+    uid: 'gEWc2jhaxbbq5Bbo1UzDUj7ZfEA2',
     name: 'Todd Clark',
     nickname: 'Mollit',
     email: 'kassulke.gabrielle@gmail.com',
     password: 'NswJ47qN'
   },
   {
-    uid: 'IvAdhZYwEtPFwYWJcksP1nVBia42',
+    uid: 'ziEZxbyZzQclsiWmsuyVqjXSrOr1',
     name: 'Garrett Hernandez', // captain
     nickname: 'Ea',
     email: 'kathlyn49@gmail.com',
     password: 'pvrPY9XN'
   },
   {
-    uid: 'od6yy9S8JpOecQlnrooBcol6OLa2',
+    uid: 'o6HXQMWKTUhEsoPd5rHQ69zurcb2',
     name: 'Tyler White',
     nickname: 'Sed',
     email: 'kertzmann.jake@gmail.com',
     password: 'BWz&wXfj'
   },
   {
-    uid: 'qC8HFewnbofLjLeJ67yOyLAutlu1',
+    uid: 'XAJ4Y3gqXcczRWHQqAYNZOmcFiq2',
     name: 'Jason Clark',
     nickname: 'Ipsum',
     email: 'keven.lakin@gmail.com',
     password: 'q8*nF8LG'
   },
   {
-    uid: 'w0bNVJXxs4gc9mGSj1K3hnCuD1E3',
+    uid: 'XJMloJYYIdSndz8946jur7Br28K2',
     name: 'Michael Baker',
     nickname: 'Adipiscing',
     email: 'khaley@gmail.com',
     password: 'Vmdx*t&$'
   },
   {
-    uid: 'alaKW5vDqcYwm5l41iplcBRGamL2',
+    uid: 'BdNAOvpEcEdZUA7xiUao3e1TDIK2',
     name: 'David Ortiz',
     nickname: 'Enim',
     email: 'kmoore@gmail.com',
     password: 's4k3q$jW'
   },
   {
-    uid: 'SHfgSM501rM7f4w5NwqV4BjPCG33',
+    uid: 'nK6U5uSCiuhvPjnmwJhKi3yAZx12',
     name: 'Christopher Thompson',
     nickname: 'Sed',
     email: 'lea.klocko@gmail.com',
     password: '1w4EBUeR'
   },
   {
-    uid: 'G9jxMYVIquSyeaypZzlorvBySll2',
+    uid: 'vI1Zwg8ZORT28LUbumf6kK5b19h1',
     name: 'John Webster',
     nickname: 'Nulla',
     email: 'leilani.mclaughlin@gmail.com',
     password: 'JKBb!I#O'
   },
   {
-    uid: 'sy1yMiy4AKgSpBpEl9x8Jj2uhh13',
+    uid: 'FqTgxfRP42U7pH8QBKERqvQ3JHV2',
     name: 'Harry Estrada',
     nickname: 'Exercitation',
     email: 'lluettgen@gmail.com',
     password: 'lfXYEzzD'
   },
   {
-    uid: 'ozQfCaO7Ihah00oT7Nc2mAGugfa2',
+    uid: 'IPmc0ZI2RJXfctavOezOdSfsjOc2',
     name: 'Daniel James',
     nickname: 'Quis',
     email: 'lockman.tito@gmail.com',
     password: 'ciEQivT9'
   },
   {
-    uid: 'CsACe054rgbfoTPyJnPHGimrp7x1',
+    uid: 'bRrHIkVfBuOL1CFcc0bMHfpG1zR2',
     name: 'Michael Fox',
     nickname: 'Officia',
     email: 'lpowlowski@gmail.com',
     password: 'XhEJXy5H'
   },
   {
-    uid: 'vJvQMMeRcWeTmotEsaEpxHF5frH3',
+    uid: '3wacffg2a0XUzZG97iLv0mYEM5s2',
     name: 'Michael Cox',
     nickname: 'Quis',
     email: 'marjolaine07@gmail.com',
     password: 'KRm8Qh&@'
   },
   {
-    uid: 'EoYWEWs0EpUCgYsbs0EFsOCN0P42',
+    uid: 'TDXp3zaXSuTiJiuv9YeYfTbPEQU2',
     name: 'Michael Rowe',
     nickname: 'Reprehenderit',
     email: 'maybell39@gmail.com',
     password: 'FX57U&4Q'
   },
   {
-    uid: 'XSxvFy54akSWSNpbTZO2UO4nibH2',
+    uid: '7Nhq3NxjcxNPiLIS0sDJDw7WCdF3',
     name: 'Justin Rose',
     nickname: 'Incididunt',
     email: 'mayer.eric@gmail.com',
     password: 'Og7br57I'
   },
   {
-    uid: 'eUr1sreWxOff7GMjBEXQKYP5UWt1',
+    uid: '2XkqmIFX42NN40ytkvzOj5pGbcy1',
     name: 'Dennis Gomez',
     nickname: 'Aute',
     email: 'miller36@gmail.com',
     password: '1a&b8oZv'
   },
   {
-    uid: 'UzooSGD4i3VXHlD3m9mdDTzkV8J3',
+    uid: '1bFqvuxVwLNy4mFjnlA7HcBQbJs1',
     name: 'Cory Sims',
     nickname: 'Adipiscing',
     email: 'monahan.bret@gmail.com',
     password: 'EYornN@m'
   },
   {
-    uid: 'oJ836xJFnxUWExqN3UEiowJegui1',
+    uid: '5Lzy2NvH5VPuU1nssDRdzDUuZ852',
     name: 'Jerry Mitchell',
     nickname: 'Reprehenderit',
     email: 'natalie.blanda@gmail.com',
     password: '3L%CF7O@'
   },
   {
-    uid: 'X3QuZJlzCJhH4qdl0VrqfbncJLv2',
+    uid: 'zjFb8vPICkbgYhtCxcJwEn8frWB3',
     name: 'Andrew Davis',
     nickname: 'Duis',
     email: 'njerde@gmail.com',
     password: 'f@b^ji#v'
   },
   {
-    uid: '6qbLvM6JzLYgOlIlzQR1guX8ZAe2',
+    uid: 'x2Mu5l5TTXTsu3loL3AAv9EdJQC3',
     name: 'Ryan Mitchell',
     nickname: 'Mollit',
     email: 'noelia86@gmail.com',
     password: 'qlEehhKX'
   },
   {
-    uid: 'j0TUdg1Hv6Wy11cFIDDxNhVUT5l1',
+    uid: 'wAK5hZlNLXfCxko8OXiMCC8j4Hp1',
     name: 'Ryan Lopez',
     nickname: 'Ullamco',
     email: 'nola72@gmail.com',
     password: 'W$IJkXxW'
   },
   {
-    uid: 'EWBDvgf1D4YN8ml6kCOSieRy3Y02',
+    uid: '5EJYAxHK9rd0C8i4qHcHJPLHBV23',
     name: 'John Flores',
     nickname: 'Esse',
     email: 'orlando.schneider@gmail.com',
     password: 'YsifIZb$'
   },
   {
-    uid: 'ovuNVRrKJjgxTQaozkePS4IOxns1',
+    uid: 'NK4GdjyLiTbemDEbTFQciEqlcf22',
     name: 'Craig Gay',
     nickname: 'Cupidatat',
     email: 'paris43@gmail.com',
     password: 'WFuKBSdi'
   },
   {
-    uid: 'ZlcEv4jTn4U9V2Z14ozE74H50LB2',
+    uid: 'T3sfqbvVc1ZNAq8UGIIMkGYwyQ33',
     name: 'Andrew Sloan',
     nickname: 'Cupidatat',
     email: 'patience84@gmail.com',
     password: '3HYMul$f'
   },
   {
-    uid: 'vVHoGUSkinYpgxzZ4zDsdbvWevr1',
+    uid: 'YmmYeH6XsZdszLbnQScw1KGtFcW2',
     name: 'Donald Lynch',
     nickname: 'Sit',
     email: 'paul04@gmail.com',
     password: 'H7uKF*1a'
   },
   {
-    uid: 'PKfzrC8HKLMVAiGbcNYOyTUWCDi2',
+    uid: '9zeF3Ifeu9NqrBXDzYLO8dYpzk23',
     name: 'Anthony Dunlap',
     nickname: 'Aute',
     email: 'plowe@gmail.com',
     password: '2dY4EgIi'
   },
   {
-    uid: 'DTKtFXeZ0yTURTMILs5CF18VG4X2',
+    uid: 'e98hXR3z8wROSKLTW6V53CIzQQ02',
     name: 'Kevin Irwin',
     nickname: 'Velit',
     email: 'prohaska.ella@gmail.com',
     password: 'O%72875s'
   },
   {
-    uid: 'DQWPLmk2b5Qsdtxq7eWRYbtqaS93',
+    uid: 'kJgiDRf0H0eDfLE9vLu1cMFoceF2',
     name: 'Andrew Maxwell',
     nickname: 'Id',
     email: 'rachael.rippin@gmail.com',
     password: 'GW#bIo32'
   },
   {
-    uid: 'cN8yYkT5jac14OX0gIEZ0krl44N2',
+    uid: '8HhvdpLnXbQ2joxko0CWkTnDbub2',
     name: 'Jesse White',
     nickname: 'Excepteur',
     email: 'rebeka83@gmail.com',
     password: 'OGbMRm9O'
   },
   {
-    uid: 'ypLysIMdFTY88vWQX7dwDbaSsKg1',
+    uid: 'bzqNi6rdhBbRBjQXm62GqXI0jDF2',
     name: 'Samuel Watts',
     nickname: 'Dolore',
     email: 'rhea89@gmail.com',
     password: '$QJO%s3b'
   },
   {
-    uid: 'oa8CED2sPzSl13388K2TkQpJpsp2',
+    uid: '69yWU0q7RkcWs1o2SyTXmCbqPfZ2',
     name: 'Tyler Cruz',
     nickname: 'Ullamco',
     email: 'rick67@gmail.com',
     password: 'h0dMuY^E'
   },
   {
-    uid: 'vSKU9qJfQYaJejcY3Ph7o7lmL2K2',
+    uid: 'Ynbx63Zo58QAyIW9y67DuY06vNA2',
     name: 'Gabriel Harris',
     nickname: 'Commodo',
     email: 'rjacobson@gmail.com',
     password: 'GmCQSF3#'
   },
   {
-    uid: 'INoBwC0rraMPYXTY7xpVRuUjv9I2',
+    uid: 'jb9J7sCU5pY7LETUJPH9rbP3Gbv2',
     name: 'Duane Shah',
     nickname: 'Est',
     email: 'robert22@gmail.com',
     password: 'MF*a9j!D'
   },
   {
-    uid: '5PEG8G321VecxEOAbBL7zdO7Qwg2',
+    uid: 'ZE6HS6oooCbvJ7QMWv0c1VXhZzH2',
     name: 'Joseph Tucker',
     nickname: 'Velit',
     email: 'roderick.haley@gmail.com',
     password: 'w#tFNcJg'
   },
   {
-    uid: '9oGTQa8FMzaVZDfNRd43QjZoH072',
+    uid: 'MbLzYFFsPOXJstxlAK9MQnM9y0N2',
     name: 'David Larson Jr',
     nickname: 'Commodo',
     email: 'roderick05@gmail.com',
     password: '6Mfp#@i5'
   },
   {
-    uid: 'mGCf1yaqmTfPhRPfflGGoECLsYM2',
+    uid: 'x4iVjZT7pwfdrkYkGgNN64lpvcT2',
     name: 'Corey Oliver', // captain
     nickname: 'Cillum',
     email: 'rodriguez.destin@gmail.com',
     password: 'b17Qjukn'
   },
   {
-    uid: 'HUnQ5D7O2SenUHdfRcaEyBsCVpA3',
+    uid: 'CJJQ7E0JjRc5yxSSFZVqxSp4ZT63',
     name: 'Julian Hernandez',
     nickname: 'Nostrud',
     email: 'romaine69@gmail.com',
     password: 'MGtlc80u'
   },
   {
-    uid: 'QiPfgz9pBDcwbP8QFslxfkdcfJf2',
+    uid: 'qF2RVlE3UhRhVN3KXQKoWQ2go1n2',
     name: 'Samuel Johnson',
     nickname: 'Est',
     email: 'sage.wilkinson@gmail.com',
     password: 'kODbGqC!'
   },
   {
-    uid: '344MtJkELjU7ZoFEk5VlbzRotO32',
+    uid: 'i55s3LtB1BN7ElcHM9UZvNxU5u52',
     name: 'Ralph Johnson',
     nickname: 'Nisi',
     email: 'savannah02@gmail.com',
     password: 'raB@y4Wo'
   },
   {
-    uid: 'NjcFxXQMFEYkf4uD8yKdI55qqRa2',
+    uid: 'Nmd1UjSnXDYvPIsZLGn16ZxSvbO2',
     name: 'Charles Osborne',
     nickname: 'In',
     email: 'selina.hermiston@gmail.com',
     password: 'XwsST$L9'
   },
   {
-    uid: 'PvNbcRfpNYMHrVeXD51Kui5NKU43',
+    uid: 'upBPklYPbjg78TxLvrO5hQKwDKs1',
     name: 'Joel Padilla',
     nickname: 'Do',
     email: 'serdman@gmail.com',
     password: '^Q5Jarst'
   },
   {
-    uid: 'LmocO9FA5nXLJmarQ1jp3bXIuAZ2',
+    uid: 'F6yZaEk9b5OYwA3K6vbNeQq2cro1',
     name: 'Craig Schneider',
     nickname: 'Dolore',
     email: 'stiedemann.zoie@gmail.com',
     password: 'kuPlhLNi'
   },
   {
-    uid: 'U0rl0k9WgLNeQbnYWvg1gzWdf4G2',
+    uid: 'm4Z1wIiJUIdo49XBGICbQSVuWBq2',
     name: 'James Harrison',
     nickname: 'Voluptate',
     email: 'tierra.kihn@gmail.com',
     password: 'M#!Bkf@*'
   },
   {
-    uid: 'L4UN38dYgOgkNt7681PIM6NbKy43',
+    uid: 'eysKRYtaSkNBG9budfODDaf7gkH2',
     name: 'William Ali',
     nickname: 'Dolore',
     email: 'towne.abdullah@gmail.com',
     password: 'qzjpQoK@'
   },
   {
-    uid: 'qLlPkwXkawOLXZZ0lKqEPANg00h2',
+    uid: 'x2aX81sMESWdQs5zED81DVUsgp92',
     name: 'Christopher Carroll',
     nickname: 'In',
     email: 'tsteuber@gmail.com',
     password: '&U96QI#%'
   },
   {
-    uid: '3MSOO4AxznWtQg5EhNzp0Ei2A9I3',
+    uid: 'AM50AH7GXiUrnFDiyjX9ezCjSYG2',
     name: 'Mark Pittman',
     nickname: 'Anim',
     email: 'tyson.rau@gmail.com',
     password: '8UTX*&vf'
   },
   {
-    uid: '9qiDJHZS8TQUoPRo2gCnGTrJocp2',
+    uid: 'voveYjqSUNP8bAibyMZ5YyrtQ2Z2',
     name: 'Jim Riley',
     nickname: 'Reprehenderit',
     email: 'vella.pacocha@gmail.com',
     password: 'DXyyC#6u'
   },
   {
-    uid: 'xY1IFxJlAaNM3oRdzDazHMTyRuU2',
+    uid: 'kRb9VvhJvjVOXzjxTKpDq86Tga92',
     name: 'Jose Harris',
     nickname: 'Consectetur',
     email: 'vella.rosenbaum@gmail.com',
     password: 'h4gk&dIg'
   },
   {
-    uid: 'KBVNyrISMpgNdENAlHtXlI66ArH3',
+    uid: 'atmRbU3wzeUIulIWddU3juceikx1',
     name: 'Mark Hale',
     nickname: 'Sit',
     email: 'vsmitham@gmail.com',
     password: 'CiI&nHwN'
   },
   {
-    uid: 'igUj60xZjngnMpI3VZW2pHKjyqW2',
+    uid: '8dzpxOyZodTkpgbx7NozUIe6sR12',
     name: 'Benjamin Johnson',
     nickname: 'Sit',
     email: 'wbednar@gmail.com',
     password: '!NSOik%5'
   },
   {
-    uid: 'dm66HFjfdyWTghZoKsCu0beE8MZ2',
+    uid: 'Cb1MWJdwgvNmQpsVNkVhcV0pwN93',
     name: 'Kirk Hunt',
     nickname: 'Voluptate',
     email: 'will.melisa@gmail.com',
     password: 'GAI!cLTN'
   },
   {
-    uid: 'C4S2wEa9BdawA2DZs1O8YLJCS9u1',
+    uid: 'rs6TbytBuYaff8RFvv8XYHCaDi43',
     name: 'Eric Klein',
     nickname: 'Nostrud',
     email: 'willa06@gmail.com',
     password: 'YE4Ssb2l'
   },
   {
-    uid: 'mqpCW5aNS7PP6M0r8HPVPPNEyU52',
+    uid: 'orY6GMNSSpM1f9Tjlv0Upz12kzy2',
     name: 'John Miller',
     nickname: 'Minim',
     email: 'wmacejkovic@gmail.com',
     password: 'LE1lH4JO'
   },
   {
-    uid: 'tbhVv7eMBkTW7DkMhgnH85ocmgv2',
+    uid: 'm6IZF5t2EENDZC8zaIVsV4GdAY03',
     name: 'Austin Thomas',
     nickname: 'Nulla',
     email: 'wuckert.mariana@gmail.com',
     password: 'yc2bjDE4'
   },
   {
-    uid: 'CyINMe1JyZaygUuNYfUyFzlCj392',
+    uid: 'eEHQqoC87agUrHFpyz1idgcX6fy1',
     name: 'William Proctor',
     nickname: 'In',
     email: 'xschmitt@gmail.com',
     password: 'PxgIiHqW'
   },
   {
-    uid: 'CuqHEBpraUglw5ncToeVrYIWueH3',
+    uid: 'Ji2L122kbabRnnSvCCskLtyVV3i1',
     name: 'Robert Fernandez', // captain
     nickname: 'Minim',
     email: 'zmurray@gmail.com',
     password: 'uDL!9Ljp'
-  },
-  {
-    uid: 'd05XgM7QBccYTsGG6kIRVZayWKc2',
-    name: 'Prateek Goel',
-    nickname: 'Skullteek',
-    email: 'pgoel681@gmail.com',
-    password: ''
   }
 ]
 export const CONTAINING_TOURNAMENTS = ['FKC', 'FCP', 'FPL'];

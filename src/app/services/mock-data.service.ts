@@ -5,7 +5,7 @@ import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randPhr
 import { DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
-import { PlayerMoreInfo } from '@shared/interfaces/user.model';
+import { PlayerMoreInfo, PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { PLAYING_POSITIONS_LIST, MatchConstantsSecondary } from '@shared/constants/constants';
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class MockDataService {
     for (let i = 0; i < this.USERS.length; i++) {
       const email = this.USERS[i].email;
       setTimeout(() => {
-        this.addUser(email, this.USERS[i].password, this.USERS[i].name);
-        if (email === 'zmurray@gmail.com') {
+        this.addUser(email, this.USERS[i].password);
+        if (i === this.USERS.length - 1) {
           console.log('operation completed!');
         }
       }, 5000);
@@ -43,7 +43,7 @@ export class MockDataService {
   }
 
   private initFirestore(): void {
-    for (let i = 0; i < this.USERS.length; i++) {
+    for (let i = this.USERS.length - 1; i < this.USERS.length; i++) {
       const userDetails = {
         nickname: this.USERS[i].nickname,
         name: this.USERS[i].name
@@ -51,7 +51,7 @@ export class MockDataService {
       const uid = this.USERS[i].uid;
       setTimeout(() => {
         this.addUserInfo(uid, userDetails);
-        if (uid === 'CuqHEBpraUglw5ncToeVrYIWueH3') {
+        if (i === this.USERS.length - 1) {
           console.log('operation completed!');
         }
       }, 5000);
@@ -62,83 +62,81 @@ export class MockDataService {
     const allPromises: any[] = [];
     const teamID = this.ngFire.createId();
     const teamInfo: TeamBasicInfo = {
-      tname: "South Park United",
+      tname: "",
       isVerified: true,
       imgpath: this.TEAM_PHOTO_DEFAULT,
       imgpath_logo: this.TEAM_LOGO_DEFAULT,
-      captainId: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
+      captainId: '',
       locState: randState(),
       locCity: randCity()
     };
     const teamMoreInfo: TeamMoreInfo = {
       tdateCreated: new Date().getTime(),
       tageCat: 30,
-      captainName: 'Douglas Palmer',
+      captainName: '',
       tslogan: randPhrase(),
       tdesc: randSentence()
     };
     const membersList: Tmember[] = [
       {
-        id: '0X3LyKKd7TSuhY1P6JchyEZoqRy2',
+        id: 'vxT9IkWGkLgxwxfOkYwJuEK0DMA3',
         name: 'Douglas Palmer',
         pl_pos: 'Left Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'VJzhhl9O1Eerav1qR6SIH67GQ1K2',
+        id: 'C6LGoSsOhOWcmCBDY0BSMtGvhYH2',
         name: 'John Wilkerson',
         pl_pos: 'Center Midfielder',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'kEC8lzonTFey4jLA798fQe0XHBv1',
+        id: 'CgIFHtzTgQX4V7P1YkD2iDvsMFO2',
         name: 'James Vance',
         pl_pos: 'GoalKeeper',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'Chi3xkyldRcsP9tEdThOkbUBffa2',
+        id: '16t924bW6qeIGyloCKGew25lYRa2',
         name: 'David Allen',
         pl_pos: 'Right Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'EdOItpqXmFdFLqCHo45gYzFJzRQ2',
+        id: '7mUWgQ4MKffiOegyNcyVIdBvPdV2',
         name: 'Andrew Fischer',
         pl_pos: 'Center Forward',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: 'uBw8TjNm54gedqAh2WLFWqXGnqt1',
+        id: '6IH80NDkCDNlE5WVZjYbEyUCZlI2',
         name: 'Kevin Hughes',
         pl_pos: 'Center Midfielder',
         imgpath_sm: 'https://i.pravatar.cc/100',
       },
       {
-        id: '91TtWPndI2STeBvrLPjmgXB1MKv2',
+        id: 'CzEzvvAYFYatWvK626sC4Wpaq0b2',
         name: 'Matthew Christian',
         pl_pos: 'Right Back',
         imgpath_sm: 'https://i.pravatar.cc/100',
       }
     ]
     const tMembers: TeamMembers = {
-      memCount: 7,
+      memCount: membersList.length,
       members: membersList,
     };
     allPromises.push(this.ngFire.collection('teams').doc(teamID).set(teamInfo));
     allPromises.push(this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('moreInfo').set(teamMoreInfo));
     allPromises.push(this.ngFire.collection(`teams/${teamID}/additionalInfo`).doc('members').set(tMembers));
-
     return Promise.all(allPromises);
-
   }
 
   private initPlayerStatusUpdate(): Promise<any> {
     const batch = this.ngFire.firestore.batch();
-    for (let i = 26; i < 34; i++) {
+    for (let i = 0; i < this.USERS.length; i++) {
       if (this.USERS[i]['teamId']) {
         const uid = this.USERS[i].uid || '';
-        const updateData = {
+        const updateData: Partial<PlayerBasicInfo> = {
           team: {
             capId: this.USERS[i].capId,
             name: this.USERS[i].teamName,
@@ -152,7 +150,7 @@ export class MockDataService {
     return batch.commit();
   }
 
-  private addUser(email: string, pass: string, name: string): Promise<any> {
+  private addUser(email: string, pass: string): Promise<any> {
     return this.ngAuth.createUserWithEmailAndPassword(email, pass);
   }
 

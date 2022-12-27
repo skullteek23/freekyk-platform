@@ -18,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private ngFire: AngularFirestore
+    private ngFire: AngularFirestore,
+    private mockDataService: MockDataService
   ) { }
 
   ngOnInit(): void {
