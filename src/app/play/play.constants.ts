@@ -1,7 +1,7 @@
 export class PlayConstants {
-  public static SEASON_STATUS_UPCOMING = 'Upcoming';
-  public static SEASON_STATUS_LIVE = 'LIVE';
-  public static SEASON_STATUS_ENDED = 'Finished';
-  public static TO_BE_DECIDED = 'TBD';
-  public static MATCH_DRAW = 'Draw';
+  static readonly SEASON_STATUS_UPCOMING = 'Upcoming';
+  static readonly SEASON_STATUS_LIVE = 'LIVE';
+  static readonly SEASON_STATUS_ENDED = 'Finished';
+  static readonly TO_BE_DECIDED = 'TBD';
+  static readonly MATCH_DRAW = 'Draw';
 }
