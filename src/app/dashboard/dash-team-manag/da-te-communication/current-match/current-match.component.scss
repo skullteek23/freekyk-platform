@@ -2,9 +2,12 @@
   height: auto;
   width: 100px;
 }
+
 .kickoff {
   width: 70px;
+  margin-top: 20px;
 }
+
 .score_rec {
   height: 32px;
   width: 64px;
@@ -13,12 +16,14 @@
   border-radius: 2px;
   background-color: var(--primaryColor);
 }
+
 .img_cont img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: var(--borderRadiusCard);
 }
+
 .img_cont {
   height: 100px;
   width: 100px;
@@ -26,6 +31,7 @@
   background: var(--grey4);
   border-radius: var(--borderRadiusCard);
 }
+
 .score_square {
   height: 32px;
   width: 32px;
