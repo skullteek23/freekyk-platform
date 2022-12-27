@@ -22,6 +22,8 @@ export class PlayerCardComponent implements OnInit {
 
   stats: {} = {};
   defaultvalue = 0;
+  data: PlayerBasicInfo;
+  basicInfo$: Observable<PlayerBasicInfo>;
   addiInfo$: Observable<PlayerMoreInfo>;
   plStats$: Observable<Stats>;
   isLoading = true;
@@ -32,16 +34,33 @@ export class PlayerCardComponent implements OnInit {
     public dialogRef: MatDialogRef<PlayerCardComponent>,
     private ngFire: AngularFirestore,
     private socialShareService: SocialShareService,
-    @Inject(MAT_DIALOG_DATA) public data: PlayerBasicInfo,
+    @Inject(MAT_DIALOG_DATA) public pid: string,
   ) { }
 
   ngOnInit(): void {
-    this.getAdditionalInfo();
+    if (this.pid) {
+      this.getPlayerInfo();
+    }
+  }
+
+  getPlayerInfo() {
+    this.ngFire
+      .collection('players')
+      .doc(this.pid)
+      .get()
+      .pipe(
+        map((resp) => resp.data() as PlayerBasicInfo),
+        share()
+      )
+      .subscribe(response => {
+        this.data = response;
+        this.getAdditionalInfo();
+      });
   }
 
   getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
-      .collection(`players/${this.data.id}/additionalInfo`)
+      .collection(`players/${this.pid}/additionalInfo`)
       .doc('otherInfo')
       .get()
       .pipe(
@@ -61,7 +80,7 @@ export class PlayerCardComponent implements OnInit {
 
   onLoadStats(): void {
     this.plStats$ = this.ngFire
-      .collection(`players/${this.data.id}/additionalInfo`)
+      .collection(`players/${this.pid}/additionalInfo`)
       .doc('statistics')
       .get()
       .pipe(

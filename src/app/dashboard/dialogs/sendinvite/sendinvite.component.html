@@ -2,38 +2,19 @@
   <span fxFlex="<grow>" class="mat-subheading-1 center" mat-dialog-title>
     Send Team Join Invite to Player
   </span>
-  <a
-    mat-dialog-close
-    class="material-icons-round"
-    (click)="onCloseDialog(false)"
-  >
+  <a mat-dialog-close class="material-icons-round" (click)="onCloseDialog(false)">
     close
   </a>
 </div>
-<div
-  class="content"
-  mat-dialog-content
-  fxLayoutAlign="center center"
-  fxLayout="column"
->
+<div class="content" mat-dialog-content fxLayoutAlign="center center" fxLayout="column">
   <p class="mat-body-2 center">
     Do you want to invite this player to your team?
   </p>
-  <a
-    class="center"
-    [routerLink]="['/p', data.id]"
-    (click)="onCloseDialog(false)"
-  >
+  <a class="center" [routerLink]="['/play/players', data.id]" (click)="onCloseDialog(false)">
     {{ data.name }}
   </a>
 </div>
-<div
-  class="buttons"
-  mat-dialog-actions
-  fxLayoutAlign.gt-sm="center center"
-  fxLayout.lt-md="column"
-  fxLayoutGap="8px"
->
+<div class="buttons" mat-dialog-actions fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="8px">
   <button class="noResponseButton buttonText" (click)="onCloseDialog(false)">
     Back
   </button>

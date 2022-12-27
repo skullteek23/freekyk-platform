@@ -74,13 +74,13 @@ export class DaHoCompleteProfileComponent implements OnInit {
   onShareProfile(): void {
     const uid = localStorage.getItem('uid');
     if (this.profileShared) {
-      this.router.navigate(['/p', uid]);
+      this.router.navigate(['/play/players', uid]);
       return;
     }
     if (this.profileProgress >= 80) {
       this.profileProgress += 20;
     }
     localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
-    this.router.navigate(['/p', uid]);
+    this.router.navigate(['/play/players', uid]);
   }
 }

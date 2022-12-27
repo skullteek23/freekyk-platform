@@ -18,6 +18,7 @@ const routes: Routes = [
       { path: 'home', component: PlHomeComponent },
       { path: 'seasons', component: PlSeasonsComponent },
       { path: 'players', component: PlPlayersComponent },
+      { path: 'players/:uid', component: PlPlayersComponent },
       { path: 'teams', component: PlTeamsComponent },
       { path: 'fixtures', component: PlFixturesComponent },
       { path: 'results', component: PlResultsComponent },

@@ -41,24 +41,10 @@ export class TeMembersComponent implements OnInit, OnDestroy {
   }
 
   onOpenPlayerProfile(pid: string): void {
-    this.subscriptions.add(
-      this.ngFire
-        .collection('players')
-        .doc(pid)
-        .get()
-        .pipe(
-          map((resp) => ({
-            id: pid,
-            ...(resp.data() as PlayerBasicInfo),
-          } as PlayerBasicInfo))
-        )
-        .subscribe((response) => {
-          const dialogRef = this.dialog.open(PlayerCardComponent, {
-            panelClass: 'fk-dialogs',
-            data: response,
-          });
-        })
-    );
+    const dialogRef = this.dialog.open(PlayerCardComponent, {
+      panelClass: 'fk-dialogs',
+      data: pid,
+    });
   }
 
   onChangeFilter(queryInfo: QueryInfo): void {

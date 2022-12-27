@@ -18,7 +18,7 @@
   <div class="container min-height section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
-      <mat-list-item (click)="onOpenPlayerProfile(player)"
+      <mat-list-item (click)="openPlayerCard(player)"
         *ngFor="let player of players$ | async | filterList: 'name,locCity,pl_pos':filterTerm;last as last">
         <img matListAvatar [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="player.name"
           loading="lazy" appFallbackImg />
@@ -87,7 +87,7 @@
         <tr mat-header-row class="green-table-header" *matHeaderRowDef="cols"></tr>
         <tr mat-row *matRowDef="let row; columns: cols" [ngClass]="{ underline: row === selectedRowIndex }"
           (mouseenter)="selectedRowIndex = selectedRowIndex === row ? -1 : row"
-          (click)="selectedRowIndex = -1; onOpenPlayerProfile(row)" (mouseleave)="selectedRowIndex = -1"></tr>
+          (click)="selectedRowIndex = -1; selectRow(row)" (mouseleave)="selectedRowIndex = -1"></tr>
 
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="5">

@@ -34,21 +34,10 @@ export class MemberListComponent implements OnInit {
     };
   }
 
-  async onOpenPlayerProfile(pid: string): Promise<any> {
-    const playersnap = await this.ngFire
-      .collection('players')
-      .doc(pid)
-      .get()
-      .pipe(
-        map((resp) => ({
-          id: pid,
-          ...(resp.data() as PlayerBasicInfo),
-        } as PlayerBasicInfo))
-      )
-      .toPromise();
+  onOpenPlayerProfile(pid: string): void {
     const dialogRef = this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',
-      data: playersnap,
+      data: pid,
     });
   }
 
