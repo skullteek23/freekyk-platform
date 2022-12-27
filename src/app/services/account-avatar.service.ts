@@ -24,11 +24,6 @@ export class AccountAvatarService {
     );
   }
   constructor(
-    private authService: AuthService,
-    private store: Store<{
-      dash: DashState;
-    }>
-  ) {
-    // console.log('avatar service started');
-  }
+    private store: Store<{ dash: DashState; }>
+  ) { }
 }

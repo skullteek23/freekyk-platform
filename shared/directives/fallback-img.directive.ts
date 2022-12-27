@@ -15,12 +15,7 @@ export class FallbackImgDirective implements OnDestroy {
   }
 
   private onError() {
-    this.removeEvents();
-
-    if (!this.isApplied) {
-      this.isApplied = true;
-      this.el?.nativeElement?.setAttribute('src', this.imgSrc);
-    }
+    this.el?.nativeElement?.setAttribute('src', this.imgSrc);
   }
 
   private removeEvents() {
