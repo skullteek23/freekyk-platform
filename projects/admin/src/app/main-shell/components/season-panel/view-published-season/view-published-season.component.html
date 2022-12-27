@@ -151,7 +151,7 @@
     </span>
     <mat-list *ngIf="seasonParticipants.length">
       <a mat-list-item *ngFor="let participant of seasonParticipants">
-        <img matListAvatar [src]="participant.logo" alt="Team Image" />
+        <img matListAvatar [src]="participant.logo" alt="Team Image" appFallbackImg />
         <p matLine fxLayoutAlign="start center" fxLayoutGap="8px">
           <span>{{ participant.name }}</span>
           <mat-chip-list>

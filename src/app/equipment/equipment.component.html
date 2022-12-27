@@ -28,7 +28,8 @@
       gutterSize="20px">
       <mat-grid-tile appElevateOnHover *ngFor="let product of allProducts$ | async">
         <div class="productContainer">
-          <img [routerLink]="['/product', product.id]" class="box-image" [src]="product.imgpath" [alt]="product.name" />
+          <img [routerLink]="['/product', product.id]" class="box-image" [src]="product.imgpath" [alt]="product.name"
+            appFallbackImg />
           <div class="content" fxLayoutAlign="space-between center">
             <div fxLayout="column" fxLayoutAlign="center start" [routerLink]="['/product', product.id]">
               <span ngClass.lt-sm="mat-caption left" ngClass.gt-xs="mat-body-1 left">

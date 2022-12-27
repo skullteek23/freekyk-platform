@@ -27,7 +27,7 @@
       <mat-grid-tile appElevateOnHover *ngFor="let ground of grounds$ | async">
         <div class="groundContainer" [ngClass]="{ 'premiumBorder-2': ground.ownType == 'PRIVATE' }">
           <img [routerLink]="['/ground', ground.id]" class="box-image" [src]="ground.imgpath" alt="Football Ground"
-            loading="lazy" />
+            loading="lazy" appFallbackImg />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/ground', ground.id]" fxLayout="column" fxLayoutAlign="center start">
               <span class="mat-body-1 left">

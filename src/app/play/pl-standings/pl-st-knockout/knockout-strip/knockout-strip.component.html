@@ -1,7 +1,8 @@
 <div (click)="openFixture()" class="box" fxLayout="row" fxLayoutAlign="space-between center">
   <div fxFlex="<grow>" fxLayout="column" fxLayoutGap="12px">
     <div class="box_inner-1" fxLayout="row" fxLayoutGap="8px" fxLayoutlign="center center">
-      <img [src]="match?.home.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
+      <img [src]="match?.home.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar"
+        appFallbackImg />
       <span class="mat-caption" fxLayoutAlign="start center">
         {{ match?.home.name | textShorten: 15 }}
         <mat-icon fxLayoutAlign="center center" *ngIf="match?.concluded && match?.home.score > match?.away.score">
@@ -12,7 +13,8 @@
     </div>
 
     <div class="box_inner-2" fxLayout="row" fxLayoutGap="8px" fxLayoutlign="center center">
-      <img [src]="match?.away.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
+      <img [src]="match?.away.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar"
+        appFallbackImg />
       <span class="mat-caption" fxLayoutAlign="start center">
         {{ match?.away.name | textShorten: 15 }}
         <mat-icon fxLayoutAlign="center center" *ngIf="match?.concluded && match?.home.score < match?.away.score">

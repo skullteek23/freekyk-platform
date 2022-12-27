@@ -3,7 +3,7 @@
   <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
     ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
     <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
-      <img [src]="(groundInfo$ | async)?.imgpath" alt="Ground Image" />
+      <img [src]="(groundInfo$ | async)?.imgpath" alt="Ground Image" appFallbackImg />
     </div>
 
     <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"

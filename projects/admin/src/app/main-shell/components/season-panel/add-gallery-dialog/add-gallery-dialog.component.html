@@ -13,7 +13,7 @@
       <app-no-items-message items="photos" *ngIf="!photosList?.length"></app-no-items-message>
       <mat-grid-list cols="2" gutterSize="16px" rowHeight="2:1" *ngIf="photosList?.length">
         <mat-grid-tile *ngFor="let photo of photosList; let i = index">
-          <img [src]="photo" class="image-season-gallery" alt="photo_{{i}}">
+          <img [src]="photo" class="image-season-gallery" alt="photo_{{i}}" appFallbackImg>
         </mat-grid-tile>
       </mat-grid-list>
     </div>

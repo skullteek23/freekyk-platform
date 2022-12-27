@@ -6,12 +6,12 @@
   <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
     <button (click)="onGoogleLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
       fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
-      <img class="iconSize" src="assets/svgs/google.svg" alt="Google" />
+      <img class="iconSize" src="assets/svgs/google.svg" alt="Google" appFallbackImg />
       <span> Continue with Google </span>
     </button>
     <!-- <button (click)="onFacebookLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
       fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
-      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" />
+      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" appFallbackImg/>
       <span> Continue with Facebook </span>
     </button> -->
   </div>

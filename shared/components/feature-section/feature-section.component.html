@@ -1,38 +1,15 @@
-<section
-  class="feature-section"
-  fxLayout="column"
-  fxLayout.gt-sm="row"
-  fxLayoutAlign="center center"
-  fxLayoutAlign="space-evenly center"
-  fxLayoutGap="8px"
->
-  <div
-    [fxFlexOrder.gt-sm]="flexOrderInvert ? '1' : '2'"
-    fxFlexOrder="1"
-    class="placeholder"
-    fxLayoutAlign="center center"
-  >
-    <img [src]="svg" alt="Illustration" />
+<section class="feature-section" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center center"
+  fxLayoutAlign="space-evenly center" fxLayoutGap="8px">
+  <div [fxFlexOrder.gt-sm]="flexOrderInvert ? '1' : '2'" fxFlexOrder="1" class="placeholder"
+    fxLayoutAlign="center center">
+    <img [src]="svg" alt="Illustration" appFallbackImg />
   </div>
-  <div
-    [fxFlexOrder.gt-sm]="flexOrderInvert ? '2' : '1'"
-    fxFlexOrder="2"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="center start"
-    fxLayoutGap="8px"
-    ngClass.gt-sm="content"
-  >
+  <div [fxFlexOrder.gt-sm]="flexOrderInvert ? '2' : '1'" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
+    fxLayoutAlign.gt-sm="center start" fxLayoutGap="8px" ngClass.gt-sm="content">
     <h4 class="mat-subheading-1 align">{{ content.subHeading | titlecase }}</h4>
     <p class="mat-body-1 align" [innerHTML]="content.desc"></p>
-    <button
-      color="primary"
-      mat-button
-      (click)="onNavigate(content.CTA.link)"
-      fxLayout="column"
-      fxLayoutAlign="center center"
-      fxLayoutGap="8px"
-    >
+    <button color="primary" mat-button (click)="onNavigate(content.CTA.link)" fxLayout="column"
+      fxLayoutAlign="center center" fxLayoutGap="8px">
       <span> {{ content.CTA.text }} </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>

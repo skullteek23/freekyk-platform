@@ -1,7 +1,7 @@
 <div class="container min-height section-space-top section-space-bottom">
   <div class="name" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign.gt-sm="center center">
     <div class="profile-image">
-      <img [src]="(plInfo$ | async)?.imgpath_sm | profilePic" [alt]="(plInfo$ | async)?.name" />
+      <img [src]="(plInfo$ | async)?.imgpath_sm" [alt]="(plInfo$ | async)?.name" appFallbackImg />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">

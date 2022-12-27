@@ -12,6 +12,5 @@ export class AccountAvatarComponent implements OnInit {
 
   constructor() { }
 
-
   ngOnInit(): void { }
 }

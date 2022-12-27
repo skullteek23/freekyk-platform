@@ -10,7 +10,8 @@
     <mat-label> Choose Image for Profile Picture </mat-label>
     <input hidden type="file" name="fileInput" accept="image/*" #fileInput (change)="onChooseImage($event)" id="file" />
     <div>
-      <img [src]="selectedImage || 'assets/images/placeholder_product.png'" class="preview" alt="Image" />
+      <img [src]="selectedImage || 'assets/images/placeholder_product.png'" class="preview" alt="Image"
+        appFallbackImg />
     </div>
     <p class="file">
       {{ this.$file?.name }}

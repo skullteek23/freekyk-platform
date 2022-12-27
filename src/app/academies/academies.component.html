@@ -27,8 +27,8 @@
       gutterSize="20px">
       <mat-grid-tile appElevateOnHover *ngFor="let academy of academies$ | async">
         <div class="academyContainer">
-          <img [routerLink]="['/academy', academy.name]" class="box-image" [src]="academy.imgpath"
-            [alt]="academy.name" />
+          <img [routerLink]="['/academy', academy.name]" class="box-image" [src]="academy.imgpath" [alt]="academy.name"
+            appFallbackImg />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/academy', academy.name]" fxLayout="column" fxLayoutAlign="center start">
               <span class="mat-body-1 left">

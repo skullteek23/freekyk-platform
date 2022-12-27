@@ -9,7 +9,7 @@
 
 <mat-list>
   <mat-list-item *ngFor="let teamMember of membersArray | filterList: 'pl_pos':term; last as last">
-    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" />
+    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         {{ teamMember.name + (capId == teamMember.id ? " (C)" : "") }}

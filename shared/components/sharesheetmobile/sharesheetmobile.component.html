@@ -14,7 +14,7 @@
     <button mat-icon-button [shareButton]="social" [url]="url + data.share_url" [title]="data.share_title"
       [description]="data.share_desc" [image]="imageUrl">
       <div class="iconSize" fxLayoutAlign="start center">
-        <img class="icon" [src]="'assets/svgs/' + social + '.svg'" [alt]="social" />
+        <img class="icon" [src]="'assets/svgs/' + social + '.svg'" [alt]="social" appFallbackImg />
         <span class="mat-body-1">
           {{ social | titlecase }}
         </span>

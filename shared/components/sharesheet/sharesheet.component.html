@@ -10,22 +10,22 @@
   </a>
   <a [matTooltip]="'Share on facebook'" shareButton="facebook" [url]="url + data.url" [description]="data.share_desc"
     [title]="data.share_title" [image]="imageUrl" fxLayoutAlign="center center">
-    <img src="assets/svgs/facebook.svg" alt="facebook share" />
+    <img src="assets/svgs/facebook.svg" alt="facebook share" appFallbackImg />
   </a>
   <a [matTooltip]="'Tweet on twitter'" shareButton="twitter" [url]="url + data.url" [description]="data.share_desc"
     [title]="data.share_title" [image]="imageUrl" fxLayoutAlign="center center">
-    <img src="assets/svgs/twitter.svg" alt="twitter share" />
+    <img src="assets/svgs/twitter.svg" alt="twitter share" appFallbackImg />
   </a>
   <!-- <a [matTooltip]="'Post on linkedin'" shareButton="linkedin" [url]="url + data.share_url"
     [description]="data.share_desc" [title]="data.share_title" [image]="imageUrl" fxLayoutAlign="center center">
-    <img src="assets/svgs/linkedin.svg" alt="linkedin share" />
+    <img src="assets/svgs/linkedin.svg" alt="linkedin share" appFallbackImg/>
   </a> -->
   <a [matTooltip]="'Message on whatsapp'" shareButton="whatsapp" [url]="url + data.url" [description]="data.share_desc"
     [title]="data.share_title" [image]="imageUrl" fxLayoutAlign="center center">
-    <img src="assets/svgs/whatsapp.svg" alt="whatsapp share" />
+    <img src="assets/svgs/whatsapp.svg" alt="whatsapp share" appFallbackImg />
   </a>
   <!-- <a [matTooltip]="'Pit it on pinterest'" shareButton="pinterest" [url]="url + data.share_url"
     [description]="data.share_desc" [title]="data.share_title" [image]="imageUrl" fxLayoutAlign="center center">
-    <img src="assets/svgs/pinterest.svg" alt="pinterest share" />
+    <img src="assets/svgs/pinterest.svg" alt="pinterest share" appFallbackImg/>
   </a> -->
 </div>

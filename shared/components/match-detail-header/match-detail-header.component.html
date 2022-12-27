@@ -2,7 +2,7 @@
   <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center center">
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="matchData?.home.imgpathLogo" alt="profile image" />
+        <img [src]="matchData?.home.imgpathLogo" alt="profile image" appFallbackImg />
       </div>
       <span class="mat-body-1 center">{{ matchData?.home.name }} </span>
     </div>
@@ -33,7 +33,7 @@
     </ng-template>
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="matchData?.away.imgpathLogo" alt="profile image" />
+        <img [src]="matchData?.away.imgpathLogo" alt="profile image" appFallbackImg />
       </div>
       <span class="mat-body-1 center"> {{ matchData?.away.name }} </span>
     </div>

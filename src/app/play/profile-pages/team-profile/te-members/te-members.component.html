@@ -3,26 +3,15 @@
 <!-- mobile filter -->
 
 <!-- desktop filters -->
-<app-filters-lg
-  [margin]="true"
-  fxHide.lt-md="true"
-  [data]="filterData"
-  (changeFilter)="onChangeFilter($event)"
-></app-filters-lg>
+<app-filters-lg [margin]="true" fxHide.lt-md="true" [data]="filterData"
+  (changeFilter)="onChangeFilter($event)"></app-filters-lg>
 <!-- desktop filters -->
-<app-no-items-message
-  items="members"
-  *ngIf="(members | filterList: 'pl_pos':term)?.length === 0"
-></app-no-items-message>
+<app-no-items-message items="members"
+  *ngIf="(members | filterList: 'pl_pos':term)?.length === 0"></app-no-items-message>
 <mat-list>
-  <mat-list-item
-    *ngFor="let teamMember of members | filterList: 'pl_pos':term; last as last"
-  >
-    <img
-      matListAvatar
-      [src]="teamMember.imgpath_sm || 'assets/images/dummy_player_sm.jpg'"
-      [alt]="teamMember.name"
-    />
+  <mat-list-item *ngFor="let teamMember of members | filterList: 'pl_pos':term; last as last">
+    <img matListAvatar [src]="teamMember.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="teamMember.name"
+      appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         {{ teamMember.name }}

@@ -21,7 +21,7 @@
       <mat-list-item (click)="onOpenPlayerProfile(player)"
         *ngFor="let player of players$ | async | filterList: 'name,locCity,pl_pos':filterTerm;last as last">
         <img matListAvatar [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="player.name"
-          loading="lazy" />
+          loading="lazy" appFallbackImg />
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-body-1"> {{ player.name | slice: 0:40 }} </span>
           <span class="material-icons-round"> keyboard_arrow_right </span>
@@ -52,7 +52,7 @@
           <td mat-cell *matCellDef="let pl; let i = index">
             <div fxLayoutAlign="start center" fxLayoutGap="8px">
               <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name"
-                loading="lazy" />
+                loading="lazy" appFallbackImg />
               <span class="mat-body-1 left">
                 {{ pl.name | textShorten: 30 }}
               </span>

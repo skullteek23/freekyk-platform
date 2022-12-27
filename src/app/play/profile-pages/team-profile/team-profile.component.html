@@ -3,7 +3,7 @@
   <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
     ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
     <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
-      <img [src]="(teamInfo$ | async)?.imgpath" [alt]="(teamInfo$ | async)?.tname" />
+      <img [src]="(teamInfo$ | async)?.imgpath" [alt]="(teamInfo$ | async)?.tname" appFallbackImg />
     </div>
 
     <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
@@ -18,7 +18,7 @@
         <span class="overline align">Freekyk Team</span>
         <div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
           <div class="circle" fxLayoutAlign="center center">
-            <img [src]="(teamInfo$ | async)?.imgpath_logo" alt="Logo" />
+            <img [src]="(teamInfo$ | async)?.imgpath_logo" alt="Logo" appFallbackImg />
           </div>
           <span [ngClass]="{
               shine: isLoading,

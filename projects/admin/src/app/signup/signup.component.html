@@ -7,7 +7,7 @@
 <section fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutAlign.gt-sm="space-evenly center"
   class="section-space-top">
   <div class="placeholder" fxLayoutAlign="center center">
-    <img src="assets/placeholder_product.png" alt="Illustration" />
+    <img src="assets/placeholder_product.png" alt="Illustration" appFallbackImg />
   </div>
   <div class="form-container" *ngIf="!isRegistrationSent; else successBox">
     <form [formGroup]="signupForm" fxLayout="column">

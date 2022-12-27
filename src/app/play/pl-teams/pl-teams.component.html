@@ -27,7 +27,7 @@
             | filterList: 'tname,locState,locCity':filterTerm;
           last as last
         ">
-        <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" loading="lazy" />
+        <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" loading="lazy" appFallbackImg />
 
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-body-1"> {{ team.tname }} </span>
@@ -59,9 +59,9 @@
               | filterList: 'tname,locState,locCity':filterTerm
           ">
           <div class="teamContainer">
-            <img class="box-image" [src]="team.imgpath" alt="Team Photo" loading="lazy" />
+            <img class="box-image" [src]="team.imgpath" alt="Team Photo" loading="lazy" appFallbackImg />
             <span class="overlay-logo" fxLayoutALign="center center">
-              <img class="logo-image" [src]="team.imgpath_logo" alt="Logo" loading="lazy" />
+              <img class="logo-image" [src]="team.imgpath_logo" alt="Logo" loading="lazy" appFallbackImg />
             </span>
             <div class="content" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
               <div fxLayout="column">

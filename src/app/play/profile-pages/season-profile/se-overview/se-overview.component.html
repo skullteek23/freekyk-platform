@@ -32,7 +32,7 @@
     </span>
     <mat-list *ngIf="(participants$ | async)?.length !== 0">
       <a [routerLink]="['/t', participant.name]" mat-list-item *ngFor="let participant of participants$ | async">
-        <img matListAvatar [src]="participant.logo" alt="Team Image" />
+        <img matListAvatar [src]="participant.logo" alt="Team Image" appFallbackImg />
         <p matLine fxLayoutAlign="start center" fxLayoutGap="8px">
           <span>{{ participant.name }}</span>
           <mat-chip-list>

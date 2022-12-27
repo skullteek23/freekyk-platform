@@ -68,6 +68,7 @@ import { PlStKnockoutComponent } from '@app/play/pl-standings/pl-st-knockout/pl-
 import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-league.component';
 import { environment } from 'environments/environment';
 import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
+import { FallbackImgDirective } from '@shared/directives/fallback-img.directive';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -131,7 +132,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlStKnockoutComponent,
     PlStCommunityPlayComponent,
     KnockoutSmComponent,
-    KnockoutStripComponent
+    KnockoutStripComponent,
+    FallbackImgDirective
   ],
   imports: [
     CommonModule,
@@ -201,7 +203,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlStKnockoutComponent,
     PlStCommunityPlayComponent,
     KnockoutSmComponent,
-    KnockoutStripComponent
+    KnockoutStripComponent,
+    FallbackImgDirective
   ],
 })
 export class SharedModule { }

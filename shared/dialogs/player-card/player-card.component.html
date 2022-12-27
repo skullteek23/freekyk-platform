@@ -11,7 +11,7 @@
 <div class="container-2">
   <div class="name" fxLayout="row" fxLayoutGap="20px">
     <div class="profile-image">
-      <img [src]="(addiInfo$ | async)?.imgpath_lg | profilePic" [alt]="data.name" />
+      <img [src]="(addiInfo$ | async)?.imgpath_lg" [alt]="data.name" appFallbackImg />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">

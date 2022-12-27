@@ -5,6 +5,6 @@
     </button>
   </div>
   <div class="cont" *ngFor="let photo of photos; let i = index">
-    <img [src]="photo" [alt]="'Team Photo ' + i" loading="lazy" />
+    <img [src]="photo" [alt]="'Team Photo ' + i" loading="lazy" appFallbackImg />
   </div>
 </mat-card>

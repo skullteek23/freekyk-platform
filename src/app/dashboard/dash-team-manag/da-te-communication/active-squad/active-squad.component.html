@@ -1,6 +1,6 @@
 <mat-list>
   <mat-list-item *ngFor="let sqPlayer of sqData$ | async; last as last">
-    <img matListAvatar [src]="sqPlayer.imgpath_sm" [alt]="sqPlayer.name" />
+    <img matListAvatar [src]="sqPlayer.imgpath_sm" [alt]="sqPlayer.name" appFallbackImg />
 
     <div matLine>
       <span class="mat-body-1"> {{ sqPlayer.name }} </span>

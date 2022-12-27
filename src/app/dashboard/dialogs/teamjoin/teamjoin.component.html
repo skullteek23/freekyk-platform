@@ -27,7 +27,7 @@
             <mat-list-item *ngFor="let team of selectedTeams; let i = index">
               <div fxLayoutAlign="space-between center" fxLayoutGap="4px" class="selection-container">
                 <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                  <img matListAvatar [src]="team.data.imgpath_logo" alt="Team Logo" />
+                  <img matListAvatar [src]="team.data.imgpath_logo" alt="Team Logo" appFallbackImg />
                   <span ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption">
                     {{ team.viewValue | textShorten: 50 }}
                   </span>

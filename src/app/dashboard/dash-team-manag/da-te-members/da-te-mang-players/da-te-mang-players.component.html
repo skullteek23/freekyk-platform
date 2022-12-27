@@ -1,33 +1,22 @@
 <div style="margin: 20px 0" fxLayoutAlign="center center" fxLayoutGap="20px">
-  <button
-    class="noResponseButton buttonText"
-    [disabled]="(capId$ | async) == uid"
-    (click)="onLeaveTeam()"
-  >
+  <button class="noResponseButton buttonText" [disabled]="(capId$ | async) == uid" (click)="onLeaveTeam()">
     Leave Team
   </button>
-  <button
-    class="noResponseButton buttonText"
-    [disabled]="(capId$ | async) != uid"
-    (click)="onDeleteTeam()"
-  >
+  <button class="noResponseButton buttonText" [disabled]="(capId$ | async) != uid" (click)="onDeleteTeam()">
     Delete Team
   </button>
 </div>
 <mat-list>
   <mat-list-item *ngFor="let teamMember of membersArray; last as last">
-    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" />
+    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         {{
-          teamMember.name + ((capId$ | async) == teamMember.id ? " (C)" : "")
+        teamMember.name + ((capId$ | async) == teamMember.id ? " (C)" : "")
         }}
       </span>
-      <a
-        *ngIf="(capId$ | async) != teamMember.id && (capId$ | async) == uid"
-        (click)="onRemovePlayer(teamMember.id)"
-        class="red mat-caption"
-      >
+      <a *ngIf="(capId$ | async) != teamMember.id && (capId$ | async) == uid" (click)="onRemovePlayer(teamMember.id)"
+        class="red mat-caption">
         Remove
       </a>
     </p>

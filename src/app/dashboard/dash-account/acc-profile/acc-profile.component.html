@@ -176,7 +176,7 @@
       <div fxFlex.gt-sm="100%" class="form" fxLayout="column" fxLayoutGap="16px">
         <p class="mat-caption align" fxLayoutAlign="start center">
           Add your top freestyle videos uploaded on
-          <img class="yt" src="assets/svgs/youtube.svg" alt="Youtube" />
+          <img class="yt" src="assets/svgs/youtube.svg" alt="Youtube" appFallbackImg/>
         </p>
         <p class="smaller-caption mat-caption align" *ngIf="getFormArray('top_vids', 'fs').length === 0">
           (No video link added,
