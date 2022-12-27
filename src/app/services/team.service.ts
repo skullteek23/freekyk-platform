@@ -6,19 +6,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { map, take, tap } from 'rxjs/operators';
-import { MatchFixture } from '../shared/interfaces/match.model';
-import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '../shared/interfaces/team.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '@shared/interfaces/team.model';
 import { SnackbarService } from './snackbar.service';
 import { TeamsettingsComponent } from '../dashboard/dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from '../dashboard/dialogs/teamcreate/teamcreate.component';
-import { Invite } from '../shared/interfaces/notification.model';
-import { TeamCommsMobileComponent } from '../shared/components/team-comms-mobile/team-comms-mobile.component';
+import { Invite } from '@shared/interfaces/notification.model';
+import { TeamCommsMobileComponent } from '@shared/components/team-comms-mobile/team-comms-mobile.component';
 import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { DashState } from '../dashboard/store/dash.reducer';
-import { CLOUD_FUNCTIONS } from '../shared/Constants/CLOUD_FUNCTIONS';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '../shared/Constants/DEFAULTS';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -28,9 +28,7 @@ export class TeamService implements OnDestroy {
     this.store
       .select('dash')
       .pipe(
-        map((currState) => {
-          return { team: currState.hasTeam, isCaptain: currState.isCaptain };
-        }),
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
         take(1)
       )
       .subscribe((state) => {
@@ -86,9 +84,7 @@ export class TeamService implements OnDestroy {
     this.store
       .select('dash')
       .pipe(
-        map((currState) => {
-          return { team: currState.hasTeam, isCaptain: currState.isCaptain };
-        }),
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
         take(1)
       )
       .subscribe((state) => {
@@ -164,9 +160,7 @@ export class TeamService implements OnDestroy {
       .doc('members')
       .valueChanges()
       .pipe(
-        map((resp) => {
-          return resp as TeamMembers;
-        })
+        map((resp) => resp as TeamMembers)
       )
       .subscribe((members) =>
         this.store.dispatch(new TeamActions.AddMembers(members))
@@ -209,7 +203,7 @@ export class TeamService implements OnDestroy {
         this.store.dispatch(new TeamActions.AddMoreInfo(teamData))
       );
   }
-  private async getTeamStats(tid: string): Promise<any> {
+  async getTeamStats(tid: string): Promise<any> {
     this.ngFire
       .collection('teams/' + tid + '/additionalInfo')
       .doc('statistics')
@@ -242,7 +236,8 @@ export class TeamService implements OnDestroy {
               ({ id: doc.id, ...(doc.data() as MatchFixture) } as MatchFixture)
           )
         ),
-        map((resp) => (resp.length === 0 ? [] : resp))
+        map((resp) => (resp.length === 0 ? [] : resp)),
+        map(resp => resp.filter(el => el.date > new Date().getTime()))
       )
       .toPromise();
     this.store.dispatch(new TeamActions.AddUpcomingMatches(upmSnap));
@@ -280,7 +275,7 @@ export class TeamService implements OnDestroy {
     callable({ teamId: tid })
       .toPromise()
       .then(() => {
-        this.snackServ.displayCustomMsgLong(
+        this.snackBarService.displayCustomMsg(
           'Your Team will be deleted shortly!'
         );
         location.reload();
@@ -313,29 +308,29 @@ export class TeamService implements OnDestroy {
   handlePermissionErrors(error: string): void {
     switch (error) {
       case NO_TEAM:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Join or create a team to perform this action!'
         );
         break;
       case CAPTAIN_ONLY:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Only a Captain can perform this action!'
         );
         break;
       case MEMBER_ONLY:
-        this.snackServ.displayCustomMsg(
+        this.snackBarService.displayCustomMsg(
           'Only Non-Captain Member can perform this action!'
         );
         break;
       case INCOMPLETE_PROFILE:
-        this.snackServ.displayCustomMsg('Complete your profile to proceed!');
+        this.snackBarService.displayCustomMsg('Complete your profile to proceed!');
         break;
       case PHOTO_NOT_UPLOADED:
-        this.snackServ.displayCustomMsg('Upload your Photo to proceed!');
+        this.snackBarService.displayCustomMsg('Upload your Photo to proceed!');
         break;
 
       case ALREADY_IN_TEAM:
-        this.snackServ.displayCustomMsg('You are already a team member!');
+        this.snackBarService.displayCustomMsg('You are already a team member!');
         break;
 
       default:
@@ -348,7 +343,7 @@ export class TeamService implements OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private dialog: MatDialog,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<fromApp.AppState>,
     private ngFunc: AngularFireFunctions,
     private router: Router

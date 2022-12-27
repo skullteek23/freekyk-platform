@@ -1,0 +1,62 @@
+.form-container {
+  width: 100%;
+  /* max-width: 600px !important; */
+}
+
+.radio-buttons,
+.text-container,
+mat-form-field {
+  width: 100%;
+}
+
+.radio-group {
+  margin: 10px 0 20px;
+}
+
+.goal-label {
+  text-align: center;
+}
+
+.green {
+  color: var(--primaryLightColor);
+}
+
+.red {
+  color: var(--red);
+}
+
+.overflow {
+  overflow-y: auto;
+}
+
+.heading {
+  margin-bottom: 16px;
+}
+
+.label {
+  width: 150px;
+}
+
+.summary-container {
+  width: 100%;
+}
+
+.center {
+  text-align: justify;
+}
+
+.contract-container {
+  margin-bottom: 20px !important;
+}
+
+.error {
+  background-color: var(--red);
+  height: 42px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error span {
+  width: 100%;
+  color: white;
+}

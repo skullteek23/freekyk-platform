@@ -7,14 +7,20 @@ import { MockDataService } from './services/mock-data.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
+
   title = 'football-platform-v1';
   menuOpen = false;
   dashOpen = false;
   routeSubscription: Subscription = new Subscription();
-  constructor(private router: Router, private ngFire: AngularFirestore, private mockData: MockDataService) { }
+
+  constructor(
+    private router: Router,
+    private ngFire: AngularFirestore
+  ) { }
+
   ngOnInit(): void {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -22,9 +28,11 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   onOpenMenu(eventValue: any): any {
     this.menuOpen = eventValue;
   }
+
   ngOnDestroy(): any {
     this.routeSubscription.unsubscribe();
     localStorage.removeItem('uid');

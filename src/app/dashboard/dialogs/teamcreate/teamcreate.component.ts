@@ -15,23 +15,26 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
-import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
+import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import {
   DEFAULT_TEAM_LOGO,
   DEFAULT_TEAM_PHOTO,
-} from 'src/app/shared/Constants/DEFAULTS';
-import { ALPHA_NUM_SPACE } from 'src/app/shared/Constants/REGEX';
-import { Invite } from '../../../shared/interfaces/notification.model';
-import { PlayerBasicInfo } from '../../../shared/interfaces/user.model';
+} from '@shared/Constants/DEFAULTS';
+import { RegexPatterns } from '@shared/Constants/REGEX';
+import { Invite } from '@shared/interfaces/notification.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-teamcreate',
   templateUrl: './teamcreate.component.html',
-  styleUrls: ['./teamcreate.component.css'],
+  styleUrls: ['./teamcreate.component.scss'],
 })
 export class TeamcreateComponent implements OnInit {
+
   @ViewChild('stepper') myStepper: MatStepper;
+
   isStepOneComplete = false;
   isStepTwoComplete = false;
   teamBasicinfoForm: FormGroup;
@@ -52,31 +55,31 @@ export class TeamcreateComponent implements OnInit {
   file1Selected = false;
   file2Selected = false;
   filterTerm = '';
+
   constructor(
     public dialogRef: MatDialogRef<TeamcreateComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngStorage: AngularFireStorage,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.newTeamId = this.ngFire.createId();
     this.teamBasicinfoForm = new FormGroup({
-      tName: new FormControl(
-        null,
-        [Validators.required, Validators.pattern(ALPHA_NUM_SPACE)],
-        this.validateTNameNotTaken.bind(this)
-      ),
+      tName: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace)], this.validateTNameNotTaken.bind(this)),
     });
     this.invitesList = [];
   }
+
   onCloseDialog(toRoute: boolean = false): void {
     if (toRoute) {
       this.router.navigate(['/dashboard/team-management']);
     }
     this.dialogRef.close();
   }
+
   onSubmitOne(): void {
     if (this.teamBasicinfoForm.valid) {
       this.isStepOneComplete = true;
@@ -88,6 +91,7 @@ export class TeamcreateComponent implements OnInit {
       this.error = true;
     }
   }
+
   onSubmitTwo(plSelected: ListOption[]): void {
     this.myStepper.next();
     !this.file1Selected || !this.file2Selected
@@ -99,9 +103,9 @@ export class TeamcreateComponent implements OnInit {
     this.error = false;
     this.isStepTwoComplete = true;
   }
+
   async createTeam(logo: string, image: string): Promise<any> {
     const uid = localStorage.getItem('uid');
-
     const FunctionData = {
       newTeamInfo: {
         id: this.newTeamId,
@@ -114,6 +118,7 @@ export class TeamcreateComponent implements OnInit {
     const callable = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.CREATE_TEAM);
     return await callable(FunctionData).toPromise();
   }
+
   createInvites(selArray: { name: string; id: string }[]): void {
     selArray.forEach((selection) => {
       this.invitesList.push({
@@ -125,6 +130,7 @@ export class TeamcreateComponent implements OnInit {
       });
     });
   }
+
   sendInvites(): void {
     const batch = this.ngFire.firestore.batch();
     for (const invite of this.invitesList) {
@@ -136,13 +142,13 @@ export class TeamcreateComponent implements OnInit {
       .commit()
       .then(() => {
         this.success = true;
-        this.snackServ.displayCustomMsg('Invites sent successfully!');
-      });
+        this.snackBarService.displayCustomMsg('Invites sent successfully!');
+      })
+      .catch(() => this.snackBarService.displayError());
     // .catch((error) => console.log(error));
   }
-  validateTNameNotTaken(
-    control: AbstractControl
-  ): Observable<ValidationErrors | null> {
+
+  validateTNameNotTaken(control: AbstractControl): Observable<ValidationErrors | null> {
     const teamNameToBeChecked: string = (control.value as string).trim();
     return this.ngFire
       .collection('teams', (query) =>
@@ -153,6 +159,7 @@ export class TeamcreateComponent implements OnInit {
         map((responseData) => (responseData.empty ? null : { nameTaken: true }))
       );
   }
+
   async onChooseTeamImage(ev: any): Promise<any> {
     this.$teamPhoto = ev.target.files[0];
     this.imgPath = await (
@@ -163,6 +170,7 @@ export class TeamcreateComponent implements OnInit {
     ).ref.getDownloadURL();
     this.file1Selected = true;
   }
+
   async onChooseTeamLogoImage(ev: any): Promise<any> {
     this.$teamLogo = ev.target.files[0];
     this.logoPath = await (
@@ -173,12 +181,15 @@ export class TeamcreateComponent implements OnInit {
     ).ref.getDownloadURL();
     this.file2Selected = true;
   }
+
   getDefaultTPhoto(): string {
     return DEFAULT_TEAM_PHOTO;
   }
+
   getDefaultTLogo(): string {
     return DEFAULT_TEAM_LOGO;
   }
+
   getPlayers(): void {
     const uid = localStorage.getItem('uid');
     this.players$ = this.ngFire
@@ -207,10 +218,11 @@ export class TeamcreateComponent implements OnInit {
   onAddSelection(value: ListOption): void {
     if (this.selectedPlayers.findIndex(player => player.viewValue === value.viewValue) === -1) {
       this.selectedPlayers.push(value);
+      this.selectedPlayers.sort(ArraySorting.sortObjectByKey('viewValue'))
     }
   }
+
   onRemoveSelection(delIndex: number): void {
     this.selectedPlayers.splice(delIndex, 1);
   }
-
 }

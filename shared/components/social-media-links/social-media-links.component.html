@@ -1,0 +1,25 @@
+<div [ngSwitch]="type">
+  <p class="dash-h5 align" *ngSwitchCase="'player' || 'freestyler'">
+    Social Media
+  </p>
+  <p class="dash-h5 align" *ngSwitchCase="'team'">Team Social Media</p>
+</div>
+<div fxLayoutGap="8px" fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="start center" fxLayout>
+  <a (click)="socials?.fb ? onOpenSocialMedia('facebook') : null"
+    [matTooltip]="socials?.fb ? 'Open Profile' : ADD_THIS_LINK" fxLayoutAlign="center center">
+    <img src="assets/svgs/facebook.svg" alt="Facebook" class="iconSize" appFallbackImg />
+  </a>
+  <a (click)="socials?.ig ? onOpenSocialMedia('instagram') : null"
+    [matTooltip]="socials?.ig ? 'Open Profile' : ADD_THIS_LINK" fxLayoutAlign="center center">
+    <img src="assets/svgs/instagram.svg" alt="instagram" class="iconSize" appFallbackImg />
+  </a>
+  <a (click)="socials?.yt ? onOpenSocialMedia('youtube') : null"
+    [matTooltip]="socials?.yt ? 'Open Profile' : ADD_THIS_LINK" fxLayoutAlign="center center">
+    <img src="assets/svgs/youtube.svg" alt="Youtube" class="iconSize" appFallbackImg />
+  </a>
+  <a (click)="socials?.tw ? onOpenSocialMedia('twitter') : null"
+    [matTooltip]="socials?.tw ? 'Open Profile' : ADD_THIS_LINK" fxLayoutAlign="center center">
+    <img src="assets/svgs/twitter.svg" alt="Twitter" class="iconSize" appFallbackImg />
+  </a>
+  <a matTooltip="Add Link" (click)="onAddLinks()" class="material-icons-round">add_circle</a>
+</div>

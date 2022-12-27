@@ -3,30 +3,27 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { tap, map, share } from 'rxjs/operators';
+import { tap, map, share, take } from 'rxjs/operators';
 import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { NotificationBasic } from 'src/app/shared/interfaces/notification.model';
-import { StatsTeam } from 'src/app/shared/interfaces/others.model';
-import {
-  TeamBasicInfo,
-  TeamMedia,
-  TeamMembers,
-  TeamMoreInfo,
-  TeamStats,
-} from 'src/app/shared/interfaces/team.model';
-import firebase from 'firebase/app';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { StatsTeam } from '@shared/interfaces/others.model';
+import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
+import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-team-profile',
   templateUrl: './team-profile.component.html',
-  styleUrls: ['./team-profile.component.css'],
+  styleUrls: ['./team-profile.component.scss'],
 })
 export class TeamProfileComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   teamInfo$: Observable<TeamBasicInfo>;
   teamMoreInfo$: Observable<TeamMoreInfo>;
+  teamName = '';
   stats$: Observable<StatsTeam>;
   members$: Observable<TeamMembers>;
   media$: Observable<string[]>;
@@ -34,24 +31,31 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   error = false;
   imgPath: string;
   id: string;
+  uid: string;
   subscriptions = new Subscription();
+
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<{ dash: DashState }>,
     private router: Router,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlServ: EnlargeService
+    private enlargeService: EnlargeService,
+    private socialShareService: SocialShareService
   ) { }
+
   ngOnInit(): void {
-    const teamName = this.route.snapshot.params.teamName;
-    this.getTeamInfo(teamName);
+    this.uid = localStorage.getItem('uid');
+    this.teamName = this.route.snapshot.params.teamName;
+    this.getTeamInfo(this.teamName);
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   getTeamInfo(tName: string): void {
     this.teamInfo$ = this.ngFire
       .collection('teams', (query) =>
@@ -88,6 +92,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   getTeamMoreInfo(tid: string): void {
     this.teamMoreInfo$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -102,6 +107,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         share()
       );
   }
+
   getStats(tid: string): void {
     this.stats$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -119,9 +125,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             'FKC Played': resp.fkc_played.toString(),
             'FCP Played': resp.fcp_played.toString(),
             'FPL Played': resp.fpl_played.toString(),
-            'Goals': resp.g.toString(),
-            'Wins': resp.w.toString(),
-            'Losses': resp.l.toString(),
+            Goals: resp.g.toString(),
+            Wins: resp.w.toString(),
+            Losses: resp.l.toString(),
             'Red cards': resp.rcards.toString(),
             'Yellow cards': resp.ycards.toString(),
             'Goals Conceded': resp.g_conceded.toString(),
@@ -129,6 +135,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         )
       );
   }
+
   getTeamMedia(tid: string): void {
     this.media$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -143,6 +150,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         })
       );
   }
+
   getTeamMembers(tid: string): void {
     this.members$ = this.ngFire
       .collection(`teams/${tid}/additionalInfo`)
@@ -156,41 +164,49 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         })
       );
   }
+
   onChallengeTeam(): void {
-    const uid = localStorage.getItem('uid');
-    this.store
+    if (this.isOwnTeam) {
+      return;
+    }
+    this.subscriptions.add(this.store
       .select('dash')
-      .pipe(map((resp) => resp))
+      .pipe(take(1), map((resp) => resp))
       .subscribe(async (team) => {
-        if (team.hasTeam == null) {
-          this.snackServ.displayCustomMsg(
-            'Join or create a team to perform this action!'
-          );
-        } else if (team.hasTeam.capId !== uid) {
-          this.snackServ.displayCustomMsg(
-            'Only a Captain can perform this action!'
-          );
+        if (team && team.hasTeam == null) {
+          this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');
+        } else if (team.hasTeam.capId !== this.uid) {
+          this.snackBarService.displayCustomMsg('Only a Captain can perform this action!');
         } else {
           const notif: NotificationBasic = {
             type: 'team challenge',
-            senderId: uid,
-            recieverId: this.id,
-            date: firebase.firestore.Timestamp.fromDate(new Date()),
+            senderId: this.uid,
+            receiverId: this.id,
+            date: new Date().getTime(),
             title: 'Team Challenge Recieved',
+            read: false,
             senderName: team.hasTeam.name,
           };
           this.ngFire
             .collection(`players/${this.id}/Notifications`)
             .add(notif)
-            .then(() =>
-              this.snackServ.displayCustomMsg(
-                'Challenge Notification sent to team captain.'
-              )
-            );
+            .then(() => this.snackBarService.displayCustomMsg('Challenge Notification sent to team captain.'))
+            .catch(() => this.snackBarService.displayError());
         }
-      });
+      }));
   }
+
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.imgPath);
+    this.enlargeService.onOpenPhoto(this.imgPath);
+  }
+
+  get isOwnTeam(): boolean {
+    return this.id === this.uid;
+  }
+
+  onShare() {
+    const data = new ShareData();
+    data.share_url = `/t/${this.teamName}`;
+    this.socialShareService.onShare(data);
   }
 }

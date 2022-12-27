@@ -1,15 +1,7 @@
 <div class="container min-height section-space-top section-space-bottom">
-  <div
-    class="name"
-    fxLayout="row"
-    fxLayoutGap="20px"
-    fxLayoutAlign.gt-sm="center center"
-  >
+  <div class="name" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign.gt-sm="center center">
     <div class="profile-image">
-      <img
-        [src]="(plInfo$ | async)?.imgpath_sm | profilePic"
-        [alt]="(plInfo$ | async)?.name"
-      />
+      <img [src]="(plInfo$ | async)?.imgpath_sm" [alt]="(plInfo$ | async)?.name" appFallbackImg />
     </div>
     <div fxLayout="column" fxLayoutAlign="center">
       <p class="mat-caption left">
@@ -34,59 +26,49 @@
               <span class="mat-body-2">Position</span>
               <span class="mat-body-1 right">{{
                 (plInfo$ | async)?.pl_pos
-              }}</span>
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Team</span
-              ><span class="mat-body-1 right">{{
-                (plInfo$ | async)?.team !== null
-                  ? (plInfo$ | async)?.team.name
-                  : "No Team"
-              }}</span>
+              <span class="mat-body-2">Team</span><span class="mat-body-1 right">
+                {{ (plInfo$ | async)?.team?.name }}
+              </span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Strong Foot</span
-              ><span class="mat-body-1 right">{{
+              <span class="mat-body-2">Strong Foot</span><span class="mat-body-1 right">{{
                 (addiInfo$ | async)?.str_ft | strongFoot
-              }}</span>
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Location</span
-              ><span class="mat-body-1 right">{{
+              <span class="mat-body-2">Location</span><span class="mat-body-1 right">{{
                 (addiInfo$ | async)?.locState
-              }}</span>
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Birthday</span
-              ><span class="mat-body-1 right">{{
-                (addiInfo$ | async)?.born?.toDate() | date: "mediumDate"
-              }}</span>
+              <span class="mat-body-2">Birthday</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.born | date: "mediumDate"
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Gender</span
-              ><span class="mat-body-1 right">{{
+              <span class="mat-body-2">Gender</span><span class="mat-body-1 right">{{
                 (plInfo$ | async)?.gen | gender
-              }}</span>
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Height</span
-              ><span class="mat-body-1 right">{{
+              <span class="mat-body-2">Height</span><span class="mat-body-1 right">{{
                 (addiInfo$ | async)?.height | height
-              }}</span>
+                }}</span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Weight</span
-              ><span class="mat-body-1 right">{{
+              <span class="mat-body-2">Weight</span><span class="mat-body-1 right">{{
                 (addiInfo$ | async)?.weight | weight
-              }}</span>
+                }}</span>
             </div>
           </div>
           <mat-divider></mat-divider>
           <div class="other" fxLayout="column" fxLayoutGap="16px">
             <span class="dash-h5 align">{{ "other info" | titlecase }}</span>
             <div fxLayoutAlign="start" fxLayout="column">
-              <span class="mat-body-2">Bio</span
-              ><span class="mat-body-1 left">
+              <span class="mat-body-2">Bio</span><span class="mat-body-1 left">
                 {{ (addiInfo$ | async)?.bio | bio }}
               </span>
             </div>
@@ -103,12 +85,8 @@
         <div class="seperator" fxLayoutGap="16px" fxLayout="column">
           <div class="basic" fxLayout="column" fxLayoutGap="16px">
             <span class="dash-h5 align">{{ "Basic stats" | titlecase }}</span>
-            <div
-              fxLayoutAlign="space-between center"
-              *ngFor="let stat of plStats$ | async | keyvalue"
-            >
-              <span class="mat-body-2">{{ stat.key }}</span
-              ><span class="mat-body-1">{{ stat.value }}</span>
+            <div fxLayoutAlign="space-between center" *ngFor="let stat of plStats$ | async | keyvalue">
+              <span class="mat-body-2">{{ stat.key }}</span><span class="mat-body-1">{{ stat.value }}</span>
             </div>
           </div>
           <mat-divider></mat-divider>

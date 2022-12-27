@@ -1,56 +1,82 @@
-import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppMaterialModule } from 'projects/admin/src/app/app-material.module';
-import { AppRoutingModule } from './app-routing.module';
+import { AngularFireModule } from '@angular/fire';
+import { RouterModule, Routes } from '@angular/router';
+import { REGION } from '@angular/fire/functions';
+import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { environment } from 'src/environments/environment';
-
-import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { environment } from 'environments/environment';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 import { ErrorComponent } from './error/error.component';
-import { AddSeasonComponent } from './season-panel/add-season/add-season.component';
-import { GenFixturesComponent } from './season-panel/gen-fixtures/gen-fixtures.component';
-import { SeasonPanelComponent } from './season-panel/season-panel.component';
-import { UpdateMrComponent } from './season-panel/update-mr/update-mr.component';
-import { ViewSeasonComponent } from './season-panel/view-season/view-season.component';
-import { SharedAdminModule } from './shared/shared-admin.module';
-import { GroundsPanelComponent } from './grounds-panel/grounds-panel.component';
-import { FixtureTableComponent } from './season-panel/fixture-table/fixture-table.component';
+import { MaterialModule } from '@shared/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthGuard } from './guards/auth.guard';
+import { LoggedUserRedirectGuard } from './guards/logged-user-redirect.guard';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SharedModule } from '@shared/shared.module';
+import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [
+      LoggedUserRedirectGuard
+    ]
+  },
+  {
+    path: 'register',
+    component: SignupComponent
+  },
+  {
+    path: '**',
+    component: ErrorComponent,
+    data: {
+      message: 'We are sorry, but the page you requested was not found!',
+      code: '404',
+    },
+  },
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminHomeComponent,
-    SeasonPanelComponent,
-    AddSeasonComponent,
-    GenFixturesComponent,
-    UpdateMrComponent,
-    ViewSeasonComponent,
-    ErrorComponent,
-    GroundsPanelComponent,
-    FixtureTableComponent,
+    LoginComponent,
+    SignupComponent,
+    ErrorComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
-    AppRoutingModule,
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+    MaterialModule,
     BrowserAnimationsModule,
-    AppMaterialModule,
-    SharedAdminModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    AngularFireDatabaseModule,
     FormsModule,
+    FlexLayoutModule,
+    SharedModule,
+    SnackBarModule,
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [],
+  providers: [
+    { provide: REGION, useValue: 'asia-south1' },
+    DatePipe,
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

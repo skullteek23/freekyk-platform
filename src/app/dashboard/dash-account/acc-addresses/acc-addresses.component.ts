@@ -9,16 +9,18 @@ import {
 import { MatSelectChange } from '@angular/material/select';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { LocationCitiesService } from 'src/app/services/location-cities.service';
+import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { userAddress } from 'src/app/shared/interfaces/others.model';
+import { userAddress } from '@shared/interfaces/others.model';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 
 @Component({
   selector: 'app-acc-addresses',
   templateUrl: './acc-addresses.component.html',
-  styleUrls: ['./acc-addresses.component.css'],
+  styleUrls: ['./acc-addresses.component.scss'],
 })
 export class AccAddressesComponent implements OnInit {
+
   noSavedAddress = false;
   newAddressForm: FormGroup = new FormGroup({});
   addr$: Observable<userAddress[]>;
@@ -29,9 +31,9 @@ export class AccAddressesComponent implements OnInit {
   uid: string;
 
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
-    private locationServ: LocationCitiesService
+    private locationService: LocationService
   ) { }
 
   ngOnInit(): void {
@@ -39,12 +41,15 @@ export class AccAddressesComponent implements OnInit {
     this.getAddresses();
     this.onGetStates();
   }
+
   onGetStates(): void {
-    this.states$ = this.locationServ.getStateByCountry('India');
+    this.states$ = this.locationService.getStateByCountry();
   }
+
   onSelectState(state: MatSelectChange): void {
-    this.cities$ = this.locationServ.getCityByState(state.value);
+    this.cities$ = this.locationService.getCityByState(state.value);
   }
+
   getAddresses(): void {
     this.addr$ = this.ngFire
       .collection(`players/${this.uid}/Addresses`)
@@ -62,63 +67,53 @@ export class AccAddressesComponent implements OnInit {
         )
       );
   }
+
   onOpenAddressForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
     this.newAddressForm = new FormGroup({
       addr_name: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[a-zA-Z ]*$'),
+        Validators.pattern(RegexPatterns.alphaNumberWithSpace),
       ]),
-      addr_line1: new FormControl(null, Validators.required),
-      addr_line2: new FormControl(null),
-      landmark: new FormControl(null),
+      addr_line1: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.query)]),
+      addr_line2: new FormControl(null, Validators.pattern(RegexPatterns.query)),
+      landmark: new FormControl(null, Validators.pattern(RegexPatterns.query)),
       city: new FormControl(null, Validators.required),
       state: new FormControl(null, Validators.required),
-      pincode: new FormControl(
-        null,
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(6),
-          Validators.minLength(6),
-        ],
-        this.FirstDigitNotZero.bind(this)
-      ),
-      ph_numb: new FormControl(
-        null,
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(10),
-          Validators.minLength(10),
-        ],
-        this.FirstDigitNotZero.bind(this)
-      ),
+      pincode: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.pincode)]),
+      ph_numb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
     });
   }
+
   onDeleteAddress(formid: string): void {
     this.ngFire
       .collection(`players/${this.uid}/Addresses`)
       .doc(formid)
       .delete()
-      .then(() => this.snackServ.displayDelete());
+      .then(() => this.snackBarService.displayCustomMsg('Address deleted successfully!'))
+      .catch(() => this.snackBarService.displayError());
   }
+
   resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
+
   onSaveAddress(): void {
     // console.log(this.newAddressForm);
     this.ngFire
       .collection(`players/${this.uid}/Addresses`)
       .add(this.newAddressForm.value)
-      .then(this.finishSubmit.bind(this));
+      .then(this.finishSubmit.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
+
   finishSubmit(): void {
-    this.snackServ.displayCustomMsg('Address saved successfully!');
+    this.snackBarService.displayCustomMsg('Address saved successfully!');
     this.resetAll();
   }
+
   FirstDigitNotZero(control: AbstractControl): Observable<any> {
     return (control.value as string).charAt(0) === '0'
       ? of({ invalidCode: true })

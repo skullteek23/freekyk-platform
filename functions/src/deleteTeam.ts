@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
-import { Invite } from '../../src/app/shared/interfaces/notification.model';
-import { ActiveSquadMember, TeamMembers } from '../../src/app/shared/interfaces/team.model';
+import { Invite } from '@shared/interfaces/notification.model';
+import { TeamMembers, ActiveSquadMember } from '@shared/interfaces/team.model';
 
 const db = admin.firestore();
 

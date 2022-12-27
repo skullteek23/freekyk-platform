@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { EnlargeMediaComponent } from '../shared/dialogs/enlarge-media/enlarge-media.component';
+import { EnlargeMediaComponent } from '@shared/dialogs/enlarge-media/enlarge-media.component';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +36,5 @@ export class EnlargeService {
       return this.domSanServ.bypassSecurityTrustResourceUrl(url);
     }
   }
-  constructor(private dialog: MatDialog, private domSanServ: DomSanitizer) {}
+  constructor(private dialog: MatDialog, private domSanServ: DomSanitizer) { }
 }

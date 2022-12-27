@@ -1,0 +1,4 @@
+<div class="banner" [ngClass.gt-sm]="{ shiftSvg: svgSrc.includes('play') }" fxLayoutAlign="center center">
+  <img [ngStyle.lt-md]="{ height: svgSrc.includes('academy') ? '69%' : '93%' }" [src]="svgSrc" alt="Scene SVG"
+    appFallbackImg />
+</div>

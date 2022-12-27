@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PlayComponent } from './play.component';
 import { PlayRoutingModule } from './play-routing.module';
 import { PlHomeComponent } from './pl-home/pl-home.component';
@@ -7,15 +8,11 @@ import { PlPlayersComponent } from './pl-players/pl-players.component';
 import { PlTeamsComponent } from './pl-teams/pl-teams.component';
 import { PlFixturesComponent } from './pl-fixtures/pl-fixtures.component';
 import { PlResultsComponent } from './pl-results/pl-results.component';
-import { PlStandingsComponent } from './pl-standings/pl-standings.component';
-import { SharedModule } from '../shared/shared.module';
-import { PlStLeagueComponent } from './pl-standings/pl-st-league/pl-st-league.component';
-import { PlStKnockoutComponent } from './pl-standings/pl-st-knockout/pl-st-knockout.component';
-import { PlStCommunityPlayComponent } from './pl-standings/pl-st-community-play/pl-st-community-play.component';
-import { KnockoutSmComponent } from './pl-standings/pl-st-knockout/knockout-sm/knockout-sm.component';
+import { SharedModule } from '@shared/shared.module';
 import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
-import { PlayMaterialModule } from './play-material.module';
-import { KnockoutStripComponent } from './pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
+import { MaterialModule } from '@shared/material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 @NgModule({
   declarations: [
@@ -26,15 +23,15 @@ import { KnockoutStripComponent } from './pl-standings/pl-st-knockout/knockout-s
     PlTeamsComponent,
     PlFixturesComponent,
     PlResultsComponent,
-    PlStandingsComponent,
-    PlStLeagueComponent,
-    PlStKnockoutComponent,
-    PlStCommunityPlayComponent,
-    KnockoutSmComponent,
     PlGroundsComponent,
-    KnockoutStripComponent,
   ],
-  imports: [SharedModule, PlayMaterialModule, PlayRoutingModule],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    SharedModule,
+    PlayRoutingModule,
+    FlexLayoutModule,
+  ],
   exports: [],
 })
-export class PlayModule {}
+export class PlayModule { }

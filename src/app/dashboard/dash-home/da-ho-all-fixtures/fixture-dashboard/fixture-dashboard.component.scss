@@ -1,0 +1,120 @@
+.filled {
+  color: var(--primaryColor);
+}
+.fixture {
+  height: 56px;
+  width: 100%;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid var(--grey3);
+  border-radius: var(--borderRadiusCard);
+  padding: 0 20px;
+  background-color: white;
+}
+.premiumFixture {
+  border: 2px solid var(--premiumServiceColor);
+}
+.versus {
+  height: 24px;
+  width: 24px;
+  font-weight: 600;
+}
+.round {
+  border-radius: 50%;
+}
+.box {
+  border-radius: var(--borderRadiusCard);
+}
+
+.side-space {
+  padding: 0 20px;
+}
+.scoreColor {
+  color: white;
+}
+.score {
+  height: 40px;
+  width: 40px;
+}
+.team_name {
+  width: 150px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media only screen and (max-width: 359px) {
+  .hide {
+    display: none;
+  }
+  .team_name {
+    width: 50px;
+    max-width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media only screen and (min-width: 360px) and (max-width: 600px) {
+  .versus {
+    border-radius: 50%;
+    height: 8px;
+    width: 8px;
+    font-weight: 600;
+  }
+  .team_name {
+    width: 60px;
+    max-width: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .side-space {
+    padding: 0 0px 0 8px !important;
+  }
+  .score {
+    height: 24px;
+    width: 24px;
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 959px) {
+  .versus {
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    font-weight: 600;
+  }
+  .side-space {
+    padding: 0 0px 0 8px !important;
+  }
+  .team_name {
+    width: 100%;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media only screen and (min-width: 959px) and (max-width: 1279px) {
+  .fixture {
+    height: 72px;
+    width: 100%;
+    margin: 8px 0;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: var(--borderRadiusCard);
+  }
+  .team_name {
+    width: 75px;
+    max-width: 75px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .timestamp {
+    min-width: 80px;
+    max-width: 85px;
+  }
+}

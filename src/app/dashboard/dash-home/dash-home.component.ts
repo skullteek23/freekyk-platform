@@ -10,7 +10,7 @@ import { DashState } from '../store/dash.reducer';
 @Component({
   selector: 'app-dash-home',
   templateUrl: './dash-home.component.html',
-  styleUrls: ['./dash-home.component.css'],
+  styleUrls: ['./dash-home.component.scss'],
 })
 export class DashHomeComponent implements OnInit, OnDestroy {
   @ViewChild(MatTabGroup) tabs: MatTabGroup;
@@ -25,7 +25,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private mediaObs: MediaObserver,
-    private teServ: TeamService,
+    private teamService: TeamService,
     private store: Store<{
       dash: DashState;
     }>
@@ -70,9 +70,9 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     }
   }
   joinTeam(): void {
-    this.teServ.onOpenJoinTeamDialog();
+    this.teamService.onOpenJoinTeamDialog();
   }
   createTeam(): void {
-    this.teServ.onOpenCreateTeamDialog();
+    this.teamService.onOpenCreateTeamDialog();
   }
 }

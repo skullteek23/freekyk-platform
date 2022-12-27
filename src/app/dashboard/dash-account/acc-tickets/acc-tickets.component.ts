@@ -2,30 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ALPHA_W_SPACE, NUM, QUERY } from 'src/app/shared/Constants/REGEX';
-import { BasicTicket } from 'src/app/shared/interfaces/ticket.model';
+import { BasicTicket } from '@shared/interfaces/ticket.model';
+import { ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-acc-tickets',
   templateUrl: './acc-tickets.component.html',
-  styleUrls: ['./acc-tickets.component.css'],
+  styleUrls: ['./acc-tickets.component.scss'],
 })
 export class AccTicketsComponent implements OnInit {
+
   ticketStatus = true;
   newTicketForm: FormGroup = new FormGroup({});
   additionAvailable = true;
   showForm = false;
   myTickets$: Observable<BasicTicket[]>;
   noTickets = false;
+
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private ngFire: AngularFirestore
   ) { }
+
   ngOnInit(): void {
     this.getTickets();
   }
+
   getTickets(): void {
     this.myTickets$ = this.ngFire
       .collection('tickets')
@@ -43,6 +48,7 @@ export class AccTicketsComponent implements OnInit {
         )
       );
   }
+
   getColor(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -53,6 +59,7 @@ export class AccTicketsComponent implements OnInit {
         return 'grey';
     }
   }
+
   getIcon(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -63,6 +70,7 @@ export class AccTicketsComponent implements OnInit {
         return 'inventory';
     }
   }
+
   getStatus(status: 'Complete' | 'Processing' | 'Recieved'): string {
     switch (status) {
       case 'Complete':
@@ -73,40 +81,43 @@ export class AccTicketsComponent implements OnInit {
         return 'request recieved';
     }
   }
+
   onOpenTicketForm(): void {
     this.additionAvailable = false;
     this.showForm = true;
     this.newTicketForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
-        Validators.pattern(ALPHA_W_SPACE),
+        Validators.pattern(RegexPatterns.alphaWithSpace),
       ]),
       ph_number: new FormControl(null, [
         Validators.required,
-        Validators.pattern(NUM),
-        Validators.minLength(10),
-        Validators.maxLength(10),
+        Validators.pattern(RegexPatterns.phoneNumber),
       ]),
       email: new FormControl(null, [Validators.required, Validators.email]),
       query: new FormControl(null, [
         Validators.required,
-        Validators.maxLength(300),
-        Validators.pattern(QUERY),
+        Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT),
+        Validators.pattern(RegexPatterns.query),
       ]),
     });
   }
+
   onDeleteTicket(ticketID: string): void {
     // backend code goes here
     this.ngFire
       .collection('tickets')
       .doc(ticketID)
       .delete()
-      .then(() => this.snackServ.displayDelete());
+      .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'))
+      .catch(() => this.snackBarService.displayError());
   }
+
   resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
   }
+
   onSubmitTicket(): void {
     // backend code goes here
     // console.log(this.newTicketForm);
@@ -120,10 +131,12 @@ export class AccTicketsComponent implements OnInit {
         tkt_date: new Date(),
         tkt_status: 'Recieved',
       } as BasicTicket)
-      .then(this.finishSubmission.bind(this));
+      .then(this.finishSubmission.bind(this))
+      .catch(() => this.snackBarService.displayError());
   }
+
   finishSubmission(): void {
     this.resetAll();
-    this.snackServ.displayCustomMsg('Ticket submitted successfully!');
+    this.snackBarService.displayCustomMsg('Ticket submitted successfully!');
   }
 }

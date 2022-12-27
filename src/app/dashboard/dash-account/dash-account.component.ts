@@ -3,20 +3,22 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
-import { RouteLinks } from 'src/app/shared/Constants/ROUTE_LINKS';
+import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 @Component({
   selector: 'app-dash-account',
   templateUrl: './dash-account.component.html',
-  styleUrls: ['./dash-account.component.css'],
+  styleUrls: ['./dash-account.component.scss'],
 })
 export class DashAccountComponent implements OnInit, OnDestroy {
+
   accountLinks: string[] = RouteLinks.DASHBOARD_ACCOUNT;
   routeSubscription: Subscription;
   activeLink = '';
+
   constructor(
     private router: Router,
-    private plServ: PlayerService,
-    private teServ: TeamService
+    private playerService: PlayerService,
+    private teamService: TeamService
   ) {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -24,7 +26,9 @@ export class DashAccountComponent implements OnInit, OnDestroy {
       }
     });
   }
-  ngOnInit(): void {}
+
+  ngOnInit(): void { }
+
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
   }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { LANDING_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
+import { LANDING_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css'],
+  styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements OnInit {
   readonly mainContent = LANDING_PAGE.banner;
@@ -15,12 +15,15 @@ export class LandingPageComponent implements OnInit {
   readonly whyChoose = LANDING_PAGE.whyChooseFreekyk;
   readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   readonly sliderContent = LANDING_PAGE.communityMedia;
+
   responsiveSize;
-  constructor() {}
+
+  constructor() { }
 
   ngOnInit(): void {
     this.onResizeSlider();
   }
+
   onResizeSlider(): void {
     if (window.innerWidth > 599) {
       this.responsiveSize = { width: 350, height: 300, space: 16 };

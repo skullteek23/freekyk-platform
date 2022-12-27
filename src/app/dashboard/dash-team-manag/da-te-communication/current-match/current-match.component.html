@@ -2,9 +2,9 @@
   <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center center">
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="data?.home.logo" alt="profile image" />
+        <img [src]="data?.home.logo" alt="profile image" appFallbackImg />
       </div>
-      <span class="mat-body-1 center">{{ data?.home.logo }} </span>
+      <span class="mat-body-1 center">{{ data?.home.name }} </span>
     </div>
     <div class="kickoff" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
       <span class="overline">
@@ -12,18 +12,18 @@
       </span>
 
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-        {{ data?.date.toDate() | date: "HH:mm" }}
+        {{ data?.date | date: "HH:mm" }}
       </span>
     </div>
 
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="data?.away.logo" alt="profile image" />
+        <img [src]="data?.away.logo" alt="profile image" appFallbackImg />
       </div>
       <span class="mat-body-1 center"> {{ data?.away.name }} </span>
     </div>
   </div>
-  <span class="mat-body-2 center">This match is on {{ data?.date.toDate() | date: "mediumDate" }}</span>
+  <span class="mat-body-2 center">This match is on {{ data?.date | date: "mediumDate" }}</span>
 </div>
 <div fxLayoutAlign="center center">
   <button (click)="onOpenFixture()" class="secondaryButton buttonText">

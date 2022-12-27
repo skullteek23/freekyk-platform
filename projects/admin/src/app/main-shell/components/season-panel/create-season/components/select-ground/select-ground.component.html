@@ -1,0 +1,39 @@
+<form [formGroup]="groundForm" class="select-ground-form-container" fxLayout="column">
+  <section class="section-container" fxLayout="column">
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onLoadTabs()">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Private Grounds
+          <mat-chip-list>
+            <mat-chip>PAID</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <ng-template matTabContent>
+          <div fxLayout.gt-sm="row" fxLayoutGap="20px" fxLayout.lt-md="column">
+            <app-ground-filters fxFlex.gt-sm="30%" (filterChange)="onApplyFilter($event)" [data]="cities"
+              selectedCityName="{{selectedCity}}">
+            </app-ground-filters>
+            <app-ground-slots fxFlex.gt-sm="auto" [groundsList]="grounds"></app-ground-slots>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Public Grounds
+          <mat-chip-list>
+            <mat-chip>FREE</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <ng-template matTabContent>
+          <div fxLayout.gt-sm="row" fxLayoutGap="20px" fxLayout.lt-md="column">
+            <app-ground-filters fxFlex.gt-sm="30%" (filterChange)="onApplyFilter($event)" [data]="cities"
+              selectedCityName="{{selectedCity}}">
+            </app-ground-filters>
+            <app-ground-slots fxFlex.gt-sm="auto" [groundsList]="grounds"></app-ground-slots>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
+</form>
+<app-loading *ngIf="isLoaderShown"></app-loading>

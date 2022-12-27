@@ -2,26 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlayerService } from 'src/app/services/player.service';
-import { statsIcon } from 'src/app/shared/interfaces/others.model';
+import { statsIcon } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-da-ho-stats-card',
   templateUrl: './da-ho-stats-card.component.html',
-  styleUrls: ['./da-ho-stats-card.component.css'],
+  styleUrls: ['./da-ho-stats-card.component.scss'],
 })
 export class DaHoStatsCardComponent implements OnInit {
+
   isLoading = true;
   statsIconsFs: statsIcon[] = [];
   plStats$: Observable<statsIcon[]>;
   fsStats$: Observable<statsIcon[]>;
-  constructor(private plServ: PlayerService) {}
+
+  constructor(
+    private playerService: PlayerService
+  ) { }
+
   ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
     const uid = localStorage.getItem('uid');
     if (uid) {
-      this.plStats$ = this.plServ.fetchPlayerStats(uid).pipe(
+      this.plStats$ = this.playerService.fetchPlayerStats(uid).pipe(
         map((stats) => {
           let newArray: statsIcon[] = [];
           newArray = [
@@ -32,13 +37,14 @@ export class DaHoStatsCardComponent implements OnInit {
             },
             { icon: 'sports_soccer', name: 'Goals', value: stats.g },
             { icon: 'flag', name: 'Wins', value: stats.w },
-            { icon: 'style', name: 'Cards', value: stats.cards },
+            { icon: 'style', name: 'Red Cards', value: stats.rcards },
+            { icon: 'style', name: 'Yellow Cards', value: stats.ycards },
             { icon: 'cancel_presentation', name: 'Losses', value: stats.l },
           ];
           return newArray;
         })
       );
-      this.fsStats$ = this.plServ.fetchFsStats(uid).pipe(
+      this.fsStats$ = this.playerService.fetchFsStats(uid).pipe(
         map((stats) => {
           const newArray: statsIcon[] = [
             { icon: 'stars', name: 'Skill Level', value: stats.sk_lvl },

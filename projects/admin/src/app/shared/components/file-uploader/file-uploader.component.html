@@ -1,7 +1,0 @@
-<div class="uploader-container">
-  <button class="buttonText primaryButton" (click)="fileInput.click()">
-    <input type="file" hidden class="file-upload" #fileInput (change)="onSelectFile($event)">
-    {{fileName ? 'Change File' : 'Choose File'}}
-  </button>
-  <span class="mat-caption">{{fileName}}</span>
-</div>

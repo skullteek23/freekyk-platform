@@ -1,24 +1,10 @@
-<mat-card
-  class="mat-elevation-z8"
-  [ngClass]="{ 'cards-l': profile == 'player' }"
->
+<mat-card class="mat-elevation-z8" [ngClass]="{ 'cards-l': profile == 'player' }">
   <ng-template #profileLoading>
-    <div
-      class="_inside"
-      fxLayout.gt-sm="row"
-      fxLayout.lt-md="column"
-      fxLayoutAlign.gt-sm="center stretch"
-      fxLayoutGap="20px"
-    >
+    <div class="_inside" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="center stretch"
+      fxLayoutGap="20px">
       <span fxFlexFill.lt-md fxFlex.gt-sm="50%" class="shine _box"></span>
-      <div
-        fxFill.lt-md
-        ngClass.lt-md="full-width-table"
-        fxFlex.gt-sm="50%"
-        fxFlexAlign="center"
-        fxLayout="column"
-        fxLayoutGap="20px"
-      >
+      <div fxFill.lt-md ngClass.lt-md="full-width-table" fxFlex.gt-sm="50%" fxFlexAlign="center" fxLayout="column"
+        fxLayoutGap="20px">
         <span *ngFor="let text of [1, 1, 1, 1, 1, 1, 1, 1]" class="_text shine">
         </span>
         <div class="full-width-table">
@@ -30,104 +16,53 @@
       </div>
     </div>
   </ng-template>
-  <div
-    *ngIf="!isLoading; else profileLoading"
-    fxLayout.gt-sm="row"
-    fxLayout="column"
-    fxLayoutGap="20px"
-    fxLayoutAlign.gt-sm="center center"
-  >
+  <div *ngIf="!isLoading; else profileLoading" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="20px"
+    fxLayoutAlign.gt-sm="center center">
     <!-- Photo -->
-    <a
-      fxFlexOrder="0"
-      fxFlexFill.lt-md
-      fxFlex.gt-sm="50%"
-      fxFlexOrder.gt-sm="0"
-      class="photo_container"
-      fxLayoutAlign="space-evenly center"
-    >
-      <img
-        (click)="onUploadPhoto()"
-        *ngIf="profilePhoto; else photoPlaceholder"
-        [src]="profilePhoto"
-        alt="Photo"
-        class="profile-photo-large"
-      />
+    <a fxFlexOrder="0" fxFlexFill.lt-md fxFlex.gt-sm="50%" fxFlexOrder.gt-sm="0" class="photo_container"
+      fxLayoutAlign="space-evenly center">
+      <img (click)="onUploadPhoto()" *ngIf="profilePhoto; else photoPlaceholder" [src]="profilePhoto" alt="Photo"
+        class="profile-photo-large" loading="lazy" appFallbackImg />
     </a>
     <!-- Photo -->
 
     <!-- data -->
-    <div
-      fxFlex="<grow>"
-      fxFlexOrder="1"
-      class="prof_data"
-      fxLayout="column"
-      fxLayoutGap="20px"
-      fxLayoutAlign.gt-sm="center"
-    >
-      <span
-        ngClass.gt-sm="mat-subheading-2"
-        ngClass.lt-md="mat-subheading-1"
-        class="align"
-      >
+    <div fxFlex="<grow>" fxFlexOrder="1" class="prof_data" fxLayout="column" fxLayoutGap="20px"
+      fxLayoutAlign.gt-sm="center">
+      <span ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-subheading-1" class="align">
         {{ playerName | nameCombo: nickname | titlecase }}
       </span>
       <div fxLayoutAlign="center center">
-        <button
-          fxHide.gt-sm="true"
-          [routerLink]="['/dashboard', 'account', 'profile']"
-          class="buttonText secondaryButton"
-        >
+        <button fxHide.gt-sm="true" [routerLink]="['/dashboard', 'account', 'profile']"
+          class="buttonText secondaryButton">
           Edit Profile
         </button>
       </div>
 
       <!-- main data -->
       <div fxLayout="column" fxLayoutGap="20px" fxLayoutGap.gt-sm="8px">
-        <div
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxLayoutAlign.lt-md="center center"
-          fxLayoutGap="8px"
-        >
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
           <span class="dash-h5 align">
             {{ getHeading() | titlecase }}
           </span>
-          <a
-            [routerLink]="['/dashboard', 'account', 'profile']"
-            fxHide.lt-md="true"
-            matTooltip="Edit Profile"
-            class="material-icons-round"
-          >
+          <a [routerLink]="['/dashboard', 'account', 'profile']" fxHide.lt-md="true" matTooltip="Edit Profile"
+            class="material-icons-round">
             edit
           </a>
-          <a
-            matTooltip="Share Profile"
-            (click)="onShareProfile()"
-            class="material-icons-round"
-          >
+          <a matTooltip="Share Profile" (click)="onShareProfile()" class="material-icons-round">
             share
           </a>
         </div>
 
-        <div
-          fxLayoutAlign="space-between center"
-          *ngFor="let prop of mainProperties | keyvalue"
-        >
+        <div fxLayoutAlign="space-between center" *ngFor="let prop of mainProperties | keyvalue">
           <span class="mat-body-2">{{ prop.key | titlecase }}</span>
-          <a
-            [routerLink]="['/dashboard', 'account', 'profile']"
-            class="mat-body-1 right"
-            [ngClass]="{ addInfo: !prop.value }"
-          >
+          <a [routerLink]="['/dashboard', 'account', 'profile']" class="mat-body-1 right"
+            [ngClass]="{ addInfo: !prop.value }">
             {{ prop.value ? prop.value : defaultString }}
           </a>
         </div>
-        <app-social-media-links
-          [mode]="profile"
-          [links]="smLinks"
-          (addLink)="onOpenAccountSettings()"
-        ></app-social-media-links>
+        <app-social-media-links [mode]="profile" [links]="smLinks"
+          (addLink)="onOpenAccountSettings()"></app-social-media-links>
       </div>
       <!-- main data -->
     </div>
@@ -136,14 +71,7 @@
 </mat-card>
 
 <ng-template #photoPlaceholder>
-  <button
-    matTooltip="Upload Photo"
-    (click)="onUploadPhoto()"
-    mat-icon-button
-    color="primary"
-  >
-    <span class="material-icons-round" style="font-size: 48px"
-      >add_photo_alternate</span
-    >
+  <button matTooltip="Upload Photo" (click)="onUploadPhoto()" mat-icon-button color="primary">
+    <span class="material-icons-round" style="font-size: 48px">add_photo_alternate</span>
   </button>
 </ng-template>

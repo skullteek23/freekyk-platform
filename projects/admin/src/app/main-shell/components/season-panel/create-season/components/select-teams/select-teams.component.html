@@ -1,0 +1,26 @@
+<form [formGroup]="teamSelectForm" class="select-team-form-container" fxLayout="column">
+  <section fxLayout="column">
+    <ng-container formArrayName="participants">
+      <ng-container *ngFor="let control of participants?.controls; let i = index">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Team {{i + 1}}</mat-label>
+          <mat-select [formControlName]="i" [compareWith]="compareFunction" required>
+            <mat-option *ngFor="let team of teamList" [value]="team">
+              {{team.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+    </ng-container>
+  </section>
+  <section>
+    <span class="error" *ngIf="participants?.hasError('duplicated')">
+      Duplicate teams are selected!
+    </span>
+    <span class="mat-caption center info">
+      Note: Only selected teams will be able to make payments for this match. Skipping this step will allow any team to
+      pay and participate in the season.
+    </span>
+  </section>
+</form>
+<app-loading *ngIf="isLoaderShown"></app-loading>

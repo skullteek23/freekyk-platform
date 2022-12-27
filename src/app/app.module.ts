@@ -1,5 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { REGION } from '@angular/fire/functions';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireModule } from '@angular/fire';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './others/about/about.component';
@@ -11,15 +17,10 @@ import { ErrorComponent } from './error/error.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { LandingPageComponent } from './others/landing-page/landing-page.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignupComponent } from './auth/signup/signup.component';
-import { AppMaterialModule } from './app-material.module';
-import { SharedModule } from './shared/shared.module';
-import { AngularFireModule } from '@angular/fire';
+import { MaterialModule } from '@shared/material.module';
 import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import * as fromApp from './store/app.reducer';
-import { ReactiveFormsModule } from '@angular/forms';
 import { LoginUiComponent } from './auth/login-ui/login-ui.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { PlayerProfileComponent } from './play/profile-pages/player-profile/player-profile.component';
@@ -33,9 +34,14 @@ import { TeMembersComponent } from './play/profile-pages/team-profile/te-members
 import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
 import { NgImageSliderModule } from 'ng-image-slider';
-import { environment } from 'src/environments/environment';
-import { HttpClientModule } from '@angular/common/http';
-import { REGION } from '@angular/fire/functions';
+import { SharedModule } from '@shared/shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { environment } from 'environments/environment';
+import { SeStandingsComponent } from './play/profile-pages/season-profile/se-standings/se-standings.component';
+import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 
 @NgModule({
   declarations: [
@@ -62,14 +68,17 @@ import { REGION } from '@angular/fire/functions';
     SeOverviewComponent,
     SeGalleryComponent,
     SeStatsComponent,
+    SeFixturesComponent,
+    SeStandingsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppMaterialModule,
+    MaterialModule,
     SharedModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     StoreModule.forRoot(fromApp.appReducer),
@@ -80,7 +89,10 @@ import { REGION } from '@angular/fire/functions';
     NgImageSliderModule,
   ],
   providers: [
-    { provide: REGION, useValue: 'asia-south1' }
+    { provide: REGION, useValue: 'asia-south1' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
   ],
   bootstrap: [AppComponent],
 })

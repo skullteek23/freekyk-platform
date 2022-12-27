@@ -1,0 +1,32 @@
+<p class="dash-h5 align">Super Admin Global Configurations</p>
+
+<form [formGroup]="configForm" class="form-container" fxLayout="column">
+  <div class="fields-container" fxLayout fxLayoutGap.gt-sm="20px" fxLayout.lt-md="column">
+    <mat-form-field fxFlex.lt-md fxFlex.gt-sm="25%" appearance="outline" color="primary">
+      <mat-label>One Match Duration (in Hrs)</mat-label>
+      <input type="number" matInput name="duration" formControlName="duration" />
+      <span matSuffix>Hrs</span>
+      <mat-error *ngIf="duration.hasError('pattern')">
+        {{ messages.error.notAllowedCharacter }}
+      </mat-error>
+      <mat-error *ngIf="duration.hasError('required')">
+        {{ messages.error.requiredField }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex.lt-md fxFlex.gt-sm="25%" appearance="outline" color="primary">
+      <mat-label>Last date to take participants</mat-label>
+      <mat-select formControlName="lastParticipationDate">
+        <mat-option *ngFor="let option of allowedParticipationDate" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="button-container">
+    <button class="primaryButton buttonText" [disabled]="!configForm.dirty || configForm.invalid" type="button"
+      (click)="saveConfig()">
+      Save Changes
+    </button>
+  </div>
+</form>
+<app-loading *ngIf="isLoaderShown"></app-loading>

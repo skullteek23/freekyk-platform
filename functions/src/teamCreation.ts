@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '../../src/app/shared/interfaces/team.model';
-import { PlayerBasicInfo } from '../../src/app/shared/interfaces/user.model';
+import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
-let db = admin.firestore();
+const db = admin.firestore();
 
 export async function teamCreation(data: {
   newTeamInfo: {
@@ -42,7 +42,7 @@ export async function teamCreation(data: {
       captainId: CAPTAIN_ID,
     };
     teamMoreInfo = {
-      tdateCreated: admin.firestore.Timestamp.now(),
+      tdateCreated: admin.firestore.Timestamp.now().toMillis(),
       tageCat: 30,
       captainName: captainInfo.name,
     };
@@ -66,3 +66,4 @@ export async function teamCreation(data: {
   }
   return false;
 }
+

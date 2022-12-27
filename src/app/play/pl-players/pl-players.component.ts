@@ -8,17 +8,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { PlayersFilters } from 'src/app/shared/Constants/FILTERS';
-import { PlayerCardComponent } from 'src/app/shared/dialogs/player-card/player-card.component';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { PlayerBasicInfo } from 'src/app/shared/interfaces/user.model';
+import { PlayersFilters } from '@shared/Constants/FILTERS';
+import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
+import { FilterData } from '@shared/interfaces/others.model';
+import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-players',
   templateUrl: './pl-players.component.html',
-  styleUrls: ['./pl-players.component.css'],
+  styleUrls: ['./pl-players.component.scss'],
 })
 export class PlPlayersComponent implements OnInit, OnDestroy {
+
   filterTerm: string = null;
   selectedRowIndex;
   onMobile = false;
@@ -27,12 +29,14 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
   cols = ['jersey', 'player', 'Team', 'Location', 'PlayingPos'];
   lastDoc: QueryDocumentSnapshot<PlayerBasicInfo> = null;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
-    private queryServ: QueryService
-  ) {}
+    private queryService: QueryService
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -55,9 +59,11 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     };
     this.getPlayers();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getPlayers(): void {
     this.players$ = this.ngFire
       .collection('players')
@@ -66,25 +72,29 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as PlayerBasicInfo),
-              } as PlayerBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as PlayerBasicInfo),
+            } as PlayerBasicInfo)
           )
         ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo == null) {
       return this.getPlayers();
     }
-    this.players$ = this.queryServ
+    this.players$ = this.queryService
       .onQueryData(queryInfo, 'players')
       .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo))
+        map((resp) => resp.docs.map((doc) => doc.data() as PlayerBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
       );
   }
+
   onOpenPlayerProfile(player: PlayerBasicInfo): void {
     this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',

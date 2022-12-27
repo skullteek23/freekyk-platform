@@ -2,20 +2,29 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { statsIcon } from 'src/app/shared/interfaces/others.model';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TeamService } from 'src/app/services/team.service';
+import { statsIcon } from '@shared/interfaces/others.model';
 import { AppState } from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-da-te-stats',
   templateUrl: './da-te-stats.component.html',
-  styleUrls: ['./da-te-stats.component.css'],
+  styleUrls: ['./da-te-stats.component.scss'],
 })
 export class DaTeStatsComponent implements OnInit, OnDestroy {
+
   Stats: statsIcon[];
   tournamentWins: any[];
   noPremiumWon = true;
   subscriptions = new Subscription();
-  constructor(private store: Store<AppState>) { }
+
+  constructor(
+    private store: Store<AppState>,
+    private teamService: TeamService,
+    private snackbarService: SnackbarService
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -62,9 +71,18 @@ export class DaTeStatsComponent implements OnInit, OnDestroy {
         .subscribe((stats) => (this.Stats = stats))
     );
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
+    }
+  }
+
+  refreshStats() {
+    const tid = sessionStorage.getItem('tid');
+    if (tid) {
+      this.teamService.getTeamStats(tid);
+      this.snackbarService.displayCustomMsg('Team Statistics refreshed just now!');
     }
   }
 }

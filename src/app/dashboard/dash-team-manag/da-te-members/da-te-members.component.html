@@ -1,15 +1,7 @@
 <div>
-  <div
-    fxLayout
-    fxLayoutAlign="space-between center"
-    fxLayoutAlign.lt-md="center center"
-  >
+  <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Team Members</span>
-    <a
-      (click)="noTeam ? onOpenTeamSettings() : (ind = 2)"
-      fxHide.lt-md="true"
-      class="mat-caption sec-menu"
-    >
+    <a (click)="noTeam ? onOpenTeamSettings() : (ind = 2)" fxHide.lt-md="true" class="mat-caption sec-menu">
       View invites
     </a>
   </div>
@@ -36,11 +28,8 @@
             </li>
           </ul>
         </ng-template>
-        <app-member-list
-          *ngIf="teamMembers.members.length > 0; else nomem"
-          [membersArray]="teamMembers.members"
-          [capId]="capId$ | async"
-        ></app-member-list>
+        <app-member-list *ngIf="membersList.length > 0; else nomem" [membersArray]="membersList"
+          [capId]="capId$ | async"></app-member-list>
         <!-- list -->
       </ng-template>
     </mat-tab>
@@ -54,9 +43,7 @@
     <mat-tab [disabled]="noTeam" label="Manage Team">
       <ng-template matTabContent>
         <!-- list -->
-        <app-da-te-mang-players
-          [membersArray]="teamMembers.members"
-        ></app-da-te-mang-players>
+        <app-da-te-mang-players [membersArray]="membersList"></app-da-te-mang-players>
         <!-- list -->
       </ng-template>
     </mat-tab>

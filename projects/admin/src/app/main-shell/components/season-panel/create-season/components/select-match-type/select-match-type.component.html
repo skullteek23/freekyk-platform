@@ -1,0 +1,85 @@
+<form [formGroup]="matchSelectForm" class="select-match-type-form-container" fxLayout="column">
+
+  <section class="section-container" fxLayout="column">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-select panelClass="select-match-type" (selectionChange)="onCustomPackage($event.value)" [multiple]="false"
+        placeholder="I WANT TO CREATE" formControlName="package" required>
+        <mat-option *ngFor="let package of matchPackages" [value]="package.value">
+          <span class="mat-body-1">{{ package.value }}</span>
+          <mat-chip-list *ngIf="package.chipText">
+            <mat-chip [selected]="package?.chipText === 'Most Popular'">{{package.chipText}}</mat-chip>
+          </mat-chip-list>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="matchSelectForm?.get('package')?.hasError('required')">
+        {{messages.error.requiredField}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Start Date</mat-label>
+      <input matInput [min]="minDate" [max]="maxDate" formControlName="startDate" [matDatepicker]="startDate"
+        required />
+      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+      <mat-datepicker #startDate></mat-datepicker>
+      <mat-error *ngIf="matchSelectForm?.get('startDate')?.hasError('required')">
+        {{messages.error.requiredField}}
+      </mat-error>
+    </mat-form-field>
+    <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
+      <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
+        <mat-label>Country</mat-label>
+        <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="country" required>
+          <mat-option>--Select Country--</mat-option>
+          <mat-option *ngFor="let country of countries$ | async" [value]="country">
+            {{ country }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>State</mat-label>
+        <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state" required>
+          <mat-option>--Select State--</mat-option>
+          <mat-option *ngFor="let state of states$ | async" [value]="state">
+            {{ state }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>City</mat-label>
+        <mat-select formControlName="city" required>
+          <mat-option>--Select City--</mat-option>
+          <mat-option *ngFor="let city of cities$ | async" [value]="city">
+            {{ city }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
+  <section fxLayout="column" class="team-selection" *ngIf="showAdditionFields">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select Participating Teams</mat-label>
+      <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event.value)"
+        required>
+        <mat-option *ngFor="let team of teamsList" [value]="team">
+          {{ team }} teams
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="matchSelectForm?.get('participatingTeamsCount')?.hasError('required')">
+        {{messages.error.requiredField}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select Containing Tournaments</mat-label>
+      <mat-select formControlName="containingTournaments" multiple required>
+        <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="matchSelectForm?.get('participatingTeamsCount')?.hasError('required')">
+        {{messages.error.requiredField}}
+      </mat-error>
+    </mat-form-field>
+  </section>
+</form>

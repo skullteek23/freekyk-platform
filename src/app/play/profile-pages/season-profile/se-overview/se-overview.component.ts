@@ -5,12 +5,12 @@ import { map, share } from 'rxjs/operators';
 import {
   SeasonAbout,
   SeasonParticipants,
-} from 'src/app/shared/interfaces/season.model';
+} from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-overview',
   templateUrl: './se-overview.component.html',
-  styleUrls: ['./se-overview.component.css'],
+  styleUrls: ['./se-overview.component.scss'],
 })
 export class SeOverviewComponent implements OnInit {
   @Input() data: SeasonAbout;
@@ -20,9 +20,15 @@ export class SeOverviewComponent implements OnInit {
     }
   }
   @Input() venue: { city: string; state: string };
+
   participants$: Observable<SeasonParticipants[]>;
-  constructor(private ngFire: AngularFirestore) {}
-  ngOnInit(): void {}
+
+  constructor(
+    private ngFire: AngularFirestore
+  ) { }
+
+  ngOnInit(): void { }
+
   getSeasonParticipants(sid: string): void {
     this.participants$ = this.ngFire
       .collection(`seasons/${sid}/participants`)
@@ -31,5 +37,9 @@ export class SeOverviewComponent implements OnInit {
         map((resp) => resp.docs.map((doc) => doc.data() as SeasonParticipants)),
         share()
       );
+  }
+
+  get isRestrictedParticipants(): boolean {
+    return this.data?.allowedParticipants?.length > 0;
   }
 }

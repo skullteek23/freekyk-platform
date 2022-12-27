@@ -1,10 +1,10 @@
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import {
   TeamBasicInfo,
   TeamMoreInfo,
   TeamMembers,
   TeamStats,
-} from 'src/app/shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 import * as TeamActions from './team.actions';
 export interface TeamState {
   basicInfo: TeamBasicInfo;

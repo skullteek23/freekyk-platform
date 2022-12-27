@@ -16,7 +16,7 @@ export class AccountAvatarService {
       //   if (val) {
       //     return of(val);
       //   } else {
-      //     return this.authServ.userDataChanged.pipe(
+      //     return this.authService.userDataChanged.pipe(
       //       map((user) => user?.imgpath)
       //     );
       //   }
@@ -24,11 +24,6 @@ export class AccountAvatarService {
     );
   }
   constructor(
-    private authServ: AuthService,
-    private store: Store<{
-      dash: DashState;
-    }>
-  ) {
-    // console.log('avatar service started');
-  }
+    private store: Store<{ dash: DashState; }>
+  ) { }
 }

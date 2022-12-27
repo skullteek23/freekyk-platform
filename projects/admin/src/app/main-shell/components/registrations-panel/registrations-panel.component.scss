@@ -1,0 +1,25 @@
+table {
+  width: 100%;
+  .mat-column-id {
+    width: 15%;
+  }
+  .mat-column-company {
+    width: 15%;
+  }
+  .mat-column-name {
+    width: 17%;
+  }
+  .mat-column-phone {
+    width: 15%;
+  }
+  .mat-column-location {
+    width: 20%;
+  }
+  .mat-column-status {
+    width: 8%;
+    padding-right: 10px;
+  }
+  .mat-column-actions {
+    width: 10%;
+  }
+}

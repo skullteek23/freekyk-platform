@@ -4,23 +4,27 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { TeamMedia } from 'src/app/shared/interfaces/team.model';
+import { TeamMedia } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-te-gallery',
   templateUrl: './te-gallery.component.html',
-  styleUrls: ['./te-gallery.component.css'],
+  styleUrls: ['./te-gallery.component.scss'],
 })
 export class TeGalleryComponent implements OnInit, OnDestroy {
+
   @Input() photos: string[] = [];
+
   subscriptions = new Subscription();
   columns: any;
   photos$: Observable<TeamMedia>;
+
   constructor(
     private mediaObs: MediaObserver,
-    private enServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -40,10 +44,12 @@ export class TeGalleryComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onEnlargeView(imagePath: string): void {
-    this.enServ.onOpenPhoto(imagePath);
+    this.enlargeService.onOpenPhoto(imagePath);
   }
 }

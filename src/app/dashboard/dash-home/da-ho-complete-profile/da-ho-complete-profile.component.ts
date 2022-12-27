@@ -9,14 +9,17 @@ import { DashState } from '../../store/dash.reducer';
 @Component({
   selector: 'app-da-ho-complete-profile',
   templateUrl: './da-ho-complete-profile.component.html',
-  styleUrls: ['./da-ho-complete-profile.component.css'],
+  styleUrls: ['./da-ho-complete-profile.component.scss'],
 })
 export class DaHoCompleteProfileComponent implements OnInit {
+
   @Output() profileComplete = new Subject<boolean>();
+
   data$: Observable<{ photo: boolean; profile: boolean; team: boolean }>;
   profileProgress = 20;
   isLoading = true;
   profileShared: boolean;
+
   constructor(
     private store: Store<{ dash: DashState }>,
     private dialog: MatDialog,
@@ -54,6 +57,7 @@ export class DaHoCompleteProfileComponent implements OnInit {
       }),
     );
   }
+
   onUploadProfilePhoto(): void {
     this.dialog
       .open(UploadphotoComponent, {
@@ -62,9 +66,11 @@ export class DaHoCompleteProfileComponent implements OnInit {
       .afterClosed()
       .subscribe(() => location.reload());
   }
+
   onOpenTeamBox(): void {
     this.router.navigate(['/dashboard', 'team-management']);
   }
+
   onShareProfile(): void {
     const uid = localStorage.getItem('uid');
     if (this.profileShared) {

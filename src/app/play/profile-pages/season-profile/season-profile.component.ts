@@ -13,15 +13,16 @@ import {
   SeasonMedia,
   SeasonParticipants,
   SeasonStats,
-} from 'src/app/shared/interfaces/season.model';
-import firebase from 'firebase/app';
+} from '@shared/interfaces/season.model';
+
 
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
-  styleUrls: ['./season-profile.component.css'],
+  styleUrls: ['./season-profile.component.scss'],
 })
 export class SeasonProfileComponent implements OnInit {
+
   isLoading = true;
   isPremium = false;
   noPhotos = false;
@@ -37,18 +38,21 @@ export class SeasonProfileComponent implements OnInit {
   imgPath: string;
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
+
   constructor(
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<DashState>,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
-    private enlServ: EnlargeService,
+    private enlargeService: EnlargeService,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.seasonName = this.route.snapshot.params.seasonid;
     this.getSeasonInfo();
   }
+
   getSeasonInfo(): void {
     this.seasonInfo$ = this.ngFire
       .collection('seasons', (query) =>
@@ -74,7 +78,7 @@ export class SeasonProfileComponent implements OnInit {
             ({
               id: doc.id,
               ...(doc.data() as SeasonBasicInfo),
-              start_date: new Date((doc.data() as SeasonBasicInfo).start_date['seconds'] * 1000),
+              start_date: new Date((doc.data() as SeasonBasicInfo).start_date).getTime(),
             } as SeasonBasicInfo)
           )
         ),
@@ -83,6 +87,7 @@ export class SeasonProfileComponent implements OnInit {
         share()
       );
   }
+
   getSeasonMoreInfo(sid: string): void {
     this.seasonMoreInfo$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -97,6 +102,7 @@ export class SeasonProfileComponent implements OnInit {
         share()
       );
   }
+
   getPhotos(sid: string): void {
     this.photos$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -110,18 +116,13 @@ export class SeasonProfileComponent implements OnInit {
         }),
         map((media: SeasonMedia) => {
           if (media) {
-            return [
-              media.photo_1,
-              media.photo_2,
-              media.photo_3,
-              media.photo_4,
-              media.photo_5,
-            ];
+            return media.photos;
           }
           return [];
         })
       );
   }
+
   getStats(sid: string): void {
     this.stats$ = this.ngFire
       .collection('seasons/' + sid + '/additionalInfo')
@@ -135,29 +136,7 @@ export class SeasonProfileComponent implements OnInit {
         })
       );
   }
-  onClickActionButton(): void {
-    const data = this.getSeasonStatus();
-    if (data.isUpcoming && !data.hasFixtures) {
-      this.snackServ.displayCustomMsg('Participation opening soon!');
-    } else if (data.isUpcoming && data.hasFixtures) {
-      this.onParticipate();
-    } else if (data.isOngoing) {
-      this.router.navigate(['/play', 'fixtures'], { queryParams: { s: this.seasonName } })
-    } else if (data.isEnded) {
-      this.router.navigate(['/play', 'standings'], { queryParams: { s: this.seasonName } });
-    }
-  }
-  get actionText(): string {
-    const data = this.getSeasonStatus();
-    if (data.isUpcoming) {
-      return 'Participate';
-    } else if (data.isOngoing) {
-      return 'View Fixtures';
-    } else if (data.isEnded) {
-      return 'View Standings'
-    }
-    return 'NA';
-  }
+
   onParticipate(): void {
     const uid = localStorage.getItem('uid');
     this.router.navigate(['/dashboard/participate']);
@@ -166,27 +145,15 @@ export class SeasonProfileComponent implements OnInit {
       .pipe(take(1))
       .subscribe((team) => {
         if (!uid) {
-          this.snackServ.displayCustomMsg('Please login to continue!');
+          this.snackBarService.displayCustomMsg('Please login to continue!');
           this.router.navigate(['/login']);
         } else if (team === null) {
           this.router.navigate(['/dashboard/participate']);
         }
       });
   }
-  onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.imgPath);
-  }
 
-  getSeasonStatus(): any {
-    if (this.seasonInfo) {
-      const seasonTimeInMillis = (this.seasonInfo.start_date as any).toMillis();
-      const currentTimeInMillis = new Date().getTime();
-      const isUpcoming = seasonTimeInMillis > currentTimeInMillis;
-      const isEnded = seasonTimeInMillis < currentTimeInMillis && this.seasonInfo.isSeasonEnded;
-      const isOngoing = seasonTimeInMillis <= currentTimeInMillis
-      const hasFixtures = this.seasonInfo.isFixturesCreated || false;
-      return { isUpcoming, isEnded, isOngoing, hasFixtures }
-    }
-    return {};
+  onEnlargePhoto(): void {
+    this.enlargeService.onOpenPhoto(this.imgPath);
   }
 }

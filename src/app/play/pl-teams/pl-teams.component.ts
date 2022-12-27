@@ -4,14 +4,15 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { TeamsFilters } from 'src/app/shared/Constants/FILTERS';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { TeamBasicInfo } from 'src/app/shared/interfaces/team.model';
+import { TeamsFilters } from '@shared/Constants/FILTERS';
+import { FilterData } from '@shared/interfaces/others.model';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-teams',
   templateUrl: './pl-teams.component.html',
-  styleUrls: ['./pl-teams.component.css'],
+  styleUrls: ['./pl-teams.component.scss'],
 })
 export class PlTeamsComponent implements OnInit, OnDestroy {
   filterTerm: string = null;
@@ -22,11 +23,12 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   cols = 1;
   subscriptions = new Subscription();
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private queryServ: QueryService
-  ) {}
+    private queryService: QueryService
+  ) { }
 
   ngOnInit(): void {
     this.filterData = {
@@ -54,9 +56,11 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
     );
     this.getTeams();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getTeams(): void {
     this.teams$ = this.ngFire
       .collection('teams', (ref) => ref.orderBy('tname'))
@@ -69,21 +73,26 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as TeamBasicInfo),
-              } as TeamBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as TeamBasicInfo),
+            } as TeamBasicInfo)
           )
         ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo === null) {
       return this.getTeams();
     }
-    this.teams$ = this.queryServ
+    this.teams$ = this.queryService
       .onQueryData(queryInfo, 'teams')
-      .pipe(map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)));
+      .pipe(
+        map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
+      );
   }
 }

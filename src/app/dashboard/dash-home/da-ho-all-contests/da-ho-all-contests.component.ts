@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-da-ho-all-contests',
   templateUrl: './da-ho-all-contests.component.html',
-  styleUrls: ['./da-ho-all-contests.component.css'],
+  styleUrls: ['./da-ho-all-contests.component.scss'],
 })
 export class DaHoAllContestsComponent implements OnInit {
   isLoading = true;

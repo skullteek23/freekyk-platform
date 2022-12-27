@@ -3,17 +3,17 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
-import { Stats } from 'src/app/shared/interfaces/others.model';
+import { Stats } from '@shared/interfaces/others.model';
 import {
   BasicStats,
   PlayerBasicInfo,
   PlayerMoreInfo,
-} from 'src/app/shared/interfaces/user.model';
+} from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-player-profile',
   templateUrl: './player-profile.component.html',
-  styleUrls: ['./player-profile.component.css'],
+  styleUrls: ['./player-profile.component.scss'],
 })
 export class PlayerProfileComponent implements OnInit {
   stats: {} = {};
@@ -25,15 +25,18 @@ export class PlayerProfileComponent implements OnInit {
   isLoading = true;
   userTours: string[] = [];
   userTeams: string[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private router: Router
-  ) {}
+  ) { }
+
   ngOnInit(): void {
     this.playerId = this.route.snapshot.params.playerid;
     this.getBasicInfo();
   }
+
   getBasicInfo(): void {
     this.plInfo$ = this.ngFire
       .collection('players')
@@ -51,6 +54,7 @@ export class PlayerProfileComponent implements OnInit {
         share()
       );
   }
+
   getAdditionalInfo(): void {
     this.addiInfo$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)
@@ -67,6 +71,7 @@ export class PlayerProfileComponent implements OnInit {
         share()
       );
   }
+
   onLoadStats(): void {
     this.plStats$ = this.ngFire
       .collection(`players/${this.playerId}/additionalInfo`)
@@ -76,12 +81,13 @@ export class PlayerProfileComponent implements OnInit {
         map((resp) => resp.data() as BasicStats),
         map(
           (resp) =>
-            ({
-              Appearances: resp ? resp.apps : 0,
-              Wins: resp ? resp.w : 0,
-              Goals: resp ? resp.g : 0,
-              Cards: resp ? resp.cards : 0,
-            } as Stats)
+          ({
+            Appearances: resp ? resp.apps : 0,
+            Wins: resp ? resp.w : 0,
+            Goals: resp ? resp.g : 0,
+            'Red Cards': resp ? resp.rcards : 0,
+            'Yellow Cards': resp ? resp.ycards : 0,
+          } as Stats)
         )
       );
   }

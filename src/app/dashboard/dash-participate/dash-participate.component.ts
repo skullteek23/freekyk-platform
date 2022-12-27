@@ -3,17 +3,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, share, take } from 'rxjs/operators';
-import { PaymentService, PAYMENT_TYPE } from 'src/app/services/payment.service';
+import { ICheckoutOptions, PaymentService, PAYMENT_TYPE } from '@shared/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { OrderBasic } from 'src/app/shared/interfaces/order.model';
-import { SeasonBasicInfo, SeasonParticipants } from 'src/app/shared/interfaces/season.model';
+import { OrderBasic } from '@shared/interfaces/order.model';
+import { SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
 import { Router } from '@angular/router';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import { ProfileConstants } from '@shared/constants/constants';
 @Component({
   selector: 'app-dash-participate',
   templateUrl: './dash-participate.component.html',
-  styleUrls: ['./dash-participate.component.css'],
+  styleUrls: ['./dash-participate.component.scss'],
 })
 export class DashParticipateComponent implements OnInit, OnDestroy {
 
@@ -33,9 +35,10 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private store: Store<fromApp.AppState>,
     private paymentServ: PaymentService,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(this.paymentServ.getLoadingStatus().subscribe((status) => {
       this.loadingStatus = status;
@@ -44,8 +47,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
       this.teamInfo = data;
       this.hasTeam = data && data.basicInfo.captainId && data.basicInfo.tname ? true : false;
     }));
-    this.getSeasonOrders()
-    this.getSeasons()
+    this.getSeasonOrders();
+    this.getSeasons();
   }
 
   ngOnDestroy(): void {
@@ -67,24 +70,27 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   getSeasons() {
-    this.seasons$ = this.ngFire.collection('seasons').snapshotChanges()
+    const currentTimestamp = new Date().getTime();
+    this.seasons$ = this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
       .pipe(
         map((resp) => {
           const seasons: SeasonBasicInfo[] = [];
           resp.forEach(doc => {
             const data = doc.payload.doc.data() as SeasonBasicInfo;
             const id = doc.payload.doc.id;
-            if (data.isFixturesCreated && !data.isSeasonEnded) {
+            if (data.status === 'PUBLISHED') {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
-          })
-          return seasons;
+          });
+          return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
         }
         ),
         share()
       );
   }
+
   async onPayNow(season: SeasonBasicInfo): Promise<any> {
     if (!season.id) {
       return;
@@ -92,58 +98,70 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     this.selectedSeason = season.name;
     const teamInfo = await this.store.select('team').pipe(take(1)).toPromise();
     const uid = localStorage.getItem('uid');
-    if (teamInfo && teamInfo.basicInfo && teamInfo.basicInfo.captainId && teamInfo.basicInfo.tname) {
-      if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount >= 8) {
-        this.paymentServ.onLoadingStatusChange('loading');
-        const isSlotEmpty: boolean = await this.isSlotEmpty(season.p_teams, season.id);
-        if (isSlotEmpty) {
-          this.initPayment(season, teamInfo.basicInfo.id);
-        } else {
-          this.snackServ.displayCustomMsg('Participation is full!');
-          this.paymentServ.onLoadingStatusChange('home');
-        }
-        return;
-      } else if (uid === teamInfo.basicInfo.captainId && teamInfo.teamMembers.memCount < 8) {
-        this.snackServ.displayCustomMsg('Not enough players in Team!');
-        return;
-      }
-      this.snackServ.displayCustomMsg('Please contact your team captain!');
-      return;
+    const restrictedParticipants: string[] = await this.getParticipantsInfo(season.id);
+    const isAvailableSlot: boolean = await this.isAvailableSlot(season.p_teams, season.id);
+    let errorMessage = '';
+    if (!teamInfo || !teamInfo.basicInfo || !teamInfo.basicInfo.tname) {
+      errorMessage = 'Join or Create a team to participate!';
+    } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT) {
+      errorMessage = `Minimum ${ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
+    } else if (!uid || !teamInfo.basicInfo || uid !== teamInfo.basicInfo.captainId) {
+      errorMessage = 'Only captains are allowed to make payment!';
+    } else if (restrictedParticipants && restrictedParticipants.includes(teamInfo?.basicInfo?.id) === false) {
+      errorMessage = 'Participants are restricted!';
+    } else if (!isAvailableSlot) {
+      errorMessage = 'Participation is full!';
     } else {
-      this.snackServ.displayCustomMsg('Join or Create a team to participate!');
-      return;
+      this.paymentServ.onLoadingStatusChange('loading');
+      this.initPayment(season, teamInfo.basicInfo.id);
+    }
+    if (errorMessage) {
+      this.snackBarService.displayError(errorMessage);
+      this.paymentServ.onLoadingStatusChange('home');
     }
   }
+
   initPayment(season: SeasonBasicInfo, teamId: string): void {
+    // minimum fees
+    const fees = this.paymentServ.getFeesAfterDiscount(season.feesPerTeam, season.discount);
     this.paymentServ
-      .generateOrder(season.feesPerTeam)
+      .generateOrder(fees)
       .then((res) => {
         if (res) {
-          this.paymentServ.onLoadingStatusChange('home');
-          this.paymentServ.openCheckoutPage(res.id, season, teamId);
+          const options: ICheckoutOptions = this.paymentServ.getCaptainCheckoutOptions(fees, season, teamId);
+          options.order_id = res['id'];
+          options.failureRoute = '/dashboard/error';
+          this.paymentServ.openCheckoutPage(options);
         }
-      })
-      .catch(() => {
         this.paymentServ.onLoadingStatusChange('home');
-        this.snackServ.displayError();
+      })
+      .catch((err) => {
+        this.paymentServ.onLoadingStatusChange('home');
+        this.snackBarService.displayError();
       });
   }
-  async isSlotEmpty(maxTeams: number, sid: string): Promise<boolean> {
-    const participants: SeasonParticipants[] = (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.map((doc) => doc.data() as SeasonParticipants);
-    if (participants.length < maxTeams) {
-      return true;
-    }
+
+  async isAvailableSlot(maxTeams: number, sid: string): Promise<boolean> {
+    return (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.length < maxTeams;
   }
+
+  async getParticipantsInfo(sid: string): Promise<string[]> {
+    const data = (await this.ngFire.collection('seasons').doc(sid).collection('additionalInfo').doc('moreInfo').get().toPromise()).data() as SeasonAbout;
+    return data?.allowedParticipants?.length > 0 ? data?.allowedParticipants : null;
+  }
+
   goToSeason(name?: string): void {
     this.paymentServ.onLoadingStatusChange('home');
     if (name) {
-      this.router.navigate(['/s', name])
+      this.router.navigate(['/s', name]);
     }
   }
+
   isParticipated(seasonid: string): boolean {
     return this.participatedTournaments.includes(seasonid);
   }
+
   getContainingTournaments(list: string[]) {
-    return list.length ? list.join(', ') : "NA";
+    return list.length ? list.join(', ') : 'NA';
   }
 }

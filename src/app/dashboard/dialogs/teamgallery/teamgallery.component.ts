@@ -7,33 +7,37 @@ import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { TeamMedia } from 'src/app/shared/interfaces/team.model';
+import { TeamMedia } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-teamgallery',
   templateUrl: './teamgallery.component.html',
-  styleUrls: ['./teamgallery.component.css'],
+  styleUrls: ['./teamgallery.component.scss'],
 })
 export class TeamgalleryComponent implements OnInit {
+
   noGallery = false;
   isLoading = false;
   teamGallery$: Observable<TeamMedia>;
   showEditButtons = false;
   newSub: Subscription;
   deleteInProgress$: Observable<boolean>;
+
   constructor(
     public dialogRef: MatDialogRef<TeamgalleryComponent>,
     private ngFire: AngularFirestore,
     private ngStorage: AngularFireStorage,
-    private snackServ: SnackbarService
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
     this.getGalleryPhotos();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   async onChoosePhoto(ev: any): Promise<any> {
     this.isLoading = true;
     const teamPhoto = ev.target.files[0];
@@ -43,37 +47,42 @@ export class TeamgalleryComponent implements OnInit {
         `/teamGallery/${tid}${teamPhoto.name}`,
         teamPhoto
       );
-      uploadRef.ref.getDownloadURL().then((url) => {
-        let photoSnap;
-        if (!this.noGallery) {
-          photoSnap = this.ngFire
-            .collection(`teams/${tid}/additionalInfo`)
-            .doc('media')
-            .update({
-              media: firebase.firestore.FieldValue.arrayUnion(url),
-            });
-        } else {
-          photoSnap = this.ngFire
-            .collection(`teams/${tid}/additionalInfo`)
-            .doc('media')
-            .set({
-              media: [url],
-            });
-        }
-        photoSnap
-          .then(() => this.cleanUp('Photo uploaded successfully!'))
-          .catch((err => this.snackServ.displayError()));
-      });
+      uploadRef.ref.getDownloadURL()
+        .then((url) => {
+          let photoSnap;
+          if (!this.noGallery) {
+            photoSnap = this.ngFire
+              .collection(`teams/${tid}/additionalInfo`)
+              .doc('media')
+              .update({
+                media: firebase.firestore.FieldValue.arrayUnion(url),
+              });
+          } else {
+            photoSnap = this.ngFire
+              .collection(`teams/${tid}/additionalInfo`)
+              .doc('media')
+              .set({
+                media: [url],
+              });
+          }
+          photoSnap
+            .then(() => this.cleanUp('Photo uploaded successfully!'))
+            .catch((err => this.snackBarService.displayError()));
+        })
+        .catch(() => this.snackBarService.displayError());
     }
   }
+
   cleanUp(message: string): void {
     this.isLoading = false;
-    this.snackServ.displayCustomMsg(message);
+    this.snackBarService.displayCustomMsg(message);
     this.onCloseDialog();
   }
+
   onHover(state: boolean): void {
     this.showEditButtons = state;
   }
+
   onRemovePhoto(photoUrl: string): void {
     const tid = sessionStorage.getItem('tid');
     this.deleteInProgress$ = this.ngFire
@@ -98,6 +107,7 @@ export class TeamgalleryComponent implements OnInit {
         map(() => true)
       );
   }
+
   getGalleryPhotos(): void {
     const tid = sessionStorage.getItem('tid');
     this.teamGallery$ = this.ngFire

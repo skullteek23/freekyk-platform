@@ -1,0 +1,122 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Player Profile</span>
+  <button mat-icon-button (click)="onShare(data)">
+    <mat-icon class="material-icons-round"> share </mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container-2">
+  <div class="name" fxLayout="row" fxLayoutGap="20px">
+    <div class="profile-image">
+      <img [src]="(addiInfo$ | async)?.imgpath_lg" [alt]="data.name" appFallbackImg />
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center">
+      <p class="mat-caption left">
+        {{ data?.jer_no | jersey }}
+      </p>
+      <p class="mat-subheading-1 left">
+        {{ data?.name | nameCombo: (addiInfo$ | async)?.nickname | titlecase }}
+      </p>
+    </div>
+  </div>
+  <mat-tab-group (selectedIndexChange)="onLoadStats()">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Overview
+        <span class="material-icons-round filled">feed</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <div class="seperator" fxLayoutGap="16px" fxLayout="column">
+          <div class="basic" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">{{ "Basic info" | titlecase }}</span>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Position</span>
+              <span class="mat-body-1 right">{{ data.pl_pos }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Team</span><span class="mat-body-1 right">{{
+                data.team != null ? data.team.name : "No Team"
+                }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Strong Foot</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.str_ft | strongFoot
+                }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Location</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.locState
+                }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Birthday</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.born | date: "mediumDate"
+                }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Gender</span><span class="mat-body-1 right">{{ data.gen | gender }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Height</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.height | height
+                }}</span>
+            </div>
+            <div fxLayoutAlign="space-between center">
+              <span class="mat-body-2">Weight</span><span class="mat-body-1 right">{{
+                (addiInfo$ | async)?.weight | weight
+                }}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="other" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">{{ "other info" | titlecase }}</span>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span class="mat-body-2">Bio</span><span class="mat-body-1 left">
+                {{ (addiInfo$ | async)?.bio | bio }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Stats">
+      <ng-template mat-tab-label>
+        Stats
+        <span class="material-icons-round filled">analytics</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <div class="seperator" fxLayoutGap="16px" fxLayout="column">
+          <div class="basic" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">{{ "Basic stats" | titlecase }}</span>
+            <div fxLayoutAlign="space-between center" *ngFor="let stat of plStats$ | async | keyvalue">
+              <span class="mat-body-2">{{ stat.key }}</span><span class="mat-body-1">{{ stat.value }}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="other" fxLayout="column" fxLayoutGap="16px">
+            <span class="dash-h5 align">{{ "other stats" | titlecase }}</span>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span class="mat-body-2">Professional teams played for</span>
+              <i *ngIf="userTeams.length === 0"> none </i>
+              <span class="mat-body-1" *ngFor="let team of userTeams">
+                {{ team }}
+              </span>
+            </div>
+            <div fxLayoutAlign="start" fxLayout="column">
+              <span class="mat-body-2">
+                Professional tournaments participated in
+              </span>
+              <i *ngIf="userTours.length == 0"> none </i>
+              <span class="mat-body-1" *ngFor="let tournas of userTours">
+                {{ tournas }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

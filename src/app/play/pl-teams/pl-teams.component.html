@@ -7,18 +7,11 @@
   <!-- mobile filter -->
 
   <!-- desktop filters -->
-  <app-filters-lg
-    (changeFilter)="onQueryData($event)"
-    fxHide.lt-md="true"
-    [data]="filterData"
-  ></app-filters-lg>
+  <app-filters-lg (changeFilter)="onQueryData($event)" fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
   <!-- desktop filters -->
 
-  <app-search-lg
-    [isDisabled]="(teams$ | async)?.length === 0"
-    searchPlaceholder="Search teams by name, location"
-    (searchItem)="filterTerm = $event"
-  >
+  <app-search-lg [isDisabled]="(teams$ | async)?.length === 0" searchPlaceholder="Search teams by name, location"
+    (searchItem)="filterTerm = $event">
   </app-search-lg>
 
   <!-- loading -->
@@ -28,16 +21,13 @@
   <div class="container section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
-      <mat-list-item
-        [routerLink]="['/t', team.tname]"
-        *ngFor="
+      <mat-list-item [routerLink]="['/t', team.tname]" *ngFor="
           let team of teams$
             | async
             | filterList: 'tname,locState,locCity':filterTerm;
           last as last
-        "
-      >
-        <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" />
+        ">
+        <img matListAvatar [src]="team.imgpath_logo" alt="Team Logo Image" loading="lazy" appFallbackImg />
 
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-body-1"> {{ team.tname }} </span>
@@ -62,43 +52,25 @@
       </ng-template>
       <!-- no teams -->
 
-      <mat-grid-list
-        *ngIf="noTeams == false; else placeholder"
-        [cols]="cols"
-        rowHeight="340px"
-        gutterSize="20px"
-      >
-        <mat-grid-tile
-          [routerLink]="['/t', team.tname]"
-          appElevateOnHover
-          *ngFor="
+      <mat-grid-list *ngIf="noTeams == false; else placeholder" [cols]="cols" rowHeight="340px" gutterSize="20px">
+        <mat-grid-tile [routerLink]="['/t', team.tname]" appElevateOnHover *ngFor="
             let team of teams$
               | async
               | filterList: 'tname,locState,locCity':filterTerm
-          "
-        >
+          ">
           <div class="teamContainer">
-            <img class="box-image" [src]="team.imgpath" alt="Team Photo" />
+            <img class="box-image" [src]="team.imgpath" alt="Team Photo" loading="lazy" appFallbackImg />
             <span class="overlay-logo" fxLayoutALign="center center">
-              <img class="logo-image" [src]="team.imgpath_logo" alt="Logo" />
+              <img class="logo-image" [src]="team.imgpath_logo" alt="Logo" loading="lazy" appFallbackImg />
             </span>
-            <div
-              class="content"
-              fxLayoutAlign="center center"
-              fxLayout="column"
-              fxLayoutGap="20px"
-            >
+            <div class="content" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
               <div fxLayout="column">
                 <span class="mat-body-1 center">{{ team.tname }}</span>
                 <span class="mat-caption center">
                   {{ (team.locCity || "NA") + ", " + (team.locState || "NA") }}
                 </span>
               </div>
-              <button
-                [routerLink]="['/t', team.tname]"
-                color="primary"
-                class="secondaryButton buttonText"
-              >
+              <button [routerLink]="['/t', team.tname]" color="primary" class="secondaryButton buttonText">
                 View Team Profile
               </button>
             </div>

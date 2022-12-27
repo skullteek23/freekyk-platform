@@ -1,0 +1,110 @@
+<section class="fullpad-20" fxLayout="column" fxLayoutGap="48px" fxLayoutGap.lt-md="24px">
+  <!-- personal info form -->
+  <div class="form-p form" id="personal">
+    <p class="dash-h5 align">Organizer's Basic Details</p>
+    <form [formGroup]="personalInfoForm" fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutGap.gt-sm="20px">
+      <mat-form-field fxFlex.gt-sm="50%" appearance="outline" color="primary">
+        <mat-label>Freekyk Organizer's ID</mat-label>
+        <input type="text" matInput name="id" formControlName="id" />
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>Organization Name</mat-label>
+        <input type="text" matInput name="company" formControlName="company" />
+        <mat-error *ngIf="company.hasError('pattern')">
+          {{ messages.error.notAllowedCharacter }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
+        <mat-label>Managed By</mat-label>
+        <input type="text" matInput name="managedBy" formControlName="managedBy" />
+        <mat-error *ngIf="managedBy.hasError('pattern')">
+          {{ messages.error.notAllowedCharacter }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>Phone</mat-label>
+        <input type="number" matInput name="contactNumber" formControlName="contactNumber" />
+        <mat-error *ngIf="contactNumber.hasError('pattern')">
+          {{ messages.error.notAllowedCharacter }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>Alternate Phone</mat-label>
+        <input type="number" matInput name="altContactNumber" formControlName="altContactNumber" />
+        <mat-error *ngIf="altContactNumber.hasError('pattern')">
+          {{ messages.error.notAllowedCharacter }}
+        </mat-error>
+      </mat-form-field>
+
+      <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px">
+        <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
+          <mat-label>Country</mat-label>
+          <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="country">
+            <mat-option>--Select Country--</mat-option>
+            <mat-option *ngFor="let country of countries$ | async" [value]="country">
+              {{ country }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+          <mat-label>State</mat-label>
+          <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state">
+            <mat-option>--Select State--</mat-option>
+            <mat-option *ngFor="let state of states$ | async" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+          <mat-label>City</mat-label>
+          <mat-select formControlName="city">
+            <mat-option>--Select City--</mat-option>
+            <mat-option *ngFor="let city of cities$ | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
+        <mat-label>GST Number (if any)</mat-label>
+        <input type="text" matInput formControlName="gst" name="gst" />
+      </mat-form-field>
+
+      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+        <mat-label>Organization Website Link</mat-label>
+        <input type="text" matInput formControlName="website" name="website" />
+        <mat-error *ngIf="website.hasError('pattern')">
+          {{ messages.error.invalidField }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
+        <span> Do you own a football ground? </span>
+        <mat-radio-group color="primary" aria-label="own-football-ground" formControlName="selfGround"
+          fxLayoutGap="8px">
+          <mat-radio-button [value]="1">Yes</mat-radio-button>
+          <mat-radio-button [value]="0">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </form>
+
+    <div class="button-container" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center">
+      <button class="primaryButton buttonText" [disabled]="!personalInfoForm.dirty || personalInfoForm.invalid"
+        type="button" (click)="onSubmit()">
+        Save Changes
+      </button>
+    </div>
+  </div>
+  <!-- personal info form -->
+
+  <span>
+    <mat-divider></mat-divider>
+  </span>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

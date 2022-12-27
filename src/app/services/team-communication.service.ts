@@ -7,7 +7,7 @@ import {
   Tmember,
   ActiveSquadMember,
   MemberResponseNotification,
-} from '../shared/interfaces/team.model';
+} from '@shared/interfaces/team.model';
 import { SnackbarService } from './snackbar.service';
 import { TeamState } from '../dashboard/dash-team-manag/store/team.reducer';
 import { TeamCommState } from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.reducer';
@@ -42,7 +42,7 @@ export class TeamCommunicationService implements OnDestroy {
           resp.activeSquad.every((sq) => sq.id !== uid) ||
           resp.activeSquad.length === 0
         ) {
-          this.snackServ.displayCustomMsgLong(
+          this.snackBarService.displayCustomMsg(
             'Only Players included in active squad can accept/reject the invitation'
           );
           return null;
@@ -66,16 +66,16 @@ export class TeamCommunicationService implements OnDestroy {
             const deny = ' has rejected the invitation for this fixture.';
             const pname = sessionStorage.getItem('name');
             const log: MemberResponseNotification = {
-              content: pname + (response ? accept : deny),
+              content: (pname && pname !== 'null' ? pname : 'Team Member') + (response ? accept : deny),
               time: new Date().getTime(),
             };
             // console.log(log);
             this.updateTeamActivity(log, resp.currUpcomingMatchNo);
           })
-          .then(() => this.snackServ.displaySent())
+          .then(() => this.snackBarService.displayCustomMsg('Response sent!'))
           .catch((error) => {
             // console.log(error);
-            this.snackServ.displayError();
+            this.snackBarService.displayError('Unable to update response');
           });
       });
   }
@@ -126,7 +126,7 @@ export class TeamCommunicationService implements OnDestroy {
             };
             this.updateTeamActivity(newLog, matchNo);
           })
-          .then(() => this.snackServ.displayComplete());
+          .then(() => this.snackBarService.displayCustomMsg('Active Squad created successfully!'));
       });
   }
   getActiveSquad(upcomingMatchNo: number): void {
@@ -162,7 +162,7 @@ export class TeamCommunicationService implements OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private ngFireDb: AngularFireDatabase,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
 
     private store: Store<{ teamComms: TeamCommState }>,
     private store2: Store<{ team: TeamState }>

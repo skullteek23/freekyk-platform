@@ -1,0 +1,11 @@
+<div class="uploader-container" fxLayoutAlign="space-between center"
+  (click)="fileInput.click(); $event.stopPropagation();">
+  <input type="file" hidden class="file-upload" #fileInput (change)="onSelectFile($event)">
+  <span [matTooltip]="fileName" class="mat-caption file-name">{{fileName}}</span>
+  <button *ngIf="uploadedImageFile$" mat-icon-button class="delete" (click)="deleteFile();$event.stopPropagation();">
+    <span class="material-icons-round">
+      delete_forever
+    </span>
+  </button>
+</div>
+<span class="mat-caption" *ngIf="error">{{messages.error.requiredFile}}</span>

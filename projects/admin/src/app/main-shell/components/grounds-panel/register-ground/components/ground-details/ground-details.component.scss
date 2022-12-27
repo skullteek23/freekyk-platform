@@ -1,0 +1,31 @@
+.photo-container {
+  width: 100%;
+}
+
+.form-container {
+  border: 1px solid var(--grey1);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 20px;
+}
+
+section.section-container div,
+section.section-container div mat-form-field,
+section.section-container {
+  width: 100%;
+}
+
+mat-radio-button {
+  margin: 0 8px;
+  width: 70px;
+}
+
+.contract-container {
+  margin-top: 20px;
+}
+.label {
+  width: 250px;
+}
+.radio-box {
+  margin-bottom: 16px;
+}

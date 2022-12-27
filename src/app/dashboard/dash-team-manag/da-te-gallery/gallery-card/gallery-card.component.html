@@ -1,19 +1,10 @@
-<mat-card
-  class="mat-elevation-z8 gallery"
-  fxLayout="row nowrap"
-  fxLayoutGap="20px"
->
+<mat-card class="mat-elevation-z8 gallery" fxLayout="row nowrap" fxLayoutGap="20px">
   <div class="add-photo" fxLayoutAlign="center center">
-    <button
-      matTooltip="Upload Photos"
-      color="primary"
-      mat-icon-button
-      (click)="onOpenTeamSettings()"
-    >
+    <button matTooltip="Upload Photos" color="primary" mat-icon-button (click)="onOpenTeamSettings()">
       <mat-icon class="material-icons-round">add_photo_alternate</mat-icon>
     </button>
   </div>
   <div class="cont" *ngFor="let photo of photos; let i = index">
-    <img [src]="photo" [alt]="'Team Photo ' + i" />
+    <img [src]="photo" [alt]="'Team Photo ' + i" loading="lazy" appFallbackImg />
   </div>
 </mat-card>

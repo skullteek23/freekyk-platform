@@ -1,9 +1,10 @@
 <div (click)="openFixture()" class="box" fxLayout="row" fxLayoutAlign="space-between center">
   <div fxFlex="<grow>" fxLayout="column" fxLayoutGap="12px">
     <div class="box_inner-1" fxLayout="row" fxLayoutGap="8px" fxLayoutlign="center center">
-      <img [src]="match?.home.name || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
+      <img [src]="match?.home.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar"
+        appFallbackImg />
       <span class="mat-caption" fxLayoutAlign="start center">
-        {{ match?.home.logo | textShorten: 15 }}
+        {{ match?.home.name | textShorten: 15 }}
         <mat-icon fxLayoutAlign="center center" *ngIf="match?.concluded && match?.home.score > match?.away.score">
           sports_soccer</mat-icon>
       </span>
@@ -12,7 +13,8 @@
     </div>
 
     <div class="box_inner-2" fxLayout="row" fxLayoutGap="8px" fxLayoutlign="center center">
-      <img [src]="match?.away.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar" />
+      <img [src]="match?.away.logo || 'assets/images/dummy_player_sm.jpg'" [alt]="match?.id" class="teAvatar"
+        appFallbackImg />
       <span class="mat-caption" fxLayoutAlign="start center">
         {{ match?.away.name | textShorten: 15 }}
         <mat-icon fxLayoutAlign="center center" *ngIf="match?.concluded && match?.home.score < match?.away.score">
@@ -25,10 +27,10 @@
   <div *ngIf="!match?.concluded" class="box_inner-v mat-body-1" fxFlex="40%" fxLayoutAlign="center center"
     fxLayout="column">
     <span>
-      {{ checkTBD(match?.date.toDate()) }}
+      {{ checkTBD(match?.date) }}
     </span>
     <span>
-      {{ match?.date.toDate() | date: "mediumDate" }}
+      {{ match?.date | date: "mediumDate" }}
     </span>
   </div>
 </div>

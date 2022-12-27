@@ -4,19 +4,24 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, share, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { SeasonsFilters } from 'src/app/shared/Constants/FILTERS';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
-import { SeasonBasicInfo } from 'src/app/shared/interfaces/season.model';
+import { SeasonsFilters } from '@shared/Constants/FILTERS';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import { SocialShareService } from '@app/services/social-share.service';
+import { FilterData } from '@shared/interfaces/others.model';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-pl-seasons',
   templateUrl: './pl-seasons.component.html',
-  styleUrls: ['./pl-seasons.component.css'],
+  styleUrls: ['./pl-seasons.component.scss'],
 })
 export class PlSeasonsComponent implements OnInit, OnDestroy {
+
   readonly LIVE = PlayConstants.SEASON_STATUS_LIVE;
   readonly UPCOMING = PlayConstants.SEASON_STATUS_UPCOMING;
+
   isLoading = true;
   noSeasons = false;
   filterTerm: string = null;
@@ -24,11 +29,14 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   subscriptions = new Subscription();
   columns: number;
+
   constructor(
     private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
-    private queryServ: QueryService
+    private queryService: QueryService,
+    private socialShareService: SocialShareService
   ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'seasons',
@@ -55,47 +63,45 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     );
     this.getSeasons();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getSeasons(): void {
     this.seasons$ = this.ngFire
       .collection('seasons')
-      .valueChanges()
+      .get()
       .pipe(
         tap((val) => {
-          this.noSeasons = val.length === 0;
+          this.noSeasons = val.empty;
           this.isLoading = false;
         }),
-        map((resp) => resp.map((doc) => doc as SeasonBasicInfo)),
+        map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
         share()
       );
   }
+
   onQueryData(queryInfo): void {
     this.isLoading = true;
     if (queryInfo === null) {
       return this.getSeasons();
     }
-    this.seasons$ = this.queryServ.onQueryData(queryInfo, 'seasons').pipe(
+    this.seasons$ = this.queryService.onQueryData(queryInfo, 'seasons').pipe(
       tap((resp) => {
         this.noSeasons = resp.empty;
         this.isLoading = false;
       }),
-      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo))
+      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
+      map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
     );
   }
 
-  getSeasonStatus(start_date?, isFixturesCreated?: boolean, isSeasonEnded?: boolean): string {
-    const seasonTimeInMillis = (start_date as any).toMillis();
-    const currentTimeInMillis = new Date().getTime();
-    if (seasonTimeInMillis > currentTimeInMillis) {
-      return this.UPCOMING;
-    } else if (isFixturesCreated && !isSeasonEnded && seasonTimeInMillis <= currentTimeInMillis) {
-      return this.LIVE;
-    } else if (isSeasonEnded) {
-      return PlayConstants.SEASON_STATUS_ENDED;
-    } else {
-      return 'No Status';
-    }
+  onShareSeason(element: SeasonBasicInfo) {
+    const data = new ShareData();
+    data.share_url = `/s/${element.name}`;
+    data.share_title = element.name;
+    this.socialShareService.onShare(data);
   }
 }

@@ -8,7 +8,7 @@ import { take, map, tap, filter } from 'rxjs/operators';
 import {
   NotificationBasic,
   Invite,
-} from '../shared/interfaces/notification.model';
+} from '@shared/interfaces/notification.model';
 import { SnackbarService } from './snackbar.service';
 import { InviteAcceptCardComponent } from '../dashboard/dialogs/invite-accept-card/invite-accept-card.component';
 import { SendinviteComponent } from '../dashboard/dialogs/sendinvite/sendinvite.component';
@@ -25,31 +25,24 @@ export class NotificationsService implements OnDestroy {
   notifsCountChanged = new BehaviorSubject<number>(0);
   emptyInvites = new BehaviorSubject<boolean>(true);
   subscriptions = new Subscription();
-  onSendNotif(
-    recieverId: string,
-    notif: NotificationBasic
-  ): Promise<DocumentReference<unknown>> {
-    return this.ngFire
-      .collection('players/' + recieverId + '/Notifications')
-      .add(notif);
-  }
-  onSelNotif(notif: NotificationBasic): void {
-    switch (notif.type) {
+
+  onSelectNotification(notification: NotificationBasic): void {
+    switch (notification.type) {
       case 'team welcome':
         this.router.navigate(['/dashboard', 'team-management']);
         break;
       case 'request':
-        this.sendTeamInviteByNotif(notif);
+        this.sendTeamInviteByNotif(notification);
         break;
       case 'invite':
-        this.openTeamOffer(notif.id, notif.senderName);
+        this.openTeamOffer(notification.id, notification.senderName);
         break;
       case 'team challenge':
         this.router.navigate(['/dashboard', 'participate']);
         break;
 
       default:
-        this.snackServ.displayError();
+        this.snackBarService.displayError('Error Occurred! Please try again later');
         break;
     }
   }
@@ -63,6 +56,13 @@ export class NotificationsService implements OnDestroy {
       .doc(notifId)
       .delete();
   }
+  markNotification(notificationID: string, status: boolean): void {
+    const uid = localStorage.getItem('uid');
+    this.ngFire
+      .collection('players/' + uid + '/Notifications')
+      .doc(notificationID)
+      .update({ read: status });
+  }
   deleteInvite(invId: string): void {
     this.subscriptions.add(
       this.store
@@ -70,7 +70,7 @@ export class NotificationsService implements OnDestroy {
         .pipe(
           tap((resp) => {
             if (!!resp.isCaptain === false) {
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Only a Captain can perform this action!'
               );
             }
@@ -84,13 +84,13 @@ export class NotificationsService implements OnDestroy {
             .collection('invites')
             .doc(invId)
             .delete()
-            .then(() => this.snackServ.displayDelete())
+            .then(() => this.snackBarService.displayCustomMsg('Invite deleted successfully!'))
         )
     );
   }
   async sendTeamInviteByInv(inv: Invite): Promise<any> {
     if (inv.status !== 'reject') {
-      this.snackServ.displayCustomMsg(
+      this.snackBarService.displayCustomMsg(
         'Only invites rejected by player can be resent!'
       );
     } else {
@@ -105,7 +105,7 @@ export class NotificationsService implements OnDestroy {
         .collection('invites')
         .doc()
         .set(newInvite)
-        .then(() => this.snackServ.displayCustomMsg('Invite Sent!'));
+        .then(() => this.snackBarService.displayCustomMsg('Invite Sent!'));
     }
   }
   async sendTeamInviteByNotif(data: NotificationBasic): Promise<any> {
@@ -152,11 +152,11 @@ export class NotificationsService implements OnDestroy {
         .pipe(map(checkProfileComplete), take(1))
         .subscribe((data) => {
           if (data === 1) {
-            this.snackServ.displayCustomMsg(
+            this.snackBarService.displayCustomMsg(
               'Complete your profile to proceed!'
             );
           } else if (data === 2) {
-            this.snackServ.displayCustomMsg('Upload your Photo to proceed!');
+            this.snackBarService.displayCustomMsg('Upload your Photo to proceed!');
           } else {
             const dialogRef = this.dialog.open(InviteAcceptCardComponent, {
               data: teamName,
@@ -176,9 +176,7 @@ export class NotificationsService implements OnDestroy {
                       : null
                   )
                 )
-                .subscribe((response: 'accept' | 'reject' | null) => {
-                  return this.updTeamInviteByNotif(response, id);
-                })
+                .subscribe((response: 'accept' | 'reject' | null) => this.updTeamInviteByNotif(response, id))
             );
           }
         })
@@ -186,18 +184,16 @@ export class NotificationsService implements OnDestroy {
   }
   fetchAndGetAllNotifs(uid: string): Observable<NotificationBasic[]> {
     return this.ngFire
-      .collection('players/' + uid + '/Notifications', (query) =>
-        query.orderBy('date', 'asc')
-      )
+      .collection('players/' + uid + '/Notifications')
       .snapshotChanges()
       .pipe(
         map((resp) =>
           resp.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as NotificationBasic),
-              } as NotificationBasic)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as NotificationBasic),
+            } as NotificationBasic)
           )
         )
       );
@@ -211,10 +207,10 @@ export class NotificationsService implements OnDestroy {
           this.emptyInvites.next(responseData.length === 0);
           return responseData.map(
             (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as Invite),
-              } as Invite)
+            ({
+              id: doc.payload.doc.id,
+              ...(doc.payload.doc.data() as Invite),
+            } as Invite)
           );
         })
       );
@@ -229,7 +225,7 @@ export class NotificationsService implements OnDestroy {
     statusUpdate: 'wait' | 'accept' | 'reject' | null,
     notifId: string
   ): Promise<any> {
-    // notif id is same as invite id for team invites
+    // notification id is same as invite id for team invites
     if (statusUpdate == null) {
       return;
     }
@@ -240,25 +236,23 @@ export class NotificationsService implements OnDestroy {
   private fetchtNotifications(pid: string): void {
     this.subscriptions.add(
       this.ngFire
-        .collection('players/' + pid + '/Notifications', (query) =>
-          query.orderBy('date', 'asc').limit(8)
-        )
+        .collection('players/' + pid + '/Notifications', (query) => query.limit(8))
         .snapshotChanges()
         .pipe(
           map((resp) =>
             resp.map(
               (doc) =>
-                ({
-                  id: doc.payload.doc.id,
-                  ...(doc.payload.doc.data() as NotificationBasic),
-                } as NotificationBasic)
+              ({
+                id: doc.payload.doc.id,
+                ...(doc.payload.doc.data() as NotificationBasic),
+              } as NotificationBasic)
             )
           )
         )
         .subscribe((notifs) => {
           this.notifications = notifs;
           this.notifsChanged.next(this.notifications.slice());
-          this.notifsCountChanged.next(this.notifications.length);
+          this.notifsCountChanged.next(this.notifications.filter(el => !el.read).length);
         })
     );
   }
@@ -269,7 +263,7 @@ export class NotificationsService implements OnDestroy {
         .pipe(
           tap((resp) => {
             if (!resp.isCaptain) {
-              this.snackServ.displayCustomMsg(
+              this.snackBarService.displayCustomMsg(
                 'Only a Captain can perform this action!'
               );
             }
@@ -291,7 +285,7 @@ export class NotificationsService implements OnDestroy {
     private ngFire: AngularFirestore,
     private dialog: MatDialog,
     private router: Router,
-    private snackServ: SnackbarService,
+    private snackBarService: SnackbarService,
     private store: Store<{ dash: DashState }>
   ) {
     const uid = localStorage.getItem('uid');

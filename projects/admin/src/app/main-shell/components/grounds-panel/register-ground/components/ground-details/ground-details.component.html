@@ -1,0 +1,129 @@
+<form [formGroup]="groundDetailsForm" id="groundDetailsForm">
+  <div class="form-container" fxLayout.lt-md="column" fxLayout fxLayoutGap="20px">
+    <section class="section-container" fxLayoutGap="20px" fxLayout fxLayout.lt-md="column"
+      fxLayoutAlign="space-between stretch">
+      <div fxLayout="column">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Enter Ground Name</mat-label>
+          <input type="text" matInput formControlName="name" required />
+        </mat-form-field>
+        <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column" fxLayout.gt-sm="row"
+          fxLayoutGap.gt-sm="20px">
+          <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+            <mat-label>State</mat-label>
+            <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state" required>
+              <mat-option>--Select State--</mat-option>
+              <mat-option *ngFor="let state of states$ | async" [value]="state">
+                {{ state }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+            <mat-label>City</mat-label>
+            <mat-select formControlName="city" required>
+              <mat-option>--Select City--</mat-option>
+              <mat-option *ngFor="let city of cities$ | async" [value]="city">
+                {{ city }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+          <mat-label>Choose Field Type</mat-label>
+          <mat-select formControlName="fieldType" required>
+            <mat-option>--Select Field--</mat-option>
+            <mat-option *ngFor="let type of fieldTypes | keyvalue" [value]="type.key">
+              {{ type.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="contract-container" appearance="outline" color="primary">
+          <mat-label>Contract Date Range</mat-label>
+          <mat-date-range-input [formGroup]="contract" [rangePicker]="picker" required>
+            <input matStartDate formControlName="start" placeholder="Start Date" required>
+            <input matEndDate formControlName="end" placeholder="End Date" required>
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-type">Ground Ownership Type (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="Ownership-type" matInput formControlName="type" required>
+            <mat-radio-button *ngFor="let type of groundTypes" [value]="type">
+              {{ type | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-type">Playability Level (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="Playability-level" matInput formControlName="playLvl"
+            required>
+            <mat-radio-button *ngFor="let type of playLevels" [value]="type">
+              {{ type | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-referee">Referee Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-referee" matInput formControlName="referee" required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-foodBev">Food & Beverages Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-foodBev" matInput formControlName="foodBev" required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-parking">Parking Facility Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-parking" matInput formControlName="parking" required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-goalpost">Goalpost Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-goalpost" matInput formControlName="goalpost"
+            required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-washroom">Washroom Facility Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-washroom" matInput formControlName="washroom"
+            required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div fxLayout fxLayoutGap="16px" class="radio-box">
+          <mat-label class="label" id="ground-staff">Ball Boy (Staff) Availability (*) :</mat-label>
+          <mat-radio-group color="primary" aria-labelledby="ground-staff" matInput formControlName="staff" required>
+            <mat-radio-button *ngFor="let option of YES_OR_NO_OPTIONS" [value]="option.value">
+              {{ option.viewValue | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </section>
+    <section class="section-container-2" fxLayoutGap="20px" fxLayout="column" fxLayoutAlign="start center">
+      <div>
+        <app-photo-uploader (changeUpload)="selectPhoto($event)"></app-photo-uploader>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
+        <mat-label>Upload Contract File (*) :</mat-label>
+        <app-file-uploader (changeUpload)="selectContract($event)"></app-file-uploader>
+      </div>
+    </section>
+  </div>
+</form>

@@ -1,0 +1,30 @@
+<form [formGroup]="filterForm">
+  <div id="admin-select-ground-filter-form" class="filter-container" fxLayout="column" fxLayoutGap="16px">
+    <div class="filters-list box">
+      <div class="location" fxLayout="column" fxLayoutGap="8px">
+        <h4>Ground Location (City)</h4>
+        <mat-form-field appearance="outline" color="primary">
+          <mat-select formControlName="city">
+            <mat-option>--Select City--</mat-option>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="features" fxLayout="column" fxLayoutGap="8px">
+        <h4>Grounds Features</h4>
+        <div class="example-list-section">
+          <ul>
+            <li *ngFor="let feature of featuresList | keyvalue">
+              <mat-checkbox color="primary" [formControlName]="feature.key">
+                {{feature.value}}
+              </mat-checkbox>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

@@ -6,17 +6,20 @@ import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ListOption } from 'src/app/shared/components/search-autocomplete/search-autocomplete.component';
-import { CLOUD_FUNCTIONS } from 'src/app/shared/Constants/CLOUD_FUNCTIONS';
-import { TeamBasicInfo } from '../../../shared/interfaces/team.model';
+import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
+import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-teamjoin',
   templateUrl: './teamjoin.component.html',
-  styleUrls: ['./teamjoin.component.css'],
+  styleUrls: ['./teamjoin.component.scss'],
 })
 export class TeamjoinComponent implements OnInit {
+
   @ViewChild('stepper') private myStepper: MatStepper;
+
   teamsList$: Observable<ListOption[]>;
   selectedTeams: ListOption[] = [];
   noTeams = false;
@@ -26,18 +29,22 @@ export class TeamjoinComponent implements OnInit {
   success = false;
   filterTerm = '';
   isStepOneComplete = false;
+
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackServ: SnackbarService
+    private snackBarService: SnackbarService
   ) { }
+
   ngOnInit(): void {
     this.getTeams();
   }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onSubmit(plSelected: ListOption[]): void {
     this.myStepper.next();
     this.isStepOneComplete = true;
@@ -47,9 +54,10 @@ export class TeamjoinComponent implements OnInit {
       this.state = 'complete';
       this.success = true;
       this.error = false;
-      this.snackServ.displayCustomMsg('Requests sent successfully!');
+      this.snackBarService.displayCustomMsg('Requests sent successfully!');
     }
   }
+
   async sendRequests(capIds: string[], playerName: string): Promise<any> {
     const FunctionData = {
       capId: capIds,
@@ -61,6 +69,7 @@ export class TeamjoinComponent implements OnInit {
     );
     return await callable(FunctionData).toPromise();
   }
+
   getTeams(): void {
     this.teamsList$ = this.ngFire
       .collection('teams')
@@ -85,8 +94,10 @@ export class TeamjoinComponent implements OnInit {
   onAddSelection(value: ListOption): void {
     if (this.selectedTeams.findIndex(team => team.viewValue === value.viewValue) === -1) {
       this.selectedTeams.push(value);
+      this.selectedTeams.sort(ArraySorting.sortObjectByKey('viewValue'))
     }
   }
+
   onRemoveSelection(delIndex: number): void {
     this.selectedTeams.splice(delIndex, 1);
   }

@@ -1,0 +1,22 @@
+.teAvatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.points {
+  font-weight: 700;
+  font-family: "Open Sans";
+  font-size: 15px;
+}
+
+.mat-column-stadium {
+  /* width: 250px; */
+  text-align: left;
+}
+
+.mat-column-winner {
+  min-width: 45px;
+  text-align: center;
+}

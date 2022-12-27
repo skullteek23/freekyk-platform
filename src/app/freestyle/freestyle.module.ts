@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { FreestyleRoutingModule } from './freestyle-routing.module';
 import { FreestyleComponent } from './freestyle.component';
 import { FsHomeComponent } from './fs-home/fs-home.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
+import { MaterialModule } from '@shared/material.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [FreestyleComponent, FsHomeComponent],
-  imports: [SharedModule, FreestyleRoutingModule],
+  imports: [
+    CommonModule, SharedModule, FreestyleRoutingModule, MaterialModule,],
   exports: [],
 })
-export class FreestyleModule {}
+export class FreestyleModule { }

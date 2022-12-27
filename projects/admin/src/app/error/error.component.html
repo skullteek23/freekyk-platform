@@ -1,9 +1,4 @@
-<section
-  class="error_space container"
-  fxLayout="column"
-  fxLayoutGap="20px"
-  fxLayoutAlign="center center"
->
+<section class="error_space container" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
   <div fxLayout="column">
     <h1 class="large_404">{{ errorCode }}</h1>
     <h4 class="center section-space-top section-space-bottom">
@@ -11,12 +6,7 @@
     </h4>
   </div>
 
-  <div
-    fxLayout.lt-md="column"
-    fxLayout.gt-sm="row"
-    fxLayoutGap="8px"
-    fxLayoutAlign="center center"
-  >
+  <div fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px" fxLayoutAlign="center center">
     <button [routerLink]="['/support']" class="buttonText secondaryButton">
       Contact Us
     </button>

@@ -4,7 +4,7 @@ import { AcademiesComponent } from './academies.component';
 import { AcademiesRoutingModule } from './academies-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AcademiesMaterialModule } from './academies-material.module';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [AcademiesComponent],
@@ -17,4 +17,4 @@ import { SharedModule } from '../shared/shared.module';
   ],
   exports: [],
 })
-export class AcademiesModule {}
+export class AcademiesModule { }

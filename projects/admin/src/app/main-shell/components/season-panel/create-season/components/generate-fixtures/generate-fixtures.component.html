@@ -1,0 +1,3 @@
+<form [formGroup]="fixturesForm" class="form-container" fxLayout="column" fxLayoutAlign="stretch center">
+  <app-fixture-table *ngIf="fixturesList" [data]="fixturesList" [displayedCols]="cols"></app-fixture-table>
+</form>

@@ -7,14 +7,11 @@
 <div class="container-2">
   <div ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata">
     <mat-vertical-stepper #stepper [linear]="true">
-      <mat-step label="Send Join Request to Teams" [completed]="
-          selectedTeams.length < 5 &&
-          selectedTeams.length >= 1 &&
-          !error
-        " [state]="state">
+      <mat-step label="Send Join Request to Teams"
+        [completed]="selectedTeams.length < 5 && selectedTeams.length >= 1 && !error" [state]="state">
         <div class="content_container" fxLayout="column" fxLayoutGap="16px">
           <app-search-autocomplete [isDisabled]="noTeams" [options]="(teamsList$ | async)"
-            (selectionChange)="onAddSelection($event)" placeholder="Search for a team">
+            (selectionChange)="onAddSelection($event)" placeholder="Enter Team Name to Get Started">
           </app-search-autocomplete>
           <mat-hint *ngIf="selectedTeams.length > 5">
             Maximum teams selected!
@@ -22,7 +19,7 @@
           <mat-hint *ngIf="selectedTeams.length > 5">
             You can send join requests to maximum 5 teams
           </mat-hint>
-          <mat-list class="list" dense color="primary">
+          <mat-list class="list" dense color="primary" *ngIf="selectedTeams.length">
             <i *ngIf="noTeams">
               Currently, there are no team available to join! Please
               try again later
@@ -30,7 +27,7 @@
             <mat-list-item *ngFor="let team of selectedTeams; let i = index">
               <div fxLayoutAlign="space-between center" fxLayoutGap="4px" class="selection-container">
                 <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                  <img matListAvatar [src]="team.data.imgpath_logo" alt="Team Logo" />
+                  <img matListAvatar [src]="team.data.imgpath_logo" alt="Team Logo" appFallbackImg />
                   <span ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption">
                     {{ team.viewValue | textShorten: 50 }}
                   </span>

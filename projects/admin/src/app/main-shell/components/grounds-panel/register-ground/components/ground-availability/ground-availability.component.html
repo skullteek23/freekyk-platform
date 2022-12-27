@@ -1,0 +1,13 @@
+<div class="ground-availability-container form-container" fxLayout="column" fxLayoutAlign="center center"
+  fxLayoutGap="16px">
+  <span class="mat-body-2">Select hourly availability for your ground in a week (*) </span>
+  <div fxLayoutAlign="center center">
+    <span class="mat-body-2 unselectable-box" *ngFor="let day of days" fxLayoutAlign="center center">{{ day }} </span>
+  </div>
+  <mat-chip-list [multiple]="true">
+    <mat-chip [selected]="timing.selected" (click)="onSelectionChange(timing);$event.stopPropagation();"
+      *ngFor="let timing of timingArray" class="box" fxLayoutAlign="center center">
+      <span class="mat-body-2">{{timing.hour | hourToDate | date: 'h a'}}</span>
+    </mat-chip>
+  </mat-chip-list>
+</div>

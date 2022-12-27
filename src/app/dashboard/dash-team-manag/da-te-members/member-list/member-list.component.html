@@ -3,22 +3,13 @@
 <!-- mobile filter -->
 
 <!-- desktop filters -->
-<app-filters-lg
-  [margin]="true"
-  fxHide.lt-md="true"
-  [data]="filterData"
-  (changeFilter)="onChangeFilter($event)"
-></app-filters-lg>
+<app-filters-lg [margin]="true" fxHide.lt-md="true" [data]="filterData"
+  (changeFilter)="onChangeFilter($event)"></app-filters-lg>
 <!-- desktop filters -->
 
 <mat-list>
-  <mat-list-item
-    *ngFor="
-      let teamMember of membersArray | filterList: 'pl_pos':term;
-      last as last
-    "
-  >
-    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" />
+  <mat-list-item *ngFor="let teamMember of membersArray | filterList: 'pl_pos':term; last as last">
+    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         {{ teamMember.name + (capId == teamMember.id ? " (C)" : "") }}

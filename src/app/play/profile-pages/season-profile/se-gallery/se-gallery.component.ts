@@ -1,26 +1,28 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { SeasonMedia } from 'src/app/shared/interfaces/season.model';
+import { SeasonMedia } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-gallery',
   templateUrl: './se-gallery.component.html',
-  styleUrls: ['./se-gallery.component.css'],
+  styleUrls: ['./se-gallery.component.scss'],
 })
 export class SeGalleryComponent implements OnInit, OnDestroy {
+
   @Input() photos: string[] = [];
+
   subscriptions = new Subscription();
   columns: any;
   photos$: Observable<SeasonMedia>;
+
   constructor(
     private mediaObs: MediaObserver,
-    private enServ: EnlargeService,
-    private ngFire: AngularFirestore
-  ) {}
+    private enlargeService: EnlargeService
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -40,10 +42,12 @@ export class SeGalleryComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   onEnlargeView(imagePath: string): void {
-    this.enServ.onOpenPhoto(imagePath);
+    this.enlargeService.onOpenPhoto(imagePath);
   }
 }

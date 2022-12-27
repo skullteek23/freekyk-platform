@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randParagraph, randPhrase, randSentence, randState, randWord } from '@ngneat/falso';
-import { PlayerMoreInfo } from '../shared/interfaces/user.model';
 import { PLAYING_POSTIIONS, DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
-import firebase from 'firebase/app';
-import { TeamBasicInfo, TeamMembers, TeamMoreInfo, Tmember } from '../shared/interfaces/team.model';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
+import { PlayerMoreInfo } from '@shared/interfaces/user.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -71,7 +70,7 @@ export class MockDataService {
       locCity: randCity()
     };
     const teamMoreInfo: TeamMoreInfo = {
-      tdateCreated: firebase.firestore.Timestamp.now(),
+      tdateCreated: new Date().getTime(),
       tageCat: 30,
       captainName: 'Douglas Palmer',
       tslogan: randPhrase(),
@@ -162,7 +161,7 @@ export class MockDataService {
     const newDetails: PlayerMoreInfo = {
       imgpath_lg: avatar,
       profile: true,
-      born: firebase.firestore.Timestamp.fromDate(randBetweenDate({ from: new Date('01/01/1968'), to: new Date('01/01/2003') })),
+      born: new Date(randBetweenDate({ from: new Date('01/01/1968'), to: new Date('01/01/2003') })).getTime(),
       locState: randState(),
       locCountry: randCountry(),
       nickname: userDetails.nickname,

@@ -2,25 +2,25 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { SeasonStats } from 'src/app/shared/interfaces/season.model';
+import { SeasonStats } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-se-stats',
   templateUrl: './se-stats.component.html',
-  styleUrls: ['./se-stats.component.css'],
+  styleUrls: ['./se-stats.component.scss'],
 })
 export class SeStatsComponent implements OnInit, OnDestroy {
-  @Input() stats: SeasonStats = {
-    FKC_winner: 'NA',
-    FPL_winner: 'NA',
-    totGoals: 0,
-    awards: 'NA',
-  };
+  @Input() stats = new SeasonStats();
+
   subscriptions = new Subscription();
   columns = '4';
   height = '0';
   gutter = '0';
-  constructor(private mediaObs: MediaObserver) {}
+
+  constructor(
+    private mediaObs: MediaObserver
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -42,6 +42,7 @@ export class SeStatsComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

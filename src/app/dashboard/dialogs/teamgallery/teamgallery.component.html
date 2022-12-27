@@ -26,7 +26,7 @@
       <div (mouseover)="onHover(true)" (mouseleave)="onHover(false)" fxLayout="row" fxLayoutGap="10px"
         fxLayoutAlign="center center" *ngFor="let photo of (teamGallery$ | async)?.media">
         <div class="img-container" fxLayoutAlign="center center">
-          <img [src]="photo" alt="Team Photo" />
+          <img [src]="photo" alt="Team Photo" appFallbackImg />
         </div>
         <button [disabled]="deleteInProgress$ | async" (click)="onRemovePhoto(photo)" mat-icon-button
           class="remove-button buttonText">

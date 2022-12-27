@@ -1,7 +1,7 @@
 // import * as admin from 'firebase-admin';
 // import { firestore } from 'firebase-admin';
-// import { FsTrick } from '../../src/app/shared/interfaces/others.model';
-// import { FsStats } from '../../src/app/shared/interfaces/user.model';
+// import { FsTrick } from '@shared/interfaces/others.model';
+// import { FsStats } from '@shared/interfaces/user.model';
 
 // const db = admin.firestore();
 

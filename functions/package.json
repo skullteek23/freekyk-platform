@@ -15,6 +15,7 @@
   "main": "lib/functions/src/index.js",
   "dependencies": {
     "@google-cloud/storage": "^5.15.3",
+    "@mailchimp/mailchimp_transactional": "^1.0.50",
     "crypto": "^1.0.1",
     "firebase-admin": "^9.8.0",
     "firebase-functions": "^3.18.8",

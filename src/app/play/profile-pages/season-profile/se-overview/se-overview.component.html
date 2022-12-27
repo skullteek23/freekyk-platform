@@ -1,9 +1,4 @@
-<section
-  class="section-space-top section-space-bottom"
-  fxLayout.lt-md="column"
-  fxLayout.gt-sm="row"
-  fxLayoutGap="8px"
->
+<section class="section-space-top section-space-bottom" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px">
   <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="24px">
     <div>
       <h4>Description</h4>
@@ -31,19 +26,15 @@
     </div>
   </div>
   <div fxLayout="column" fxFlex.gt-sm="50%">
-    <h4>{{ "teams participant list" | titlecase }}</h4>
+    <h4>Participants ({{isRestrictedParticipants ? 'Restricted' : 'Open For All'}})</h4>
     <span *ngIf="(participants$ | async)?.length === 0" class="mat-caption">
       No Participants yet!
     </span>
     <mat-list *ngIf="(participants$ | async)?.length !== 0">
-      <a
-        [routerLink]="['/t', participant.tname]"
-        mat-list-item
-        *ngFor="let participant of participants$ | async"
-      >
-        <img matListAvatar [src]="participant.tlogo" alt="Team Image" />
+      <a [routerLink]="['/t', participant.name]" mat-list-item *ngFor="let participant of participants$ | async">
+        <img matListAvatar [src]="participant.logo" alt="Team Image" appFallbackImg />
         <p matLine fxLayoutAlign="start center" fxLayoutGap="8px">
-          <span>{{ participant.tname }}</span>
+          <span>{{ participant.name }}</span>
           <mat-chip-list>
             <mat-chip selected>Paid</mat-chip>
           </mat-chip-list>

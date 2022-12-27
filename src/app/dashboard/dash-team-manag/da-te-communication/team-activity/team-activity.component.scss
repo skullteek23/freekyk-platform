@@ -1,0 +1,16 @@
+.log {
+  height: 32px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: white;
+}
+.time {
+  color: var(--primaryColor);
+}
+ul {
+  max-height: 540px;
+  overflow-y: auto;
+  padding: 0 4px;
+}

@@ -2,26 +2,27 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { logDetails } from 'src/app/shared/interfaces/others.model';
-import {
-  EMAIL,
-  ALPHA_W_SPACE,
-  PASS_STRONG,
-} from '../../shared/Constants/REGEX';
+import { logDetails } from '@shared/interfaces/others.model';
+import { RegexPatterns } from '@shared/Constants/REGEX';
 @Component({
   selector: 'app-login-ui',
   templateUrl: './login-ui.component.html',
-  styleUrls: ['./login-ui.component.css'],
+  styleUrls: ['./login-ui.component.scss'],
 })
 export class LoginUiComponent implements OnInit {
+
+  // readonly strongPassword = RegexPatterns.passwordStrong;
+
   @Input() type: 'login' | 'signup' = 'login';
-  formData = new FormGroup({});
+  authForm: FormGroup;
   disableAllButtons = false;
   isLoading = false;
+
   constructor(
-    private authServ: AuthService,
-    private snackServ: SnackbarService
+    private authService: AuthService,
+    private snackBarService: SnackbarService
   ) { }
+
   ngOnInit(): void {
     this.initForm();
   }
@@ -32,69 +33,66 @@ export class LoginUiComponent implements OnInit {
 
   initForm(): void {
     if (this.isViewLogin()) {
-      this.formData = new FormGroup({
+      this.authForm = new FormGroup({
         email: new FormControl(null, [
           Validators.required,
-          Validators.pattern(EMAIL),
+          Validators.pattern(RegexPatterns.email),
         ]),
-        pass: new FormControl(null, Validators.required),
+        pass: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       });
     } else {
-      this.formData = new FormGroup({
+      this.authForm = new FormGroup({
         name: new FormControl(null, [
           Validators.required,
-          Validators.pattern(ALPHA_W_SPACE),
+          Validators.pattern(RegexPatterns.alphaWithSpace),
         ]),
         email: new FormControl(null, [
           Validators.required,
-          Validators.pattern(EMAIL),
+          Validators.pattern(RegexPatterns.email),
         ]),
-        pass: new FormControl(null, [
-          Validators.required,
-          Validators.pattern(PASS_STRONG),
-        ]),
+        pass: new FormControl(null, [Validators.required, Validators.minLength(8)])
       });
     }
   }
 
   onForgotPassword(): void {
-    this.authServ.onForgotPassword();
+    this.authService.onForgotPassword();
   }
 
   onSubmit(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
-    if (!this.formData.valid) {
-      this.snackServ.displayCustomMsg('Invalid Details! Please try again.');
+    if (!this.authForm.valid) {
+      this.snackBarService.displayCustomMsg('Invalid Details! Please try again.');
       this.disableAllButtons = false;
       return;
     }
     if (this.isViewLogin()) {
       const userData: logDetails = {
-        email: this.formData.get('email')?.value,
-        pass: this.formData.get('pass')?.value,
+        email: this.authForm.get('email')?.value,
+        pass: this.authForm.get('pass')?.value,
       };
-      const loginSnap = this.authServ.onlogin(userData);
+      const loginSnap = this.authService.onlogin(userData);
       loginSnap
-        .then(() => this.authServ.afterSignin())
+        .then(() => this.authService.afterSignIn())
         .catch((error) => this.onErrorAfterSignin(error))
         .finally(this.cleanUpAfterSignin.bind(this));
     } else {
       const userData: logDetails = {
-        email: this.formData.get('email')?.value,
-        pass: this.formData.get('pass')?.value,
-        name: this.formData.get('name')?.value,
+        email: this.authForm.get('email')?.value,
+        pass: this.authForm.get('pass')?.value,
+        name: this.authForm.get('name')?.value,
       };
-      const signupSnap = this.authServ.onSignup(userData);
+      const signupSnap = this.authService.onSignup(userData);
       signupSnap
         .then((user) => {
           sessionStorage.setItem('name', userData.name);
-          const cloudSnap = this.authServ.createProfileByCloudFn(
+          const cloudSnap = this.authService.createProfileByCloudFn(
             userData.name,
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup())
+            .then(() => this.authService.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         })
@@ -105,21 +103,21 @@ export class LoginUiComponent implements OnInit {
   onGoogleLogin(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
-    this.authServ
-      .onGoogleSignin()
+    this.authService
+      .onGoogleSignIn()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
         if (user.additionalUserInfo.isNewUser) {
-          const cloudSnap = this.authServ.createProfileByCloudFn(
+          const cloudSnap = this.authService.createProfileByCloudFn(
             user.user.displayName,
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup())
+            .then(() => this.authService.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         } else {
-          this.authServ.afterSignup();
+          this.authService.afterSignup();
         }
       })
       .catch((error) => this.onErrorAfterSignin(error));
@@ -128,35 +126,37 @@ export class LoginUiComponent implements OnInit {
   onFacebookLogin(): void {
     this.disableAllButtons = true;
     this.isLoading = true;
-    this.authServ
-      .onFacebookSignin()
+    this.authService
+      .onFacebookSignIn()
       .then((user) => {
         sessionStorage.setItem('name', user.user.displayName);
         if (user.additionalUserInfo.isNewUser) {
-          const cloudSnap = this.authServ.createProfileByCloudFn(
+          const cloudSnap = this.authService.createProfileByCloudFn(
             user.user.displayName,
             user.user.uid
           );
           cloudSnap
-            .then(() => this.authServ.afterSignup())
+            .then(() => this.authService.afterSignup())
             .catch((error) => this.onErrorAfterSignin(error))
             .finally(this.cleanUpAfterSignin.bind(this));
         } else {
-          this.authServ.afterSignup();
+          this.authService.afterSignup();
         }
       })
       .catch((error) => this.onErrorAfterSignin(error));
   }
+
   cleanUpAfterSignin(hideLoading = false): void {
-    this.formData.reset();
-    this.formData.markAsUntouched();
+    this.authForm.reset();
+    this.authForm.markAsUntouched();
     this.disableAllButtons = false;
     if (hideLoading) {
       this.isLoading = false;
     }
   }
+
   onErrorAfterSignin(error): void {
-    this.authServ.onError(error.code);
+    this.authService.onError(error.code);
     this.cleanUpAfterSignin(true);
   }
 }

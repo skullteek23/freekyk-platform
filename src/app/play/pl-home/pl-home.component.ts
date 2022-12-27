@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { PLAY_PAGE } from 'src/app/shared/Constants/WEBSITE_CONTENT';
+import { PLAY_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-pl-home',
   templateUrl: './pl-home.component.html',
-  styleUrls: ['./pl-home.component.css'],
+  styleUrls: ['./pl-home.component.scss'],
 })
 export class PlHomeComponent implements OnInit {
   readonly findTeamContent = PLAY_PAGE.findTeam;
@@ -16,6 +16,6 @@ export class PlHomeComponent implements OnInit {
   readonly whyChooseContent = PLAY_PAGE.whyChoosePlay;
   readonly communityNumbers = PLAY_PAGE.communityNumbers;
 
-  constructor() {}
-  ngOnInit(): void {}
+  constructor() { }
+  ngOnInit(): void { }
 }

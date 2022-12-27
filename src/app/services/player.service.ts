@@ -11,7 +11,7 @@ import {
   PlayerMoreInfo,
   BasicStats,
   FsStats,
-} from '../shared/interfaces/user.model';
+} from '@shared/interfaces/user.model';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class PlayerService implements OnDestroy {
       .pipe(
         map((resp) => {
           if (!resp.exists) {
-            return { apps: 0, g: 0, w: 0, cards: 0, l: 0 };
+            return new BasicStats();
           }
           return resp.data() as BasicStats;
         })
@@ -53,7 +53,6 @@ export class PlayerService implements OnDestroy {
     this.fetchPlayerBasicInfo(uid);
     this.fetchPlayerMoreInfo(uid);
     this.fetchSMLinks(uid);
-    // this.fetchPlayerBasicInfoFs(uid);
   }
   private fetchPlayerBasicInfoFs(uid: string): void {
     this.ngfire

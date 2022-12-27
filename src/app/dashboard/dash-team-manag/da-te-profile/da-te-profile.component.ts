@@ -6,16 +6,17 @@ import { Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { TeamService } from 'src/app/services/team.service';
-import { SocialMediaLinks } from 'src/app/shared/interfaces/user.model';
+import { SocialMediaLinks } from '@shared/interfaces/user.model';
 import { AppState } from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-da-te-profile',
   templateUrl: './da-te-profile.component.html',
-  styleUrls: ['./da-te-profile.component.css'],
+  styleUrls: ['./da-te-profile.component.scss'],
   providers: [DatePipe],
 })
 export class DaTeProfileComponent implements OnInit, OnDestroy {
+
   isLoading = true;
   tName: string;
   defaultString = '-';
@@ -24,13 +25,15 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
   logoUrl: string;
   photoUrl: string;
   subscriptions = new Subscription();
+
   constructor(
-    private enlServ: EnlargeService,
-    private teServ: TeamService,
+    private enlargeService: EnlargeService,
+    private teamService: TeamService,
     private datePipe: DatePipe,
     private store: Store<AppState>,
     private router: Router
   ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.store
@@ -44,9 +47,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
             this.photoUrl = info.basicInfo.imgpath;
             this.smLinks = info.moreInfo.tSocials;
             return {
-              'Created On': this.getCreationDate(
-                info.moreInfo.tdateCreated?.toDate()
-              ),
+              'Created On': this.getCreationDate(info.moreInfo.tdateCreated),
               'age category': this.getAgeCategory(info.moreInfo.tageCat),
               captain: info.moreInfo.captainName,
               location: this.getLocation(
@@ -65,22 +66,26 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
 
-  getCreationDate(date: Date): string {
-    return date ? this.datePipe.transform(date, 'mediumDate') : null;
+  getCreationDate(date: any): string {
+    if (date && date.hasOwnProperty('seconds')) {
+      return date ? this.datePipe.transform(date['seconds'] * 1000, 'mediumDate') : null;
+    } else {
+      return date ? this.datePipe.transform(date, 'mediumDate') : null;
+    }
   }
+
   getAgeCategory(category: number): string {
     return category ? `U-${category.toString()}` : null;
   }
-  getLocation(
-    city: string | null | undefined,
-    state: string | null | undefined
-  ): string {
+
+  getLocation(city: string | null | undefined, state: string | null | undefined): string {
     if (city == null) {
       return state;
     } else if (state == null) {
@@ -89,15 +94,18 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
       return `${city}, ${state}`;
     }
   }
+
   onEnlargePhoto(imageUrl: string): void {
-    this.enlServ.onOpenPhoto(imageUrl);
+    this.enlargeService.onOpenPhoto(imageUrl);
   }
+
   onNavigateToTeamPage(): void {
     if (this.tName) {
       this.router.navigate(['/t', this.tName]);
     }
   }
+
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
 }

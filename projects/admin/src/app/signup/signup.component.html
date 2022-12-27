@@ -1,0 +1,104 @@
+<header class="section-space-top">
+  <span ngClass.gt-sm="mat-headline" ngClass.lt-md="mat-subheading-2">WANT TO ORGANISE A FOOTBALL TOURNAMENT?</span>
+  <p class="mat-subheading-1">
+    Get Access to Freekyk Admin Panel Now
+  </p>
+</header>
+<section fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutAlign.gt-sm="space-evenly center"
+  class="section-space-top">
+  <div class="placeholder" fxLayoutAlign="center center">
+    <img src="assets/placeholder_product.png" alt="Illustration" appFallbackImg />
+  </div>
+  <div class="form-container" *ngIf="!isRegistrationSent; else successBox">
+    <form [formGroup]="signupForm" fxLayout="column">
+      <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="auto">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Organizer Name</mat-label>
+          <input type="text" matInput formControlName="name" />
+          <mat-error *ngIf="signupForm.get('name').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Contact Number</mat-label>
+          <input type="number" matInput formControlName="contactNumber" />
+          <mat-error *ngIf="signupForm.get('contactNumber').hasError('required')">
+            {{messages.error.requiredField}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Organizer's Email ID</mat-label>
+        <input type="email" matInput formControlName="email" />
+        <mat-error *ngIf="signupForm.get('email').hasError('required')">
+          {{messages.error.requiredField}}
+        </mat-error>
+      </mat-form-field>
+      <div formGroupName="location" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="auto">
+        <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
+          <mat-label>Country</mat-label>
+          <mat-select (selectionChange)="onSelectCountry($event)" formControlName="country">
+            <mat-option>--Select Country--</mat-option>
+            <mat-option *ngFor="let country of countries$ | async" [value]="country">
+              {{ country }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
+          <mat-label>State</mat-label>
+          <mat-select (selectionChange)="onSelectState($event)" formControlName="state">
+            <mat-option>--Select State--</mat-option>
+            <mat-option *ngFor="let state of states$ | async" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
+          <mat-label>City</mat-label>
+          <mat-select formControlName="city">
+            <mat-option>--Select City--</mat-option>
+            <mat-option *ngFor="let city of cities$ | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <span class="mat-body-2">
+        Are you a registered organization? If yes, please provide details:
+      </span>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>Company Name (if any)</mat-label>
+        <input type="text" matInput formControlName="company" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>GST Number (if any)</mat-label>
+        <input type="text" matInput formControlName="gst" />
+      </mat-form-field>
+      <div class="radio-group" fxFlex.gt-sm="100%" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
+        <span> Do you own a football ground? </span>
+        <mat-radio-group color="primary" aria-label="own-football-ground" formControlName="selfGround"
+          fxLayoutGap="8px">
+          <mat-radio-button [value]="1">Yes</mat-radio-button>
+          <mat-radio-button [value]="0">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <button [disabled]="signupForm.invalid || !signupForm.dirty" type="button"
+        class="submit-button primaryButton buttonText" (click)="onSubmit()">Submit</button>
+      <span class="mat-caption shortcut"> Already have an account? <a [routerLink]="['/login']">Log in</a></span>
+    </form>
+  </div>
+  <ng-template #successBox>
+    <div class="success-container" fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+      <app-tick-animation></app-tick-animation>
+      <p>
+        Thank you for submitting your details!!<br>
+        Please check your email to get your Organizer ID.
+      </p>
+      <button type="button" class="submit-button primaryButton buttonText" [routerLink]="['/login']">
+        Login to Admin Panel</button>
+    </div>
+  </ng-template>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

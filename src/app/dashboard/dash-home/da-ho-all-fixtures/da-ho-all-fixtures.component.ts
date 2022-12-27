@@ -3,25 +3,28 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { map, share, switchMap, tap } from 'rxjs/operators';
-import { MatchFixture } from 'src/app/shared/interfaces/match.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import { AppState } from 'src/app/store/app.reducer';
 import { Observable, Subscription } from 'rxjs';
-import { FilterData, QueryInfo } from 'src/app/shared/interfaces/others.model';
+import { FilterData, QueryInfo } from '@shared/interfaces/others.model';
 import {
   FilterHeadingMap,
   FilterSymbolMap,
   FilterValueMap,
   MatchFilters,
-} from 'src/app/shared/Constants/FILTERS';
+} from '@shared/Constants/FILTERS';
 import { QueryService } from 'src/app/services/query.service';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from 'src/app/shared/Constants/DEFAULTS';
+import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
+import { ArraySorting } from '@shared/utils/array-sorting';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
-  styleUrls: ['./da-ho-all-fixtures.component.css'],
+  styleUrls: ['./da-ho-all-fixtures.component.scss'],
 })
 export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
+
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   isLoading = true;
   myFixtures$: Observable<MatchFixture[]>;
   allFixtures$: Observable<MatchFixture[]>;
@@ -29,11 +32,12 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
   filterData: FilterData;
   subscriptions = new Subscription();
   isListLoading: boolean;
+
   constructor(
     private ngFire: AngularFirestore,
     private store: Store<AppState>,
-    private queryServ: QueryService
-  ) {}
+    private queryService: QueryService
+  ) { }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -45,11 +49,13 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     };
     this.getPlayerFixtures();
   }
+
   ngOnDestroy(): void {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
+
   onChangeIndex(changeState: MatTabChangeEvent): void {
     switch (changeState.index) {
       case 0:
@@ -60,6 +66,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         return this.getAllResults();
     }
   }
+
   onQueryMyFixtures(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
@@ -71,51 +78,54 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       tap(() => (this.isListLoading = false))
     );
   }
+
   onQueryAllFixtures(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
       return this.getAllFixtures();
     }
-    this.allFixtures$ = this.queryServ
+    this.allFixtures$ = this.queryService
       .onQueryMatchesForDashboard(queryInfo, 'allMatches', false)
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         tap(() => (this.isListLoading = false))
       );
   }
+
   onQueryResults(queryInfo: QueryInfo): void {
     this.isListLoading = true;
     if (queryInfo === null) {
       return this.getAllResults();
     }
-    this.allResults$ = this.queryServ
+    this.allResults$ = this.queryService
       .onQueryMatchesForDashboard(queryInfo, 'allMatches', true)
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         tap(() => (this.isListLoading = false))
       );
   }
+
   getPlayerFixtures(): void {
     this.isListLoading = true;
     this.myFixtures$ = this.store.select('dash').pipe(
       map((resp) => (resp.hasTeam ? resp.hasTeam.name : null)),
-      switchMap((teamName) => {
-        return this.ngFire
-          .collection('allMatches', (query) =>
-            query.where('teams', 'array-contains', teamName)
-          )
-          .get()
-          .pipe(
-            tap((resp) => (this.tabGroup.selectedIndex = resp.empty ? 1 : 0)),
-            map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-            map((resp) =>
-              resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-            ),
-            tap(() => (this.isListLoading = false))
-          );
-      })
+      switchMap((teamName) => this.ngFire
+        .collection('allMatches', (query) =>
+          query
+            .where('teams', 'array-contains', teamName)
+            .where('concluded', '==', false)
+            .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+        )
+        .get()
+        .pipe(
+          tap((resp) => (this.tabGroup.selectedIndex = resp.empty ? 1 : 0)),
+          map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
+          map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
+          tap(() => (this.isListLoading = false))
+        ))
     );
   }
+
   getAllFixtures(): void {
     this.isListLoading = true;
     this.allFixtures$ = this.ngFire
@@ -127,12 +137,11 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        ),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
         tap(() => (this.isListLoading = false))
       );
   }
+
   getAllResults(): void {
     this.isListLoading = true;
     this.allResults$ = this.ngFire
@@ -144,12 +153,11 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        ),
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
         tap(() => (this.isListLoading = false))
       );
   }
+
   onQueryToFirebase(queryInfo, teamName: string): Observable<MatchFixture[]> {
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],
@@ -172,9 +180,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) =>
-          resp.sort((a, b) => a.date.toMillis() - b.date.toMillis())
-        )
+        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
       );
   }
 }

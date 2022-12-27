@@ -1,5 +1,5 @@
-import { InjectionToken, NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { NgModule } from '@angular/core';
+import { SharedModule } from '@shared/shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
@@ -11,7 +11,6 @@ import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.comp
 import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
-import { DashboardMaterialModule } from './dashboard-material.module';
 import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
 import { DaHoAllFixturesComponent } from './dash-home/da-ho-all-fixtures/da-ho-all-fixtures.component';
 import { DaHoAllContestsComponent } from './dash-home/da-ho-all-contests/da-ho-all-contests.component';
@@ -47,13 +46,16 @@ import { DaTeMangPlayersComponent } from './dash-team-manag/da-te-members/da-te-
 import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.component';
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
 import { HttpClientModule } from '@angular/common/http';
-import { LocationCitiesService } from '../services/location-cities.service';
-import { environment } from 'src/environments/environment';
-import { RazorPayAPI } from '../shared/Constants/RAZORPAY';
-import { PaymentService } from '../services/payment.service';
-import { DeactivateAccountComponent } from './dialogs/deactivate-account/deactivate-account.component';
+import { LocationService } from '../../../shared/services/location-cities.service';
+import { environment } from 'environments/environment';
+import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
+import { PaymentService } from '../../../shared/services/payment.service';
 import { PlayerService } from '../services/player.service';
 import { TeamService } from '../services/team.service';
+import { MaterialModule } from '@shared/material.module';
+import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 
 @NgModule({
   declarations: [
@@ -99,23 +101,25 @@ import { TeamService } from '../services/team.service';
     DaTeMangPlayersComponent,
     InvitePlayersComponent,
     TeamgalleryComponent,
-    DeactivateAccountComponent,
+    DeactivateProfileRequestComponent,
   ],
   imports: [
     SharedModule,
+    CommonModule,
+    MaterialModule,
     DashboardRoutingModule,
-    DashboardMaterialModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    FlexLayoutModule
   ],
   exports: [],
   providers: [
-    LocationCitiesService,
+    LocationService,
     { provide: RazorPayAPI, useValue: environment.razorPay },
     PaymentService,
   ],
 })
 export class DashboardModule {
-  constructor(plServ: PlayerService, teServ: TeamService) { }
+  constructor(playerService: PlayerService, teamService: TeamService) { }
 }

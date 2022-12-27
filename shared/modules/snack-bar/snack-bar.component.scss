@@ -1,0 +1,23 @@
+.custom-message {
+  position: relative;
+  padding: 5px;
+}
+
+.close-icon {
+  position: absolute;
+  top: -14px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  right: -15px;
+  color: white;
+}
+
+span {
+  font-size: 14px;
+  text-align: left;
+  color: white;
+  margin-bottom: 0;
+}

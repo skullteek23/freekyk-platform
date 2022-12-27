@@ -22,14 +22,15 @@
     <div fxFlexOrder="0" fxFlexFill.lt-md fxFlex.gt-sm="40%" fxFlexOrder.gt-sm="2" class="photo_container"
       fxLayoutAlign="center center">
       <img (click)="onEnlargePhoto(photoUrl)" *ngIf="photoUrl; else photoPlaceholder" [src]="photoUrl" alt="Photo"
-        class="profile-photo-large" />
+        class="profile-photo-large" loading="lazy" appFallbackImg />
     </div>
     <!-- Photo -->
 
     <!-- logo -->
     <div fxFlex="100px" fxFlexOrder.gt-sm="0" fxFlexOrder="1" fxLayoutAlign="center center">
       <div class="circle" fxLayoutAlign="center center">
-        <img *ngIf="logoUrl; else logoPlaceholder" [src]="logoUrl" alt="Team Logo Image" />
+        <img *ngIf="logoUrl; else logoPlaceholder" [src]="logoUrl" alt="Team Logo Image" loading="lazy"
+          appFallbackImg />
       </div>
     </div>
     <!-- logo -->

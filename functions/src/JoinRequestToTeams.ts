@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 const db = admin.firestore();
-import { NotificationBasic } from '../../src/app/shared/interfaces/notification.model';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 
 
 export async function joinRequests(data: { capId: string[]; name: string }, context: any): Promise<any> {
@@ -16,9 +16,10 @@ export async function joinRequests(data: { capId: string[]; name: string }, cont
       const notification: NotificationBasic = {
         type: 'request',
         senderId: UID,
-        recieverId: ID,
-        date: admin.firestore.Timestamp.now(),
+        receiverId: ID,
+        date: admin.firestore.Timestamp.now().toMillis(),
         title: 'Join Request',
+        read: false,
         senderName: requesterName,
       };
       const notificationRef = db.collection(`players/${ID}/Notifications`).doc();

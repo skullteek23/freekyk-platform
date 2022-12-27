@@ -1,32 +1,23 @@
 <div class="table_container">
-  <table
-    *ngIf="this.LeagueDataSource.length; else noitem"
-    mat-table
-    [dataSource]="LeagueDataSource"
-    class="extra-width-table"
-  >
+  <table *ngIf="this.LeagueDataSource.length; else noitem" mat-table [dataSource]="LeagueDataSource"
+    class="extra-width-table">
     <ng-container matColumnDef="pos" sticky>
       <th mat-header-cell *matHeaderCellDef>Position</th>
       <td mat-cell *matCellDef="let team; let i = index">
         <span class="mat-caption">
-          {{ "#" + (i + 1) }}
+          #{{ team.tData.name === TO_BE_DECIDED ? '' : (i + 1) }}
         </span>
       </td>
     </ng-container>
     <ng-container matColumnDef="Team" sticky>
       <th mat-header-cell *matHeaderCellDef>Team</th>
-      <td mat-cell *matCellDef="let team" [matTooltip]="team.tData.tName">
+      <td mat-cell *matCellDef="let team" [matTooltip]="team.tData.name">
         <div fxLayoutAlign="start center" fxLayoutGap="8px">
-          <img
-            [fxShow.gt-sm]="true"
-            fxHide
-            class="teAvatar hideAvatar"
-            [src]="team.tData.timgpath"
-            alt="Team Logo"
-          />
+          <img [fxShow.gt-sm]="true" fxHide class="teAvatar hideAvatar" [src]="team.tData.logo" alt="Team Logo"
+            appFallbackImg />
 
           <span class="mat-body-1 left team-name">
-            {{ team.tData.tName }}
+            {{ team.tData.name }}
           </span>
         </div>
       </td>

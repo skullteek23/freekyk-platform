@@ -3,14 +3,15 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { ProdBasicInfo } from '../shared/interfaces/product.model';
+import { ProdBasicInfo } from '@shared/interfaces/product.model';
 
 @Component({
   selector: 'app-equipment',
   templateUrl: './equipment.component.html',
-  styleUrls: ['./equipment.component.css'],
+  styleUrls: ['./equipment.component.scss'],
 })
 export class EquipmentComponent implements OnInit, OnDestroy {
+
   subscriptions = new Subscription();
   columns: any;
   cardHeight = '';
@@ -19,10 +20,12 @@ export class EquipmentComponent implements OnInit, OnDestroy {
   allProducts$: Observable<ProdBasicInfo[]>;
   tempProductsArr: number[] = [];
   prodFilters = ['Product Type', 'Product Category', 'Brand', 'Price'];
+
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore
-  ) {}
+  ) { }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.mediaObs
@@ -46,9 +49,11 @@ export class EquipmentComponent implements OnInit, OnDestroy {
     );
     this.getProducts();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getProducts(): void {
     this.allProducts$ = this.ngFire
       .collection('products')
@@ -61,16 +66,18 @@ export class EquipmentComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as ProdBasicInfo),
-              } as ProdBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as ProdBasicInfo),
+            } as ProdBasicInfo)
           )
         )
       );
   }
+
   getDate(): Date {
     return new Date();
   }
-  onShare(prod: ProdBasicInfo): void {}
+
+  onShare(prod: ProdBasicInfo): void { }
 }

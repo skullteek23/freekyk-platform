@@ -28,25 +28,24 @@
       <mat-grid-tile appCardElevate
         *ngFor="let season of seasons$ | async | filterList: 'locCity,locState,name':filterTerm">
         <div class="seasonContainer">
-          <img [routerLink]="['/s', season.name]" class="box-image" [src]="season.imgpath" [alt]="season.name" />
+          <img [routerLink]="['/s', season.name]" class="box-image" [src]="season.imgpath" [alt]="season.name"
+            loading="lazy" appFallbackImg />
           <div class="content" fxLayoutAlign="space-between start">
             <div [routerLink]="['/s', season.name]" fxLayout="column" fxLayoutAlign="center start">
-              <span class="mat-body-1 left">
-                {{ season.name | textShorten: 50 }}
+              <span matTooltip="{{season.name}}" class="mat-body-1 left text-container">
+                {{ season.name }}
               </span>
-              <span class="mat-caption left">
-                {{ season.locCity + ", " + season.locState | textShorten: 50 }}
+              <span matTooltip="{{season.locCity + ', '  + season.locState}}" class="mat-caption left text-container">
+                {{ season.locCity + ", " + season.locState }}
               </span>
             </div>
-            <button disabled mat-icon-button color="primary">
+            <button (click)="onShareSeason(season); $event.stopPropagation()" mat-icon-button color="primary">
               <mat-icon class="material-icons-round"> share </mat-icon>
             </button>
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px" class="status-container">
-            <span
-              [ngClass]="{'status-live': getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) === LIVE, 'status-upcoming': getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) === UPCOMING }"
-              class="mat-caption status left">
-              {{ getSeasonStatus(season.start_date, season.isFixturesCreated, season.isSeasonEnded) }}
+            <span [ngClass]="{'status-live': season.status === 'PUBLISHED'}" class="mat-caption status left">
+              {{ season.status === 'PUBLISHED' ? 'LIVE' : season.status }}
             </span>
           </div>
         </div>

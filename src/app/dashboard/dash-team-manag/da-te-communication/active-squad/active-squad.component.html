@@ -1,6 +1,6 @@
 <mat-list>
   <mat-list-item *ngFor="let sqPlayer of sqData$ | async; last as last">
-    <img matListAvatar [src]="sqPlayer.imgpath_sm" [alt]="sqPlayer.name" />
+    <img matListAvatar [src]="sqPlayer.imgpath_sm" [alt]="sqPlayer.name" appFallbackImg />
 
     <div matLine>
       <span class="mat-body-1"> {{ sqPlayer.name }} </span>
@@ -9,12 +9,8 @@
       <span *ngSwitchCase="'accept'" class="material-icons-round yes">
         check_circle
       </span>
-      <span *ngSwitchCase="'reject'" class="material-icons-round no"
-        >cancel</span
-      >
-      <span *ngSwitchCase="'wait'" class="material-icons-round undecided"
-        >help</span
-      >
+      <span *ngSwitchCase="'reject'" class="material-icons-round no">cancel</span>
+      <span *ngSwitchCase="'wait'" class="material-icons-round undecided">help</span>
       <div *ngSwitchDefault>output2</div>
     </span>
     <!-- <div>

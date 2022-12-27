@@ -1,11 +1,6 @@
 <div fxLayoutGap="20px" fxLayout="column">
   <!-- button loading -->
-  <div
-    *ngIf="showMobile && isLoading"
-    class="_fixture"
-    fxLayout="column"
-    fxLayoutGap="16px"
-  >
+  <div *ngIf="showMobile && isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
     <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
   </div>
   <!-- button loading -->
@@ -13,12 +8,7 @@
   <!-- mobile buttons -->
   <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
     <!-- complete your profile button -->
-    <button
-      [routerLink]="['/dashboard', 'account']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button [routerLink]="['/dashboard', 'account']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">account_box</span>
         <span class="mat-body-1"> Complete your profile </span>
@@ -29,13 +19,7 @@
     <!-- complete your profile button -->
 
     <!-- join team button -->
-    <button
-      *ngIf="noTeam"
-      (click)="joinTeam()"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button *ngIf="noTeam" (click)="joinTeam()" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">add_circle</span>
         <span class="mat-body-1"> Join a Freekyk Team </span>
@@ -46,20 +30,8 @@
     <!-- join team button -->
 
     <!-- create team  button -->
-    <button
-      *ngIf="noTeam"
-      (click)="createTeam()"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
-      <div
-        class="b-name"
-        fxLayout
-        fxLayoutGap="20px"
-        fxLayoutAlign="start center"
-        fxLayoutGap.lt-sm="4px"
-      >
+    <button *ngIf="noTeam" (click)="createTeam()" class="wide-button" fxLayout fxLayoutAlign="space-between center">
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">edit</span>
         <span class="mat-body-1 left"> Create a new Team </span>
       </div>
@@ -69,21 +41,9 @@
     <!-- create team button -->
 
     <!-- team comms button -->
-    <button
-      *ngIf="!noTeam"
-      (click)="onTCommsMobile()"
-      class="wide-button"
-      fxLayout
-      fxHide.gt-sm="true"
-      fxLayoutAlign="space-between center"
-    >
-      <div
-        class="b-name"
-        fxLayout
-        fxLayoutGap="20px"
-        fxLayoutAlign="start center"
-        fxLayoutGap.lt-sm="4px"
-      >
+    <button *ngIf="!noTeam" (click)="onTCommsMobile()" class="wide-button" fxLayout fxHide.gt-sm="true"
+      fxLayoutAlign="space-between center">
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">chat</span>
         <span class="mat-body-1 left"> Open Team Communication </span>
       </div>
@@ -93,12 +53,7 @@
     <!-- team comms button -->
 
     <!-- raise a ticket button -->
-    <button
-      [routerLink]="['/support']"
-      class="wide-button"
-      fxLayout
-      fxLayoutAlign="space-between center"
-    >
+    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">live_help</span>
         <span class="mat-body-1"> Need help? Raise a ticket </span>

@@ -3,25 +3,29 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { tap, map, share } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
-import { TeamMembers } from 'src/app/shared/interfaces/team.model';
+import { Tmember } from '@shared/interfaces/team.model';
 import { TeamState } from '../store/team.reducer';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-da-te-members',
   templateUrl: './da-te-members.component.html',
-  styleUrls: ['./da-te-members.component.css'],
+  styleUrls: ['./da-te-members.component.scss'],
 })
 export class DaTeMembersComponent implements OnInit, OnDestroy {
+
   ind: number;
   noTeam = true;
-  teamMembers: TeamMembers;
+  membersList: Tmember[] = [];
   isLoading = true;
   capId$: Observable<string>;
   subscriptions = new Subscription();
+
   constructor(
-    private teServ: TeamService,
+    private teamService: TeamService,
     private store: Store<{ team: TeamState }>
-  ) {}
+  ) { }
+
   ngOnInit(): void {
     this.capId$ = this.store.select('team').pipe(
       map((resp) => resp.basicInfo.captainId),
@@ -38,20 +42,28 @@ export class DaTeMembersComponent implements OnInit, OnDestroy {
           }),
           map((info) => info.teamMembers)
         )
-        .subscribe((members) => (this.teamMembers = members))
+        .subscribe((members) => {
+          if (members) {
+            this.membersList = members.members.slice();
+            this.membersList.sort(ArraySorting.sortObjectByKey('name'));
+          }
+        })
     );
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   onOpenTeamSettings(): void {
-    this.teServ.onOpenTeamSettingsDialog();
+    this.teamService.onOpenTeamSettingsDialog();
   }
+
   createTeam(): void {
-    this.teServ.onOpenCreateTeamDialog();
+    this.teamService.onOpenCreateTeamDialog();
   }
+
   joinTeam(): void {
-    this.teServ.onOpenJoinTeamDialog();
+    this.teamService.onOpenJoinTeamDialog();
   }
 }

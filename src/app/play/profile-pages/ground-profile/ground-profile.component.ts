@@ -5,45 +5,59 @@ import { Observable } from 'rxjs';
 import { map, share, tap } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import {
+  Formatters,
   GroundBasicInfo,
   GroundMoreInfo,
-} from 'src/app/shared/interfaces/ground.model';
+} from '@shared/interfaces/ground.model';
+import { SocialShareService } from '@app/services/social-share.service';
+import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
 @Component({
   selector: 'app-ground-profile',
   templateUrl: './ground-profile.component.html',
-  styleUrls: ['./ground-profile.component.css'],
+  styleUrls: ['./ground-profile.component.scss'],
 })
 export class GroundProfileComponent implements OnInit {
+
   groundInfo$: Observable<GroundBasicInfo>;
   groundMoreInfo$: Observable<GroundMoreInfo>;
   grName: string;
   grImgpath: string;
   grId: string;
   isLoading = true;
+  formatter: any;
   error = false;
+  groundID: string = '';
+
   constructor(
     private ngFire: AngularFirestore,
     private route: ActivatedRoute,
-    private enlServ: EnlargeService,
-    private router: Router
-  ) {}
+    private enlargeService: EnlargeService,
+    private router: Router,
+    private socialShareService: SocialShareService
+  ) { }
+
   ngOnInit(): void {
-    const GroundId = this.route.snapshot.params.groundid;
-    this.getGroundInfo(GroundId);
+    this.formatter = Formatters;
+    this.groundID = this.route.snapshot.params.groundid;
+    this.getGroundInfo();
   }
-  getGroundInfo(gid: string): void {
+
+  getGroundInfo(): void {
+    if (!this.groundID) {
+      return;
+    }
     this.groundInfo$ = this.ngFire
       .collection('grounds')
-      .doc(gid)
+      .doc(this.groundID)
       .get()
       .pipe(
         tap((resp) => {
           if (resp.exists) {
-            this.getGroundMoreInfo(gid);
+            this.getGroundMoreInfo(this.groundID);
             this.grName = (resp.data() as GroundBasicInfo).name;
             this.grImgpath = (resp.data() as GroundBasicInfo).imgpath;
-            this.grId = gid;
+            this.grId = this.groundID;
           } else {
             this.error = !resp.exists;
             this.router.navigate(['error']);
@@ -53,10 +67,11 @@ export class GroundProfileComponent implements OnInit {
         share()
       );
   }
+
   getGroundMoreInfo(gid: string): void {
     this.groundMoreInfo$ = this.ngFire
-      .collection('grounds/' + gid + '/additionalInfo')
-      .doc('moreInfo')
+      .collection('groundDetails')
+      .doc(gid)
       .get()
       .pipe(
         tap(() => (this.isLoading = false)),
@@ -64,23 +79,14 @@ export class GroundProfileComponent implements OnInit {
         share()
       );
   }
-  getFieldType(type: 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'): string {
-    switch (type) {
-      case 'FG':
-        return 'Full Ground';
-      case 'SG':
-        return 'Short Ground';
-      case 'HG':
-        return 'Huge Ground';
-      case 'AG':
-        return 'Agile Ground';
-      case 'TURF':
-        return 'Football Turf';
-      default:
-        return 'Not Available';
-    }
-  }
+
   onEnlargePhoto(): void {
-    this.enlServ.onOpenPhoto(this.grImgpath);
+    this.enlargeService.onOpenPhoto(this.grImgpath);
+  }
+
+  onShare() {
+    const data = new ShareData();
+    data.share_url = `/ground/${this.groundID}`;
+    this.socialShareService.onShare(data);
   }
 }

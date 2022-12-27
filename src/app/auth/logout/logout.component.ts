@@ -5,22 +5,27 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.css'],
+  styleUrls: ['./logout.component.scss'],
 })
 export class LogoutComponent implements OnInit {
+
   constructor(
-    private authServ: AuthService,
+    private authService: AuthService,
     public dialogRef: MatDialogRef<LogoutComponent>
-  ) {}
-  ngOnInit(): void {}
+  ) { }
+
+  ngOnInit(): void { }
+
   onCloseDialog(): void {
     this.dialogRef.close();
   }
+
   onCancel(): void {
     this.onCloseDialog();
   }
+
   onLogout(): void {
-    this.authServ.onLogout();
+    this.authService.onLogout();
     this.onCloseDialog();
   }
 }

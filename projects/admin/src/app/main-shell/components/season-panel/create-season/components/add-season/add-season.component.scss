@@ -1,0 +1,17 @@
+.form-container {
+  border: 1px solid var(--grey1);
+  padding: 20px 20px 0;
+  margin-top: 20px;
+  border-radius: 20px;
+}
+
+.field-container,
+.team-selection,
+.team-selection mat-form-field,
+.state-city-container mat-form-field {
+  width: 100%;
+}
+
+.text-area-field textarea {
+  height: 150px;
+}

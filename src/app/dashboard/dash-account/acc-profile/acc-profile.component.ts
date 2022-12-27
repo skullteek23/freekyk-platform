@@ -1,49 +1,34 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormArray,
-  AbstractControl,
-} from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, AbstractControl, } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, of, Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UpdateInfoComponent } from 'src/app/shared/components/update-info/update-info.component';
-import { positionGroup } from 'src/app/shared/interfaces/others.model';
-import {
-  FsProfileVideos,
-  PlayerMoreInfo,
-  SocialMediaLinks,
-} from 'src/app/shared/interfaces/user.model';
+import { UpdateInfoComponent } from '@shared/components/update-info/update-info.component';
+import { positionGroup } from '@shared/interfaces/others.model';
+import { PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
-import {
-  ALPHA_W_SPACE,
-  ALPHA_NUM_SPACE,
-  BIO,
-  YOUTUBE_REGEX,
-  ALPHA_LINK,
-} from 'src/app/shared/Constants/REGEX';
-import { PLAYING_POSITIONS } from 'src/app/shared/Constants/PLAYING_POSITIONS';
-import { LocationCitiesService } from 'src/app/services/location-cities.service';
-import { MatSelectChange } from '@angular/material/select';
-import { BIO_MAX_LIMIT } from '../../constants/constants';
-import { map } from 'rxjs/operators';
-import { DeactivateAccountComponent } from '../../dialogs/deactivate-account/deactivate-account.component';
-import { SOCIAL_MEDIA_PRE } from 'src/app/shared/Constants/DEFAULTS';
+import { RegexPatterns } from '@shared/Constants/REGEX';
+import { LocationService } from '@shared/services/location-cities.service';
+import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
+import { AuthService } from 'src/app/services/auth.service';
+import { PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
+import { DeactivateProfileRequestComponent } from '@app/dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
+import { map, share } from 'rxjs/operators';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',
-  styleUrls: ['./acc-profile.component.css'],
+  styleUrls: ['./acc-profile.component.scss'],
 })
 export class AccProfileComponent implements OnInit, OnDestroy {
-  readonly BIO_MAX_LIMIT = BIO_MAX_LIMIT;
+
+  readonly BIO_MAX_LIMIT = ProfileConstants.BIO_MAX_LIMIT;
   readonly ig = SOCIAL_MEDIA_PRE.ig;
   readonly fb = SOCIAL_MEDIA_PRE.fb;
   readonly tw = SOCIAL_MEDIA_PRE.tw;
   readonly yt = SOCIAL_MEDIA_PRE.yt;
+  readonly positions: positionGroup[] = PLAYING_POSITIONS;
 
   teamsArray: FormArray = new FormArray([]);
   toursArray: FormArray = new FormArray([]);
@@ -54,14 +39,13 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   playerArrayForm = new FormGroup({});
   fsArrayForm = new FormGroup({});
   socialInfoForm = new FormGroup({});
-  filteredOptions: positionGroup[] = PLAYING_POSITIONS;
   countries$: Observable<string[]>;
   states$: Observable<string[]>;
   cities$: Observable<string[]>;
   subscriptions = new Subscription();
   emptyControlArray = new FormControl(null, [
     Validators.required,
-    Validators.pattern(ALPHA_NUM_SPACE),
+    Validators.pattern(RegexPatterns.alphaNumberWithSpace),
   ]);
   isDisableArrayButton = true;
 
@@ -71,53 +55,92 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       dash: DashState;
     }>,
     private ngFire: AngularFirestore,
-    private snackServ: SnackbarService,
-    private locationServ: LocationCitiesService
+    private snackBarService: SnackbarService,
+    private locationService: LocationService,
+    private authService: AuthService
   ) { }
+
   ngOnInit(): void {
-    this.initFormWithValues();
-    this.countries$ = this.locationServ.getCountry();
-    this.subscriptions.add(
-      this.playerArrayForm
-        .get('prof_teams')
-        ?.valueChanges.subscribe(() => (this.isDisableArrayButton = false))
-    );
-    this.subscriptions.add(
-      this.playerArrayForm
-        .get('prof_tourns')
-        ?.valueChanges.subscribe(() => (this.isDisableArrayButton = false))
-    );
+    this.initForm();
+    this.getCountries();
+    this.getSavedValues();
+    this.subscriptions.add(this.playerArrayForm.get('prof_teams')?.valueChanges.subscribe(() => (this.isDisableArrayButton = false)));
+    this.subscriptions.add(this.playerArrayForm.get('prof_tours')?.valueChanges.subscribe(() => (this.isDisableArrayButton = false)));
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-  onSelectCountry(country: MatSelectChange): void {
-    this.states$ = this.locationServ.getStateByCountry(country.value);
+
+  initForm() {
+    this.personalInfoForm = new FormGroup({
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
+      nickname: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace),]),
+      gen: new FormControl(null, Validators.required),
+      born: new FormControl(null, Validators.required, this.minimumAge.bind(this)),
+    });
+
+    this.playingInfoForm = new FormGroup({
+      str_ft: new FormControl(null, Validators.required),
+      pl_pos: new FormControl(null, Validators.required),
+      jer_no: new FormControl(null, [
+        Validators.required, Validators.min(1), Validators.max(99), Validators.pattern(RegexPatterns.num)]),
+      location: new FormGroup({
+        locCountry: new FormControl(null, Validators.required),
+        locState: new FormControl(null, Validators.required),
+        locCity: new FormControl(null, Validators.required),
+      }),
+      height: new FormControl(null, [Validators.pattern(RegexPatterns.num), Validators.required]),
+      weight: new FormControl(null, [Validators.pattern(RegexPatterns.num), Validators.required]),
+      bio: new FormControl(null, [Validators.required, Validators.maxLength(this.BIO_MAX_LIMIT), Validators.pattern(RegexPatterns.bio)]),
+    });
+
+    this.socialInfoForm = new FormGroup({
+      ig: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink),]),
+      fb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink),]),
+      yt: new FormControl(null, Validators.pattern(RegexPatterns.socialProfileLink)),
+      tw: new FormControl(null, Validators.pattern(RegexPatterns.socialProfileLink)),
+    });
   }
-  onSelectState(state: MatSelectChange): void {
-    this.cities$ = this.locationServ.getCityByState(state.value);
+
+  getCountries() {
+    this.countries$ = this.locationService.getCountry();
   }
-  initFormWithValues(): void {
-    const uid = localStorage.getItem('uid');
-    this.initFsArrayForm();
+
+
+  getSavedValues(): void {
+    // this.initFsArrayForm();
     this.subscriptions.add(
       this.store.select('dash').subscribe((data) => {
-        // for location
-        if (data.playerMoreInfo.locState && data.playerMoreInfo.locCountry) {
-          this.states$ = this.locationServ.getStateByCountry(
-            data.playerMoreInfo.locCountry
-          );
-          this.cities$ = this.locationServ.getCityByState(
-            data.playerMoreInfo.locState
-          );
+        // console.log(data)
+        const country = data.playerMoreInfo.locCountry;
+        const state = data.playerMoreInfo.locState;
+        const city = data.playerBasicInfo.locCity;
+        const personalInfoData = {
+          name: data.playerBasicInfo.name,
+          nickname: data.playerMoreInfo.nickname,
+          gen: data.playerBasicInfo.gen,
+          born: data.playerMoreInfo.born ? new Date(data.playerMoreInfo.born) : null,
         }
-        // for location
-
+        const playingInfoData = {
+          str_ft: data.playerMoreInfo.str_ft,
+          pl_pos: data.playerBasicInfo.pl_pos,
+          jer_no: data.playerBasicInfo.jer_no,
+          location: {
+            locCountry: country,
+            locState: state,
+            locCity: city,
+          },
+          height: data.playerMoreInfo.height,
+          weight: data.playerMoreInfo.weight,
+          bio: data.playerMoreInfo.bio,
+        }
+        if (country && state && city) {
+          this.onSelectCountry(country);
+          this.onSelectState(state);
+        }
         // for player tournaments & teams
-        if (
-          data.playerMoreInfo.prof_teams.length !== 0 &&
-          this.teamsArray.length === 0
-        ) {
+        if (data.playerMoreInfo.prof_teams.length !== 0 && this.teamsArray.length === 0) {
           this.isDisableArrayButton = false;
           data.playerMoreInfo.prof_teams.forEach((team) => {
             const newControl = new FormControl(team);
@@ -125,10 +148,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           });
           this.teamsArray.push(this.emptyControlArray);
         }
-        if (
-          data.playerMoreInfo.prof_tours.length !== 0 &&
-          this.toursArray.length === 0
-        ) {
+        if (data.playerMoreInfo.prof_tours.length !== 0 && this.toursArray.length === 0) {
           this.isDisableArrayButton = false;
           data.playerMoreInfo.prof_tours.forEach((tournament) => {
             const newControl = new FormControl(tournament);
@@ -136,134 +156,79 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           });
           this.toursArray.push(this.emptyControlArray);
         }
-        // for player tournaments & teams
-
-        this.personalInfoForm = new FormGroup({
-          name: new FormControl(
-            data.playerBasicInfo.name,
-            Validators.pattern('^[a-zA-Z0-9- ]*$')
-          ),
-          nickname: new FormControl(data.playerMoreInfo.nickname, [
-            Validators.pattern('^[a-zA-Z ]*$'),
-            Validators.required,
-          ]),
-          gender: new FormControl(
-            data.playerBasicInfo.gen,
-            Validators.required
-          ),
-          birthdate: new FormControl(
-            data.playerMoreInfo.born ? data.playerMoreInfo.born.toDate() : null,
-            Validators.required,
-            this.minimumAge.bind(this)
-          ),
-        });
-        this.playingInfoForm = new FormGroup({
-          str_foot: new FormControl(
-            data.playerMoreInfo.str_ft,
-            Validators.required
-          ),
-          p_pos: new FormControl(
-            data.playerBasicInfo.pl_pos,
-            Validators.required
-          ),
-          j_num: new FormControl(data.playerBasicInfo.jer_no, [
-            Validators.pattern('^[0-9]*$'),
-            Validators.required,
-          ]),
-          loc_city: new FormControl(
-            data.playerBasicInfo.locCity,
-            Validators.required
-          ),
-          loc_state: new FormControl(
-            data.playerMoreInfo.locState,
-            Validators.required
-          ),
-          loc_country: new FormControl(
-            data.playerMoreInfo.locCountry,
-            Validators.required
-          ),
-          height: new FormControl(data.playerMoreInfo.height, [
-            Validators.pattern('^[0-9]*$'),
-            Validators.required,
-          ]),
-          weight: new FormControl(data.playerMoreInfo.weight, [
-            Validators.pattern('^[0-9]*$'),
-            Validators.required,
-          ]),
-          bio: new FormControl(data.fsInfo.bio, [
-            Validators.maxLength(BIO_MAX_LIMIT),
-            Validators.pattern(BIO),
-          ]),
-        });
-        this.playerArrayForm = new FormGroup({
-          prof_teams: this.teamsArray,
-          prof_tourns: this.toursArray,
-        });
-        this.socialInfoForm = new FormGroup({
-          ig: new FormControl(data.socials.ig, [
-            Validators.required,
-            Validators.pattern(ALPHA_LINK),
-          ]),
-          fb: new FormControl(data.socials.fb, [
-            Validators.required,
-            Validators.pattern(ALPHA_LINK),
-          ]),
-          yt: new FormControl(data.socials.yt, Validators.pattern(ALPHA_LINK)),
-          tw: new FormControl(data.socials.tw, Validators.pattern(ALPHA_LINK)),
-        });
+        this.playerArrayForm = new FormGroup({ prof_teams: this.teamsArray, prof_tours: this.toursArray, });
+        this.personalInfoForm.patchValue({
+          ...personalInfoData
+        })
+        this.playingInfoForm.patchValue({
+          ...playingInfoData
+        })
+        this.socialInfoForm.patchValue({
+          ...data.socials
+        })
       })
     );
   }
-  initFsArrayForm(): void {
-    const uid = localStorage.getItem('uid');
-    // for player brand collabs & fs videos
-    this.fsArrayForm = new FormGroup({
-      top_vids: new FormArray([
-        new FormControl(null, [
-          Validators.required,
-          Validators.pattern(YOUTUBE_REGEX),
-        ]),
-      ]),
-    });
-    this.ngFire
-      .collection(`freestylers/${uid}/additionalInfoFs`)
-      .doc('fsVideos')
-      .get()
-      .pipe(map((resp) => resp.data() as FsProfileVideos))
-      .subscribe((videos) => {
-        // for player brand collabs & fs videos
-        if (videos && videos.top_vids && videos.top_vids?.length > 0) {
-          videos.top_vids.forEach((video) => {
-            const newControl = new FormControl(
-              video,
-              Validators.pattern(YOUTUBE_REGEX)
-            );
-            this.fsVidsArray.push(newControl);
-          });
-        }
-        // for player brand collabs & fs videos
-        if (this.fsVidsArray.length !== 0) {
-          this.fsVidsArray.push(
-            new FormControl(null, [
-              Validators.required,
-              Validators.pattern(YOUTUBE_REGEX),
-            ])
-          );
-        }
-        this.fsArrayForm = new FormGroup({
-          top_vids: this.fsVidsArray,
-        });
-      });
+
+  onSelectCountry(country: string): void {
+    this.states$ = this.locationService.getStateByCountry(country);
   }
+
+  onSelectState(state: string): void {
+    this.cities$ = this.locationService.getCityByState(state);
+  }
+
+  // initFsArrayForm(): void {
+  //   const uid = localStorage.getItem('uid');
+  //   // for player brand collabs & fs videos
+  //   this.fsArrayForm = new FormGroup({
+  //     top_vids: new FormArray([
+  //       new FormControl(null, [
+  //         Validators.required,
+  //         Validators.pattern(YOUTUBE_REGEX),
+  //       ]),
+  //     ]),
+  //   });
+  //   this.ngFire
+  //     .collection(`freestylers/${uid}/additionalInfoFs`)
+  //     .doc('fsVideos')
+  //     .get()
+  //     .pipe(map((resp) => resp.data() as FsProfileVideos))
+  //     .subscribe((videos) => {
+  //       // for player brand collabs & fs videos
+  //       if (videos && videos.top_vids && videos.top_vids?.length > 0) {
+  //         videos.top_vids.forEach((video) => {
+  //           const newControl = new FormControl(
+  //             video,
+  //             Validators.pattern(YOUTUBE_REGEX)
+  //           );
+  //           this.fsVidsArray.push(newControl);
+  //         });
+  //       }
+  //       // for player brand collabs & fs videos
+  //       if (this.fsVidsArray.length !== 0) {
+  //         this.fsVidsArray.push(
+  //           new FormControl(null, [
+  //             Validators.required,
+  //             Validators.pattern(YOUTUBE_REGEX),
+  //           ])
+  //         );
+  //       }
+  //       this.fsArrayForm = new FormGroup({
+  //         top_vids: this.fsVidsArray,
+  //       });
+  //     });
+  // }
+
   onAddControl(controlName: string, formName: 'player' | 'fs'): void {
     let fmCtrl = new FormControl(null, [
       Validators.required,
-      Validators.pattern(ALPHA_W_SPACE),
+      Validators.pattern(RegexPatterns.alphaWithSpace),
     ]);
     if (controlName === 'top_vids' && formName === 'fs') {
       fmCtrl = new FormControl(null, [
         Validators.required,
-        Validators.pattern(YOUTUBE_REGEX),
+        Validators.pattern(RegexPatterns.youtube),
       ]);
     }
     if (formName === 'player') {
@@ -274,13 +239,14 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return;
     }
   }
+
   onRemoveControl(controlName: string, formName: 'player' | 'fs'): any {
     if (formName === 'player') {
       if (
         this.playerArrayForm.get(controlName).value.length === 1 &&
         !this.playerArrayForm.get(controlName).value[0]
       ) {
-        this.snackServ.displayCustomMsg(`Empty fields cannot be removed!`);
+        this.snackBarService.displayCustomMsg(`Empty fields cannot be removed!`);
       } else {
         (this.playerArrayForm.get(controlName) as FormArray).removeAt(
           (this.playerArrayForm.get(controlName) as FormArray).length - 1
@@ -291,7 +257,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.fsArrayForm.get(controlName).value.length === 1 &&
         !this.fsArrayForm.get(controlName).value[0]
       ) {
-        this.snackServ.displayCustomMsg(`Empty fields cannot be removed!`);
+        this.snackBarService.displayCustomMsg(`Empty fields cannot be removed!`);
       } else {
         (this.fsArrayForm.get(controlName) as FormArray).removeAt(
           (this.fsArrayForm.get(controlName) as FormArray).length - 1
@@ -301,6 +267,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return;
     }
   }
+
   getFormArray(controlName: string, formName: 'player' | 'fs'): any {
     if (formName === 'player') {
       return (
@@ -312,21 +279,23 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return [];
     }
   }
+
   onSavePersonalInfo(): Promise<any> {
     if (this.personalInfoForm.dirty) {
-      const newDetails: any = {};
-      if (this.personalInfoForm.get('birthdate').dirty && this.personalInfoForm.get('birthdate').value) {
-        newDetails.born = this.personalInfoForm.get('birthdate').value;
+      const newDetails: Partial<PlayerMoreInfo> = {};
+      if (this.personalInfoForm.get('born').dirty && this.personalInfoForm.get('born').value) {
+        newDetails.born = new Date(this.personalInfoForm.get('born').value).getTime();
       }
       if (this.personalInfoForm.get('nickname').dirty && this.personalInfoForm.get('nickname').value) {
         newDetails.nickname = this.personalInfoForm.get('nickname').value;
       }
       const newBasicDetails: any = {};
-      if (this.personalInfoForm.get('gender').dirty && this.personalInfoForm.get('gender').value) {
-        newBasicDetails.gen = this.personalInfoForm.get('gender').value;
+      if (this.personalInfoForm.get('gen').dirty && this.personalInfoForm.get('gen').value) {
+        newBasicDetails.gen = this.personalInfoForm.get('gen').value;
       }
       if (this.personalInfoForm.get('name').dirty && this.personalInfoForm.get('name').value) {
         newBasicDetails.name = this.personalInfoForm.get('name').value;
+        this.authService.updateAuthDisplayName(newBasicDetails.name);
       }
 
       const uid = localStorage.getItem('uid');
@@ -337,12 +306,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           this.ngFire
             .collection('players/' + uid + '/additionalInfo')
             .doc('otherInfo')
-            .set(
-              {
-                ...newDetails,
-              },
-              { merge: true }
-            )
+            .set({ ...newDetails, }, { merge: true })
         );
       }
       if (Object.keys(newBasicDetails).length) {
@@ -365,35 +329,36 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         );
       }
       if (allPromises.length) {
-        return Promise.all(allPromises).then(() =>
-          this.snackServ.displayCustomMsg('Updated Successfully!')
-        );
+        return Promise.all(allPromises)
+          .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+          .catch(error => this.snackBarService.displayError())
       }
     }
     this.personalInfoForm.reset();
 
     // backend code here
   }
+
   onSavePlayerInfo(): Promise<any> {
     if (this.playingInfoForm.dirty && this.playingInfoForm.valid) {
       const newDetails: PlayerMoreInfo = {
-        locState: this.playingInfoForm.get('loc_state').value,
-        locCountry: this.playingInfoForm.get('loc_country').value,
+        locState: this.playingInfoForm.value.location.locState,
+        locCountry: this.playingInfoForm.value.location.locCountry,
         height: this.playingInfoForm.get('height').value,
         weight: this.playingInfoForm.get('weight').value,
-        str_ft: this.playingInfoForm.get('str_foot').value,
+        str_ft: this.playingInfoForm.get('str_ft').value,
         bio: this.playingInfoForm.get('bio').value,
         profile: true,
       };
       const newBasicDetails: {} = {
-        jer_no: this.playingInfoForm.get('j_num').value,
-        locCity: this.playingInfoForm.get('loc_city').value,
-        pl_pos: this.playingInfoForm.get('p_pos').value,
+        jer_no: this.playingInfoForm.get('jer_no').value,
+        locCity: this.playingInfoForm.value.location.locCity,
+        pl_pos: this.playingInfoForm.get('pl_pos').value,
       };
-      const newFsDetails: {} = {
-        locCountry: this.playingInfoForm.get('loc_country').value,
-        bio: this.playingInfoForm.get('bio').value,
-      };
+      // const newFsDetails: {} = {
+      //   locCountry: this.playingInfoForm.value.location.locCountry,
+      //   bio: this.playingInfoForm.get('bio').value,
+      // };
       const uid = localStorage.getItem('uid');
       const allPromises = [];
 
@@ -401,12 +366,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         this.ngFire
           .collection('players/' + uid + '/additionalInfo')
           .doc('otherInfo')
-          .set(
-            {
-              ...newDetails,
-            },
-            { merge: true }
-          )
+          .set({ ...newDetails, }, { merge: true })
       );
       allPromises.push(
         this.ngFire
@@ -424,18 +384,19 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       //       ...newFsDetails,
       //     })
       // );
-      return Promise.all(allPromises).then(() =>
-        this.snackServ.displayCustomMsg('Updated Successfully!')
-      );
+      return Promise.all(allPromises)
+        .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+        .catch(error => this.snackBarService.displayError())
     }
     this.playingInfoForm.reset();
     // backend code here
   }
+
   onSavePlayerArrayInfo(): Promise<any> {
     // console.log(this.playerArrayForm.value);
     const newArrayDetails = {
       prof_teams: this.playerArrayForm.get('prof_teams').value,
-      prof_tours: this.playerArrayForm.get('prof_tourns').value,
+      prof_tours: this.playerArrayForm.get('prof_tours').value,
     };
     const uid = localStorage.getItem('uid');
     if (!newArrayDetails.prof_teams) {
@@ -448,52 +409,50 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return this.ngFire
         .collection(`players/${uid}/additionalInfo`)
         .doc('otherInfo')
-        .set(
-          {
-            ...newArrayDetails,
-          },
-          { merge: true }
-        )
+        .set({ ...newArrayDetails, }, { merge: true })
         .then(() => {
-          this.snackServ.displayCustomMsg('Updated Successfully!');
+          this.snackBarService.displayCustomMsg('Updated Successfully!');
           location.reload();
-        });
+        })
+        .catch(error => this.snackBarService.displayError());
     }
     this.playerArrayForm.reset();
   }
-  onSaveFreestylerArrayInfo(): Promise<any> {
-    // console.log(this.fsArrayForm.value);
-    if (
-      !this.fsArrayForm.value ||
-      this.fsArrayForm.value.top_vids.length === 0
-    ) {
-      return;
-    }
-    const newArrayDetails = {
-      top_vids: this.fsArrayForm.get('top_vids').value,
-    };
-    if (newArrayDetails.top_vids.length > 5) {
-      this.fsArrayForm.reset();
-      return;
-    }
-    const uid = localStorage.getItem('uid');
-    if (Object.keys(newArrayDetails).length !== 0) {
-      return this.ngFire
-        .collection('freestylers/' + uid + '/additionalInfoFs')
-        .doc('fsVideos')
-        .set(
-          {
-            ...newArrayDetails,
-          },
-          { merge: true }
-        )
-        .then(() => {
-          this.snackServ.displayCustomMsg('Updated Successfully!');
-          location.reload();
-        });
-    }
-    this.fsArrayForm.reset();
-  }
+
+  // onSaveFreestylerArrayInfo(): Promise<any> {
+  //   // console.log(this.fsArrayForm.value);
+  //   if (
+  //     !this.fsArrayForm.value ||
+  //     this.fsArrayForm.value.top_vids.length === 0
+  //   ) {
+  //     return;
+  //   }
+  //   const newArrayDetails = {
+  //     top_vids: this.fsArrayForm.get('top_vids').value,
+  //   };
+  //   if (newArrayDetails.top_vids.length > 5) {
+  //     this.fsArrayForm.reset();
+  //     return;
+  //   }
+  //   const uid = localStorage.getItem('uid');
+  //   if (Object.keys(newArrayDetails).length !== 0) {
+  //     return this.ngFire
+  //       .collection('freestylers/' + uid + '/additionalInfoFs')
+  //       .doc('fsVideos')
+  //       .set(
+  //         {
+  //           ...newArrayDetails,
+  //         },
+  //         { merge: true }
+  //       )
+  //       .then(() => {
+  //         this.snackBarService.displayCustomMsg('Updated Successfully!');
+  //         location.reload();
+  //       });
+  //   }
+  //   this.fsArrayForm.reset();
+  // }
+
   onSaveSMInfo(): Promise<any> {
     // console.log(this.socialInfoForm);
     const newSocials: SocialMediaLinks = {
@@ -526,11 +485,12 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     //   })
     // );
     this.socialInfoForm.reset();
-    return Promise.all(allPromises).then(() =>
-      this.snackServ.displayCustomMsg('Updated Successfully!')
-    );
+    return Promise.all(allPromises)
+      .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
+      .catch(error => this.snackBarService.displayError())
     // backend code here
   }
+
   onChangeCredentials(changeElement: 'email' | 'password'): void {
     // log out user and then login again
     this.dialog.open(UpdateInfoComponent, {
@@ -539,15 +499,43 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
   }
+
   minimumAge(control: AbstractControl): Observable<Date> {
     return new Date(control?.value).getTime() >=
-      new Date('1 January 2016').getTime()
+      new Date(ProfileConstants.MAX_BIRTH_DATE_ALLOWED).getTime()
       ? of({ underAge: true })
       : of(null);
   }
+
   onDeactivateAccount(): void {
-    this.dialog.open(DeactivateAccountComponent, {
-      panelClass: 'large-dialogs',
+    this.isRequestExists$.subscribe(response => {
+      if (!response) {
+        this.dialog.open(DeactivateProfileRequestComponent, {
+          panelClass: 'fk-dialogs',
+        }).afterClosed().subscribe(userResponse => {
+          if (userResponse) {
+            this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
+              .then(
+                () => {
+                  this.snackBarService.displayCustomMsg('Account Deactivation Request Submitted!');
+                  this.authService.onLogout();
+                }, err => {
+                  this.snackBarService.displayError('Request raise failed!');
+                }
+              )
+              .catch(err => this.snackBarService.displayError());
+          }
+        });
+      } else {
+        this.snackBarService.displayCustomMsg('Request already submitted!');
+      }
     });
+  }
+
+  get isRequestExists$(): Observable<boolean> {
+    const uid = localStorage.getItem('uid');
+    return this.ngFire.collection('adminRequests', query => query.where('referenceID', '==', uid))
+      .get()
+      .pipe(map(resp => !resp.empty), share());
   }
 }

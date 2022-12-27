@@ -1,0 +1,46 @@
+<div class="container register-ground-container" fxLayout="column" fxLayoutGap="20px">
+  <div class="title-heading">
+    <span class="mat-subheading-1">
+      Register Ground
+    </span>
+  </div>
+  <mat-horizontal-stepper #groundStepper [linear]="true">
+
+    <mat-step label="Basic Details" [stepControl]="groundDetailsForm" [editable]="groundStepper.selectedIndex <= 1">
+      <app-ground-details *ngIf="groundStepper.selectedIndex === 0"></app-ground-details>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <span class="mat-caption center">
+          To save your response and move to the next step, select Next
+        </span>
+        <button type="button" [disabled]="groundDetailsForm?.invalid" class="primaryButton buttonText"
+          (click)="onSaveDetails(groundStepper)">Next</button>
+      </div>
+    </mat-step>
+
+    <mat-step label="Availability" [editable]="groundStepper.selectedIndex <= 1">
+      <app-ground-availability *ngIf="groundStepper.selectedIndex === 1"></app-ground-availability>
+      <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+        <span class="mat-caption center error" *ngIf="errorMessage">
+          {{errorMessage}}
+        </span>
+        <button type="button" class="primaryButton buttonText" (click)="onSaveAvailability(groundStepper)">
+          Next
+        </button>
+      </div>
+    </mat-step>
+
+    <mat-step label="Publish" [editable]="groundStepper.selectedIndex <= 1">
+      <ng-container *ngIf="groundStepper.selectedIndex === 2 && !isLoaderShown && !isPublished">
+        <app-ground-form-summary (clickNext)="onRegisterGround()"></app-ground-form-summary>
+      </ng-container>
+      <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px"
+        *ngIf="isPublished && !isLoaderShown">
+        <app-tick-animation></app-tick-animation>
+        <span class="mat-caption center">Wuhooo! Your ground is REGISTERED.</span>
+        <span class="mat-caption center">View <a [routerLink]="['/grounds', groundID]"
+            routerLinkActive="router-link-active">Ground</a></span>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

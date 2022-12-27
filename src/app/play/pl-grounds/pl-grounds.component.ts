@@ -4,27 +4,31 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
-import { GroundsFilters } from 'src/app/shared/Constants/FILTERS';
-import { GroundBasicInfo } from 'src/app/shared/interfaces/ground.model';
-import { FilterData } from 'src/app/shared/interfaces/others.model';
+import { GroundsFilters } from '@shared/Constants/FILTERS';
+import { GroundBasicInfo } from '@shared/interfaces/ground.model';
+import { FilterData } from '@shared/interfaces/others.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-pl-grounds',
   templateUrl: './pl-grounds.component.html',
-  styleUrls: ['./pl-grounds.component.css'],
+  styleUrls: ['./pl-grounds.component.scss'],
 })
 export class PlGroundsComponent implements OnInit, OnDestroy {
+
   subscriptions = new Subscription();
   columns: any;
   isLoading = true;
   noGrounds = false;
   grounds$: Observable<GroundBasicInfo[]>;
   filterData: FilterData;
+
   constructor(
     private mediaObs: MediaObserver,
     private ngFire: AngularFirestore,
-    private queryServ: QueryService
-  ) {}
+    private queryService: QueryService
+  ) { }
+
   ngOnInit(): void {
     this.filterData = {
       defaultFilterPath: 'grounds',
@@ -51,9 +55,11 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
     );
     this.getGrounds();
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
   getGrounds(): void {
     this.grounds$ = this.ngFire
       .collection('grounds')
@@ -66,22 +72,25 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
         map((resp) =>
           resp.docs.map(
             (doc) =>
-              ({
-                id: doc.id,
-                ...(doc.data() as GroundBasicInfo),
-              } as GroundBasicInfo)
+            ({
+              id: doc.id,
+              ...(doc.data() as GroundBasicInfo),
+            } as GroundBasicInfo)
           )
-        )
+        ),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
+
   onQueryData(queryInfo): void {
     if (queryInfo == null) {
       return this.getGrounds();
     }
-    this.grounds$ = this.queryServ
+    this.grounds$ = this.queryService
       .onQueryData(queryInfo, 'grounds')
       .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo))
+        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo)),
+        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
 }

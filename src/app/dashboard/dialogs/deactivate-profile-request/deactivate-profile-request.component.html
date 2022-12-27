@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Raise a request</span>
+</mat-toolbar>
+<div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <div class="box-size">
+    <p class="mat-body-2 text-align">
+      Account Deactivation request will disable <strong>disable login</strong> for you. Please provide us the reason
+      below: [max characters: 1000]
+    </p>
+  </div>
+  <mat-form-field class="box-size" appearance="outline">
+    <textarea matInput [(ngModel)]="reason" cols="30" rows="10" maxlength="1000"
+      placeholder="Ex: Unable to get into a team."></textarea>
+    <mat-error *ngIf="!isReasonValid">Max Characters allowed: 1000</mat-error>
+  </mat-form-field>
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
+    fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">
+    <button (click)="onCloseDialog()" class="secondaryButton buttonText">
+      Cancel
+    </button>
+    <button [disabled]="!isReasonValid" (click)="sendRequestToAdmin()" class="primaryButton buttonText">
+      Deactivate
+    </button>
+  </div>
+</div>

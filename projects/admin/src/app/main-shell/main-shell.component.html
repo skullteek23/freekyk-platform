@@ -1,0 +1,52 @@
+<div class="container section-space-top" fxLayoutAlign="space-between center">
+  <span class="mat-title">
+    {{ "freekyk admin console" | titlecase }}
+  </span>
+  <div class="logged-user" [matMenuTriggerFor]="accountMenu" fxLayoutAlign="start center" fxLayoutGap="4px">
+    <app-account-avatar matTooltip="Settings" [dataImg]="(user$ | async)?.photoURL" [margins]="false">
+    </app-account-avatar>
+    <a fxLayoutAlign="start center" fxLayoutGap="8px" fxLayout="row">
+      <span class="user-name">
+        {{(user$ | async)?.displayName}}
+      </span>
+      <span>
+        | {{role}}
+      </span>
+    </a>
+  </div>
+  <mat-menu #accountMenu>
+    <button [routerLink]="['/seasons']" mat-menu-item>
+      <mat-icon>home</mat-icon>
+      <span>Home</span>
+    </button>
+    <button [routerLink]="['/account']" mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>My Account</span>
+    </button>
+    <button (click)="onLogout()" mat-menu-item>
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Sign Out</span>
+    </button>
+  </mat-menu>
+</div>
+<div class="container section-space-bottom">
+  <nav mat-tab-nav-bar color="primary">
+    <a [disabled]="link.disabled" mat-tab-link *ngFor="let link of links" (click)="activeLink = link.route"
+      routerLink="/{{link.route}}" [active]="activeLink == link.route">
+      {{ link.name | titlecase }}
+    </a>
+  </nav>
+  <router-outlet></router-outlet>
+</div>
+
+<div class="container strip" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center"
+  fxLayoutAlign.lt-md="center center">
+  <span class="mat-body-2">Copyright © 2023. Freekyk. All rights reserved.</span>
+  <div fxLayoutAlign="center center" fxLayoutGap="20px">
+    <a [routerLink]="['/terms']" class="mat-caption"> Terms & Conditions </a>
+    <a [routerLink]="['/privacypolicy']" class="mat-caption">
+      Privacy Policy
+    </a>
+  </div>
+</div>
+<app-loading *ngIf="isLoading"></app-loading>

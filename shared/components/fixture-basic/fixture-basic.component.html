@@ -1,0 +1,72 @@
+<div class="fixture" [ngClass]="{premiumFixture: isPremium}" fxLayoutAlign.lt-md="center center"
+  fxLayoutAlign.gt-sm="space-between center">
+  <!-- date -->
+  <div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
+    <span class="mat-caption green">
+      {{ fixture.date | date: "shortTime" | lowercase }}
+    </span>
+    <span class="mat-caption">
+      {{ fixture.date | date: "mediumDate" }}</span>
+  </div>
+  <!-- date -->
+
+  <!-- teams  -->
+  <div fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+    <div fxLayoutAlign="end center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture.home.name }}
+      </span>
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" loading="lazy"
+        appFallbackImg />
+    </div>
+    <ng-template #score>
+      <div fxLayoutAlign="center center" fxLayoutGap="8px">
+        <div class="score box primary-bg" fxLayoutAlign="center center">
+          <span class="mat-body-2 scoreColor">{{ fixture.home.score }}</span>
+        </div>
+        <div class="score box primary-bg" fxLayoutAlign="center center">
+          <span class="mat-body-2 scoreColor">{{ fixture.away.score }}</span>
+        </div>
+      </div>
+    </ng-template>
+    <div *ngIf="!isResult; else score" fxLayoutAlign="center center">
+      <span fxHide.gt-sm="true" class="versus round mat-caption" fxLayoutAlign="center center">
+        {{ "v" }}
+      </span>
+      <span fxHide.lt-md="true" class="grey-bg versus round mat-caption" fxLayoutAlign="center center">
+        {{ "vs" | uppercase }}
+      </span>
+    </div>
+    <div fxLayoutAlign="start center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+      <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" loading="lazy"
+        appFallbackImg />
+
+      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+        {{ fixture.away.name }}
+      </span>
+    </div>
+  </div>
+  <!-- teams  -->
+
+  <!-- action-button - small  -->
+  <button (click)="isResult ? onOpenFixture() : onOpenFixture()" fxHide.gt-sm="true" mat-icon-button
+    matTooltip="Open Fixture" fxLayoutAlign="center center">
+    <mat-icon class="material-icons-round">
+      keyboard_arrow_right
+    </mat-icon>
+  </button>
+  <!-- action-button - small  -->
+
+  <!-- action-button - large  -->
+  <div fxHide.lt-md="true" fxLayout fxLayoutGap="12px">
+    <mat-chip-list>
+      <mat-chip>{{fixture.type | uppercase}}</mat-chip>
+    </mat-chip-list>
+    <a (click)="isResult ? onOpenFixture() : onOpenFixture()">
+      <span class="mat-caption">
+        See more
+      </span>
+    </a>
+  </div>
+  <!-- action-button - large  -->
+</div>

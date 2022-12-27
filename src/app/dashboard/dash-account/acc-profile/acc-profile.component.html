@@ -21,28 +21,28 @@
         <mat-label>Add your full name</mat-label>
         <input type="text" matInput name="name" formControlName="name" />
         <mat-error *ngIf="this.personalInfoForm.get('name')?.hasError('pattern')">
-          Only letters, numbers and hyphen characters are allowed!
+          Only letters, and spaces are allowed!
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add a nickname</mat-label>
         <input type="text" matInput name="nickname" formControlName="nickname" />
-        <mat-error *ngIf="this.personalInfoForm.get('name')?.hasError('pattern')">
-          Only letters are allowed!
+        <mat-error *ngIf="this.personalInfoForm.get('nickname')?.hasError('pattern')">
+          Only letters, number & spaces are allowed!
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
-        <mat-label>Select birthdate</mat-label>
-        <input matInput name="birthdate" formControlName="birthdate" [matDatepicker]="picker" />
+        <mat-label>Add your Birth Date</mat-label>
+        <input matInput name="born" formControlName="born" [matDatepicker]="picker" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="personalInfoForm.get('birthdate')?.errors?.underAge">
+        <mat-error *ngIf="personalInfoForm.get('born')?.errors?.underAge">
           Minimum Age must be 6 years!
         </mat-error>
       </mat-form-field>
       <div fxFlex.gt-sm="100%" class="form" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
         <span> Your Gender: </span>
-        <mat-radio-group formControlName="gender" color="primary" aria-label="Select gender" fxLayoutGap="8px">
+        <mat-radio-group formControlName="gen" color="primary" aria-label="Select gender" fxLayoutGap="8px">
           <mat-radio-button value="M">Male</mat-radio-button>
           <mat-radio-button value="F">Female</mat-radio-button>
         </mat-radio-group>
@@ -69,8 +69,8 @@
       fxLayoutGap.gt-sm="20px">
       <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Select Playing Position</mat-label>
-        <mat-select formControlName="p_pos">
-          <mat-optgroup *ngFor="let group of filteredOptions" [label]="group.position">
+        <mat-select formControlName="pl_pos">
+          <mat-optgroup *ngFor="let group of positions" [label]="group.position">
             <mat-option *ngFor="let name of group.pos_name" [value]="name">
               {{ name }}
             </mat-option>
@@ -79,7 +79,7 @@
       </mat-form-field>
       <div fxFlex.gt-sm="60%" class="form" fxLayout fxLayoutGap="16px" fxLayoutAlign.lt-md="center center">
         <span> Strong Foot: </span>
-        <mat-radio-group color="primary" aria-label="Select Stronger Foot" fxLayoutGap="8px" formControlName="str_foot">
+        <mat-radio-group color="primary" aria-label="Select Stronger Foot" fxLayoutGap="8px" formControlName="str_ft">
           <mat-radio-button value="L" selected>Left</mat-radio-button>
           <mat-radio-button value="R">Right</mat-radio-button>
         </mat-radio-group>
@@ -87,8 +87,8 @@
 
       <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
         <mat-label>Add Jersey Number</mat-label>
-        <input type="tel" matInput name="j_num" formControlName="j_num" />
-        <mat-error *ngIf="this.playingInfoForm.get('j_num')?.hasError('pattern')">
+        <input type="tel" matInput name="jer_no" formControlName="jer_no" />
+        <mat-error *ngIf="this.playingInfoForm.get('jer_no')?.hasError('pattern')">
           Only numbers are allowed!
         </mat-error>
       </mat-form-field>
@@ -113,50 +113,42 @@
         <span matSuffix>kg</span>
       </mat-form-field>
 
-      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
-        <mat-label>Select Country</mat-label>
-        <mat-select (selectionChange)="onSelectCountry($event)" formControlName="loc_country">
-          <mat-option>Select Country</mat-option>
-          <mat-option *ngFor="let country of countries$ | async" [value]="country">
-            {{ country }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px">
+        <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
+          <mat-label>Country</mat-label>
+          <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="locCountry">
+            <mat-option>--Select Country--</mat-option>
+            <mat-option *ngFor="let country of countries$ | async" [value]="country">
+              {{ country }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
-        <mat-label>Select State</mat-label>
-        <mat-select (selectionChange)="onSelectState($event)" formControlName="loc_state">
-          <mat-option>Select State</mat-option>
-          <mat-option *ngFor="let state of states$ | async" [value]="state">
-            {{ state }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+          <mat-label>State</mat-label>
+          <mat-select (selectionChange)="onSelectState($event.value)" formControlName="locState">
+            <mat-option>--Select State--</mat-option>
+            <mat-option *ngFor="let state of states$ | async" [value]="state">
+              {{ state }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field fxFlex.gt-sm="30%" appearance="outline" color="primary">
-        <mat-label>Select City</mat-label>
-        <mat-select formControlName="loc_city">
-          <mat-option>Select Country</mat-option>
-          <mat-option *ngFor="let city of cities$ | async" [value]="city">
-            {{ city }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
+          <mat-label>City</mat-label>
+          <mat-select formControlName="locCity">
+            <mat-option>--Select City--</mat-option>
+            <mat-option *ngFor="let city of cities$ | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <mat-form-field fxFlex.gt-sm="100%" appearance="outline" color="primary">
         <mat-label>Add Bio</mat-label>
         <textarea matInput name="bio" formControlName="bio"></textarea>
-        <mat-hint [align]="'end'">
-          {{
-          playingInfoForm.get("bio")?.value?.length > 0
-          ? playingInfoForm.get("bio")?.value?.length
-          : 0
-          }}
-          / {{ BIO_MAX_LIMIT }}
-        </mat-hint>
-        <mat-error *ngIf="this.playingInfoForm.get('bio')?.hasError('maxlength')">
-          Only {{ BIO_MAX_LIMIT }} Characters are allowed!
-        </mat-error>
+        <mat-hint align="end">{{this.playingInfoForm.get('bio')?.value?.length}} / {{BIO_MAX_LIMIT}}</mat-hint>
         <mat-error *ngIf="this.playingInfoForm.get('bio')?.hasError('pattern')">
           Only letters, spaces and numbers are allowed!
         </mat-error>
@@ -177,14 +169,14 @@
   </span>
 
   <!-- fs array form -->
-  <div class="form" id="freestyle-array">
+  <!-- <div class="form" id="freestyle-array">
     <p class="dash-h5 align">Showcase your Freestyle Videos</p>
     <form [formGroup]="fsArrayForm" (ngSubmit)="onSaveFreestylerArrayInfo()" fxLayout="column" fxLayout.gt-sm="row wrap"
       fxLayoutGap.gt-sm="20px">
       <div fxFlex.gt-sm="100%" class="form" fxLayout="column" fxLayoutGap="16px">
         <p class="mat-caption align" fxLayoutAlign="start center">
           Add your top freestyle videos uploaded on
-          <img class="yt" src="assets/svgs/youtube.svg" alt="Youtube" />
+          <img class="yt" src="assets/svgs/youtube.svg" alt="Youtube" appFallbackImg/>
         </p>
         <p class="smaller-caption mat-caption align" *ngIf="getFormArray('top_vids', 'fs').length === 0">
           (No video link added,
@@ -219,12 +211,12 @@
         </button>
       </div>
     </form>
-  </div>
+  </div> -->
   <!-- fs array form -->
 
-  <span>
+  <!-- <span>
     <mat-divider></mat-divider>
-  </span>
+  </span> -->
 
   <!-- social info form -->
   <div class="form-sm form" id="social-media">
@@ -301,13 +293,13 @@
         <p class="mat-caption align">
           Professional Tournaments you have played in
         </p>
-        <p class="smaller-caption mat-caption align" *ngIf="getFormArray('prof_tourns', 'player').length === 0">
+        <p class="smaller-caption mat-caption align" *ngIf="getFormArray('prof_tours', 'player').length === 0">
           (No tournament added,
-          <a (click)="onAddControl('prof_tourns', 'player')">add one</a>)
+          <a (click)="onAddControl('prof_tours', 'player')">add one</a>)
         </p>
-        <div formArrayName="prof_tourns" fxLayout="column">
+        <div formArrayName="prof_tours" fxLayout="column">
           <div *ngFor="
-              let prof_tourn of getFormArray('prof_tourns', 'player');
+              let prof_tourn of getFormArray('prof_tours', 'player');
               let i = index;
               last as last
             " fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
@@ -316,12 +308,12 @@
               <input type="text" matInput [formControlName]="i" />
             </mat-form-field>
 
-            <button fxLayoutAlign="center center" *ngIf="last" (click)="onRemoveControl('prof_tourns', 'player')"
+            <button fxLayoutAlign="center center" *ngIf="last" (click)="onRemoveControl('prof_tours', 'player')"
               mat-icon-button class="red center-button" type="button">
               <mat-icon class="material-icons-round">delete</mat-icon>
             </button><button *ngIf="last" class="center-button green" type="button" mat-icon-button
-              fxLayoutAlign="center center" [disabled]="!playerArrayForm.get('prof_tourns')?.valid"
-              (click)="onAddControl('prof_tourns', 'player')">
+              fxLayoutAlign="center center" [disabled]="!playerArrayForm.get('prof_tours')?.valid"
+              (click)="onAddControl('prof_tours', 'player')">
               <mat-icon class="material-icons-round">add_circle</mat-icon>
             </button>
           </div>

@@ -1,0 +1,35 @@
+header {
+  text-align: center;
+  width: 100%;
+}
+
+section {
+  width: 100%;
+  .submit-button {
+    margin: auto;
+    margin-top: 20px;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+.form-container,
+.success-container {
+  width: 100%;
+  max-width: 415px;
+  p {
+    text-align: center;
+  }
+}
+
+.shortcut {
+  text-align: center;
+  margin-top: 16px;
+}
+
+@media screen and (min-width: 959px) {
+  .placeholder {
+    height: 432px !important;
+    width: 499px !important;
+  }
+}
