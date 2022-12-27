@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randParagraph, randPhrase, randSentence, randState, randWord } from '@ngneat/falso';
-import { PLAYING_POSTIIONS, DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
+import { randAvatar, randBetweenDate, randCity, randCountry, randNumber, randPhrase, randSentence, randState, randWord } from '@ngneat/falso';
+import { DUMMY_USERS, GENDER, STRONG_FOOT } from '../dummyUsers.constants';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
 import { PlayerMoreInfo } from '@shared/interfaces/user.model';
+import { PLAYING_POSITIONS_LIST, MatchConstantsSecondary } from '@shared/constants/constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +14,10 @@ export class MockDataService {
   readonly STRONG_FOOT: string[] = STRONG_FOOT;
   readonly GENDER: string[] = GENDER;
   readonly MOCK_IDS = 'mock-uids';
-  readonly PLAYING_POSITIONS: string[] = PLAYING_POSTIIONS;
+  readonly PLAYING_POSITIONS: string[] = PLAYING_POSITIONS_LIST;
   readonly USERS: any[] = DUMMY_USERS;
-  readonly TEAM_LOGO_DEFAULT = 'https://images.unsplash.com/photo-1614851099518-055a1000e6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
-  readonly TEAM_PHOTO_DEFAULT = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg';
+  readonly TEAM_LOGO_DEFAULT = MatchConstantsSecondary.DEFAULT_LOGO;
+  readonly TEAM_PHOTO_DEFAULT = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
 
   constructor(
     private ngAuth: AngularFireAuth,

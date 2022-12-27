@@ -799,19 +799,6 @@ export const DUMMY_USERS = [
     password: ''
   }
 ]
-export const PLAYING_POSTIIONS = [
-  'Striker',
-  'Left Winger',
-  'Right Winger',
-  'Center Forward',
-  'Center Midfielder',
-  'Right Midfielder',
-  'Left Midfielder',
-  'Center Back',
-  'Left Back',
-  'Right Back',
-  'GoalKeeper',
-]
 export const CONTAINING_TOURNAMENTS = ['FKC', 'FCP', 'FPL'];
 export const TRUTHY_FALSY = [true, false];
 export const PAYMENT_METHODS = ['Online', 'Offline'];
