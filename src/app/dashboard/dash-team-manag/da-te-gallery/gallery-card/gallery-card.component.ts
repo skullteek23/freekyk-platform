@@ -16,7 +16,7 @@ export class GalleryCardComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onOpenTeamSettings(): void {
-    this.teamService.onOpenTeamSettingsDialog();
+  onOpenTeamGallery(): void {
+    this.teamService.onOpenTeamGalleryDialog();
   }
 }

@@ -122,15 +122,15 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         map(
           (resp) =>
           ({
-            'FKC Played': resp.fkc_played.toString(),
-            'FCP Played': resp.fcp_played.toString(),
-            'FPL Played': resp.fpl_played.toString(),
-            Goals: resp.g.toString(),
-            Wins: resp.w.toString(),
-            Losses: resp.l.toString(),
-            'Red cards': resp.rcards.toString(),
-            'Yellow cards': resp.ycards.toString(),
-            'Goals Conceded': resp.g_conceded.toString(),
+            'FKC Played': resp?.fkc_played.toString() || '0',
+            'FCP Played': resp?.fcp_played.toString() || '0',
+            'FPL Played': resp?.fpl_played.toString() || '0',
+            Goals: resp?.g.toString() || '0',
+            Wins: resp?.w.toString() || '0',
+            Losses: resp?.l.toString() || '0',
+            'Red cards': resp?.rcards.toString() || '0',
+            'Yellow cards': resp?.ycards.toString() || '0',
+            'Goals Conceded': resp?.g_conceded.toString() || '0',
           } as StatsTeam)
         )
       );
