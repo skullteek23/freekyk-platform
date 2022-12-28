@@ -12,7 +12,6 @@ export const environment = {
     url: 'https://freekyk-development.web.app',
     adminUrl: 'https://admin-freekyk-dev.web.app',
     adminRegister: 'https://admin-freekyk-dev.web.app/register',
-    // logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
     logoURL: 'http://commondatastorage.googleapis.com/codeskulptor-assets/lathrop/asteroid_brown.png'
   },
   // Razorpay
