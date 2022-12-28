@@ -1,20 +1,20 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {
-  AngularFireStorage,
-  AngularFireUploadTask,
-} from '@angular/fire/storage';
+import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { YES_OR_NO_OPTIONS } from '@shared/constants/constants';
 import { firestoreCustomType } from '@shared/interfaces/user.model';
 import { Subscription } from 'rxjs';
-import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
-  selector: 'app-uploadphoto',
-  templateUrl: './uploadphoto.component.html',
-  styleUrls: ['./uploadphoto.component.scss'],
+  selector: 'app-upload-team-photo',
+  templateUrl: './upload-team-photo.component.html',
+  styleUrls: ['./upload-team-photo.component.scss']
 })
-export class UploadphotoComponent implements OnInit, OnDestroy {
+export class UploadTeamPhotoComponent implements OnInit {
+
+  readonly options = YES_OR_NO_OPTIONS;
 
   $file: File = null;
   selectedImage = null;
@@ -24,18 +24,14 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    public dialogRef: MatDialogRef<UploadphotoComponent>,
+    public dialogRef: MatDialogRef<UploadTeamPhotoComponent>,
     private ngStorage: AngularFireStorage,
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
     @Inject(MAT_DIALOG_DATA) public data: string
   ) { }
 
-  ngOnInit(): void {
-    if (this.data) {
-      this.selectedImage = this.data;
-    }
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     if (this.subscriptions) {

@@ -1,6 +1,7 @@
 import { GroundAdminService } from '@admin/main-shell/services/ground-admin.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { YES_OR_NO_OPTIONS } from '@shared/constants/constants';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { IGroundDetails, ownershipTypes, playLevels, turfTypes } from '@shared/interfaces/ground.model';
 import { ListOption } from '@shared/interfaces/others.model';
@@ -15,10 +16,7 @@ import { Observable } from 'rxjs';
 export class GroundDetailsComponent implements OnInit {
 
   readonly defaultCountry = 'India';
-  readonly YES_OR_NO_OPTIONS: ListOption[] = [
-    { value: true, viewValue: 'Yes' },
-    { value: false, viewValue: 'No' }
-  ]
+  readonly YES_OR_NO_OPTIONS = YES_OR_NO_OPTIONS;
   readonly fieldTypes = turfTypes;
   readonly playLevels = playLevels;
   readonly groundTypes = ownershipTypes;

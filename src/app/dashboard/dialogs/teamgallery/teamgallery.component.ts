@@ -2,12 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef } from '@angular/material/dialog';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { TeamMedia } from '@shared/interfaces/team.model';
+import { firestoreCustomType } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-teamgallery',
@@ -55,7 +55,7 @@ export class TeamgalleryComponent implements OnInit {
               .collection(`teams/${tid}/additionalInfo`)
               .doc('media')
               .update({
-                media: firebase.firestore.FieldValue.arrayUnion(url),
+                media: firestoreCustomType.FieldValue.arrayUnion(url),
               });
           } else {
             photoSnap = this.ngFire

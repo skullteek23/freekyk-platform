@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
@@ -7,7 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 import { uData, logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI } from '@shared/Constants/DEFAULTS';
+import { fireAuthCustomType, firebaseUserType } from '@shared/interfaces/user.model';
+import { MatchConstants } from '@shared/constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -80,7 +80,7 @@ export class AuthService {
   onChangePassword(newPass: string): void {
     this.ngAuth.currentUser.then((user) => {
       const lastSignInTime = new Date(user.metadata.lastSignInTime);
-      if (new Date().getTime() - lastSignInTime.getTime() <= EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
+      if (new Date().getTime() - lastSignInTime.getTime() <= MatchConstants.EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
         this.changePassword(newPass)
           .then(() => {
             // console.log('password changed!');
@@ -100,7 +100,7 @@ export class AuthService {
   onChangeEmail(newEmail: string): void {
     this.ngAuth.currentUser.then((user) => {
       const lastSignInTime = new Date(user.metadata.lastSignInTime);
-      if (new Date().getTime() - lastSignInTime.getTime() <= EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
+      if (new Date().getTime() - lastSignInTime.getTime() <= MatchConstants.EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI) {
         this.changeEmail(newEmail)
           ?.then(() => {
             // console.log('email changed!');
@@ -169,7 +169,7 @@ export class AuthService {
     this.updateName(name);
   }
 
-  private setCurrentUser(userData: firebase.User | null): void {
+  private setCurrentUser(userData: firebaseUserType | null): void {
     this.currentUser = {
       uid: userData?.uid,
       refreshToken: userData?.refreshToken,
@@ -247,28 +247,28 @@ export class AuthService {
     }
   }
   private signInGoogle(): Promise<any> {
-    return this.ngAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    return this.ngAuth.signInWithPopup(new fireAuthCustomType.GoogleAuthProvider());
   }
   private signInFacebook(): Promise<any> {
     return this.ngAuth.signInWithPopup(
-      new firebase.auth.FacebookAuthProvider()
+      new fireAuthCustomType.FacebookAuthProvider()
     );
   }
   private logoutFromFirebase(): Promise<any> {
     return this.ngAuth.signOut();
   }
   private updateName(newName: string): Promise<any> {
-    return firebase.auth().currentUser?.updateProfile({ displayName: newName });
+    return fireAuthCustomType().currentUser?.updateProfile({ displayName: newName });
   }
   private forgotPassword(): Promise<any> {
     const userEmail: any = this.currentUser?.email;
     return this.ngAuth.sendPasswordResetEmail(userEmail);
   }
   private changeEmail(newEmail: string): Promise<any> {
-    return firebase.auth().currentUser?.updateEmail(newEmail);
+    return fireAuthCustomType().currentUser?.updateEmail(newEmail);
   }
   private changePassword(newPass: string): Promise<any> {
-    return firebase.auth().currentUser?.updatePassword(newPass);
+    return fireAuthCustomType().currentUser?.updatePassword(newPass);
   }
   // firebase functions
 

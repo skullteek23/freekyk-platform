@@ -7,8 +7,7 @@ import { SnackbarService } from '../services/snackbar.service';
 import { heroCallToAction } from '@shared/interfaces/others.model';
 import { BasicTicket } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { ProfileConstants } from '@shared/constants/constants';
-import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
+import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-support',
@@ -17,11 +16,11 @@ import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 })
 export class SupportComponent implements OnInit {
 
-  readonly fb = SOCIAL_MEDIA_PRE.fb;
-  readonly ig = SOCIAL_MEDIA_PRE.ig;
-  readonly tw = SOCIAL_MEDIA_PRE.tw;
-  readonly yt = SOCIAL_MEDIA_PRE.yt;
-  readonly linkedIn = SOCIAL_MEDIA_PRE.linkedIn;
+  readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;
+  readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
+  readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
+  readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
+  readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
 
   ticketForm: FormGroup;
   activeIndex = 0;

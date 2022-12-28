@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
+import { MatchConstants } from '@shared/constants/constants';
 import { FOOTER } from '@shared/Constants/WEBSITE_CONTENT';
 
 @Component({
@@ -9,11 +9,11 @@ import { FOOTER } from '@shared/Constants/WEBSITE_CONTENT';
 })
 export class FooterComponent implements OnInit {
   readonly COPYRIGHT = FOOTER.copyright;
-  readonly ig = SOCIAL_MEDIA_PRE.ig;
-  readonly fb = SOCIAL_MEDIA_PRE.fb;
-  readonly tw = SOCIAL_MEDIA_PRE.tw;
-  readonly yt = SOCIAL_MEDIA_PRE.yt;
-  readonly linkedIn = SOCIAL_MEDIA_PRE.linkedIn;
+  readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
+  readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;
+  readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
+  readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
+  readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
 
   productLinks = FOOTER.product;
   aboutLinks = FOOTER.about;

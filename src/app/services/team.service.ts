@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import firebase from 'firebase/app';
 import * as fromApp from '../store/app.reducer';
 import * as TeamActions from '../dashboard/dash-team-manag/store/team.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -18,9 +17,11 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { DashState } from '../dashboard/store/dash.reducer';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import { Observable } from 'rxjs';
 import { TeamgalleryComponent } from '@app/dashboard/dialogs/teamgallery/teamgallery.component';
+import { UploadTeamPhotoComponent } from './../dashboard/dialogs/upload-team-photo/upload-team-photo.component';
+import { firestoreCustomType } from '@shared/interfaces/user.model';
+import { MatchConstants } from '@shared/constants/constants';
 @Injectable({
   providedIn: 'root',
 })
@@ -48,6 +49,13 @@ export class TeamService implements OnDestroy {
 
   onOpenTeamGalleryDialog(): void {
     this.dialog.open(TeamgalleryComponent, {
+      panelClass: 'fk-dialogs',
+      disableClose: true,
+    });
+  }
+
+  onOpenTeamPhotoDialog(): void {
+    this.dialog.open(UploadTeamPhotoComponent, {
       panelClass: 'fk-dialogs',
       disableClose: true,
     });
@@ -235,7 +243,7 @@ export class TeamService implements OnDestroy {
           .where('teams', 'array-contains', tName)
           .where('concluded', '==', false)
           .orderBy('date', 'asc')
-          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get()
       .pipe(
@@ -267,7 +275,7 @@ export class TeamService implements OnDestroy {
         .collection('teams/' + tid + '/additionalInfo')
         .doc('members')
         .update({
-          memCount: firebase.firestore.FieldValue.increment(-1),
+          memCount: firestoreCustomType.FieldValue.increment(-1),
           members: mems,
         })
     );
@@ -303,7 +311,7 @@ export class TeamService implements OnDestroy {
         .collection('teams/' + tid + '/additionalInfo')
         .doc('members')
         .update({
-          memCount: firebase.firestore.FieldValue.increment(-1),
+          memCount: firestoreCustomType.FieldValue.increment(-1),
           members: mems,
         })
     );

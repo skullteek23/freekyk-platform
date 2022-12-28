@@ -11,9 +11,8 @@ import { PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model
 import { DashState } from '../../store/dash.reducer';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { LocationService } from '@shared/services/location-cities.service';
-import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import { AuthService } from 'src/app/services/auth.service';
-import { PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
+import { MatchConstants, PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
 import { DeactivateProfileRequestComponent } from '@app/dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 import { map, share } from 'rxjs/operators';
 @Component({
@@ -24,10 +23,10 @@ import { map, share } from 'rxjs/operators';
 export class AccProfileComponent implements OnInit, OnDestroy {
 
   readonly BIO_MAX_LIMIT = ProfileConstants.BIO_MAX_LIMIT;
-  readonly ig = SOCIAL_MEDIA_PRE.ig;
-  readonly fb = SOCIAL_MEDIA_PRE.fb;
-  readonly tw = SOCIAL_MEDIA_PRE.tw;
-  readonly yt = SOCIAL_MEDIA_PRE.yt;
+  readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
+  readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;
+  readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
+  readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
   readonly positions: positionGroup[] = PLAYING_POSITIONS;
 
   teamsArray: FormArray = new FormArray([]);

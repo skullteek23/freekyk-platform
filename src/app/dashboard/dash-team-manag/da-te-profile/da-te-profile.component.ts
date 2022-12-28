@@ -106,6 +106,10 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     this.teamService.onOpenTeamSettingsDialog();
   }
 
+  onOpenTeamPhotoDialog(): void {
+    this.teamService.onOpenTeamPhotoDialog();
+  }
+
   onShare() {
     const data = new ShareData();
     data.share_url = `/t/${this.tName}`;

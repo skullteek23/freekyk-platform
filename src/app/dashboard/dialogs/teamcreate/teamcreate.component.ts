@@ -17,14 +17,11 @@ import { map, share, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import {
-  DEFAULT_TEAM_LOGO,
-  DEFAULT_TEAM_PHOTO,
-} from '@shared/Constants/DEFAULTS';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { Invite } from '@shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-teamcreate',
@@ -94,9 +91,7 @@ export class TeamcreateComponent implements OnInit {
 
   onSubmitTwo(plSelected: ListOption[]): void {
     this.myStepper.next();
-    !this.file1Selected || !this.file2Selected
-      ? this.createTeam(this.getDefaultTLogo(), this.getDefaultTPhoto())
-      : this.createTeam(this.logoPath, this.imgPath);
+    this.createTeam(this.logoPath, this.imgPath);
     this.createInvites(plSelected.map((sel: ListOption) => ({ name: sel.data.name, id: sel.data.id })));
     this.sendInvites();
     this.state2 = 'complete';
@@ -110,8 +105,8 @@ export class TeamcreateComponent implements OnInit {
       newTeamInfo: {
         id: this.newTeamId,
         name: this.teamBasicinfoForm.value.tName,
-        imgpath: image,
-        logoPath: logo,
+        logoPath: logo || MatchConstants.DEFAULT_LOGO,
+        imgpath: image || MatchConstantsSecondary.DEFAULT_PLACEHOLDER,
       },
       tcaptainId: uid,
     };
@@ -180,14 +175,6 @@ export class TeamcreateComponent implements OnInit {
       )
     ).ref.getDownloadURL();
     this.file2Selected = true;
-  }
-
-  getDefaultTPhoto(): string {
-    return DEFAULT_TEAM_PHOTO;
-  }
-
-  getDefaultTLogo(): string {
-    return DEFAULT_TEAM_LOGO;
   }
 
   getPlayers(): void {

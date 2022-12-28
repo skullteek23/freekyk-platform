@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { map, share, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { AppState } from 'src/app/store/app.reducer';
 import { Observable, Subscription } from 'rxjs';
@@ -14,8 +14,8 @@ import {
   MatchFilters,
 } from '@shared/Constants/FILTERS';
 import { QueryService } from 'src/app/services/query.service';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { MatchConstants } from '@shared/constants/constants';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
@@ -114,7 +114,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
           query
             .where('teams', 'array-contains', teamName)
             .where('concluded', '==', false)
-            .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+            .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
         )
         .get()
         .pipe(
@@ -132,7 +132,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .collection('allMatches', (query) =>
         query
           .where('concluded', '==', false)
-          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get()
       .pipe(
@@ -148,7 +148,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
       .collection('allMatches', (query) =>
         query
           .where('concluded', '==', true)
-          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get()
       .pipe(
@@ -175,7 +175,7 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
             queryInfo.queryComparisonSymbol,
             queryInfo.queryValue
           )
-          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get()
       .pipe(

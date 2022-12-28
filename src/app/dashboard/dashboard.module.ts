@@ -56,6 +56,7 @@ import { MaterialModule } from '@shared/material.module';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
+import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-team-photo.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactiva
     InvitePlayersComponent,
     TeamgalleryComponent,
     DeactivateProfileRequestComponent,
+    UploadTeamPhotoComponent,
   ],
   imports: [
     SharedModule,

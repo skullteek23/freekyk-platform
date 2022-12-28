@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
 export const CLOUD_FUNCTIONS = {
   CREATE_PROFILE: 'createProfile',
   SEND_JOIN_REQUEST_TO_TEAMS: 'sendJoinRequest',

@@ -1,3 +1,5 @@
+import { ListOption } from "@shared/interfaces/others.model";
+
 export class MatchConstants {
   static readonly GROUND_HOURS: number[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
   static readonly DAYS_LIST_FULL = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -35,6 +37,16 @@ export class MatchConstants {
   static readonly TEAM_ACTIVITY_DATE_FORMAT = 'd/M/yy, hh:mm a'; // results in `15/6/21, 9 AM`
   static readonly GROUND_CONTRACT_DATE_FORMAT = 'd/M/yy'; // results in `15/6/21, 9 AM`
   static readonly NOTIFICATION_DATE_FORMAT = 'd MMM, h:mm aa'; // results in `15/6/21, 9 AM`
+  static readonly DEFAULT_DASHBOARD_FIXTURES_LIMIT = 6;
+  static readonly LINK_NOT_ADDED = 'Unavailable';
+  static readonly EMAIL_PASS_CHANGE_TIMEOUT_IN_MILI = 300000;
+  static readonly SOCIAL_MEDIA_PRE = {
+    ig: 'https://www.instagram.com/',
+    fb: 'https://www.facebook.com/',
+    tw: 'https://twitter.com/',
+    yt: 'https://www.youtube.com/channel/',
+    linkedIn: 'https://www.linkedin.com/',
+  };
 }
 export const PLAYING_POSITIONS = [
   {
@@ -151,3 +163,8 @@ export enum LOADING_STATUS {
   LOADING,
   DONE
 }
+
+export const YES_OR_NO_OPTIONS: ListOption[] = [
+  { value: true, viewValue: 'Yes' },
+  { value: false, viewValue: 'No' }
+]

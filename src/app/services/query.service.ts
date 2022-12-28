@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { DEFAULT_DASHBOARD_FIXTURES_LIMIT } from '@shared/Constants/DEFAULTS';
 import {
   FilterHeadingMap,
   FilterSymbolMap,
   FilterValueMap,
 } from '@shared/Constants/FILTERS';
 import { QueryInfo } from '@shared/interfaces/others.model';
+import { MatchConstants } from '@shared/constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -94,7 +94,7 @@ export class QueryService {
             queryInfo.queryValue
           )
           .where('concluded', '==', isConcluded)
-          .limit(DEFAULT_DASHBOARD_FIXTURES_LIMIT)
+          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get();
   }

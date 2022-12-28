@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LINK_NOT_ADDED, SOCIAL_MEDIA_PRE } from '../../Constants/DEFAULTS';
+import { MatchConstants } from '@shared/constants/constants';
 import { SocialMediaLinks } from '../../interfaces/user.model';
 
 @Component({
@@ -13,11 +13,11 @@ export class SocialMediaLinksComponent implements OnInit {
   @Input('mode') type: 'player' | 'freestyler' | 'team' = 'player';
   @Output('addLink') Addlink = new EventEmitter<true>();
 
-  readonly facebookUrl = SOCIAL_MEDIA_PRE.fb;
-  readonly InstaUrl = SOCIAL_MEDIA_PRE.ig;
-  readonly TwitterUrl = SOCIAL_MEDIA_PRE.tw;
-  readonly youtubeUrl = SOCIAL_MEDIA_PRE.yt;
-  readonly ADD_THIS_LINK = LINK_NOT_ADDED;
+  readonly facebookUrl = MatchConstants.SOCIAL_MEDIA_PRE.fb;
+  readonly InstaUrl = MatchConstants.SOCIAL_MEDIA_PRE.ig;
+  readonly TwitterUrl = MatchConstants.SOCIAL_MEDIA_PRE.tw;
+  readonly youtubeUrl = MatchConstants.SOCIAL_MEDIA_PRE.yt;
+  readonly ADD_THIS_LINK = MatchConstants.LINK_NOT_ADDED;
 
   constructor() { }
 

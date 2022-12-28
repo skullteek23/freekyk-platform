@@ -1,0 +1,48 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Add/Edit Profile Photo</span>
+</mat-toolbar>
+<div class="container-2">
+  <div *ngIf="!isLoading && !isUploadComplete" ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
+    <mat-label> Choose Image for Profile Picture </mat-label>
+    <input hidden type="file" name="fileInput" accept="image/*" #fileInput (change)="onChooseImage($event)" id="file" />
+    <div fxLayout fxLayoutGap="16px" class="radio-box">
+      <mat-label class="label" id="ground-referee">Referee Availability (*) :</mat-label>
+      <mat-radio-group color="primary" aria-labelledby="ground-referee" matInput formControlName="referee" required>
+        <mat-radio-button *ngFor="let option of options" [value]="option.value">
+          {{ option.viewValue | titlecase }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <img [src]="selectedImage || 'assets/images/placeholder_product.png'" class="preview" alt="Image"
+        appFallbackImg />
+    </div>
+    <p class="file">
+      {{ this.$file?.name }}
+    </p>
+    <div fxLayoutGap="20px">
+      <button (click)="fileInput.click()" class="buttonText secondaryButton">
+        Choose New Photo
+      </button>
+      <button [disabled]="!$file" (click)="onUploadImage()" class="buttonText primaryButton">
+        Upload
+      </button>
+      <button [disabled]="$file || !selectedImage" (click)="onRemovePhoto()" class="buttonText noResponseButton">
+        Remove Photo
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!isLoading && isUploadComplete" ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="8px">
+    <app-tick-animation></app-tick-animation>
+    <span class="mat-body-1"> Upload Complete! </span>
+  </div>
+  <div *ngIf="isLoading && !isUploadComplete" ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata"
+    fxLayoutAlign="center center" fxLayout="column">
+    <app-loading></app-loading>
+  </div>
+</div>

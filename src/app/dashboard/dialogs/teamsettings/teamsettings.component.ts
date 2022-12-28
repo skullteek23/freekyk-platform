@@ -1,23 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { SOCIAL_MEDIA_PRE } from '@shared/Constants/DEFAULTS';
 import {
   TeamBasicInfo,
   TeamMoreInfo,
 } from '@shared/interfaces/team.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
-import { TeamgalleryComponent } from '../teamgallery/teamgallery.component';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { ProfileConstants } from '@shared/constants/constants';
+import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-teamsettings',
@@ -26,10 +23,10 @@ import { ProfileConstants } from '@shared/constants/constants';
 })
 export class TeamsettingsComponent implements OnInit, OnDestroy {
 
-  readonly ig = SOCIAL_MEDIA_PRE.ig;
-  readonly fb = SOCIAL_MEDIA_PRE.fb;
-  readonly tw = SOCIAL_MEDIA_PRE.tw;
-  readonly yt = SOCIAL_MEDIA_PRE.yt;
+  readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
+  readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;
+  readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
+  readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
   readonly sloganLimit = ProfileConstants.TEAM_SLOGAN_MAX_LIMIT;
   readonly descriptionLimit = ProfileConstants.TEAM_DESC_MAX_LIMIT;
 
