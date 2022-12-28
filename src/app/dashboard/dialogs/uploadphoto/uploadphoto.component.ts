@@ -5,8 +5,8 @@ import {
   AngularFireUploadTask,
 } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { firestoreCustomType } from '@shared/interfaces/user.model';
 import { Subscription } from 'rxjs';
+import firebase from 'firebase/app';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
@@ -67,8 +67,8 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const uid = localStorage.getItem('uid');
     const allPromises = [];
-    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: firestoreCustomType.FieldValue.delete() }));
-    allPromises.push(this.ngFire.collection('players').doc(uid).update({ imgpath_sm: firestoreCustomType.FieldValue.delete() }));
+    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: firebase.firestore.FieldValue.delete() }));
+    allPromises.push(this.ngFire.collection('players').doc(uid).update({ imgpath_sm: firebase.firestore.FieldValue.delete() }));
     Promise.all(allPromises)
       .then(() => {
         this.selectedImage = null;

@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { uData, logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { firebaseUserType } from '@shared/interfaces/user.model';
 import { MatchConstants } from '@shared/constants/constants';
 import firebase from 'firebase/app';
 
@@ -170,7 +169,7 @@ export class AuthService {
     this.updateName(name);
   }
 
-  private setCurrentUser(userData: firebaseUserType | null): void {
+  private setCurrentUser(userData: firebase.User | null): void {
     this.currentUser = {
       uid: userData?.uid,
       refreshToken: userData?.refreshToken,

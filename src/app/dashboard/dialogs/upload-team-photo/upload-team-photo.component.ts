@@ -1,11 +1,9 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { YES_OR_NO_OPTIONS } from '@shared/constants/constants';
 import { ListOption } from '@shared/interfaces/others.model';
-import { firestoreCustomType } from '@shared/interfaces/user.model';
 import { Subscription } from 'rxjs';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 

@@ -20,7 +20,7 @@ import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { Observable } from 'rxjs';
 import { TeamgalleryComponent } from '@app/dashboard/dialogs/teamgallery/teamgallery.component';
 import { UploadTeamPhotoComponent } from './../dashboard/dialogs/upload-team-photo/upload-team-photo.component';
-import { firestoreCustomType } from '@shared/interfaces/user.model';
+import firebase from 'firebase/app';
 import { MatchConstants } from '@shared/constants/constants';
 @Injectable({
   providedIn: 'root',
@@ -275,7 +275,7 @@ export class TeamService implements OnDestroy {
         .collection('teams/' + tid + '/additionalInfo')
         .doc('members')
         .update({
-          memCount: firestoreCustomType.FieldValue.increment(-1),
+          memCount: firebase.firestore.FieldValue.increment(-1),
           members: mems,
         })
     );
@@ -311,7 +311,7 @@ export class TeamService implements OnDestroy {
         .collection('teams/' + tid + '/additionalInfo')
         .doc('members')
         .update({
-          memCount: firestoreCustomType.FieldValue.increment(-1),
+          memCount: firebase.firestore.FieldValue.increment(-1),
           members: mems,
         })
     );

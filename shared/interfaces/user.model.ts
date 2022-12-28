@@ -1,8 +1,4 @@
 
-import firebase from 'firebase/app';
-export const firestoreCustomType = firebase.firestore;
-export const fireAuthCustomType = firebase.auth;
-export type firebaseUserType = firebase.User;
 export interface PlayerBasicInfo {
   name: string;
   team: { name: string; id: string; capId: string };
