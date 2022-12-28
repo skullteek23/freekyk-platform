@@ -56,7 +56,7 @@ export class TeamService implements OnDestroy {
 
   onOpenTeamPhotoDialog(): void {
     this.dialog.open(UploadTeamPhotoComponent, {
-      panelClass: 'fk-dialogs',
+      panelClass: 'large-dialogs',
       disableClose: true,
     });
   }

@@ -1,26 +1,31 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { YES_OR_NO_OPTIONS } from '@shared/constants/constants';
+import { ListOption } from '@shared/interfaces/others.model';
 import { firestoreCustomType } from '@shared/interfaces/user.model';
 import { Subscription } from 'rxjs';
+import { TeamBasicInfo } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-upload-team-photo',
   templateUrl: './upload-team-photo.component.html',
   styleUrls: ['./upload-team-photo.component.scss']
 })
-export class UploadTeamPhotoComponent implements OnInit {
+export class UploadTeamPhotoComponent implements OnInit, OnDestroy {
 
-  readonly options = YES_OR_NO_OPTIONS;
+  readonly options: ListOption[] = [
+    { viewValue: 'Team Photo', value: 'imgpath' },
+    { viewValue: 'Team Logo', value: 'imgpath_logo' },
+  ];
 
-  $file: File = null;
-  selectedImage = null;
-  isLoading = false;
+  photoType = 'imgpath';
+  previewFile = '';
+  selectedPhoto$: File = null;
   isUploadComplete = false;
-  uploadImageTask: AngularFireUploadTask;
+  isLoading = false;
   subscriptions = new Subscription();
 
   constructor(
@@ -28,7 +33,6 @@ export class UploadTeamPhotoComponent implements OnInit {
     private ngStorage: AngularFireStorage,
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
-    @Inject(MAT_DIALOG_DATA) public data: string
   ) { }
 
   ngOnInit(): void { }
@@ -40,66 +44,61 @@ export class UploadTeamPhotoComponent implements OnInit {
   }
 
   onCloseDialog(): void {
-    this.dialogRef.close();
+    location.reload();
+    // this.dialogRef.close();
   }
 
   onChooseImage(ev: any): void {
-    this.$file = ev.target.files[0];
+    this.selectedPhoto$ = ev.target.files[0];
     this.onShowPreview();
   }
 
   onShowPreview(): void {
     const reader = new FileReader();
     reader.onload = () => {
-      this.selectedImage = reader.result as string;
+      this.previewFile = reader.result as string;
     };
-    reader.readAsDataURL(this.$file);
+    reader.readAsDataURL(this.selectedPhoto$);
   }
 
-  onRemovePhoto(): void {
-    if (!this.selectedImage) {
+  async upload(): Promise<any> {
+    if (!this.selectedPhoto$ || !this.photoType) {
       return;
     }
     this.isLoading = true;
-    const uid = localStorage.getItem('uid');
-    const allPromises = [];
-    allPromises.push(this.ngFire.collection(`players/${uid}/additionalInfo`).doc('otherInfo').update({ imgpath_lg: firestoreCustomType.FieldValue.delete() }));
-    allPromises.push(this.ngFire.collection('players').doc(uid).update({ imgpath_sm: firestoreCustomType.FieldValue.delete() }));
-    Promise.all(allPromises)
+    const tid = sessionStorage.getItem('tid');
+    const update: Partial<TeamBasicInfo> = {};
+    update[this.photoType] = await this.getPhotoUrl(tid);
+    this.ngFire.collection('teams').doc(tid)
+      .update({ ...update })
       .then(() => {
-        this.selectedImage = null;
-        this.snackBarService.displayCustomMsg('Photo removed successfully!');
+        this.isUploadComplete = true;
+        this.selectedPhoto$ = null;
+        const textToShow = this.photoType === 'imgpath' ? 'Photo' : 'Logo';
+        this.snackBarService.displayCustomMsg(textToShow + ' modified successfully!');
       })
       .catch(() => this.snackBarService.displayError())
       .finally(() => {
         this.isLoading = false;
-        this.onCloseDialog();
+        setTimeout(() => {
+          this.onCloseDialog();
+        }, 3000);
       });
   }
 
-  async onUploadImage(): Promise<any> {
-    this.isLoading = true;
-    if (this.$file === null) {
-      this.isLoading = false;
-      this.snackBarService.displayError();
-      return this.onCloseDialog();
+  async getPhotoUrl(tid: string) {
+    if (this.photoType === 'imgpath') {
+      return await this.onUploadTeamPhoto(tid);
+    } else {
+      return await this.onUploadTeamLogo(tid);
     }
-    const uid = localStorage.getItem('uid');
-    this.uploadImageTask = this.ngStorage.upload('/profileImages/profileimage_' + uid, this.$file);
-    const downloadURL: string = await this.uploadImageTask.then((res) => res.ref.getDownloadURL());
-    if (downloadURL) {
-      return this.ngFire
-        .collection(`players/${uid}/additionalInfo`)
-        .doc('otherInfo')
-        .set({ imgpath_lg: downloadURL, }, { merge: true })
-        .then(() => {
-          this.isUploadComplete = true;
-        })
-        .catch(() => this.snackBarService.displayError())
-        .finally(() => {
-          this.isLoading = false;
-          this.onCloseDialog();
-        });
-    }
+  }
+
+  async onUploadTeamLogo(tid: string): Promise<any> {
+    return (await this.ngStorage.upload('/teamLogos/team_logo_' + tid, this.selectedPhoto$)).ref.getDownloadURL();
+  }
+
+  async onUploadTeamPhoto(tid: string): Promise<any> {
+    return (await this.ngStorage.upload('/teamsImages/team_photo_' + tid, this.selectedPhoto$)).ref.getDownloadURL();
   }
 }
