@@ -103,7 +103,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',
       data: playerID,
-    });
+    }).afterClosed().subscribe(() => this.router.navigate(['/play/players']));
   }
 
 }

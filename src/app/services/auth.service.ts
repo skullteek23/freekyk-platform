@@ -6,8 +6,9 @@ import { BehaviorSubject } from 'rxjs';
 import { uData, logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { fireAuthCustomType, firebaseUserType } from '@shared/interfaces/user.model';
+import { firebaseUserType } from '@shared/interfaces/user.model';
 import { MatchConstants } from '@shared/constants/constants';
+import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -247,28 +248,28 @@ export class AuthService {
     }
   }
   private signInGoogle(): Promise<any> {
-    return this.ngAuth.signInWithPopup(new fireAuthCustomType.GoogleAuthProvider());
+    return this.ngAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
   private signInFacebook(): Promise<any> {
     return this.ngAuth.signInWithPopup(
-      new fireAuthCustomType.FacebookAuthProvider()
+      new firebase.auth.FacebookAuthProvider()
     );
   }
   private logoutFromFirebase(): Promise<any> {
     return this.ngAuth.signOut();
   }
   private updateName(newName: string): Promise<any> {
-    return fireAuthCustomType().currentUser?.updateProfile({ displayName: newName });
+    return firebase.auth().currentUser?.updateProfile({ displayName: newName });
   }
   private forgotPassword(): Promise<any> {
     const userEmail: any = this.currentUser?.email;
     return this.ngAuth.sendPasswordResetEmail(userEmail);
   }
   private changeEmail(newEmail: string): Promise<any> {
-    return fireAuthCustomType().currentUser?.updateEmail(newEmail);
+    return firebase.auth().currentUser?.updateEmail(newEmail);
   }
   private changePassword(newPass: string): Promise<any> {
-    return fireAuthCustomType().currentUser?.updatePassword(newPass);
+    return firebase.auth().currentUser?.updatePassword(newPass);
   }
   // firebase functions
 
