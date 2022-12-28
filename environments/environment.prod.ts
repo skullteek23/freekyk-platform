@@ -10,9 +10,9 @@ export const environment = {
     messagingSenderId: '678320827100',
     appId: '1:678320827100:web:d14c29c405b86b825a2219',
     measurementId: 'G-K55NRR7QXM',
-    url: 'https://freekyk-prod.web.app',
-    adminUrl: 'https://admin-freekyk.web.app',
-    adminRegister: 'https://admin-freekyk.web.app/register',
+    url: 'https://www.freekyk.com',
+    adminUrl: 'https://admin.freekyk.com',
+    adminRegister: 'https://admin.freekyk.com/register',
     logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
   },
   razorPay: {
