@@ -7,14 +7,14 @@
 <div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
   <div class="box-size">
     <p class="mat-body-2 text-align">
-      Account Deactivation request will disable <strong>disable login</strong> for you. Please provide us the reason
-      below: [max characters: 1000]
+      Account Deactivation request will <strong>disable login</strong> for you. Please provide us the reason below: [max
+      characters: {{reasonLimit}}]
     </p>
   </div>
   <mat-form-field class="box-size" appearance="outline">
-    <textarea matInput [(ngModel)]="reason" cols="30" rows="10" maxlength="1000"
+    <textarea matInput [(ngModel)]="reason" cols="30" rows="10" maxlength="{{reasonLimit}}"
       placeholder="Ex: Unable to get into a team."></textarea>
-    <mat-error *ngIf="!isReasonValid">Max Characters allowed: 1000</mat-error>
+    <mat-error *ngIf="!isReasonValid">Max Characters allowed: {{reasonLimit}}</mat-error>
   </mat-form-field>
   <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
     fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">

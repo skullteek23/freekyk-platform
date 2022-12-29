@@ -1,10 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UNIQUE_DELETION_REQUEST_CODE } from '@shared/constants/constants';
-import { ActionRequest } from '@shared/interfaces/admin.model';
+import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 
-export interface IRequestData { seasonID: string; heading: string; isShowMatch: boolean }
+export interface IRequestData {
+  seasonID: string;
+  heading: string;
+  isShowMatch: boolean;
+}
 
 @Component({
   selector: 'app-request-dialog',
@@ -18,7 +20,6 @@ export class RequestDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<RequestDialogComponent>,
-    private ngFire: AngularFirestore,
     @Inject(MAT_DIALOG_DATA) public data: IRequestData
   ) { }
 
@@ -29,23 +30,29 @@ export class RequestDialogComponent {
   sendRequestToAdmin() {
     if (this.isReasonValid) {
       const timestamp = new Date().getTime();
-      const uniqueRequestID = UNIQUE_DELETION_REQUEST_CODE + '-' + this.ngFire.createId().slice(0, 5);
       const uid = sessionStorage.getItem('uid');
-      const requestData: ActionRequest = {
-        id: uniqueRequestID,
-        uid,
+      const message = '';
+      if (this.data.isShowMatch) {
+        message.concat('Match ID: ' + this.mid + '&nbsp;<br>')
+      } else {
+        message.concat('Season ID: ' + this.data.seasonID + '&nbsp;<br>')
+      }
+      message.concat(this.reason.trim());
+      const ticket: ISupportTicket = {
+        status: TicketStatus.Open,
+        type: TicketTypes.Season,
         timestamp,
-        reason: this.reason,
-        referenceID: this.data.isShowMatch ? this.mid : this.data.seasonID
-      };
+        uid,
+        message,
+      }
       this.reason = null;
       this.mid = null;
-      this.onCloseDialogWithData(requestData);
+      this.onCloseDialogWithData(ticket);
     }
   }
 
-  onCloseDialogWithData(data) {
-    this.dialogRef.close(data);
+  onCloseDialogWithData(ticket: ISupportTicket) {
+    this.dialogRef.close(ticket);
   }
 
   get isReasonValid(): boolean {

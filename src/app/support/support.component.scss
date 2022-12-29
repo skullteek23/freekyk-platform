@@ -1,3 +1,9 @@
 .highlight {
   color: var(--primaryColor);
 }
+
+@media only screen and (min-width: 959px) {
+  .completed {
+    margin-left: 50px;
+  }
+}

@@ -10,7 +10,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [SupportComponent, FaqsComponent],
-  imports: [CommonModule, SharedModule, SupportRoutingModule, ReactiveFormsModule, FlexLayoutModule,
-    MaterialModule],
+  imports: [
+    CommonModule, SharedModule, SupportRoutingModule, ReactiveFormsModule, FlexLayoutModule,
+    MaterialModule
+  ],
 })
 export class SupportModule { }

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
 import { heroCallToAction } from '@shared/interfaces/others.model';
-import { BasicTicket } from '@shared/interfaces/ticket.model';
+import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 
@@ -22,19 +22,19 @@ export class SupportComponent implements OnInit {
   readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
   readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
 
-  ticketForm: FormGroup;
   activeIndex = 0;
   activePage: {
     svg: string;
     title: string;
     CTA: heroCallToAction | false;
   };
+  ticketForm: FormGroup;
+  isTicketSubmitted = false;
 
   constructor(
     private snackBarService: SnackbarService,
     private ngFire: AngularFirestore,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -67,25 +67,32 @@ export class SupportComponent implements OnInit {
 
   onSubmitTicket(): void {
     if (this.ticketForm.valid) {
-      this.ngFire
-        .collection('tickets')
-        .add({
-          ...this.ticketForm.value,
-          ticket_UID: (
-            this.ngFire.createId() + Date.now().toString().slice(0, 5)
-          ).toUpperCase(),
-          tkt_date: new Date(),
-          tkt_status: 'Recieved',
-        } as BasicTicket)
+      const ticket: ISupportTicket = {
+        status: TicketStatus.Open,
+        contactInfo: {
+          name: String(this.ticketForm.value.name)?.trim(),
+          email: String(this.ticketForm.value.email)?.trim(),
+          phone_no: String(this.ticketForm.value.ph_number)?.trim(),
+        },
+        type: TicketTypes.Support,
+        timestamp: new Date().getTime(),
+        message: String(this.ticketForm.value.query)?.trim(),
+        uid: 'NA'
+      }
+      const uid = localStorage.getItem('uid');
+      if (uid) {
+        ticket.uid = uid;
+      }
+      this.ngFire.collection('tickets').add(ticket)
         .then(() => {
-          this.snackBarService.displayCustomMsg('Ticket registered successfully!');
-          this.ticketForm.reset();
+          this.isTicketSubmitted = true;
+          this.snackBarService.displayCustomMsg('Enquiry submitted successfully!');
         })
-        .catch(() => this.snackBarService.displayError());
-    } else {
-      this.snackBarService.displayError('Unable to register ticket!');
+        .catch(() => this.snackBarService.displayError())
+        .finally(() => {
+          this.ticketForm.reset();
+        });
     }
-    window.scrollTo(0, 0);
   }
 
   onChangeTab(ev: MatTabChangeEvent): void {

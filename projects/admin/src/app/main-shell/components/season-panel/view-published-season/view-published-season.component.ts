@@ -19,6 +19,7 @@ import { IRequestData, RequestDialogComponent } from '../request-dialog/request-
 import { SeasonAdminService } from '../../../services/season-admin.service';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dialog.component';
+import { ISupportTicket } from '@shared/interfaces/ticket.model';
 
 @Component({
   selector: 'app-view-published-season',
@@ -180,39 +181,36 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onRaiseRequest(isDeleteRequest = false) {
-    this.isLoaderShown = true
-    this.isRequestExists$.subscribe(response => {
-      if (!response && this.isSeasonPublished) {
-        this.isLoaderShown = false;
-        this.dialog.open(RequestDialogComponent, {
-          panelClass: 'fk-dialogs',
-          data: {
-            seasonID: this.seasonID,
-            heading: isDeleteRequest ? DELETE_SEASON_SUBHEADING : REVOKE_MATCH_UPDATE_SUBHEADING,
-            isShowMatch: !isDeleteRequest
-          } as IRequestData
-        }).afterClosed().subscribe(userResponse => {
-          if (userResponse) {
-            this.isLoaderShown = true;
-            this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
-              .then(
-                () => {
-                  this.isLoaderShown = false;
-                  const message = (isDeleteRequest ? 'Delete' : 'Revoke') + ' Request Submitted!';
-                  this.snackbarService.displayCustomMsg(message);
-                }, err => {
-                  this.isLoaderShown = false;
-                  this.snackbarService.displayError('Request raise failed!');
-                }
-              )
-              .catch(err => this.snackbarService.displayError());
-          }
-        });
-      } else {
-        this.isLoaderShown = false;
-        this.snackbarService.displayCustomMsg('Request already submitted!');
+    if (this.isSeasonPublished) {
+      const data: IRequestData = {
+        seasonID: this.seasonID,
+        heading: isDeleteRequest ? DELETE_SEASON_SUBHEADING : REVOKE_MATCH_UPDATE_SUBHEADING,
+        isShowMatch: !isDeleteRequest
       }
-    });
+
+      const dialogRef = this.dialog.open(RequestDialogComponent, {
+        panelClass: 'fk-dialogs',
+        data
+      });
+
+      dialogRef.afterClosed().subscribe((ticket: ISupportTicket) => {
+        if (ticket) {
+          this.isLoaderShown = true;
+          this.ngFire.collection('tickets').add(ticket)
+            .then(
+              () => {
+                this.isLoaderShown = false;
+                const message = (isDeleteRequest ? 'Delete' : 'Revoke') + ' Request Submitted!';
+                this.snackbarService.displayCustomMsg(message);
+              }, err => {
+                this.isLoaderShown = false;
+                this.snackbarService.displayError('Request raise failed!');
+              }
+            )
+            .catch(err => this.snackbarService.displayError());
+        }
+      });
+    }
   }
 
   onConfirm(): Observable<any> {
@@ -296,14 +294,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
 
   get isSeasonFinished(): boolean {
     return this.seasonData?.status === 'FINISHED';
-  }
-
-  get isRequestExists$(): Observable<boolean> {
-    if (this.seasonID) {
-      return this.ngFire.collection('adminRequests', query => query.where('referenceID', '==', this.seasonID))
-        .get()
-        .pipe(map(resp => !resp.empty), share());
-    }
   }
 
   get payableFees(): number {

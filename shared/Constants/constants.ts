@@ -83,6 +83,7 @@ export class ProfileConstants {
   static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
   static readonly MIN_TEAM_ELIGIBLE_PLAYER_LIMIT = 8;
   static readonly SUPPORT_QUERY_LIMIT = 300;
+  static readonly DEACTIVATION_REASON_LIMIT = 500;
   static readonly FALLBACK_IMG_URL = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
 
 }

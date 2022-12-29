@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { BasicTicket } from '@shared/interfaces/ticket.model';
+import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { ProfileConstants } from '@shared/constants/constants';
 
 @Component({
@@ -19,7 +19,7 @@ export class AccTicketsComponent implements OnInit {
   newTicketForm: FormGroup = new FormGroup({});
   additionAvailable = true;
   showForm = false;
-  myTickets$: Observable<BasicTicket[]>;
+  myTickets$: Observable<ISupportTicket[]>;
   noTickets = false;
 
   constructor(
@@ -32,53 +32,56 @@ export class AccTicketsComponent implements OnInit {
   }
 
   getTickets(): void {
-    this.myTickets$ = this.ngFire
-      .collection('tickets')
-      .snapshotChanges()
-      .pipe(
-        tap((resp) => (this.noTickets = resp.length === 0)),
-        map((resp) =>
-          resp.map(
-            (doc) =>
-            ({
-              id: doc.payload.doc.id,
-              ...(doc.payload.doc.data() as BasicTicket),
-            } as BasicTicket)
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      this.myTickets$ = this.ngFire
+        .collection('tickets', query => query.where('uid', '==', uid))
+        .snapshotChanges()
+        .pipe(
+          tap((resp) => (this.noTickets = resp.length === 0)),
+          map((resp) =>
+            resp.map(
+              (doc) =>
+              ({
+                id: doc.payload.doc.id,
+                ...(doc.payload.doc.data() as ISupportTicket),
+              } as ISupportTicket)
+            )
           )
-        )
-      );
+        );
+    }
   }
 
-  getColor(status: 'Complete' | 'Processing' | 'Recieved'): string {
+  getColor(status: TicketStatus): string {
     switch (status) {
-      case 'Complete':
+      case TicketStatus.Closed:
         return 'var(--primaryColor)';
-      case 'Processing':
+      case TicketStatus.Pending:
         return 'var(--premiumServiceColor)';
-      case 'Recieved':
+      case TicketStatus.Open:
         return 'grey';
     }
   }
 
-  getIcon(status: 'Complete' | 'Processing' | 'Recieved'): string {
+  getIcon(status: TicketStatus): string {
     switch (status) {
-      case 'Complete':
+      case TicketStatus.Closed:
         return 'check_circle';
-      case 'Processing':
+      case TicketStatus.Pending:
         return 'pending';
-      case 'Recieved':
+      case TicketStatus.Open:
         return 'inventory';
     }
   }
 
-  getStatus(status: 'Complete' | 'Processing' | 'Recieved'): string {
+  getStatus(status: TicketStatus): string {
     switch (status) {
-      case 'Complete':
-        return 'resolved';
-      case 'Processing':
-        return 'processing';
-      case 'Recieved':
-        return 'request recieved';
+      case TicketStatus.Closed:
+        return 'Resolved';
+      case TicketStatus.Pending:
+        return 'Pending';
+      case TicketStatus.Open:
+        return 'Open';
     }
   }
 
@@ -116,23 +119,31 @@ export class AccTicketsComponent implements OnInit {
   resetAll(): void {
     this.additionAvailable = true;
     this.showForm = false;
+    this.newTicketForm.reset();
   }
 
   onSubmitTicket(): void {
-    // backend code goes here
-    // console.log(this.newTicketForm);
-    this.ngFire
-      .collection('tickets')
-      .add({
-        ...this.newTicketForm.value,
-        ticket_UID: (
-          this.ngFire.createId() + Date.now().toString().slice(0, 5)
-        ).toUpperCase(),
-        tkt_date: new Date(),
-        tkt_status: 'Recieved',
-      } as BasicTicket)
-      .then(this.finishSubmission.bind(this))
-      .catch(() => this.snackBarService.displayError());
+    const uid = localStorage.getItem('uid');
+    const ticket: ISupportTicket = {
+      status: TicketStatus.Open,
+      contactInfo: {
+        name: String(this.newTicketForm.value.name)?.trim(),
+        email: String(this.newTicketForm.value.email)?.trim(),
+        phone_no: String(this.newTicketForm.value.ph_number)?.trim(),
+      },
+      type: TicketTypes.Support,
+      uid,
+      timestamp: new Date().getTime(),
+      message: String(this.newTicketForm.value.query)?.trim()
+    }
+    this.ngFire.collection('tickets').add(ticket)
+      .then(() => {
+        this.snackBarService.displayCustomMsg('Ticket raised successfully!');
+      })
+      .catch(() => this.snackBarService.displayError())
+      .finally(() => {
+        this.resetAll();
+      });
   }
 
   finishSubmission(): void {

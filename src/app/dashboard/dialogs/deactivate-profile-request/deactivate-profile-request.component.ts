@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { UNIQUE_DELETION_REQUEST_CODE } from '@shared/constants/constants';
-import { ActionRequest } from '@shared/interfaces/admin.model';
+import { ProfileConstants } from '@shared/constants/constants';
+import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 
 @Component({
   selector: 'app-deactivate-profile-request',
@@ -11,11 +10,11 @@ import { ActionRequest } from '@shared/interfaces/admin.model';
 })
 export class DeactivateProfileRequestComponent {
 
+  readonly reasonLimit = ProfileConstants.DEACTIVATION_REASON_LIMIT;
   reason: string = null;
 
   constructor(
     public dialogRef: MatDialogRef<DeactivateProfileRequestComponent>,
-    private ngFire: AngularFirestore,
   ) { }
 
   onCloseDialog() {
@@ -25,26 +24,24 @@ export class DeactivateProfileRequestComponent {
   sendRequestToAdmin() {
     const uid = localStorage.getItem('uid');
     if (this.isReasonValid && uid) {
-      const timestamp = new Date().getTime();
-      const uniqueRequestID = UNIQUE_DELETION_REQUEST_CODE + '-' + this.ngFire.createId().slice(0, 5);
-      const requestData: ActionRequest = {
-        id: uniqueRequestID,
+      const ticket: ISupportTicket = {
+        status: TicketStatus.Open,
+        type: TicketTypes.Profile,
+        timestamp: new Date().getTime(),
         uid,
-        timestamp,
-        reason: this.reason,
-        referenceID: uid
-      };
-      this.onCloseDialogWithData(requestData);
+        message: `Deactivate Profile - ${this.reason.trim()}`,
+      }
+      this.onCloseDialogWithData(ticket);
       this.reason = null;
     }
   }
 
-  onCloseDialogWithData(data) {
+  onCloseDialogWithData(data: ISupportTicket) {
     this.dialogRef.close(data);
   }
 
   get isReasonValid(): boolean {
-    return this.reason && this.reason.length <= 1000;
+    return this.reason && this.reason.length <= this.reasonLimit;
   }
 
 }

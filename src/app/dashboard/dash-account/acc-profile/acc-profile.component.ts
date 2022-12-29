@@ -507,34 +507,23 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
 
   onDeactivateAccount(): void {
-    this.isRequestExists$.subscribe(response => {
-      if (!response) {
-        this.dialog.open(DeactivateProfileRequestComponent, {
-          panelClass: 'fk-dialogs',
-        }).afterClosed().subscribe(userResponse => {
-          if (userResponse) {
-            this.ngFire.collection('adminRequests').doc(userResponse.id).set(userResponse)
-              .then(
-                () => {
-                  this.snackBarService.displayCustomMsg('Account Deactivation Request Submitted!');
-                  this.authService.onLogout();
-                }, err => {
-                  this.snackBarService.displayError('Request raise failed!');
-                }
-              )
-              .catch(err => this.snackBarService.displayError());
-          }
-        });
-      } else {
-        this.snackBarService.displayCustomMsg('Request already submitted!');
+    const dialogRef = this.dialog.open(DeactivateProfileRequestComponent, {
+      panelClass: 'fk-dialogs',
+    });
+
+    dialogRef.afterClosed().subscribe(userResponse => {
+      if (userResponse) {
+        this.ngFire.collection('tickets').doc(userResponse.id).set(userResponse)
+          .then(
+            () => {
+              this.snackBarService.displayCustomMsg('Account Deactivation Request Submitted!');
+              this.authService.onLogout();
+            }, err => {
+              this.snackBarService.displayError('Request raise failed!');
+            }
+          )
+          .catch(err => this.snackBarService.displayError());
       }
     });
-  }
-
-  get isRequestExists$(): Observable<boolean> {
-    const uid = localStorage.getItem('uid');
-    return this.ngFire.collection('adminRequests', query => query.where('referenceID', '==', uid))
-      .get()
-      .pipe(map(resp => !resp.empty), share());
   }
 }

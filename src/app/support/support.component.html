@@ -24,35 +24,48 @@
           <mat-divider fxHide.gt-sm="true"></mat-divider>
 
           <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign.gt-sm="space-between center"
-            ngClass.gt-sm="section-space-bottom section-space-top" fxLayoutGap.lt-md="20px">
+            ngClass.gt-sm="section-space-bottom section-space-top" fxLayoutGap="0px" fxLayoutGap.lt-md="20px">
             <!-- Ticket Form -->
-            <aside fxFlex.gt-sm="45%" fxLayout="column" fxLayoutGap="16px">
-              <span class="mat-subheading-1 center"> Raise an Enquiry </span>
-              <form [formGroup]="ticketForm" (ngSubmit)="onSubmitTicket()" fxLayout="column">
-                <mat-form-field appearance="outline" color="primary">
-                  <mat-label>Enter your name</mat-label>
-                  <input type="text" matInput name="name" formControlName="name" />
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary">
-                  <mat-label>Enter your mobile number</mat-label>
-                  <input type="text" matInput name="ph_number" formControlName="ph_number" />
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary">
-                  <mat-label>Enter your email address</mat-label>
-                  <input type="text" matInput name="email" formControlName="email" />
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary">
-                  <mat-label>Tell us your query/message</mat-label>
-                  <textarea type="text" matInput name="query" formControlName="query"></textarea>
-                </mat-form-field>
-                <div fxLayout="column" fxLayoutAlign="center center">
-                  <button [disabled]="!ticketForm.valid" type="button" (click)="onSubmitTicket()"
-                    class="buttonText primaryButton">
-                    Submit
-                  </button>
+            <ng-template #successBox>
+              <div class="completed">
+                <div class="success-container" fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+                  <app-tick-animation></app-tick-animation>
+                  <p style="text-align: center">
+                    Your enquiry has been successfully submitted!<br>
+                    Please check your email for further follow-ups.
+                  </p>
                 </div>
-              </form>
-            </aside>
+              </div>
+            </ng-template>
+            <ng-container *ngIf="!isTicketSubmitted; else successBox">
+              <div fxFlex.gt-sm="45%" fxLayout="column" fxLayoutGap="16px">
+                <span class="mat-subheading-1 center"> Raise an Enquiry </span>
+                <form [formGroup]="ticketForm" (ngSubmit)="onSubmitTicket()" fxLayout="column">
+                  <mat-form-field appearance="outline" color="primary">
+                    <mat-label>Enter your name</mat-label>
+                    <input type="text" matInput name="name" formControlName="name" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" color="primary">
+                    <mat-label>Enter your mobile number</mat-label>
+                    <input type="number" matInput name="ph_number" formControlName="ph_number" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" color="primary">
+                    <mat-label>Enter your email address</mat-label>
+                    <input type="email" matInput name="email" formControlName="email" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" color="primary">
+                    <mat-label>Tell us your query/message</mat-label>
+                    <textarea type="text" matInput name="query" formControlName="query"></textarea>
+                  </mat-form-field>
+                  <div fxLayout="column" fxLayoutAlign="center center">
+                    <button [disabled]="!ticketForm.valid" type="button" (click)="onSubmitTicket()"
+                      class="buttonText primaryButton">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </ng-container>
             <!-- Ticket Form -->
 
             <mat-divider fxHide.gt-sm="true"></mat-divider>
