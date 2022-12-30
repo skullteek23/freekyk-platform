@@ -1,79 +1,8 @@
 <div>
-  <app-hero-section
-    imageSource="assets/svgs/Banner/privacy.svg"
-    title="privacy policy"
-    [overline]="false"
-    [CTA]="false"
-  ></app-hero-section>
+  <app-hero-section [description]="description" imageSource="assets/svgs/Banner/privacy.svg" title="privacy policy"
+    [overline]="false" [CTA]="false"></app-hero-section>
 </div>
-<section
-  fxLayout="column"
-  class="container section-space-bottom section-space-top"
-  fxLayoutGap.lt-md="16px"
-  fxLayoutGap.gt-sm="20px"
->
-  <div>
-    <h4 class="mat-subheading-1 align">What Do We Do With Your Information?</h4>
-    <p class="mat-body-1 justify">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt aliquam orci. Pellentesque non libero urna. Vestibulum faucibus
-      dui sed elementum pharetra.
-    </p>
-  </div>
-  <div>
-    <h4 class="mat-subheading-1 align">Consent</h4>
-    <p class="mat-body-1 justify">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt aliquam orci. Pellentesque non libero urna. Vestibulum faucibus
-      dui sed elementum pharetra.
-    </p>
-  </div>
-  <div>
-    <h4 class="mat-subheading-1 align">Disclosure</h4>
-    <p class="mat-body-1 justify">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt aliquam orci. Pellentesque non libero urna. Vestibulum faucibus
-      dui sed elementum pharetra.
-    </p>
-  </div>
-  <div>
-    <h4 class="mat-subheading-1 align">Payment</h4>
-    <p class="mat-body-1 justify">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt aliquam orci. Pellentesque non libero urna. Vestibulum faucibus
-      dui sed elementum pharetra.
-    </p>
-  </div>
+<section fxLayout="column" class="container section-space-bottom section-space-top" fxLayoutGap.lt-md="16px"
+  fxLayoutGap.gt-sm="20px">
+  <div [innerHTML]="content"></div>
 </section>

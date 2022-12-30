@@ -1,22 +1,21 @@
-<section
-  class="container section-space-top section-space-bottom"
-  fxLayout="column"
-  fxLayout.gt-sm="row"
-  fxLayoutAlign.gt-sm="space-between center"
-  fxLayoutGap.lt-md="20px"
->
+<section class="container section-space-top section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
+  fxLayoutAlign.gt-sm="space-between center" fxLayoutGap.lt-md="20px">
   <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="8px">
     <h4 class="mat-subheading-1 align">{{ content.heading | titlecase }}</h4>
     <span class="mat-body-1 align">
       {{ content.desc }}
     </span>
+    <div class="cta-button" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.lt-md="center center">
+      <button color="primary" mat-button (click)="onNavigate()" fxLayout="column" fxLayoutAlign="center center"
+        fxLayoutGap="8px">
+        <span> {{'get started' | titlecase}} </span>
+        <span class="material-icons-round"> keyboard_arrow_right </span>
+      </button>
+    </div>
   </div>
   <div fxFlex.gt-sm="30%">
     <mat-grid-list cols="2" gutterSize="20px">
-      <mat-grid-tile
-        *ngFor="let figure of content.numbers | keyvalue"
-        class="mat-elevation-z4"
-      >
+      <mat-grid-tile *ngFor="let figure of content.numbers | keyvalue" class="mat-elevation-z4">
         <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="8px">
           <h2 class="numbers">{{ figure.value }}</h2>
           <p>

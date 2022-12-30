@@ -8,8 +8,6 @@ export class FallbackImgDirective implements OnDestroy {
 
   @Input() imgSrc: string = ProfileConstants.FALLBACK_IMG_URL;
 
-  private isApplied: boolean = false;
-
   constructor(private el: ElementRef) {
     el?.nativeElement?.addEventListener('error', this.onError.bind(this))
   }

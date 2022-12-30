@@ -5,7 +5,7 @@
     {{ covidContent.heading }}
   </h4>
   <div class="placeholder-rectangle" fxLayoutAlign="center center">
-    <img src="assets/svgs/Banner/covid.svg" alt="" appFallbackImg />
+    <img src="assets/images/covid.png" alt="Covid Image" appFallbackImg />
   </div>
   <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center start" fxLayoutAlign.lt-md="center center"
     ngClass.gt-sm="hero-text">
@@ -16,7 +16,7 @@
     <span class="mat-body-1 align">
       {{ covidContent.desc }}
     </span>
-    <button (click)="onLearnMore('covid')" color="primary" mat-button fxLayout="column" fxLayoutAlign="center center"
+    <button (click)="onLearnMore()" color="primary" mat-button fxLayout="column" fxLayoutAlign="center center"
       fxLayoutGap="8px">
       <span> Read COVID-19 Prevention Measures </span>
       <span class="material-icons-round"> keyboard_arrow_right </span>

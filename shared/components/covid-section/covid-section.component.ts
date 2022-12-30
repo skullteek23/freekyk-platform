@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { COVID_PRECAUTIONS } from '../../Constants/WEBSITE_CONTENT';
-import { FeatureInfoComponent } from '../../dialogs/feature-info/feature-info.component';
+import { COVID_LEARN_MORE, COVID_PRECAUTIONS } from '../../Constants/WEBSITE_CONTENT';
+import { FeatureInfoComponent, IFeatureInfoOptions } from '../../dialogs/feature-info/feature-info.component';
 
 @Component({
   selector: 'app-covid-section',
@@ -15,10 +15,14 @@ export class CovidSectionComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onLearnMore(learnData: any): void {
+  onLearnMore(): void {
+    const data: IFeatureInfoOptions = {
+      heading: COVID_LEARN_MORE.heading,
+      description: COVID_LEARN_MORE.desc,
+    };
     this.dialog.open(FeatureInfoComponent, {
       panelClass: 'large-dialogs',
-      data: learnData,
+      data,
     });
   }
 }

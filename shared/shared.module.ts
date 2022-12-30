@@ -69,6 +69,7 @@ import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-l
 import { environment } from 'environments/environment';
 import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
 import { FallbackImgDirective } from '@shared/directives/fallback-img.directive';
+import { RouterModule } from '@angular/router';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -142,6 +143,7 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     ReactiveFormsModule,
     YouTubePlayerModule,
     ClipboardModule,
+    RouterModule,
     ShareModule.withConfig(customConfig),
   ],
   exports: [

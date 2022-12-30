@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PRIVACY_POLICY } from '@shared/Constants/LEGAL_CONTENT';
 
 @Component({
   selector: 'app-privacy',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./privacy.component.scss'],
 })
 export class PrivacyComponent {
-  constructor() {}
+
+  readonly description = PRIVACY_POLICY.miniDescription;
+  readonly content = PRIVACY_POLICY.text;
+
+  constructor() { }
 }

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -16,14 +15,14 @@ export class AppComponent implements OnInit, OnDestroy {
   routeSubscription: Subscription = new Subscription();
 
   constructor(
-    private router: Router,
-    private ngFire: AngularFirestore
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.dashOpen = event.url.includes('dashboard');
+        window.scrollTo(0, 0);
       }
     });
   }

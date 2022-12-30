@@ -1,63 +1,26 @@
-<section
-  class="container product"
-  ngClass.lt-md="section-space-bottom"
-  fxLayout="column"
-  fxLayout.gt-sm="row"
-  [ngClass]="{ 'hero-big': largeBanner, hero: !largeBanner }"
-  fxLayoutAlign="end center"
-  fxLayoutAlign.gt-sm="space-between center"
-  fxLayoutGap="20px"
->
-  <app-illustration-hero-section
-    [isEnlarge]="largeBanner"
-    *ngIf="!useAltLayout; else alt"
-    [svgSrc]="imageSource"
-    fxFlexOrder.gt-sm="2"
-    fxFlexOrder="1"
-  ></app-illustration-hero-section>
+<section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
+  [ngClass]="{ 'hero-big': largeBanner, hero: !largeBanner }" fxLayoutAlign="end center"
+  fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
+  <app-illustration-hero-section [isEnlarge]="largeBanner" *ngIf="!useAltLayout; else alt" [svgSrc]="imageSource"
+    fxFlexOrder.gt-sm="2" fxFlexOrder="1"></app-illustration-hero-section>
   <ng-template #alt>
-    <app-illustration-hero-section-alternate
-      [svgSrc]="imageSource"
-      fxFlexOrder.gt-sm="2"
-      fxFlexOrder="1"
-    >
+    <app-illustration-hero-section-alternate [svgSrc]="imageSource" fxFlexOrder.gt-sm="2" fxFlexOrder="1">
     </app-illustration-hero-section-alternate>
   </ng-template>
 
-  <div
-    [ngStyle.gt-sm]="{ position: isFloatText() }"
-    fxFlexOrder.gt-sm="1"
-    fxFlexOrder="2"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="center start"
-    ngClass.gt-sm="hero-text"
-  >
-    <span
-      *ngIf="headline"
-      ngClass.gt-sm="mat-headline"
-      class="align"
-      ngClass.lt-md="mat-title"
-    >
+  <div [ngStyle.gt-sm]="{ position: isFloatText() }" fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column"
+    fxLayoutAlign="center center" fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="hero-text">
+    <span *ngIf="headline" ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
       Freekyk - India's No.1 Football Network
     </span>
-    <div
-      fxLayoutAlign.lt-md="center center"
-      fxLayoutAlign.gt-sm="center start"
-      fxLayout="column"
-    >
-      <span *ngIf="overline" class="overline align"
-        >Your Only Place to {{ overline }}</span
-      >
+    <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
+      <span *ngIf="overline" class="overline align">Your Only Place to {{ overline }}</span>
       <span *ngIf="title" class="mat-title align">{{ title | titlecase }}</span>
     </div>
 
     <p class="mat-body-1 align" [innerHTML]="description"></p>
-    <button
-      *ngIf="button"
-      (click)="onNavigate(button['route'])"
-      class="primaryButton buttonText"
-    >
+    <button [fxHide.lt-md]="largeBanner" *ngIf="button" (click)="onNavigate(button['route'])"
+      class="primaryButton buttonText">
       {{ button["name"] | titlecase }}
     </button>
   </div>

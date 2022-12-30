@@ -45,7 +45,7 @@ export class MatchConstants {
     fb: 'https://www.facebook.com/',
     tw: 'https://twitter.com/',
     yt: 'https://www.youtube.com/channel/',
-    linkedIn: 'https://www.linkedin.com/',
+    linkedIn: 'https://www.linkedin.com/company/',
   };
 }
 export const PLAYING_POSITIONS = [

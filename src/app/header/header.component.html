@@ -38,8 +38,10 @@
         class="avatarSize subCircle"
         fxLayoutAlign="center center"
       > -->
-      <app-account-avatar *ngIf="isLogged && !isLoading" [routerLink]="['/dashboard', 'account', 'profile']"
-        [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>
+      <div class="account-circle-container">
+        <app-account-avatar *ngIf="isLogged && !isLoading" [routerLink]="['/dashboard', 'account', 'profile']"
+          [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>
+      </div>
       <!-- </div> -->
       <!-- account circle - small -->
 

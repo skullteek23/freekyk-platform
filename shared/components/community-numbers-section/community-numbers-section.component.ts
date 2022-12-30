@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommunityNumbersContent } from '../../interfaces/others.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-community-numbers-section',
@@ -14,7 +15,13 @@ export class CommunityNumbersSectionComponent implements OnInit {
     numbers: {},
   };
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(): void { }
+
+  onNavigate() {
+    this.router.navigate(['/signup']);
+  }
 }

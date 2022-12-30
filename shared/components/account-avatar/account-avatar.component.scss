@@ -1,17 +1,21 @@
 .prof_pic {
-  height: 100%;
-  width: auto;
   border-radius: 50%;
   overflow: hidden;
   max-height: 32px !important;
   max-width: 32px !important;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
 }
+
 .margin {
   margin-bottom: 8px;
 }
+
 .pointer {
   cursor: pointer;
 }
+
 @media only screen and (min-width: 960px) and (max-width: 1279px) {
   .prof_pic {
     height: 64px;
@@ -19,6 +23,7 @@
     border-radius: 50%;
     overflow: hidden;
   }
+
   .margin {
     margin-bottom: 16px;
   }
@@ -31,10 +36,12 @@
     border-radius: 50%;
     overflow: hidden;
   }
+
   .margin {
     margin-bottom: 16px;
   }
 }
+
 @media only screen and (min-width: 1920px) and (max-width: 5000px) {
   .prof_pic {
     height: 56px;
@@ -42,6 +49,7 @@
     border-radius: 50%;
     overflow: hidden;
   }
+
   .margin {
     margin-bottom: 16px;
   }

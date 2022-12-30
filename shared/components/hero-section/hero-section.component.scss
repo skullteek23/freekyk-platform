@@ -1,17 +1,21 @@
 .hero {
   height: 500px;
 }
+
 .hero-big {
   height: 600px;
 }
+
 .hero-text {
   max-width: 500px;
 }
+
 @media only screen and (min-width: 960px) and (max-width: 1279px) {
   .hero-text {
     max-width: 450px;
   }
 }
+
 .float {
   position: absolute;
 }

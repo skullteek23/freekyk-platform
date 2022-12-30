@@ -26,9 +26,9 @@ export class LandingPageComponent implements OnInit {
 
   onResizeSlider(): void {
     if (window.innerWidth > 599) {
-      this.responsiveSize = { width: 350, height: 300, space: 16 };
+      this.responsiveSize = { width: '20%', height: 300, space: 4 };
     } else {
-      this.responsiveSize = { width: 250, height: 200, space: 12 };
+      this.responsiveSize = { width: '40%', height: 150, space: 4 };
     }
   }
 }
