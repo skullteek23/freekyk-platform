@@ -68,6 +68,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   get onMobile(): boolean {
-    return Math.min(window.screen.width, window.screen.height) < 768;
+    return window.screen.width < 768;
   }
 }
