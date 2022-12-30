@@ -48,17 +48,46 @@ export class TeamService implements OnDestroy {
   }
 
   onOpenTeamGalleryDialog(): void {
-    this.dialog.open(TeamgalleryComponent, {
-      panelClass: 'fk-dialogs',
-      disableClose: true,
-    });
+    this.store
+      .select('dash')
+      .pipe(
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
+        take(1)
+      )
+      .subscribe((state) => {
+        if (state.team === null) {
+          this.handlePermissionErrors(NO_TEAM);
+        } else if (!state.isCaptain) {
+          this.handlePermissionErrors(CAPTAIN_ONLY);
+        } else {
+          this.dialog.open(TeamgalleryComponent, {
+            panelClass: 'fk-dialogs',
+            disableClose: true,
+          });
+        }
+      });
+
   }
 
   onOpenTeamPhotoDialog(): void {
-    this.dialog.open(UploadTeamPhotoComponent, {
-      panelClass: 'large-dialogs',
-      disableClose: true,
-    });
+    this.store
+      .select('dash')
+      .pipe(
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
+        take(1)
+      )
+      .subscribe((state) => {
+        if (state.team === null) {
+          this.handlePermissionErrors(NO_TEAM);
+        } else if (!state.isCaptain) {
+          this.handlePermissionErrors(CAPTAIN_ONLY);
+        } else {
+          this.dialog.open(UploadTeamPhotoComponent, {
+            panelClass: 'large-dialogs',
+            disableClose: true,
+          });
+        }
+      });
   }
 
   onOpenCreateTeamDialog(): void {
@@ -91,25 +120,18 @@ export class TeamService implements OnDestroy {
         }
       });
   }
+
   onIncompleteProfile(section: 'player' | 'freestyle'): void {
     this.handlePermissionErrors(INCOMPLETE_PROFILE);
     this.router.navigate(['/dashboard', 'account', 'profile'], {
       fragment: section,
     });
   }
+
   onOpenTeamCommsMobileDialog(): void {
-    this.store
-      .select('dash')
-      .pipe(
-        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
-        take(1)
-      )
-      .subscribe((state) => {
-        this.dialog.open(TeamCommsMobileComponent, {
-          panelClass: 'fk-dialogs',
-        });
-      });
+
   }
+
   onOpenJoinTeamDialog(): void {
     this.store
       .select('dash')

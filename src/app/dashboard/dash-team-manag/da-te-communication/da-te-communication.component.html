@@ -1,12 +1,12 @@
 <div fxLayout="column" fxLayoutGap="20px">
-  <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
+  <div fxLayout fxLayout.lt-md="column" fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Team Communication</span>
     <a [matMenuTriggerFor]="verticalMenu" fxHide.lt-md="true" class="material-icons-round">more_vert</a>
   </div>
-  <div fxLayout="row" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayout.lt-md="column-reverse" fxLayoutGap="20px">
     <div fxFlex.lt-lg="40%" fxFlex.gt-md="30%" fxLayout="column" fxLayoutGap="20px">
       <!-- match details -->
-      <mat-card class="mat-elevation-z8">
+      <mat-card fxHide.lt-md="true" class="mat-elevation-z8">
         <ng-template #noUpmMatch>
           <ul>
             <li class="nofi grey-bg center">
@@ -23,7 +23,6 @@
       </mat-card>
       <!-- match details -->
 
-      <!-- *ngIf="activeMatch | async; else nomatch" -->
       <!-- active squad -->
       <mat-card class="mat-elevation-z8">
         <mat-card-title>
@@ -33,13 +32,12 @@
       </mat-card>
       <!-- active squad -->
     </div>
-    <!-- *ngIf="squadSelected; else noactive" -->
 
     <!-- responses -->
     <div fxFlex.lt-lg="60%" fxFlex.gt-md="70%">
       <mat-tab-group (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="currMatch">
         <!-- first upcoming match   -->
-        <mat-tab [disabled]="noMatch == 0" label="Upcoming Match 1">
+        <mat-tab [disabled]="noMatch == 0" label="Upcoming Match First">
           <ng-template matTabContent>
             <ng-template #nomatch1>
               <ul>
@@ -57,7 +55,7 @@
         <!-- first upcoming match -->
 
         <!-- second upcoming match -->
-        <mat-tab [disabled]="noMatch < 2" label="Upcoming Match 2">
+        <mat-tab [disabled]="noMatch < 2" label="Upcoming Match Second">
           <ng-template matTabContent>
             <ng-template #nomatch2>
               <ul>
@@ -76,7 +74,7 @@
         <!-- second upcoming match -->
 
         <!-- third upcoming match -->
-        <mat-tab [disabled]="noMatch < 3" label="Upcoming Match 3">
+        <mat-tab [disabled]="noMatch < 3" label="Upcoming Match Third">
           <ng-template matTabContent>
             <ng-template #noMatch3>
               <ul>

@@ -2,17 +2,32 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export const RouteLinks = {
   PLAY: [
-    'home',
-    'seasons',
-    'players',
-    'teams',
-    'fixtures',
-    'results',
-    'standings',
-    'grounds',
+    { value: 'home', viewValue: 'home' },
+    { value: 'seasons', viewValue: 'seasons' },
+    { value: 'players', viewValue: 'players' },
+    { value: 'teams', viewValue: 'teams' },
+    { value: 'fixtures', viewValue: 'fixtures' },
+    { value: 'results', viewValue: 'results' },
+    { value: 'standings', viewValue: 'standings' },
+    { value: 'grounds', viewValue: 'grounds' },
   ],
-  FREESTYLE: ['home'],
-  DASHBOARD: ['home', 'team management', 'participate', 'account'],
-  DASHBOARD_ACCOUNT: ['profile', 'notifications', 'addresses', 'tickets'],
-  OTHERS: ['about', 'support'],
+  FREESTYLE: [
+    { viewValue: 'home', value: 'home' }
+  ],
+  DASHBOARD: [
+    { viewValue: 'home', value: 'home' },
+    { viewValue: 'team management', value: 'team-management' },
+    { viewValue: 'participate', value: 'participate' },
+    { viewValue: 'account', value: 'account' },
+  ],
+  DASHBOARD_ACCOUNT: [
+    { viewValue: 'profile', value: 'profile' },
+    { viewValue: 'notifications', value: 'notifications' },
+    { viewValue: 'addresses', value: 'addresses' },
+    { viewValue: 'tickets', value: 'tickets' },
+  ],
+  OTHERS: [
+    { viewValue: 'about', value: 'about' },
+    { viewValue: 'support', value: 'support' },
+  ],
 };

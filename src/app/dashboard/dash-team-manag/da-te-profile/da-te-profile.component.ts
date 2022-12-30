@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -33,7 +32,6 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
     private teamService: TeamService,
     private datePipe: DatePipe,
     private store: Store<AppState>,
-    private router: Router,
     private socialShareService: SocialShareService
   ) { }
 

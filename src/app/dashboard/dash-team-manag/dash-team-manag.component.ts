@@ -66,10 +66,6 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
     this.teamService.onOpenCreateTeamDialog();
   }
 
-  onTCommsMobile(): void {
-    this.teamService.onOpenTeamCommsMobileDialog();
-  }
-
   onOpenTeamSettings(): void {
     this.teamService.onOpenTeamSettingsDialog();
   }

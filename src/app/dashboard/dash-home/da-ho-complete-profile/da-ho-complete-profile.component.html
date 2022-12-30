@@ -12,7 +12,7 @@
   </mat-card>
 </ng-template>
 
-<mat-card *ngIf="!isLoading; else compProfileLoading" fxHide.lt-md="true" class="mat-elevation-z8 maxh-cards-r cards-r">
+<mat-card *ngIf="!isLoading; else compProfileLoading" class="mat-elevation-z8 maxh-cards-r cards-r">
   <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Complete your profile</span>
     <a [matMenuTriggerFor]="verticalMenu" fxHide.lt-md="true" class="material-icons-round">more_vert</a>

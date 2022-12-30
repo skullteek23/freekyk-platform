@@ -38,41 +38,34 @@
 
     <!-- data -->
     <div fxFlex="<grow>" fxFlexOrder="1" class="prof_data" fxLayout="column" fxLayoutGap="20px"
-      fxLayoutAlign.gt-sm="center">
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
+      fxLayoutAlign.gt-sm="center" fxLayoutGap.lt-md="8px">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center start" fxLayoutGap="8px">
         <a [matTooltip]="tName" ngClass.gt-sm="mat-subheading-2" ngClass.lt-md="mat-subheading-1"
           class="ellipsis team-name" [routerLink]="['/t', tName]">
           {{ tName != null ? tName : "Team Name" }}
         </a>
-        <a (click)="onShare()" fxHide.lt-md="true" matTooltip="Share Team Profile" class="material-icons-round">
+        <a (click)="onShare()" matTooltip="Share Team Profile" class="material-icons-round share-icon">
           share
         </a>
       </div>
 
-      <div fxLayoutAlign="center center">
-        <button fxHide.gt-sm="true" (click)="onOpenTeamSettings()" class="buttonText secondaryButton">
-          Edit Team Info
-        </button>
-      </div>
-
       <!-- main data -->
-      <div fxLayout="column" fxLayoutGap="20px" fxLayoutGap.gt-sm="8px">
+      <div fxLayout="column" fxLayoutGap="8px">
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
-          <span class="dash-h5 align"> About Team </span>
-          <a (click)="onOpenTeamSettings()" fxHide.lt-md="true" matTooltip="Edit Team Profile"
-            class="material-icons-round">
+          <span class="dash-h5 align"> My Team Info </span>
+          <a (click)="onOpenTeamSettings()" matTooltip="Edit Team Profile" class="material-icons-round">
             edit
           </a>
         </div>
 
         <div fxLayoutAlign="space-between center" *ngFor="let prop of mainProperties | keyvalue">
           <span class="mat-body-2">{{ prop.key | titlecase }}</span>
-          <a [matTooltip]="(prop.value || prop.value != undefined) ? prop.value : defaultString"
-            (click)="onOpenTeamSettings()" class="mat-body-1 right" [ngClass]="{ addInfo: !prop.value }">
+          <span [matTooltip]="(prop.value || prop.value != undefined) ? prop.value : defaultString"
+            class="mat-body-1 right" [ngClass]="{ addInfo: !prop.value }">
             {{
             prop.value || prop.value != undefined ? (prop.value | textShorten:30) : defaultString
             }}
-          </a>
+          </span>
         </div>
         <app-social-media-links [links]="smLinks" mode="team" (addLink)="onOpenTeamSettings()"></app-social-media-links>
       </div>

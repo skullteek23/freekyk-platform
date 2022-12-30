@@ -4,11 +4,14 @@
   </li>
   <li class="log mat-elevation-z4" *ngFor="let log of teamActivityListLogs$ | async" fxLayout="column" fxLayoutGap="0px"
     fxLayoutAlign="center">
-    <div fxLayoutAlign="space-between center" fxLayout>
-      <span class="mat-body-1">
+    <div fxLayoutAlign="space-between center" fxLayout fxLayout.lt-md="column" fxLayoutAlign.lt-md="stretch start">
+      <span [matTooltip]="log.content" class="mat-caption content-activity" fxHide.gt-sm="true">
+        {{ log.content }}
+      </span>
+      <span [matTooltip]="log.content" class="mat-body-1 ellipsis content-activity" fxHide.lt-md="true">
         {{ log.content | textShorten: 60 }}
       </span>
-      <span class="mat-body-2 time">
+      <span class="mat-caption time">
         {{ log.time | date: CUSTOM_DATE_FORMAT }}
       </span>
     </div>

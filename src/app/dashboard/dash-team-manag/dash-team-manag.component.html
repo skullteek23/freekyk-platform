@@ -7,16 +7,6 @@
 
   <!-- mobile buttons -->
   <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
-    <!-- complete your profile button -->
-    <button [routerLink]="['/dashboard', 'account']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">account_box</span>
-        <span class="mat-body-1"> Complete your profile </span>
-      </div>
-
-      <span class="mat-caption"> 25% Done </span>
-    </button>
-    <!-- complete your profile button -->
 
     <!-- join team button -->
     <button *ngIf="noTeam" (click)="joinTeam()" class="wide-button" fxLayout fxLayoutAlign="space-between center">
@@ -40,30 +30,7 @@
     </button>
     <!-- create team button -->
 
-    <!-- team comms button -->
-    <button *ngIf="!noTeam" (click)="onTCommsMobile()" class="wide-button" fxLayout fxHide.gt-sm="true"
-      fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">chat</span>
-        <span class="mat-body-1 left"> Open Team Communication </span>
-      </div>
-
-      <span class="material-icons-round"> keyboard_arrow_right </span>
-    </button>
-    <!-- team comms button -->
-
-    <!-- raise a ticket button -->
-    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">live_help</span>
-        <span class="mat-body-1"> Need help? Raise a ticket </span>
-      </div>
-
-      <span class="material-icons-round"> keyboard_arrow_right </span>
-    </button>
-    <!-- raise a ticket button -->
   </div>
-  <!-- mobile buttons -->
 
   <!-- team profile card -->
   <app-da-te-profile></app-da-te-profile>
@@ -92,6 +59,19 @@
   </div>
 
   <!-- lg team communication -->
-  <app-da-te-communication *ngIf="!showMobile"></app-da-te-communication>
+  <app-da-te-communication></app-da-te-communication>
   <!-- lg team communication -->
+
+  <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
+    <!-- raise a ticket button -->
+    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">live_help</span>
+        <span class="mat-body-1"> Need help? Raise a ticket </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- raise a ticket button -->
+  </div>
 </div>

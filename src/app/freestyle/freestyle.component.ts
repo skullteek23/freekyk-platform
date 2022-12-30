@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { ListOption } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-freestyle',
@@ -13,7 +14,7 @@ export class FreestyleComponent implements OnInit, OnDestroy {
 
   readonly fsBannerContent = FREESTYLE_PAGE.banner;
 
-  fsLinks: string[] = RouteLinks.FREESTYLE;
+  fsLinks: ListOption[] = RouteLinks.FREESTYLE;
   routeSubscription: Subscription;
   activeLink = 'home';
 

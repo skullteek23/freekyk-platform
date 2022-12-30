@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawerMode } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { DashState } from './store/dash.reducer';
@@ -27,7 +26,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sidenavOpenState: boolean;
 
   constructor(
-    private mediaObs: MediaObserver,
     private dialog: MatDialog,
     private router: Router,
     private avatarServ: AccountAvatarService,

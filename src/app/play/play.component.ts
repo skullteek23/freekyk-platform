@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { PLAY_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { ListOption } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-play',
@@ -14,7 +15,7 @@ export class PlayComponent implements OnInit, OnDestroy {
   readonly SCROLL_HEIGHT = 420;
   readonly mainContent = PLAY_PAGE.banner;
 
-  playLinks: string[] = RouteLinks.PLAY;
+  playLinks: ListOption[] = RouteLinks.PLAY;
   subscriptions = new Subscription();
   activeLink = '';
 

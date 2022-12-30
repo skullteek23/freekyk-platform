@@ -11,11 +11,12 @@
   margin-top: 20px;
 }
 
-.cont > img {
+.cont>img {
   height: 300px;
   width: 100%;
   object-fit: contain;
 }
+
 .cont {
   max-width: 300px;
   max-height: 300px;
@@ -25,11 +26,13 @@
   height: 300px;
   overflow: hidden;
 }
+
 .add-photo {
   background-color: var(--grey4);
   height: 100%;
   width: 100%;
 }
+
 @media only screen and (max-width: 959px) {
   .gallery {
     border-radius: var(--dashCardBorder);
@@ -38,7 +41,7 @@
     height: 310px;
     max-width: calc(100vw - 40px);
     max-height: 310px;
-    min-width: 350px;
+    min-width: 100%;
     padding: 0;
     margin: 0;
   }

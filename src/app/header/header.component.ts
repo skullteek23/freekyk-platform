@@ -8,6 +8,7 @@ import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
+import { ListOption } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-header',
@@ -26,11 +27,11 @@ export class HeaderComponent implements OnInit {
   menuState: boolean;
   sidenavOpen: boolean;
   profilePicture$: Observable<string | null>;
-  playSublinks: string[] = [];
-  fsSublinks: string[] = [];
-  dashSublinks: string[] = [];
+  playSublinks: ListOption[] = [];
+  fsSublinks: ListOption[] = [];
+  dashSublinks: ListOption[] = [];
   morelinks: { name: string; route: string }[] = [];
-  selectedSubLinks: string[] = [];
+  selectedSubLinks: ListOption[] = [];
   selected: 'dashboard' | 'play' | 'freestyle' | null = null;
   notifCount$: Observable<number | string>;
 
@@ -63,9 +64,9 @@ export class HeaderComponent implements OnInit {
     this.playSublinks = RouteLinks.PLAY;
     this.fsSublinks = RouteLinks.FREESTYLE;
     this.morelinks = [
-      { name: RouteLinks.OTHERS[0], route: `/${RouteLinks.OTHERS[0]}` },
+      { name: RouteLinks.OTHERS[0].viewValue, route: `/${RouteLinks.OTHERS[0].value}` },
 
-      { name: RouteLinks.OTHERS[1], route: `/${RouteLinks.OTHERS[1]}` }
+      { name: RouteLinks.OTHERS[1].viewValue, route: `/${RouteLinks.OTHERS[1].value}` }
     ];
   }
 

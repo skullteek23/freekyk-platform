@@ -54,10 +54,9 @@
 
         <div fxLayoutAlign="space-between center" *ngFor="let prop of mainProperties | keyvalue">
           <span class="mat-body-2">{{ prop.key | titlecase }}</span>
-          <a [routerLink]="['/dashboard', 'account', 'profile']" class="mat-body-1 right"
-            [ngClass]="{ addInfo: !prop.value }">
+          <span class="mat-body-1 right" [ngClass]="{ addInfo: !prop.value }">
             {{ prop.value ? prop.value : defaultString }}
-          </a>
+          </span>
         </div>
         <app-social-media-links [mode]="profile" [links]="smLinks"
           (addLink)="onOpenAccountSettings()"></app-social-media-links>

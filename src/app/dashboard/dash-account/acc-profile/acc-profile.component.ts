@@ -145,7 +145,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             const newControl = new FormControl(team);
             this.teamsArray.push(newControl);
           });
-          this.teamsArray.push(this.emptyControlArray);
+          // this.teamsArray.push(this.emptyControlArray);
         }
         if (data.playerMoreInfo.prof_tours.length !== 0 && this.toursArray.length === 0) {
           this.isDisableArrayButton = false;
@@ -153,7 +153,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
             const newControl = new FormControl(tournament);
             this.toursArray.push(newControl);
           });
-          this.toursArray.push(this.emptyControlArray);
+          // this.toursArray.push(this.emptyControlArray);
         }
         this.playerArrayForm = new FormGroup({ prof_teams: this.teamsArray, prof_tours: this.toursArray, });
         this.personalInfoForm.patchValue({
@@ -411,7 +411,6 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         .set({ ...newArrayDetails, }, { merge: true })
         .then(() => {
           this.snackBarService.displayCustomMsg('Updated Successfully!');
-          location.reload();
         })
         .catch(error => this.snackBarService.displayError());
     }

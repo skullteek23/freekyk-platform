@@ -151,9 +151,9 @@
     <mat-drawer [(opened)]="sidenavOpen" position="end" mode="side" class="primary-bg">
       <mat-nav-list>
         <a class="subNav" mat-list-item (click)="onToggleMenu(); assignSelected(null)"
-          [routerLink]="[selected, sublink]" *ngFor="let sublink of selectedSubLinks">
+          [routerLink]="[selected, sublink.value]" *ngFor="let sublink of selectedSubLinks">
           <span class="mat-body-1">
-            {{ sublink | titlecase }}
+            {{ sublink.viewValue | titlecase }}
           </span>
         </a>
       </mat-nav-list>
@@ -219,14 +219,14 @@
 <!-- mobile header content -->
 
 <mat-menu #playMenu>
-  <a mat-menu-item [routerLink]="['/play', sublink]" *ngFor="let sublink of playSublinks">
-    <span class="mat-body-1">{{ sublink | titlecase }}</span>
+  <a mat-menu-item [routerLink]="['/play', sublink.value]" *ngFor="let sublink of playSublinks">
+    <span class="mat-body-1">{{ sublink.viewValue | titlecase }}</span>
   </a>
 </mat-menu>
 
 <mat-menu #fsMenu>
-  <a mat-menu-item [routerLink]="['/freestyle', sublink]" *ngFor="let sublink of fsSublinks">
-    <span class="mat-body-1">{{ sublink | titlecase }}</span>
+  <a mat-menu-item [routerLink]="['/freestyle', sublink.value]" *ngFor="let sublink of fsSublinks">
+    <span class="mat-body-1">{{ sublink.viewValue | titlecase }}</span>
   </a>
 </mat-menu>
 

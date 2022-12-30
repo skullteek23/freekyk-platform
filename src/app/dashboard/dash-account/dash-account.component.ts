@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { PlayerService } from 'src/app/services/player.service';
 import { TeamService } from 'src/app/services/team.service';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { ListOption } from '@shared/interfaces/others.model';
 @Component({
   selector: 'app-dash-account',
   templateUrl: './dash-account.component.html',
@@ -11,7 +12,7 @@ import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 })
 export class DashAccountComponent implements OnInit, OnDestroy {
 
-  accountLinks: string[] = RouteLinks.DASHBOARD_ACCOUNT;
+  accountLinks: ListOption[] = RouteLinks.DASHBOARD_ACCOUNT;
   routeSubscription: Subscription;
   activeLink = '';
 
