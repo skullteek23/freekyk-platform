@@ -9,9 +9,9 @@ export const environment = {
     storageBucket: 'freekyk-development.appspot.com',
     messagingSenderId: '954435558889',
     appId: '1:954435558889:web:a8b04b7d21456b5a07bf78',
-    url: 'https://freekyk-development.web.app',
-    adminUrl: 'https://admin-freekyk-dev.web.app',
-    adminRegister: 'https://admin-freekyk-dev.web.app/register',
+    url: 'https://dev.freekyk.com',
+    adminUrl: 'https://dev.admin.freekyk.com',
+    adminRegister: 'https://dev.admin.freekyk.com/register',
     logoURL: 'http://commondatastorage.googleapis.com/codeskulptor-assets/lathrop/asteroid_brown.png'
   },
   // Razorpay
