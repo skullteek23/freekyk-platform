@@ -18,7 +18,9 @@ const routes: Routes = [
     component: DashboardComponent,
     ...canActivate(redirectUnauthorizedToLogin),
     children: [
-      { path: 'home', component: DashHomeComponent },
+      {
+        path: 'home', component: DashHomeComponent,
+      },
       { path: 'team-management', component: DashTeamManagComponent },
       { path: 'participate', component: DashParticipateComponent },
       {
@@ -52,4 +54,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRoutingModule {}
+export class DashboardRoutingModule { }

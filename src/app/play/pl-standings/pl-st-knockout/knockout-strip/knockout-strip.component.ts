@@ -31,7 +31,7 @@ export class KnockoutStripComponent implements OnInit {
   openFixture() {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
-      data: this.match,
+      data: this.match.id,
     });
   }
 }

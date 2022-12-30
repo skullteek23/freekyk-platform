@@ -141,7 +141,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
   }
 
   getHeading(): string {
-    return this.profile === 'player' ? 'basic info' : 'freestyler info';
+    return this.profile === 'player' ? 'My Profile Info' : 'freestyler info';
   }
 
   onOpenAccountSettings(): void {

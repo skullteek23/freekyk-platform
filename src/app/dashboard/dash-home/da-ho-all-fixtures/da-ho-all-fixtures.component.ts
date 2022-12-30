@@ -16,6 +16,10 @@ import {
 import { QueryService } from 'src/app/services/query.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants } from '@shared/constants/constants';
+import { MatchCardComponent } from '@shared/dialogs/match-card/match-card.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-da-ho-all-fixtures',
   templateUrl: './da-ho-all-fixtures.component.html',
@@ -36,13 +40,24 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
   constructor(
     private ngFire: AngularFirestore,
     private store: Store<AppState>,
-    private queryService: QueryService
+    private queryService: QueryService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
+    this.subscriptions.add(
+      this.route.queryParams.subscribe(qParams => {
+        if (qParams && qParams.hasOwnProperty('open')) {
+          this.onOpenFixture(qParams['open']);
+        }
+      })
+    )
     this.filterData = {
       defaultFilterPath: 'allMatches',
       filtersObj: MatchFilters,
@@ -182,5 +197,22 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
       );
+  }
+
+  onSelectFixture(fixture: MatchFixture) {
+    if (fixture?.id) {
+      this.router.navigate([this.router.url], { queryParams: { open: fixture.id } });
+    }
+  }
+
+  onOpenFixture(fixtureID: string): void {
+    const dialogRef = this.dialog.open(MatchCardComponent, {
+      panelClass: 'fk-dialogs',
+      data: fixtureID,
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.router.navigate(['/dashboard/home'], { skipLocationChange: true });
+      // this.location.go('/dashboard/home')
+    });
   }
 }

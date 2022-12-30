@@ -43,7 +43,7 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
   onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
-      data: this.upFixture,
+      data: this.upFixture.id,
     });
   }
 }

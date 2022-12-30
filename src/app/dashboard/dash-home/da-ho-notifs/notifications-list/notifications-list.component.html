@@ -9,14 +9,19 @@
           By {{ notification.senderName }}
         </span>
       </div>
-      <div fxLayout="column" fxLayoutAlign="center end">
+      <div fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column" fxLayoutAlign="center end" fxLayoutGap.lt-md="8px"
+        fxLayout.gt-sm="0px">
         <a *ngIf="!notification.read" (click)="changeStatus(notification, true); $event.stopPropagation()"
           class="action">
-          Mark as Read</a>
+          <span fxHide.gt-sm="true" class="material-icons-round">mark_email_read</span>
+          <span fxHide.lt-md="true">Mark as Read</span>
+        </a>
         <a *ngIf="notification.read" (click)="changeStatus(notification, false); $event.stopPropagation()"
           class="action">
-          Mark as Unread</a>
-        <span class="mat-body-2 notif_time">
+          <span fxHide.gt-sm="true" class="material-icons-round">mark_as_unread</span>
+          <span fxHide.lt-md="true">Mark as Unread</span>
+        </a>
+        <span class="mat-body-2 notif_time" ngClass.lt-md="mat-caption">
           {{ notification.date | date: CUSTOM_FORMAT }}
         </span>
       </div>

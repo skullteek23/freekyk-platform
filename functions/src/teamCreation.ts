@@ -36,7 +36,7 @@ export async function teamCreation(data: {
 
     teamInfo = {
       tname: teamData.name,
-      isVerified: false,
+      isVerified: true,
       imgpath: teamData.imgpath,
       imgpath_logo: teamData.logoPath,
       captainId: CAPTAIN_ID,

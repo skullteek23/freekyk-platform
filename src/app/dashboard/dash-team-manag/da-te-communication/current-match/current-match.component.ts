@@ -14,7 +14,7 @@ export class CurrentMatchComponent {
   onOpenFixture(): void {
     const dialogRef = this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
-      data: this.data,
+      data: this.data.id,
     });
   }
 }

@@ -1,39 +1,24 @@
-<!-- list laoding -->
+<!-- list loading -->
 <div *ngIf="isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
   <span class="_bar shine" *ngFor="let fixt of [1, 2, 3, 4, 5, 6]"></span>
 </div>
-<!-- list laoding -->
+<!-- list loading -->
 
 <!-- matches section -->
 <div class="list-group" fxLayout="column">
-  <div
-    fxLayout
-    fxLayoutAlign="space-between center"
-    fxLayoutAlign.lt-md="center center"
-  >
+  <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Freekyk Matches</span>
-    <a
-      [routerLink]="['/play', 'fixtures']"
-      fxHide.lt-md="true"
-      class="mat-caption sec-menu"
-      >view more</a
-    >
+    <a [routerLink]="['/play', 'fixtures']" fxHide.lt-md="true" class="mat-caption sec-menu">view more</a>
   </div>
   <mat-tab-group *ngIf="!isLoading" (selectedTabChange)="onChangeIndex($event)">
-    <mat-tab
-      [disabled]="(myFixtures$ | async)?.length === 0"
-      label="My Fixtures"
-    >
+    <mat-tab [disabled]="(myFixtures$ | async)?.length === 0" label="My Fixtures">
       <ng-template matTabContent>
         <!-- mobile filter -->
         <!-- mobile filter -->
 
         <!-- desktop filters -->
-        <app-filters-lg
-          fxHide.lt-md="true"
-          [data]="filterData"
-          (changeFilter)="onQueryMyFixtures($event)"
-        ></app-filters-lg>
+        <app-filters-lg fxHide.lt-md="true" [data]="filterData"
+          (changeFilter)="onQueryMyFixtures($event)"></app-filters-lg>
         <!-- desktop filters -->
 
         <!-- list -->
@@ -46,11 +31,8 @@
             </span>
           </li>
           <li *ngFor="let fixture of myFixtures$ | async">
-            <app-fixture-dashboard
-              [matchData]="fixture"
-              [resultMode]="false"
-              [premium]="fixture.premium"
-            ></app-fixture-dashboard>
+            <app-fixture-dashboard [matchData]="fixture" [resultMode]="false"
+              [premium]="fixture.premium"></app-fixture-dashboard>
           </li>
         </ul>
         <!-- list -->
@@ -62,11 +44,8 @@
         <!-- mobile filter -->
 
         <!-- desktop filters -->
-        <app-filters-lg
-          fxHide.lt-md="true"
-          [data]="filterData"
-          (changeFilter)="onQueryAllFixtures($event)"
-        ></app-filters-lg>
+        <app-filters-lg fxHide.lt-md="true" [data]="filterData"
+          (changeFilter)="onQueryAllFixtures($event)"></app-filters-lg>
         <!-- desktop filters -->
 
         <!-- list -->
@@ -76,11 +55,8 @@
             <span class="mat-body-1"> Currently, there are no fixtures! </span>
           </li>
           <li *ngFor="let fixture of allFixtures$ | async">
-            <app-fixture-dashboard
-              [matchData]="fixture"
-              [resultMode]="false"
-              [premium]="fixture.premium"
-            ></app-fixture-dashboard>
+            <app-fixture-dashboard (selectFixture)="onSelectFixture($event)" [matchData]="fixture" [resultMode]="false"
+              [premium]="fixture.premium"></app-fixture-dashboard>
           </li>
         </ul>
         <!-- list -->
@@ -92,11 +68,8 @@
         <!-- mobile filter -->
 
         <!-- desktop filters -->
-        <app-filters-lg
-          fxHide.lt-md="true"
-          [data]="filterData"
-          (changeFilter)="onQueryResults($event)"
-        ></app-filters-lg>
+        <app-filters-lg fxHide.lt-md="true" [data]="filterData"
+          (changeFilter)="onQueryResults($event)"></app-filters-lg>
         <!-- desktop filters -->
 
         <!-- list -->
@@ -106,11 +79,8 @@
             <span class="mat-body-1"> Currently, there are no fixtures! </span>
           </li>
           <li *ngFor="let result of allResults$ | async">
-            <app-fixture-dashboard
-              [matchData]="result"
-              [resultMode]="true"
-              [premium]="result.premium"
-            ></app-fixture-dashboard>
+            <app-fixture-dashboard [matchData]="result" [resultMode]="true"
+              [premium]="result.premium"></app-fixture-dashboard>
           </li>
         </ul>
         <!-- list -->

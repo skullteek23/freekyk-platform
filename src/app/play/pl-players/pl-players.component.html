@@ -18,7 +18,7 @@
   <div class="container min-height section-space-bottom">
     <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
-      <mat-list-item (click)="openPlayerCard(player)"
+      <mat-list-item (click)="selectRow(player)"
         *ngFor="let player of players$ | async | filterList: 'name,locCity,pl_pos':filterTerm;last as last">
         <img matListAvatar [src]="player.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="player.name"
           loading="lazy" appFallbackImg />

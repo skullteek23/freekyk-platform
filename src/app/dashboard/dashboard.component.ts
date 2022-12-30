@@ -18,7 +18,7 @@ import { DashState } from './store/dash.reducer';
 export class DashboardComponent implements OnInit, OnDestroy {
 
   watcher: Subscription;
-  onMobile = false;
+  // onMobile = false;
   screen = '';
   dataImg$: Observable<string>;
   dataPos$: Observable<string>;
@@ -49,28 +49,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         this.playerName = data;
       }));
-    this.subscriptions.add(
-      this.mediaObs
-        .asObservable()
-        .pipe(
-          filter((changes: MediaChange[]) => changes.length > 0),
-          map((changes: MediaChange[]) => changes[0])
-        )
-        .subscribe((change: MediaChange) => {
-          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-            this.onMobile = true;
-          } else if (change.mqAlias === 'md') {
-            this.onMobile = false;
-            this.screen = 'md';
-          } else if (change.mqAlias === 'lg') {
-            this.onMobile = false;
-            this.screen = 'lg';
-          } else {
-            this.onMobile = false;
-            this.screen = 'xl';
-          }
-        })
-    );
   }
 
   ngOnDestroy(): void {
@@ -87,5 +65,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.dialog.open(LogoutComponent);
+  }
+
+  get onMobile(): boolean {
+    return Math.min(window.screen.width, window.screen.height) < 768;
   }
 }

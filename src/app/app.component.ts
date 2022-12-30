@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
+        // if (event instanceof NavigationEnd && !event.url.includes('/dashboard/home')) {
         this.dashOpen = event.url.includes('dashboard');
         window.scrollTo(0, 0);
       }

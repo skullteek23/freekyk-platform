@@ -28,31 +28,26 @@
 
     <!-- data -->
     <div fxFlex="<grow>" fxFlexOrder="1" class="prof_data" fxLayout="column" fxLayoutGap="20px"
-      fxLayoutAlign.gt-sm="center">
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
+      fxLayoutAlign.gt-sm="center" fxLayoutGap.lt-md="8px">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center start" fxLayoutGap="8px">
         <a matTooltip="{{ playerName | nameCombo: nickname | titlecase }}" ngClass.gt-sm="mat-subheading-2"
-          ngClass.lt-md="mat-subheading-1" class="ellipsis player-name" [routerLink]="['/play/players', playerID]">
+          ngClass.lt-md="mat-subheading-1" class="ellipsis player-name no-bottom-margin"
+          [routerLink]="['/play/players', playerID]">
           {{ playerName | nameCombo: nickname | titlecase }}
         </a>
-        <a matTooltip="Share Profile" (click)="onShareProfile()" class="material-icons-round">
+        <a matTooltip="Share Profile" (click)="onShareProfile()" class="share-icon material-icons-round">
           share
         </a>
       </div>
-      <div fxLayoutAlign="center center">
-        <button fxHide.gt-sm="true" [routerLink]="['/dashboard', 'account', 'profile']"
-          class="buttonText secondaryButton">
-          Edit Profile
-        </button>
-      </div>
 
       <!-- main data -->
-      <div fxLayout="column" fxLayoutGap="20px" fxLayoutGap.gt-sm="8px">
+      <div fxLayout="column" fxLayoutGap="8px">
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap="8px">
           <span class="dash-h5 align">
             {{ getHeading() | titlecase }}
           </span>
-          <a [routerLink]="['/dashboard', 'account', 'profile']" fxHide.lt-md="true" matTooltip="Edit Profile"
-            class="material-icons-round">
+          <a [routerLink]="['/dashboard', 'account', 'profile']" matTooltip="Edit Profile"
+            class="share-icon material-icons-round">
             edit
           </a>
         </div>

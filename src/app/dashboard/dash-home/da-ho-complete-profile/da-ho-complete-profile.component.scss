@@ -1,13 +1,17 @@
 .mat-card {
   border-radius: var(--dashCardBorder);
   overflow: hidden;
+  margin-top: 20px;
 }
+
 .filled {
   color: var(--primaryColor);
 }
+
 .seperate {
   margin-top: 16px;
 }
+
 .bar {
   height: calc(56px / 2);
   border-radius: var(--borderRadiusCard);
@@ -15,15 +19,18 @@
   border: 2px solid var(--primaryColor);
   overflow: hidden;
 }
+
 .progress {
   height: 100%;
   background-color: var(--primaryColor);
   transition: width 0.8s ease-in-out;
 }
+
 .maxh-cards-r {
   height: 350px;
   max-height: 350px;
 }
+
 ._inside {
   height: 100%;
   width: 100%;
@@ -39,10 +46,12 @@
   height: 32px;
   width: 100%;
 }
+
 ._step {
   height: 24px;
   width: 100%;
 }
+
 ._circle-small {
   height: 24px;
   min-width: 24px;
@@ -58,6 +67,7 @@
     height: 300px;
   }
 }
+
 @media only screen and (min-width: 1280px) {
   .cards-r {
     max-width: 360px;

@@ -1,9 +1,9 @@
 <div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout="column" fxLayoutAlign.gt-md="center">
-  <!-- button laoding -->
+  <!-- button loading -->
   <div *ngIf="showMobile && isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
     <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
   </div>
-  <!-- button laoding -->
+  <!-- button loading -->
 
   <!-- mobile buttons -->
   <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
@@ -18,41 +18,7 @@
       <span class="mat-caption"> 25% Done </span>
     </button>
     <!-- complete your profile button -->
-
-    <!-- visit store button -->
-    <button [routerLink]="['/equipment']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">store</span>
-        <span class="mat-body-1"> Visit equipment store </span>
-      </div>
-
-      <span class="material-icons-round"> keyboard_arrow_right </span>
-    </button>
-    <!-- visit store button -->
-
-    <!-- find academies button -->
-    <button [routerLink]="['/academies']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">school</span>
-        <span class="mat-body-1 left"> Find top academies near you </span>
-      </div>
-
-      <span class="material-icons-round"> keyboard_arrow_right </span>
-    </button>
-    <!-- find academies button -->
-
-    <!-- raise a ticket button -->
-    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
-      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">live_help</span>
-        <span class="mat-body-1"> Need help? Raise a ticket </span>
-      </div>
-
-      <span class="material-icons-round"> keyboard_arrow_right </span>
-    </button>
-    <!-- raise a ticket button -->
   </div>
-  <!-- mobile buttons -->
 
   <div fxFlex.gt-sm="<grow>" fxLayoutGap="20px" fxLayout="column">
     <app-da-ho-profile></app-da-ho-profile>
@@ -122,4 +88,18 @@
     <!-- your team card -->
     <app-da-ho-notifs [fxFlexOrder]="order4"></app-da-ho-notifs>
   </div>
+
+  <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
+    <!-- raise a ticket button -->
+    <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
+      <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
+        <span class="material-icons-round">live_help</span>
+        <span class="mat-body-1"> Need help? Raise a ticket </span>
+      </div>
+
+      <span class="material-icons-round"> keyboard_arrow_right </span>
+    </button>
+    <!-- raise a ticket button -->
+  </div>
+  <!-- mobile buttons -->
 </div>

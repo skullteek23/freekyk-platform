@@ -19,28 +19,42 @@ export class MatchCardComponent implements OnInit {
   overViewData: MatchFixtureOverview;
   statsData: MatchDayReport;
   selectedIndex = 0;
+  data: MatchFixture;
 
   constructor(
     public dialogRef: MatDialogRef<MatchCardComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: MatchFixture,
+    public matchID: string,
     private ngFirestore: AngularFirestore
   ) { }
 
   ngOnInit(): void {
-    if (this.data) {
-      this.getOverviewData();
-      this.getMatchLineup();
-      this.setMatchHeaderData();
-      if (this.data.concluded) {
-        this.selectedIndex = 2;
-        this.getMatchReport();
-      }
+    if (this.matchID) {
+      this.getFixtureData();
     }
   }
 
   onCloseDialog(): void {
     this.dialogRef.close();
+  }
+
+  getFixtureData() {
+    this.ngFirestore
+      .collection('allMatches').doc(this.matchID)
+      .get()
+      .pipe(map((resp) => (resp.data() as MatchFixture)))
+      .subscribe(response => {
+        this.data = response;
+        this.homeTeam = this.data.home.name;
+        this.awayTeam = this.data.away.name;
+        this.getOverviewData();
+        this.getMatchLineup();
+        this.setMatchHeaderData();
+        if (this.data.concluded) {
+          this.selectedIndex = 2;
+          this.getMatchReport();
+        }
+      });
   }
 
   getOverviewData(): void {

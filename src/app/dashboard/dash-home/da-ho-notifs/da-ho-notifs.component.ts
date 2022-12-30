@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 @Component({
   selector: 'app-da-ho-notifs',
   templateUrl: './da-ho-notifs.component.html',
   styleUrls: ['./da-ho-notifs.component.scss'],
 })
-export class DaHoNotifsComponent implements OnInit {
+export class DaHoNotifsComponent implements OnInit, OnDestroy {
 
   isLoading = true;
-  notifications$: Observable<NotificationBasic[]>;
-  noNotification$: Observable<boolean>;
+  notifications: NotificationBasic[] = [];
+  noNotification: boolean = false;
+  subscriptions = new Subscription();
 
   constructor(
     private notificationService: NotificationsService
@@ -21,16 +24,18 @@ export class DaHoNotifsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.notifications$ = this.notificationService.notifsChanged;
-    this.noNotification$ = this.notifications$.pipe(
-      map((resp) => resp?.length === 0)
-    );
+    this.subscriptions.add(this.notificationService.notifsChanged.subscribe(notifications => {
+      if (notifications) {
+        notifications.sort(ArraySorting.sortObjectByKey('date', 'desc'));
+        this.notifications = notifications.filter(el => !el.read).slice(0, 5);
+      }
+    }));
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);
   }
 
-  getNotifications(): void {
-    this.notificationService.getNotifications();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

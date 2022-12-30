@@ -149,6 +149,14 @@
     max-width: 360px;
     max-height: 300px;
   }
+
+  .share-icon {
+    margin-top: 4px;
+  }
+
+  .no-bottom-margin {
+    margin-bottom: 0 !important;
+  }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 959px) {

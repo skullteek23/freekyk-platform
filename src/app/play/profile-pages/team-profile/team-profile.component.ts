@@ -171,7 +171,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     }
     this.subscriptions.add(this.store
       .select('dash')
-      .pipe(take(1), map((resp) => resp))
+      .pipe(map((resp) => resp))
       .subscribe(async (team) => {
         if (team && team.hasTeam == null) {
           this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');

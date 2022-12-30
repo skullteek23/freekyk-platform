@@ -25,7 +25,7 @@ export class FixtureBasicComponent implements OnInit {
   onOpenFixture() {
     this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
-      data: this.fixture,
+      data: this.fixture.id,
     });
   }
 }
