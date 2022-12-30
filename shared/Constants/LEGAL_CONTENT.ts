@@ -16,7 +16,7 @@ export const TERMS_AND_CONDITIONS = {
     the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring
     to same.</p>
 
-  <h3>Cookies</strong>
+  <h3>Cookies</h3>
 
   <p>We employ the use of cookies. By accessing Freekyk India, you agreed to use cookies in agreement with the Freekyk
     India's Privacy Policy. </p>
@@ -25,7 +25,7 @@ export const TERMS_AND_CONDITIONS = {
     website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our
     affiliate/advertising partners may also use cookies.</p>
 
-  <h3>License</strong>
+  <h3>License</h3>
 
   <p>Unless otherwise stated, Freekyk India and/or its licensors own the intellectual property rights for all material
     on Freekyk India. All intellectual property rights are reserved. You may access this from Freekyk India for your own
@@ -67,7 +67,7 @@ export const TERMS_AND_CONDITIONS = {
   <p>You hereby grant Freekyk India a non-exclusive license to use, reproduce, edit and authorize others to use,
     reproduce and edit any of your Comments in any and all forms, formats or media.</p>
 
-  <h3>Hyperlinking to our Content</strong>
+  <h3>Hyperlinking to our Content</h3>
 
   <p>The following organizations may link to our Website without prior written approval:</p>
 
@@ -123,30 +123,30 @@ export const TERMS_AND_CONDITIONS = {
   <p>No use of Freekyk India's logo or other artwork will be allowed for linking absent a trademark license agreement.
   </p>
 
-  <h3>iFrames</strong>
+  <h3>iFrames</h3>
 
   <p>Without prior approval and written permission, you may not create frames around our Webpages that alter in any way
     the visual presentation or appearance of our Website.</p>
 
-  <h3>Content Liability</strong>
+  <h3>Content Liability</h3>
 
   <p>We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us
     against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted
     as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other
     violation of, any third party rights.</p>
 
-  <h3>Your Privacy</strong>
+  <h3>Your Privacy</h3>
 
   <p>Please read Privacy Policy</p>
 
-  <h3>Reservation of Rights</strong>
+  <h3>Reservation of Rights</h3>
 
   <p>We reserve the right to request that you remove all links or any particular link to our Website. You approve to
     immediately remove all links to our Website upon request. We also reserve the right to amen these terms and
     conditions and it's linking policy at any time. By continuously linking to our Website, you agree to be bound to and
     follow these linking terms and conditions.</p>
 
-  <h3>Removal of links from our website</strong>
+  <h3>Removal of links from our website</h3>
 
   <p>If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any
     moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
@@ -156,7 +156,7 @@ export const TERMS_AND_CONDITIONS = {
     nor do we promise to ensure that the website remains available or that the material on the website is kept up to
     date.</p>
 
-  <h3>Disclaimer</strong>
+  <h3>Disclaimer</h3>
 
   <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions
     relating to our website and the use of this website. Nothing in this disclaimer will:</p>

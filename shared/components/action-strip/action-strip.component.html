@@ -1,24 +1,14 @@
 <div [ngClass]="{ 'primary-bg': !isCompact, 'grey-bg': isCompact }">
-  <div
-    class="container long-action-strip"
-    [ngClass]="{
+  <div class="container long-action-strip" [ngClass]="{
       'blackText compactSpace': isCompact,
       'whiteText longSpace': !isCompact
-    }"
-    fxLayout="column"
-    fxLayout.gt-sm="row"
-    fxLayoutAlign="center stretch"
-    [fxLayoutAlign.gt-sm]="elementSpacing"
-    fxLayoutGap="20px"
-  >
+    }" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center stretch" [fxLayoutAlign.gt-sm]="elementSpacing"
+    fxLayoutGap="20px">
     <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="0">
-      <span
-        [ngClass]="{
+      <span [ngClass]="{
           'mat-subheading-1': isCompact,
           'mat-subheading-2': !isCompact
-        }"
-        class="align"
-      >
+        }" class="align">
         {{ headingText | titlecase }}
       </span>
       <span *ngIf="!isCompact" class="mat-body-1 align">
@@ -26,40 +16,21 @@
       </span>
     </div>
 
-    <div
-      fxLayoutGap="8px"
-      fxLayout="column"
-      fxLayout.gt-sm="row"
-      fxLayoutAlign.gt-sm="center center"
-      fxLayoutAlign.lt-md="center stretch"
-    >
-      <button
-        *ngIf="!isCompact"
-        (click)="onNavigate('/support')"
-        class="buttonText secondaryButtonInv"
-      >
+    <div fxLayoutGap="8px" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="center center"
+      fxLayoutAlign.lt-md="center stretch">
+      <button *ngIf="!isCompact" (click)="onNavigate('/support')" class="buttonText secondaryButtonInv">
         Contact us
       </button>
-      <button
-        *ngIf="!enablePartnerForm"
-        (click)="onNavigate('/signup')"
-        class="buttonText"
-        [ngClass]="{
+      <button *ngIf="!enablePartnerForm" (click)="onNavigate('/signup')" class="buttonText" [ngClass]="{
           primaryButton: isCompact,
           secondaryButton: !isCompact
-        }"
-      >
+        }">
         Get Started
       </button>
-      <button
-        *ngIf="enablePartnerForm"
-        (click)="onNavigateToForms()"
-        class="buttonText"
-        [ngClass]="{
+      <button *ngIf="enablePartnerForm" (click)="onNavigateToForms()" class="buttonText" [ngClass]="{
           primaryButton: isCompact,
           secondaryButton: !isCompact
-        }"
-      >
+        }">
         {{ formCTA }}
       </button>
     </div>

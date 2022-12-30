@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/naming-convention */
 export const LOREM_IPSUM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut magna aliqua.<br/><ul><br/><li>Benefit of Feature</li><li>Benefit of Feature</li><li>Benefit of Feature</li></ul>`;
 export const LOREM_IPSUM_VERY_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at.`;
 export const LOREM_IPSUM_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris.`;
