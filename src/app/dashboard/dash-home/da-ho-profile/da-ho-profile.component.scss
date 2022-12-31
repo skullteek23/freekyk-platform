@@ -16,6 +16,7 @@
   max-width: 360px;
   max-height: 400px;
   background-color: var(--grey4);
+  min-height: 100px;
 }
 
 .mat-card {
@@ -195,4 +196,8 @@
     max-height: 32px !important;
     max-height: 24px !important;
   }
+}
+
+.prof_data {
+  width: 100%;
 }

@@ -3,6 +3,7 @@
   width: 100%;
   max-width: 100%;
 }
+
 ._fixture {
   height: 100%;
   background-color: white;
@@ -13,6 +14,7 @@
   padding: 16px;
   margin: 0px;
 }
+
 .nofi {
   margin-top: 20px;
   height: 72px;
@@ -21,4 +23,9 @@
   box-shadow: 0;
   border-radius: var(--borderRadiusCard);
   opacity: 0.75;
+}
+
+.mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
 }

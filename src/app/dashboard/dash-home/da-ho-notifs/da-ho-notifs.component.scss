@@ -49,3 +49,8 @@
   width: 100%;
   opacity: 0.75;
 }
+
+mat-card {
+  border-radius: var(--dashCardBorder);
+  overflow: hidden;
+}

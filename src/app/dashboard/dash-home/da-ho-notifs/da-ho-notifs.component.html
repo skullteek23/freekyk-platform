@@ -15,7 +15,7 @@
   </div>
 </ng-template>
 
-<div class="cards-r" *ngIf="!isLoading; else loading" fxLayout="column">
+<mat-card class="cards-r mat-elevation-z8" *ngIf=" !isLoading; else loading" fxLayout="column">
   <div fxLayout fxLayoutAlign="space-between center">
     <span class="dash-h5 align">Notification</span>
     <a [routerLink]="['/dashboard', 'account', 'notifications']" class="mat-caption sec-menu">All
@@ -30,5 +30,5 @@
   <app-notifications-list [data]="notifications">
   </app-notifications-list>
   <!-- list -->
-</div>
+</mat-card>
 <!-- notifications section -->
