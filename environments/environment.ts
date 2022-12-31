@@ -39,5 +39,8 @@ export const environment = {
     gaTracking: true,
     twitterAccount: 'twitterUsername',
     autoSetMeta: true,
+  },
+  whatsAppCommunity: {
+    link: 'https://chat.whatsapp.com/HowuJlzE4qo0CpyoXyevJr'
   }
 };

@@ -12,7 +12,15 @@
         <span class="circles shine"></span>
         <span class="circles shine"></span>
         <span class="circles shine"></span>
+        <span class="circles shine"></span>
       </div>
+
+      <!-- whatsApp icon - small -->
+      <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+        (click)="openSocialGroupDialog()">
+        <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
+      </button>
+      <!-- whatsApp icon - small -->
 
       <!-- notif icon - small -->
       <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
@@ -92,8 +100,16 @@
         <span class="circles shine"></span>
         <span class="circles shine"></span>
         <span class="circles shine"></span>
+        <span class="circles shine"></span>
       </div>
+
+
       <div fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
+        <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+          (click)="openSocialGroupDialog()">
+          <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
+        </button>
+
         <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
           [routerLink]="['/dashboard', 'account', 'notifications']">
           <mat-icon [matBadge]="notifCount$ | async" matBadgeSize="small"

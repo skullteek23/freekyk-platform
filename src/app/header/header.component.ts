@@ -9,6 +9,7 @@ import { NotificationsService } from '../services/notifications.service';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
 import { ListOption } from '@shared/interfaces/others.model';
+import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
 
 @Component({
   selector: 'app-header',
@@ -108,5 +109,17 @@ export class HeaderComponent implements OnInit {
 
   assignSelected(value: 'dashboard' | 'play' | 'freestyle' | null): void {
     this.selected = value;
+  }
+
+  openSocialGroupDialog() {
+    const data: ISocialGroupConfig = {
+      name: 'Link to WhatsApp Group',
+      link: environment.whatsAppCommunity.link,
+      image: 'assets/images/whatsappGroupQR.png',
+    }
+    this.dialog.open(SocialGroupComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
   }
 }

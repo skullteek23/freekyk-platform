@@ -1,0 +1,15 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Join Freekyk Players' Community</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="dialogData" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+    <p class="mat-body-1 left">{{options.name}}</p>
+    <div class="img-container">
+      <img [src]="options.image" alt="QR Code" appFallbackImg>
+    </div>
+    <a [href]="options.link" target="_blank">Click here to join us on WhatsApp!</a>
+  </div>
+</div>
