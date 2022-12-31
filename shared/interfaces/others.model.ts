@@ -273,3 +273,12 @@ export interface ITiming {
   day: string;
   selected: boolean;
 }
+
+export interface IFaqQuestions {
+  ques: string;
+  answer: string;
+  media?: {
+    images: string[];
+    videos: string[];
+  }
+}

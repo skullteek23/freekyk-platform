@@ -232,6 +232,9 @@ export const FREESTYLE_PAGE = {
 export const ACADEMIES_PAGE = {
   banner: `Looking for a right academy to nurture your football skills?<br/>Join this exciting football network and get immediate access to amazing academies, professional coaches in no time and their training sessions.`,
 };
+export const EQUIPMENT_PAGE = {
+  banner: `Looking for football equipment at right price?<br/>this is your one stop shop for buying football goods online in India. We sell at an extremely affordable prices and our products are of very high quality.`,
+};
 export const ABOUT_PAGE = {
   prateek: {
     name: 'Prateek Goel',

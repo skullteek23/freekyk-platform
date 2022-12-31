@@ -1,19 +1,10 @@
 <section fxLayout="column" style="padding: 20px 8px">
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let que of ques">
+    <mat-expansion-panel *ngFor="let question of content">
       <mat-expansion-panel-header>
-        <span class="mat-body-1"> What is Freekyk</span>
+        <span class="mat-body-1" [innerHTML]="question.ques"> </span>
       </mat-expansion-panel-header>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tristique,
-      tellus a suscipit efficitur, ante ex semper nisl, sit amet volutpat mauris
-      enim ut nisi. Vestibulum condimentum sed purus eget dignissim. Nam sed
-      rutrum nibh. Maecenas eget lacus velit. Sed tempus ipsum ut neque tempus
-      mollis at accumsan orci. Vestibulum convallis malesuada leo, non
-      scelerisque ligula. Etiam feugiat dolor metus, sit amet venenatis urna
-      dignissim at. Duis hendrerit leo diam, ut consectetur mauris gravida
-      imperdiet. Suspendisse ultricies vel tellus quis viverra. Sed tempor leo
-      aliquam risus elementum aliquam. Ut ante diam, tempus vel leo id,
-      tincidunt.
+      <div [innerHTML]="question.answer"></div>
     </mat-expansion-panel>
   </mat-accordion>
 </section>

@@ -4,6 +4,7 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { ProdBasicInfo } from '@shared/interfaces/product.model';
+import { EQUIPMENT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-equipment',
@@ -11,6 +12,8 @@ import { ProdBasicInfo } from '@shared/interfaces/product.model';
   styleUrls: ['./equipment.component.scss'],
 })
 export class EquipmentComponent implements OnInit, OnDestroy {
+
+  readonly equipmentDescription = EQUIPMENT_PAGE.banner;
 
   subscriptions = new Subscription();
   columns: any;
