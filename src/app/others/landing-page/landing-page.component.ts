@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LANDING_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { LANDING_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-landing-page',

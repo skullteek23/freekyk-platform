@@ -31,7 +31,7 @@
             </span>
           </li>
           <li *ngFor="let fixture of myFixtures$ | async">
-            <app-fixture-dashboard [matchData]="fixture" [resultMode]="false"
+            <app-fixture-dashboard (selectFixture)="onSelectFixture($event)" [matchData]="fixture" [resultMode]="false"
               [premium]="fixture.premium"></app-fixture-dashboard>
           </li>
         </ul>
@@ -79,7 +79,7 @@
             <span class="mat-body-1"> Currently, there are no fixtures! </span>
           </li>
           <li *ngFor="let result of allResults$ | async">
-            <app-fixture-dashboard [matchData]="result" [resultMode]="true"
+            <app-fixture-dashboard (selectFixture)="onSelectFixture($event)" [matchData]="result" [resultMode]="true"
               [premium]="result.premium"></app-fixture-dashboard>
           </li>
         </ul>

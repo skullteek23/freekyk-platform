@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PRIVACY_POLICY } from '@shared/Constants/LEGAL_CONTENT';
+import { PRIVACY_POLICY } from '@shared/web-content/LEGAL_CONTENT';
 
 @Component({
   selector: 'app-privacy',

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { LOREM_IPSUM_SHORT } from '../../Constants/WEBSITE_CONTENT';
+import { LOREM_IPSUM_SHORT } from '../../web-content/WEBSITE_CONTENT';
 import { heroCallToAction } from '../../interfaces/others.model';
 
 @Component({

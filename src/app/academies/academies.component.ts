@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { ACADEMIES_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { ACADEMIES_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 import { AcadBasicInfo } from '@shared/interfaces/academy.model';
 
 @Component({

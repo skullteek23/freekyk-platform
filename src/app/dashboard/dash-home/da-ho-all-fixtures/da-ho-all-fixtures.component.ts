@@ -212,7 +212,6 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['/dashboard/home'], { skipLocationChange: true });
-      // this.location.go('/dashboard/home')
     });
   }
 }

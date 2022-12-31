@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LOREM_IPSUM } from '../../Constants/WEBSITE_CONTENT';
+import { LOREM_IPSUM } from '../../web-content/WEBSITE_CONTENT';
 import { FeatureSectionContent } from '../../interfaces/others.model';
 
 @Component({

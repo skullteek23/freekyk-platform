@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TERMS_AND_CONDITIONS } from '@shared/Constants/LEGAL_CONTENT';
+import { TERMS_AND_CONDITIONS } from '@shared/web-content/LEGAL_CONTENT';
 
 @Component({
   selector: 'app-terms',

@@ -20,15 +20,15 @@
     <!-- complete your profile button -->
   </div>
 
-  <div fxFlex.gt-sm="<grow>" fxLayoutGap="20px" fxLayout="column">
+  <div fxLayoutGap="20px" fxLayout="column">
     <app-da-ho-profile></app-da-ho-profile>
     <app-da-ho-all-fixtures></app-da-ho-all-fixtures>
     <!-- <app-da-ho-all-contests></app-da-ho-all-contests> -->
   </div>
 
-  <div fxFlex.gt-sm="360px" fxLayoutGap="20px" fxLayout="column">
+  <div fxFlex.gt-sm="360px" fxLayout="column" fxLayoutAlign.md="start center" fxLayout.md="row wrap" fxLayoutGap="20px"
+    class="right-boxes-container">
     <!-- your stats -->
-
     <div [fxFlexOrder]="order1" class="cards-r maxh-cards-r">
       <app-da-ho-stats-card> </app-da-ho-stats-card>
     </div>
@@ -40,7 +40,6 @@
     <!-- complete your profile section -->
 
     <!-- your team card -->
-
     <mat-card [fxFlexOrder]="order3" class="cards-r side-padding mat-elevation-z8">
       <mat-tab-group [(selectedIndex)]="yourTeamIndex">
         <mat-tab label="Your Team">
@@ -86,7 +85,8 @@
       </mat-tab-group>
     </mat-card>
     <!-- your team card -->
-    <app-da-ho-notifs [fxFlexOrder]="order4"></app-da-ho-notifs>
+
+    <app-da-ho-notifs fxFlex.md="100%" [fxFlexOrder]="order4"></app-da-ho-notifs>
   </div>
 
   <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchConstants } from '@shared/constants/constants';
-import { FOOTER } from '@shared/Constants/WEBSITE_CONTENT';
+import { FOOTER } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-footer',

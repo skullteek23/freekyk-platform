@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FREESTYLE_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { FREESTYLE_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-fs-home',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PLAY_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { PLAY_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-pl-home',

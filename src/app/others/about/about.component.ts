@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ABOUT_PAGE } from '@shared/Constants/WEBSITE_CONTENT';
+import { ABOUT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 import { profile } from '@shared/interfaces/others.model';
 
 @Component({

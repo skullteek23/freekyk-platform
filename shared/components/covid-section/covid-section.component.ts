@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { COVID_LEARN_MORE, COVID_PRECAUTIONS } from '../../Constants/WEBSITE_CONTENT';
+import { COVID_LEARN_MORE, COVID_PRECAUTIONS } from '../../web-content/WEBSITE_CONTENT';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '../../dialogs/feature-info/feature-info.component';
 
 @Component({

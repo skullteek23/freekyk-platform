@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { LOREM_IPSUM_LONG } from '../../Constants/WEBSITE_CONTENT';
+import { LOREM_IPSUM_LONG } from '../../web-content/WEBSITE_CONTENT';
 
 export interface IFeatureInfoOptions {
   heading: string;

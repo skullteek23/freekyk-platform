@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FOOTER } from '@shared/Constants/WEBSITE_CONTENT';
+import { FOOTER } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-dash-footer',

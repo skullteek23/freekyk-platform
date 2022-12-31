@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawerMode } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { DashState } from './store/dash.reducer';
@@ -29,10 +30,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private avatarServ: AccountAvatarService,
+    private mediaObs: MediaObserver,
     private store: Store<{ dash: DashState; }>
   ) { }
 
   ngOnInit(): void {
+    this.subscriptions.add(
+      this.mediaObs
+        .asObservable()
+        .pipe(
+          filter((changes: MediaChange[]) => changes.length > 0),
+          map((changes: MediaChange[]) => changes[0])
+        )
+        .subscribe((change: MediaChange) => {
+          if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
+          } else if (change.mqAlias === 'md') {
+            this.screen = 'md';
+          } else if (change.mqAlias === 'lg') {
+            this.screen = 'lg';
+          } else {
+            this.screen = 'xl';
+          }
+        })
+    );
     if (window.location.href.endsWith('dashboard')) {
       this.router.navigate(['/dashboard/home']);
     }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { LOREM_IPSUM_VERY_SHORT } from '../../Constants/WEBSITE_CONTENT';
+import { LOREM_IPSUM_VERY_SHORT } from '../../web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-why-choose-section',
