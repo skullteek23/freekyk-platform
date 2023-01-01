@@ -14,7 +14,7 @@ export class RegexPatterns {
   static readonly url = `https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#()?&//=]*)`;
   static readonly pincode = `d{6}`;
   static readonly bio = `^(.|\s)*[a-zA-Z]+(.|\s)*$`;
-  static readonly adminID = `^[A-Z0-9]*$`;
+  static readonly adminID = `^[A-Z0-9-]*$`;
   static readonly gstNumber = `^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$`;
   static readonly website = `^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$`;
   static readonly matchDuration = `^([0-9]{1})*$`;
