@@ -5,6 +5,7 @@ header {
 
 section {
   width: 100%;
+
   .submit-button {
     margin: auto;
     margin-top: 20px;
@@ -17,6 +18,7 @@ section {
 .success-container {
   width: 100%;
   max-width: 415px;
+
   p {
     text-align: center;
   }
@@ -27,9 +29,18 @@ section {
   margin-top: 16px;
 }
 
-@media screen and (min-width: 959px) {
+.placeholder {
+  height: 500px !important;
+  width: 600px !important;
+  border: none !important;
+}
+
+@media screen and (max-width: 600px) {
   .placeholder {
-    height: 432px !important;
-    width: 499px !important;
+    border: none !important;
+    height: 300px !important;
+    width: 320px !important;
+    max-width: 320px;
+    overflow: hidden;
   }
 }

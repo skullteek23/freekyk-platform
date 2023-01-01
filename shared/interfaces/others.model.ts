@@ -238,6 +238,7 @@ export interface FeatureSectionContent {
   CTA: {
     text: string;
     link: string;
+    disabled?: boolean;
   };
   desc: string;
 }

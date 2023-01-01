@@ -190,6 +190,7 @@ export const FREESTYLE_PAGE = {
     CTA: {
       text: EXPLORE_MORE,
       link: `/dashboard/freestyle`,
+      disabled: true
     },
   },
   leaderboard: {
@@ -198,6 +199,7 @@ export const FREESTYLE_PAGE = {
     CTA: {
       text: `See Leaderboard`,
       link: `/freestyle/leaderboard`,
+      disabled: true
     },
   },
   contests: {
@@ -206,6 +208,7 @@ export const FREESTYLE_PAGE = {
     CTA: {
       text: `See Upcoming Contests`,
       link: `/freestyle/contests`,
+      disabled: true
     },
   },
   whyChooseFreestyle: {

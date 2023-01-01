@@ -5,8 +5,8 @@
 </div>
 <nav mat-tab-nav-bar>
   <div class="container">
-    <a [disabled]="link.value !== 'home'" mat-tab-link *ngFor="let link of fsLinks" (click)="activeLink = link.value"
-      [routerLink]="[link]" [active]="activeLink == link.value">
+    <a disabled mat-tab-link *ngFor="let link of fsLinks" (click)="activeLink = link.value" [routerLink]="[link]"
+      [active]="activeLink == link.value">
       {{ link.viewValue | titlecase }}
     </a>
   </div>
