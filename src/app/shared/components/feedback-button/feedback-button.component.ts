@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FeedbackComponent } from '@shared/dialogs/feedback/feedback.component';
+import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 
 @Component({
   selector: 'app-feedback-button',

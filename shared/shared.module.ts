@@ -71,7 +71,6 @@ import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
 import { FallbackImgDirective } from '@shared/directives/fallback-img.directive';
 import { RouterModule } from '@angular/router';
 import { SocialGroupComponent } from './dialogs/social-group/social-group.component';
-import { FeedbackButtonComponent } from './components/feedback-button/feedback-button.component';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -138,7 +137,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
-    FeedbackButtonComponent
   ],
   imports: [
     CommonModule,
@@ -212,7 +210,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
-    FeedbackButtonComponent
   ],
 })
 export class SharedModule { }
