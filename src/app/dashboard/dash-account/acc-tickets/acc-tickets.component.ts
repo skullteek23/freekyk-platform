@@ -7,6 +7,7 @@ import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { ProfileConstants } from '@shared/constants/constants';
+import { formsMessages } from '@shared/constants/messages';
 
 @Component({
   selector: 'app-acc-tickets',
@@ -14,6 +15,9 @@ import { ProfileConstants } from '@shared/constants/constants';
   styleUrls: ['./acc-tickets.component.scss'],
 })
 export class AccTicketsComponent implements OnInit {
+
+  readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
+  readonly messages = formsMessages;
 
   ticketStatus = true;
   newTicketForm: FormGroup = new FormGroup({});
@@ -100,7 +104,7 @@ export class AccTicketsComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       query: new FormControl(null, [
         Validators.required,
-        Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT),
+        Validators.maxLength(this.queryLimit),
         Validators.pattern(RegexPatterns.query),
       ]),
     });

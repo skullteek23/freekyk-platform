@@ -95,8 +95,8 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     });
 
     this.socialInfoForm = new FormGroup({
-      ig: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink),]),
-      fb: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink),]),
+      ig: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.socialProfileLink)]),
+      fb: new FormControl(null, Validators.pattern(RegexPatterns.socialProfileLink)),
       yt: new FormControl(null, Validators.pattern(RegexPatterns.socialProfileLink)),
       tw: new FormControl(null, Validators.pattern(RegexPatterns.socialProfileLink)),
     });

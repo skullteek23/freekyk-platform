@@ -56,6 +56,10 @@
                   <mat-form-field appearance="outline" color="primary">
                     <mat-label>Tell us your query/message</mat-label>
                     <textarea type="text" matInput name="query" formControlName="query"></textarea>
+                    <mat-hint align="end">{{ticketForm.get('query')?.value?.length}} / {{queryLimit}}</mat-hint>
+                    <mat-error *ngIf="ticketForm.get('query')?.hasError('pattern')">
+                      {{messages.error.notAllowedCharacter}}
+                    </mat-error>
                   </mat-form-field>
                   <div fxLayout="column" fxLayoutAlign="center center">
                     <button [disabled]="!ticketForm.valid" type="button" (click)="onSubmitTicket()"

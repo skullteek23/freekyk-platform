@@ -51,16 +51,11 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Tell us your query/message</mat-label>
-      <textarea type="text" matInput name="query" placeholder="Describe your concern in not more than 300 words"
-        formControlName="query"></textarea>
-      <mat-error *ngIf="newTicketForm.get('query')?.hasError('required')">
-        This field cannot be empty
-      </mat-error>
+      <textarea type="text" matInput name="query"
+        placeholder="Describe your concern in not more than {{queryLimit}} words" formControlName="query"></textarea>
+      <mat-hint align="end">{{newTicketForm.get('query')?.value?.length}} / {{queryLimit}}</mat-hint>
       <mat-error *ngIf="newTicketForm.get('query')?.hasError('pattern')">
-        Only letters, numbers and spaces are allowed!
-      </mat-error>
-      <mat-error *ngIf="newTicketForm.get('query')?.hasError('maxlength')">
-        Only 300 characters are allowed!
+        {{messages.error.notAllowedCharacter}}
       </mat-error>
     </mat-form-field>
     <div fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column" fxLayoutGap="16px">

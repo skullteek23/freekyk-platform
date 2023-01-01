@@ -8,6 +8,7 @@ import { heroCallToAction } from '@shared/interfaces/others.model';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
+import { formsMessages } from '@shared/constants/messages';
 
 @Component({
   selector: 'app-support',
@@ -21,6 +22,8 @@ export class SupportComponent implements OnInit {
   readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
   readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
   readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
+  readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
+  readonly messages = formsMessages;
 
   activeIndex = 0;
   activePage: {
@@ -61,7 +64,7 @@ export class SupportComponent implements OnInit {
       name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
       ph_number: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
-      query: new FormControl(null, [Validators.required, Validators.maxLength(ProfileConstants.SUPPORT_QUERY_LIMIT), Validators.pattern(RegexPatterns.query)]),
+      query: new FormControl(null, [Validators.required, Validators.maxLength(this.queryLimit), Validators.pattern(RegexPatterns.query)]),
     });
   }
 
