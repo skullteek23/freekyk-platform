@@ -42,7 +42,7 @@ import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixt
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
-import { SocialGroupComponent } from '../../shared/dialogs/social-group/social-group.component';
+import { FeedbackComponent } from '@shared/dialogs/feedback/feedback.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +71,7 @@ import { SocialGroupComponent } from '../../shared/dialogs/social-group/social-g
     SeStatsComponent,
     SeFixturesComponent,
     SeStandingsComponent,
-    SocialGroupComponent,
+    FeedbackComponent,
   ],
   imports: [
     BrowserModule,

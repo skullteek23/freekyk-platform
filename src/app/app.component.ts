@@ -36,4 +36,5 @@ export class AppComponent implements OnInit, OnDestroy {
     this.routeSubscription.unsubscribe();
     localStorage.removeItem('uid');
   }
+
 }

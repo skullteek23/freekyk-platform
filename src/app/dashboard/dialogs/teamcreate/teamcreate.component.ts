@@ -9,7 +9,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -22,6 +22,8 @@ import { Invite } from '@shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
+import { IFeatureInfoOptions, FeatureInfoComponent } from '@shared/dialogs/feature-info/feature-info.component';
+import { RULES } from '@shared/web-content/MATCH-RELATED';
 
 @Component({
   selector: 'app-teamcreate',
@@ -59,7 +61,8 @@ export class TeamcreateComponent implements OnInit {
     private ngFunc: AngularFireFunctions,
     private snackBarService: SnackbarService,
     private ngStorage: AngularFireStorage,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -211,5 +214,16 @@ export class TeamcreateComponent implements OnInit {
 
   onRemoveSelection(delIndex: number): void {
     this.selectedPlayers.splice(delIndex, 1);
+  }
+
+  openRules() {
+    const data: IFeatureInfoOptions = {
+      heading: 'Freekyk Rules & Regulations',
+      description: RULES
+    }
+    this.dialog.open(FeatureInfoComponent, {
+      panelClass: 'large-dialogs',
+      data
+    })
   }
 }

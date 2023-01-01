@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { ListOption } from '@shared/components/search-autocomplete/search-autoco
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
+import { RULES } from '@shared/web-content/MATCH-RELATED';
 
 @Component({
   selector: 'app-teamjoin',
@@ -34,7 +36,8 @@ export class TeamjoinComponent implements OnInit {
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -100,5 +103,16 @@ export class TeamjoinComponent implements OnInit {
 
   onRemoveSelection(delIndex: number): void {
     this.selectedTeams.splice(delIndex, 1);
+  }
+
+  openRules() {
+    const data: IFeatureInfoOptions = {
+      heading: 'Freekyk Rules & Regulations',
+      description: RULES
+    }
+    this.dialog.open(FeatureInfoComponent, {
+      panelClass: 'large-dialogs',
+      data
+    })
   }
 }
