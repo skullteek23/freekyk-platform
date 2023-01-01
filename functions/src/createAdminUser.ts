@@ -1,12 +1,12 @@
 import { Admin } from '@shared/interfaces/admin.model';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { environment } from '../../environments/environment';
+// import { environment } from '../../environments/environment';
 import { UNIQUE_ORGANIZER_CODE } from './utils/utilities';
 
 const db = admin.firestore();
 const auth = admin.auth();
-const mailChimp = require('@mailchimp/mailchimp_transactional')(environment.mailchimp.apiKey);
+// const mailChimp = require('@mailchimp/mailchimp_transactional')(environment.mailchimp.apiKey);
 
 export async function createAdminUser(data: Admin, context: any) {
   if (!data) {
@@ -22,35 +22,35 @@ export async function createAdminUser(data: Admin, context: any) {
     console.log('organizerID', uid);
     console.log('email', email);
     console.log('password', password);
-    const emailWrapper = {
-      from_email: "admin@freekyk.com",
-      subject: "Account Credentials | Freekyk Admin",
-      text: `Hi ${displayName},<br><br>
+    // const emailWrapper = {
+    //   from_email: "admin@freekyk.com",
+    //   subject: "Account Credentials | Freekyk Admin",
+    //   text: `Hi ${displayName},<br><br>
 
-      Please find below your account login credentials:<br>
-      Organizer ID: ${uid}<br>
-      Email: ${email}<br>
-      Password: ${password}<br><br>
+    //   Please find below your account login credentials:<br>
+    //   Organizer ID: ${uid}<br>
+    //   Email: ${email}<br>
+    //   Password: ${password}<br><br>
 
-      Follow this link to login to Freekyk admin console:<br>
-      Link: ${environment.firebase.adminUrl}<br><br>
+    //   Follow this link to login to Freekyk admin console:<br>
+    //   Link: ${environment.firebase.adminUrl}<br><br>
 
-      If you didn't ask to verify this address, you can ignore this email.<br><br>
+    //   If you didn't ask to verify this address, you can ignore this email.<br><br>
 
-      Thanks & Regards,<br>
-      Team Freekyk`,
-      to: [
-        {
-          email: email,
-          type: "to"
-        }
-      ]
-    };
+    //   Thanks & Regards,<br>
+    //   Team Freekyk`,
+    //   to: [
+    //     {
+    //       email: email,
+    //       type: "to"
+    //     }
+    //   ]
+    // };
 
     const allPromises: any[] = [];
     allPromises.push(auth.createUser({ email, uid, password, displayName }));
     allPromises.push(db.collection('admins').doc(uid).set(data));
-    allPromises.push(mailChimp.messages.send({ emailWrapper }).toPromise());
+    // allPromises.push(mailChimp.messages.send({ emailWrapper }).toPromise());
 
     return Promise.all(allPromises);
   }
