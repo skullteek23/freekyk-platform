@@ -31,7 +31,7 @@ export const StandingsFilters = {
   'Select Season': [],
 };
 export const GroundsFilters = {
-  Owner: ['Freekyk', 'Public', 'Private'],
+  Owner: ['Public', 'Private'],
   'Field Type': [
     'Soft Ground',
     'Futsal Ground',
