@@ -879,3 +879,12 @@ button.mat-button-base {
     margin: 0px !important;
   }
 }
+
+.faq-container {
+  .mat-expansion-panel-header {
+    @media screen and (max-width: 600px) {
+      height: 125px !important;
+    }
+  }
+
+}

@@ -1,6 +1,6 @@
 <div>
-  <app-hero-section [imageSource]="activePage.svg" [title]="activePage.title" [overline]="false"
-    [CTA]="activePage.CTA"></app-hero-section>
+  <app-hero-section [description]="description" [imageSource]="activePage.svg" [title]="activePage.title"
+    [overline]="false" [CTA]="null"></app-hero-section>
 </div>
 <div style="margin-top: 20px" class="container section-space-bottom">
   <mat-tab-group (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="activeIndex">

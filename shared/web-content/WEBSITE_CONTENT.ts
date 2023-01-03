@@ -1,3 +1,5 @@
+import { environment } from "environments/environment";
+
 export const LOREM_IPSUM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut magna aliqua.<br/><ul><br/><li>Benefit of Feature</li><li>Benefit of Feature</li><li>Benefit of Feature</li></ul>`;
 export const LOREM_IPSUM_VERY_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at.`;
 export const LOREM_IPSUM_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris.`;
@@ -238,6 +240,9 @@ export const ACADEMIES_PAGE = {
 export const EQUIPMENT_PAGE = {
   banner: `Looking for football equipment at right price?<br/>this is your one stop shop for buying football goods online in India. We sell at an extremely affordable prices and our products are of very high quality.`,
 };
+export const SUPPORT_PAGE = {
+  banner: `Need any help? Raise a query or Check out the FAQs!`
+}
 export const ABOUT_PAGE = {
   prateek: {
     name: 'Prateek Goel',

@@ -9,6 +9,7 @@ import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ti
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
+import { SUPPORT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-support',
@@ -24,6 +25,7 @@ export class SupportComponent implements OnInit {
   readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
   readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
   readonly messages = formsMessages;
+  readonly description = SUPPORT_PAGE.banner;
 
   activeIndex = 0;
   activePage: {
