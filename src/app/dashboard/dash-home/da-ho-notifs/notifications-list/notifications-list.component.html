@@ -6,7 +6,8 @@
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="mat-body-1"> {{ notification.title }} </span>
         <span fxHide.lt-sm="true" class="sec-menu mat-caption">
-          By {{ notification.senderName }}
+          By {{ notification.senderName && notification.senderName !== 'null' ? notification.senderName :
+          ('User#' + notification.senderId) }}
         </span>
       </div>
       <div fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column" fxLayoutAlign="center end" fxLayoutGap.lt-md="8px"

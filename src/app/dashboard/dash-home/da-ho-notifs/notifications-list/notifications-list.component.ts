@@ -3,7 +3,6 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants } from '@shared/constants/constants';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 @Component({
   selector: 'app-notifications-list',

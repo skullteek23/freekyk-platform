@@ -236,7 +236,7 @@ export class NotificationsService implements OnDestroy {
   private fetchtNotifications(pid: string): void {
     this.subscriptions.add(
       this.ngFire
-        .collection('players/' + pid + '/Notifications', (query) => query.limit(8))
+        .collection('players/' + pid + '/Notifications')
         .snapshotChanges()
         .pipe(
           map((resp) =>

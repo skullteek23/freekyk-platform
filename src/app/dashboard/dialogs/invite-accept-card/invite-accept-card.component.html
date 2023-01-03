@@ -6,31 +6,17 @@
     close
   </a>
 </div>
-<div
-  class="content"
-  mat-dialog-content
-  fxLayoutAlign="center center"
-  fxLayout="column"
->
+<div class="content" mat-dialog-content fxLayoutAlign="center center" fxLayout="column">
   <p class="mat-body-2 center">Do you want to join this team?</p>
   <a class="center" [routerLink]="['/t', data]" (click)="dialogRef.close()">
-    {{ data }}
+    {{data && data !== 'null' ? data : 'Team#Unknown' }}
   </a>
 </div>
-<div
-  class="buttons"
-  mat-dialog-actions
-  fxLayoutAlign.gt-sm="center center"
-  fxLayout.lt-md="column"
-  fxLayoutGap="8px"
->
+<div class="buttons" mat-dialog-actions fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="8px">
   <button class="noResponseButton buttonText" (click)="onCloseDialog('reject')">
     Reject
   </button>
-  <button
-    class="yesResponseButton buttonText"
-    (click)="onCloseDialog('accept')"
-  >
+  <button class="yesResponseButton buttonText" (click)="onCloseDialog('accept')">
     Accept
   </button>
 </div>

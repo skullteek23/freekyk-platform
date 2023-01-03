@@ -11,7 +11,7 @@
     Do you want to invite this player to your team?
   </p>
   <a class="center" [routerLink]="['/play/players', data.id]" (click)="onCloseDialog(false)">
-    {{ data.name }}
+    {{data.name && data.name !== 'null' ? data.name : 'User#Unknown' }}
   </a>
 </div>
 <div class="buttons" mat-dialog-actions fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column" fxLayoutGap="8px">
