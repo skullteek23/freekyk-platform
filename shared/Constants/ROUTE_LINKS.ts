@@ -18,7 +18,6 @@ export const RouteLinks = {
     { viewValue: 'home', value: 'home' },
     { viewValue: 'team management', value: 'team-management' },
     { viewValue: 'participate', value: 'participate' },
-    { viewValue: 'account', value: 'account' },
   ],
   DASHBOARD_ACCOUNT: [
     { viewValue: 'profile', value: 'profile' },
