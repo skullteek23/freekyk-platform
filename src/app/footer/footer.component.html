@@ -6,6 +6,9 @@
     <a *ngFor="let link of productLinks" [routerLink]="[link.route]" fxLayoutAlign="start center">
       <span class="mat-body-1">{{ link.name | titlecase }}</span>
     </a>
+    <a [href]="adminURL" target="_blank" fxLayoutAlign="start center">
+      <span class="mat-body-1">{{ 'admin' | titlecase }}</span>
+    </a>
   </ul>
   <!-- product links -->
 

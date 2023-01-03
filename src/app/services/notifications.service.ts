@@ -26,6 +26,25 @@ export class NotificationsService implements OnDestroy {
   emptyInvites = new BehaviorSubject<boolean>(true);
   subscriptions = new Subscription();
 
+  constructor(
+    private ngFire: AngularFirestore,
+    private dialog: MatDialog,
+    private router: Router,
+    private snackBarService: SnackbarService,
+    private store: Store<{ dash: DashState }>
+  ) {
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      this.fetchtNotifications(uid);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+
   onSelectNotification(notification: NotificationBasic): void {
     switch (notification.type) {
       case 'team welcome':
@@ -46,9 +65,11 @@ export class NotificationsService implements OnDestroy {
         break;
     }
   }
+
   getNotifications(): NotificationBasic[] {
     return this.notifications.slice();
   }
+
   deleteNotification(notifId: string): void {
     const uid = localStorage.getItem('uid');
     this.ngFire
@@ -56,6 +77,7 @@ export class NotificationsService implements OnDestroy {
       .doc(notifId)
       .delete();
   }
+
   markNotification(notificationID: string, status: boolean): void {
     const uid = localStorage.getItem('uid');
     this.ngFire
@@ -63,6 +85,7 @@ export class NotificationsService implements OnDestroy {
       .doc(notificationID)
       .update({ read: status });
   }
+
   deleteInvite(invId: string): void {
     this.subscriptions.add(
       this.store
@@ -88,6 +111,7 @@ export class NotificationsService implements OnDestroy {
         )
     );
   }
+
   async sendTeamInviteByInv(inv: Invite): Promise<any> {
     if (inv.status !== 'reject') {
       this.snackBarService.displayCustomMsg(
@@ -108,6 +132,7 @@ export class NotificationsService implements OnDestroy {
         .then(() => this.snackBarService.displayCustomMsg('Invite Sent!'));
     }
   }
+
   async sendTeamInviteByNotif(data: NotificationBasic): Promise<any> {
     const dialogRef = this.dialog.open(SendinviteComponent, {
       data: { name: data.senderName, id: data.senderId },
@@ -145,6 +170,7 @@ export class NotificationsService implements OnDestroy {
         })
     );
   }
+
   async openTeamOffer(id: string, teamName: string): Promise<any> {
     this.subscriptions.add(
       this.store
@@ -182,6 +208,7 @@ export class NotificationsService implements OnDestroy {
         })
     );
   }
+
   fetchAndGetAllNotifs(uid: string): Observable<NotificationBasic[]> {
     return this.ngFire
       .collection('players/' + uid + '/Notifications')
@@ -198,6 +225,7 @@ export class NotificationsService implements OnDestroy {
         )
       );
   }
+
   fetchInvites(uid: string): Observable<Invite[]> {
     return this.ngFire
       .collection('invites', (query) => query.where('inviteeId', '==', uid))
@@ -215,12 +243,14 @@ export class NotificationsService implements OnDestroy {
         })
       );
   }
+
   async callUpdateTeamInvite(
     statusUpdate: 'wait' | 'accept' | 'reject' | null,
     invId: string
   ): Promise<any> {
     this.updTeamInviteByNotif(statusUpdate, invId);
   }
+
   private async updTeamInviteByNotif(
     statusUpdate: 'wait' | 'accept' | 'reject' | null,
     notifId: string
@@ -233,6 +263,7 @@ export class NotificationsService implements OnDestroy {
       status: statusUpdate,
     });
   }
+
   private fetchtNotifications(pid: string): void {
     this.subscriptions.add(
       this.ngFire
@@ -256,6 +287,7 @@ export class NotificationsService implements OnDestroy {
         })
     );
   }
+
   onOpenInvitePlayersDialog(): void {
     this.subscriptions.add(
       this.store
@@ -280,22 +312,5 @@ export class NotificationsService implements OnDestroy {
           });
         })
     );
-  }
-  constructor(
-    private ngFire: AngularFirestore,
-    private dialog: MatDialog,
-    private router: Router,
-    private snackBarService: SnackbarService,
-    private store: Store<{ dash: DashState }>
-  ) {
-    const uid = localStorage.getItem('uid');
-    if (uid) {
-      this.fetchtNotifications(uid);
-    }
-  }
-  ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
   }
 }
