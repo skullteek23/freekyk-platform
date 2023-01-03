@@ -9,3 +9,31 @@
 .list {
   min-height: 150px;
 }
+
+.action-buttons-container {
+  margin-top: 20px;
+}
+
+.success-container {
+  margin: 200px;
+}
+
+.error {
+  color: var(--red);
+}
+
+.success {
+  height: 400px;
+}
+
+.summary-container {
+  @media screen and (max-width: 600px) {
+    .mat-column-label {
+      width: 50%;
+    }
+  }
+
+  .mat-column-label {
+    width: 30%;
+  }
+}

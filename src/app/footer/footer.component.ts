@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchConstants } from '@shared/constants/constants';
 import { FOOTER } from '@shared/web-content/WEBSITE_CONTENT';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +9,8 @@ import { FOOTER } from '@shared/web-content/WEBSITE_CONTENT';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+
+  readonly adminURL = environment?.firebase?.adminRegister || '';
   readonly COPYRIGHT = FOOTER.copyright;
   readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
   readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;

@@ -17,7 +17,7 @@
 
       <!-- whatsApp icon - small -->
       <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-        (click)="openSocialGroupDialog()">
+        (click)="openSocialGroupDialog();onCloseMenu()">
         <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
       </button>
       <!-- whatsApp icon - small -->
@@ -47,8 +47,9 @@
         fxLayoutAlign="center center"
       > -->
       <div class="account-circle-container">
-        <app-account-avatar *ngIf="isLogged && !isLoading" [routerLink]="['/dashboard', 'account', 'profile']"
-          [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>
+        <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
+          [routerLink]="['/dashboard', 'account', 'profile']" [dataImg]="profilePicture$ | async"
+          [margins]="false"></app-account-avatar>
       </div>
       <!-- </div> -->
       <!-- account circle - small -->
@@ -170,6 +171,12 @@
           [routerLink]="[selected, sublink.value]" *ngFor="let sublink of selectedSubLinks">
           <span class="mat-body-1">
             {{ sublink.viewValue | titlecase }}
+          </span>
+        </a>
+        <a class="subNav" mat-list-item (click)="onToggleMenu(); assignSelected(null)"
+          [routerLink]="['dashboard', 'account', 'profile']">
+          <span class="mat-body-1">
+            {{ 'Account' | titlecase }}
           </span>
         </a>
       </mat-nav-list>

@@ -107,6 +107,7 @@ export interface ISeasonSummaryData {
 export interface ISummaryDataSource {
   label: string;
   value: string | number;
+  type?: string;
 }
 
 export interface ISeasonCloudFnData {

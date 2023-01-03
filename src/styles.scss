@@ -887,4 +887,14 @@ button.mat-button-base {
     }
   }
 
-}
+  .team-create-dialog {
+    app-photo-uploader {
+      .photo-container {
+        @media screen and (max-width: 600px) {
+          max-height: 100px !important;
+          min-height: 100px !important;
+          overflow: hidden;
+        }
+      }
+    }
+  }

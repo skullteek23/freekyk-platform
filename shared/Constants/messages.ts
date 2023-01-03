@@ -35,6 +35,14 @@ export const seasonFlowMessages = {
     }
   }
 };
+export const TeamFlowMessages = {
+  basicDetails: {
+    error: {}
+  },
+  invitePlayers: {
+    error: {}
+  }
+};
 export const groundFlowMessages = {
   availability: {
     error: {

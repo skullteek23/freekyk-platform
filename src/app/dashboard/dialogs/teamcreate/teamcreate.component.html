@@ -4,9 +4,9 @@
   </button>
   <span class="mat-body-1">Create a New Team</span>
 </mat-toolbar>
-<div class="container-2">
+<div class="container-2 team-create-dialog">
   <div ngClass.lt-md="dialogData" ngClass.gt-sm="stepdata">
-    <mat-vertical-stepper #stepper [linear]="true">
+    <!-- <mat-vertical-stepper #stepper [linear]="true">
       <mat-step [stepControl]="teamBasicinfoForm" label="Fill Basic Details" [state]="state1"
         [completed]="teamBasicinfoForm.valid && isStepOneComplete" [hasError]="error">
         <form [formGroup]="teamBasicinfoForm" fxLayout="column" fxLayoutGap="16px" (ngSubmit)="onSubmitOne()">
@@ -34,14 +34,7 @@
             </button>
             <input hidden type="file" name="fileInput2" accept="image/*" #fileInputLogo
               (change)="onChooseTeamLogoImage($event)" id="file2" />
-            <!-- <button
-              [disabled]="!file1Selected || !file2Selected"
-              (click)="onSaveImages()"
-              class="primaryButton buttonText"
-              type="submit"
-            >
-              Save Changes
-            </button> -->
+
           </div>
           <button [disabled]="!teamBasicinfoForm.valid || error" type="submit" class="primaryButton buttonText">
             Next
@@ -61,13 +54,13 @@
               placeholder="Enter Player Name or Position to Get Started" (selectionChange)="onAddSelection($event)">
             </app-search-autocomplete>
             <span class="mat-body-2 left">
-              {{selectedPlayers.length}}/8 players
+              {{selectedplayers?.value?.length}}/8 players
             </span>
           </div>
-          <mat-hint *ngIf="selectedPlayers.length > 15">
+          <mat-hint *ngIf="selectedplayers?.value?.length > 15">
             Maximum players selected!
           </mat-hint>
-          <mat-list class="list" dense color="primary" *ngIf="selectedPlayers.length">
+          <mat-list class="list" dense color="primary" *ngIf="selectedplayers?.value?.length">
             <i *ngIf="noPlayers">
               Currently, there are no players available to join any team! Please
               try again later
@@ -91,8 +84,8 @@
           </mat-list>
 
           <button type="button" (click)="onSubmitTwo(selectedPlayers)" [disabled]="
-              selectedPlayers.length < 8 ||
-              selectedPlayers.length > 15 ||
+              selectedplayers?.value?.length < 8 ||
+              selectedplayers?.value?.length > 15 ||
               error
             " class="primaryButton buttonText">
             Next
@@ -117,7 +110,6 @@
         </div>
       </mat-step>
 
-      <!-- overriding icons -->
       <ng-template matStepperIcon="details">
         <mat-icon class="material-icons-round"> text_snippet </mat-icon>
       </ng-template>
@@ -128,6 +120,129 @@
       <ng-template matStepperIcon="complete">
         <mat-icon class="material-icons-round"> close </mat-icon>
       </ng-template>
+    </mat-vertical-stepper> -->
+    <mat-vertical-stepper #stepper [linear]="true">
+
+      <mat-step label="Fill Basic Details" [stepControl]="teamDetailsForm"
+        [editable]="stepper.selectedIndex > 1 && isTeamLive">
+        <form [formGroup]="teamDetailsForm" fxLayout="column" fxLayoutGap="0px">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Enter Team Name</mat-label>
+            <input type="text" matInput name="team-name" formControlName="name" />
+            <mat-error *ngIf="teamDetailsForm.get('name').errors?.nameTaken">
+              Team name is already taken! Please choose another name
+            </mat-error>
+            <mat-error *ngIf="teamDetailsForm.get('name').hasError('pattern')">
+              Only letters, numbers and spaces are allowed
+            </mat-error>
+          </mat-form-field>
+          <div class="image-container-wrapper" fxLayoutGap="20px" fxLayout fxLayout.lt-md="column"
+            fxLayoutAlign="center start" fxLayoutAlign.lt-md="center stretch">
+            <div class="logo-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
+              <span class="mat-body-2">
+                Select Team logo
+              </span>
+              <app-photo-uploader actionBtnLabel="Browse Logo"
+                (changeUpload)="onSelectTeamLogo($event)"></app-photo-uploader>
+            </div>
+            <div class="logo-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
+              <span class="mat-body-2">
+                Select Team Photo
+              </span>
+              <app-photo-uploader (changeUpload)="onSelectTeamPhoto($event)"></app-photo-uploader>
+            </div>
+          </div>
+        </form>
+        <div class="action-buttons-container" fxLayout="row" fxLayoutAlign.lt-md="center center"
+          fxLayoutAlign="start center" fxLayoutGap="20px">
+          <button type="button" [disabled]="!teamDetailsForm?.valid" class="primaryButton buttonText"
+            (click)="onSaveTeamDetails(stepper)">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step label="Invite Players" [stepControl]="invitesForm" [editable]="stepper.selectedIndex > 1 && isTeamLive">
+
+        <div fxLayout="column" fxLayoutGap="16px">
+          <app-search-autocomplete [isDisabled]="playersList.length === 0" [options]="playersList"
+            placeholder="Enter Player name to Get Started" (selectionChange)="onAddSelection($event)">
+          </app-search-autocomplete>
+          <span class="mat-body-2 left">
+            {{players?.value?.length || 0}}/8 players
+          </span>
+        </div>
+        <mat-list class="list" dense color="primary" *ngIf="players?.value?.length">
+          <i *ngIf="!playersList.length">
+            Currently, there are no players available to join any team! Please
+            try again later
+          </i>
+
+          <mat-list-item *ngFor="let player of players?.controls; let i = index">
+            <div fxLayoutAlign="space-between center" fxLayoutGap="4px" class="selection-container">
+              <span ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption">
+                {{ player?.value?.viewValue | textShorten: 50 }}
+              </span>
+              <div fxLayoutAlign="center center" fxLayoutGap="16px">
+                <a class="material-icons-round remove-icon" matTooltip="Remove"
+                  (click)="onRemoveSelection(i)">delete</a>
+                <a target="_blank" matTooltip="Open player profile"
+                  [routerLink]="['/play/players', player?.value?.value?.id]" class="material-icons-round">
+                  open_in_new
+                </a>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+        <div class="action-buttons-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="end center"
+          fxLayoutGap="20px">
+          <button type="button" [disabled]="isValidTeamMemberCount === false" class="primaryButton buttonText"
+            (click)="onSelectPlayers(stepper)">Next</button>
+        </div>
+      </mat-step>
+
+      <mat-step label="Finish" [editable]="false">
+        <ng-container *ngIf="!isTeamLive">
+          <div class="mat-body-1">Review your Info</div>
+          <div class="summary-container">
+            <table mat-table [dataSource]="summaryDataSource">
+
+              <ng-container matColumnDef="label" sticky>
+                <th mat-header-cell *matHeaderCellDef> Team Info</th>
+                <td mat-cell *matCellDef="let element"> {{ element.label }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="value" sticky>
+                <th mat-header-cell *matHeaderCellDef> Your Input </th>
+                <td mat-cell *matCellDef="let element" [matTooltip]="element.value">
+                  <span
+                    [ngClass]="{'material-icons-round': element.type === 'icon', 'mat-body-2': element.type === 'text'}">
+                    {{ element.value }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="cols; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+            </table>
+          </div>
+          <div class="action-buttons-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+            <button type="button" class="primaryButton buttonText" (click)="createTeam()">
+              Create Team
+            </button>
+            <p class="mat-caption left">
+              By tapping 'Next', you acknowledge that you have read and
+              understood, and agree to
+              <a (click)="openRules()">Freekyk Team Rules & Regulations</a>.
+            </p>
+          </div>
+        </ng-container>
+        <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" *ngIf="isTeamLive">
+          <app-tick-animation></app-tick-animation>
+          <span class="mat-caption center">Wuhooo! Your team is LIVE.</span>
+          <span class="mat-caption center">You're now {{ teamDetailsForm.value.name + "'s" }} Captain!</span>
+        </div>
+      </mat-step>
     </mat-vertical-stepper>
   </div>
 </div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

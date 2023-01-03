@@ -82,12 +82,27 @@ export class ProfileConstants {
   static readonly TEAM_DESC_MAX_LIMIT = 300;
   static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
   static readonly MIN_TEAM_ELIGIBLE_PLAYER_LIMIT = 8;
+  static readonly MAX_TEAM_ELIGIBLE_PLAYER_LIMIT = 15;
   static readonly SUPPORT_QUERY_LIMIT = 1000;
   static readonly DEACTIVATION_REASON_LIMIT = 500;
   static readonly FALLBACK_IMG_URL = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
   static readonly FEEDBACK_MESSAGE_LIMIT = 3000;
   static readonly RATING_NUMBERS = [0, 1, 2, 3, 4, 5];
+  static readonly ALLOWED_PHOTO_FILE_TYPES_TEAM = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/tiff',
+    'image/webp',
+    'image/gif',
+  ]
 }
+
+export class TeamConstants {
+  static readonly PLACEHOLDER_TEAM_LOGO = 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2Fplaceholder_logo_team.jpg?alt=media&token=8e5566f0-2f03-40a0-988b-a3dea1d631ff';
+  static readonly PLACEHOLDER_TEAM_PHOTO = 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2Fplaceholder_team.jpg?alt=media&token=fd4acbb9-2187-401b-a723-9411e4dbdd27';
+}
+
 export const GROUNDS_FEATURES_LIST = {
   referee: 'Referee',
   foodBev: 'Food and Beverages ',
