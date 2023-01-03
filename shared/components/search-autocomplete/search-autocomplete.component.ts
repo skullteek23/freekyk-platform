@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { ListOption } from '@shared/interfaces/others.model';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ArraySorting } from '../../utils/array-sorting';
-export interface ListOption { viewValue: string; data: any };
 @Component({
   selector: 'app-search-autocomplete',
   templateUrl: './search-autocomplete.component.html',

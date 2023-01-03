@@ -879,3 +879,15 @@ button.mat-button-base {
     margin: 0px !important;
   }
 }
+
+.team-create-dialog {
+  app-photo-uploader {
+    .photo-container {
+      @media screen and (max-width: 600px) {
+        max-height: 100px !important;
+        min-height: 100px !important;
+        overflow: hidden;
+      }
+    }
+  }
+}

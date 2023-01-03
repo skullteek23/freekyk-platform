@@ -7,7 +7,7 @@
       {{actionBtnLabel}}
     </button>
   </div>
-  <input hidden type="file" name="photoInput" accept="image/*" #photoInput (change)="onBrowsePhoto($event, preview)"
+  <input hidden type="file" name="photoInput" [accept]="types" #photoInput (change)="onBrowsePhoto($event, preview)"
     id="file" />
 
 </div>

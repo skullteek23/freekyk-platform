@@ -6,12 +6,12 @@ import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { ListOption } from '@shared/components/search-autocomplete/search-autocomplete.component';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
+import { ListOption } from '@shared/interfaces/others.model';
 
 @Component({
   selector: 'app-teamjoin',
@@ -51,7 +51,7 @@ export class TeamjoinComponent implements OnInit {
   onSubmit(plSelected: ListOption[]): void {
     this.myStepper.next();
     this.isStepOneComplete = true;
-    const capIds: string[] = plSelected.map((sel) => (sel.data as TeamBasicInfo).captainId);
+    const capIds: string[] = plSelected.map((sel) => (sel.value as TeamBasicInfo).captainId);
     const userName = sessionStorage.getItem('name');
     if (this.sendRequests(capIds, userName)) {
       this.state = 'complete';
@@ -86,7 +86,7 @@ export class TeamjoinComponent implements OnInit {
             const id = doc.payload.doc.id;
             listOptions.push({
               viewValue: teamData.tname,
-              data: ({ id, ...teamData } as TeamBasicInfo)
+              value: ({ id, ...teamData } as TeamBasicInfo)
             });
           });
           return listOptions;

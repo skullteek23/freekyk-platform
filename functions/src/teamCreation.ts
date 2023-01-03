@@ -1,48 +1,44 @@
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { Invite } from '@shared/interfaces/notification.model';
+import { PLACEHOLDER_TEAM_LOGO, PLACEHOLDER_TEAM_PHOTO } from './utils/utilities';
 
 const db = admin.firestore();
 
-export async function teamCreation(data: {
-  newTeamInfo: {
-    id: string;
-    name: string;
-    imgpath: string;
-    logoPath: string;
-  };
-  tcaptainId: string;
-}, context: any) {
+export async function teamCreation(data: { players: PlayerBasicInfo[], teamName: string, captainID: string, imgpath?: string, logo?: string }, context: any) {
 
-  const DEFAULT_PHOTO = 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/dummy_logo.png?alt=media&token=c787be11-7ed7-4df4-95d0-5ed0dffd3102';
-  const DEFAULT_POSITION = 'NA';
-  const UID = context && context.auth && context.auth.uid ? context.auth.uid : null;
-  const CAPTAIN_ID = data && data.tcaptainId ? data.tcaptainId : null;
-  const teamData = data && data.newTeamInfo ? data.newTeamInfo : null;
+  const logo = data.logo ? data.logo : PLACEHOLDER_TEAM_LOGO;
+  const imgpath = data.imgpath ? data.imgpath : PLACEHOLDER_TEAM_PHOTO;
+  const position = 'NA';
+  const captainID = data && data.captainID ? data.captainID : null;
+  const teamData = data && data.teamName ? data.teamName : null;
   let teamInfo: TeamBasicInfo;
   let teamMoreInfo: TeamMoreInfo;
-  let allPromises: any[] = [];
   let tMembers: TeamMembers;
 
-  if (UID && CAPTAIN_ID && teamData && UID === CAPTAIN_ID) {
-    const captainInfo = (await db.collection('players').doc(CAPTAIN_ID).get()).data() as PlayerBasicInfo;
-    const teamInfoPath = `teams/${teamData.id}/additionalInfo`;
+  if (logo && imgpath && position && captainID && teamData) {
+    const captainInfo = (await db.collection('players').doc(captainID).get()).data() as PlayerBasicInfo;
+    if (captainInfo.team !== null) {
+      throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
+    }
     const membersList: Tmember[] = [{
-      id: CAPTAIN_ID,
+      id: captainID,
       name: captainInfo.name,
-      pl_pos: captainInfo.pl_pos ? captainInfo.pl_pos : DEFAULT_POSITION,
-      imgpath_sm: captainInfo.imgpath_sm ? captainInfo.imgpath_sm : DEFAULT_PHOTO,
+      pl_pos: captainInfo.pl_pos ? captainInfo.pl_pos : position,
+      imgpath_sm: captainInfo.imgpath_sm ? captainInfo.imgpath_sm : null,
     }];
 
     teamInfo = {
-      tname: teamData.name,
+      tname: teamData,
       isVerified: true,
-      imgpath: teamData.imgpath,
-      imgpath_logo: teamData.logoPath,
-      captainId: CAPTAIN_ID,
+      imgpath: imgpath,
+      imgpath_logo: logo,
+      captainId: captainID,
     };
     teamMoreInfo = {
-      tdateCreated: admin.firestore.Timestamp.now().toMillis(),
+      tdateCreated: new Date().getTime(),
       tageCat: 30,
       captainName: captainInfo.name,
     };
@@ -51,18 +47,33 @@ export async function teamCreation(data: {
       members: membersList,
     };
 
-    allPromises.push(db.collection('teams').doc(teamData.id).set(teamInfo));
-    allPromises.push(db.collection(teamInfoPath).doc('moreInfo').set(teamMoreInfo));
-    allPromises.push(db.collection(teamInfoPath).doc('members').set(tMembers));
-    allPromises.push(db.collection('players').doc(CAPTAIN_ID).update({
-      team: {
-        name: teamData.name,
-        id: teamData.id,
-        capId: CAPTAIN_ID,
-      }
-    }));
+    const teamRef = db.collection('teams').doc(teamData);
+    const teamInfoRef = db.collection(`teams/${teamData}/additionalInfo`).doc('moreInfo');
+    const teamMemberRef = db.collection(`teams/${teamData}/additionalInfo`).doc('members');
+    const captainRef = db.collection('players').doc(captainID);
+    const batch = db.batch();
 
-    return Promise.all(allPromises);
+    batch.create(teamRef, teamInfo);
+    batch.create(teamInfoRef, teamMoreInfo);
+    batch.create(teamMemberRef, tMembers);
+    batch.update(captainRef, { team: { name: teamData, id: teamData, capId: captainID } });
+
+    for (let i = 0; i < data.players.length; i++) {
+      const player = data.players[i];
+      if (player.id) {
+        const inviteRef = db.collection('invites').doc();
+        const invite: Invite = {
+          teamId: teamData,
+          teamName: teamData,
+          inviteeId: player.id,
+          inviteeName: player.name,
+          status: 'wait',
+        }
+        batch.create(inviteRef, invite);
+      }
+    }
+
+    return batch.commit();
   }
   return false;
 }

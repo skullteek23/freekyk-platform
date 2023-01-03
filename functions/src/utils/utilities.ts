@@ -64,3 +64,5 @@ export const UNIQUE_ORGANIZER_CODE = 'FKYK2022';
 export const DEFAULT_LOGO = 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
 export const DEFAULT_PLACEHOLDER = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg';
 export const DEFAULT_IMAGE_URL = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
+export const PLACEHOLDER_TEAM_LOGO = 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2Fplaceholder_logo_team.jpg?alt=media&token=8e5566f0-2f03-40a0-988b-a3dea1d631ff';
+export const PLACEHOLDER_TEAM_PHOTO = 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2Fplaceholder_team.jpg?alt=media&token=fd4acbb9-2187-401b-a723-9411e4dbdd27';

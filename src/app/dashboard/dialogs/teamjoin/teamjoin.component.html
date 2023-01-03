@@ -27,7 +27,7 @@
             <mat-list-item *ngFor="let team of selectedTeams; let i = index">
               <div fxLayoutAlign="space-between center" fxLayoutGap="4px" class="selection-container">
                 <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                  <img matListAvatar [src]="team.data.imgpath_logo" alt="Team Logo" appFallbackImg />
+                  <img matListAvatar [src]="team.value.imgpath_logo" alt="Team Logo" appFallbackImg />
                   <span ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption">
                     {{ team.viewValue | textShorten: 50 }}
                   </span>
@@ -35,7 +35,7 @@
                 <div fxLayoutAlign="center center" fxLayoutGap="16px">
                   <a class="material-icons-round remove-icon" matTooltip="remove"
                     (click)="onRemoveSelection(i)">delete</a>
-                  <a target="_blank" matTooltip="Open team profile" [routerLink]="['/t', team.data.tname]"
+                  <a target="_blank" matTooltip="Open team profile" [routerLink]="['/t', team.value.tname]"
                     class="material-icons-round">
                     open_in_new
                   </a>
