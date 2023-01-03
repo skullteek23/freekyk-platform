@@ -10,7 +10,7 @@
         </span>
       </div>
       <div fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column" fxLayoutAlign="center end" fxLayoutGap.lt-md="8px"
-        fxLayout.gt-sm="0px">
+        fxLayoutGap.gt-sm="0px">
         <a *ngIf="!notification.read" (click)="changeStatus(notification, true); $event.stopPropagation()"
           class="action">
           <span fxHide.gt-sm="true" class="material-icons-round">mark_email_read</span>
