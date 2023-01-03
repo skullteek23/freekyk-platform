@@ -73,8 +73,8 @@
           <input type="text" matInput name="yt" formControlName="yt" />
         </mat-form-field>
         <div fxLayoutAlign.gt-sm="center center" fxLayout.lt-md="column">
-          <button [disabled]="!teamInfoForm.valid && !teamInfoForm.dirty" class="primaryButton buttonText" type="button"
-            (click)="onSubmitTeamInfo()">
+          <button [disabled]="!(teamInfoForm.dirty && teamInfoForm.valid)" class="primaryButton buttonText"
+            type="button" (click)="onSubmitTeamInfo()">
             Save Changes
           </button>
         </div>
