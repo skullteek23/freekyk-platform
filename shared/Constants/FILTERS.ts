@@ -1,4 +1,5 @@
 import { PLAYING_POSITIONS_LIST } from "@shared/constants/constants";
+import { ownershipTypes } from "@shared/interfaces/ground.model";
 
 export const SeasonsFilters: any = {
   Premium: ['Yes', 'No'],
@@ -11,6 +12,7 @@ export const SeasonsFilters: any = {
 };
 export const PlayersFilters = {
   Gender: ['Male', 'Female'],
+  'Profile Status': ['Active', 'Inactive']
 };
 export const TeamsFilters = {
   Verified: ['Yes', 'No'],
@@ -31,13 +33,13 @@ export const StandingsFilters = {
   'Select Season': [],
 };
 export const GroundsFilters = {
-  Owner: ['Public', 'Private'],
+  Owner: ownershipTypes,
   'Field Type': [
-    'Soft Ground',
-    'Futsal Ground',
-    'Hard Ground',
-    'Artifical Ground',
-    'Turf',
+    'Full Ground',
+    'Short Ground',
+    'Huge Ground',
+    'Agile Ground',
+    'Football Turf',
   ],
 };
 
@@ -65,15 +67,15 @@ export const FilterValueMap = {
   Male: 'M',
   Female: 'F',
   Freekyk: 'FK',
-  Public: 'PUBLIC',
-  Private: 'PRIVATE',
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
   Live: 'PUBLISHED',
   Finished: 'FINISHED',
-  'Soft Ground': 'SG',
-  'Futsal Ground': 'FG',
-  'Hard Ground': 'HG',
-  'Artifical Ground': 'AG',
-  Turf: 'TURF',
+  'Full Ground': 'FG',
+  'Short Ground': 'SG',
+  'Huge Ground': 'HG',
+  'Agile Ground': 'AG',
+  'Football Turf': 'TURF',
   'U-15': 15,
   'U-19': 19,
   'U-21': 21,
