@@ -60,7 +60,7 @@ export const Constants = {
 }
 export const TO_BE_DECIDED = 'TBD';
 export const FKC_ROUND_MULTIPLIER = 2;
-export const UNIQUE_ORGANIZER_CODE = 'FKYK2022';
+export const UNIQUE_ORGANIZER_CODE = 'FKYK2023';
 export const DEFAULT_LOGO = 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
 export const DEFAULT_PLACEHOLDER = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg';
 export const DEFAULT_IMAGE_URL = 'https://www.littlethings.info/wp-content/uploads/2014/04/dummy-image-green-e1398449160839.jpg'
