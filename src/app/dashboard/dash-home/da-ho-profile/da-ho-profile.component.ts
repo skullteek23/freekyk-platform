@@ -166,7 +166,7 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
       localStorage.setItem(uid, JSON.stringify({ isProfileShared: true }));
     }
     const data = new ShareData();
-    data.share_url = `/p/${uid}`;
+    data.share_url = `/play/players/${uid}`;
     data.share_title = this.playerName;
     this.socialShareService.onShare(data);
   }
