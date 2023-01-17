@@ -16,8 +16,8 @@ export const environment = {
     logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
   },
   razorPay: {
-    key_id: 'rzp_live_ow8sSR7ZCWKSST',
-    key_secret: 'ObgEc8yFbtkmCkrexJcedhju',
+    key_id: 'rzp_live_jr3zxDVvn9KtS5',
+    key_secret: 'QKAVGs5rvgekTz4JDQMhDo63',
   },
   // https://www.universal-tutorial.com/api/getaccesstoken
   location: {
