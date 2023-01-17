@@ -1,14 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from '@shared/Constants/FILTERS';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { FilterData } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '@shared/services/api.service';
+import { manipulateFixtureData } from '@shared/utils/pipe-functions';
 
 @Component({
   selector: 'app-pl-fixtures',
@@ -26,10 +25,10 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private ngFire: AngularFirestore,
     private queryService: QueryService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -67,16 +66,13 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
         },
       };
     } else {
-      this.ngFire
-        .collection('seasons')
-        .get()
-        .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+      this.apiService.getSeasons()
         .subscribe((resp) => {
           this.filterData = {
             defaultFilterPath: 'allMatches',
             filtersObj: {
               ...MatchFilters,
-              Season: resp,
+              Season: resp.map(res => res.name),
             },
           };
         });
@@ -91,22 +87,18 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
       .pipe(
         tap((val) => {
           this.noFixtures = val.empty;
-        }),
-        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        // map((res) => res.filter(el => el.date > new Date().getTime())),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
-        tap(() => {
           this.isLoading = false;
         }),
+        manipulateFixtureData.bind(this)
       );
   }
 
   onQueryData(queryInfo): void {
+    let queryParams = null;
     if (queryInfo) {
       const queryParamKey = queryInfo?.queryItem;
-      this.router.navigate(['/play', 'fixtures'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
-    } else {
-      this.router.navigate(['/play', 'fixtures']);
+      queryParams = { queryParams: { [queryParamKey]: queryInfo.queryValue } };
     }
+    this.router.navigate(['/play', 'fixtures'], queryParams);
   }
 }

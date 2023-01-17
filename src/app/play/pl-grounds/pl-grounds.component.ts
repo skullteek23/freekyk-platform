@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
@@ -7,7 +6,8 @@ import { QueryService } from 'src/app/services/query.service';
 import { GroundsFilters } from '@shared/Constants/FILTERS';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { FilterData } from '@shared/interfaces/others.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
+import { manipulateGroundData } from '@shared/utils/pipe-functions';
+import { ApiService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-grounds',
@@ -25,8 +25,8 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
 
   constructor(
     private mediaObs: MediaObserver,
-    private ngFire: AngularFirestore,
-    private queryService: QueryService
+    private queryService: QueryService,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -61,24 +61,12 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
   }
 
   getGrounds(): void {
-    this.grounds$ = this.ngFire
-      .collection('grounds')
-      .get()
+    this.grounds$ = this.apiService.getGrounds()
       .pipe(
         tap((val) => {
-          this.noGrounds = val.empty;
+          this.noGrounds = val.length === 0;
           this.isLoading = false;
         }),
-        map((resp) =>
-          resp.docs.map(
-            (doc) =>
-            ({
-              id: doc.id,
-              ...(doc.data() as GroundBasicInfo),
-            } as GroundBasicInfo)
-          )
-        ),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
       );
   }
 
@@ -88,9 +76,6 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
     }
     this.grounds$ = this.queryService
       .onQueryData(queryInfo, 'grounds')
-      .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as GroundBasicInfo)),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
-      );
+      .pipe(manipulateGroundData.bind(this));
   }
 }

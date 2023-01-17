@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from '@shared/Constants/FILTERS';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { FilterData } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
+import { manipulateResultData } from '@shared/utils/pipe-functions';
+import { ApiService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-results',
@@ -24,10 +23,10 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private ngFire: AngularFirestore,
     private queryService: QueryService,
     private route: ActivatedRoute,
     private router: Router,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -54,16 +53,13 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   }
 
   initSeasonFilter() {
-    this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+    this.apiService.getSeasons()
       .subscribe((resp) => {
         this.filterData = {
           defaultFilterPath: 'allMatches',
           filtersObj: {
             ...MatchFilters,
-            Season: resp,
+            Season: resp.map(res => res.name),
           },
         };
       });
@@ -76,21 +72,18 @@ export class PlResultsComponent implements OnInit, OnDestroy {
       .pipe(
         tap((val) => {
           this.noResults = val.empty;
-        }),
-        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
-        tap(() => {
           this.isLoading = false;
         }),
+        manipulateResultData.bind(this)
       );
   }
 
   onQueryData(queryInfo): void {
+    let queryParams = null;
     if (queryInfo) {
       const queryParamKey = queryInfo?.queryItem;
-      this.router.navigate(['/play', 'results'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
-    } else {
-      this.router.navigate(['/play', 'results']);
+      queryParams = { queryParams: { [queryParamKey]: queryInfo.queryValue } };
     }
+    this.router.navigate(['/play', 'results'], queryParams);
   }
 }

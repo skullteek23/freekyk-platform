@@ -1,8 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AngularFirestore,
-  QueryDocumentSnapshot,
-} from '@angular/fire/firestore';
+import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
@@ -12,8 +9,9 @@ import { PlayersFilters } from '@shared/Constants/FILTERS';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { FilterData } from '@shared/interfaces/others.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '@shared/services/api.service';
+import { manipulatePlayerData } from '@shared/utils/pipe-functions';
 
 @Component({
   selector: 'app-pl-players',
@@ -32,12 +30,12 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private ngFire: AngularFirestore,
     private mediaObs: MediaObserver,
     private dialog: MatDialog,
     private queryService: QueryService,
     private router: Router,
     private route: ActivatedRoute,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -73,14 +71,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
   }
 
   getPlayers(): void {
-    this.players$ = this.ngFire
-      .collection('players')
-      .get()
-      .pipe(
-        map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as PlayerBasicInfo), } as PlayerBasicInfo))),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-        share()
-      );
+    this.players$ = this.apiService.getPlayers();
   }
 
   onQueryData(queryInfo): void {
@@ -89,10 +80,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     }
     this.players$ = this.queryService
       .onQueryData(queryInfo, 'players')
-      .pipe(
-        map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as PlayerBasicInfo), } as PlayerBasicInfo))),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-      );
+      .pipe(manipulatePlayerData.bind(this));
   }
 
   selectRow(player: PlayerBasicInfo) {

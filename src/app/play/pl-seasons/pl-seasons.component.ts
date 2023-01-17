@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, share, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { SeasonsFilters } from '@shared/Constants/FILTERS';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { SocialShareService } from '@app/services/social-share.service';
 import { FilterData } from '@shared/interfaces/others.model';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
+import { ApiService } from '@shared/services/api.service';
+import { manipulateSeasonData } from '@shared/utils/pipe-functions';
 
 @Component({
   selector: 'app-pl-seasons',
@@ -31,7 +31,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   columns: number;
 
   constructor(
-    private ngFire: AngularFirestore,
+    private apiService: ApiService,
     private mediaObs: MediaObserver,
     private queryService: QueryService,
     private socialShareService: SocialShareService
@@ -69,18 +69,12 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   }
 
   getSeasons(): void {
-    this.seasons$ = this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(
-        tap((val) => {
-          this.noSeasons = val.empty;
-          this.isLoading = false;
-        }),
-        map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-        share()
-      );
+    this.seasons$ = this.apiService.getSeasons().pipe(
+      tap((val: SeasonBasicInfo[]) => {
+        this.noSeasons = val.length === 0;
+        this.isLoading = false;
+      }),
+    );
   }
 
   onQueryData(queryInfo): void {
@@ -89,12 +83,11 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
       return this.getSeasons();
     }
     this.seasons$ = this.queryService.onQueryData(queryInfo, 'seasons').pipe(
-      tap((resp) => {
-        this.noSeasons = resp.empty;
+      manipulateSeasonData.bind(this),
+      tap((val: SeasonBasicInfo[]) => {
+        this.noSeasons = val.length === 0;
         this.isLoading = false;
       }),
-      map((resp) => resp.docs.map((doc) => doc.data() as SeasonBasicInfo)),
-      map(resp => resp.sort(ArraySorting.sortObjectByKey('name')))
     );
   }
 
