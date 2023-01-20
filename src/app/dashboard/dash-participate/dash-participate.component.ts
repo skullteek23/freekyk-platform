@@ -25,7 +25,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
 
   hasTeam = true;
   loadingStatus: PAYMENT_TYPE = HOME;
-  participatedTournaments: string[];
+  participatedTournaments: string[] = [];
   selectedSeason: string = null;
   seasons$: Observable<SeasonBasicInfo[]>;
   subscriptions = new Subscription();
