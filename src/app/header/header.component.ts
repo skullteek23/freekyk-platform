@@ -14,6 +14,7 @@ import { ngfactoryFilePath } from '@angular/compiler/src/aot/util';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
+import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Component({
   selector: 'app-header',
@@ -79,11 +80,20 @@ export class HeaderComponent implements OnInit {
   }
 
   getLiveSeasons() {
-    this.ngFire.collection('seasons', query => query.where('status', '==', 'PUBLISHED')).get()
+    const currentTimestamp = new Date().getTime();
+    this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
       .pipe(
-        map(resp => resp.docs.map(doc => ({ id: doc.id, ...doc.data() as SeasonBasicInfo }))),
-        map(resp => resp.length > 0 ? resp : [])
-      )
+        map((resp) => {
+          const seasons: SeasonBasicInfo[] = [];
+          resp.forEach(doc => {
+            const data = doc.payload.doc.data() as SeasonBasicInfo;
+            const id = doc.payload.doc.id;
+            if (data.status === 'PUBLISHED') {
+              seasons.push({ id, ...data } as SeasonBasicInfo);
+            }
+          });
+          return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
+        }))
       .subscribe({
         next: (response: SeasonBasicInfo[]) => {
           this.seasonsList = response;
@@ -91,7 +101,7 @@ export class HeaderComponent implements OnInit {
         error: () => {
           this.seasonsList = [];
         }
-      })
+      });
   }
 
   onToggleMenu(): void {
