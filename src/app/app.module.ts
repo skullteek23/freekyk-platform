@@ -44,6 +44,7 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
+import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { FeedbackButtonComponent } from '@shared/components/feedback-button/feed
     SeFixturesComponent,
     SeStandingsComponent,
     FeedbackComponent,
-    FeedbackButtonComponent
+    FeedbackButtonComponent,
+    LiveSeasonComponent
   ],
   imports: [
     BrowserModule,

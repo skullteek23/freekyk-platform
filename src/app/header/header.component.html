@@ -87,6 +87,13 @@
 
       <mat-divider style="height: 30px" [vertical]="true"></mat-divider>
 
+      <!-- Live Seasons icon -->
+      <button class="live-season" fxHide.lt-md="true" matTooltip="Live Tournaments" mat-icon-button color="primary"
+        [matMenuTriggerFor]="seasonMenu">
+        <span class="material-icons-round red">sensors</span>
+      </button>
+      <!-- Live Seasons icon -->
+
       <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/login']"
         class="buttonText secondaryButton">
         Login
@@ -274,5 +281,11 @@
   </a>
   <a mat-menu-item (click)="onLogout()">
     <span class="mat-body-1">{{ "Logout" | titlecase }}</span>
+  </a>
+</mat-menu>
+
+<mat-menu #seasonMenu>
+  <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
+    <span class="mat-body-1">{{ season.name }}</span>
   </a>
 </mat-menu>

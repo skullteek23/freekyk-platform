@@ -49,8 +49,14 @@ export class SeasonProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.seasonName = this.route.snapshot.params.seasonid;
-    this.getSeasonInfo();
+    this.route.params.subscribe({
+      next: (params) => {
+        if (params && params.hasOwnProperty('seasonid')) {
+          this.seasonName = params['seasonid'];
+          this.getSeasonInfo();
+        }
+      }
+    });
   }
 
   getSeasonInfo(): void {

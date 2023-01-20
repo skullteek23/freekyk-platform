@@ -63,6 +63,14 @@ a:hover {
   border-radius: 50%;
 }
 
+.red {
+  color: var(--red);
+}
+
+.live-season {
+  margin-right: 8px !important;
+}
+
 @media only screen and (min-width: 960px) {
   .subCircle {
     overflow: hidden !important;

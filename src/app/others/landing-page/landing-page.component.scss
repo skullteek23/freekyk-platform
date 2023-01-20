@@ -51,10 +51,26 @@
 
 .floating-button-container {
   width: 100%;
+  z-index: 99;
 
   .floating-CTA {
     border-color: white !important;
     position: fixed;
     bottom: 20px;
+  }
+
+  .floating-live {
+    border-color: white !important;
+    position: fixed;
+    bottom: 20px;
+    right: 10%;
+  }
+
+  .live-season {
+    background-color: white !important;
+
+    span {
+      color: var(--red) !important;
+    }
   }
 }

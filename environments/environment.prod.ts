@@ -13,7 +13,7 @@ export const environment = {
     url: 'https://www.freekyk.com',
     adminUrl: 'https://admin.freekyk.com',
     adminRegister: 'https://admin.freekyk.com/register',
-    logoURL: 'https://drive.google.com/file/d/1fUmNtk2jfs_TLtMkpYMMXDwzAKPZME8Q/view?usp=sharing'
+    logoURL: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/Logo%20Mark%20Color.png?alt=media&token=ab98b246-821a-42fc-8845-ea82634e77af'
   },
   razorPay: {
     key_id: 'rzp_live_jr3zxDVvn9KtS5',
@@ -21,8 +21,8 @@ export const environment = {
   },
   // https://www.universal-tutorial.com/api/getaccesstoken
   location: {
-    token: 'rBvTqnFug52VojoavuiXTidP55cANzztlxJhNMYn0BMCUxVKD7EjWR_L7JQyY4xh7oo',
-    email: 'pgoel681@gmail.com'
+    token: 'jrkrjsDH1j-bT6R5go0k6Ha7qB9CSerPfUxj_Z-PiSMR39B0EmzzzYGBQmKo7yxqrsE',
+    email: 'freekyk123@gmail.com'
   },
   // https://us8.admin.mailchimp.com/account/api/
   mailchimp: {

@@ -4,9 +4,13 @@
     imageSource="assets/svgs/Banner/main_banner.svg" [description]="mainContent"></app-hero-section>
   <!-- banner-section -->
 
-  <div class="floating-button-container" fxLayoutAlign="center center">
-    <button fxHide.gt-sm="true" [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA">
+  <div fxHide.gt-sm="true" class="floating-button-container" fxLayoutAlign="center center">
+    <button [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA" matTooltip="Get started">
       {{ 'get started' | titlecase }}
+    </button>
+    <button class="live-season floating-live" matTooltip="Live Tournaments" mat-mini-fab
+      [matMenuTriggerFor]="seasonMenu">
+      <span class="material-icons-round red">sensors</span>
     </button>
   </div>
 
@@ -58,3 +62,9 @@
   <!-- community numbers -->
 </div>
 <app-feedback-button fxShow.gt-sm="false"></app-feedback-button>
+
+<mat-menu #seasonMenu [hasBackdrop]="true" backdropClass="cdk-overlay-dark-backdrop">
+  <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
+    <span class="mat-body-1">{{ season.name }}</span>
+  </a>
+</mat-menu>

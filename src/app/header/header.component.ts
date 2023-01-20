@@ -10,6 +10,10 @@ import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
+import { ngfactoryFilePath } from '@angular/compiler/src/aot/util';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +29,7 @@ export class HeaderComponent implements OnInit {
 
   isLoading = true;
   isLogged = false;
+  seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
   sidenavOpen: boolean;
   profilePicture$: Observable<string | null>;
@@ -40,13 +45,15 @@ export class HeaderComponent implements OnInit {
     private dialog: MatDialog,
     private ngAuth: AngularFireAuth,
     private notificationService: NotificationsService,
-    private avatarServ: AccountAvatarService
+    private avatarServ: AccountAvatarService,
+    private ngFire: AngularFirestore,
   ) { }
 
   ngOnInit(): void {
     this.menuState = false;
     this.sidenavOpen = false;
     this.profilePicture$ = this.avatarServ.getProfilePicture();
+    this.getLiveSeasons();
     this.ngAuth.user.subscribe((user) => {
       if (user !== null) {
         this.isLogged = true;
@@ -69,6 +76,22 @@ export class HeaderComponent implements OnInit {
 
       { name: RouteLinks.OTHERS[1].viewValue, route: `/${RouteLinks.OTHERS[1].value}` }
     ];
+  }
+
+  getLiveSeasons() {
+    this.ngFire.collection('seasons', query => query.where('status', '==', 'PUBLISHED')).get()
+      .pipe(
+        map(resp => resp.docs.map(doc => ({ id: doc.id, ...doc.data() as SeasonBasicInfo }))),
+        map(resp => resp.length > 0 ? resp : [])
+      )
+      .subscribe({
+        next: (response: SeasonBasicInfo[]) => {
+          this.seasonsList = response;
+        },
+        error: () => {
+          this.seasonsList = [];
+        }
+      })
   }
 
   onToggleMenu(): void {
@@ -118,6 +141,13 @@ export class HeaderComponent implements OnInit {
       image: 'assets/images/whatsappGroupQR.png',
     }
     this.dialog.open(SocialGroupComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
+  }
+
+  openLiveSeason(data: SeasonBasicInfo) {
+    this.dialog.open(LiveSeasonComponent, {
       panelClass: 'fk-dialogs',
       data
     });
