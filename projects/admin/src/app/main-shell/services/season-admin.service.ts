@@ -18,6 +18,7 @@ export interface Slot {
   locCity: string;
   ownType: OWNERSHIP_TYPES;
   slot: number;
+  id: string;
 }
 
 @Injectable({
@@ -44,14 +45,15 @@ export class SeasonAdminService {
     const fixtures: IDummyFixture[] = [];
     const groundSlots: Slot[] = [];
     options.grounds.map(ground => {
-      const groundInfo: any = {
+      const groundInfo: Partial<Slot> = {
         name: ground.name,
         locState: ground.locState,
         locCity: ground.locCity,
-        ownType: ground.ownType
+        ownType: ground.ownType,
+        id: ground.id
       }
       ground.slots.forEach(slot => {
-        groundSlots.push({ ...groundInfo, slot });
+        groundSlots.push({ ...groundInfo, slot } as Slot);
       })
     });
     groundSlots.sort(ArraySorting.sortObjectByKey('slot'));
@@ -77,7 +79,8 @@ export class SeasonAdminService {
         type: matchType,
         locCity: groundSlots[i].locCity,
         locState: groundSlots[i].locState,
-        stadium: groundSlots[i].name
+        ground: groundSlots[i].name,
+        groundID: groundSlots[i].id
       }
       fixtures.push(fixture);
     }

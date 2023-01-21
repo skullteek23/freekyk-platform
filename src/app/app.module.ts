@@ -37,7 +37,6 @@ import { NgImageSliderModule } from 'ng-image-slider';
 import { SharedModule } from '@shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
-import { SeStandingsComponent } from './play/profile-pages/season-profile/se-standings/se-standings.component';
 import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -72,10 +71,9 @@ import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.co
     SeGalleryComponent,
     SeStatsComponent,
     SeFixturesComponent,
-    SeStandingsComponent,
     FeedbackComponent,
     FeedbackButtonComponent,
-    LiveSeasonComponent
+    LiveSeasonComponent,
   ],
   imports: [
     BrowserModule,

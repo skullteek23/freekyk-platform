@@ -103,8 +103,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     let errorMessage = '';
     if (!teamInfo || !teamInfo.basicInfo || !teamInfo.basicInfo.tname) {
       errorMessage = 'Join or Create a team to participate!';
-    } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT) {
-      errorMessage = `Minimum ${ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
+    } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT) {
+      errorMessage = `Minimum ${ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
     } else if (!uid || !teamInfo.basicInfo || uid !== teamInfo.basicInfo.captainId) {
       errorMessage = 'Only captains are allowed to make payment!';
     } else if (restrictedParticipants && restrictedParticipants.includes(teamInfo?.basicInfo?.id) === false) {

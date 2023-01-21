@@ -23,7 +23,8 @@ export interface MatchFixture {
   locState: string;
   id?: string;
   tie_breaker?: string;
-  stadium?: string;
+  ground?: string;
+  groundID?: string;
   fkcRound?: KnockoutRounds;
 }
 export interface MatchFixtureOverview {
@@ -82,7 +83,8 @@ export interface IDummyFixture {
   home: string;
   away: string;
   id?: string;
-  stadium?: string;
+  ground?: string;
+  groundID?: string;
   fkcRound?: number;
   timestamp?: number;
   actionDisabled?: boolean;

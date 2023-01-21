@@ -258,7 +258,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
           type: data.type,
           locCity: data.locCity,
           locState: data.locState,
-          stadium: data.stadium,
+          stadium: data.ground,
           id: data.id,
         } as IDummyFixture)
         )),

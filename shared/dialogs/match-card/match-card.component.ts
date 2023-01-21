@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
 import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchDayReport } from '../../interfaces/match.model';
-import { matchData } from '../../interfaces/others.model';
+import { ListOption, matchData } from '../../interfaces/others.model';
+import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.component';
 
 @Component({
   selector: 'app-match-card',
@@ -25,7 +26,8 @@ export class MatchCardComponent implements OnInit {
     public dialogRef: MatDialogRef<MatchCardComponent>,
     @Inject(MAT_DIALOG_DATA)
     public matchID: string,
-    private ngFirestore: AngularFirestore
+    private ngFirestore: AngularFirestore,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +83,7 @@ export class MatchCardComponent implements OnInit {
         }
       });
   }
+
   getMatchReport(): void {
     this.ngFirestore
       .collection('matchReports')
@@ -90,6 +93,17 @@ export class MatchCardComponent implements OnInit {
       .subscribe(response => {
         this.statsData = response;
       });
+  }
+
+  OnOpenGround() {
+    const data: ListOption = {
+      viewValue: this.data.ground,
+      value: this.data.groundID
+    }
+    this.dialog.open(ViewGroundCardComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
   }
 
   setMatchHeaderData(): void {

@@ -15,7 +15,10 @@ import { PlayConstants } from '../play.constants';
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
-  @Input() seasonChosen = null;
+  @Input() set selectedSeason(value: string) {
+    this.seasonChosen = value;
+    this.ngOnInit();
+  }
   @Input() showFilters = true;
 
   activeIndex = 0;
@@ -25,6 +28,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   leagueData: LeagueTableModel[] = [];
   onMobile = false;
   subscriptions = new Subscription();
+  seasonChosen = '';
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -103,7 +107,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
                   logo: element.away.logo,
                 },
                 winner,
-                stadium: element.stadium,
+                stadium: element.ground,
               };
               return CPdata;
             });

@@ -22,7 +22,9 @@
               </span>
             </div>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Stadium/Ground</span><span class="mat-body-1">{{ data?.stadium }}</span>
+              <span class="mat-body-2">Stadium/Ground</span><a matTooltip="View Ground" (click)="OnOpenGround()"
+                class="mat-body-1">{{
+                data?.ground }}</a>
             </div>
             <div fxLayoutAlign="space-between center">
               <span class="mat-body-2">Season Name</span><span class="mat-body-1">{{ data?.season }}</span>

@@ -128,7 +128,8 @@ export function getPublishableFixture(data: IDummyFixture[]) {
     type: val.type,
     locCity: val.locCity,
     locState: val.locState,
-    stadium: val.stadium,
+    ground: val.ground,
+    groundID: val.groundID
   } as MatchFixture));
 }
 

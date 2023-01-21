@@ -14,6 +14,12 @@ import {
   SeasonParticipants,
   SeasonStats,
 } from '@shared/interfaces/season.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { ListOption } from '@shared/interfaces/others.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import * as _ from 'lodash';
 
 
 @Component({
@@ -35,6 +41,9 @@ export class SeasonProfileComponent implements OnInit {
   stats$: Observable<SeasonStats>;
   isLocked$: Observable<boolean>;
   seasonName: string;
+  seasonFixtures: MatchFixture[] = [];
+  seasonResults: MatchFixture[] = [];
+  seasonGroundsList: ListOption[] = [];
   imgPath: string;
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
@@ -45,7 +54,8 @@ export class SeasonProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
     private enlargeService: EnlargeService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +67,10 @@ export class SeasonProfileComponent implements OnInit {
         }
       }
     });
+  }
+
+  getGrounds() {
+
   }
 
   getSeasonInfo(): void {
@@ -73,6 +87,7 @@ export class SeasonProfileComponent implements OnInit {
             this.getSeasonMoreInfo(this.sid);
             this.getPhotos(this.sid);
             this.getStats(this.sid);
+            this.getMatches(this.seasonName);
           } else {
             this.error = resp.empty;
             this.router.navigate(['error']);
@@ -107,6 +122,35 @@ export class SeasonProfileComponent implements OnInit {
         ),
         share()
       );
+  }
+
+  getMatches(season: string) {
+    if (season) {
+      this.ngFire.collection('allMatches', query => query.where('season', '==', season))
+        .get()
+        .pipe(
+          map(resp => resp.docs.map(doc => ({ id: doc.id, ...doc.data() as MatchFixture }))),
+        )
+        .subscribe({
+          next: (response: MatchFixture[]) => {
+            this.seasonFixtures = response.filter(match => match.concluded === false);
+            this.seasonResults = response.filter(match => match.concluded === true);
+            this.seasonGroundsList = _.uniqBy(response, 'stadium').map(el => ({ viewValue: el.ground, value: el.groundID }))
+          },
+          error: () => {
+            this.seasonFixtures = [];
+            this.seasonResults = [];
+            this.seasonGroundsList = [];
+          }
+        })
+    }
+  }
+
+  OnOpenGround(data: ListOption) {
+    this.dialog.open(ViewGroundCardComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
   }
 
   getPhotos(sid: string): void {

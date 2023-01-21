@@ -8,7 +8,7 @@
     <button [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA" matTooltip="Get started">
       {{ 'get started' | titlecase }}
     </button>
-    <button class="live-season floating-live" matTooltip="Live Tournaments" mat-mini-fab
+    <button class="live-season floating-live" matTooltip="Upcoming Seasons" mat-mini-fab
       [matMenuTriggerFor]="seasonMenu">
       <span class="material-icons-round red">sensors</span>
     </button>
@@ -64,6 +64,7 @@
 <app-feedback-button fxShow.gt-sm="false"></app-feedback-button>
 
 <mat-menu #seasonMenu [hasBackdrop]="true" backdropClass="cdk-overlay-dark-backdrop">
+  <h4 mat-menu-item class="mat-subheading-1 align">Upcoming Seasons</h4>
   <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
     <span class="mat-body-1">{{ season.name }}</span>
   </a>

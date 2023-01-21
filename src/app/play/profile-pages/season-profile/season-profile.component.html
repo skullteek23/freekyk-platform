@@ -17,9 +17,22 @@
           (seasonInfo$ | async)?.name }}</span>
       </div>
 
-      <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
+      <!-- <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
+      </p> -->
+      <p class="mat-body-1 align">
+        Starts on {{(seasonInfo$ | async)?.start_date | date: 'fullDate'}}
       </p>
+      <p class="mat-body-1 align">
+        Fees per team : {{(seasonInfo$ | async)?.feesPerTeam | currency:'INR':true}}
+      </p>
+      <p class="mat-body-1 align">
+        Total Teams : {{(seasonInfo$ | async)?.p_teams}}
+      </p>
+      <p class="mat-body-1 align">
+        Ground(s): <a *ngFor="let ground of seasonGroundsList" (click)="OnOpenGround(ground)">{{ground.viewValue}}</a>
+      </p>
+
       <div fxLayout.gt-sm fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign.gt-sm="start center"
         fxLayoutAlign.lt-md="stretch center">
         <button (click)="onParticipate()" *ngIf="(seasonInfo$ | async)?.status !== 'FINISHED'"
@@ -41,7 +54,12 @@
 <!-- intro-section -->
 
 <!-- content -->
-<mat-tab-group class="container section-space-bottom season-fixtures-container">
+<mat-tab-group class="container section-space-bottom season-fixtures-container" fxHide.lt-md="true">
+  <mat-tab label="Fixtures">
+    <ng-template matTabContent>
+      <app-se-fixtures [list]="seasonFixtures"></app-se-fixtures>
+    </ng-template>
+  </mat-tab>
   <mat-tab label="Overview">
     <ng-template matTabContent>
       <app-se-overview [seasonId]="sid" [venue]="{
@@ -60,21 +78,63 @@
       <app-se-stats [stats]="stats$ | async"></app-se-stats>
     </ng-template>
   </mat-tab>
-  <mat-tab label="Fixtures">
-    <ng-template matTabContent>
-      <app-se-fixtures [seasonName]="seasonInfo.name"></app-se-fixtures>
-    </ng-template>
-  </mat-tab>
   <mat-tab label="Results">
     <ng-template matTabContent>
-      <app-se-fixtures [showResults]="true" [seasonName]="seasonInfo.name">
+      <app-se-fixtures [list]="seasonResults">
       </app-se-fixtures>
     </ng-template>
   </mat-tab>
   <mat-tab label="Standings">
     <ng-template matTabContent>
-      <app-pl-standings [seasonChosen]="seasonInfo.name" [showFilters]="false"></app-pl-standings>
+      <app-pl-standings [selectedSeason]="seasonInfo?.name" [showFilters]="false"></app-pl-standings>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
 <!-- content -->
+
+<div class="section-space-bottom season-fixtures-container" fxHide.gt-sm="true">
+  <div class="content-box container">
+    <p class="dash-h5">Fixtures</p>
+    <app-se-fixtures [list]="seasonFixtures"></app-se-fixtures>
+  </div>
+
+  <div class="content-box container">
+
+    <p class="dash-h5">Overview</p>
+    <app-se-overview [seasonId]="sid" [venue]="{
+      city: (seasonInfo$ | async)?.locCity,
+      state: (seasonInfo$ | async)?.locState
+    }" [data]="seasonMoreInfo$ | async"></app-se-overview>
+  </div>
+
+  <div class="content-box container" *ngIf="seasonResults.length">
+    <p class="dash-h5">Results</p>
+    <app-se-fixtures [list]="seasonResults"></app-se-fixtures>
+  </div>
+
+  <div class="content-box">
+    <p class="dash-h5 container">Standings</p>
+    <app-pl-standings [selectedSeason]="seasonInfo?.name" [showFilters]="false"></app-pl-standings>
+  </div>
+
+  <div class="content-box container">
+    <p class="dash-h5">Statistics</p>
+    <app-se-stats [stats]="stats$ | async"></app-se-stats>
+  </div>
+
+  <div class="content-box container" *ngIf="(photos$ | async)?.length">
+    <p class="dash-h5">Gallery</p>
+    <app-se-gallery [photos]="photos$ | async"></app-se-gallery>
+  </div>
+
+  <div fxLayout.gt-sm fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign.gt-sm="start center"
+    fxLayoutAlign.lt-md="stretch center">
+    <button (click)="onParticipate()" *ngIf="(seasonInfo$ | async)?.status !== 'FINISHED'"
+      class="primaryButton buttonText">
+      <div fxLayoutGap="8px" fxLayoutAlign="center center">
+        <span matTooltip="Participate in this season">Participate</span>
+      </div>
+    </button>
+  </div>
+
+</div>

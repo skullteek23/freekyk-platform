@@ -46,9 +46,10 @@
 
 @media only screen and (min-width: 960px) {
   .bannerPhoto {
-    height: 360px;
+    height: 100%;
+    // margin-right: 15%;
     width: auto;
-    max-width: 45%;
+    max-width: 60%;
     overflow: hidden;
     border-radius: var(--borderRadiusCard) !important;
   }
@@ -58,4 +59,8 @@
   .hero-text {
     max-width: 450px;
   }
+}
+
+.content-box {
+  margin-bottom: 20px;
 }

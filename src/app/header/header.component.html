@@ -88,7 +88,7 @@
       <mat-divider style="height: 30px" [vertical]="true"></mat-divider>
 
       <!-- Live Seasons icon -->
-      <button class="live-season" fxHide.lt-md="true" matTooltip="Live Tournaments" mat-icon-button color="primary"
+      <button class="live-season" fxHide.lt-md="true" matTooltip="Upcoming Seasons" mat-icon-button color="primary"
         [matMenuTriggerFor]="seasonMenu">
         <span class="material-icons-round red">sensors</span>
       </button>
@@ -285,6 +285,7 @@
 </mat-menu>
 
 <mat-menu #seasonMenu>
+  <h4 mat-menu-item class="mat-subheading-1 align">Upcoming Seasons</h4>
   <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
     <span class="mat-body-1">{{ season.name }}</span>
   </a>

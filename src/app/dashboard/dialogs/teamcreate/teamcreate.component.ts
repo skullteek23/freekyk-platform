@@ -105,7 +105,7 @@ export class TeamcreateComponent implements OnInit, OnDestroy {
     const uid = localStorage.getItem('uid');
     const teamName = teamDetailsFormData?.name;
 
-    if (teamDetailsFormData && invitesFormData && playersList && playersList.length >= ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT && teamName) {
+    if (teamDetailsFormData && invitesFormData && playersList && playersList.length >= ProfileConstants.MIN_TEAM_CREATION_ELIGIBLE_PLAYER_LIMIT && teamName) {
       this.isLoaderShown = true;
       const functionData = {
         players: playersList,
@@ -178,7 +178,7 @@ export class TeamcreateComponent implements OnInit, OnDestroy {
   }
 
   get isValidTeamMemberCount(): boolean {
-    return this.memberCount >= ProfileConstants.MIN_TEAM_ELIGIBLE_PLAYER_LIMIT && this.memberCount < ProfileConstants.MAX_TEAM_ELIGIBLE_PLAYER_LIMIT;
+    return this.memberCount >= ProfileConstants.MIN_TEAM_CREATION_ELIGIBLE_PLAYER_LIMIT && this.memberCount < ProfileConstants.MAX_TEAM_ELIGIBLE_PLAYER_LIMIT;
   }
 
   onCloseDialog(): void {
