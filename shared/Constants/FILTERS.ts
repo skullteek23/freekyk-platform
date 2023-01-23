@@ -12,7 +12,7 @@ export const SeasonsFilters: any = {
 };
 export const PlayersFilters = {
   Gender: ['Male', 'Female'],
-  'Profile Status': ['Active', 'Inactive']
+  // 'Profile Status': ['Active', 'Inactive']
 };
 export const TeamsFilters = {
   Verified: ['Yes', 'No'],
