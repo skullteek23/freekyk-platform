@@ -29,7 +29,8 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
   const UID = fileName ? fileName.split('_')[1] : '';
   const bucketDir = dirname(filePath);
   const workingDir = join(tmpdir(), 'thumbs');
-  const tmpFilePath = join(workingDir, 'source.png');
+  const timestamp = new Date().getTime();
+  const tmpFilePath = join(workingDir, `${timestamp}.png`);
   const thumbName = `thumb_${UID}`;
   const thumbPath = join(workingDir, thumbName);
 
