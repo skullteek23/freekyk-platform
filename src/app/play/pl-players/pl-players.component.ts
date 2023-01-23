@@ -14,6 +14,7 @@ import { FilterData } from '@shared/interfaces/others.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pl-players',
@@ -38,6 +39,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     private queryService: QueryService,
     private router: Router,
     private route: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -103,7 +105,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',
       data: playerID,
-    }).afterClosed().subscribe(() => this.router.navigate(['/play/players']));
+    }).afterClosed().subscribe(() => this.location.go('/play/players'));
   }
 
 }
