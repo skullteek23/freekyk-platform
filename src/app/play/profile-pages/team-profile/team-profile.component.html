@@ -39,7 +39,7 @@
 <!-- intro-section -->
 
 <!-- content -->
-<mat-tab-group class="container section-space-bottom">
+<mat-tab-group class="container section-space-bottom" fxHide.lt-md="true">
   <mat-tab label="Overview">
     <ng-template matTabContent>
       <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{
@@ -65,3 +65,34 @@
   </mat-tab>
 </mat-tab-group>
 <!-- content -->
+
+<div class="section-space-bottom season-fixtures-container" fxHide.gt-sm="true">
+  <div class="content-box container">
+    <p class="dash-h5">Overview</p>
+    <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{
+      city: (teamInfo$ | async)?.locCity,
+      state: (teamInfo$ | async)?.locState
+    }"></app-te-overview>
+  </div>
+
+  <div class="content-box container">
+    <p class="dash-h5">Members</p>
+    <app-te-members [members]="(members$ | async)?.members"></app-te-members>
+  </div>
+
+  <div class="content-box container" *ngIf="(media$ | async)?.length">
+    <p class="dash-h5">Gallery</p>
+    <app-te-gallery [photos]="media$ | async"></app-te-gallery>
+  </div>
+
+  <div class="content-box container">
+    <p class="dash-h5">Statistics</p>
+    <app-te-stats [data]="stats$ | async"></app-te-stats>
+  </div>
+
+  <div fxLayoutAlign="center center">
+    <button *ngIf="!isOwnTeam" (click)="onChallengeTeam()" class="primaryButton buttonText">
+      Challenge Team
+    </button>
+  </div>
+</div>

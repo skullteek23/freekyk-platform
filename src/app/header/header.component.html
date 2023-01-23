@@ -285,7 +285,7 @@
 </mat-menu>
 
 <mat-menu #seasonMenu>
-  <h4 mat-menu-item class="mat-subheading-1 align">Upcoming Seasons</h4>
+  <h4 class="mat-subheading-1 align">Upcoming Seasons</h4>
   <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
     <span class="mat-body-1">{{ season.name }}</span>
   </a>
