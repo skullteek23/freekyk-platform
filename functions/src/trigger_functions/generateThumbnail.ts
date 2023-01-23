@@ -1,12 +1,13 @@
-import { Storage } from '@google-cloud/storage';
 import { join, dirname } from 'path';
 import { tmpdir } from 'os';
 import * as sharp from 'sharp';
 import * as fs from 'fs-extra';
 import * as admin from 'firebase-admin';
-const gcs = new Storage();
+const uuid = require("uuid-v4");
 const db = admin.firestore();
+const gcsStorage = admin.storage();
 import * as functions from 'firebase-functions';
+import { createPersistentDownloadUrl } from 'src/utils/utilities';
 
 export async function generateThumbnail(object: functions.storage.ObjectMetadata, context: any): Promise<any> {
 
@@ -19,7 +20,7 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
     return false;
   }
 
-  const bucketRef = gcs.bucket(object.bucket);
+  const bucketRef = gcsStorage.bucket(object.bucket);
   const fileName = filePath.split('/').pop() || '';
 
   if (fileName.includes('thumb') || !filePath.includes('profileimage')) {
@@ -44,12 +45,22 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
   await sharp(tmpFilePath).resize(SIZE, SIZE).toFile(thumbPath);
 
   // Upload to GCS
-  const uploadedFile = await bucketRef.upload(thumbPath, { destination: join(bucketDir, `/thumbnails/${thumbName}`), contentType });
-  const uploadedFilePathTemp = uploadedFile && uploadedFile[0] ? await uploadedFile[0].getSignedUrl({ action: 'read', expires: new Date('31 December 2199') }) : null;
+  const accessToken = uuid();
+  await bucketRef.upload(thumbPath, {
+    destination: join(bucketDir, `/thumbnails/${thumbName}`),
+    contentType,
+    metadata: {
+      cacheControl: "max-age=31536000",
+      metadata: {
+        firebaseStorageDownloadTokens: accessToken,
+      },
+    },
+  });
+  const imgpath_sm = createPersistentDownloadUrl(object.bucket, `profileImages/thumbnails/${thumbName}`, accessToken);
 
   // Update player documents
-  if (uploadedFilePathTemp && workingDir) {
-    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm: uploadedFilePathTemp[0] }));
+  if (imgpath_sm && workingDir) {
+    allPromises.push(db.collection('players').doc(UID).update({ imgpath_sm }));
     allPromises.push(fs.remove(workingDir));
     return Promise.all(allPromises);
   }

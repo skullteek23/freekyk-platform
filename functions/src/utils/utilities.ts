@@ -56,8 +56,10 @@ export function isFixtureAvailableAway(fixture: MatchFixture): boolean {
   return fixture?.away?.name === TO_BE_DECIDED;
 }
 
-export const Constants = {
-}
+export function createPersistentDownloadUrl(bucket: string, pathToFile: string, downloadToken: string) {
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(pathToFile)}?alt=media&token=${downloadToken}`;
+};
+
 export const TO_BE_DECIDED = 'TBD';
 export const FKC_ROUND_MULTIPLIER = 2;
 export const UNIQUE_ORGANIZER_CODE = 'FKYK2023';
