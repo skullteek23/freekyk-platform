@@ -7,7 +7,6 @@ const uuid = require("uuid-v4");
 const db = admin.firestore();
 const gcsStorage = admin.storage();
 import * as functions from 'firebase-functions';
-import { createPersistentDownloadUrl } from 'src/utils/utilities';
 
 export async function generateThumbnail(object: functions.storage.ObjectMetadata, context: any): Promise<any> {
 
@@ -66,3 +65,7 @@ export async function generateThumbnail(object: functions.storage.ObjectMetadata
   }
   return false;
 }
+
+export function createPersistentDownloadUrl(bucket: string, pathToFile: string, downloadToken: string) {
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(pathToFile)}?alt=media&token=${downloadToken}`;
+};
