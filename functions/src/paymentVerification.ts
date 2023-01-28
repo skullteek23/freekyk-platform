@@ -11,9 +11,9 @@ export async function paymentVerification(data: any, context: any): Promise<any>
   const KEY_SECRET = environment.razorPay.key_secret;
   const generatedSignature = crypto.createHmac('sha256', KEY_SECRET).update(`${ORDER_ID}|${PAYMENT_ID}`).digest('hex');
 
-  if (!ORDER_ID || !PAYMENT_ID || !SIGNATURE || !generatedSignature || SIGNATURE !== generatedSignature) {
-    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
-  } else {
+  if (ORDER_ID && PAYMENT_ID && SIGNATURE && generatedSignature && SIGNATURE === generatedSignature) {
     return true;
+  } else {
+    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
   }
 }

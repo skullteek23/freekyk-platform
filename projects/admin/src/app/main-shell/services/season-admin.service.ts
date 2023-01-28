@@ -6,7 +6,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, TournamentTypes, } from '@shared/interfaces/match.model';
-import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, statusType } from '@shared/interfaces/season.model';
+import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
@@ -115,20 +115,24 @@ export class SeasonAdminService {
       }
       return callable(data).toPromise();
     }
-    return null;
+    return Promise.reject();
   }
 
   setSelectedFile(fileObj: File) {
     this.selectedFile = fileObj;
   }
 
-  async uploadSeasonPhoto(seasonID: string): Promise<any> {
-    if (!this.selectedFile) {
+  get _selectedFile(): File {
+    return this.selectedFile;
+  }
+
+  async uploadSeasonPhoto(seasonID: string, file: File): Promise<any> {
+    if (!file) {
       return Promise.reject({
         message: 'Unable to upload Season Photo!'
       });
     }
-    const imgpath: string = await this.getImageURL(this.selectedFile);
+    const imgpath: string = await this.getImageURL(file);
     if (imgpath) {
       return this.ngFire.collection('seasons').doc(seasonID).update({ imgpath });
     } else {
@@ -191,6 +195,9 @@ export class SeasonAdminService {
 
   getMappedDateRange(): number {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    if (!selectMatchTypeFormData) {
+      return 0;
+    }
     const comparatorTimestamp = new Date(selectMatchTypeFormData.startDate).getTime();
     if (this.adminConfigs && this.adminConfigs.hasOwnProperty('lastParticipationDate') && this.adminConfigs.lastParticipationDate) {
       switch (this.adminConfigs.lastParticipationDate) {
@@ -276,14 +283,13 @@ export class SeasonAdminService {
     }
   }
 
-  checkSeasonName(input: string) {
+  getExistingSeasonNames() {
     return this.ngFire
-      .collection('seasons', (query) =>
-        query.where('name', '==', input).limit(1)
-      )
+      .collection('seasons')
       .get()
       .pipe(
-        map((responseData) => (responseData.empty ? null : { nameTaken: true }))
+        map((responseData) => (responseData.docs.map(doc => doc.data() as SeasonBasicInfo))),
+        map(resp => resp.map(resp => resp.name))
       );
   }
 

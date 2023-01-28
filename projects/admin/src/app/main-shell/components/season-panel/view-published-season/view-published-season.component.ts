@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,7 @@ import { SeasonAdminService } from '../../../services/season-admin.service';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dialog.component';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
+import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 
 @Component({
   selector: 'app-view-published-season',
@@ -40,7 +41,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
     DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
     DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
-    DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION,
     DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
     DUMMY_FIXTURE_TABLE_COLUMNS.ACTIONS,
   ];
@@ -54,6 +54,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   seasonParticipants: SeasonParticipants[] = [];
   updateEntriesForm = new FormGroup({});
   isRestrictedParticipants: string[];
+
+  @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -82,10 +84,10 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   initForm() {
     this.updateEntriesForm = new FormGroup({
       description: new FormControl(this.seasonMoreData?.description,
-        [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)]
+        [Validators.maxLength(this.descriptionLimit)]
       ),
       rules: new FormControl(this.seasonMoreData?.rules,
-        [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.rulesLimit)]
+        [Validators.maxLength(this.rulesLimit)]
       ),
     });
   }
@@ -240,6 +242,29 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
         .get()
         .pipe(map(resp => resp.exists && (resp.data() as MatchFixture).concluded === false));
     }
+  }
+
+  onChangeSeasonPhoto(newFileEvent: File) {
+    this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.isLoaderShown = true;
+            this.seasonAdminService.uploadSeasonPhoto(this.seasonID, newFileEvent)
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Season Photo updated successfully!');
+              })
+              .catch(() => {
+                this.snackbarService.displayError('Error Updating Season Photo')
+                this.photoUploaderComponent.setManualPreview(this.seasonData.imgpath);
+              })
+              .finally(() => this.isLoaderShown = false)
+          } else {
+            this.photoUploaderComponent.setManualPreview(this.seasonData.imgpath);
+          }
+        },
+      })
   }
 
   getFixtures(): void {

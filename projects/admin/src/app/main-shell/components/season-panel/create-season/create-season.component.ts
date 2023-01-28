@@ -106,7 +106,8 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     this.isLoaderShown = true;
     this.seasonAdminService.publishSeason(this.seasonID)
       .then(() => {
-        this.seasonAdminService.uploadSeasonPhoto(this.seasonID)
+        const file = this.seasonAdminService._selectedFile;
+        this.seasonAdminService.uploadSeasonPhoto(this.seasonID, file)
           .catch(this.handleError.bind(this))
           .finally(() => {
             this.seasonAdminService.clearSavedData();

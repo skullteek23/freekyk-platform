@@ -2,6 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { ISeasonSummaryData, ISummaryDataSource, ISelectMatchType, ISelectTeam, ISelectGrounds, ISeasonFixtures, ISeasonDetails } from '@shared/interfaces/season.model';
@@ -25,7 +26,8 @@ export class ViewSummaryComponent implements OnInit {
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private currencyPipe: CurrencyPipe,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +62,8 @@ export class ViewSummaryComponent implements OnInit {
       } else {
         data.participants = 'Any team can participate';
       }
+    } else {
+      this.snackbarService.displayError('Please finish previous steps!');
     }
     this.summaryData = data;
   }

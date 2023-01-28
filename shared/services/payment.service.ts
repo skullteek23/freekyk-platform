@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../../src/app/dashboard/constants/constants';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
+
+export enum LoadingStatus {
+  default = 0,
+  loading = 1,
+  success = 2,
+  failed = 3,
+}
 
 export interface ICheckoutOptions {
   key?: string,
@@ -26,6 +32,9 @@ export interface ICheckoutOptions {
   amount?: number;
   order_id?: string;
   failureRoute?: string;
+  modal?: {
+    ondismiss: () => void
+  }
 }
 
 @Injectable({
@@ -34,15 +43,16 @@ export interface ICheckoutOptions {
 export class PaymentService {
 
   private loadingStatusChanged = new BehaviorSubject<PAYMENT_TYPE>(HOME);
-  private paymentStatusAdmin = new Subject<any>();
 
   constructor(
     private ngFunc: AngularFireFunctions,
-    private router: Router
   ) { }
 
   generateOrder(finalAmount: string): Promise<any> {
     const amount = Number(finalAmount);
+    if (amount === 0) {
+      return Promise.reject();
+    }
     // order generation can only be handled from backend, confirmed by razorpay team
     const generatorFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER);
     return generatorFunc({ amount }).toPromise();
@@ -54,16 +64,11 @@ export class PaymentService {
     }
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
-    razorpayInstance.on('payment.failed', this.handleFailure.bind(this, options.failureRoute));
+    razorpayInstance.on('payment.failed', this.handleFailure.bind(this));
   }
 
-  handleFailure(error, route: string): void {
-    alert(error.description);
-    if (route) {
-      this.router.navigate([route], { state: { message: error.description, code: error.code } });
-    } else {
-      this.router.navigate(['/error'], { state: { message: error.description, code: error.code } });
-    }
+  handleFailure(response): void {
+    alert(response.error.description);
   }
 
   verifyPayment(response): Observable<any> {
@@ -115,28 +120,6 @@ export class PaymentService {
     return participateFunc({ ...response, season, tid, uid });
   }
 
-  getAdminCheckoutOptions(fees: string): ICheckoutOptions {
-    const options = {
-      ...UNIVERSAL_OPTIONS,
-      description: `Tournament Organizer Fees`,
-      handler: this.onSuccessAdmin.bind(this),
-      amount: Number(fees),
-    };
-    return options;
-  }
-
-  onSuccessAdmin(response: any) {
-    this.paymentStatusAdmin.next({ status: false });
-    this.verifyPayment(response).subscribe({
-      next: (response) => {
-        this.paymentStatusAdmin.next({ ...response, status: response ? true : false });
-      },
-      error: (err) => {
-        this.paymentStatusAdmin.next({ status: false });
-      }
-    })
-  }
-
   onLoadingStatusChange(status: PAYMENT_TYPE): void {
     this.loadingStatusChanged.next(status);
   }
@@ -150,9 +133,5 @@ export class PaymentService {
       return '0';
     }
     return (fees - ((discount / 100) * fees)).toString();
-  }
-
-  get _paymentStatusAdmin(): Subject<any> {
-    return this.paymentStatusAdmin;
   }
 }

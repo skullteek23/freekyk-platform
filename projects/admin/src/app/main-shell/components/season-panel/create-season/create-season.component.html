@@ -5,9 +5,9 @@
     </span>
   </div>
 
-  <mat-horizontal-stepper #seasonStepper [linear]="true">
+  <mat-horizontal-stepper #seasonStepper>
 
-    <mat-step label="Match Type" [stepControl]="matchSelectForm" [editable]="seasonStepper.selectedIndex <= 4">
+    <mat-step label="Match Type" [stepControl]="matchSelectForm" [editable]="true">
       <app-select-match-type *ngIf="seasonStepper.selectedIndex === 0" (stepper)="seasonStepper">
       </app-select-match-type>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
@@ -19,8 +19,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Participants" [stepControl]="teamSelectForm" [optional]="true"
-      [editable]="seasonStepper.selectedIndex <= 4">
+    <mat-step label="Participants" [stepControl]="teamSelectForm" [optional]="true" [editable]="true">
       <app-select-teams *ngIf="seasonStepper.selectedIndex === 1" (stepper)="seasonStepper">
       </app-select-teams>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
@@ -32,7 +31,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Ground(s)" [stepControl]="groundForm" [editable]="seasonStepper.selectedIndex <= 4">
+    <mat-step label="Ground(s)" [stepControl]="groundForm" [editable]="true">
       <app-select-ground *ngIf="seasonStepper.selectedIndex === 2"></app-select-ground>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center error" *ngIf="errorMessage">
@@ -46,7 +45,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="More Details" [editable]="seasonStepper.selectedIndex <= 4" [stepControl]="detailsForm">
+    <mat-step label="More Details" [editable]="true" [stepControl]="detailsForm">
       <app-add-season *ngIf="seasonStepper.selectedIndex === 3"></app-add-season>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <button type="button" class="secondaryButton buttonText" matStepperPrevious>Previous</button>
@@ -55,7 +54,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Fixtures" [editable]="seasonStepper.selectedIndex <= 4" [stepControl]="fixturesForm">
+    <mat-step label="Fixtures" [editable]="true" [stepControl]="fixturesForm">
       <app-generate-fixtures *ngIf="seasonStepper.selectedIndex === 4"></app-generate-fixtures>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center">
@@ -70,7 +69,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Payment" [editable]="seasonStepper.selectedIndex <= 4" [stepControl]="paymentForm">
+    <mat-step label="Payment" [editable]="true" [stepControl]="paymentForm">
       <app-admin-payment *ngIf="seasonStepper.selectedIndex === 5"></app-admin-payment>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center">
@@ -82,7 +81,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Publish" [editable]="seasonStepper.selectedIndex <= 4">
+    <mat-step label="Publish" [editable]="true">
       <ng-container *ngIf="seasonStepper.selectedIndex === 6 && isSeasonLive === false">
         <app-view-summary (clickNext)="onPublishSeason()"></app-view-summary>
       </ng-container>

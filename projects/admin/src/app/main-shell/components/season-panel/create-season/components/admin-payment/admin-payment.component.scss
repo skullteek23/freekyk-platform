@@ -10,8 +10,13 @@
   justify-content: center;
   flex-direction: column;
   gap: 15px;
-  .succes-message {
+
+  .message {
     width: 100%;
     text-align: center;
+  }
+
+  .error-message {
+    color: var(--red)
   }
 }

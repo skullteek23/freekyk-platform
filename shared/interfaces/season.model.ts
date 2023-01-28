@@ -47,10 +47,10 @@ export interface SeasonParticipants {
 }
 
 export enum LastParticipationDate {
-  sameDate = 'Same as Tournament Start Date',
-  oneDayBefore = '1 day before Start Date',
-  threeDayBefore = '3 days before Start Date',
-  oneWeekBefore = '1 week before Start Date',
+  sameDate = 'Same as Tournament Start Date', // 0
+  oneDayBefore = '1 day before Start Date', // 86400
+  threeDayBefore = '3 days before Start Date', // 259200
+  oneWeekBefore = '1 week before Start Date', // 604800
 };
 
 

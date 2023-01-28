@@ -65,7 +65,11 @@ export class SelectTeamsComponent implements OnInit {
   getLastSavedData() {
     const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    this.initControls(selectMatchTypeFormData?.participatingTeamsCount, selectTeamFormData?.participants);
+    if (selectMatchTypeFormData) {
+      this.initControls(selectMatchTypeFormData?.participatingTeamsCount, selectTeamFormData?.participants);
+    } else {
+      this.snackbarService.displayError('Please finish previous steps!');
+    }
   }
 
   initControls(limit: number, values: ITeamInfo[]): void {

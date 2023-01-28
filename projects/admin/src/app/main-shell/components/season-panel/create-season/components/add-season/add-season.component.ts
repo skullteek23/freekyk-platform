@@ -1,5 +1,5 @@
 import { Component, OnInit, SecurityContext, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
@@ -25,6 +25,7 @@ export class AddSeasonComponent implements OnInit {
   detailsForm: FormGroup = new FormGroup({});
   messages = formsMessages;
   currentDate = new Date();
+  seasonsNamesList: string[] = [];
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -33,21 +34,34 @@ export class AddSeasonComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.getSeasons();
     this.getLastSavedData();
   }
 
   initForm() {
     this.detailsForm = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)], this.validateNameNotTaken.bind(this)),
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50), this.seasonNameUnique.bind(this)]),
       description: new FormControl(null, [
-        Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.descriptionLimit)
+        Validators.required, Validators.maxLength(this.descriptionLimit)
       ]),
-      rules: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.bio), Validators.maxLength(this.rulesLimit)]),
+      rules: new FormControl(null, [Validators.required, Validators.maxLength(this.rulesLimit)]),
       fees: new FormControl(0,
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
       lastRegistrationDate: new FormControl(null, [Validators.required]),
+    });
+  }
+
+  getSeasons() {
+    this.seasonAdminService.getExistingSeasonNames().subscribe({
+      next: (response) => {
+        if (response && response.length) {
+          this.seasonsNamesList = response;
+        } else {
+          this.seasonsNamesList = [];
+        }
+      }
     });
   }
 
@@ -70,11 +84,8 @@ export class AddSeasonComponent implements OnInit {
     }
   }
 
-  validateNameNotTaken(
-    control: AbstractControl
-  ): Observable<ValidationErrors | null> {
-    const input: string = (control.value as string).trim();
-    return this.seasonAdminService.checkSeasonName(input);
+  seasonNameUnique(control: AbstractControl): { [key: string]: any } | null {
+    return this.seasonsNamesList?.findIndex(val => val?.toLowerCase() === String(control?.value)?.toLowerCase()) === -1 ? null : { nameTaken: true };
   }
 
   get description(): AbstractControl {

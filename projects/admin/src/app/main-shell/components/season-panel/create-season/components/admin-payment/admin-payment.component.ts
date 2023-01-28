@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
-import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
+import { ICheckoutOptions, LoadingStatus, PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,34 +14,22 @@ import { Subscription } from 'rxjs';
 })
 export class AdminPaymentComponent implements OnInit {
 
-  isLoaderShown = true;
-  isPaymentDone = false;
+  readonly loadingStatus = LoadingStatus;
+
+  status = LoadingStatus.default;
   paymentForm: FormGroup;
   subscriptions = new Subscription();
-  totalAmount = 0;
+  errorMessage = '';
 
   constructor(
-    private snackbarService: SnackbarService,
     private paymentService: PaymentService,
-    private ref: ChangeDetectorRef
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.addPaymentEventListener();
     this.calculatePayment();
-    this.intiPayment();
-  }
-
-  addPaymentEventListener() {
-    this.subscriptions.add(this.paymentService._paymentStatusAdmin.subscribe(response => {
-      if (response['status']) {
-        this.success();
-      } else {
-        this.reset();
-      }
-      this.ref.detectChanges();
-    }))
+    this.initPayment();
   }
 
   initForm() {
@@ -54,42 +43,74 @@ export class AdminPaymentComponent implements OnInit {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(JSON.stringify(sessionStorage.getItem('selectMatchType')));
     if (selectMatchTypeFormData) {
       // pricing model calculations
-      const totalAmount = 1000;
+      const totalAmount = 1;
       this.amount.setValue(totalAmount);
+    } else {
+      this.snackBarService.displayCustomMsg('Please finish previous steps');
     }
   }
 
-  intiPayment(): void {
+  initPayment(): void {
+    this.isSuccess.setValue(false);
     const fees = this.amount.value;
     if (fees) {
+      this.status = this.loadingStatus.loading;
       this.paymentService.generateOrder(fees)
         .then((response) => {
           if (response) {
-            this.isLoaderShown = false;
-            const options: ICheckoutOptions = this.paymentService.getAdminCheckoutOptions(fees);
+            const options: ICheckoutOptions = this.getSeasonCreationCheckoutOptions(fees);
             options.order_id = response['id'];
-            options.failureRoute = '/error';
+            options.modal = {
+              ondismiss: () => {
+                this.failure();
+                this.errorMessage = 'To proceed further, payment must be done!';
+              }
+            }
             this.paymentService.openCheckoutPage(options);
-          } else {
-            this.reset();
           }
         })
         .catch((err) => {
-          this.reset();
-          this.snackbarService.displayError('Order not generated due to an error');
+          this.failure();
+          this.errorMessage = 'Error generating order from RazorPay! Pls try again later';
         })
+    } else if (fees === 0) {
+      // case for 0 participation fees
+      this.success();
+    } else {
+      this.status = this.loadingStatus.default;
+      this.snackBarService.displayError('Please finish previous steps!');
     }
   }
 
-  reset() {
-    this.isPaymentDone = false;
-    this.isLoaderShown = false;
+  getSeasonCreationCheckoutOptions(fees: string): ICheckoutOptions {
+    const options = {
+      ...UNIVERSAL_OPTIONS,
+      description: `Season Creation Fees`,
+      handler: this.onSuccessSeasonPayment.bind(this),
+      amount: Number(fees),
+    };
+    return options;
+  }
+
+  onSuccessSeasonPayment(response: any) {
+    this.paymentService.verifyPayment(response).subscribe({
+      next: (response) => {
+        this.success();
+      },
+      error: (err) => {
+        this.failure();
+        this.errorMessage = 'Payment Verification Failed!';
+      }
+    })
+  }
+
+  failure() {
     this.isSuccess.setValue(false);
+    this.status = this.loadingStatus.failed;
   }
 
   success() {
-    this.isLoaderShown = false;
-    this.isPaymentDone = true;
+    this.status = this.loadingStatus.success;
     this.isSuccess.setValue(true);
   }
 

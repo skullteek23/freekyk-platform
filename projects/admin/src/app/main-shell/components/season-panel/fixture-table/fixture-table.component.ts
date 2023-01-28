@@ -19,7 +19,7 @@ export class FixtureTableComponent {
       [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: val.home,
       [DUMMY_FIXTURE_TABLE_COLUMNS.AWAY]: val.away,
       [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
-      [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
+      // [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
       [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.ground,
       occurred: currentDate > val.date,
       concluded: val.concluded,

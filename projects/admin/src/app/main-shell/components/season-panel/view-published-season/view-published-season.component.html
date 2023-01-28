@@ -75,7 +75,7 @@
               <span class="material-icons-round cancel" matTooltip="Cancel" (click)="cancel()">block</span>
             </ng-container>
           </h4>
-          <p class="mat-body-1" *ngIf="!isEditMode; else descriptionFormField">
+          <p class="mat-body-1 preserve-white-space" *ngIf="!isEditMode; else descriptionFormField">
             {{ seasonMoreData?.description }}
           </p>
           <ng-template #descriptionFormField>
@@ -105,7 +105,7 @@
               <span class="material-icons-round cancel" matTooltip="Cancel" (click)="cancel()">block</span>
             </ng-container>
           </h4>
-          <p class="mat-body-1" *ngIf="!isEditMode; else rulesFormField">
+          <p class="mat-body-1 preserve-white-space" *ngIf="!isEditMode; else rulesFormField">
             {{ seasonMoreData?.rules }}
           </p>
           <ng-template #rulesFormField>
@@ -126,13 +126,9 @@
       </form>
     </div>
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="">
+      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="Change Photo"
+        (changeUpload)="onChangeSeasonPhoto($event)">
       </app-photo-uploader>
-      <div class="button-container">
-        <button (click)="onAddGallery()" class="buttonText secondaryButton">
-          Add Gallery Photos
-        </button>
-      </div>
     </div>
   </div>
 </mat-card>
@@ -141,6 +137,14 @@
   <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
   <app-fixture-table (actionTrigger)="onUpdateMatchData($event)" *ngIf="seasonFixtures.length" [data]="seasonFixtures"
     [displayedCols]="cols"> </app-fixture-table>
+</mat-card>
+<mat-card class="info-card season-page-container">
+  <h4>Gallery</h4>
+  <div class="button-container">
+    <button (click)="onAddGallery()" class="buttonText secondaryButton">
+      Add Gallery Photos
+    </button>
+  </div>
 
 </mat-card>
 <mat-card class="info-card">

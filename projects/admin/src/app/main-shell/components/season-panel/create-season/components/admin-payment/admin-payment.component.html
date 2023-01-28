@@ -1,11 +1,28 @@
 <section class="payment-container">
-  <ng-container *ngIf="!isLoaderShown && isPaymentDone">
+  <ng-container *ngIf="status === loadingStatus.success">
     <app-tick-animation></app-tick-animation>
-    <div class="succes-message">
+    <div class="message">
       <span class="mat-caption">
         Payment Done!
       </span>
     </div>
   </ng-container>
+  <ng-container *ngIf="status === loadingStatus.failed">
+    <div class="message" fxLayout="column" fxLayoutGap="12px" fxLayoutAlign="center center">
+      <span class="mat-caption">
+        {{errorMessage}}
+      </span>
+      <button class="buttonText secondaryButton" (click)="initPayment()">
+        Retry Payment
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="status === loadingStatus.default">
+    <div class="message" fxLayout="column" fxLayoutGap="12px" fxLayoutAlign="center center">
+      <span class="mat-caption">
+        Season Creation payment popup will open soon.
+      </span>
+    </div>
+  </ng-container>
 </section>
-<app-loading *ngIf="isLoaderShown"></app-loading>
+<app-loading *ngIf="status === loadingStatus.loading"></app-loading>

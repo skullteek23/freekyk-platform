@@ -32,6 +32,8 @@ export class MatchConstants {
   static readonly JOINING_CHARACTER = ', ';
   static readonly LARGE_TEXT_CHARACTER_LIMIT = 2000;
   static readonly ONE_DAY_IN_MILLIS = 86400000;
+  static readonly THREE_DAY_IN_MILLIS = 259200000;
+  static readonly ONE_WEEK_IN_MILLIS = 604800000;
   static readonly CREATE_TEXT = 'I Want to Create!';
   static readonly GROUND_SLOT_DATE_FORMAT = 'd/M/yy, h a'; // results in `15/6/21, 9 AM`
   static readonly TEAM_ACTIVITY_DATE_FORMAT = 'd/M/yy, hh:mm a'; // results in `15/6/21, 9 AM`
@@ -155,7 +157,6 @@ export const DUMMY_FIXTURE_TABLE_COLUMNS = {
   HOME: 'home',
   AWAY: 'away',
   DATE: 'date',
-  LOCATION: 'location',
   GROUND: 'ground',
   ACTIONS: 'actions',
 };
@@ -164,7 +165,6 @@ export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   HOME: 'Home Team',
   AWAY: 'Away Team',
   DATE: 'Date & Time',
-  LOCATION: 'Location',
   GROUND: 'Ground',
 };
 

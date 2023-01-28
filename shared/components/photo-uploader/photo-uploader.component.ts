@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstantsSecondary, ProfileConstants } from '../../constants/constants';
 
@@ -14,9 +14,10 @@ export class PhotoUploaderComponent {
   @Input() url: string = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
   // defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
 
-  readonly ACCEPTED_TYPES = ProfileConstants.ALLOWED_PHOTO_FILE_TYPES_TEAM
+  readonly ACCEPTED_TYPES = ProfileConstants.ALLOWED_PHOTO_FILE_TYPES_TEAM;
 
-  preview: string = null;
+  @ViewChild('preview') previewContainer: HTMLElement;
+
   $uploadedImageFile: File = null;
 
   constructor(
@@ -39,11 +40,17 @@ export class PhotoUploaderComponent {
   }
 
   resetImage(): void {
-    this.preview = null;
     this.$uploadedImageFile = null;
   }
 
   get types(): string {
     return this.ACCEPTED_TYPES.join(", ");
+  }
+
+  setManualPreview(imgpath: string) {
+    if (imgpath) {
+      this.previewContainer['nativeElement']['src'] = imgpath;
+      this.resetImage();
+    }
   }
 }
