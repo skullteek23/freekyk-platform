@@ -9,20 +9,24 @@
     {{ season | titlecase }}
   </div>
 
-  <div class="section-space-top headings section-space-bottom" fxLayoutAlign="center">
-    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfSixteenMatches.length">Round of 16</span>
-    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfEightMatches.length">Quarter Finals</span>
-    <span fxFlex="25%" class="mat-body-2 center" *ngIf="roundOfFourMatches.length">Semi Finals</span>
-    <div fxFlex="25%" fxLayoutAlign="center center" *ngIf="roundOfTwoMatches.length">
+  <div class="headings" fxLayoutAlign="center" fxLayoutAlign.lt-md="space-between">
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfSixteenMatches.length">Round of 16</span>
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfSixteenMatches.length">></span>
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfEightMatches.length">Quarter Finals</span>
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfEightMatches.length">></span>
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfFourMatches.length">Semi Finals</span>
+    <span fxFlex="auto" class="mat-body-2 center" *ngIf="roundOfFourMatches.length">></span>
+    <div fxFlex="auto" fxLayoutAlign="center center" *ngIf="roundOfTwoMatches.length">
       <span class="material-icons-round">emoji_events</span>
       <span class="mat-body-2 center">Final</span>
     </div>
   </div>
 
-  <div class="section-space-top stage_container" fxLayout="row nowrap" fxLayoutGap="20px" fxLayoutAlign="center">
+  <div class="section-space-top stage_container" fxLayout="row nowrap" fxLayoutGap="20px" fxLayoutAlign="center"
+    fxLayoutAlign.lt-md="start center">
     <!-- round of 16 -->
     <div class="stage" fxLayout="column" fxLayoutAlign="space-evenly stretch" *ngIf="roundOfSixteenMatches.length">
-      <!-- <span fxFlexAlign="start" class="mat-body-2 knockout-heading">Round of 16</span> -->
+      <span fxFlexAlign="start" class="mat-body-2 knockout-heading">Round of 16</span>
       <div [ngClass]="{ 'primary-bg whiteText concluded': match?.concluded }"
         *ngFor="let match of roundOfSixteenMatches" class="match">
         <app-knockout-strip [match]="match"></app-knockout-strip>
