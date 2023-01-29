@@ -92,56 +92,6 @@ export class SeasonAdminService {
     return fixtures;
   }
 
-  changeStatus(status: MatchStatus, matchID: string) {
-    switch (status) {
-      case MatchStatus.CAN:
-        this.cancelMatch(matchID);
-        break;
-
-      case MatchStatus.ABT:
-        this.abortMatch(matchID);
-        break;
-
-      case MatchStatus.RES:
-        this.rescheduleMatch(matchID);
-        break;
-
-      case MatchStatus.STU:
-        this.onUpdateMatchData(matchID);
-        break;
-    }
-  }
-
-  cancelMatch(matchID: string) {
-    this.dialog.open(CancelDialogComponent, {
-      panelClass: 'fk-dialogs',
-      data: matchID,
-    });
-  }
-
-  abortMatch(matchID: string) {
-    this.dialog.open(AbortDialogComponent, {
-      panelClass: 'fk-dialogs',
-      data: matchID,
-    });
-  }
-
-  rescheduleMatch(matchID: string) {
-    this.dialog.open(RescheduleMatchDialogComponent, {
-      panelClass: 'extra-large-dialogs',
-      data: matchID,
-      disableClose: true
-    });
-  }
-
-  onUpdateMatchData(matchID: string) {
-    this.dialog.open(UpdateMatchReportComponent, {
-      panelClass: 'extra-large-dialogs',
-      data: matchID,
-      disableClose: true
-    });
-  }
-
   clearSavedData() {
     sessionStorage.removeItem('selectMatchType');
     sessionStorage.removeItem('selectTeam');

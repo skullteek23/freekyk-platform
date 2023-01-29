@@ -22,6 +22,7 @@ export class FixtureTableComponent {
       [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
       // [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
       [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.ground,
+      [DUMMY_FIXTURE_TABLE_COLUMNS.STATUS]: MatchStatus[val.status],
       statusCode: MatchStatus[val.status],
       statusTooltip: this.formatter?.formatStatus(val.status).shortMsg,
       isCancelAllowed: this.getCancelPermission(val.status),

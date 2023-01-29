@@ -19,6 +19,10 @@ import { SeasonAdminService } from '../../../services/season-admin.service';
 import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dialog.component';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
+import { AbortDialogComponent } from '../abort-dialog/abort-dialog.component';
+import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
+import { RescheduleMatchDialogComponent } from '../reschedule-match-dialog/reschedule-match-dialog.component';
+import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 
 @Component({
   selector: 'app-view-published-season',
@@ -214,7 +218,58 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onChangeMatchStatus(event: { status: MatchStatus, matchID: string }) {
-    this.seasonAdminService.changeStatus(event.status, event.matchID);
+    this.changeStatus(event.status, event.matchID);
+  }
+
+
+  changeStatus(status: MatchStatus, matchID: string) {
+    switch (status) {
+      case MatchStatus.CAN:
+        this.cancelMatch(matchID);
+        break;
+
+      case MatchStatus.ABT:
+        this.abortMatch(matchID);
+        break;
+
+      case MatchStatus.RES:
+        this.rescheduleMatch(matchID);
+        break;
+
+      case MatchStatus.STU:
+        this.onUpdateMatchData(matchID);
+        break;
+    }
+  }
+
+  cancelMatch(matchID: string) {
+    this.dialog.open(CancelDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data: matchID,
+    });
+  }
+
+  abortMatch(matchID: string) {
+    this.dialog.open(AbortDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data: matchID,
+    });
+  }
+
+  rescheduleMatch(matchID: string) {
+    this.dialog.open(RescheduleMatchDialogComponent, {
+      panelClass: 'extra-large-dialogs',
+      data: matchID,
+      disableClose: true
+    });
+  }
+
+  onUpdateMatchData(matchID: string) {
+    this.dialog.open(UpdateMatchReportComponent, {
+      panelClass: 'extra-large-dialogs',
+      data: matchID,
+      disableClose: true
+    });
   }
 
   onChangeSeasonPhoto(newFileEvent: File) {
