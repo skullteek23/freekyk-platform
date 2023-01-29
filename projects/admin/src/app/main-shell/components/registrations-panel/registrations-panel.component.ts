@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 
 @Component({
@@ -35,7 +37,8 @@ export class RegistrationsPanelComponent implements OnInit {
 
   constructor(
     private ngFire: AngularFirestore,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -67,16 +70,25 @@ export class RegistrationsPanelComponent implements OnInit {
   }
 
   onDelete(element: Admin) {
-    this.isLoaderShown = true;
-    this.ngFire.collection('admins').doc(element.id).delete()
-      .then(() => {
-        this.snackbarService.displayCustomMsg('Request deleted successfully!');
-        this.getRequests();
+    this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.isLoaderShown = true;
+            this.ngFire.collection('admins').doc(element.id).delete()
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Request deleted successfully!');
+                this.getRequests();
+              })
+              .catch(err => {
+                this.isLoaderShown = false;
+                this.snackbarService.displayError('Delete operation failed');
+              });
+
+          }
+        }
       })
-      .catch(err => {
-        this.isLoaderShown = false;
-        this.snackbarService.displayError('Delete operation failed');
-      });
   }
 
   setDataSource(data: Admin[]) {
@@ -84,16 +96,26 @@ export class RegistrationsPanelComponent implements OnInit {
   }
 
   onChangeStatus(element: any, selection: MatSelectChange) {
-    this.isLoaderShown = true;
-    this.ngFire.collection('admins').doc(element.id).update({ status: selection.value })
-      .then(() => {
-        this.snackbarService.displayCustomMsg('Request status changed successfully!');
-        this.getRequests();
+    this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.isLoaderShown = true;
+            this.ngFire.collection('admins').doc(element.id).update({ status: selection.value })
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Request status changed successfully!');
+                this.getRequests();
+              })
+              .catch(err => {
+                this.snackbarService.displayError('Update operation failed');
+                this.getRequests();
+              });
+          } else {
+            this.getRequests();
+          }
+        }
       })
-      .catch(err => {
-        this.isLoaderShown = false;
-        this.snackbarService.displayError('Update operation failed');
-      });
   }
 
 }

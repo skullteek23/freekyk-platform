@@ -2,6 +2,53 @@ import { ListOption } from './others.model';
 
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export type KnockoutRounds = 2 | 4 | 8 | 16;
+export type CancellationTypes = 'match' | 'season';
+export enum MatchStatus {
+  ONT = 0, // match time hasn't started
+  ONG = 1, // match time is going on
+  SNU = 2, // match time has occurred
+  RES = 3, // match is rescheduled
+  CAN = 4, // match is cancelled by any manual action
+  CNS = 5, // match is cancelled by season cancellation action
+  ABT = 6, // match is aborted by any manual action
+  STD = 7, // match stats are disputed
+  STU = 8, // match stats are updated (at least once)
+}
+
+export const StatusMessage = [
+  // match time hasn't started
+  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'On-time' },
+
+  // match time is going on
+  { code: MatchStatus.ONG, shortMsg: 'live', description: 'live' },
+
+  // match time has occurred
+  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'pending' },
+
+  // match is rescheduled
+  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'rescheduled' },
+
+  // match is cancelled by any manual action
+  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'cancelled' },
+
+  // match is cancelled by any manual action
+  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'cancelled season' },
+
+  // match is aborted by any manual action
+  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'aborted' },
+
+  // match stats are disputed
+  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'conflict' },
+
+  // match stats are updated (at least once)
+  { code: MatchStatus.STU, shortMsg: 'finished', description: 'finished' },
+]
+
+export const Formatters = {
+  formatStatus: (key: number): { shortMsg: string, description: string } => {
+    return StatusMessage[key];
+  }
+}
 export interface MatchFixture {
   date: number;
   concluded: boolean;
@@ -19,8 +66,7 @@ export interface MatchFixture {
   season: string;
   premium: boolean;
   type: TournamentTypes;
-  locCity: string;
-  locState: string;
+  status?: MatchStatus;
   id?: string;
   tie_breaker?: string;
   ground?: string;
@@ -78,10 +124,9 @@ export interface IDummyFixture {
   season: string;
   premium: boolean;
   type: TournamentTypes;
-  locCity: string;
-  locState: string;
   home: string;
   away: string;
+  status: MatchStatus;
   id?: string;
   ground?: string;
   groundID?: string;
@@ -162,4 +207,14 @@ export interface CloudFunctionStatsData {
   fcp_played: number;
   fpl_played: number;
   allPlayersList: string[];
+}
+
+export interface MatchCancelData {
+  reason: string;
+  description: string;
+  mid: string;
+  date: number;
+  uid: string,
+  type: CancellationTypes,
+  operation: MatchStatus
 }

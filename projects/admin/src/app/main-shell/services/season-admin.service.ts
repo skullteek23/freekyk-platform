@@ -5,12 +5,17 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
-import { IDummyFixture, TournamentTypes, } from '@shared/interfaces/match.model';
+import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
 import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateMatchReportComponent } from '../components/season-panel/update-match-report/update-match-report.component';
+import { CancelDialogComponent } from '../components/season-panel/cancel-dialog/cancel-dialog.component';
+import { RescheduleMatchDialogComponent } from '../components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
+import { AbortDialogComponent } from '../components/season-panel/abort-dialog/abort-dialog.component';
 
 export interface Slot {
   name: string;
@@ -33,7 +38,8 @@ export class SeasonAdminService {
   constructor(
     private ngFire: AngularFirestore,
     private ngFunctions: AngularFireFunctions,
-    private ngStorage: AngularFireStorage
+    private ngStorage: AngularFireStorage,
+    private dialog: MatDialog
   ) {
     this.getAdminConfigs();
   }
@@ -77,14 +83,63 @@ export class SeasonAdminService {
         premium: groundSlots[i].ownType === 'PRIVATE',
         season: options.season,
         type: matchType,
-        locCity: groundSlots[i].locCity,
-        locState: groundSlots[i].locState,
+        status: MatchStatus.ONT,
         ground: groundSlots[i].name,
         groundID: groundSlots[i].id
       }
       fixtures.push(fixture);
     }
     return fixtures;
+  }
+
+  changeStatus(status: MatchStatus, matchID: string) {
+    switch (status) {
+      case MatchStatus.CAN:
+        this.cancelMatch(matchID);
+        break;
+
+      case MatchStatus.ABT:
+        this.abortMatch(matchID);
+        break;
+
+      case MatchStatus.RES:
+        this.rescheduleMatch(matchID);
+        break;
+
+      case MatchStatus.STU:
+        this.onUpdateMatchData(matchID);
+        break;
+    }
+  }
+
+  cancelMatch(matchID: string) {
+    this.dialog.open(CancelDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data: matchID,
+    });
+  }
+
+  abortMatch(matchID: string) {
+    this.dialog.open(AbortDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data: matchID,
+    });
+  }
+
+  rescheduleMatch(matchID: string) {
+    this.dialog.open(RescheduleMatchDialogComponent, {
+      panelClass: 'extra-large-dialogs',
+      data: matchID,
+      disableClose: true
+    });
+  }
+
+  onUpdateMatchData(matchID: string) {
+    this.dialog.open(UpdateMatchReportComponent, {
+      panelClass: 'extra-large-dialogs',
+      data: matchID,
+      disableClose: true
+    });
   }
 
   clearSavedData() {

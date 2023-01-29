@@ -62,6 +62,7 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
         by: data.adminID,
         slotTimestamp: slot,
         groundID: ground.id,
+        season: season.name
       }
       const bookingRef = db.collection('groundBookings').doc();
       batch.create(bookingRef, booking);
@@ -125,9 +126,8 @@ export function getPublishableFixture(data: IDummyFixture[]) {
     teams: [TO_BE_DECIDED],
     season: val.season,
     premium: val.premium,
+    status: 0,
     type: val.type,
-    locCity: val.locCity,
-    locState: val.locState,
     ground: val.ground,
     groundID: val.groundID
   } as MatchFixture));

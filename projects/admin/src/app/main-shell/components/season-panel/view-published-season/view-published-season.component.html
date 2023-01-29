@@ -135,7 +135,7 @@
 <mat-card class="info-card season-page-container">
   <h4 *ngIf="seasonFixtures.length">Fixtures</h4>
   <span class="mat-caption" *ngIf="!seasonFixtures.length">Fixtures not generated yet!</span>
-  <app-fixture-table (actionTrigger)="onUpdateMatchData($event)" *ngIf="seasonFixtures.length" [data]="seasonFixtures"
+  <app-fixture-table (statusChange)="onChangeMatchStatus($event)" *ngIf="seasonFixtures.length" [data]="seasonFixtures"
     [displayedCols]="cols"> </app-fixture-table>
 </mat-card>
 <mat-card class="info-card season-page-container">

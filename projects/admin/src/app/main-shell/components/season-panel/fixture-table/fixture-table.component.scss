@@ -11,3 +11,12 @@ th.mat-column-actions .mat-sort-header-container {
   max-height: 30px;
   font-size: small;
 }
+
+.green {
+  color: var(--primaryColor);
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

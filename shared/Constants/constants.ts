@@ -49,6 +49,7 @@ export class MatchConstants {
     yt: 'https://www.youtube.com/channel/',
     linkedIn: 'https://www.linkedin.com/company/',
   };
+  static readonly RESCHEDULE_MINIMUM_GAP_MILLISECONDS = 86400000; // 24 Hours
 }
 export const PLAYING_POSITIONS = [
   {
@@ -76,6 +77,26 @@ export const PLAYING_POSITIONS_LIST = [
   'Left Back',
   'Right Back',
   'GoalKeeper',
+];
+
+export const MATCH_CANCELLATION_REASONS = [
+  'Both teams did not participate',
+  'Ground was not available',
+  'Weather / Ground Condition',
+  'Uncertain Events',
+  'Other Reason'
+];
+
+export const MATCH_ABORT_REASONS = [
+  'Uncertain Events',
+  'Other Reason'
+];
+
+export const SEASON_CANCELLATION_REASONS = [
+  'Low Participation',
+  'Ground unavailability',
+  'Bad Weather',
+  'Other Reason'
 ];
 
 export class ProfileConstants {
@@ -157,6 +178,7 @@ export const DUMMY_FIXTURE_TABLE_COLUMNS = {
   HOME: 'home',
   AWAY: 'away',
   DATE: 'date',
+  STATUS: 'status',
   GROUND: 'ground',
   ACTIONS: 'actions',
 };
@@ -164,6 +186,7 @@ export const DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS = {
   MATCH_ID: 'Unique Match ID',
   HOME: 'Home Team',
   AWAY: 'Away Team',
+  STATUS: 'Status',
   DATE: 'Date & Time',
   GROUND: 'Ground',
 };

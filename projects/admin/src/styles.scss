@@ -110,7 +110,7 @@ app-fixture-table {
 }
 
 .create-season-container .fixture-table-container .mat-column-home {
-  width: 9%;
+  width: 10%;
 }
 
 .create-season-container .fixture-table-container .mat-column-away {
@@ -121,12 +121,12 @@ app-fixture-table {
   width: 16%;
 }
 
-.create-season-container .fixture-table-container .mat-column-location {
-  width: 25%;
+.create-season-container .fixture-table-container .mat-column-status {
+  width: 9%;
 }
 
 .create-season-container .fixture-table-container .mat-column-ground {
-  width: 21%;
+  width: 25%;
 }
 
 .season-page-container .fixture-table-container {
@@ -157,16 +157,17 @@ app-fixture-table {
   width: 16%;
 }
 
-.season-page-container .fixture-table-container .mat-column-location {
-  width: 17%;
+.season-page-container .fixture-table-container .mat-column-status {
+  width: 10%;
 }
 
 .season-page-container .fixture-table-container .mat-column-ground {
-  width: 21%;
+  width: 20%;
 }
 
 .season-page-container .fixture-table-container .mat-column-actions {
-  width: 16%;
+  width: 20%;
+  text-align: center;
 }
 
 .red-card-holder {

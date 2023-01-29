@@ -49,6 +49,7 @@ export class UpdateMatchReportComponent implements OnInit {
   readonly away = TeamSides.away;
 
   awayTeam = '';
+  disabledForm = false;
   awayTeamPlayersList: ListOption[] = [];
   fixture: MatchFixture;
   formMessages = formsMessages;
@@ -104,7 +105,7 @@ export class UpdateMatchReportComponent implements OnInit {
   getMatchInfo(): void {
     this.isLoaderShown = true;
     this.ngFire.collection('allMatches').doc(this.data).get().pipe(map(resp => resp.data() as MatchFixture)).subscribe(data => {
-      if (data && data.date < new Date().getTime() && data.concluded === false) {
+      if (data?.concluded === false) {
         this.fixture = data;
         this.homeTeam = this.fixture?.home?.name;
         this.awayTeam = this.fixture?.away?.name;
@@ -149,7 +150,7 @@ export class UpdateMatchReportComponent implements OnInit {
     if (!homeMembers || !homeMembers.length || !awayMembers || !awayMembers.length) {
       this.isLoaderShown = false;
       this.snackbarService.displayError('Unable to get team members!');
-      this.onCloseDialog();
+      this.matchReportForm.disable();
       return;
     }
     if (homeMembers && homeMembers.length) {
@@ -526,12 +527,17 @@ export class UpdateMatchReportComponent implements OnInit {
   }
 
   isSubmitDisabled(): boolean {
-    return (!this.matchReportForm.dirty
+    if (this.disabledForm) {
+      return true;
+    } else if (!this.matchReportForm.dirty
       || this.matchReportForm.invalid
       || (this.penalties?.value === 1 && (this.awayPenScore?.value === this.homePenScore?.value))
       || this.totalInputGoalsAway > this.awayScore?.value
       || this.totalInputGoalsHome > this.homeScore?.value
-    );
+    ) {
+      return true;
+    }
+    return false;
   }
 
   get totalInputGoalsHome(): number {

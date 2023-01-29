@@ -44,11 +44,30 @@
     <ng-container matColumnDef="actions" sticky>
       <th mat-header-cell *matHeaderCellDef> Actions</th>
       <td mat-cell *matCellDef="let element">
-        <div>
-          <button [disabled]="!element.occurred || element.concluded" (click)="onTriggerAction(element)"
-            class="action-button primaryButton">
-            {{element.action }}
+        <div fxLayoutAlign="center center" fxLayoutGap="12px">
+
+          <button mat-icon-button
+            (click)="changeStatus(element.id, MatchStatusEnum.STU, element.isMatchReportUpdateAllowed)"
+            [disabled]="!element.isMatchReportUpdateAllowed">
+            <span class="material-icons-round icon-button green" matTooltip="Upload Match Report"> note_add </span>
           </button>
+
+          <button mat-icon-button (click)="changeStatus(element.id, MatchStatusEnum.RES, element.isRescheduleAllowed)"
+            [disabled]="!element.isRescheduleAllowed">
+            <span class="material-icons-round icon-button green" matTooltip="Reschedule Match"> edit_calendar </span>
+          </button>
+
+          <button mat-icon-button (click)="changeStatus(element.id, MatchStatusEnum.ABT, element.isAbortAllowed)"
+            [disabled]="!element.isAbortAllowed">
+            <span class="material-icons-round icon-button red" matTooltip="Abort Match"> stop_circle </span>
+          </button>
+
+
+          <button mat-icon-button (click)="changeStatus(element.id, MatchStatusEnum.CAN, element.isCancelAllowed)"
+            [disabled]="!element.isCancelAllowed">
+            <span class="material-icons-round icon-button red" matTooltip="Cancel Match"> cancel </span>
+          </button>
+
         </div>
       </td>
       <td mat-footer-cell *matFooterCellDef> </td>

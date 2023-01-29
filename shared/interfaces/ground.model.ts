@@ -3,7 +3,7 @@ import { LocationDetails } from './others.model';
 import { ITiming } from '@shared/interfaces/others.model';
 
 export type OWNERSHIP_TYPES = 'PUBLIC' | 'PRIVATE';
-export type TURF_TYPES = 'FG' | 'SG' | 'HG' | 'AG' | 'TURF'
+export type TURF_TYPES = 'FG' | 'SG' | 'HG' | 'AG' | 'TURF';
 export type PLAY_LEVELS = 'good' | 'best' | 'fair';
 export const turfTypes = {
   FG: 'Full Ground',
@@ -54,6 +54,7 @@ export interface GroundBooking {
   by: string;
   slotTimestamp: number;
   groundID: string;
+  season: string;
 }
 
 export interface IGroundInfo {

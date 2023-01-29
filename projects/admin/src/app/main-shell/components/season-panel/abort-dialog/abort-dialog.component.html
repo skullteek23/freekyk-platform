@@ -1,0 +1,45 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Abort Match</span>
+</mat-toolbar>
+<div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <form *ngIf="!isSuccess" [formGroup]="cancelForm" fxLayout="column" fxLayoutGap="20px">
+
+    <p class="mat-caption left">
+      Unique Match ID: {{matchID}}
+    </p>
+
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Select Reason</mat-label>
+      <mat-select formControlName="reason">
+        <mat-option [value]="option" *ngFor="let option of reasonsList">
+          {{option}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="box-size" appearance="outline">
+      <mat-label>Reason Description</mat-label>
+      <textarea matInput formControlName="description" cols="30" rows="10" [maxlength]="queryLimit"
+        placeholder="Please provide more details"></textarea>
+      <mat-hint align="end">{{cancelForm.get('description')?.value?.length}} / {{queryLimit}}</mat-hint>
+      <mat-error *ngIf="cancelForm.get('description')?.hasError('pattern')">
+        {{messages.error.notAllowedCharacter}}
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
+      fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">
+      <button (click)="onCloseDialog()" class="secondaryButton buttonText">
+        Don't Cancel
+      </button>
+      <button [disabled]="cancelForm.invalid" type="button" (click)="abortMatch()" class="primaryButton buttonText">
+        Cancel
+      </button>
+    </div>
+  </form>
+  <app-tick-animation *ngIf="isSuccess"></app-tick-animation>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

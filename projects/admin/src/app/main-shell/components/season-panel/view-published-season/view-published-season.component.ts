@@ -6,18 +6,16 @@ import { ActivatedRoute } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IDummyFixture, MatchFixture } from '@shared/interfaces/match.model';
+import { IDummyFixture, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { SeasonParticipants, SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment.dev';
-import { forkJoin, Observable, Subscription } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { forkJoin, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IRequestData, RequestDialogComponent } from '../request-dialog/request-dialog.component';
 import { SeasonAdminService } from '../../../services/season-admin.service';
-import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dialog.component';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
@@ -41,6 +39,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     DUMMY_FIXTURE_TABLE_COLUMNS.HOME,
     DUMMY_FIXTURE_TABLE_COLUMNS.AWAY,
     DUMMY_FIXTURE_TABLE_COLUMNS.DATE,
+    DUMMY_FIXTURE_TABLE_COLUMNS.STATUS,
     DUMMY_FIXTURE_TABLE_COLUMNS.GROUND,
     DUMMY_FIXTURE_TABLE_COLUMNS.ACTIONS,
   ];
@@ -111,7 +110,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.isLoaderShown = false;
-          this.seasonFixtures = [];
         }
       });
   }
@@ -215,33 +213,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     }
   }
 
-  onConfirm(): Observable<any> {
-    return this.dialog.open(ConfirmationBoxComponent).afterClosed();
-  }
-
-  onUpdateMatchData(matchID: any) {
-    if (matchID) {
-      this.isLoaderShown = true;
-      this.isValidUpdate(matchID).subscribe(response => {
-        if (response === true) {
-          this.dialog.open(UpdateMatchReportComponent, {
-            panelClass: 'extra-large-dialogs',
-            data: matchID,
-            disableClose: true
-          });
-        }
-        this.isLoaderShown = false;
-      });
-    }
-  }
-
-  isValidUpdate(matchID: string): Observable<boolean> {
-    if (matchID) {
-      return this.ngFire.collection('allMatches')
-        .doc(matchID)
-        .get()
-        .pipe(map(resp => resp.exists && (resp.data() as MatchFixture).concluded === false));
-    }
+  onChangeMatchStatus(event: { status: MatchStatus, matchID: string }) {
+    this.seasonAdminService.changeStatus(event.status, event.matchID);
   }
 
   onChangeSeasonPhoto(newFileEvent: File) {
@@ -281,9 +254,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
           premium: data.premium,
           season: data.season,
           type: data.type,
-          locCity: data.locCity,
-          locState: data.locState,
-          stadium: data.ground,
+          ground: data.ground,
+          status: data.status,
           id: data.id,
         } as IDummyFixture)
         )),

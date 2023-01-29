@@ -1,9 +1,9 @@
 import { Component, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { IDummyFixture } from '@shared/interfaces/match.model';
+import { Formatters, IDummyFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from '@shared/constants/constants';
+import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS, MatchConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-fixture-table',
@@ -12,8 +12,9 @@ import { DUMMY_FIXTURE_TABLE_COLUMNS, DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS } from
 })
 export class FixtureTableComponent {
 
+  readonly MatchStatusEnum = MatchStatus;
+
   @Input() set data(value: IDummyFixture[]) {
-    const currentDate = new Date().getTime();
     const dummyFixturesTemp = value.map(val => ({
       [DUMMY_FIXTURE_TABLE_COLUMNS.MATCH_ID]: val.id,
       [DUMMY_FIXTURE_TABLE_COLUMNS.HOME]: val.home,
@@ -21,29 +22,77 @@ export class FixtureTableComponent {
       [DUMMY_FIXTURE_TABLE_COLUMNS.DATE]: val.date,
       // [DUMMY_FIXTURE_TABLE_COLUMNS.LOCATION]: `${val.locCity}, ${val.locState}`,
       [DUMMY_FIXTURE_TABLE_COLUMNS.GROUND]: val.ground,
-      occurred: currentDate > val.date,
-      concluded: val.concluded,
-      action: val.concluded ? 'Submitted' : 'Update Match'
+      statusCode: MatchStatus[val.status],
+      statusTooltip: this.formatter?.formatStatus(val.status).shortMsg,
+      isCancelAllowed: this.getCancelPermission(val.status),
+      isAbortAllowed: this.getAbortPermission(val.status, val.date),
+      isRescheduleAllowed: this.getReschedulePermission(val.status, val.date),
+      isMatchReportUpdateAllowed: this.getUploadMatchReportPermission(val.status, val.date)
     }), this);
     dummyFixturesTemp.sort(ArraySorting.sortObjectByKey('date'));
     this.dataSource = new MatTableDataSource<any>(dummyFixturesTemp);
     this.tableLength = value.length;
-    this.dataSource.sortingDataAccessor = (data, sortHeaderId) => data[sortHeaderId].toLowerCase();
   }
 
   @Input() displayedCols: string[] = [];
-
-  @Output() actionTrigger = new Subject<any>();
+  @Output() statusChange = new Subject<{ matchID: string, status: MatchStatus }>();
 
   readonly tableUIColumns = DUMMY_FIXTURE_TABLE_DISPLAY_COLUMNS;
   readonly tableColumns = DUMMY_FIXTURE_TABLE_COLUMNS;
 
   dataSource = new MatTableDataSource<any>([]);
   tableLength = 0;
+  formatter: any;
+  validStatusList: string[] = Object.keys(MatchStatus).filter((v) => isNaN(Number(v)));;
 
-  onTriggerAction(data: any) {
-    if (data.occurred && !data.concluded) {
-      this.actionTrigger.next(data[this.tableColumns.MATCH_ID]);
+  constructor() {
+    this.formatter = Formatters;
+  }
+
+  getCancelPermission(status: number) {
+    if (status === null || status === undefined) {
+      return false;
+    } else if (status === MatchStatus.ABT || status === MatchStatus.STU || status === MatchStatus.CAN || status === MatchStatus.CNS || status === MatchStatus.STD) {
+      return false;
+    }
+    return true;
+  }
+
+  getAbortPermission(status: number, date: number) {
+    const comparator = new Date().getTime();
+    if (status === null || status === undefined) {
+      return false;
+    } else if (date > comparator) {
+      return false;
+    } else if (status === MatchStatus.ABT || status === MatchStatus.RES || status === MatchStatus.STU || status === MatchStatus.CAN || status === MatchStatus.CNS || status === MatchStatus.STD) {
+      return false;
+    }
+    return true;
+  }
+
+  getReschedulePermission(status: number, date: number) {
+    const currentTimestamp = new Date().getTime();
+    const comparator = currentTimestamp - MatchConstants.RESCHEDULE_MINIMUM_GAP_MILLISECONDS;
+    if (status === null || status === undefined) {
+      return false;
+    } else if (status === MatchStatus.ONT && comparator <= date) {
+      return true;
+    }
+    return false;
+  }
+
+  getUploadMatchReportPermission(status: number, date: number) {
+    if (status === null || status === undefined) {
+      return false;
+    } else if (status === MatchStatus.ABT || status === MatchStatus.CAN || status === MatchStatus.CNS) {
+      return false;
+    }
+    return true;
+  }
+
+  changeStatus(matchID: string, status: MatchStatus, allowedOperation: boolean) {
+    if (allowedOperation) {
+      this.statusChange.next({ matchID, status });
     }
   }
 

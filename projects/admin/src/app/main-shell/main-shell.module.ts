@@ -49,6 +49,9 @@ import { GroundFormSummaryComponent } from './components/grounds-panel/register-
 import { AuthInterceptor } from '@admin/interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddGalleryDialogComponent } from './components/season-panel/add-gallery-dialog/add-gallery-dialog.component';
+import { CancelDialogComponent } from './components/season-panel/cancel-dialog/cancel-dialog.component';
+import { AbortDialogComponent } from './components/season-panel/abort-dialog/abort-dialog.component';
+import { RescheduleMatchDialogComponent } from './components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
 
 const routes: Routes = [
   {
@@ -114,7 +117,10 @@ const routes: Routes = [
     GroundDetailsComponent,
     GroundAvailabilityComponent,
     GroundFormSummaryComponent,
-    AddGalleryDialogComponent
+    AddGalleryDialogComponent,
+    CancelDialogComponent,
+    AbortDialogComponent,
+    RescheduleMatchDialogComponent
   ],
   imports: [
     CommonModule,
