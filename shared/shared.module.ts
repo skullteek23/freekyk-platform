@@ -62,7 +62,6 @@ import { HourToDate } from './pipes/hour-to-date.pipe';
 import { ActionStripComponent } from './components/action-strip/action-strip.component';
 import { PlStandingsComponent } from '@app/play/pl-standings/pl-standings.component';
 import { PlStCommunityPlayComponent } from '@app/play/pl-standings/pl-st-community-play/pl-st-community-play.component';
-import { KnockoutSmComponent } from '@app/play/pl-standings/pl-st-knockout/knockout-sm/knockout-sm.component';
 import { KnockoutStripComponent } from '@app/play/pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
 import { PlStKnockoutComponent } from '@app/play/pl-standings/pl-st-knockout/pl-st-knockout.component';
 import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-league.component';
@@ -134,7 +133,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlStLeagueComponent,
     PlStKnockoutComponent,
     PlStCommunityPlayComponent,
-    KnockoutSmComponent,
     KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
@@ -208,7 +206,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlStLeagueComponent,
     PlStKnockoutComponent,
     PlStCommunityPlayComponent,
-    KnockoutSmComponent,
     KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
