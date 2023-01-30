@@ -119,3 +119,11 @@ export interface ISeasonCloudFnData {
   seasonID: string;
   adminID: string
 }
+
+export interface ISeasonPartner {
+  name: string;
+  imgpath: string;
+  website: string;
+  seasonID: string;
+  id?: string;
+}

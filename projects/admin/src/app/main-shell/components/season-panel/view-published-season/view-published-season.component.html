@@ -145,7 +145,21 @@
       Add Gallery Photos
     </button>
   </div>
-
+</mat-card>
+<mat-card class="info-card season-page-container">
+  <h4>Tournament Partner(s)</h4>
+  <ul fxLayoutAlign="start center" fxLayoutGap="20px">
+    <li *ngFor="let partner of partners" [matTooltip]="partner.name">
+      <a (click)="onEditPartner(partner.id)">
+        <img [src]="partner.imgpath" [alt]="partner.name" appFallbackImg>
+      </a>
+    </li>
+  </ul>
+  <div class="button-container">
+    <button (click)="onAddPartner()" class="buttonText secondaryButton">
+      Add Partner
+    </button>
+  </div>
 </mat-card>
 <mat-card class="info-card">
   <h4>Participants ({{isRestrictedParticipants ? 'Restricted' : 'Open For All'}})</h4>

@@ -9,7 +9,6 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
-import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 import { AdminConfigPanelComponent } from './components/admin-config-panel/admin-config-panel.component';
 import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
@@ -27,9 +26,7 @@ import { ViewSeasonsTableComponent } from './components/season-panel/view-season
 import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/material.module';
 import { MatchReportSummaryComponent } from './components/season-panel/update-match-report/components/match-report-summary/match-report-summary.component';
-import {
-  SelectMatchTypeComponent
-} from './components/season-panel/create-season/components/select-match-type/select-match-type.component';
+import { SelectMatchTypeComponent } from './components/season-panel/create-season/components/select-match-type/select-match-type.component';
 import { SelectTeamsComponent } from './components/season-panel/create-season/components/select-teams/select-teams.component';
 import { SelectGroundComponent } from './components/season-panel/create-season/components/select-ground/select-ground.component';
 import { GroundFiltersComponent } from './components/season-panel/create-season/components/select-ground/components/ground-filters/ground-filters.component';
@@ -52,6 +49,7 @@ import { AddGalleryDialogComponent } from './components/season-panel/add-gallery
 import { CancelDialogComponent } from './components/season-panel/cancel-dialog/cancel-dialog.component';
 import { AbortDialogComponent } from './components/season-panel/abort-dialog/abort-dialog.component';
 import { RescheduleMatchDialogComponent } from './components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
+import { AddSponsorComponent } from './components/season-panel/add-sponsor/add-sponsor.component';
 
 const routes: Routes = [
   {
@@ -120,7 +118,8 @@ const routes: Routes = [
     AddGalleryDialogComponent,
     CancelDialogComponent,
     AbortDialogComponent,
-    RescheduleMatchDialogComponent
+    RescheduleMatchDialogComponent,
+    AddSponsorComponent
   ],
   imports: [
     CommonModule,

@@ -25,6 +25,44 @@
   margin-top: 20px;
 }
 
+.partner-list {
+  margin-bottom: 16px;
+  width: 100%;
+
+  .list-container {
+    margin-top: 16px;
+    overflow-x: auto;
+    max-width: 100%;
+
+    .partner {
+      @media screen and (max-width: 600px) {
+        width: 60px;
+        max-width: 60px;
+        min-width: 60px;
+        height: 60px;
+        max-height: 60px;
+        min-height: 60px;
+      }
+
+      width: 150px;
+      max-width: 150px;
+      height: 150px;
+      max-height: 150px;
+      overflow: hidden;
+      background-color: var(--grey4);
+
+      a {
+        img {
+          height: 100%;
+          width: 100%;
+          max-width: 200px;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 599px) {
   .bannerPhoto {
     height: 250px;

@@ -8,7 +8,7 @@ import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEA
 import { formsMessages } from '@shared/constants/messages';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { IDummyFixture, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
-import { SeasonParticipants, SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment';
@@ -23,6 +23,7 @@ import { AbortDialogComponent } from '../abort-dialog/abort-dialog.component';
 import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
 import { RescheduleMatchDialogComponent } from '../reschedule-match-dialog/reschedule-match-dialog.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
+import { AddSponsorComponent, ISponsorDialogData } from '../add-sponsor/add-sponsor.component';
 
 @Component({
   selector: 'app-view-published-season',
@@ -57,6 +58,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   seasonParticipants: SeasonParticipants[] = [];
   updateEntriesForm = new FormGroup({});
   isRestrictedParticipants: string[];
+  partners: ISeasonPartner[] = [];
 
   @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
 
@@ -75,6 +77,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     if (this.seasonID) {
       this.getSeasonInfo();
       this.getParticipants();
+      this.getPartners();
     }
   }
 
@@ -127,6 +130,19 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.snackbarService.displayError('Unable to get participants!');
+      },
+    });
+  }
+
+  getPartners() {
+    this.ngFire.collection('partners', query => query.where('seasonID', '==', this.seasonID)).snapshotChanges().subscribe({
+      next: (response) => {
+        if (response) {
+          this.partners = response.map(el => ({ id: el.payload.doc.id, ...el.payload.doc.data() as ISeasonPartner }));
+        }
+      },
+      error: (error) => {
+        this.snackbarService.displayError('Unable to get season partners!');
       },
     });
   }
@@ -325,6 +341,32 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       this.dialog.open(AddGalleryDialogComponent, {
         panelClass: 'large-dialogs',
         data: this.seasonID
+      })
+    }
+  }
+
+  onAddPartner() {
+    const data: ISponsorDialogData = {
+      editMode: false,
+      documentID: this.seasonID
+    };
+    if (this.seasonID) {
+      this.dialog.open(AddSponsorComponent, {
+        panelClass: 'fk-dialogs',
+        data
+      })
+    }
+  }
+
+  onEditPartner(partnerID: string) {
+    const data: ISponsorDialogData = {
+      editMode: true,
+      documentID: partnerID
+    };
+    if (partnerID) {
+      this.dialog.open(AddSponsorComponent, {
+        panelClass: 'fk-dialogs',
+        data
       })
     }
   }

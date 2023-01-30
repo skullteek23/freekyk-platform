@@ -8,6 +8,7 @@ import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import {
+  ISeasonPartner,
   SeasonAbout,
   SeasonBasicInfo,
   SeasonMedia,
@@ -47,6 +48,7 @@ export class SeasonProfileComponent implements OnInit {
   imgPath: string;
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
+  partners: ISeasonPartner[] = [];
 
   constructor(
     private snackBarService: SnackbarService,
@@ -69,10 +71,6 @@ export class SeasonProfileComponent implements OnInit {
     });
   }
 
-  getGrounds() {
-
-  }
-
   getSeasonInfo(): void {
     this.seasonInfo$ = this.ngFire
       .collection('seasons', (query) =>
@@ -88,6 +86,7 @@ export class SeasonProfileComponent implements OnInit {
             this.getPhotos(this.sid);
             this.getStats(this.sid);
             this.getMatches(this.seasonName);
+            this.getPartners(this.sid);
           } else {
             this.error = resp.empty;
             this.router.navigate(['error']);
@@ -144,6 +143,21 @@ export class SeasonProfileComponent implements OnInit {
           }
         })
     }
+  }
+
+  getPartners(seasonID: string) {
+    this.ngFire.collection('partners', query => query.where('seasonID', '==', seasonID)).get()
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.partners = !response.empty ? response.docs.map(el => el.data() as ISeasonPartner) : [];
+          }
+        },
+        error: () => {
+          this.snackBarService.displayError('Error getting Season Partners');
+          this.partners = [];
+        }
+      })
   }
 
   OnOpenGround(data: ListOption) {
