@@ -11,7 +11,7 @@ import { IDummyFixture, MatchFixture, MatchStatus } from '@shared/interfaces/mat
 import { SeasonParticipants, SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { environment } from 'environments/environment.dev';
+import { environment } from 'environments/environment';
 import { forkJoin, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IRequestData, RequestDialogComponent } from '../request-dialog/request-dialog.component';
