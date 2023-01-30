@@ -26,7 +26,6 @@
       </div>
 
       <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
-        <span class="overline align">Freekyk Season</span>
         <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
           (seasonInfo$ | async)?.name }}</span>
       </div>
