@@ -105,7 +105,7 @@ export class ProfileConstants {
   static readonly TEAM_DESC_MAX_LIMIT = 300;
   static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
   static readonly MIN_TEAM_CREATION_ELIGIBLE_PLAYER_LIMIT = 0;
-  static readonly MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT = 8;
+  static readonly MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT = 1;
   static readonly MAX_TEAM_ELIGIBLE_PLAYER_LIMIT = 15;
   static readonly SUPPORT_QUERY_LIMIT = 1000;
   static readonly DEACTIVATION_REASON_LIMIT = 500;
