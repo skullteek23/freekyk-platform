@@ -3,7 +3,7 @@ import { IGroundSelection } from './ground.model';
 import { IDummyFixture, TournamentTypes } from './match.model';
 import { ITeamInfo } from './team.model';
 
-export type statusType = 'PUBLISHED' | 'FINISHED' | 'CANCELLED';
+export type statusType = 'PUBLISHED' | 'FINISHED' | 'CANCELLED' | 'REMOVED';
 export interface SeasonBasicInfo {
   name: string;
   locCity: string;
@@ -126,4 +126,11 @@ export interface ISeasonPartner {
   website: string;
   seasonID: string;
   id?: string;
+}
+
+export interface ICloudCancelData {
+  reason: string;
+  description: string;
+  uid: string;
+  seasonID: string
 }

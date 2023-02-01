@@ -79,6 +79,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
         }),
         map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
         map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+        map(el => el.filter(season => season.status !== 'REMOVED')),
         share()
       );
   }

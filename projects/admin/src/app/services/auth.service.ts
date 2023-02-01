@@ -77,6 +77,14 @@ export class AuthService {
     return this.user || null;
   }
 
+  getAdminDetails(): Admin {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      return JSON.parse(user) as Admin;
+    }
+    return null;
+  }
+
   getUID(): string {
     if (this.user) {
       return this.user.uid;

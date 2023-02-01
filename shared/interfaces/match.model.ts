@@ -2,7 +2,7 @@ import { ListOption } from './others.model';
 
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
 export type KnockoutRounds = 2 | 4 | 8 | 16;
-export type CancellationTypes = 'match' | 'season';
+export type CancellationTypes = 'abort-match' | 'cancel-match' | 'cancel-season';
 export enum MatchStatus {
   ONT = 0, // match time hasn't started
   ONG = 1, // match time is going on
@@ -209,12 +209,11 @@ export interface CloudFunctionStatsData {
   allPlayersList: string[];
 }
 
-export interface MatchCancelData {
+export interface ICancelData {
   reason: string;
   description: string;
-  mid: string;
+  docID: string;
   date: number;
   uid: string,
   type: CancellationTypes,
-  operation: MatchStatus
 }

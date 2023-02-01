@@ -7,8 +7,8 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING, MATCH_CANCELLATION_REASONS, SEASON_CANCELLATION_REASONS } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IDummyFixture, MatchCancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
-import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner } from '@shared/interfaces/season.model';
+import { IDummyFixture, ICancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner, ICloudCancelData } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment';
@@ -24,6 +24,8 @@ import { CancelDialogComponent, ICancellationDialogData } from '../cancel-dialog
 import { RescheduleMatchDialogComponent } from '../reschedule-match-dialog/reschedule-match-dialog.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AddSponsorComponent, ISponsorDialogData } from '../add-sponsor/add-sponsor.component';
+import { AuthService } from '@admin/services/auth.service';
+import { AssignedRoles } from '@shared/interfaces/admin.model';
 
 @Component({
   selector: 'app-view-published-season',
@@ -68,7 +70,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     private seasonAdminService: SeasonAdminService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -297,46 +300,62 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   openCancelSeasonDialog() {
-    const data: ICancellationDialogData = {
-      reasonsList: SEASON_CANCELLATION_REASONS,
-      showConfirmation: true,
-      confirmationName: this.seasonData.name
-    }
-    this.dialog.open(CancelDialogComponent, {
-      panelClass: 'fk-dialogs',
-      data,
-    }).afterClosed()
-      .subscribe((response) => {
-        if (response?.hasOwnProperty('reason') && response?.hasOwnProperty('description')) {
-          this.isLoaderShown = true;
-          const data = {
-            ...response,
-            seasonID: this.seasonID
+    if (this.isValidCancellation()) {
+      const data: ICancellationDialogData = {
+        reasonsList: SEASON_CANCELLATION_REASONS,
+        showConfirmation: true,
+        confirmationName: this.seasonData.name
+      }
+      this.dialog.open(CancelDialogComponent, {
+        panelClass: 'fk-dialogs',
+        data,
+      }).afterClosed()
+        .subscribe((response) => {
+          if (response?.hasOwnProperty('reason') && response?.hasOwnProperty('description')) {
+            this.isLoaderShown = true;
+            const uid = sessionStorage.getItem('uid');
+            const cloudData: ICloudCancelData = {
+              reason: response['reason'],
+              description: response['reason'],
+              seasonID: this.seasonID,
+              uid
+            }
+            this.seasonAdminService.cancelSeason(cloudData)
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Season cancelled successfully!');
+                this.getSeasonInfo();
+              })
+              .catch((error) => {
+                this.snackbarService.displayError(error?.message);
+              })
+              .finally(() => this.isLoaderShown = false)
           }
-          this.seasonAdminService.cancelSeason(data)
-            .then(() => {
-              this.snackbarService.displayCustomMsg('Season cancelled successfully!');
-              this.getSeasonInfo();
-            })
-            .catch((error) => {
-              this.snackbarService.displayError(error?.message);
-            })
-            .finally(() => this.isLoaderShown = false)
-        }
-      });
+        });
+    } else {
+      this.snackbarService.displayError('Season is not eligible for cancellation!');
+    }
   }
 
   isValidCancellation() {
-    if (this.seasonFixtures.length) {
+    if (this.seasonFixtures.length && this.seasonData.status === 'PUBLISHED') {
       let conditionOne = false;
-      let conditionTwo = false;
       const comparator = this.seasonFixtures.length * MatchConstants.SEASON_CANCELLATION_ONT_PERCENTAGE_MODIFIER;
       const onTimeMatchesLength = this.seasonFixtures.filter(el => el.status === MatchStatus.ONT).length;
-      const isInitialMatchCancelledOrAborted = this.seasonFixtures.slice(0, this.seasonFixtures.length > 3 ? 3 : 1).every(el => el.status === MatchStatus.CAN || el.status === MatchStatus.ABT);
+
+      let isInitialMatchCancelledOrAborted = false;
+      if (this.seasonFixtures.length === 1) {
+        isInitialMatchCancelledOrAborted = this.seasonFixtures[0].status === MatchStatus.CAN || this.seasonFixtures[0].status === MatchStatus.ABT;
+      } else {
+        isInitialMatchCancelledOrAborted = this.seasonFixtures.slice(0, MatchConstants.CANCELLATION_FIRST_N_MATCHES).every(el => el.status === MatchStatus.CAN || el.status === MatchStatus.ABT);
+      }
+
       if ((onTimeMatchesLength >= comparator) || isInitialMatchCancelledOrAborted) {
         conditionOne = true;
       }
-      conditionTwo = this.seasonFixtures.some(el => el.status === MatchStatus.STU);
+
+      let conditionTwo = false;
+      conditionTwo = this.seasonFixtures.some(el => el.status === MatchStatus.STU) === false;
+
       return conditionOne && conditionTwo;
     }
     return false;
@@ -349,13 +368,12 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     }
     const allPromises = [];
     const uid = sessionStorage.getItem('uid');
-    const cancellationData: MatchCancelData = {
+    const cancellationData: ICancelData = {
       reason: data['reason'].trim(),
       description: data['description'].trim(),
-      mid,
+      docID: mid,
       uid,
-      type: 'match',
-      operation: MatchStatus.CAN,
+      type: 'cancel-match',
       date: new Date().getTime()
     }
 
@@ -421,6 +439,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onAddGallery() {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     if (this.seasonID) {
       this.dialog.open(AddGalleryDialogComponent, {
         panelClass: 'large-dialogs',
@@ -429,7 +450,24 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeSeason() {
+    const user = this.authService.getAdminDetails();
+    if (user && user.role === AssignedRoles.superAdmin) {
+      this.seasonAdminService.markSeasonAsRemoved(this.seasonID)
+        .then(() => {
+          this.snackbarService.displayCustomMsg('Season removed successfully!');
+          this.getSeasonInfo();
+        })
+        .catch();
+    } else {
+      this.snackbarService.displayError('Only Super-admins are allowed this action!');
+    }
+  }
+
   onAddPartner() {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     const data: ISponsorDialogData = {
       editMode: false,
       documentID: this.seasonID
@@ -443,6 +481,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onEditPartner(partnerID: string) {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     const data: ISponsorDialogData = {
       editMode: true,
       documentID: partnerID
@@ -480,6 +521,14 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
 
   get description(): AbstractControl {
     return this.updateEntriesForm.get('description');
+  }
+
+  get isShowViewSeason(): boolean {
+    return this.seasonData.status !== 'REMOVED';
+  }
+
+  get isShowDeleteSeason(): boolean {
+    return this.seasonData.status === 'CANCELLED';
   }
 
   get rules(): AbstractControl {
