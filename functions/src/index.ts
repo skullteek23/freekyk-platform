@@ -16,6 +16,7 @@ import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 import { createAdminUser } from './createAdminUser';
 import { seasonParticipation } from './seasonParticipation';
+import { seasonCancellation } from './seasonCancellation';
 
 
 // callable functions
@@ -30,6 +31,7 @@ export const participateSeason = functions.region('asia-south1').https.onCall(se
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
 export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
 export const addAdminUser = functions.region('asia-south1').https.onCall(createAdminUser);
+export const cancelSeason = functions.region('asia-south1').https.onCall(seasonCancellation);
 // callable functions
 
 // trigger functions

@@ -68,6 +68,10 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
     return this.seasonAdminService.isSeasonFinished(status);
   }
 
+  isSeasonCancelled(status: statusType): boolean {
+    return this.seasonAdminService.isSeasonCancelled(status);
+  }
+
   getStatusClass(status: statusType): any {
     return this.seasonAdminService.getStatusClass(status);
   }

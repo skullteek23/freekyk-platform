@@ -50,6 +50,7 @@ export class MatchConstants {
     linkedIn: 'https://www.linkedin.com/company/',
   };
   static readonly RESCHEDULE_MINIMUM_GAP_MILLISECONDS = 86400000; // 24 Hours
+  static readonly SEASON_CANCELLATION_ONT_PERCENTAGE_MODIFIER = 0.8 // 80 %
 }
 export const PLAYING_POSITIONS = [
   {

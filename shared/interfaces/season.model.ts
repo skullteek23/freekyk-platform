@@ -3,7 +3,7 @@ import { IGroundSelection } from './ground.model';
 import { IDummyFixture, TournamentTypes } from './match.model';
 import { ITeamInfo } from './team.model';
 
-export type statusType = 'PUBLISHED' | 'FINISHED';
+export type statusType = 'PUBLISHED' | 'FINISHED' | 'CANCELLED';
 export interface SeasonBasicInfo {
   name: string;
   locCity: string;

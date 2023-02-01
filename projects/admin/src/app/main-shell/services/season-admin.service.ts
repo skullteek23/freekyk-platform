@@ -12,10 +12,7 @@ import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/const
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
-import { UpdateMatchReportComponent } from '../components/season-panel/update-match-report/update-match-report.component';
-import { CancelDialogComponent } from '../components/season-panel/cancel-dialog/cancel-dialog.component';
-import { RescheduleMatchDialogComponent } from '../components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
-import { AbortDialogComponent } from '../components/season-panel/abort-dialog/abort-dialog.component';
+
 
 export interface Slot {
   name: string;
@@ -39,7 +36,6 @@ export class SeasonAdminService {
     private ngFire: AngularFirestore,
     private ngFunctions: AngularFireFunctions,
     private ngStorage: AngularFireStorage,
-    private dialog: MatDialog
   ) {
     this.getAdminConfigs();
   }
@@ -151,6 +147,13 @@ export class SeasonAdminService {
       return await imageSnapshot.ref.getDownloadURL();
     }
     return null;
+  }
+
+  cancelSeason(data) {
+    if (data) {
+      const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.CANCEL_SEASON);
+      return callable(data).toPromise();
+    }
   }
 
   getMaxSelectableSlots(): number {
@@ -266,6 +269,8 @@ export class SeasonAdminService {
         return { green: true };
       case 'FINISHED':
         return { greenLight: true };
+      case 'CANCELLED':
+        return { red: true };
       default:
         return {};
     }
@@ -277,6 +282,10 @@ export class SeasonAdminService {
 
   isSeasonFinished(status: statusType): boolean {
     return status === 'FINISHED';
+  }
+
+  isSeasonCancelled(status: statusType): boolean {
+    return status === 'CANCELLED';
   }
 
   onGroundSelectionChange(selection: IGroundSelection): void {

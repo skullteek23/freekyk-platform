@@ -192,8 +192,11 @@
   <button *ngIf="isSeasonFinished || this.isSeasonPublished" (click)="goToURL()" class="buttonText primaryButton">
     View your season
   </button>
-  <button *ngIf="this.isSeasonPublished" (click)="onRaiseRequest(true)" class="buttonText noResponseButton">
+  <!-- <button *ngIf="this.isSeasonPublished" (click)="onRaiseRequest(true)" class="buttonText noResponseButton">
     Delete this season
+  </button> -->
+  <button *ngIf="this.isSeasonPublished" (click)="openCancelSeasonDialog()" class="buttonText noResponseButton">
+    Cancel season
   </button>
 </div>
 <app-loading *ngIf="isLoaderShown"></app-loading>

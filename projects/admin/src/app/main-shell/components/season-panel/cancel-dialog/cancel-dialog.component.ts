@@ -1,14 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SnackbarService } from '@app/services/snackbar.service';
-import { MatchConstants, MATCH_CANCELLATION_REASONS, ProfileConstants } from '@shared/constants/constants';
+import { ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
-import { MatchCancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
+
+export interface ICancellationDialogData {
+  reasonsList: string[];
+  showConfirmation: boolean;
+  confirmationName?: string;
+}
 
 @Component({
   selector: 'app-cancel-dialog',
@@ -17,69 +20,45 @@ import { RULES } from '@shared/web-content/MATCH-RELATED';
 })
 export class CancelDialogComponent implements OnInit {
 
-  readonly reasonsList = MATCH_CANCELLATION_REASONS;
   readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
 
   cancelForm: FormGroup;
   messages = formsMessages;
-  isLoaderShown = false;
-  isSuccess = false;
 
   constructor(
     public dialogRef: MatDialogRef<CancelDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public matchID: string,
+    @Inject(MAT_DIALOG_DATA) public data: ICancellationDialogData,
     private dialog: MatDialog,
-    private ngFire: AngularFirestore,
-    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    this.initForm()
+    this.initForm();
   }
 
   initForm() {
     this.cancelForm = new FormGroup({
       reason: new FormControl(null, Validators.required),
       description: new FormControl(null, [Validators.required, Validators.maxLength(this.queryLimit), Validators.pattern(RegexPatterns.query)]),
+      confirmName: new FormControl(null, [this.confirmName.bind(this)])
     })
+  }
+
+  confirmName(control: AbstractControl): ValidationErrors {
+    if (this.data?.showConfirmation && this.data?.confirmationName) {
+      return control?.value?.trim() !== this.data?.confirmationName?.trim() ? { invalidName: true } : null;
+    }
+    return null;
   }
 
   onCloseDialog() {
     this.dialogRef.close();
   }
 
-  cancelMatch() {
+  submit() {
     if (this.cancelForm.invalid) {
       return;
     }
-    this.isLoaderShown = true;
-    const update: Partial<MatchFixture> = {
-      status: MatchStatus.CAN
-    }
-    const allPromises = [];
-    const uid = sessionStorage.getItem('uid');
-    const cancellationData: MatchCancelData = {
-      reason: this.cancelForm.value.reason.trim(),
-      description: this.cancelForm.value.description.trim(),
-      mid: this.matchID,
-      uid,
-      type: 'match',
-      operation: MatchStatus.CAN,
-      date: new Date().getTime()
-    }
-
-    allPromises.push(this.ngFire.collection('allMatches').doc(this.matchID).update({ ...update }));
-    allPromises.push(this.ngFire.collection('cancellations').doc(this.matchID).set(cancellationData));
-
-    Promise.all(allPromises)
-      .then(() => {
-        this.snackBarService.displayCustomMsg('Match Cancelled Successfully!');
-        this.isSuccess = true;
-      })
-      .catch(() => this.snackBarService.displayError())
-      .finally(() => {
-        this.isLoaderShown = false;
-      })
+    this.dialogRef.close(this.cancelForm.value);
   }
 
   openRules() {

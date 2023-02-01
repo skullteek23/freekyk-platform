@@ -23,6 +23,8 @@
           <span *ngIf="isSeasonLive(data.status)" matTooltip="Live" class="material-icons-round red">sensors</span>
           <span *ngIf="isSeasonFinished(data.status)" matTooltip="Finished"
             class="material-icons-round greenLight">assignment_turned_in</span>
+          <span *ngIf="isSeasonCancelled(data.status)" matTooltip="Cancelled"
+            class="material-icons-round red">event_busy</span>
         </div>
       </td>
     </ng-container>
