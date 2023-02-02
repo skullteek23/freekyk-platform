@@ -45,7 +45,7 @@ export const StatusMessage = [
 ]
 
 export const Formatters = {
-  formatStatus: (key: number): { code: number, shortMsg: string, description: string, color: string } => {
+  formatStatus: (key: number): any => {
     return StatusMessage[key];
   }
 }
