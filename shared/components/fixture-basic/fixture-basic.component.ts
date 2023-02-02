@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatchCardComponent } from '../../dialogs/match-card/match-card.component';
-import { MatchFixture, } from '../../interfaces/match.model';
+import { Formatters, MatchFixture, MatchStatus, StatusMessage, } from '../../interfaces/match.model';
 
 @Component({
   selector: 'app-fixture-basic',
@@ -10,15 +10,20 @@ import { MatchFixture, } from '../../interfaces/match.model';
 })
 export class FixtureBasicComponent implements OnInit {
 
+  readonly matchStatus = MatchStatus;
+
   @Input('matchData') fixture: MatchFixture;
   @Input('premium') isPremium = false;
   @Input('resultMode') isResult = false;
 
   todaysDate = new Date();
+  formatters: any
 
   constructor(
     private dialog: MatDialog
-  ) { }
+  ) {
+    this.formatters = Formatters;
+  }
 
   ngOnInit(): void { }
 

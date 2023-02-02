@@ -8,7 +8,7 @@
 <div class="container-2 section-space-bottom">
   <form [formGroup]="partnerForm" fxLayout="column" fxLayoutGap="0px" ngClass.lt-md="dialogData"
     ngClass.gt-sm="stepdata">
-    <div class="photo-container-wrapper">
+    <div class="photo-container-wrapper-add-sponsor">
       <app-photo-uploader [url]="imageUrl" [actionBtnLabel]="data.editMode ? '' : 'Browse Photo'"
         (changeUpload)="onSetFile($event)"></app-photo-uploader>
     </div>
@@ -28,10 +28,13 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="button-container" fxLayoutAlign="center center">
+    <div class="button-container" fxLayoutAlign="center center" fxLayoutGap="16px">
       <button *ngIf="!data.editMode" type="button" [disabled]="partnerForm.invalid" (click)="onSubmit()"
         class="buttonText primaryButton">
         Add Partner
+      </button>
+      <button *ngIf="data.editMode" type="button" (click)="remove()" class="buttonText noResponseButton">
+        Remove Partner
       </button>
       <button *ngIf="data.editMode" type="button" [disabled]="partnerForm.invalid" (click)="onUpdate()"
         class="buttonText primaryButton">

@@ -32,6 +32,7 @@ export class MatchConstants {
   static readonly JOINING_CHARACTER = ', ';
   static readonly LARGE_TEXT_CHARACTER_LIMIT = 2000;
   static readonly ONE_DAY_IN_MILLIS = 86400000;
+  static readonly ONE_HOUR_IN_MILLIS = 3600000;
   static readonly THREE_DAY_IN_MILLIS = 259200000;
   static readonly ONE_WEEK_IN_MILLIS = 604800000;
   static readonly CREATE_TEXT = 'I Want to Create!';

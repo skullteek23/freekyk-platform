@@ -6,7 +6,7 @@
   <span *ngIf="data?.concluded" class="mat-body-1">Result Details</span>
 </mat-toolbar>
 <div class="container-2" fxLayout="column" fxLayoutGap="20px">
-  <app-match-detail-header [data]="matchHeaderData"></app-match-detail-header>
+  <app-match-detail-header [data]="data"></app-match-detail-header>
 
   <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" color="primary">
     <mat-tab label="Overview" [disabled]="!data">
@@ -17,7 +17,8 @@
               {{ "Basic details" | titlecase }}
             </span>
             <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Kick Off</span><span class="mat-body-1">
+              <span class="mat-body-2">Kick Off</span>
+              <span class="mat-body-1">
                 {{ data?.date | date: "short" }}
               </span>
             </div>
@@ -99,14 +100,14 @@
               {{ "Match Stats" | titlecase }}
             </span>
             <div fxLayout="column" fxLayoutAlign="center start">
-              <span class="mat-body-2">{{homeTeam}}'s Scorers</span>
+              <span class="mat-body-2">{{data?.home?.name}}'s Scorers</span>
               <span class="mat-body-1" *ngIf="!statsData?.scorers?.home.length">-</span>
               <div *ngFor="let scorer of statsData?.scorers?.home" class="mat-body-1">
                 {{ scorer }}
               </div>
             </div>
             <div fxLayout="column" fxLayoutAlign="center start">
-              <span class="mat-body-2">{{awayTeam}}'s Scorers</span>
+              <span class="mat-body-2">{{data?.away?.name}}'s Scorers</span>
               <span class="mat-body-1" *ngIf="!statsData?.scorers?.away.length">-</span>
               <div *ngFor="let scorer of statsData?.scorers?.away" class="mat-body-1">
                 {{ scorer }}

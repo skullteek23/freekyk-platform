@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentData, QueryFn, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import {
   FilterHeadingMap,
@@ -42,14 +42,13 @@ export class QueryService {
     }
   }
 
-  onQueryMatches(
-    queryInfo: QueryInfo,
-    collectionName: string,
-    isConcluded: boolean
-  ): Observable<QuerySnapshot<unknown>> {
+  onQueryMatches(queryInfo: QueryInfo, collectionName: string, isConcluded: boolean): Observable<QuerySnapshot<unknown>> {
+    let date = new Date().getTime();
+    date -= MatchConstants.ONE_HOUR_IN_MILLIS;
+    const symbol = isConcluded ? '<' : '>=';
     if (!queryInfo) {
       return this.ngFire
-        .collection(collectionName, (query) => query.where('concluded', '==', isConcluded))
+        .collection(collectionName, (query) => query.where('date', symbol, date))
         .get();
     } else {
       queryInfo = {
@@ -67,11 +66,12 @@ export class QueryService {
               queryInfo.queryComparisonSymbol,
               queryInfo.queryValue
             )
-            .where('concluded', '==', isConcluded)
+            .where('date', symbol, date)
         )
         .get();
     }
   }
+
   onQueryMatchesForDashboard(
     queryInfo: QueryInfo,
     collectionName: string,

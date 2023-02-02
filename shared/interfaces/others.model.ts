@@ -103,14 +103,6 @@ export interface positionGroup {
   position: string;
   pos_name: string[];
 }
-export interface matchData {
-  date: number;
-  concluded: boolean;
-  home: { imgpathLogo: string; name: string };
-  away: { imgpathLogo: string; name: string };
-  score?: { home: number; away: number };
-  penalties?: string;
-}
 export interface tricks {
   submissionVideo: string;
   trick_no: number;

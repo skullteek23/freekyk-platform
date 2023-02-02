@@ -451,17 +451,22 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   removeSeason() {
-    const user = this.authService.getAdminDetails();
-    if (user && user.role === AssignedRoles.superAdmin) {
-      this.seasonAdminService.markSeasonAsRemoved(this.seasonID)
-        .then(() => {
-          this.snackbarService.displayCustomMsg('Season removed successfully!');
-          this.getSeasonInfo();
-        })
-        .catch();
-    } else {
-      this.snackbarService.displayError('Only Super-admins are allowed this action!');
-    }
+    this.dialog.open(ConfirmationBoxComponent).afterClosed()
+      .subscribe(response => {
+        if (response) {
+          const user = this.authService.getAdminDetails();
+          if (user && user.role === AssignedRoles.superAdmin) {
+            this.seasonAdminService.markSeasonAsRemoved(this.seasonID)
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Season removed successfully!');
+                this.getSeasonInfo();
+              })
+              .catch();
+          } else {
+            this.snackbarService.displayError('Only Super-admins are allowed this action!');
+          }
+        }
+      })
   }
 
   onAddPartner() {
@@ -516,7 +521,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   get payableFees(): number {
-    return Number(this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount));
+    return this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount);
   }
 
   get description(): AbstractControl {

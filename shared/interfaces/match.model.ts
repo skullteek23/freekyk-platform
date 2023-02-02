@@ -17,35 +17,35 @@ export enum MatchStatus {
 
 export const StatusMessage = [
   // match time hasn't started
-  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'On-time' },
+  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'On-time', color: '#4bb242', textColor: '#ffffff' },
 
   // match time is going on
-  { code: MatchStatus.ONG, shortMsg: 'live', description: 'live' },
+  { code: MatchStatus.ONG, shortMsg: 'live', description: 'live', color: '#ff5837', textColor: '#ffffff' },
 
   // match time has occurred
-  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'pending' },
+  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'pending', color: '#fbbe28', textColor: '#000' },
 
   // match is rescheduled
-  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'rescheduled' },
+  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'rescheduled', color: '#a9a9a9', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'cancelled' },
+  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'cancelled', color: '#b60000', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'cancelled season' },
+  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'cancelled season', color: '#b60000', textColor: '#ffffff' },
 
   // match is aborted by any manual action
-  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'aborted' },
+  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'aborted', color: '#b60000', textColor: '#ffffff' },
 
   // match stats are disputed
-  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'conflict' },
+  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'conflict', color: '#f20505', textColor: '#ffffff' },
 
   // match stats are updated (at least once)
-  { code: MatchStatus.STU, shortMsg: 'finished', description: 'finished' },
+  { code: MatchStatus.STU, shortMsg: 'finished', description: 'finished', color: '#00810f', textColor: '#ffffff' },
 ]
 
 export const Formatters = {
-  formatStatus: (key: number): { shortMsg: string, description: string } => {
+  formatStatus: (key: number): { code: number, shortMsg: string, description: string, color: string } => {
     return StatusMessage[key];
   }
 }
