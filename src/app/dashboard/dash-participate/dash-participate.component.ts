@@ -73,14 +73,15 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
 
   getSeasons() {
     const currentTimestamp = new Date().getTime();
-    this.seasons$ = this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
+    this.seasons$ = this.ngFire.collection('seasons').snapshotChanges()
+      // this.seasons$ = this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
       .pipe(
         map((resp) => {
           const seasons: SeasonBasicInfo[] = [];
           resp.forEach(doc => {
             const data = doc.payload.doc.data() as SeasonBasicInfo;
             const id = doc.payload.doc.id;
-            if (data.status === 'PUBLISHED') {
+            if (data.status === 'PUBLISHED' || data.status === 'CANCELLED') {
               seasons.push({ id, ...data } as SeasonBasicInfo);
             }
           });
@@ -93,6 +94,9 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
 
   async onPayNow(season: SeasonBasicInfo): Promise<any> {
     if (!season.id) {
+      return;
+    } else if (season.status === 'CANCELLED') {
+      this.snackBarService.displayError('Season is cancelled!');
       return;
     }
     this.selectedSeason = season.name;
@@ -125,10 +129,10 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     // minimum fees
     const fees = this.paymentServ.getFeesAfterDiscount(season.feesPerTeam, season.discount);
     this.paymentServ
-      .generateOrder(fees)
+      .generateOrder(fees, 300)
       .then((res) => {
         if (res) {
-          const options: ICheckoutOptions = this.paymentServ.getCaptainCheckoutOptions(fees, season, teamId);
+          const options: ICheckoutOptions = this.paymentServ.getCaptainCheckoutOptions(fees.toString(), season, teamId);
           options.order_id = res['id'];
           options.failureRoute = '/dashboard/error';
           this.paymentServ.openCheckoutPage(options);

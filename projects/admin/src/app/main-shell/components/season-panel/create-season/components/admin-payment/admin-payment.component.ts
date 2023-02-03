@@ -55,7 +55,7 @@ export class AdminPaymentComponent implements OnInit {
     const fees = this.amount.value;
     if (fees) {
       this.status = this.loadingStatus.loading;
-      this.paymentService.generateOrder(fees)
+      this.paymentService.generateOrder(Number(fees), null)
         .then((response) => {
           if (response) {
             const options: ICheckoutOptions = this.getSeasonCreationCheckoutOptions(fees);
