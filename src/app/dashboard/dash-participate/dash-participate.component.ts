@@ -129,7 +129,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     // minimum fees
     const fees = this.paymentServ.getFeesAfterDiscount(season.feesPerTeam, season.discount);
     this.paymentServ
-      .generateOrder(fees, 300)
+      .generateOrder(fees, null)
       .then((res) => {
         if (res) {
           const options: ICheckoutOptions = this.paymentServ.getCaptainCheckoutOptions(fees.toString(), season, teamId);
