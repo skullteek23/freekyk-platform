@@ -69,47 +69,47 @@ export const LANDING_PAGE = {
       Matches: '150+',
     },
   },
-  communityMedia: [
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/other-media%2Fflashback.png?alt=media&token=29a0dfcb-b53b-4990-8cee-ecbb8d63686d',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/other-media%2Fflashback_small.png?alt=media&token=88d434d1-efd4-4125-988f-977b02e809fa',
-      alt: 'Freekyk Community',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FLoneWolfFC.png?alt=media&token=4dfd854c-ded0-400f-8fb0-b831f215ef3a',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FloneWolfFC.png?alt=media&token=ffe9f700-4acf-4cf6-8123-1ca582d59951',
-      alt: 'Lone Wolf FC',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FOscar%20Delta.png?alt=media&token=16d54bfd-eea5-4636-9369-5576dd7cbd06',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FoscarDelta.png?alt=media&token=90b55a69-199e-4572-8357-4db687bedc42',
-      alt: 'Oscar Delta',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FVaishaliFC.png?alt=media&token=25d9f3e0-bfb9-4433-8e9f-375a72b2719b',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FvaishaliFC.png?alt=media&token=f39eb12e-ec58-45d3-82ed-5066c127eed1',
-      alt: 'Vaishali FC',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FIndian%20Arrows.png?alt=media&token=811e01d8-439e-461d-abc2-3ba19317d88f',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FindianArrows.png?alt=media&token=d72bf071-9ed9-4f2c-b5b7-083960a06b6c',
-      alt: 'Indian Arrows',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FGardenia%20FC.png?alt=media&token=8311a698-5739-4dd4-b7cd-4ea6dae3a08c',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FgardeniaFC.png?alt=media&token=3d2b4046-6f10-4bb6-9bfc-cf24f56c819b',
-      alt: 'Gardenia FC',
-    },
-    {
-      image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FVasundhara%20City%20FC.png?alt=media&token=dc442f5c-3b12-450d-94d7-d7f7dbc5cd4e',
-      thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FvasundharaCityFC.png?alt=media&token=2d6a97e7-ec96-4c86-9f17-10309628e6d4',
-      alt: 'Vasundhara City FC',
-    },
-    {
-      video: 'https://youtu.be/XDjGkiEA_XM',
-      alt: 'Freekyk: Revolutionizing football in India!!!',
-    },
-  ],
+  // communityMedia: [
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/other-media%2Fflashback.png?alt=media&token=29a0dfcb-b53b-4990-8cee-ecbb8d63686d',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/other-media%2Fflashback_small.png?alt=media&token=88d434d1-efd4-4125-988f-977b02e809fa',
+  //     alt: 'Freekyk Community',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FLoneWolfFC.png?alt=media&token=4dfd854c-ded0-400f-8fb0-b831f215ef3a',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FloneWolfFC.png?alt=media&token=ffe9f700-4acf-4cf6-8123-1ca582d59951',
+  //     alt: 'Lone Wolf FC',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FOscar%20Delta.png?alt=media&token=16d54bfd-eea5-4636-9369-5576dd7cbd06',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FoscarDelta.png?alt=media&token=90b55a69-199e-4572-8357-4db687bedc42',
+  //     alt: 'Oscar Delta',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FVaishaliFC.png?alt=media&token=25d9f3e0-bfb9-4433-8e9f-375a72b2719b',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FvaishaliFC.png?alt=media&token=f39eb12e-ec58-45d3-82ed-5066c127eed1',
+  //     alt: 'Vaishali FC',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FIndian%20Arrows.png?alt=media&token=811e01d8-439e-461d-abc2-3ba19317d88f',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FindianArrows.png?alt=media&token=d72bf071-9ed9-4f2c-b5b7-083960a06b6c',
+  //     alt: 'Indian Arrows',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FGardenia%20FC.png?alt=media&token=8311a698-5739-4dd4-b7cd-4ea6dae3a08c',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FgardeniaFC.png?alt=media&token=3d2b4046-6f10-4bb6-9bfc-cf24f56c819b',
+  //     alt: 'Gardenia FC',
+  //   },
+  //   {
+  //     image: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FVasundhara%20City%20FC.png?alt=media&token=dc442f5c-3b12-450d-94d7-d7f7dbc5cd4e',
+  //     thumbImage: 'https://firebasestorage.googleapis.com/v0/b/freekyk-prod.appspot.com/o/team-media%2FvasundharaCityFC.png?alt=media&token=2d6a97e7-ec96-4c86-9f17-10309628e6d4',
+  //     alt: 'Vasundhara City FC',
+  //   },
+  //   {
+  //     video: 'https://youtu.be/XDjGkiEA_XM',
+  //     alt: 'Freekyk: Revolutionizing football in India!!!',
+  //   },
+  // ],
 };
 export const PLAY_PAGE = {
   banner: `Want to experience hassle-free football game? Freekyk play provides solution to all of your footballing needs, right  from teams, equipment, tournament participation to keeping your scores & records , monitoring your progress and many more.`,

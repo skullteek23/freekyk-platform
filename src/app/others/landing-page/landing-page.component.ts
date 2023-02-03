@@ -20,7 +20,7 @@ export class LandingPageComponent implements OnInit {
   readonly fkEquipmentContent = LANDING_PAGE.freekykEquipment;
   readonly whyChoose = LANDING_PAGE.whyChooseFreekyk;
   readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
-  readonly sliderContent = LANDING_PAGE.communityMedia;
+  // readonly sliderContent = LANDING_PAGE.communityMedia;
 
   responsiveSize;
   seasonsList: SeasonBasicInfo[] = [];

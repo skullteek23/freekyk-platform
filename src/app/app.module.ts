@@ -34,7 +34,7 @@ import { TeGalleryComponent } from './play/profile-pages/team-profile/te-gallery
 import { TeMembersComponent } from './play/profile-pages/team-profile/te-members/te-members.component';
 import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
 import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
-import { NgImageSliderModule } from 'ng-image-slider';
+// import { NgImageSliderModule } from 'ng-image-slider';
 import { SharedModule } from '@shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
@@ -92,7 +92,7 @@ import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.co
       logOnly: environment.production,
       maxAge: 5,
     }),
-    NgImageSliderModule,
+    // NgImageSliderModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },
