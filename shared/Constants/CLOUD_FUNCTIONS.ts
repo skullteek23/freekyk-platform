@@ -8,5 +8,6 @@ export const CLOUD_FUNCTIONS = {
   SEASON_PARTICIPATION: 'participateSeason',
   UPDATE_MATCH_REPORT: 'updateMatchReport',
   PUBLISH_SEASON: 'publishSeason',
-  CREATE_ADMIN_USER: 'addAdminUser'
+  CREATE_ADMIN_USER: 'addAdminUser',
+  CANCEL_SEASON: 'cancelSeason'
 };

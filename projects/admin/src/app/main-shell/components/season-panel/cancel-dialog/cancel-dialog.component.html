@@ -5,16 +5,12 @@
   <span class="mat-body-1">Cancel Match</span>
 </mat-toolbar>
 <div class="container-2" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center center">
-  <form *ngIf="!isSuccess" [formGroup]="cancelForm" fxLayout="column" fxLayoutGap="20px">
-
-    <p class="mat-caption left">
-      Unique Match ID: {{matchID}}
-    </p>
+  <form [formGroup]="cancelForm" fxLayout="column" fxLayoutGap="20px">
 
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Reason</mat-label>
       <mat-select formControlName="reason">
-        <mat-option [value]="option" *ngFor="let option of reasonsList">
+        <mat-option [value]="option" *ngFor="let option of data?.reasonsList">
           {{option}}
         </mat-option>
       </mat-select>
@@ -30,6 +26,14 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field *ngIf="data.showConfirmation">
+      <mat-label>Please Enter Season Name to Confirm ({{data?.confirmationName}})</mat-label>
+      <input type="text" name="confirm-name" matInput formControlName="confirmName">
+      <mat-error *ngIf="cancelForm.get('confirmName').hasError('invalidName')">
+        Season name doesn't match!
+      </mat-error>
+    </mat-form-field>
+
     <p class="mat-caption left">
       Note: Please note that cancellation charges and refunds will be applicable as per
       <a (click)="openRules()">rules and refund policy</a>.
@@ -40,11 +44,9 @@
       <button (click)="onCloseDialog()" class="secondaryButton buttonText">
         Don't Cancel
       </button>
-      <button [disabled]="cancelForm.invalid" type="button" (click)="cancelMatch()" class="primaryButton buttonText">
+      <button [disabled]="cancelForm.invalid" type="button" (click)="submit()" class="primaryButton buttonText">
         Cancel
       </button>
     </div>
   </form>
-  <app-tick-animation *ngIf="isSuccess"></app-tick-animation>
 </div>
-<app-loading *ngIf="isLoaderShown"></app-loading>

@@ -7,7 +7,7 @@ import { MATCH_ABORT_REASONS, ProfileConstants } from '@shared/constants/constan
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { IFeatureInfoOptions, FeatureInfoComponent } from '@shared/dialogs/feature-info/feature-info.component';
-import { MatchCancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { ICancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
 
 @Component({
@@ -58,13 +58,12 @@ export class AbortDialogComponent implements OnInit {
     }
     const allPromises = [];
     const uid = sessionStorage.getItem('uid');
-    const cancellationData: MatchCancelData = {
+    const cancellationData: ICancelData = {
       reason: this.cancelForm.value.reason.trim(),
       description: this.cancelForm.value.description.trim(),
-      mid: this.matchID,
+      docID: this.matchID,
       uid,
-      type: 'match',
-      operation: MatchStatus.ABT,
+      type: 'abort-match',
       date: new Date().getTime()
     }
 

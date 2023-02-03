@@ -53,7 +53,7 @@ export class ViewSummaryComponent implements OnInit {
 
       let finalFees = seasonDetailsFormData.fees.toString();
       if (seasonDetailsFormData.discount > 0) {
-        finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount);
+        finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount).toString();
       }
       data.fees = this.currencyPipe.transform(finalFees, 'INR');
 

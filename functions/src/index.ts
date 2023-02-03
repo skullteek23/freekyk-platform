@@ -16,6 +16,7 @@ import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 import { createAdminUser } from './createAdminUser';
 import { seasonParticipation } from './seasonParticipation';
+import { seasonCancellation } from './seasonCancellation';
 
 
 // callable functions
@@ -30,12 +31,14 @@ export const participateSeason = functions.region('asia-south1').https.onCall(se
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
 export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
 export const addAdminUser = functions.region('asia-south1').https.onCall(createAdminUser);
+export const cancelSeason = functions.region('asia-south1').https.onCall(seasonCancellation);
 // callable functions
 
 // trigger functions
 export const onCreateInvite = functions.region('asia-south1').firestore.document('invites/{inviteId}').onCreate(inviteCreationTrigger);
 export const onUpdateInvite = functions.region('asia-south1').firestore.document('invites/{inviteId}').onUpdate(inviteUpdationTrigger);
 export const onDeleteInvite = functions.region('asia-south1').firestore.document('invites/{inviteId}').onDelete(inviteDeletionTrigger);
+// export const onUpdateMatch = functions.region('asia-south1').firestore.document('allMatches/{matchId}').onUpdate(matchUpdateTrigger);
 export const onUploadProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
 // export const generateTicketMail = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize();
 // export const onDeleteProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onDelete(removeThumbnail);

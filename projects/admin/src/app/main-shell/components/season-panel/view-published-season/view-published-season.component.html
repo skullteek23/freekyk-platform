@@ -69,7 +69,7 @@
               Description
             </span>
             <span class="material-icons-round cursors" (click)="edit()" matTooltip="Edit"
-              *ngIf="!isEditMode">edit_note</span>
+              *ngIf="!isEditMode && isSeasonPublished">edit_note</span>
             <ng-container *ngIf="isEditMode">
               <span class="material-icons-round save" matTooltip="Save" (click)="updateSeason()">save</span>
               <span class="material-icons-round cancel" matTooltip="Cancel" (click)="cancel()">block</span>
@@ -99,7 +99,7 @@
               Rules
             </span>
             <span class="material-icons-round cursors" (click)="edit()" matTooltip="Edit"
-              *ngIf="!isEditMode">edit_note</span>
+              *ngIf="!isEditMode && isSeasonPublished">edit_note</span>
             <ng-container *ngIf="isEditMode">
               <span class="material-icons-round save" matTooltip="Save" (click)="updateSeason()">save</span>
               <span class="material-icons-round cancel" matTooltip="Cancel" (click)="cancel()">block</span>
@@ -126,7 +126,7 @@
       </form>
     </div>
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="Change Photo"
+      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="{{isSeasonPublished ? 'Change Photo' : ''}}"
         (changeUpload)="onChangeSeasonPhoto($event)">
       </app-photo-uploader>
     </div>
@@ -141,7 +141,7 @@
 <mat-card class="info-card season-page-container">
   <h4>Gallery</h4>
   <div class="button-container">
-    <button (click)="onAddGallery()" class="buttonText secondaryButton">
+    <button [disabled]="!isSeasonPublished" (click)="onAddGallery()" class="buttonText secondaryButton">
       Add Gallery Photos
     </button>
   </div>
@@ -156,7 +156,7 @@
     </li>
   </ul>
   <div class="button-container">
-    <button (click)="onAddPartner()" class="buttonText secondaryButton">
+    <button [disabled]="!isSeasonPublished" (click)="onAddPartner()" class="buttonText secondaryButton">
       Add Partner
     </button>
   </div>
@@ -189,11 +189,14 @@
   <button [routerLink]="['/seasons/list']" class="buttonText secondaryButton">
     Go Back
   </button>
-  <button *ngIf="isSeasonFinished || this.isSeasonPublished" (click)="goToURL()" class="buttonText primaryButton">
+  <button *ngIf="isShowViewSeason" (click)="goToURL()" class="buttonText primaryButton">
     View your season
   </button>
-  <button *ngIf="this.isSeasonPublished" (click)="onRaiseRequest(true)" class="buttonText noResponseButton">
-    Delete this season
+  <button *ngIf="isShowDeleteSeason" (click)="removeSeason()" class="buttonText noResponseButton">
+    Remove season
+  </button>
+  <button *ngIf="isSeasonPublished" (click)="openCancelSeasonDialog()" class="buttonText noResponseButton">
+    Cancel season
   </button>
 </div>
 <app-loading *ngIf="isLoaderShown"></app-loading>

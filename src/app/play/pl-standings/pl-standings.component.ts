@@ -49,7 +49,10 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
       .get()
       .pipe(
         map((resp) =>
-          resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)
+          resp.docs.map((doc) => (doc.data() as SeasonBasicInfo)),
+        ),
+        map((resp) =>
+          resp.filter((doc) => doc.status !== 'REMOVED').map(el => el.name),
         )
       )
       .subscribe((resp) => {

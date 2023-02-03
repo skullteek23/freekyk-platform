@@ -8,7 +8,7 @@ export const SeasonsFilters: any = {
     'Freekyk Knockout Championship',
     'Freekyk Premier League',
   ],
-  Status: ['Live', 'Finished']
+  Status: ['Live', 'Finished', 'Cancelled']
 };
 export const PlayersFilters = {
   Gender: ['Male', 'Female'],
@@ -71,6 +71,7 @@ export const FilterValueMap = {
   PRIVATE: 'PRIVATE',
   Live: 'PUBLISHED',
   Finished: 'FINISHED',
+  Cancelled: 'CANCELLED',
   'Full Ground': 'FG',
   'Short Ground': 'SG',
   'Huge Ground': 'HG',

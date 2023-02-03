@@ -4,11 +4,11 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING } from '@shared/constants/constants';
+import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING, MATCH_CANCELLATION_REASONS, SEASON_CANCELLATION_REASONS } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IDummyFixture, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
-import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner } from '@shared/interfaces/season.model';
+import { IDummyFixture, ICancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner, ICloudCancelData } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment';
@@ -20,10 +20,12 @@ import { AddGalleryDialogComponent } from '../add-gallery-dialog/add-gallery-dia
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { AbortDialogComponent } from '../abort-dialog/abort-dialog.component';
-import { CancelDialogComponent } from '../cancel-dialog/cancel-dialog.component';
+import { CancelDialogComponent, ICancellationDialogData } from '../cancel-dialog/cancel-dialog.component';
 import { RescheduleMatchDialogComponent } from '../reschedule-match-dialog/reschedule-match-dialog.component';
 import { UpdateMatchReportComponent } from '../update-match-report/update-match-report.component';
 import { AddSponsorComponent, ISponsorDialogData } from '../add-sponsor/add-sponsor.component';
+import { AuthService } from '@admin/services/auth.service';
+import { AssignedRoles } from '@shared/interfaces/admin.model';
 
 @Component({
   selector: 'app-view-published-season',
@@ -68,7 +70,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     private seasonAdminService: SeasonAdminService,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -76,8 +79,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     this.seasonID = params['seasonid'];
     if (this.seasonID) {
       this.getSeasonInfo();
-      this.getParticipants();
-      this.getPartners();
     }
   }
 
@@ -111,6 +112,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
             this.seasonMoreData = response[1].data() as SeasonAbout;
             this.isRestrictedParticipants = this.seasonMoreData.allowedParticipants;
             this.getFixtures();
+            this.getParticipants();
+            this.getPartners();
             this.initForm();
             this.isLoaderShown = false;
           }
@@ -237,11 +240,10 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     this.changeStatus(event.status, event.matchID);
   }
 
-
   changeStatus(status: MatchStatus, matchID: string) {
     switch (status) {
       case MatchStatus.CAN:
-        this.cancelMatch(matchID);
+        this.openCancelDialog(matchID);
         break;
 
       case MatchStatus.ABT:
@@ -256,13 +258,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
         this.onUpdateMatchData(matchID);
         break;
     }
-  }
-
-  cancelMatch(matchID: string) {
-    this.dialog.open(CancelDialogComponent, {
-      panelClass: 'fk-dialogs',
-      data: matchID,
-    });
   }
 
   abortMatch(matchID: string) {
@@ -286,6 +281,113 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       data: matchID,
       disableClose: true
     });
+  }
+
+  openCancelDialog(matchID: string) {
+    const data: ICancellationDialogData = {
+      reasonsList: MATCH_CANCELLATION_REASONS,
+      showConfirmation: false
+    }
+    this.dialog.open(CancelDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data,
+    }).afterClosed()
+      .subscribe((response) => {
+        if (response?.hasOwnProperty('reason') && response?.hasOwnProperty('description')) {
+          this.cancelMatch(response, matchID);
+        }
+      });
+  }
+
+  openCancelSeasonDialog() {
+    if (this.isValidCancellation()) {
+      const data: ICancellationDialogData = {
+        reasonsList: SEASON_CANCELLATION_REASONS,
+        showConfirmation: true,
+        confirmationName: this.seasonData.name
+      }
+      this.dialog.open(CancelDialogComponent, {
+        panelClass: 'fk-dialogs',
+        data,
+      }).afterClosed()
+        .subscribe((response) => {
+          if (response?.hasOwnProperty('reason') && response?.hasOwnProperty('description')) {
+            this.isLoaderShown = true;
+            const uid = sessionStorage.getItem('uid');
+            const cloudData: ICloudCancelData = {
+              reason: response['reason'],
+              description: response['reason'],
+              seasonID: this.seasonID,
+              uid
+            }
+            this.seasonAdminService.cancelSeason(cloudData)
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Season cancelled successfully!');
+                this.getSeasonInfo();
+              })
+              .catch((error) => {
+                this.snackbarService.displayError(error?.message);
+              })
+              .finally(() => this.isLoaderShown = false)
+          }
+        });
+    } else {
+      this.snackbarService.displayError('Season is not eligible for cancellation!');
+    }
+  }
+
+  isValidCancellation() {
+    if (this.seasonFixtures.length && this.seasonData.status === 'PUBLISHED') {
+      let conditionOne = false;
+      const comparator = this.seasonFixtures.length * MatchConstants.SEASON_CANCELLATION_ONT_PERCENTAGE_MODIFIER;
+      const onTimeMatchesLength = this.seasonFixtures.filter(el => el.status === MatchStatus.ONT).length;
+
+      let isInitialMatchCancelledOrAborted = false;
+      if (this.seasonFixtures.length === 1) {
+        isInitialMatchCancelledOrAborted = this.seasonFixtures[0].status === MatchStatus.CAN || this.seasonFixtures[0].status === MatchStatus.ABT;
+      } else {
+        isInitialMatchCancelledOrAborted = this.seasonFixtures.slice(0, MatchConstants.CANCELLATION_FIRST_N_MATCHES).every(el => el.status === MatchStatus.CAN || el.status === MatchStatus.ABT);
+      }
+
+      if ((onTimeMatchesLength >= comparator) || isInitialMatchCancelledOrAborted) {
+        conditionOne = true;
+      }
+
+      let conditionTwo = false;
+      conditionTwo = this.seasonFixtures.some(el => el.status === MatchStatus.STU) === false;
+
+      return conditionOne && conditionTwo;
+    }
+    return false;
+  }
+
+  cancelMatch(data: any, mid: string) {
+    this.isLoaderShown = true;
+    const update: Partial<MatchFixture> = {
+      status: MatchStatus.CAN
+    }
+    const allPromises = [];
+    const uid = sessionStorage.getItem('uid');
+    const cancellationData: ICancelData = {
+      reason: data['reason'].trim(),
+      description: data['description'].trim(),
+      docID: mid,
+      uid,
+      type: 'cancel-match',
+      date: new Date().getTime()
+    }
+
+    allPromises.push(this.ngFire.collection('allMatches').doc(mid).update({ ...update }));
+    allPromises.push(this.ngFire.collection('cancellations').doc(mid).set(cancellationData));
+
+    Promise.all(allPromises)
+      .then(() => {
+        this.snackbarService.displayCustomMsg('Match Cancelled Successfully!');
+      })
+      .catch(() => this.snackbarService.displayError())
+      .finally(() => {
+        this.isLoaderShown = false;
+      })
   }
 
   onChangeSeasonPhoto(newFileEvent: File) {
@@ -337,6 +439,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onAddGallery() {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     if (this.seasonID) {
       this.dialog.open(AddGalleryDialogComponent, {
         panelClass: 'large-dialogs',
@@ -345,7 +450,29 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeSeason() {
+    this.dialog.open(ConfirmationBoxComponent).afterClosed()
+      .subscribe(response => {
+        if (response) {
+          const user = this.authService.getAdminDetails();
+          if (user && user.role === AssignedRoles.superAdmin) {
+            this.seasonAdminService.markSeasonAsRemoved(this.seasonID)
+              .then(() => {
+                this.snackbarService.displayCustomMsg('Season removed successfully!');
+                this.getSeasonInfo();
+              })
+              .catch();
+          } else {
+            this.snackbarService.displayError('Only Super-admins are allowed this action!');
+          }
+        }
+      })
+  }
+
   onAddPartner() {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     const data: ISponsorDialogData = {
       editMode: false,
       documentID: this.seasonID
@@ -359,6 +486,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   onEditPartner(partnerID: string) {
+    if (!this.isSeasonPublished) {
+      return;
+    }
     const data: ISponsorDialogData = {
       editMode: true,
       documentID: partnerID
@@ -391,11 +521,19 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   get payableFees(): number {
-    return Number(this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount));
+    return this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount);
   }
 
   get description(): AbstractControl {
     return this.updateEntriesForm.get('description');
+  }
+
+  get isShowViewSeason(): boolean {
+    return this.seasonData.status !== 'REMOVED';
+  }
+
+  get isShowDeleteSeason(): boolean {
+    return this.seasonData.status === 'CANCELLED';
   }
 
   get rules(): AbstractControl {

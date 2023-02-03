@@ -48,14 +48,23 @@ export class PaymentService {
     private ngFunc: AngularFireFunctions,
   ) { }
 
-  generateOrder(finalAmount: string): Promise<any> {
-    const amount = Number(finalAmount);
-    if (amount === 0) {
-      return Promise.reject();
+  generateOrder(amount: number, partialAmount: number): Promise<any> {
+    if (!amount || amount <= 0) {
+      return Promise.reject('Error occurred! Amount is very low');
     }
+
+    const uid = localStorage.getItem('uid');
+    const data: any = {};
+    data.amount = amount;
+    data.uid = uid;
+
+    if (partialAmount && partialAmount > 0) {
+      data.amountPartial = Number(partialAmount);
+    }
+
     // order generation can only be handled from backend, confirmed by razorpay team
     const generatorFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.GENERATE_RAZORPAY_ORDER);
-    return generatorFunc({ amount }).toPromise();
+    return generatorFunc(data).toPromise();
   }
 
   openCheckoutPage(options: ICheckoutOptions): void {
@@ -128,10 +137,10 @@ export class PaymentService {
     return this.loadingStatusChanged;
   }
 
-  getFeesAfterDiscount(fees: number, discount: number): string {
+  getFeesAfterDiscount(fees: number, discount: number): number {
     if (fees === 0) {
-      return '0';
+      return 0;
     }
-    return (fees - ((discount / 100) * fees)).toString();
+    return (fees - ((discount / 100) * fees));
   }
 }

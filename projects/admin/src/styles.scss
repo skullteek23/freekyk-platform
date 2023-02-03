@@ -252,3 +252,13 @@ app-fixture-table {
     }
   }
 }
+
+.photo-container-wrapper-add-sponsor {
+  app-photo-uploader {
+    .photo-container {
+      img {
+        max-height: 200px;
+      }
+    }
+  }
+}

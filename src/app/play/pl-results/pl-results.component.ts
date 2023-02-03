@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from '@shared/Constants/FILTERS';
-import { MatchFixture } from '@shared/interfaces/match.model';
+import { MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { FilterData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -57,7 +57,10 @@ export class PlResultsComponent implements OnInit, OnDestroy {
     this.ngFire
       .collection('seasons')
       .get()
-      .pipe(map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo).name)))
+      .pipe(
+        map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
+        map((resp) => resp.filter((doc) => doc.status !== 'REMOVED').map(el => el.name))
+      )
       .subscribe((resp) => {
         this.filterData = {
           defaultFilterPath: 'allMatches',
@@ -79,6 +82,12 @@ export class PlResultsComponent implements OnInit, OnDestroy {
         }),
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
+        map(resp => resp.map(el => {
+          if (el.status === MatchStatus.ONT) {
+            el.status = MatchStatus.SNU;
+          }
+          return el;
+        })),
         tap(() => {
           this.isLoading = false;
         }),

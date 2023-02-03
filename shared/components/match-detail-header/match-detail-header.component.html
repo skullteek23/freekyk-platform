@@ -2,9 +2,9 @@
   <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center start">
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="matchData?.home.imgpathLogo" alt="profile image" appFallbackImg />
+        <img [src]="matchData?.home?.logo" alt="profile image" appFallbackImg />
       </div>
-      <span class="mat-body-1 center">{{ matchData?.home.name }} </span>
+      <span class="mat-body-1 center">{{ matchData?.home?.name }} </span>
     </div>
     <div *ngIf="isFixture; else score" class="kickoff" fxLayout="column" fxLayoutAlign="center center"
       fxLayoutGap="8px">
@@ -15,27 +15,28 @@
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
         {{ matchData?.date | date: "HH:mm" }}
       </span>
+
     </div>
     <ng-template #score>
       <div class="kickoff" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
         <span class="overline"> FT </span>
         <div fxLayoutGap="4px" fxLayout>
           <span class="score_square mat-body-2" fxLayoutAlign="center center">{{
-            matchData.score?.home
+            matchData?.home?.score
             }}</span>
           <span class="score_square mat-body-2" fxLayoutAlign="center center">{{
-            matchData.score?.away
+            matchData?.away?.score
             }}</span>
         </div>
-        <span class="overline" *ngIf="matchData?.penalties"> Penalities </span>
-        <span class="overline" *ngIf="matchData?.penalties"> {{matchData?.penalties}} </span>
+        <span class="overline" *ngIf="matchData?.tie_breaker"> Penalities </span>
+        <span class="overline" *ngIf="matchData?.tie_breaker"> {{matchData?.tie_breaker}} </span>
       </div>
     </ng-template>
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
-        <img [src]="matchData?.away.imgpathLogo" alt="profile image" appFallbackImg />
+        <img [src]="matchData?.away?.logo" alt="profile image" appFallbackImg />
       </div>
-      <span class="mat-body-1 center"> {{ matchData?.away.name }} </span>
+      <span class="mat-body-1 center"> {{ matchData?.away?.name }} </span>
     </div>
   </div>
   <span *ngIf="isFixture; else result" class="mat-body-2 center">

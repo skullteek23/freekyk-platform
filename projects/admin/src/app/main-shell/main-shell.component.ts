@@ -91,6 +91,7 @@ export class MainShellComponent implements OnDestroy, OnInit {
         next: (response) => {
           if (response.exists) {
             const adminData = response.data() as Admin;
+            sessionStorage.setItem('user', JSON.stringify(adminData));
             this.role = this.authService.getUserRole(adminData.role);
             if (adminData.role === AssignedRoles.superAdmin) {
               this.links.push({ name: 'manage admins', route: 'manage-requests', disabled: false });

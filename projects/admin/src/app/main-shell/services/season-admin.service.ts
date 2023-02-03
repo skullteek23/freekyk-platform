@@ -6,16 +6,13 @@ import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
-import { IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
+import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
-import { UpdateMatchReportComponent } from '../components/season-panel/update-match-report/update-match-report.component';
-import { CancelDialogComponent } from '../components/season-panel/cancel-dialog/cancel-dialog.component';
-import { RescheduleMatchDialogComponent } from '../components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
-import { AbortDialogComponent } from '../components/season-panel/abort-dialog/abort-dialog.component';
+
 
 export interface Slot {
   name: string;
@@ -39,7 +36,6 @@ export class SeasonAdminService {
     private ngFire: AngularFirestore,
     private ngFunctions: AngularFireFunctions,
     private ngStorage: AngularFireStorage,
-    private dialog: MatDialog
   ) {
     this.getAdminConfigs();
   }
@@ -153,6 +149,13 @@ export class SeasonAdminService {
     return null;
   }
 
+  cancelSeason(data: ICloudCancelData) {
+    if (data) {
+      const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.CANCEL_SEASON);
+      return callable(data).toPromise();
+    }
+  }
+
   getMaxSelectableSlots(): number {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
     if (selectMatchTypeFormData && Object.keys(selectMatchTypeFormData).length) {
@@ -178,6 +181,15 @@ export class SeasonAdminService {
         fplMatches = this.calculateTotalLeagueMatches(teamsCount);
       }
       return fcpMatches + fkcMatches + fplMatches;
+    }
+  }
+
+  markSeasonAsRemoved(id: string) {
+    if (id) {
+      const update: Partial<SeasonBasicInfo> = {};
+      update.status = 'REMOVED';
+      update.lastUpdated = new Date().getTime();
+      return this.ngFire.collection('seasons').doc(id).update(update)
     }
   }
 
@@ -266,6 +278,8 @@ export class SeasonAdminService {
         return { green: true };
       case 'FINISHED':
         return { greenLight: true };
+      case 'CANCELLED':
+        return { red: true };
       default:
         return {};
     }
@@ -277,6 +291,10 @@ export class SeasonAdminService {
 
   isSeasonFinished(status: statusType): boolean {
     return status === 'FINISHED';
+  }
+
+  isSeasonCancelled(status: statusType): boolean {
+    return status === 'CANCELLED';
   }
 
   onGroundSelectionChange(selection: IGroundSelection): void {
