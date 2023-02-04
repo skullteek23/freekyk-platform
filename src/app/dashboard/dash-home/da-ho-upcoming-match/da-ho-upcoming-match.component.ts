@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatchCardComponent } from '@shared/dialogs/match-card/match-card.component';
-import { MatchFixture } from '@shared/interfaces/match.model';
+import { Formatters, MatchFixture, MatchStatus, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 
 @Component({
@@ -14,8 +14,11 @@ import { TeamState } from '../../dash-team-manag/store/team.reducer';
 })
 export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
 
-  noUpcomingMatch = false;
-  upFixture: MatchFixture;
+  readonly formatters = Formatters;
+  readonly MatchStatus = MatchStatus;
+
+  matchData: MatchFixture;
+  matchDesc: string = '';
   subscriptions = new Subscription();
 
   constructor(
@@ -28,10 +31,15 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
       this.store
         .select('team')
         .pipe(map((resp) => resp.upcomingMatches))
-        .subscribe((match: MatchFixture[]) => {
-          // console.log(match);
-          this.upFixture = match && match.length !== 0 ? match[0] : undefined;
-          this.noUpcomingMatch = match && match.length === 0;
+        .subscribe((data: MatchFixture[]) => {
+          if (data?.length) {
+            const matchCopy = JSON.parse(JSON.stringify(data[0]));
+            this.matchData = JSON.parse(JSON.stringify(matchCopy));
+            this.matchData.status = ParseMatchProperties.getTimeDrivenStatus(matchCopy.status, matchCopy.date);
+            this.matchDesc = ParseMatchProperties.getStatusDescription(this.matchData.status);
+          } else {
+            this.matchData = null;
+          }
         })
     );
   }
@@ -41,9 +49,11 @@ export class DaHoUpcomingMatchComponent implements OnInit, OnDestroy {
   }
 
   onOpenFixture(): void {
-    const dialogRef = this.dialog.open(MatchCardComponent, {
-      panelClass: 'fk-dialogs',
-      data: this.upFixture.id,
-    });
+    if (this.matchData) {
+      const dialogRef = this.dialog.open(MatchCardComponent, {
+        panelClass: 'fk-dialogs',
+        data: this.matchData.id,
+      });
+    }
   }
 }

@@ -196,7 +196,8 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const update: Partial<MatchFixture> = {
       concluded: true,
       home: newHomeObj,
-      away: newAwayObj
+      away: newAwayObj,
+      status: 8
     };
     if (isPenalties) {
       update['tie_breaker'] = `${formData.homePenScore}-${formData.awayPenScore}`

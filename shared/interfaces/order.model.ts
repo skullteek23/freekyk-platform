@@ -1,38 +1,31 @@
-import { cartItem } from './product.model';
-export type SUCCESS = 'SUCCESS';
-export type PROCESSING = 'PROCESSING';
-export type DELIVERED = 'DELIVERED';
-export type TRANSIT = 'TRANSIT';
-export type PLACED = 'PLACED';
-export type FAILED = 'FAILED';
-export type CARD = 'CARD';
-export type UPI = 'UPI';
-export type NETBANKING = 'NETBANKING';
-export interface OrderBasic {
+export enum OrderTypes {
+  season = 0,
+  match = 1
+}
+
+export interface userOrder {
   by: string;
-  status: SUCCESS | FAILED | PROCESSING;
-  payableTotal: number;
-  placedOn: number;
+  amount: number;
+  amountDue?: number;
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
-  itemsDescSnap?: cartItem;
-  id?: string;
+  date: number,
+  type: OrderTypes,
+  refId: string; // will contain document id for type of purchase
 }
-// export interface ProductOrder {
-//   pid: string;
-//   name: string;
-//   imgpath: string;
-//   price: number;
-//   category: string;
-//   color: string;
-//   size: number;
-// }
-export interface OrderAdditionalDetails {
-  dateAdded: number;
-  phoneNum: number;
-  addressId: string;
-  paymentMethod?: CARD | UPI | NETBANKING;
-  OID?: string;
-  id?: string;
+
+export interface RazorPayOrder {
+  amount: number;
+  amount_due: number;
+  amount_paid: number;
+  attempts: number;
+  created_at: number;
+  currency: string;
+  entity: string;
+  id: string;
+  notes: any[];
+  offer_id: string;
+  receipt: string;
+  status: string;
 }

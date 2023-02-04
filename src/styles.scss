@@ -54,6 +54,10 @@ ul {
   list-style: none;
 }
 
+h4 {
+  margin: 0 0 0 0 !important
+}
+
 p>ul {
   list-style: disc !important;
   padding-left: 16px !important;
@@ -559,12 +563,6 @@ mat-table {
     text-align: left;
   }
 
-  .primaryButton,
-  .secondaryButton,
-  .secondaryButtonInv {
-    max-width: 200px;
-  }
-
   .placeholder {
     height: 280px;
     width: 280px;
@@ -653,12 +651,6 @@ mat-table {
 
   mat-toolbar {
     padding: 0;
-  }
-
-  .primaryButton,
-  .secondaryButton,
-  .secondaryButtonInv {
-    max-width: 200px;
   }
 
   .placeholder {

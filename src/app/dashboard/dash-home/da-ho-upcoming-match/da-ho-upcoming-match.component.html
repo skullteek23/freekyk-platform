@@ -1,4 +1,4 @@
-<ul *ngIf="noUpcomingMatch; else match">
+<ul *ngIf="!matchData; else match">
   <li class="nofi grey-bg">
     <span class="mat-body-1">You have no Upcoming Match!</span>
   </li>
@@ -8,9 +8,9 @@
     <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center start">
       <div class="team" fxLayout="column" fxLayoutGap="8px">
         <div class="img_cont">
-          <img [src]="upFixture?.home.logo" alt="profile image" appFallbackImg />
+          <img [src]="matchData?.home.logo" alt="profile image" appFallbackImg />
         </div>
-        <span class="mat-body-1 center">{{ upFixture?.home.name }} </span>
+        <span class="mat-body-1 center">{{ matchData?.home.name }} </span>
       </div>
       <div class="kickoff" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
         <span class="overline">
@@ -18,20 +18,31 @@
         </span>
 
         <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-          {{ upFixture?.date | date: "HH:mm" }}
+          {{ matchData?.date | date: "HH:mm" }}
         </span>
+        <mat-chip-list fxLayoutAlign="center center">
+          <mat-chip [style.background]="formatters?.formatStatus(matchData?.status)?.color" class="status-chip"
+            [matTooltip]="formatters?.formatStatus(matchData?.status)?.shortMsg">
+            <span [style.color]="formatters?.formatStatus(matchData?.status)?.textColor"
+              class="status-text mat-caption">
+              {{
+              MatchStatus[formatters?.formatStatus(matchData?.status)?.code] ?
+              MatchStatus[formatters?.formatStatus(matchData?.status)?.code] : 'NA'
+              }}
+            </span>
+          </mat-chip>
+        </mat-chip-list>
       </div>
 
       <div class="team" fxLayout="column" fxLayoutGap="8px">
         <div class="img_cont">
-          <img [src]="upFixture?.away.logo" alt="profile image" appFallbackImg />
+          <img [src]="matchData?.away.logo" alt="profile image" appFallbackImg />
         </div>
-        <span class="mat-body-1 center"> {{ upFixture?.away.name }} </span>
+        <span class="mat-body-1 center"> {{ matchData?.away.name }} </span>
       </div>
     </div>
-    <span class="mat-body-2 center">
-      This match is on
-      {{ upFixture?.date | date: "mediumDate" }}
+    <span class="mat-body-2 center" [style.color]="formatters?.formatStatus(matchData?.status)?.color">
+      {{matchDesc}}
     </span>
   </div>
   <div fxLayoutAlign="center center">

@@ -15,12 +15,14 @@ import {
   SeasonParticipants,
   SeasonStats,
 } from '@shared/interfaces/season.model';
-import { MatchFixture } from '@shared/interfaces/match.model';
-import { ListOption } from '@shared/interfaces/others.model';
+import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
+import { ListOption, QueryInfo } from '@shared/interfaces/others.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import * as _ from 'lodash';
+import { QueryService } from '@app/services/query.service';
+import { MatchConstants } from '@shared/constants/constants';
 
 
 @Component({
@@ -132,9 +134,18 @@ export class SeasonProfileComponent implements OnInit {
         )
         .subscribe({
           next: (response: MatchFixture[]) => {
-            this.seasonFixtures = response.filter(match => match.concluded === false);
-            this.seasonResults = response.filter(match => match.concluded === true);
-            this.seasonGroundsList = _.uniqBy(response, 'stadium').map(el => ({ viewValue: el.ground, value: el.groundID }))
+            const currentTimestamp = new Date().getTime();
+            this.seasonFixtures = [];
+            this.seasonResults = [];
+            response.forEach(match => {
+              match.status = ParseMatchProperties.getTimeDrivenStatus(match.status, match.date);
+              if (((match.date + (MatchConstants.ONE_MATCH_DURATION * MatchConstants.ONE_HOUR_IN_MILLIS)) > currentTimestamp)) {
+                this.seasonFixtures.push(match);
+              } else {
+                this.seasonResults.push(match);
+              }
+            })
+            this.seasonGroundsList = _.uniqBy(response, 'stadium').map(el => ({ viewValue: el.ground, value: el.groundID }));
           },
           error: () => {
             this.seasonFixtures = [];

@@ -6,8 +6,8 @@
       </div>
       <span class="mat-body-1 center">{{ matchData?.home?.name }} </span>
     </div>
-    <div *ngIf="isFixture; else score" class="kickoff" fxLayout="column" fxLayoutAlign="center center"
-      fxLayoutGap="8px">
+    <div *ngIf="!matchData?.home?.hasOwnProperty('score'); else score" class="kickoff" fxLayout="column"
+      fxLayoutAlign="center center" fxLayoutGap="8px">
       <span class="overline">
         {{ "kick-off" | uppercase }}
       </span>
@@ -15,6 +15,17 @@
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
         {{ matchData?.date | date: "HH:mm" }}
       </span>
+      <mat-chip-list fxLayoutAlign="center center">
+        <mat-chip [style.background]="formatters?.formatStatus(matchData?.status)?.color" class="status-chip"
+          [matTooltip]="formatters?.formatStatus(matchData?.status)?.shortMsg">
+          <span [style.color]="formatters?.formatStatus(matchData?.status)?.textColor" class="status-text mat-caption">
+            {{
+            MatchStatus[formatters?.formatStatus(matchData?.status)?.code] ?
+            MatchStatus[formatters?.formatStatus(matchData?.status)?.code] : 'NA'
+            }}
+          </span>
+        </mat-chip>
+      </mat-chip-list>
 
     </div>
     <ng-template #score>
@@ -39,12 +50,8 @@
       <span class="mat-body-1 center"> {{ matchData?.away?.name }} </span>
     </div>
   </div>
-  <span *ngIf="isFixture; else result" class="mat-body-2 center">
-    This match is on {{ matchData?.date | date: "mediumDate" }}
+  <span class="mat-body-2 center" [style.color]="formatters?.formatStatus(matchData?.status)?.color">
+    {{matchDesc}}
   </span>
-  <ng-template #result>
-    <span class="mat-body-2 center">
-      {{ resultStatus }}
-    </span>
-  </ng-template>
+
 </div>

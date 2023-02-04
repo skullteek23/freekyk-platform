@@ -21,6 +21,7 @@ export interface SeasonBasicInfo {
   createdBy: string;
   imgpath?: string;
   id?: string;
+  discountedFees?: number;
 }
 export interface SeasonAbout {
   description: string;

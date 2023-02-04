@@ -56,7 +56,7 @@ export async function seasonCancellation(data: ICloudCancelData, context: any): 
   }
 
   // future ground bookings deletion
-  const groundBookingsList = (await db.collection('groundBookings').where('season', '==', seasonInfo.name).where('date', '>=', date).get()).docs.map(el => el.id);
+  const groundBookingsList = (await db.collection('groundBookings').where('season', '==', seasonInfo.name).where('slotTimestamp', '>=', date).get()).docs.map(el => el.id);
   for (let i = 0; i < groundBookingsList.length; i++) {
     if (groundBookingsList[i] !== null) {
       const bookingRef = db.collection('groundBookings').doc(groundBookingsList[i]);

@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from '@shared/Constants/FILTERS';
-import { MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { FilterData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -83,9 +83,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
         map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
         map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
         map(resp => resp.map(el => {
-          if (el.status === MatchStatus.ONT) {
-            el.status = MatchStatus.SNU;
-          }
+          el.status = ParseMatchProperties.getTimeDrivenStatus(el.status, el.date);
           return el;
         })),
         tap(() => {

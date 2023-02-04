@@ -5,11 +5,10 @@ import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { MatchFilters } from '@shared/Constants/FILTERS';
-import { MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { FilterData } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatchConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-pl-fixtures',
@@ -90,7 +89,6 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
 
   onQueryFixtures(queryInfo): void {
     this.isLoading = true;
-    const date = new Date().getTime() + MatchConstants.ONE_HOUR_IN_MILLIS;
     this.fixtures$ = this.queryService
       .onQueryMatches(queryInfo, 'allMatches', false)
       .pipe(
@@ -101,9 +99,7 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
         // map((res) => res.filter(el => el.date > new Date().getTime())),
         map((resp) => resp.sort(ArraySorting.sortObjectByKey('date'))),
         map(resp => resp.map(el => {
-          if (el.date < date && el.status === MatchStatus.ONT) {
-            el.status = MatchStatus.ONG;
-          }
+          el.status = ParseMatchProperties.getTimeDrivenStatus(el.status, el.date);
           return el;
         })),
         tap(() => {

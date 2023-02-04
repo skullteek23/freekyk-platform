@@ -5,6 +5,9 @@ import { T_HOME, T_LOADING, T_FAILURE, T_SUCCESS, HOME, } from '../../src/app/da
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { OrderTypes, userOrder } from '@shared/interfaces/order.model';
+import { ngfactoryFilePath } from '@angular/compiler/src/aot/util';
+import { AngularFirestore } from '@angular/fire/firestore';
 declare let Razorpay: any;
 export type PAYMENT_TYPE = T_HOME | T_LOADING | T_SUCCESS | T_FAILURE;
 
@@ -46,6 +49,7 @@ export class PaymentService {
 
   constructor(
     private ngFunc: AngularFireFunctions,
+    private ngFire: AngularFirestore
   ) { }
 
   generateOrder(amount: number, partialAmount: number): Promise<any> {
@@ -85,11 +89,10 @@ export class PaymentService {
     return verifyPaymentFunc({ ...response });
   }
 
-  getCaptainCheckoutOptions(fees: string, season: SeasonBasicInfo, teamID: string): ICheckoutOptions {
+  getCaptainCheckoutOptions(fees: string): ICheckoutOptions {
     const options = {
       ...UNIVERSAL_OPTIONS,
       description: `Participation Fees`,
-      handler: this.onSuccessPlayer.bind(this, season, teamID),
       amount: Number(fees)
     };
     return options;
@@ -101,7 +104,7 @@ export class PaymentService {
       this.verifyPayment(response).subscribe({
         next: (status) => {
           if (status) {
-            this.initParticipation(season, tid, response)
+            this.participate(season, tid)
               .subscribe({
                 next: (response) => {
                   this.onLoadingStatusChange('success');
@@ -123,10 +126,28 @@ export class PaymentService {
     }
   }
 
-  initParticipation(season: SeasonBasicInfo, tid: string, response: any) {
-    const uid = localStorage.getItem('uid');
+  participate(season: SeasonBasicInfo, participantId: string) {
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SEASON_PARTICIPATION);
-    return participateFunc({ ...response, season, tid, uid });
+    return participateFunc({ season, participantId });
+  }
+
+  saveOrder(season: SeasonBasicInfo, due: number, type: OrderTypes, response: any) {
+    const uid = localStorage.getItem('uid');
+    const payableFees = this.getFeesAfterDiscount(season.feesPerTeam, season.discount)
+    if (uid && season.id && payableFees > 0) {
+      const order: userOrder = {
+        by: uid,
+        amount: payableFees,
+        amountDue: due,
+        razorpay_order_id: response['razorpay_order_id'],
+        razorpay_payment_id: response['razorpay_payment_id'],
+        razorpay_signature: response['razorpay_signature'],
+        date: new Date().getTime(),
+        type,
+        refId: season.id
+      }
+      return this.ngFire.collection('orders').doc(order.razorpay_order_id).set(order);
+    }
   }
 
   onLoadingStatusChange(status: PAYMENT_TYPE): void {

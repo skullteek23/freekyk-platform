@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentData, QueryFn, QuerySnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import {
-  FilterHeadingMap,
-  FilterSymbolMap,
-  FilterValueMap,
-} from '@shared/Constants/FILTERS';
+import { FilterHeadingMap, FilterSymbolMap, FilterValueMap, } from '@shared/Constants/FILTERS';
 import { QueryInfo } from '@shared/interfaces/others.model';
 import { MatchConstants } from '@shared/constants/constants';
+import { ParseMatchProperties } from '@shared/interfaces/match.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,13 +39,12 @@ export class QueryService {
     }
   }
 
-  onQueryMatches(queryInfo: QueryInfo, collectionName: string, isConcluded: boolean): Observable<QuerySnapshot<unknown>> {
-    let date = new Date().getTime();
-    date -= MatchConstants.ONE_HOUR_IN_MILLIS;
-    const symbol = isConcluded ? '<' : '>=';
+  onQueryMatches(queryInfo: QueryInfo, collectionName: string, isResults: boolean): Observable<QuerySnapshot<unknown>> {
+    let comparator = ParseMatchProperties.getComparatorTimestampForBackendQuery();
+    const symbol = isResults ? '<=' : '>';
     if (!queryInfo) {
       return this.ngFire
-        .collection(collectionName, (query) => query.where('date', symbol, date))
+        .collection(collectionName, (query) => query.where('date', symbol, comparator))
         .get();
     } else {
       queryInfo = {
@@ -66,7 +62,7 @@ export class QueryService {
               queryInfo.queryComparisonSymbol,
               queryInfo.queryValue
             )
-            .where('date', symbol, date)
+            .where('date', symbol, comparator)
         )
         .get();
     }

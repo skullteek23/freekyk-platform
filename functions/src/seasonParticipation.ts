@@ -1,6 +1,5 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { OrderBasic } from '@shared/interfaces/order.model';
 import { SeasonBasicInfo, SeasonParticipants, } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { isFixtureAvailableAway, isFixtureAvailableHome, isFixtureAvailableHomeOrAway, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
@@ -11,57 +10,51 @@ const db = admin.firestore();
 
 export async function seasonParticipation(data: any, context: any): Promise<any> {
 
-  const ORDER_ID = data && data.razorpay_order_id ? data.razorpay_order_id : null;
-  const PAYMENT_ID = data && data.razorpay_payment_id ? data.razorpay_payment_id : null;
-  const SIGNATURE = data && data.razorpay_signature ? data.razorpay_signature : null;
+  // const ORDER_ID = data && data.razorpay_order_id ? data.razorpay_order_id : null;
+  // const PAYMENT_ID = data && data.razorpay_payment_id ? data.razorpay_payment_id : null;
+  // const SIGNATURE = data && data.razorpay_signature ? data.razorpay_signature : null;
   const season = data && data.season ? (data.season as SeasonBasicInfo) : null;
-  const teamID = data && data.tid ? data.tid : null;
+  const teamID = data && data.participantId ? data.participantId : null;
   const batch = db.batch();
   const seasonID = season?.id;
-  let newOrder: OrderBasic;
+  // let newOrder: userOrder;
   let teamInfo: TeamBasicInfo;
   let participantDetail: SeasonParticipants;
 
-  if (!season || !seasonID || !batch || !ORDER_ID || !PAYMENT_ID || !SIGNATURE) {
+  if (!season || !seasonID || !batch || !teamID) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
+
+  const participants = (await db.collection(`seasons/${seasonID}/participants`).get()).docs.map(el => el.data() as SeasonParticipants);
   // check if participation is allowed
-  const totalParticipants = (await db.collection(`seasons/${seasonID}/participants`).get()).size;
-  if (totalParticipants >= season.p_teams) {
+  if (participants?.length >= season.p_teams) {
     throw new functions.https.HttpsError('permission-denied', 'Season participation is full!');
+  } else if (participants.includes(teamID)) {
+    throw new functions.https.HttpsError('permission-denied', 'Team is already a participant!');
   }
 
-  newOrder = {
-    razorpay_order_id: ORDER_ID,
-    razorpay_payment_id: PAYMENT_ID,
-    razorpay_signature: SIGNATURE,
-    status: 'SUCCESS',
-    by: data.uid,
-    payableTotal: season.feesPerTeam || 1,
-    placedOn: admin.firestore.Timestamp.now().toMillis(),
-    itemsDescSnap: {
-      prodName: season.name,
-      prodImgpath: season.imgpath || '',
-      prodPrice: season.feesPerTeam,
-      prodId: seasonID,
-      prodType: 'season',
-    },
-  };
-
-  if (!teamID || !newOrder) {
-    throw new functions.https.HttpsError('unauthenticated', 'Payment Authentication failed!');
-  }
+  // newOrder = {
+  //   by: data.uid,
+  //   amount: season.feesPerTeam,
+  //   amountDue: 0,
+  //   razorpay_order_id: ORDER_ID,
+  //   razorpay_payment_id: PAYMENT_ID,
+  //   razorpay_signature: SIGNATURE,
+  //   date: admin.firestore.Timestamp.now().toMillis(),
+  //   type: 0,
+  //   refId: seasonID
+  // };
 
   teamInfo = (await db.collection('teams').doc(teamID).get()).data() as TeamBasicInfo;
   participantDetail = {
-    tid: data.tid,
+    tid: data.participantId,
     name: teamInfo.tname,
     logo: teamInfo.imgpath_logo,
   }
 
   // Saving season order
-  const docRef = db.collection('seasonOrders').doc(ORDER_ID);
-  batch.set(docRef, newOrder);
+  // const docRef = db.collection('seasonOrders').doc(ORDER_ID);
+  // batch.set(docRef, newOrder);
 
   // getting all season fixtures
   const seasonFixtures: MatchFixture[] = (await db.collection('allMatches').where('season', '==', season.name).get()).docs.map((fixtureData) => ({ ...fixtureData.data() as MatchFixture, id: fixtureData.id }));

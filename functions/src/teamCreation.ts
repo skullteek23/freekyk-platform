@@ -13,7 +13,7 @@ export async function teamCreation(data: { players: PlayerBasicInfo[], teamName:
   const imgpath = data.imgpath ? data.imgpath : PLACEHOLDER_TEAM_PHOTO;
   const position = 'NA';
   const captainID = data && data.captainID ? data.captainID : null;
-  const teamData = data && data.teamName ? data.teamName : null;
+  const teamData = data && data.teamName ? data.teamName.trim() : null;
   let teamInfo: TeamBasicInfo;
   let teamMoreInfo: TeamMoreInfo;
   let tMembers: TeamMembers;

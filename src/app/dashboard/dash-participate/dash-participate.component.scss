@@ -7,28 +7,52 @@
 
 .list-container {
   overflow-y: auto;
+  height: calc(60vh);
   max-height: calc(60vh);
+  overflow-x: visible;
+  padding: 0 10px
 }
 
 .min-height {
   height: 100vh;
 }
 
+.mat-subheading-1 {
+  margin-bottom: 0 !important;
+}
+
 .red {
   color: var(--red);
 }
 
+.green {
+  color: var(--primaryColor);
+}
+
 .tournament {
-  width: 100%;
-  border: 2px solid white;
-  color: white;
   height: 150px;
+  margin: 8px 0;
+  width: 100%;
   border-radius: var(--borderRadiusCard);
-  padding: 20px;
-  background-image: url("/assets/images/fkc_background.jpg");
+  padding: 8px 16px;
   background-repeat: no-repeat, repeat;
   background-size: cover;
-  background-color: #cccccc3b;
+  background-color: white;
+}
+
+.photo-container {
+  max-height: 130px;
+  min-height: 130px;
+  max-width: 300px;
+  width: 300px;
+  border-radius: var(--borderRadiusCard);
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
 }
 
 .loading-container {
@@ -44,19 +68,24 @@
   text-decoration: underline;
 }
 
+.striked {
+  text-decoration: line-through;
+}
+
 @media only screen and (max-width: 959px) {
   .tournament {
     text-align: center;
     width: 100%;
-    border: 2px solid white;
-    color: white;
-    height: 230px;
-    border-radius: var(--borderRadiusCard);
     padding: 20px;
-    margin: 20px 0;
-    background-image: url("/assets/images/fkc_background.jpg");
+    height: 100%;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: var(--borderRadiusCard);
     background-repeat: no-repeat, repeat;
     background-size: cover;
-    background-color: #cccccc3b;
+  }
+
+  .photo-container {
+    max-height: 500px;
   }
 }

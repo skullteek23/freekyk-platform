@@ -1,3 +1,4 @@
+import { MatchConstants } from '@shared/constants/constants';
 import { ListOption } from './others.model';
 
 export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
@@ -17,38 +18,62 @@ export enum MatchStatus {
 
 export const StatusMessage = [
   // match time hasn't started
-  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'On-time', color: '#4bb242', textColor: '#ffffff' },
+  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'This match is on-time', color: '#4bb242', textColor: '#ffffff' },
 
   // match time is going on
-  { code: MatchStatus.ONG, shortMsg: 'live', description: 'live', color: '#ff5837', textColor: '#ffffff' },
+  { code: MatchStatus.ONG, shortMsg: 'live', description: 'This match is currently live!', color: '#ff5837', textColor: '#ffffff' },
 
   // match time has occurred
-  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'pending', color: '#fbbe28', textColor: '#000' },
+  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'Match stats are not yet uploaded for this match! Please check back later.', color: '#fbbe28', textColor: '#000' },
 
   // match is rescheduled
-  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'rescheduled', color: '#a9a9a9', textColor: '#ffffff' },
+  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'This match is rescheduled by the organizer', color: '#a9a9a9', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'cancelled', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'This match is cancelled by the organizer', color: '#b60000', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'cancelled season', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'This match is cancelled due to season cancellation by the organizer', color: '#b60000', textColor: '#ffffff' },
 
   // match is aborted by any manual action
-  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'aborted', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'This match is aborted by the organizer', color: '#b60000', textColor: '#ffffff' },
 
   // match stats are disputed
-  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'conflict', color: '#f20505', textColor: '#ffffff' },
+  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'Match stats corrections is pending for this match! Please check back later.', color: '#f20505', textColor: '#ffffff' },
 
   // match stats are updated (at least once)
-  { code: MatchStatus.STU, shortMsg: 'finished', description: 'finished', color: '#00810f', textColor: '#ffffff' },
+  { code: MatchStatus.STU, shortMsg: 'finished', description: 'Match stats are updated by the organizer. Please check Stats section', color: '#00810f', textColor: '#ffffff' },
 ]
+
+export class ParseMatchProperties {
+  static getTimeDrivenStatus(status: MatchStatus, matchTimestamp: number): MatchStatus {
+    const currentTimestamp = new Date().getTime();
+    const finishTimestamp = matchTimestamp + (MatchConstants.ONE_MATCH_DURATION * MatchConstants.ONE_HOUR_IN_MILLIS);
+    if (status === MatchStatus.ONT) {
+      if (currentTimestamp < finishTimestamp && currentTimestamp >= matchTimestamp) return MatchStatus.ONG;
+      else if (currentTimestamp >= finishTimestamp) return MatchStatus.SNU;
+      else return MatchStatus.ONT;
+    }
+    return status;
+  }
+
+  static getComparatorTimestampForBackendQuery(): number {
+    const currentTimestamp = new Date().getTime();
+    const oneHourLessTimestamp = currentTimestamp - (MatchConstants.ONE_MATCH_DURATION * MatchConstants.ONE_HOUR_IN_MILLIS);
+    return oneHourLessTimestamp;
+  }
+
+  static getStatusDescription(status: MatchStatus): string {
+    return Formatters.formatStatus(status) ? Formatters.formatStatus(status).description : MatchConstants.LABEL_NOT_AVAILABLE;
+  }
+}
 
 export const Formatters = {
   formatStatus: (key: number): any => {
     return StatusMessage[key];
   }
 }
+
 export interface MatchFixture {
   date: number;
   concluded: boolean;

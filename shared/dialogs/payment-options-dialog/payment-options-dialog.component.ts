@@ -4,12 +4,13 @@ import { FeatureInfoComponent, IFeatureInfoOptions } from '../feature-info/featu
 
 export interface IPaymentOptions {
   subheading: string;
-  cta: { primary: boolean, text: string, disabled: boolean }[];
-  payAmount: number;
+  cta: CTAButtonPaymentOption[];
   offerExpiry: number;
   offerText: string;
   readMoreData: IFeatureInfoOptions;
 }
+
+export interface CTAButtonPaymentOption { primary: boolean, text: string, disabled: boolean, amount: number, isPartial: boolean }
 
 @Component({
   selector: 'app-payment-options-dialog',
@@ -38,7 +39,9 @@ export class PaymentOptionsDialogComponent implements OnInit {
     })
   }
 
-  onPayNow(selectedOption: IPaymentOptions) {
-    this.dialogRef.close(selectedOption)
+  onDecidePayment(ctaButton: CTAButtonPaymentOption) {
+    if (!ctaButton.disabled) {
+      this.dialogRef.close(ctaButton);
+    }
   }
 }

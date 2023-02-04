@@ -6,21 +6,22 @@
 </mat-toolbar>
 <div class="container-2">
   <div class="dialogData">
-    <ng-container *ngFor="let paymentOption of data">
-      <div class="option-container" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="16px">
-        <span class="mat-body-1">{{paymentOption?.subheading}}</span>
+    <ul class="list-container">
+      <li class="option-container mat-elevation-z4" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="16px"
+        *ngFor="let paymentOption of data">
+        <span class="mat-body-2">{{paymentOption?.subheading}}</span>
         <div class="button-container" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="12px">
-          <button [disabled]="button.disabled"
+          <button [disabled]="button.disabled" (click)="onDecidePayment(button)"
             [ngClass]="{'primaryButton': button.primary, 'secondaryButton': button.primary === false}"
             class="buttonText" *ngFor="let button of paymentOption?.cta">
             {{button.text}}
           </button>
         </div>
-        <span class="mat-body-2">
+        <span class="mat-body-1 red">
           Offers ends by {{paymentOption.offerExpiry | date: 'fullDate'}}
         </span>
         <a (click)="onReadMore(paymentOption.readMoreData)">Read More</a>
-      </div>
-    </ng-container>
+      </li>
+    </ul>
   </div>
 </div>
