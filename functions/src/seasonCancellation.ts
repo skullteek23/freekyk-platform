@@ -45,22 +45,26 @@ export async function seasonCancellation(data: ICloudCancelData, context: any): 
   batch.create(cancellationDocRef, cancellationDoc);
 
   // update each match status
-  const seasonFixturesId = (await db.collection('allMatches').where('season', '==', seasonInfo.name).get()).docs.map(el => el.id);
-  for (let i = 0; i < seasonFixturesId.length; i++) {
-    if (seasonFixturesId[i] !== null) {
-      const matchRef = db.collection('allMatches').doc(seasonFixturesId[i]);
-      const update: Partial<MatchFixture> = {};
-      update.status = 5;
-      batch.update(matchRef, update);
+  const seasonFixturesId = (await db.collection('allMatches').where('season', '==', seasonInfo.name).get()).docs.filter(el => (el.data() as MatchFixture).status !== 4).map(el => el.id);
+  if (seasonFixturesId) {
+    for (let i = 0; i < seasonFixturesId.length; i++) {
+      if (seasonFixturesId[i] !== null) {
+        const matchRef = db.collection('allMatches').doc(seasonFixturesId[i]);
+        const update: Partial<MatchFixture> = {};
+        update.status = 5;
+        batch.update(matchRef, update);
+      }
     }
   }
 
   // future ground bookings deletion
   const groundBookingsList = (await db.collection('groundBookings').where('season', '==', seasonInfo.name).where('slotTimestamp', '>=', date).get()).docs.map(el => el.id);
-  for (let i = 0; i < groundBookingsList.length; i++) {
-    if (groundBookingsList[i] !== null) {
-      const bookingRef = db.collection('groundBookings').doc(groundBookingsList[i]);
-      batch.delete(bookingRef);
+  if (groundBookingsList) {
+    for (let i = 0; i < groundBookingsList.length; i++) {
+      if (groundBookingsList[i] !== null) {
+        const bookingRef = db.collection('groundBookings').doc(groundBookingsList[i]);
+        batch.delete(bookingRef);
+      }
     }
   }
 
