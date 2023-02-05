@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
-import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchDayReport } from '../../interfaces/match.model';
+import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchDayReport, MatchStatus } from '../../interfaces/match.model';
 import { ListOption } from '../../interfaces/others.model';
 import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.component';
 
@@ -45,8 +45,7 @@ export class MatchCardComponent implements OnInit {
         this.data = response;
         this.getOverviewData();
         this.getMatchLineup();
-        if (this.data.concluded) {
-          this.selectedIndex = 2;
+        if (this.data.status === MatchStatus.STU || this.data.status === MatchStatus.STD) {
           this.getMatchReport();
         }
       });
@@ -83,6 +82,7 @@ export class MatchCardComponent implements OnInit {
       .pipe(map((resp) => resp.data() as MatchDayReport))
       .subscribe(response => {
         this.statsData = response;
+        this.selectedIndex = 2
       });
   }
 
