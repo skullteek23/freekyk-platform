@@ -22,10 +22,12 @@
     <ng-template #score>
       <div fxLayoutAlign="center center" fxLayoutGap="8px">
         <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.home.score }}</span>
+          <span class="mat-body-2 scoreColor">{{ fixture.home.hasOwnProperty('score') ? fixture.home.score : '-'
+            }}</span>
         </div>
         <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.away.score }}</span>
+          <span class="mat-body-2 scoreColor">{{ fixture.away.hasOwnProperty('score') ? fixture.away.score : '-'
+            }}</span>
         </div>
       </div>
     </ng-template>
