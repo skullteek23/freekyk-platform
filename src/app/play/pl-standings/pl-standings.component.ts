@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTabGroup } from '@angular/material/tabs';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { MatchFixture, TournamentTypes } from '@shared/interfaces/match.model';
+import { MatchFixture, MatchStatus, TournamentTypes } from '@shared/interfaces/match.model';
 import { CommunityLeaderboard, FilterData, LeagueTableModel, } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { PlayConstants } from '../play.constants';
@@ -94,10 +94,10 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
               if (element?.home?.score > element?.away?.score) {
                 winner = element.home.name;
               } else if (element?.home?.score < element?.away?.score) {
-                winner = element.home.name;
+                winner = element.away.name;
               } else if (penaltyScores && penaltyScores.length === 2 && element.hasOwnProperty('tie_breaker') && element.tie_breaker !== '') {
                 winner = penaltyScores[0] > penaltyScores[1] ? element.home.name : element.away.name;
-              } else if (!element.concluded) {
+              } else if (element.status < MatchStatus.SNU) {
                 winner = PlayConstants.TO_BE_DECIDED;
               }
               const CPdata: CommunityLeaderboard = {
