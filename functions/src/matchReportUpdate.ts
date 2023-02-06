@@ -290,12 +290,12 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const awayScorers: string[] = [];
     for (let i = 0; i < formData.scorersHome.length; i++) {
       const scorer = formData.scorersHome[i];
-      const goalScored = formData.scorersGoalsHome;
+      const goalScored = formData.scorersGoalsHome[i];
       homeScorers.push(`${scorer.viewValue} (${goalScored})`);
     }
     for (let j = 0; j < formData.scorersAway.length; j++) {
       const scorer = formData.scorersAway[j];
-      const goalScored = formData.scorersGoalsAway;
+      const goalScored = formData.scorersGoalsAway[j];
       awayScorers.push(`${scorer.viewValue} (${goalScored})`);
     }
     matchReport.scorers = {
