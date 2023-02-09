@@ -52,6 +52,17 @@
   </div>
   <!-- teams  -->
 
+  <mat-chip-list fxHide.gt-sm="true">
+    <mat-chip [style.background]="formatters.formatStatus(fixture.status)?.color" class="status-chip"
+      [matTooltip]="formatters.formatStatus(fixture.status)?.shortMsg">
+      <span [style.color]="formatters.formatStatus(fixture.status)?.textColor" class="status-text mat-caption">
+        {{
+        matchStatus[formatters.formatStatus(fixture.status)?.code]
+        }}
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+
   <!-- action-button - small  -->
   <button (click)="onOpenFixture()" fxHide.gt-sm="true" mat-icon-button matTooltip="Open Fixture"
     fxLayoutAlign="center center">
