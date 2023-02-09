@@ -115,7 +115,7 @@ export interface MatchFixtureOverview {
   replay_link?: string;
   live_link?: string;
 }
-export class MatchLineup {
+export interface MatchLineup {
   home: string[];
   away: string[];
 }

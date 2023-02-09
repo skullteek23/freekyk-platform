@@ -14,7 +14,8 @@ import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.co
 })
 export class MatchCardComponent implements OnInit {
 
-  lineups = new MatchLineup();
+  homeLineup: string[] = [];
+  awayLineup: string[] = [];
   overViewData: MatchFixtureOverview;
   statsData: MatchDayReport;
   selectedIndex = 0;
@@ -63,16 +64,19 @@ export class MatchCardComponent implements OnInit {
   }
 
   async getMatchLineup(): Promise<any> {
-    this.lineups = new MatchLineup();
     const homeData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.home.name)).get().toPromise());
     const awayData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.away.name)).get().toPromise());
     if (!homeData?.empty && homeData?.docs[0]?.exists) {
       const membersList: string[] = ((await this.ngFirestore.collection(`teams/${homeData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
-      this.lineups.home = membersList;
+      this.homeLineup = membersList;
+    } else {
+      this.homeLineup = [];
     }
     if (!awayData?.empty && awayData?.docs[0]?.exists) {
       const membersList: string[] = ((await this.ngFirestore.collection(`teams/${awayData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
-      this.lineups.away = membersList;
+      this.awayLineup = membersList;
+    } else {
+      this.awayLineup = [];
     }
   }
 

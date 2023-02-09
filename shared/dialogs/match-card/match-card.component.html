@@ -67,28 +67,28 @@
         </div>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Lineup" [disabled]="!lineups">
+    <mat-tab label="Lineup" [disabled]="homeLineup.length === awayLineup.length && homeLineup.length === 0">
       <ng-template matTabContent>
         <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column">
           <div fxLayout="column" fxLayoutGap="16px">
-            <ng-container *ngIf="lineups?.home?.length > 0">
+            <ng-container *ngIf="homeLineup?.length > 0">
 
               <span class="dash-h5 align">
                 {{ data?.home.name + " Lineup" | titlecase }}
               </span>
               <div fxLayoutAlign="start" fxLayout="column">
-                <span *ngFor="let player of lineups?.home" class="mat-body-1">
+                <span *ngFor="let player of homeLineup" class="mat-body-1">
                   {{ player }}
                 </span>
               </div>
             </ng-container>
-            <ng-container *ngIf="lineups?.away?.length > 0">
+            <ng-container *ngIf="awayLineup?.length > 0">
               <mat-divider></mat-divider>
               <span class="dash-h5 align">
                 {{ data?.away.name + " Lineup" | titlecase }}
               </span>
               <div fxLayoutAlign="start" fxLayout="column">
-                <span *ngFor="let player of lineups?.away" class="mat-body-1">
+                <span *ngFor="let player of awayLineup" class="mat-body-1">
                   {{ player }}
                 </span>
               </div>
