@@ -132,12 +132,12 @@ export const MOBILE_LINKS: ILink[] = [
         route: '/equipment',
       },
       {
-        name: 'Logout',
-        isLogout: true,
-      },
-      {
         name: 'Settings',
         route: '/dashboard/account/profile',
+      },
+      {
+        name: 'Logout',
+        isLogout: true,
       },
     ]
   },
