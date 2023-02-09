@@ -30,6 +30,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTreeModule } from '@angular/material/tree';
 // angular material
 
 @NgModule({
@@ -66,6 +67,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatBadgeModule,
+    MatTreeModule
+
   ],
   exports: [
     MatAutocompleteModule,
@@ -99,6 +102,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatBadgeModule,
+    MatTreeModule
   ],
 })
 export class MaterialModule { }

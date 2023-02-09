@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TeamMembers, Tmember } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
 import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchDayReport, MatchStatus } from '../../interfaces/match.model';
 import { ListOption } from '../../interfaces/others.model';
@@ -13,7 +14,7 @@ import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.co
 })
 export class MatchCardComponent implements OnInit {
 
-  lineups: MatchLineup;
+  lineups = new MatchLineup();
   overViewData: MatchFixtureOverview;
   statsData: MatchDayReport;
   selectedIndex = 0;
@@ -61,17 +62,18 @@ export class MatchCardComponent implements OnInit {
       });
   }
 
-  getMatchLineup(): void {
-    this.ngFirestore
-      .collection('allMatches/' + this.data?.id + '/additionalInfo')
-      .doc('matchLineup')
-      .get()
-      .pipe(map((resp) => resp.exists ? resp.data() as MatchLineup : null))
-      .subscribe(response => {
-        if (response) {
-          this.lineups = response;
-        }
-      });
+  async getMatchLineup(): Promise<any> {
+    this.lineups = new MatchLineup();
+    const homeData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.home.name)).get().toPromise());
+    const awayData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.away.name)).get().toPromise());
+    if (!homeData?.empty && homeData?.docs[0]?.exists) {
+      const membersList: string[] = ((await this.ngFirestore.collection(`teams/${homeData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
+      this.lineups.home = membersList;
+    }
+    if (!awayData?.empty && awayData?.docs[0]?.exists) {
+      const membersList: string[] = ((await this.ngFirestore.collection(`teams/${awayData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
+      this.lineups.away = membersList;
+    }
   }
 
   getMatchReport(): void {

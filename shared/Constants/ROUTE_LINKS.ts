@@ -1,8 +1,5 @@
-/* eslint-disable max-len */
-
 import { environment } from "environments/environment";
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export const RouteLinks = {
   PLAY: [
     { value: 'home', viewValue: 'home' },
@@ -34,37 +31,16 @@ export const RouteLinks = {
   ],
 };
 
-export interface ISubLink {
-  name: string;
-  route?: string,
-  externalLink?: string,
-  isLogout?: true
-}
-
 export interface ILink {
   name: string;
   route?: string;
-  subLinks: ISubLink[]
+  subLinks?: ILink[];
+  externalLink?: string,
+  isLogout?: true,
+  maxWidth?: string;
 }
 
 export const MOBILE_LINKS: ILink[] = [
-  {
-    name: 'Dashboard',
-    subLinks: [
-      {
-        name: 'Home',
-        route: '/dashboard/home',
-      },
-      {
-        name: 'My Team',
-        route: '/dashboard/team-management',
-      },
-      {
-        name: 'Participate',
-        route: '/dashboard/participate',
-      },
-    ]
-  },
   {
     name: 'Freekyk Play',
     subLinks: [
@@ -102,32 +78,37 @@ export const MOBILE_LINKS: ILink[] = [
       },
     ]
   },
-
   {
-    name: 'Freekyk Freestyle',
+    name: 'Partner With Us',
     subLinks: [
       {
-        name: 'Home',
-        route: '/freestyle/home',
-      },
+        name: 'Request a callback',
+        maxWidth: '60%',
+        externalLink: environment.forms.partner
+      }
     ]
   },
   {
-    name: 'Freekyk Academies',
+    name: 'Support',
     subLinks: [
       {
-        name: 'Home',
-        route: '/academies',
+        name: 'Tickets',
+        route: '/support'
       },
+      {
+        name: 'FAQs',
+        route: '/support/faqs'
+      }
     ]
   },
   {
-    name: 'Freekyk Equipment',
+    name: 'Admin',
     subLinks: [
       {
-        name: 'Home',
-        route: '/equipment',
-      },
+        name: 'Join as Organizer',
+        maxWidth: '60%',
+        externalLink: environment.firebase.adminUrl,
+      }
     ]
   },
   {
@@ -137,17 +118,18 @@ export const MOBILE_LINKS: ILink[] = [
         name: 'About',
         route: '/about',
       },
+
       {
-        name: 'Support',
-        route: '/support',
+        name: 'Freestyle',
+        route: '/freestyle/home',
       },
       {
-        name: 'Partner',
-        externalLink: environment.forms.partner
+        name: 'Academies',
+        route: '/academies',
       },
       {
-        name: 'Admin',
-        externalLink: environment.firebase.adminUrl,
+        name: 'Equipment',
+        route: '/equipment',
       },
       {
         name: 'Logout',

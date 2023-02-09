@@ -6,7 +6,7 @@ import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
-import { DESKTOP_LINKS, ILink, ISubLink, MOBILE_LINKS, RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
@@ -15,6 +15,8 @@ import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { Router } from '@angular/router';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 @Component({
   selector: 'app-header',
@@ -37,6 +39,9 @@ export class HeaderComponent implements OnInit {
   profilePicture$: Observable<string | null>;
   notificationCount$: Observable<number | string>;
 
+  treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
+  dataSource = new MatTreeNestedDataSource<ILink>();
+
   constructor(
     private dialog: MatDialog,
     private ngAuth: AngularFireAuth,
@@ -47,6 +52,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
     this.profilePicture$ = this.avatarServ.getProfilePicture();
     this.getLiveSeasons();
@@ -64,6 +70,8 @@ export class HeaderComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
+  hasChild = (_: number, node: ILink) => !!node.subLinks && node.subLinks.length > 0;
 
   getLiveSeasons() {
     const currentTimestamp = new Date().getTime();
@@ -124,7 +132,7 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  openLink(link: ISubLink) {
+  openLink(link: ILink) {
     this.onCloseMenu();
     if (link.route) {
       this.router.navigate([link.route]);
@@ -142,27 +150,27 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  get playLinks(): ISubLink[] {
+  get playLinks(): ILink[] {
     return this.mobileLinks.find(el => el.name === 'Freekyk Play')?.subLinks;
   }
 
-  get freestyleLinks(): ISubLink[] {
+  get freestyleLinks(): ILink[] {
     return this.mobileLinks.find(el => el.name === 'Freekyk Freestyle')?.subLinks;
   }
 
-  get academiesLinks(): ISubLink[] {
+  get academiesLinks(): ILink[] {
     return this.mobileLinks.find(el => el.name === 'Freekyk Academies')?.subLinks;
   }
 
-  get equipmentLinks(): ISubLink[] {
+  get equipmentLinks(): ILink[] {
     return this.mobileLinks.find(el => el.name === 'Freekyk Equipment')?.subLinks;
   }
 
-  get moreDesktopLinks(): ISubLink[] {
+  get moreDesktopLinks(): ILink[] {
     return this.desktopLinks.find(el => el.name === 'More')?.subLinks;
   }
 
-  get profileAvatarLinks(): ISubLink[] {
+  get profileAvatarLinks(): ILink[] {
     return this.desktopLinks.find(el => el.name === 'Account Circle')?.subLinks;
   }
 }
