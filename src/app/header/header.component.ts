@@ -158,14 +158,6 @@ export class HeaderComponent implements OnInit {
     return this.mobileLinks.find(el => el.name === 'Freekyk Freestyle')?.subLinks;
   }
 
-  get academiesLinks(): ILink[] {
-    return this.mobileLinks.find(el => el.name === 'Freekyk Academies')?.subLinks;
-  }
-
-  get equipmentLinks(): ILink[] {
-    return this.mobileLinks.find(el => el.name === 'Freekyk Equipment')?.subLinks;
-  }
-
   get moreDesktopLinks(): ILink[] {
     return this.desktopLinks.find(el => el.name === 'More')?.subLinks;
   }
