@@ -134,12 +134,11 @@ export class SeasonProfileComponent implements OnInit {
         )
         .subscribe({
           next: (response: MatchFixture[]) => {
-            const currentTimestamp = new Date().getTime();
             this.seasonFixtures = [];
             this.seasonResults = [];
             response.forEach(match => {
               match.status = ParseMatchProperties.getTimeDrivenStatus(match.status, match.date);
-              if (((match.date + (MatchConstants.ONE_MATCH_DURATION * MatchConstants.ONE_HOUR_IN_MILLIS)) > currentTimestamp)) {
+              if (!ParseMatchProperties.isResult(match.date)) {
                 this.seasonFixtures.push(match);
               } else {
                 this.seasonResults.push(match);

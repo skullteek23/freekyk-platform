@@ -29,3 +29,11 @@
   border-radius: var(--dashCardBorder);
   overflow: hidden;
 }
+
+li {
+  max-width: 700px;
+
+  @media screen and (max-width: 1110px) {
+    max-width: 500px;
+  }
+}

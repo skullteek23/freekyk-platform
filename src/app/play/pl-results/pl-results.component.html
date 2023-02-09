@@ -18,7 +18,7 @@
   <ul class="container section-space-bottom fixture-container">
     <app-no-items-message *ngIf="noResults" items="results"></app-no-items-message>
     <li *ngFor="let result of results$ | async; last as last">
-      <app-fixture-basic [resultMode]="true" [premium]="result.premium" [matchData]="result"></app-fixture-basic>
+      <app-fixture-basic [matchData]="result"></app-fixture-basic>
     </li>
   </ul>
   <!-- results list -->

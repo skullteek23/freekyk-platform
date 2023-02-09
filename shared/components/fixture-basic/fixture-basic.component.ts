@@ -1,31 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatchCardComponent } from '../../dialogs/match-card/match-card.component';
-import { Formatters, MatchFixture, MatchStatus, StatusMessage, } from '../../interfaces/match.model';
+import { Formatters, MatchFixture, MatchStatus, ParseMatchProperties, StatusMessage, } from '../../interfaces/match.model';
 
 @Component({
   selector: 'app-fixture-basic',
   templateUrl: './fixture-basic.component.html',
   styleUrls: ['./fixture-basic.component.scss'],
 })
-export class FixtureBasicComponent implements OnInit {
+export class FixtureBasicComponent {
 
   readonly matchStatus = MatchStatus;
 
-  @Input('matchData') fixture: MatchFixture;
-  @Input('premium') isPremium = false;
-  @Input('resultMode') isResult = false;
+  @Input('matchData') set matchData(value: MatchFixture) {
+    if (value) {
+      this.fixture = value;
+      this.isResult = ParseMatchProperties.isResult(value.date);
+    }
+  }
 
-  todaysDate = new Date();
-  formatters: any
+  fixture: MatchFixture;
+  isResult = false;
+  formatters: any;
 
   constructor(
     private dialog: MatDialog
   ) {
     this.formatters = Formatters;
   }
-
-  ngOnInit(): void { }
 
   onOpenFixture() {
     this.dialog.open(MatchCardComponent, {

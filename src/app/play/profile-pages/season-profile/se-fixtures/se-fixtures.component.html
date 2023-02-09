@@ -1,7 +1,7 @@
 <ul class="section-space-bottom fixture-container">
   <app-no-items-message *ngIf="matches.length === 0" items="matches"></app-no-items-message>
   <li *ngFor="let match of matches; last as last">
-    <app-fixture-basic [resultMode]="false" [premium]="match.premium" [matchData]="match"></app-fixture-basic>
+    <app-fixture-basic [matchData]="match"></app-fixture-basic>
     <mat-divider *ngIf="!last"></mat-divider>
   </li>
 </ul>

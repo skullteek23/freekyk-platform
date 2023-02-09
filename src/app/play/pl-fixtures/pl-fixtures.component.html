@@ -19,7 +19,7 @@
   <ul class="container section-space-bottom fixture-container">
     <app-no-items-message *ngIf="noFixtures" items="fixtures"></app-no-items-message>
     <li *ngFor="let fixture of fixtures$ | async; last as last">
-      <app-fixture-basic [resultMode]="false" [premium]="fixture.premium" [matchData]="fixture"></app-fixture-basic>
+      <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
     </li>
   </ul>
   <!-- fixtures list -->

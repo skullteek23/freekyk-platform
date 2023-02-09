@@ -10,10 +10,12 @@ import { ParseMatchProperties } from '@shared/interfaces/match.model';
   providedIn: 'root',
 })
 export class QueryService {
-  onQueryData(
-    queryInfo: QueryInfo,
-    collectionName: string
-  ): Observable<QuerySnapshot<unknown>> {
+
+  constructor(
+    private ngFire: AngularFirestore
+  ) { }
+
+  onQueryData(queryInfo: QueryInfo, collectionName: string): Observable<QuerySnapshot<unknown>> {
     queryInfo = {
       queryItem: FilterHeadingMap[queryInfo.queryItem],
       queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
@@ -67,32 +69,4 @@ export class QueryService {
         .get();
     }
   }
-
-  onQueryMatchesForDashboard(
-    queryInfo: QueryInfo,
-    collectionName: string,
-    isConcluded: boolean
-  ): Observable<QuerySnapshot<unknown>> {
-    queryInfo = {
-      queryItem: FilterHeadingMap[queryInfo.queryItem],
-      queryComparisonSymbol: FilterSymbolMap[queryInfo.queryItem]
-        ? FilterSymbolMap[queryInfo.queryItem]
-        : '==',
-      queryValue: FilterValueMap[queryInfo.queryValue],
-    };
-
-    return this.ngFire
-      .collection(collectionName, (query) =>
-        query
-          .where(
-            queryInfo.queryItem,
-            queryInfo.queryComparisonSymbol,
-            queryInfo.queryValue
-          )
-          .where('concluded', '==', isConcluded)
-          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
-      )
-      .get();
-  }
-  constructor(private ngFire: AngularFirestore) { }
 }

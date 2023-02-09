@@ -30,8 +30,11 @@
 }
 
 .team_name {
-  width: 200px;
-  max-width: 200px;
+  width: 70px;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .scoreColor {
@@ -41,6 +44,10 @@
 .score {
   height: 40px;
   width: 40px;
+}
+
+.teams-container {
+  margin-left: auto;
 }
 
 @media only screen and (max-width: 359px) {
@@ -57,8 +64,8 @@
   }
 
   .team_name {
-    width: 80px;
-    max-width: 80px;
+    width: 50px;
+    max-width: 50px;
     overflow: hidden;
   }
 
@@ -80,8 +87,8 @@
   }
 
   .team_name {
-    width: 200px;
-    max-width: 200px;
+    width: 50px;
+    max-width: 50px;
   }
 
   .side-space {
@@ -98,14 +105,18 @@
   }
 
   .team_name {
-    width: 200px;
-    max-width: 200px;
+    width: 70px;
+    max-width: 70px;
   }
 }
 
 @media only screen and (min-width: 1279px) {
+  .teams-container {
+    width: 40%;
+  }
+
   .team_name {
-    width: 250px;
-    max-width: 250px;
+    width: 70px;
+    max-width: 70px;
   }
 }

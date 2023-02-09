@@ -32,7 +32,6 @@ import { TeamActivityComponent } from './dash-team-manag/da-te-communication/tea
 import { TeamjoinComponent } from './dialogs/teamjoin/teamjoin.component';
 import { TeamsettingsComponent } from './dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from './dialogs/teamcreate/teamcreate.component';
-import { FixtureDashboardComponent } from './dash-home/da-ho-all-fixtures/fixture-dashboard/fixture-dashboard.component';
 import { MemberListComponent } from './dash-team-manag/da-te-members/member-list/member-list.component';
 import { NotificationsListComponent } from './dash-home/da-ho-notifs/notifications-list/notifications-list.component';
 import { InviteAcceptCardComponent } from './dialogs/invite-accept-card/invite-accept-card.component';
@@ -88,7 +87,6 @@ import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dial
     TeamsettingsComponent,
     TeamcreateComponent,
     TeamjoinComponent,
-    FixtureDashboardComponent,
     MemberListComponent,
     NotificationsListComponent,
     InviteAcceptCardComponent,

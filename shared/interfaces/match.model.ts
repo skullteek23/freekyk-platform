@@ -66,6 +66,10 @@ export class ParseMatchProperties {
   static getStatusDescription(status: MatchStatus): string {
     return Formatters.formatStatus(status) ? Formatters.formatStatus(status).description : MatchConstants.LABEL_NOT_AVAILABLE;
   }
+
+  static isResult(date: number) {
+    return (date + (MatchConstants.ONE_MATCH_DURATION * MatchConstants.ONE_HOUR_IN_MILLIS)) <= new Date().getTime();
+  }
 }
 
 export const Formatters = {

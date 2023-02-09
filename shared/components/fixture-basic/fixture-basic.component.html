@@ -1,4 +1,4 @@
-<div class="fixture" [ngClass]="{premiumFixture: isPremium}" fxLayoutAlign.lt-md="center center"
+<div class="fixture" [ngClass]="{premiumFixture: fixture?.premium}" fxLayoutAlign.lt-md="center center"
   fxLayoutAlign.gt-sm="space-between center">
   <!-- date -->
   <div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
@@ -11,9 +11,10 @@
   <!-- date -->
 
   <!-- teams  -->
-  <div style="margin-left: auto;" fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+  <div class="teams-container" fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
     <div fxLayoutAlign="end center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
-      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2"
+        [matTooltip]="fixture.home.name">
         {{ fixture.home.name }}
       </span>
       <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" loading="lazy"
@@ -43,7 +44,8 @@
       <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" loading="lazy"
         appFallbackImg />
 
-      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2">
+      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2"
+        [matTooltip]="fixture.away.name">
         {{ fixture.away.name }}
       </span>
     </div>
@@ -51,8 +53,8 @@
   <!-- teams  -->
 
   <!-- action-button - small  -->
-  <button (click)="isResult ? onOpenFixture() : onOpenFixture()" fxHide.gt-sm="true" mat-icon-button
-    matTooltip="Open Fixture" fxLayoutAlign="center center">
+  <button (click)="onOpenFixture()" fxHide.gt-sm="true" mat-icon-button matTooltip="Open Fixture"
+    fxLayoutAlign="center center">
     <mat-icon class="material-icons-round">
       keyboard_arrow_right
     </mat-icon>
@@ -72,7 +74,7 @@
       </mat-chip>
       <mat-chip>{{ fixture.type | uppercase }}</mat-chip>
     </mat-chip-list>
-    <a (click)="isResult ? onOpenFixture() : onOpenFixture()">
+    <a (click)="onOpenFixture()">
       <span class="mat-caption">
         See more
       </span>
