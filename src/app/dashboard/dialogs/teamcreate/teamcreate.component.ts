@@ -43,7 +43,6 @@ export class TeamcreateComponent implements OnInit, OnDestroy {
     private ngFunc: AngularFireFunctions,
     private snackBarService: SnackbarService,
     private ngStorage: AngularFireStorage,
-    private router: Router,
     private dialog: MatDialog
   ) { }
 
@@ -155,7 +154,10 @@ export class TeamcreateComponent implements OnInit, OnDestroy {
                 if (doc.exists && doc.id !== uid) {
                   const data = doc.data() as PlayerBasicInfo;
                   const id = doc.id;
-                  this.playersList.push({ viewValue: `${data.name} | ${data.pl_pos || 'NA'}`, value: { id, ...data } })
+                  // Only active players are shown here
+                  if (data.imgpath_sm && data.pl_pos) {
+                    this.playersList.push({ viewValue: `${data.name} | ${data.pl_pos || 'NA'}`, value: { id, ...data } })
+                  }
                 }
               });
             }

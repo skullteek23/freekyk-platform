@@ -165,8 +165,8 @@ export class AuthService {
     return null;
   }
 
-  updateAuthDisplayName(name: string) {
-    this.updateName(name);
+  updateAuthDisplayName(name: string): Promise<any> {
+    return this.updateName(name);
   }
 
   private setCurrentUser(userData: firebase.User | null): void {

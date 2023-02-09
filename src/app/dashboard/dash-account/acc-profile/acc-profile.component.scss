@@ -6,15 +6,19 @@
 .form {
   margin: 10px 0 20px;
 }
+
 .red {
   color: var(--red);
 }
+
 .green {
   color: var(--primaryLightColor);
 }
+
 .ng-dirty .mat-input-element {
   opacity: 1 !important;
 }
+
 // .ng-untouched .mat-input-element,
 // .ng-touched .mat-input-element {
 //   opacity: 0.5;
@@ -24,12 +28,18 @@
   max-height: 32px;
   padding-bottom: 20px !important;
 }
+
 .smaller-caption {
   font-style: italic;
   color: var(--grey2);
 }
+
 .yt {
   margin-left: 4px;
   height: 24px;
   width: 24px;
+}
+
+.top-line {
+  margin-bottom: 8px !important;
 }

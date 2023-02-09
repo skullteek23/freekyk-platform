@@ -1,27 +1,30 @@
 <ul>
-  <li class="notification mat-elevation-z4" [style.opacity]="notification.read ? '0.6' : '1'"
+  <li class="notification mat-elevation-z4" [style.opacity]="notification.read === 1 ? '0.6' : '1'"
     *ngFor="let notification of notifications" (click)="onSelectNotification(notification)" fxLayout="column"
     fxLayoutGap="0px" fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <div fxLayout="column" fxLayoutAlign="center start">
-        <span class="mat-body-1"> {{ notification.title }} </span>
-        <span fxHide.lt-sm="true" class="sec-menu mat-caption">
-          By {{ notification.senderName && notification.senderName !== 'null' ? notification.senderName :
-          ('User#' + notification.senderId) }}
+        <span class="mat-body-1"> {{ formatter?.formatTitle(notification.type) ?
+          formatter?.formatTitle(notification.type) : 'NA'
+          }}
+        </span>
+        <span class="sec-menu mat-caption" *ngIf="notification?.senderName">
+          By {{ notification?.senderName && notification?.senderName !== 'null' ?
+          notification?.senderName :
+          ('User#' + (notification.senderID | textShorten: 7)) }}
         </span>
       </div>
-      <div fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column" fxLayoutAlign="center end" fxLayoutGap.lt-md="8px"
-        fxLayoutGap.gt-sm="0px">
-        <a *ngIf="!notification.read" (click)="changeStatus(notification, true); $event.stopPropagation()"
-          class="action">
-          <span fxHide.gt-sm="true" class="material-icons-round">mark_email_read</span>
-          <span fxHide.lt-md="true">Mark as Read</span>
+      <div fxLayoutAlign.lt-md="center center" fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column"
+        fxLayoutAlign="center end" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="0px">
+        <a fxHide.lt-md="true" (click)="changeStatus(notification); $event.stopPropagation()" class="action">
+          <ng-container *ngIf="notification.read === 0">
+            <span>Mark as Read</span>
+          </ng-container>
+          <ng-container *ngIf="notification.read === 1">
+            <span>Mark as Unread</span>
+          </ng-container>
         </a>
-        <a *ngIf="notification.read" (click)="changeStatus(notification, false); $event.stopPropagation()"
-          class="action">
-          <span fxHide.gt-sm="true" class="material-icons-round">mark_as_unread</span>
-          <span fxHide.lt-md="true">Mark as Unread</span>
-        </a>
+        <span fxHide.gt-sm="true" class="material-icons-round">chevron_right</span>
         <span class="mat-body-2 notif_time" ngClass.lt-md="mat-caption">
           {{ notification.date | date: CUSTOM_FORMAT }}
         </span>
@@ -29,3 +32,4 @@
     </div>
   </li>
 </ul>
+<app-loading *ngIf="isLoaderShown"></app-loading>

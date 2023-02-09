@@ -20,6 +20,7 @@ export const initialState = {
     imgpath: null,
     imgpath_logo: null,
     captainId: null,
+    captainName: null,
     locState: null,
     locCity: null,
   },

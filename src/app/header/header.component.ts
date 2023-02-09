@@ -6,15 +6,15 @@ import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
-import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { DESKTOP_LINKS, ILink, ISubLink, MOBILE_LINKS, RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
-import { ngfactoryFilePath } from '@angular/compiler/src/aot/util';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -23,8 +23,10 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 })
 export class HeaderComponent implements OnInit {
 
+  readonly mobileLinks = MOBILE_LINKS;
+  readonly desktopLinks = DESKTOP_LINKS;
+
   readonly adminURL = environment?.firebase?.adminRegister || '';
-  readonly partnerFormURL = environment?.forms?.partner || '';
 
   @Output() menOpen = new Subject<boolean>();
 
@@ -32,15 +34,8 @@ export class HeaderComponent implements OnInit {
   isLogged = false;
   seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
-  sidenavOpen: boolean;
   profilePicture$: Observable<string | null>;
-  playSublinks: ListOption[] = [];
-  fsSublinks: ListOption[] = [];
-  dashSublinks: ListOption[] = [];
-  morelinks: { name: string; route: string }[] = [];
-  selectedSubLinks: ListOption[] = [];
-  selected: 'dashboard' | 'play' | 'freestyle' | null = null;
-  notifCount$: Observable<number | string>;
+  notificationCount$: Observable<number | string>;
 
   constructor(
     private dialog: MatDialog,
@@ -48,17 +43,17 @@ export class HeaderComponent implements OnInit {
     private notificationService: NotificationsService,
     private avatarServ: AccountAvatarService,
     private ngFire: AngularFirestore,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.menuState = false;
-    this.sidenavOpen = false;
     this.profilePicture$ = this.avatarServ.getProfilePicture();
     this.getLiveSeasons();
     this.ngAuth.user.subscribe((user) => {
       if (user !== null) {
         this.isLogged = true;
-        this.notifCount$ = this.notificationService.notifsCountChanged.pipe(
+        this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
           map((resp) => (!!resp ? resp : null)),
           map((resp) => (resp > 5 ? '5+' : resp)),
           share()
@@ -68,15 +63,6 @@ export class HeaderComponent implements OnInit {
       }
       this.isLoading = false;
     });
-
-    this.dashSublinks = RouteLinks.DASHBOARD;
-    this.playSublinks = RouteLinks.PLAY;
-    this.fsSublinks = RouteLinks.FREESTYLE;
-    this.morelinks = [
-      { name: RouteLinks.OTHERS[0].viewValue, route: `/${RouteLinks.OTHERS[0].value}` },
-
-      { name: RouteLinks.OTHERS[1].viewValue, route: `/${RouteLinks.OTHERS[1].value}` }
-    ];
   }
 
   getLiveSeasons() {
@@ -105,43 +91,18 @@ export class HeaderComponent implements OnInit {
   }
 
   onToggleMenu(): void {
-    this.sidenavOpen = false;
     this.menuState = !this.menuState;
     this.menOpen.next(this.menuState);
   }
 
   onCloseMenu(): void {
-    this.sidenavOpen = false;
     this.menuState = false;
     this.menOpen.next(this.menuState);
   }
 
   onLogout(): void {
-    this.sidenavOpen = false;
-    this.assignSelected(null);
+    this.onCloseMenu();
     this.dialog.open(LogoutComponent);
-  }
-
-  onUpdateSubLinks(linkName: 'dashboard' | 'play' | 'freestyle'): void {
-    this.assignSelected(linkName);
-    switch (linkName) {
-      case 'dashboard':
-        this.selectedSubLinks = this.dashSublinks;
-        break;
-      case 'play':
-        this.selectedSubLinks = this.playSublinks;
-        break;
-      case 'freestyle':
-        this.selectedSubLinks = this.fsSublinks;
-        break;
-      default:
-        this.selectedSubLinks = [];
-    }
-    this.sidenavOpen = true;
-  }
-
-  assignSelected(value: 'dashboard' | 'play' | 'freestyle' | null): void {
-    this.selected = value;
   }
 
   openSocialGroupDialog() {
@@ -161,5 +122,47 @@ export class HeaderComponent implements OnInit {
       panelClass: 'fk-dialogs',
       data
     });
+  }
+
+  openLink(link: ISubLink) {
+    this.onCloseMenu();
+    if (link.route) {
+      this.router.navigate([link.route]);
+    } else if (link.externalLink) {
+      window.open(link.externalLink, '_blank');
+    } else if (link.isLogout) {
+      this.onLogout();
+    }
+  }
+
+  openParentLink(link: ILink) {
+    if (link.route) {
+      this.onCloseMenu();
+      this.router.navigate([link.route]);
+    }
+  }
+
+  get playLinks(): ISubLink[] {
+    return this.mobileLinks.find(el => el.name === 'Freekyk Play')?.subLinks;
+  }
+
+  get freestyleLinks(): ISubLink[] {
+    return this.mobileLinks.find(el => el.name === 'Freekyk Freestyle')?.subLinks;
+  }
+
+  get academiesLinks(): ISubLink[] {
+    return this.mobileLinks.find(el => el.name === 'Freekyk Academies')?.subLinks;
+  }
+
+  get equipmentLinks(): ISubLink[] {
+    return this.mobileLinks.find(el => el.name === 'Freekyk Equipment')?.subLinks;
+  }
+
+  get moreDesktopLinks(): ISubLink[] {
+    return this.desktopLinks.find(el => el.name === 'More')?.subLinks;
+  }
+
+  get profileAvatarLinks(): ISubLink[] {
+    return this.desktopLinks.find(el => el.name === 'Account Circle')?.subLinks;
   }
 }

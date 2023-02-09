@@ -156,7 +156,11 @@ export class DaHoProfileComponent implements OnInit, OnDestroy {
         disableClose: true,
       })
       .afterClosed()
-      .subscribe(() => location.reload());
+      .subscribe((response) => {
+        if (response) {
+          location.reload()
+        }
+      });
   }
 
   onShareProfile(): void {

@@ -7,7 +7,7 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING, MATCH_CANCELLATION_REASONS, SEASON_CANCELLATION_REASONS } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IDummyFixture, ICancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
+import { IDummyFixture, ICancelData, MatchFixture, MatchStatus, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner, ICloudCancelData } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
@@ -418,6 +418,10 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       .snapshotChanges()
       .pipe(
         map(response => response.map(doc => ({ id: doc.payload.doc.id, ...doc.payload.doc.data() as MatchFixture }) as MatchFixture)),
+        map(resp => resp.map(el => {
+          el.status = ParseMatchProperties.getTimeDrivenStatus(el.status, el.date);
+          return el;
+        })),
         map(fixtureData => fixtureData.map(data =>
         ({
           home: data.home.name,

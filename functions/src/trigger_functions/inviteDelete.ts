@@ -1,13 +1,13 @@
-import { Invite } from '@shared/interfaces/notification.model';
-import * as admin from 'firebase-admin';
-const db = admin.firestore();
+// import { Invite } from '@shared/interfaces/notification.model';
+// import * as admin from 'firebase-admin';
+// const db = admin.firestore();
 
-export async function inviteDeletionTrigger(snap: any, context: any): Promise<any> {
+// export async function inviteDeletionTrigger(snap: any, context: any): Promise<any> {
 
-  const invite: Invite = snap.data() as Invite;
-  const inviteID = snap && snap['id'] ? snap['id'] : '';
-  if (invite && inviteID) {
-    return db.collection(`players/${invite.inviteeId}/Notifications`).doc(inviteID).delete();
-  }
-  return false;
-}
+//   const invite: Invite = snap.data() as Invite;
+//   const inviteID = snap && snap['id'] ? snap['id'] : '';
+//   if (invite && inviteID) {
+//     return db.collection(`players/${invite.inviteeId}/Notifications`).doc(inviteID).delete();
+//   }
+//   return false;
+// }

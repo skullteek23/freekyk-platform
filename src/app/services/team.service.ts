@@ -10,8 +10,6 @@ import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBas
 import { SnackbarService } from './snackbar.service';
 import { TeamsettingsComponent } from '../dashboard/dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from '../dashboard/dialogs/teamcreate/teamcreate.component';
-import { Invite } from '@shared/interfaces/notification.model';
-import { TeamCommsMobileComponent } from '@shared/components/team-comms-mobile/team-comms-mobile.component';
 import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
@@ -22,6 +20,7 @@ import { TeamgalleryComponent } from '@app/dashboard/dialogs/teamgallery/teamgal
 import { UploadTeamPhotoComponent } from './../dashboard/dialogs/upload-team-photo/upload-team-photo.component';
 import firebase from 'firebase/app';
 import { MatchConstants } from '@shared/constants/constants';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -177,22 +176,15 @@ export class TeamService implements OnDestroy {
       );
   }
 
-  getTeamInvites(tid: string): Observable<Invite[]> {
+  getTeamInvites(tid: string): Observable<NotificationBasic[]> {
     return this.ngFire
-      .collection('invites', (query) => query.where('teamId', '==', tid))
+      .collection('notifications', (query) => query.where('senderID', '==', tid))
       .snapshotChanges()
       .pipe(
-        map((docs) =>
-          docs.map(
-            (doc) =>
-            ({
-              id: doc.payload.doc.id,
-              ...(doc.payload.doc.data() as Invite),
-            } as Invite)
-          )
-        )
+        map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as NotificationBasic) } as NotificationBasic))),
       );
   }
+
   private async getTeamMembers(tid: string): Promise<any> {
     this.ngFire
       .collection('teams/' + tid + '/additionalInfo')
@@ -314,9 +306,7 @@ export class TeamService implements OnDestroy {
     callable({ teamId: tid })
       .toPromise()
       .then(() => {
-        this.snackBarService.displayCustomMsg(
-          'Your Team will be deleted shortly!'
-        );
+        this.snackBarService.displayCustomMsg('Your Team will be deleted shortly!');
         location.reload();
       });
   }

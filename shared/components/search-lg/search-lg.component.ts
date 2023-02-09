@@ -1,20 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  tap,
-} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-lg',
@@ -39,7 +25,7 @@ export class SearchLgComponent implements OnInit {
         filter((res) => res.length > 2 || res === ''),
 
         // Time in milliseconds between key events
-        debounceTime(1000),
+        debounceTime(100),
 
         // If previous query is diffent from current
         distinctUntilChanged(),

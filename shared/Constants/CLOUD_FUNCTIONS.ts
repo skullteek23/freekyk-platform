@@ -2,6 +2,7 @@ export const CLOUD_FUNCTIONS = {
   CREATE_PROFILE: 'createProfile',
   SEND_JOIN_REQUEST_TO_TEAMS: 'sendJoinRequest',
   CREATE_TEAM: 'createTeam',
+  JOIN_TEAM: 'joinTeam',
   DELETE_TEAM: 'deleteTeam',
   GENERATE_RAZORPAY_ORDER: 'generateRazorpayOrder',
   VERIFY_PAYMENT: 'verifyPayment',

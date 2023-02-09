@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-import { Invite } from '@shared/interfaces/notification.model';
 import { TeamMembers, ActiveSquadMember } from '@shared/interfaces/team.model';
 
 const db = admin.firestore();
@@ -12,7 +11,6 @@ export async function onDelete(data: { teamId: string }, context: any): Promise<
   const basicInfoRefs: any[] = []
   const memberRefs: any[] = [];
   const teamCommunicationsRefs: any[] = [];
-  const teamInviteRefs: any[] = []
   let teamInfoPath = '';
   let teamCommunicationPath = '';
   let memberIDs: TeamMembers;
@@ -23,7 +21,6 @@ export async function onDelete(data: { teamId: string }, context: any): Promise<
     memberIDs = (await db.collection(teamInfoPath).doc('members').get()).data() as TeamMembers;
 
     if (memberIDs && memberIDs.members && memberIDs.members.length) {
-      const invites = (await db.collection('invites').where('teamId', '==', teamID).get()).docs;
 
       basicInfoRefs.push(db.collection('teams').doc(teamID));
       basicInfoRefs.push(db.collection(teamInfoPath).doc('moreInfo'));
@@ -47,13 +44,13 @@ export async function onDelete(data: { teamId: string }, context: any): Promise<
         }
       }
 
-      if (invites.length) {
-        const tempInvites = invites.map((doc) => ({ id: doc.id, ...(doc.data() as Invite) } as Invite));
-        tempInvites.forEach(invite => {
-          const id = invite && invite.id ? invite.id : '';
-          teamInviteRefs.push(db.collection('invites').doc(id));
-        })
-      }
+      // if (invites.length) {
+      //   const tempInvites = invites.map((doc) => ({ id: doc.id, ...(doc.data() as Invite) } as Invite));
+      //   tempInvites.forEach(invite => {
+      //     const id = invite && invite.id ? invite.id : '';
+      //     teamInviteRefs.push(db.collection('invites').doc(id));
+      //   })
+      // }
     }
   }
 
@@ -67,9 +64,9 @@ export async function onDelete(data: { teamId: string }, context: any): Promise<
     teamCommunicationsRefs.forEach(element => {
       batch.delete(element);
     });
-    teamInviteRefs.forEach(element => {
-      batch.delete(element);
-    });
+    // teamInviteRefs.forEach(element => {
+    //   batch.delete(element);
+    // });
     return batch.commit();
   }
 

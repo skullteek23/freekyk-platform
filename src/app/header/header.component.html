@@ -25,8 +25,8 @@
       <!-- notif icon - small -->
       <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
         (click)="onCloseMenu()" [routerLink]="['/dashboard', 'account', 'notifications']">
-        <mat-icon [matBadge]="notifCount$ | async" matBadgeSize="small"
-          [matBadgeColor]="(notifCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
+        <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
+          [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
           notifications
         </mat-icon>
       </button>
@@ -40,18 +40,11 @@
       <!-- cart icon - small -->
 
       <!-- account circle - small -->
-      <!-- <div
-        *ngIf="isLogged && !isLoading"
-        [routerLink]="['/dashboard', 'account', 'profile']"
-        class="avatarSize subCircle"
-        fxLayoutAlign="center center"
-      > -->
       <div class="account-circle-container">
         <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
           [routerLink]="['/dashboard', 'account', 'profile']" [dataImg]="profilePicture$ | async"
           [margins]="false"></app-account-avatar>
       </div>
-      <!-- </div> -->
       <!-- account circle - small -->
 
       <!-- ham menu - small -->
@@ -72,7 +65,13 @@
       <a [matMenuTriggerFor]="playMenu" fxLayoutAlign="center center">
         <span class="mat-body-1">Play</span>
       </a>
-      <a [matMenuTriggerFor]="fsMenu" fxLayoutAlign="center center">
+      <a fxLayoutAlign="center center" routerLink="/support">
+        <span class="mat-body-1">Support</span>
+      </a>
+      <a fxLayoutAlign="center center" [href]="adminURL" target="_blank">
+        <span class="mat-body-1">Admin</span>
+      </a>
+      <!-- <a [matMenuTriggerFor]="freestyleMenu" fxLayoutAlign="center center">
         <span class="mat-body-1">Freestyle</span>
       </a>
       <a [routerLink]="['/academies']" fxLayoutAlign="center center">
@@ -80,7 +79,7 @@
       </a>
       <a [routerLink]="['/equipment']" fxLayoutAlign="center center">
         <span class="mat-body-1">Equipment</span>
-      </a>
+      </a> -->
       <a [matMenuTriggerFor]="moreMenu" fxLayoutAlign="center center">
         <span class="mat-body-1">More</span>
       </a>
@@ -120,8 +119,8 @@
 
         <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
           [routerLink]="['/dashboard', 'account', 'notifications']">
-          <mat-icon [matBadge]="notifCount$ | async" matBadgeSize="small"
-            [matBadgeColor]="(notifCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
+          <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
+            [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
             notifications
           </mat-icon>
         </button>
@@ -131,162 +130,76 @@
           <mat-icon *ngIf="!isLoading" class="material-icons-round">shopping_cart</mat-icon>
         </button>
 
-        <!-- <button
-          *ngIf="isLogged && !isLoading"
-          mat-icon-button
-          [matMenuTriggerFor]="profileMenu"
-          class="avatarSize subCircle"
-          fxLayoutAlign="center center"
-        > -->
         <app-account-avatar matTooltip="User Settings" *ngIf="isLogged && !isLoading" [matMenuTriggerFor]="profileMenu"
           [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>
-        <!-- </button> -->
+
       </div>
+
+      <mat-menu #playMenu>
+        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of playLinks">
+          <span class="mat-body-1">{{ link.name }}</span>
+        </a>
+      </mat-menu>
+
+      <mat-menu #freestyleMenu>
+        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of freestyleLinks">
+          <span class="mat-body-1">{{ link.name }}</span>
+        </a>
+      </mat-menu>
+
+      <mat-menu #moreMenu>
+        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of moreDesktopLinks">
+          <span class="mat-body-1">{{ link.name }}</span>
+        </a>
+      </mat-menu>
+
+      <mat-menu #profileMenu>
+        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of profileAvatarLinks">
+          <span class="mat-body-1">{{ link.name }}</span>
+        </a>
+      </mat-menu>
+
+      <mat-menu #seasonMenu>
+        <span class="mat-body-2 align">Upcoming Seasons</span>
+        <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
+          <span class="mat-body-1">{{ season.name }}</span>
+        </a>
+      </mat-menu>
     </div>
     <!-- menu - large -->
   </div>
 </mat-toolbar>
 
-<!-- mobile header content -->
+
+<!-- Mobile Expanded view -->
 <div class="full-header" *ngIf="menuState" fxLayout="column" fxLayoutGap="20px">
   <div fxLayout="column" fxLayoutGap="8px">
-    <button *ngIf="isLogged == false; else loggedButton1" (click)="onToggleMenu()" [routerLink]="['/login']"
-      class="buttonText secondaryButton">
+    <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/login']" class="buttonText secondaryButton">
       Login
     </button>
-    <button *ngIf="isLogged == false; else loggedButton2" (click)="onToggleMenu(); assignSelected(null)"
-      [routerLink]="['/signup']" class="buttonText primaryButton">
+    <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/signup']" class="buttonText primaryButton">
       Get Started
     </button>
-    <ng-template #loggedButton1>
-      <button (click)="onLogout(); onToggleMenu()" class="buttonText secondaryButton">
-        Logout
-      </button>
-    </ng-template>
-    <ng-template #loggedButton2>
-      <button (click)="onToggleMenu()" [routerLink]="['/dashboard', 'account', 'profile']"
-        class="buttonText primaryButton">
-        Account & Settings
-      </button>
-    </ng-template>
   </div>
 
-  <mat-drawer-container>
-    <mat-drawer [(opened)]="sidenavOpen" position="end" mode="side" class="primary-bg">
-      <mat-nav-list>
-        <a class="subNav" mat-list-item (click)="onToggleMenu(); assignSelected(null)"
-          [routerLink]="[selected, sublink.value]" *ngFor="let sublink of selectedSubLinks">
-          <span class="mat-body-1">
-            {{ sublink.viewValue | titlecase }}
-          </span>
-        </a>
-        <a class="subNav" mat-list-item (click)="onToggleMenu(); assignSelected(null)"
-          [routerLink]="['dashboard', 'account', 'profile']">
-          <span class="mat-body-1">
-            {{ 'Account' | titlecase }}
-          </span>
-        </a>
-      </mat-nav-list>
-    </mat-drawer>
-    <mat-drawer-content>
-      <mat-divider></mat-divider>
-      <mat-nav-list>
-        <h3 matSubheader>Freekyk</h3>
-        <a mat-list-item [routerLink]="['/']" (click)="onToggleMenu()" fxLayoutAlign="start center">
-          <span class="mat-body-1">Home</span>
-        </a>
-        <a mat-list-item (click)="onUpdateSubLinks('dashboard')" fxLayoutAlign="start center">
-          <span fxFlexOrder="1" class="mat-body-1">Dashboard</span>
-          <mat-icon fxFlexOrder="2" class="material-icons-round" matListIcon>
-            {{
-            selected == "dashboard"
-            ? "keyboard_arrow_right"
-            : "keyboard_arrow_down"
-            }}
-          </mat-icon>
-        </a>
-        <a mat-list-item (click)="onUpdateSubLinks('play')" fxLayoutAlign="start center">
-          <span fxFlexOrder="1" class="mat-body-1">Freekyk Play</span>
-          <mat-icon fxFlexOrder="2" class="material-icons-round" matListIcon>
-            {{
-            selected == "play"
-            ? "keyboard_arrow_right"
-            : "keyboard_arrow_down"
-            }}
-          </mat-icon>
-        </a>
-        <a mat-list-item (click)="onUpdateSubLinks('freestyle')" fxLayoutAlign="start center">
-          <span fxFlexOrder="1" class="mat-body-1">Freekyk Freestyle</span>
-          <mat-icon fxFlexOrder="2" class="material-icons-round" matListIcon>
-            {{
-            selected == "freestyle"
-            ? "keyboard_arrow_right"
-            : "keyboard_arrow_down"
-            }}
-          </mat-icon>
-        </a>
-        <a mat-list-item (click)="onToggleMenu()" [routerLink]="['/academies']" fxLayoutAlign="start center">
-          <span class="mat-body-1">Freekyk Academies</span>
-        </a>
-        <a mat-list-item (click)="onToggleMenu()" [routerLink]="['/equipment']" fxLayoutAlign="start center">
-          <span class="mat-body-1">Freekyk Equipment</span>
-        </a>
-        <mat-divider></mat-divider>
-        <h3 matSubheader>More</h3>
-        <a mat-list-item (click)="onToggleMenu()" [routerLink]="[sublink.route]" *ngFor="let sublink of morelinks">
-          <span class="mat-body-1">{{ sublink.name | titlecase }}</span>
-        </a>
-        <a mat-list-item (click)="onToggleMenu()" [href]="adminURL" target="_blank">
-          <span class="mat-body-1">{{ 'Admin' | titlecase }}</span>
-        </a>
-        <a mat-list-item (click)="onToggleMenu()" [href]="partnerFormURL" target="_blank">
-          <span class="mat-body-1">{{ 'Partner With Us' | titlecase }}</span>
-        </a>
-      </mat-nav-list>
-    </mat-drawer-content>
-  </mat-drawer-container>
+  <div class="links-container" fxLayout="column" fxLayoutGap="4px">
+    <div class="link" *ngFor="let link of mobileLinks">
+      <span class="mat-body-2" (click)="openParentLink(link)">
+        {{link.name}}
+      </span>
+      <ng-container *ngIf="link?.subLinks?.length">
+        <div class="buttons-container" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="5%">
+          <ng-container *ngFor="let subLink of link.subLinks">
+            <ng-container *ngIf="isLogged ? true : !subLink.isLogout">
+              <button routerLinkActive="red" class="link-button" fxFlex="45%" (click)="openLink(subLink)"
+                mat-stroked-button [color]="subLink.isLogout ? 'warn' : 'primary'">
+                {{subLink.name}}
+              </button>
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </div>
-<!-- mobile header content -->
-
-<mat-menu #playMenu>
-  <a mat-menu-item [routerLink]="['/play', sublink.value]" *ngFor="let sublink of playSublinks">
-    <span class="mat-body-1">{{ sublink.viewValue | titlecase }}</span>
-  </a>
-</mat-menu>
-
-<mat-menu #fsMenu>
-  <a mat-menu-item [routerLink]="['/freestyle', sublink.value]" *ngFor="let sublink of fsSublinks">
-    <span class="mat-body-1">{{ sublink.viewValue | titlecase }}</span>
-  </a>
-</mat-menu>
-
-<mat-menu #moreMenu>
-  <a mat-menu-item [routerLink]="[sublink.route]" *ngFor="let sublink of morelinks">
-    <span class="mat-body-1">{{ sublink.name | titlecase }}</span>
-  </a>
-  <a mat-menu-item [href]="adminURL" target="_blank">
-    <span class="mat-body-1">{{ 'Admin' | titlecase }}</span>
-  </a>
-  <a mat-menu-item [href]="partnerFormURL" target="_blank">
-    <span class="mat-body-1">{{ 'Partner With Us' | titlecase }}</span>
-  </a>
-</mat-menu>
-
-<mat-menu #profileMenu>
-  <a mat-menu-item [routerLink]="['/dashboard', 'home']">
-    <span class="mat-body-1">{{ "Dashboard" | titlecase }}</span>
-  </a>
-  <a mat-menu-item [routerLink]="['/dashboard', 'account', 'profile']">
-    <span class="mat-body-1">{{ "Account & Settings" | titlecase }}</span>
-  </a>
-  <a mat-menu-item (click)="onLogout()">
-    <span class="mat-body-1">{{ "Logout" | titlecase }}</span>
-  </a>
-</mat-menu>
-
-<mat-menu #seasonMenu>
-  <span class="mat-body-2 align">Upcoming Seasons</span>
-  <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
-    <span class="mat-body-1">{{ season.name }}</span>
-  </a>
-</mat-menu>
+<!-- Mobile Expanded view -->

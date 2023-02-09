@@ -30,7 +30,7 @@
       <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">
         {{ ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100 }}
       </p>
-      <button *ngIf="!isOwnTeam" (click)="onChallengeTeam()" class="primaryButton buttonText">
+      <button *ngIf="!isOwnTeam" [disabled]="true" (click)="onChallengeTeam()" class="primaryButton buttonText">
         Challenge Team
       </button>
     </div>

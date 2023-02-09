@@ -2,7 +2,7 @@ import { Admin } from '@shared/interfaces/admin.model';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 // import { environment } from '../../environments/environment';
-import { UNIQUE_ORGANIZER_CODE } from './utils/utilities';
+import { getRandomString, UNIQUE_ORGANIZER_CODE } from './utils/utilities';
 
 const db = admin.firestore();
 const auth = admin.auth();
@@ -59,18 +59,6 @@ export async function createAdminUser(data: Admin, context: any) {
 
 export function getOrganizerID(uid: string): string {
   return `${UNIQUE_ORGANIZER_CODE}-${uid.toUpperCase().slice(0, 6)}`;
-}
-
-
-export function getRandomString(length: number) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-
-  return result;
 }
 
 export async function isDuplicateEmail(email: string): Promise<boolean> {

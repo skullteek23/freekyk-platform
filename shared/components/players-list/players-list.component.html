@@ -1,0 +1,82 @@
+<app-search-lg [isDisabled]="!dataSource?.data.length" searchPlaceholder="Search players by name"
+  (searchItem)="applyFilter($event)">
+</app-search-lg>
+<mat-error *ngIf="isInvalidSelection">
+  Selections are allowed only upto {{maxLimit}} players
+</mat-error>
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" class="full-width-table players-table">
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <!-- <mat-checkbox color="primary" (change)="$event ? toggleAllRows() : null"
+          [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox> -->
+
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox color="primary" (click)="$event.stopPropagation()" (change)="$event ? selectRow(row) : null"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="jersey">
+      <th mat-header-cell *matHeaderCellDef>Jersey #</th>
+      <td mat-cell *matCellDef="let pl; let i = index">
+        <span class="mat-body-1">
+          {{ pl.jer_no ? pl.jer_no : "-" }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="player">
+      <th mat-header-cell *matHeaderCellDef>Player</th>
+      <td mat-cell *matCellDef="let pl; let i = index" (click)="openProfile(pl)">
+        <div fxLayoutAlign="start center" fxLayoutGap="8px">
+          <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name"
+            loading="lazy" appFallbackImg />
+          <span class="mat-body-1 left">
+            {{ pl.name | textShorten: 30 }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Team">
+      <th mat-header-cell *matHeaderCellDef>Team</th>
+      <td mat-cell *matCellDef="let pl">
+        <span class="mat-body-1">
+          {{ pl.team ? pl.team.name : "No Team" }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Location">
+      <th mat-header-cell *matHeaderCellDef>Location</th>
+      <td mat-cell *matCellDef="let pl">
+        <span class="mat-body-1">
+          {{ pl.locCity || "-" }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="PlayingPos">
+      <th mat-header-cell *matHeaderCellDef>Playing Position</th>
+      <td mat-cell *matCellDef="let pl">
+        <span class="mat-body-1">
+          {{ pl.pl_pos || "-" }}
+        </span>
+      </td>
+    </ng-container>
+    <tr mat-header-row class="green-table-header" *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols" [ngClass]="{ underline: row === selectedRowIndex }"
+      (mouseenter)="selectedRowIndex = selectedRowIndex === row ? -1 : row" (click)="selectedRowIndex = -1"
+      (mouseleave)="selectedRowIndex = -1"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="5">
+        <div class="box"></div>
+        <app-no-items-message items="players"></app-no-items-message>
+      </td>
+    </tr>
+  </table>
+</div>

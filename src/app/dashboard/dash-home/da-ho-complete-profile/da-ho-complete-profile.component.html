@@ -14,75 +14,19 @@
 
 <mat-card *ngIf="!isLoading; else compProfileLoading" class="mat-elevation-z8 maxh-cards-r cards-r">
   <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
-    <span class="dash-h5 align">Complete your profile</span>
+    <span class="dash-h5 align">Finish these steps</span>
     <a [matMenuTriggerFor]="verticalMenu" fxHide.lt-md="true" class="material-icons-round">more_vert</a>
   </div>
   <div class="seperate" fxLayout="column" fxLayoutGap="8px">
-    <!-- step -->
-    <div fxLayoutAlign="start center" fxLayoutGap="8px">
-      <span class="material-icons-round filled"> check_circle </span>
-      <a class="mat-body-1"> Setup Account </a>
-    </div>
-    <!-- step -->
 
-    <!-- step -->
-    <div fxLayoutAlign="start center" fxLayoutGap="8px">
-      <span class="material-icons-round" [ngClass]="{ filled: (data$ | async)?.photo == true }">
-        {{
-        (data$ | async)?.photo == true
-        ? "check_circle"
-        : "radio_button_unchecked"
-        }}
-      </span>
-      <a (click)="onUploadProfilePhoto()" class="mat-body-1">
-        Upload your profile photo
-      </a>
+    <div fxLayoutAlign="start center" fxLayoutGap="8px" *ngFor="let step of STEPS">
+      <span class="material-icons-round filled" *ngIf="profileProgress >= step.targetValue; else unfilled">
+        {{step.icon}} </span>
+      <ng-template #unfilled>
+        <span class="material-icons-round"> radio_button_unchecked </span>
+      </ng-template>
+      <a class="mat-body-1" (click)="onTapAction(step.action)"> {{step.text}} </a>
     </div>
-    <!-- step -->
-
-    <!-- step -->
-    <div fxLayoutAlign="start center" fxLayoutGap="8px">
-      <span class="material-icons-round" [ngClass]="{ filled: (data$ | async)?.profile == true }">
-        {{
-        (data$ | async)?.profile == true
-        ? "check_circle"
-        : "radio_button_unchecked"
-        }}
-      </span>
-      <a [routerLink]="['/dashboard', 'account', 'profile']" class="mat-body-1">
-        Complete your profile
-      </a>
-    </div>
-    <!-- step -->
-
-    <!-- step -->
-    <div fxLayoutAlign="start center" fxLayoutGap="8px">
-      <span class="material-icons-round" [ngClass]="{ filled: (data$ | async)?.team == true }">
-        {{
-        (data$ | async)?.team == true
-        ? "check_circle"
-        : "radio_button_unchecked"
-        }}
-      </span>
-      <a (click)="onOpenTeamBox()" class="mat-body-1">
-        Join or create a team
-      </a>
-    </div>
-    <!-- step -->
-
-    <!-- step -->
-    <div fxLayoutAlign="start center" fxLayoutGap="8px">
-      <span class="material-icons-round" [ngClass]="{ filled: profileProgress >= 100 || profileShared }">
-        {{
-        profileProgress >= 100 || profileShared
-        ? "check_circle"
-        : "radio_button_unchecked"
-        }}
-      </span>
-      <a (click)="onShareProfile()" class="mat-body-1"> Share your Profile </a>
-    </div>
-    <!-- step -->
-    <!-- step -->
 
     <!-- progress bar -->
     <div class="seperate">

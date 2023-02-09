@@ -1,22 +1,32 @@
-export type TEAM_WELCOME = 'team welcome';
-export type REQUEST = 'request';
-export type INVITE = 'invite';
-export type CHALLENGE = 'team challenge';
+export enum NotificationTypes {
+  playerJoinRequest = 0,
+  captainJoinInvite = 1,
+  teamWelcome = 2,
+  challengeTeam = 3
+}
+
+export const NotificationTitles = [
+  'Team Join Request',
+  'Team Join Invite',
+  'Welcome to the team!',
+  'Challenge received!',
+]
+
+export const NotificationFormatter = {
+  formatTitle: (key: number): string => {
+    return NotificationTitles[key];
+  }
+}
+
 export interface NotificationBasic {
-  type: TEAM_WELCOME | REQUEST | INVITE | CHALLENGE;
-  senderId: string;
-  receiverId: string;
-  date: number;
-  title: string;
-  senderName?: string | null;
-  read: boolean;
+  read: number,
+  senderID: string,
+  senderName: string,
+  receiverID: string,
+  receiverName: string,
+  date: number,
+  type: NotificationTypes,
   id?: string;
+  expire: number;
 }
-export interface Invite {
-  teamId: string;
-  teamName: string;
-  inviteeId: string;
-  inviteeName: string;
-  status: 'wait' | 'accept' | 'reject';
-  id?: string;
-}
+

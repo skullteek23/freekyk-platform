@@ -43,8 +43,8 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCloseDialog(): void {
-    this.dialogRef.close();
+  onCloseDialog(val = 0): void {
+    this.dialogRef.close(val);
   }
 
   onChooseImage(ev: any): void {
@@ -77,7 +77,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
       .catch(() => this.snackBarService.displayError())
       .finally(() => {
         this.isLoading = false;
-        this.onCloseDialog();
+        this.onCloseDialog(1);
       });
   }
 
@@ -86,7 +86,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
     if (this.$file === null) {
       this.isLoading = false;
       this.snackBarService.displayError();
-      return this.onCloseDialog();
+      return this.onCloseDialog(0);
     }
     const uid = localStorage.getItem('uid');
     this.uploadImageTask = this.ngStorage.upload('/profileImages/profileimage_' + uid, this.$file);
@@ -102,7 +102,7 @@ export class UploadphotoComponent implements OnInit, OnDestroy {
         .catch(() => this.snackBarService.displayError())
         .finally(() => {
           this.isLoading = false;
-          this.onCloseDialog();
+          this.onCloseDialog(1);
         });
     }
   }

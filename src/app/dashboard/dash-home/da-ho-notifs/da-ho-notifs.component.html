@@ -18,13 +18,12 @@
 <mat-card class="cards-r mat-elevation-z8" *ngIf=" !isLoading; else loading" fxLayout="column">
   <div fxLayout fxLayoutAlign="space-between center">
     <span class="dash-h5 align">Notification</span>
-    <a [routerLink]="['/dashboard', 'account', 'notifications']" class="mat-caption sec-menu">All
-      Feed</a>
+    <a [routerLink]="['/dashboard', 'account', 'notifications']" class="mat-caption sec-menu">Show All</a>
   </div>
   <!-- list -->
   <ul *ngIf="notifications.length === 0">
     <li class="nofi">
-      <p class="mat-body-1 grey-bg line">No notifications!</p>
+      <p class="mat-body-1 grey-bg line">No unread notifications!</p>
     </li>
   </ul>
   <app-notifications-list [data]="notifications">

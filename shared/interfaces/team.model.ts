@@ -12,6 +12,7 @@ export interface TeamBasicInfo {
   imgpath: string;
   imgpath_logo: string;
   captainId: string;
+  captainName: string;
   locState?: string;
   locCity?: string;
   id?: string;

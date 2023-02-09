@@ -1,0 +1,49 @@
+.plAvatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.mat-column-Player {
+  min-width: 125px !important;
+  text-align: left;
+}
+
+.mat-column-Team,
+.mat-column-Location,
+.mat-column-PlayingPos {
+  min-width: 125px !important;
+  max-width: 200px !important;
+  text-align: left;
+}
+
+.mat-column-Jersey {
+  width: 100px !important;
+  margin-left: 20px !important;
+  text-align: center !important;
+}
+
+.underline {
+  cursor: pointer;
+}
+
+.box {
+  margin-top: 20px;
+}
+
+.mat-column-select {
+  width: 65px;
+
+  @media screen and (max-width: 600px) {
+    width: 40px;
+  }
+
+  overflow: initial;
+}
+
+table {
+  min-width: 700px;
+  overflow-x: auto;
+}

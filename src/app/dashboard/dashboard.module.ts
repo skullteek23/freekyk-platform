@@ -16,7 +16,6 @@ import { DaHoAllFixturesComponent } from './dash-home/da-ho-all-fixtures/da-ho-a
 import { DaHoAllContestsComponent } from './dash-home/da-ho-all-contests/da-ho-all-contests.component';
 import { DaHoStatsCardComponent } from './dash-home/da-ho-stats-card/da-ho-stats-card.component';
 import { DaHoCompleteProfileComponent } from './dash-home/da-ho-complete-profile/da-ho-complete-profile.component';
-import { DaHoInvitesListComponent } from './dash-home/da-ho-invites-list/da-ho-invites-list.component';
 import { DaHoNotifsComponent } from './dash-home/da-ho-notifs/da-ho-notifs.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DaHoUpcomingMatchComponent } from './dash-home/da-ho-upcoming-match/da-ho-upcoming-match.component';
@@ -38,7 +37,6 @@ import { MemberListComponent } from './dash-team-manag/da-te-members/member-list
 import { NotificationsListComponent } from './dash-home/da-ho-notifs/notifications-list/notifications-list.component';
 import { InviteAcceptCardComponent } from './dialogs/invite-accept-card/invite-accept-card.component';
 import { UploadphotoComponent } from './dialogs/uploadphoto/uploadphoto.component';
-import { SendinviteComponent } from './dialogs/sendinvite/sendinvite.component';
 import { ActiveSquadComponent } from './dash-team-manag/da-te-communication/active-squad/active-squad.component';
 import { AskPlayerSelectorComponent } from './dash-team-manag/da-te-communication/ask-player-selector/ask-player-selector.component';
 import { UpcomingMatchTabComponent } from './dash-team-manag/da-te-communication/upcoming-match-tab/upcoming-match-tab.component';
@@ -57,6 +55,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-team-photo.component';
+import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dialog/join-team-request-dialog.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +74,6 @@ import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-tea
     DaHoAllContestsComponent,
     DaHoStatsCardComponent,
     DaHoCompleteProfileComponent,
-    DaHoInvitesListComponent,
     DaHoNotifsComponent,
     DaHoUpcomingMatchComponent,
     DaTeJoinRequestsComponent,
@@ -95,7 +93,6 @@ import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-tea
     NotificationsListComponent,
     InviteAcceptCardComponent,
     UploadphotoComponent,
-    SendinviteComponent,
     ActiveSquadComponent,
     AskPlayerSelectorComponent,
     UpcomingMatchTabComponent,
@@ -104,6 +101,8 @@ import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-tea
     TeamgalleryComponent,
     DeactivateProfileRequestComponent,
     UploadTeamPhotoComponent,
+    JoinTeamRequestDialogComponent,
+
   ],
   imports: [
     SharedModule,
@@ -113,7 +112,7 @@ import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-tea
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   exports: [],
   providers: [

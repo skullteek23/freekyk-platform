@@ -1,10 +1,7 @@
-.scroll {
-  height: 100%;
-  overflow-y: auto;
-}
 .filled {
   color: var(--primaryColor);
 }
+
 .nofi {
   margin-top: 20px;
   height: 72px;
@@ -14,6 +11,7 @@
   border-radius: var(--borderRadiusCard);
   opacity: 0.75;
 }
+
 .red {
   color: var(--red);
   cursor: pointer;

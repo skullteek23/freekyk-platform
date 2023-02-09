@@ -1,9 +1,10 @@
 import * as admin from 'firebase-admin';
 const db = admin.firestore();
 import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { ListOption } from '@shared/interfaces/others.model';
 
 
-export async function joinRequests(data: { capId: string[]; name: string }, context: any): Promise<any> {
+export async function joinRequests(data: { capId: ListOption[]; name: string }, context: any): Promise<any> {
 
   const CAPTAIN_IDS = data && data.capId ? data.capId : [];
   const requesterName = data && data.name ? data.name : '';
@@ -12,17 +13,18 @@ export async function joinRequests(data: { capId: string[]; name: string }, cont
     const batch = db.batch();
     const UID = context && context.auth && context.auth.uid ? context.auth.uid : null;
 
-    CAPTAIN_IDS.forEach((ID) => {
+    CAPTAIN_IDS.forEach((element) => {
       const notification: NotificationBasic = {
-        type: 'request',
-        senderId: UID,
-        receiverId: ID,
-        date: admin.firestore.Timestamp.now().toMillis(),
-        title: 'Join Request',
-        read: false,
+        type: 0,
+        senderID: UID,
         senderName: requesterName,
+        receiverID: element.value,
+        receiverName: element.viewValue,
+        date: new Date().getTime(),
+        read: 0,
+        expire: 0
       };
-      const notificationRef = db.collection(`players/${ID}/Notifications`).doc();
+      const notificationRef = db.collection('notifications').doc();
 
       batch.set(notificationRef, notification);
     });

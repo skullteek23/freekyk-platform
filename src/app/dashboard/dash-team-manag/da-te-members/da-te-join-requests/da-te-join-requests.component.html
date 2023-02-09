@@ -1,32 +1,19 @@
-<ng-template #noreq>
-  <ul>
-    <li class="nofi">
-      <p class="mat-body-1 center">No Pending Invites!</p>
-    </li>
-  </ul>
-</ng-template>
 <div class="fullpad-20" fxLayoutAlign="center center">
   <button class="secondaryButton buttonText" (click)="onInviteMore()">
     Invite more Players
   </button>
 </div>
-<mat-list class="scroll" *ngIf="(teamInvites$ | async)?.length != 0; else noreq">
-  <mat-list-item *ngFor="let invite of teamInvites$ | async">
+<mat-list class="scroll">
+  <app-no-items-message *ngIf="invitesList.length === 0" items="pending invites"></app-no-items-message>
+  <mat-list-item *ngFor="let invite of invitesList">
     <div class="full-width-table" fxLayoutAlign="space-between center">
-      <span class="mat-body-1">{{ invite?.inviteeName }}</span>
-      <div fxLayoutGap="8px" fxLayoutAlign="center center">
-        <a *ngIf="invite?.status == 'reject'" (click)="onSendAgain(invite)" class="mat-caption">
-          Resend Invite
-        </a>
-        <ng-container [ngSwitch]="invite?.status">
-          <span *ngSwitchCase="'wait'" class="material-icons-round">hourglass_empty</span>
-          <span *ngSwitchCase="'accept'" class="material-icons-round">check_circle</span>
-          <span *ngSwitchCase="'reject'" class="material-icons-round">replay</span>
-        </ng-container>
-        <span (click)="onDelete(invite.id)" class="material-icons-round red">
-          delete
-        </span>
+      <div class="left-centered" fxLayout="column" fxLayoutAlign="center start">
+        <span class="mat-body-1" *ngIf="invite?.receiverName">{{ invite?.receiverName }} </span>
+        <span class="mat-caption" *ngIf="invite?.date">Invite sent on {{ invite?.date | date: CUSTOM_FORMAT }} </span>
       </div>
+      <a (click)="onOpenPlayerProfile(invite?.receiverID)" class="mat-caption">
+        View Profile
+      </a>
     </div>
     <mat-divider></mat-divider>
   </mat-list-item>

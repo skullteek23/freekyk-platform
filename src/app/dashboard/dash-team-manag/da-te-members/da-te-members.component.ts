@@ -14,7 +14,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 })
 export class DaTeMembersComponent implements OnInit, OnDestroy {
 
-  ind: number;
+  ind: number = 0;
   noTeam = true;
   membersList: Tmember[] = [];
   isLoading = true;
@@ -37,7 +37,6 @@ export class DaTeMembersComponent implements OnInit, OnDestroy {
         .pipe(
           tap((info) => {
             this.noTeam = info.basicInfo.tname == null;
-            this.ind = this.noTeam ? 0 : 1;
             this.isLoading = false;
           }),
           map((info) => info.teamMembers)

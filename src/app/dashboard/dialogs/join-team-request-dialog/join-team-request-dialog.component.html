@@ -1,0 +1,37 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close>
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">{{data.requestHeading}}</span>
+
+</mat-toolbar>
+<div class="feedback-container container-2" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <span class="mat-body-1" [ngClass]="{'left-centered': data?.team}">
+    {{data.requestMessage}}
+  </span>
+
+  <ng-container *ngIf="data?.team">
+    <span class="mat-body-2">Team {{data.team.name}}</span>
+    <span class="mat-body-2">{{data.team.captain}} (C)</span>
+  </ng-container>
+
+  <span class="mat-body-2" *ngIf="data?.player">
+    Player Name - {{data.player.name}}
+  </span>
+
+  <div *ngIf="playerInfo">
+    <img [src]="playerInfo.imgpath_sm" class="preview" alt="Image" appFallbackImg />
+  </div>
+
+  <div *ngIf="teamInfo">
+    <img [src]="teamInfo.imgpath_logo" class="preview" alt="Image" appFallbackImg />
+  </div>
+
+  <div fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="row">
+    <a (click)="reject()">Reject</a>
+    <button (click)="accept()" class="primaryButton buttonText">
+      Accept
+    </button>
+  </div>
+
+</div>

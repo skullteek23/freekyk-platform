@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MatchConstants } from '@shared/constants/constants';
+import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
+import { NotificationBasic, NotificationTypes } from '@shared/interfaces/notification.model';
+import * as _ from 'lodash';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { TeamService } from 'src/app/services/team.service';
-import { Invite } from '@shared/interfaces/notification.model';
 
 @Component({
   selector: 'app-da-te-join-requests',
@@ -11,11 +14,13 @@ import { Invite } from '@shared/interfaces/notification.model';
 })
 export class DaTeJoinRequestsComponent implements OnInit {
 
-  teamInvites$: Observable<Invite[]>;
+  readonly CUSTOM_FORMAT = MatchConstants.NOTIFICATION_DATE_FORMAT;
+  invitesList: NotificationBasic[] = [];
 
   constructor(
     private teamService: TeamService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -24,18 +29,23 @@ export class DaTeJoinRequestsComponent implements OnInit {
 
   getInvitesForTeam(): void {
     const tid = sessionStorage.getItem('tid');
-    this.teamInvites$ = this.teamService.getTeamInvites(tid);
-  }
-
-  onSendAgain(invite: Invite): void {
-    this.notificationService.callUpdateTeamInvite('wait', invite.id);
-  }
-
-  onDelete(invId: string): void {
-    this.notificationService.deleteInvite(invId);
+    this.teamService.getTeamInvites(tid)
+      .subscribe(response => {
+        if (response) {
+          const tempList = response.filter(res => res.expire === 0 && res.type === NotificationTypes.captainJoinInvite);
+          this.invitesList = _.uniqBy(tempList, 'receiverID');
+        }
+      });
   }
 
   onInviteMore(): void {
     this.notificationService.onOpenInvitePlayersDialog();
+  }
+
+  onOpenPlayerProfile(pid: string): void {
+    const dialogRef = this.dialog.open(PlayerCardComponent, {
+      panelClass: 'fk-dialogs',
+      data: pid,
+    });
   }
 }

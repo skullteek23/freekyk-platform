@@ -72,6 +72,10 @@ import { RouterModule } from '@angular/router';
 import { SocialGroupComponent } from './dialogs/social-group/social-group.component';
 import { ViewGroundCardComponent } from './dialogs/view-ground-card/view-ground-card.component';
 import { PaymentOptionsDialogComponent } from './dialogs/payment-options-dialog/payment-options-dialog.component';
+import { PlayersListComponent } from './components/players-list/players-list.component';
+import { SearchableFormFieldComponent } from '@shared/components/searchable-form-field/searchable-form-field.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -138,7 +142,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     FallbackImgDirective,
     SocialGroupComponent,
     ViewGroundCardComponent,
-    PaymentOptionsDialogComponent
+    PaymentOptionsDialogComponent,
+    PlayersListComponent,
+    SearchableFormFieldComponent
   ],
   imports: [
     CommonModule,
@@ -148,6 +154,7 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     YouTubePlayerModule,
     ClipboardModule,
     RouterModule,
+    NgxMatSelectSearchModule,
     ShareModule.withConfig(customConfig),
   ],
   exports: [
@@ -212,7 +219,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     FallbackImgDirective,
     SocialGroupComponent,
     ViewGroundCardComponent,
-    PaymentOptionsDialogComponent
+    PaymentOptionsDialogComponent,
+    PlayersListComponent,
+    SearchableFormFieldComponent
   ],
 })
 export class SharedModule { }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
-import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { NotificationBasic, NotificationFormatter } from '@shared/interfaces/notification.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants } from '@shared/constants/constants';
 
@@ -18,6 +18,8 @@ export class NotificationsListComponent implements OnInit {
   }
 
   notifications: NotificationBasic[] = [];
+  formatter = NotificationFormatter;
+  isLoaderShown = false;
 
   constructor(
     private notificationService: NotificationsService
@@ -29,7 +31,8 @@ export class NotificationsListComponent implements OnInit {
     this.notificationService.onSelectNotification(notification);
   }
 
-  changeStatus(notification: NotificationBasic, status: boolean) {
-    this.notificationService.markNotification(notification.id, status);
+  changeStatus(notification: NotificationBasic) {
+    const newStatus = notification.read === 1 ? 0 : 1;
+    this.notificationService.changeStatus(notification, newStatus);
   }
 }

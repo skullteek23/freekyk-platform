@@ -48,12 +48,17 @@ export class TeamjoinComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSubmit(plSelected: ListOption[]): void {
+  onSubmit(selection: ListOption[]): void {
     this.myStepper.next();
     this.isStepOneComplete = true;
-    const capIds: string[] = plSelected.map((sel) => (sel.value as TeamBasicInfo).captainId);
+    const teamCaptainsList: ListOption[] = selection.map(el => {
+      const teamInfo = el.value as TeamBasicInfo;
+      const viewValue = teamInfo.captainName;
+      const value = teamInfo.captainId;
+      return ({ value, viewValue })
+    })
     const userName = sessionStorage.getItem('name');
-    if (this.sendRequests(capIds, userName)) {
+    if (this.sendRequests(teamCaptainsList, userName)) {
       this.state = 'complete';
       this.success = true;
       this.error = false;
@@ -61,7 +66,7 @@ export class TeamjoinComponent implements OnInit {
     }
   }
 
-  async sendRequests(capIds: string[], playerName: string): Promise<any> {
+  async sendRequests(capIds: ListOption[], playerName: string): Promise<any> {
     const FunctionData = {
       capId: capIds,
       name: playerName,

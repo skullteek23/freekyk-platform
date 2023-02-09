@@ -166,34 +166,34 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
 
   onChallengeTeam(): void {
-    if (this.isOwnTeam) {
-      return;
-    }
-    this.subscriptions.add(this.store
-      .select('dash')
-      .pipe(map((resp) => resp))
-      .subscribe(async (team) => {
-        if (team && team.hasTeam == null) {
-          this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');
-        } else if (team.hasTeam.capId !== this.uid) {
-          this.snackBarService.displayCustomMsg('Only a Captain can perform this action!');
-        } else {
-          const notif: NotificationBasic = {
-            type: 'team challenge',
-            senderId: this.uid,
-            receiverId: this.id,
-            date: new Date().getTime(),
-            title: 'Team Challenge Recieved',
-            read: false,
-            senderName: team.hasTeam.name,
-          };
-          this.ngFire
-            .collection(`players/${this.id}/Notifications`)
-            .add(notif)
-            .then(() => this.snackBarService.displayCustomMsg('Challenge Notification sent to team captain.'))
-            .catch(() => this.snackBarService.displayError());
-        }
-      }));
+    // if (this.isOwnTeam) {
+    //   return;
+    // }
+    // this.subscriptions.add(this.store
+    //   .select('dash')
+    //   .pipe(map((resp) => resp))
+    //   .subscribe(async (team) => {
+    //     if (team && team.hasTeam == null) {
+    //       this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');
+    //     } else if (team.hasTeam.capId !== this.uid) {
+    //       this.snackBarService.displayCustomMsg('Only a Captain can perform this action!');
+    //     } else {
+    //       const notif: NotificationBasic = {
+    //         type: 'team challenge',
+    //         senderId: this.uid,
+    //         receiverId: this.id,
+    //         date: new Date().getTime(),
+    //         title: 'Team Challenge Recieved',
+    //         read: false,
+    //         senderName: team.hasTeam.name,
+    //       };
+    //       this.ngFire
+    //         .collection(`players/${this.id}/Notifications`)
+    //         .add(notif)
+    //         .then(() => this.snackBarService.displayCustomMsg('Challenge Notification sent to team captain.'))
+    //         .catch(() => this.snackBarService.displayError());
+    //     }
+    //   }));
   }
 
   onEnlargePhoto(): void {

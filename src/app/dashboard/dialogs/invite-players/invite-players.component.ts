@@ -1,13 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatListOption } from '@angular/material/list';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { Invite } from '@shared/interfaces/notification.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 
 @Component({
   selector: 'app-invite-players',
@@ -16,7 +15,15 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 })
 export class InvitePlayersComponent implements OnInit {
 
-  invitesList: Invite[] = [];
+  readonly COLS = [
+    'select',
+    'jersey',
+    'player',
+    'Location',
+    'PlayingPos',
+  ]
+
+  invitesList: NotificationBasic[] = [];
   players$: Observable<PlayerBasicInfo[]>;
   noPlayers = true;
 
@@ -58,30 +65,32 @@ export class InvitePlayersComponent implements OnInit {
       );
   }
 
-  onSendInvites(plSelected: MatListOption[]): void {
-    this.createInvites(plSelected.map((sel) => sel.value));
-  }
-
-  createInvites(selArray: { name: string; id: string }[]): void {
+  createInvites(selection: PlayerBasicInfo[]): void {
+    this.invitesList = [];
     const tid = sessionStorage.getItem('tid');
-    selArray.forEach((selection) => {
-      this.invitesList.push({
-        teamId: tid,
-        teamName: this.data,
-        inviteeId: selection.id,
-        inviteeName: selection.name,
-        status: 'wait',
+    if (selection.length) {
+      selection.forEach((selection) => {
+        this.invitesList.push({
+          read: 0,
+          senderID: tid,
+          senderName: this.data,
+          receiverID: selection.id,
+          date: new Date().getTime(),
+          type: 1,
+          expire: 0,
+          receiverName: selection.name
+        });
       });
-    });
-    this.sendInvites();
+    }
   }
 
   sendInvites(): void {
-    if (this.invitesList.length > 1) {
+    console.log(this.invitesList);
+    return;
+    if (this.invitesList.length) {
       const batch = this.ngFire.firestore.batch();
       for (const invite of this.invitesList) {
-        const newId = this.ngFire.createId();
-        const colRef = this.ngFire.firestore.collection('invites').doc(newId);
+        const colRef = this.ngFire.firestore.collection('notifications').doc();
         batch.set(colRef, invite);
       }
       batch
@@ -91,17 +100,6 @@ export class InvitePlayersComponent implements OnInit {
           this.onCloseDialog();
         })
         .catch(() => this.snackBarService.displayError());
-      // .catch((error) => console.log(error));
-    } else {
-      this.ngFire.firestore
-        .collection('invites')
-        .add(this.invitesList[0])
-        .then(() => {
-          this.snackBarService.displayCustomMsg('Invites sent successfully!');
-          this.onCloseDialog();
-        })
-        .catch(() => this.snackBarService.displayError());
-      // .catch((error) => console.log(error));
     }
   }
 }

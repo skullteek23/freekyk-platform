@@ -7,7 +7,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UpdateInfoComponent } from '@shared/components/update-info/update-info.component';
 import { positionGroup } from '@shared/interfaces/others.model';
-import { PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model';
+import { PlayerBasicInfo, PlayerMoreInfo, SocialMediaLinks, } from '@shared/interfaces/user.model';
 import { DashState } from '../../store/dash.reducer';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { LocationService } from '@shared/services/location-cities.service';
@@ -38,15 +38,16 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   playerArrayForm = new FormGroup({});
   fsArrayForm = new FormGroup({});
   socialInfoForm = new FormGroup({});
-  countries$: Observable<string[]>;
-  states$: Observable<string[]>;
-  cities$: Observable<string[]>;
+  countries: string[] = [];
+  states: string[] = [];
+  cities: string[] = [];
   subscriptions = new Subscription();
   emptyControlArray = new FormControl(null, [
     Validators.required,
     Validators.pattern(RegexPatterns.alphaNumberWithSpace),
   ]);
   isDisableArrayButton = true;
+
 
   constructor(
     private dialog: MatDialog,
@@ -103,7 +104,11 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
 
   getCountries() {
-    this.countries$ = this.locationService.getCountry();
+    this.locationService.getCountry().subscribe(response => {
+      if (response) {
+        this.countries = response;
+      }
+    });
   }
 
 
@@ -170,11 +175,21 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   }
 
   onSelectCountry(country: string): void {
-    this.states$ = this.locationService.getStateByCountry(country);
+    this.locationService.getStateByCountry(country)
+      .subscribe(response => {
+        if (response) {
+          this.states = response;
+        }
+      });
   }
 
   onSelectState(state: string): void {
-    this.cities$ = this.locationService.getCityByState(state);
+    this.locationService.getCityByState(state)
+      .subscribe(response => {
+        if (response) {
+          this.cities = response;
+        }
+      });
   }
 
   // initFsArrayForm(): void {
@@ -286,15 +301,14 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         newDetails.born = new Date(this.personalInfoForm.get('born').value).getTime();
       }
       if (this.personalInfoForm.get('nickname').dirty && this.personalInfoForm.get('nickname').value) {
-        newDetails.nickname = this.personalInfoForm.get('nickname').value;
+        newDetails.nickname = this.personalInfoForm.get('nickname').value.trim();
       }
       const newBasicDetails: any = {};
       if (this.personalInfoForm.get('gen').dirty && this.personalInfoForm.get('gen').value) {
         newBasicDetails.gen = this.personalInfoForm.get('gen').value;
       }
       if (this.personalInfoForm.get('name').dirty && this.personalInfoForm.get('name').value) {
-        newBasicDetails.name = this.personalInfoForm.get('name').value;
-        this.authService.updateAuthDisplayName(newBasicDetails.name);
+        newBasicDetails.name = this.personalInfoForm.get('name').value.trim();
       }
 
       const uid = localStorage.getItem('uid');
@@ -318,6 +332,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         //       ...newBasicDetails
         //     })
         // );
+        allPromises.push(this.authService.updateAuthDisplayName(newBasicDetails.name));
         allPromises.push(
           this.ngFire
             .collection('players')
@@ -333,48 +348,114 @@ export class AccProfileComponent implements OnInit, OnDestroy {
           .catch(error => this.snackBarService.displayError())
       }
     }
-    this.personalInfoForm.reset();
 
     // backend code here
   }
 
   onSavePlayerInfo(): Promise<any> {
+
     if (this.playingInfoForm.dirty && this.playingInfoForm.valid) {
-      const newDetails: PlayerMoreInfo = {
-        locState: this.playingInfoForm.value.location.locState,
-        locCountry: this.playingInfoForm.value.location.locCountry,
-        height: this.playingInfoForm.get('height').value,
-        weight: this.playingInfoForm.get('weight').value,
-        str_ft: this.playingInfoForm.get('str_ft').value,
-        bio: this.playingInfoForm.get('bio').value,
-        profile: true,
-      };
-      const newBasicDetails: {} = {
-        jer_no: this.playingInfoForm.get('jer_no').value,
-        locCity: this.playingInfoForm.value.location.locCity,
-        pl_pos: this.playingInfoForm.get('pl_pos').value,
-      };
-      // const newFsDetails: {} = {
-      //   locCountry: this.playingInfoForm.value.location.locCountry,
-      //   bio: this.playingInfoForm.get('bio').value,
-      // };
+      const updatedValues: any = {};
+      for (const key in this.playingInfoForm.controls) {
+        if (this.playingInfoForm.valid) {
+          const control = this.playingInfoForm.controls[key];
+          if (control && control.valid && control.dirty && control.value !== null && control.value !== undefined) {
+            const controlValue = control?.value;
+            updatedValues[key] = controlValue;
+          }
+        }
+      }
+
+      // console.log(updatedValues);
+      if (Object.keys(updatedValues).length === 0) {
+        return;
+      }
+
+      const newDetails: Partial<PlayerMoreInfo> = {};
+      const newBasicDetails: Partial<PlayerBasicInfo> = {};
       const uid = localStorage.getItem('uid');
       const allPromises = [];
 
-      allPromises.push(
-        this.ngFire
-          .collection('players/' + uid + '/additionalInfo')
-          .doc('otherInfo')
-          .set({ ...newDetails, }, { merge: true })
-      );
-      allPromises.push(
-        this.ngFire
-          .collection('players')
-          .doc(uid)
-          .update({
-            ...newBasicDetails,
-          })
-      );
+      if (updatedValues['jer_no'] || updatedValues['location']['locCity'] || updatedValues['pl_pos']) {
+        newBasicDetails['jer_no'] = this.playingInfoForm.get('jer_no').value;
+        newBasicDetails['locCity'] = this.playingInfoForm.value.location.locCity;
+        newBasicDetails['pl_pos'] = this.playingInfoForm.get('pl_pos').value;
+      }
+
+      newDetails['locState'] = this.playingInfoForm.value.location.locState;
+      newDetails['locCountry'] = this.playingInfoForm.value.location.locCountry;
+      newDetails['height'] = this.playingInfoForm.get('height').value;
+      newDetails['weight'] = this.playingInfoForm.get('weight').value;
+      newDetails['str_ft'] = this.playingInfoForm.get('str_ft').value;
+      newDetails['bio'] = this.playingInfoForm.get('bio').value.trim();
+      newDetails['profile'] = true;
+
+
+      //   locState: this.playingInfoForm.value.location.locState,
+      //   locCountry: this.playingInfoForm.value.location.locCountry,
+      //   height: this.playingInfoForm.get('height').value,
+      //   weight: this.playingInfoForm.get('weight').value,
+      //   str_ft: this.playingInfoForm.get('str_ft').value,
+      //   bio: this.playingInfoForm.get('bio').value,
+      //   profile: true,
+      // };
+      // const newBasicDetails: {} = {
+      //   jer_no: this.playingInfoForm.get('jer_no').value,
+      //   locCity: this.playingInfoForm.value.location.locCity,
+      //   pl_pos: this.playingInfoForm.get('pl_pos').value,
+      // };
+      // const newDetails: PlayerMoreInfo = {
+      //   locState: this.playingInfoForm.value.location.locState,
+      //   locCountry: this.playingInfoForm.value.location.locCountry,
+      //   height: this.playingInfoForm.get('height').value,
+      //   weight: this.playingInfoForm.get('weight').value,
+      //   str_ft: this.playingInfoForm.get('str_ft').value,
+      //   bio: this.playingInfoForm.get('bio').value,
+      //   profile: true,
+      // };
+      // const newBasicDetails: {} = {
+      //   jer_no: this.playingInfoForm.get('jer_no').value,
+      //   locCity: this.playingInfoForm.value.location.locCity,
+      //   pl_pos: this.playingInfoForm.get('pl_pos').value,
+      // };
+      // // const newFsDetails: {} = {
+      // //   locCountry: this.playingInfoForm.value.location.locCountry,
+      // //   bio: this.playingInfoForm.get('bio').value,
+      // // };
+
+
+      // for (const key in newDetails) {
+      //   if (Object.prototype.hasOwnProperty.call(newDetails, key) && newDetails[key] === null) {
+      //     delete newDetails[key];
+      //   }
+      // }
+
+      // for (const key in newBasicDetails) {
+      //   if (Object.prototype.hasOwnProperty.call(newBasicDetails, key) && newBasicDetails[key] === null) {
+      //     delete newBasicDetails[key];
+      //   }
+      // }
+
+      if (Object.keys(newDetails).length) {
+        allPromises.push(
+          this.ngFire
+            .collection('players/' + uid + '/additionalInfo')
+            .doc('otherInfo')
+            .set({ ...newDetails, }, { merge: true })
+        );
+      }
+
+      if (Object.keys(newBasicDetails).length) {
+        allPromises.push(
+          this.ngFire
+            .collection('players')
+            .doc(uid)
+            .update({
+              ...newBasicDetails,
+            })
+        );
+      }
+
       // allPromises.push(
       //   this.ngFire
       //     .collection('freestylers')
@@ -386,9 +467,9 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       return Promise.all(allPromises)
         .then(() => this.snackBarService.displayCustomMsg('Updated Successfully!'))
         .catch(error => this.snackBarService.displayError())
+    } else {
+      this.snackBarService.displayError('All fields are mandatory!')
     }
-    this.playingInfoForm.reset();
-    // backend code here
   }
 
   onSavePlayerArrayInfo(): Promise<any> {
@@ -450,6 +531,18 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   //   }
   //   this.fsArrayForm.reset();
   // }
+
+  get locationCountry(): FormControl {
+    return ((this.playingInfoForm.get('location') as FormGroup).controls['locCountry'] as FormControl);
+  }
+
+  get locationState(): FormControl {
+    return ((this.playingInfoForm.get('location') as FormGroup).controls['locState'] as FormControl);
+  }
+
+  get locationCity(): FormControl {
+    return ((this.playingInfoForm.get('location') as FormGroup).controls['locCity'] as FormControl);
+  }
 
   onSaveSMInfo(): Promise<any> {
     // console.log(this.socialInfoForm);

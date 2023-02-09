@@ -56,8 +56,8 @@
         </div>
         <mat-list class="list" dense color="primary" *ngIf="players?.value?.length">
           <i *ngIf="!playersList.length">
-            Currently, there are no players available to join any team! Please
-            try again later
+            Currently, there are no active players available to join any team! Please
+            try again later!
           </i>
 
           <mat-list-item *ngFor="let player of players?.controls; let i = index">
@@ -114,14 +114,14 @@
               Create Team
             </button>
             <p class="mat-caption left">
-              By tapping 'Next', you acknowledge that you have read and
+              By tapping 'Create Team', you acknowledge that you have read and
               understood, and agree to
               <a (click)="openRules()">Freekyk Team Rules & Regulations</a>.
             </p>
           </div>
         </ng-container>
         <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" *ngIf="isTeamLive">
-          <app-tick-animation></app-tick-animation>
+          <app-tick-animation (finishAnimation)="onCloseDialog()"></app-tick-animation>
           <span class="mat-caption center">Wuhooo! Your team is LIVE.</span>
           <span class="mat-caption center">You're now {{ teamDetailsForm.value.name + "'s" }} Captain!</span>
         </div>

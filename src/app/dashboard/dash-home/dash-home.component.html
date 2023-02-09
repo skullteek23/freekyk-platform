@@ -6,16 +6,15 @@
   <!-- button loading -->
 
   <!-- mobile buttons -->
-  <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
+  <div *ngIf="showMobile && !isLoading && nextStatus" fxLayout="column" fxLayoutGap="8px">
     <!-- complete your profile button -->
-    <button [routerLink]="['/dashboard', 'account', 'profile']" class="wide-button" fxLayout
-      fxLayoutAlign="space-between center">
+    <button (click)="takeAction(nextStatus.action)" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
-        <span class="material-icons-round">account_box</span>
-        <span class="mat-body-1"> Complete your profile </span>
+        <span class="mat-body-1"> {{nextStatus.text}} </span>
       </div>
 
-      <span class="mat-caption"> 25% Done </span>
+      <span class="mat-caption"> {{currentStatusProfileCompletion.targetValue}}% Done </span>
+      <span fxHide.gt-sm="true" class="material-icons-round">chevron_right</span>
     </button>
     <!-- complete your profile button -->
   </div>
@@ -35,7 +34,7 @@
     <!-- your stats -->
 
     <!-- complete your profile section -->
-    <app-da-ho-complete-profile fxHide.lt-md="true" (profileComplete)="onComplete($event)" [fxFlexOrder]="order2">
+    <app-da-ho-complete-profile fxHide.lt-md="true" [fxFlexOrder]="order2">
     </app-da-ho-complete-profile>
     <!-- complete your profile section -->
 
@@ -77,11 +76,11 @@
             <app-da-ho-upcoming-match></app-da-ho-upcoming-match>
           </ng-template>
         </mat-tab>
-        <mat-tab label="Invites Recieved">
+        <!-- <mat-tab label="Invites Recieved">
           <ng-template matTabContent>
             <app-da-ho-invites-list></app-da-ho-invites-list>
           </ng-template>
-        </mat-tab>
+        </mat-tab> -->
       </mat-tab-group>
     </mat-card>
     <!-- your team card -->
@@ -103,3 +102,5 @@
   </div>
   <!-- mobile buttons -->
 </div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

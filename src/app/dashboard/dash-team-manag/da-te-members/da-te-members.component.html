@@ -6,7 +6,7 @@
     </a>
   </div>
   <mat-tab-group [(selectedIndex)]="ind">
-    <mat-tab [disabled]="!noTeam" label="Join/Create Team">
+    <mat-tab *ngIf="noTeam" label="Join/Create Team">
       <div class="fullpad-20 bg" fxLayoutAlign="center center">
         <div fxLayout="column" fxLayoutGap="16px">
           <button (click)="joinTeam()" class="primaryButton buttonText">
@@ -33,7 +33,7 @@
         <!-- list -->
       </ng-template>
     </mat-tab>
-    <mat-tab [disabled]="noTeam" label="Pending Invites">
+    <mat-tab [disabled]="noTeam" label="Invite Players">
       <ng-template matTabContent>
         <!-- list -->
         <app-da-te-join-requests></app-da-te-join-requests>

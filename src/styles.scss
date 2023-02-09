@@ -803,8 +803,14 @@ mat-table {
 
 /* Custom snack-bars */
 .snack-bar-success {
+  border-radius: var(--borderRadiusCard);
   background: var(--primaryColor);
   color: white;
+
+  @media screen and (max-width: 600px) {
+    border: 1px white solid !important;
+  }
+
 }
 
 .snack-bar-error {
@@ -898,4 +904,21 @@ button.mat-button-base {
 
 .preserve-white-space {
   white-space: pre-line;
+}
+
+.invite-players-card {
+  .button-container {
+    margin-top: 20px;
+  }
+
+  app-players-list {
+    mat-error {
+      margin-bottom: 20px;
+    }
+
+    .table-container {
+      overflow: auto;
+      height: calc(100% - 200px);
+    }
+  }
 }
