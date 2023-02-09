@@ -83,7 +83,7 @@ export class DaTeProfileComponent implements OnInit, OnDestroy {
   }
 
   getAgeCategory(category: number): string {
-    return category ? `U-${category.toString()}` : null;
+    return category ? `Under-${category.toString()}` : null;
   }
 
   getLocation(city: string | null | undefined, state: string | null | undefined): string {

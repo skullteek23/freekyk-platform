@@ -6,6 +6,15 @@ export const MEMBER_ONLY = 'MEMBER_ONLY';
 export const ALREADY_IN_TEAM = 'ALREADY_IN_TEAM';
 export const INCOMPLETE_PROFILE = 'INCOMPLETE_PROFILE';
 export const PHOTO_NOT_UPLOADED = 'PHOTO_NOT_UPLOADED';
+
+export const allowedAgeCategories = [
+  { viewValue: 'Under-15', value: 15 },
+  { viewValue: 'Under-16', value: 16 },
+  { viewValue: 'Under-19', value: 19 },
+  { viewValue: 'Under-23', value: 23 },
+  { viewValue: 'Open', value: 99 }
+];
+
 export interface TeamBasicInfo {
   tname: string;
   isVerified: boolean;
@@ -19,7 +28,7 @@ export interface TeamBasicInfo {
 }
 export interface TeamMoreInfo {
   tdateCreated: number;
-  tageCat: 15 | 19 | 21 | 25 | 30;
+  tageCat: number;
   captainName: string;
   tslogan?: string;
   tdesc?: string;

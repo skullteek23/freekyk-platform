@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
-import { PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers, allowedAgeCategories } from '@shared/interfaces/team.model';
+import { PlayerBasicInfo, PlayerMoreInfo } from '@shared/interfaces/user.model';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { getRandomString, PLACEHOLDER_TEAM_LOGO, PLACEHOLDER_TEAM_PHOTO } from './utils/utilities';
 
@@ -20,8 +20,9 @@ export async function teamCreation(data: { players: PlayerBasicInfo[], teamName:
 
   if (logo && imgpath && position && captainID && teamName) {
     const captainInfo = (await db.collection('players').doc(captainID).get()).data() as PlayerBasicInfo;
-
-    if (!captainInfo.imgpath_sm || !captainInfo.pl_pos) {
+    const birthDate = ((await db.collection(`players/${captainID}/additionalInfo`).doc('otherInfo').get()).data() as PlayerMoreInfo)?.born || 0;
+    const captainAge = getAge(birthDate);
+    if (!captainInfo.imgpath_sm || !captainInfo.pl_pos || !captainAge) {
       throw new functions.https.HttpsError('failed-precondition', 'Incomplete profile');
     } else if (captainInfo.team !== null) {
       throw new functions.https.HttpsError('invalid-argument', 'You are already in a team!');
@@ -43,7 +44,7 @@ export async function teamCreation(data: { players: PlayerBasicInfo[], teamName:
       };
       teamMoreInfo = {
         tdateCreated: new Date().getTime(),
-        tageCat: 30,
+        tageCat: calculateAppropriateAgeGroup(captainAge),
         captainName: captainInfo.name,
       };
       tMembers = {
@@ -85,5 +86,25 @@ export async function teamCreation(data: { players: PlayerBasicInfo[], teamName:
     }
   }
   return false;
+}
+
+export function getAge(birth: number) {
+  if (!birth) {
+    return null;
+  }
+  const diffInMilliseconds = Date.now() - birth;
+  const ageDate = new Date(diffInMilliseconds);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
+export function calculateAppropriateAgeGroup(comparator: number) {
+  let start = 0;
+  for (let i = 0; i < allowedAgeCategories.length; i++) {
+    if (comparator <= allowedAgeCategories[i].value) {
+      start = allowedAgeCategories[i].value;
+      break;
+    }
+  }
+  return start;
 }
 

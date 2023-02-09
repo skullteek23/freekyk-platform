@@ -390,52 +390,6 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       newDetails['bio'] = this.playingInfoForm.get('bio').value.trim();
       newDetails['profile'] = true;
 
-
-      //   locState: this.playingInfoForm.value.location.locState,
-      //   locCountry: this.playingInfoForm.value.location.locCountry,
-      //   height: this.playingInfoForm.get('height').value,
-      //   weight: this.playingInfoForm.get('weight').value,
-      //   str_ft: this.playingInfoForm.get('str_ft').value,
-      //   bio: this.playingInfoForm.get('bio').value,
-      //   profile: true,
-      // };
-      // const newBasicDetails: {} = {
-      //   jer_no: this.playingInfoForm.get('jer_no').value,
-      //   locCity: this.playingInfoForm.value.location.locCity,
-      //   pl_pos: this.playingInfoForm.get('pl_pos').value,
-      // };
-      // const newDetails: PlayerMoreInfo = {
-      //   locState: this.playingInfoForm.value.location.locState,
-      //   locCountry: this.playingInfoForm.value.location.locCountry,
-      //   height: this.playingInfoForm.get('height').value,
-      //   weight: this.playingInfoForm.get('weight').value,
-      //   str_ft: this.playingInfoForm.get('str_ft').value,
-      //   bio: this.playingInfoForm.get('bio').value,
-      //   profile: true,
-      // };
-      // const newBasicDetails: {} = {
-      //   jer_no: this.playingInfoForm.get('jer_no').value,
-      //   locCity: this.playingInfoForm.value.location.locCity,
-      //   pl_pos: this.playingInfoForm.get('pl_pos').value,
-      // };
-      // // const newFsDetails: {} = {
-      // //   locCountry: this.playingInfoForm.value.location.locCountry,
-      // //   bio: this.playingInfoForm.get('bio').value,
-      // // };
-
-
-      // for (const key in newDetails) {
-      //   if (Object.prototype.hasOwnProperty.call(newDetails, key) && newDetails[key] === null) {
-      //     delete newDetails[key];
-      //   }
-      // }
-
-      // for (const key in newBasicDetails) {
-      //   if (Object.prototype.hasOwnProperty.call(newBasicDetails, key) && newBasicDetails[key] === null) {
-      //     delete newBasicDetails[key];
-      //   }
-      // }
-
       if (Object.keys(newDetails).length) {
         allPromises.push(
           this.ngFire
