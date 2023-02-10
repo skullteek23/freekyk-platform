@@ -1,39 +1,18 @@
+<h4 class="mat-subheading-1 align">Freekyk Play</h4>
 <div fxLayout="column">
   <!-- features -->
-  <div
-    class="container section-space-top section-space-bottom"
-    fxLayout="column"
-    fxLayoutGap="48px"
-    fxLayoutGap.gt-sm="120px"
-  >
-    <app-feature-section
-      DialogData="perfect team"
-      svg="assets/svgs/Banner/find_your_team.svg"
-      [featureContent]="findTeamContent"
-    ></app-feature-section>
-    <app-feature-section
-      svg="assets/svgs/Banner/be_part_of_seasons.svg"
-      [featureContent]="seasonsContent"
-      [invert]="true"
-    ></app-feature-section>
-    <app-feature-section
-      svg="assets/svgs/Banner/fpl.svg"
-      [featureContent]="fplContent"
-    ></app-feature-section>
-    <app-feature-section
-      svg="assets/svgs/Banner/fkc.svg"
-      [featureContent]="fkcContent"
-      [invert]="true"
-    ></app-feature-section>
-    <app-feature-section
-      svg="assets/svgs/Banner/fcp.svg"
-      [featureContent]="fcpContent"
-    ></app-feature-section>
-    <app-feature-section
-      svg="assets/svgs/Banner/customise_your_experience.svg"
-      [featureContent]="customizeContent"
-      [invert]="true"
-    ></app-feature-section>
+  <div class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="48px"
+    fxLayoutGap.gt-sm="120px">
+    <app-feature-section DialogData="perfect team" svg="assets/svgs/Banner/find_your_team.svg"
+      [featureContent]="findTeamContent"></app-feature-section>
+    <app-feature-section svg="assets/svgs/Banner/be_part_of_seasons.svg" [featureContent]="seasonsContent"
+      [invert]="true"></app-feature-section>
+    <app-feature-section svg="assets/svgs/Banner/fpl.svg" [featureContent]="fplContent"></app-feature-section>
+    <app-feature-section svg="assets/svgs/Banner/fkc.svg" [featureContent]="fkcContent"
+      [invert]="true"></app-feature-section>
+    <app-feature-section svg="assets/svgs/Banner/fcp.svg" [featureContent]="fcpContent"></app-feature-section>
+    <app-feature-section svg="assets/svgs/Banner/customise_your_experience.svg" [featureContent]="customizeContent"
+      [invert]="true"></app-feature-section>
   </div>
   <!-- features -->
 
@@ -44,10 +23,7 @@
   <!-- action-strip-mini -->
 
   <!-- why choose fk -->
-  <app-why-choose-section
-    [content]="whyChooseContent"
-    name="Play"
-  ></app-why-choose-section>
+  <app-why-choose-section [content]="whyChooseContent" name="Play"></app-why-choose-section>
   <!-- why choose fk -->
 
   <!-- covid-19 -->
@@ -55,8 +31,6 @@
   <!-- covid-19 -->
 
   <!-- community numbers -->
-  <app-community-numbers-section
-    [content]="communityNumbers"
-  ></app-community-numbers-section>
+  <app-community-numbers-section [content]="communityNumbers"></app-community-numbers-section>
   <!-- community numbers -->
 </div>

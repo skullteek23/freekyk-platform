@@ -191,11 +191,10 @@
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node" *ngIf="isLogged ? true : !node.isLogout">
           <div class="buttons-container">
-            <button routerLinkActive="red" class="link-button" fxFlex="100%"
-              (click)="openLink(node);treeControl.collapseAll()" mat-stroked-button
-              [color]="node.isLogout ? 'warn' : 'primary'">
+            <button class="link-button" fxFlex="100%" (click)="openLink(node);treeControl.collapseAll()"
+              mat-stroked-button [color]="node.isLogout ? 'warn' : 'primary'">
+              <span class="material-icons-round external-icon" *ngIf="node.icon">{{node.icon}}</span>
               {{node.name}}
-              <span class="material-icons-round external-icon" *ngIf="node.externalLink">open_in_new</span>
             </button>
           </div>
         </li>
@@ -208,7 +207,7 @@
               {{treeControl.isExpanded(node) ? 'expand_less' : 'expand_more'}}
             </span>
           </div>
-          <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+          <ul class="example-tree-ul" [class.example-tree-invisible]="!treeControl.isExpanded(node)">
             <ng-container matTreeNodeOutlet></ng-container>
           </ul>
         </li>
@@ -217,8 +216,8 @@
     </mat-tree>
     <div class="buttons-container">
       <button class="link-button" fxFlex="100%" (click)="openMatchRequestForm()" mat-stroked-button color="primary">
-        Request a Football Match
-        <span class="material-icons-round external-icon">open_in_new</span>
+        <span class="material-icons-round external-icon">sports_soccer</span>
+        Request a Football Match!
       </button>
     </div>
   </div>

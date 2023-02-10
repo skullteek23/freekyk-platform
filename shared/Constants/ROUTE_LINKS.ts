@@ -38,6 +38,7 @@ export interface ILink {
   externalLink?: string,
   isLogout?: true,
   maxWidth?: string;
+  icon?: string;
 }
 
 export const MOBILE_LINKS: ILink[] = [
@@ -47,34 +48,42 @@ export const MOBILE_LINKS: ILink[] = [
       {
         name: 'Home',
         route: '/play/home',
+        icon: 'grass'
       },
       {
         name: 'Grounds',
         route: '/play/grounds',
+        icon: 'stadium'
       },
       {
         name: 'Fixtures',
         route: '/play/fixtures',
+        icon: 'calendar_month'
       },
       {
         name: 'Seasons',
         route: '/play/seasons',
+        icon: 'try'
       },
       {
         name: 'Standings',
         route: '/play/standings',
+        icon: 'leaderboard'
       },
       {
         name: 'Players',
         route: '/play/players',
+        icon: 'sports_handball'
       },
       {
         name: 'Results',
         route: '/play/results',
+        icon: 'event_available'
       },
       {
         name: 'Teams',
         route: '/play/teams',
+        icon: 'diversity_3'
       },
     ]
   },
@@ -84,7 +93,8 @@ export const MOBILE_LINKS: ILink[] = [
       {
         name: 'Request a callback',
         maxWidth: '60%',
-        externalLink: environment.forms.partner
+        externalLink: environment.forms.partner,
+        icon: 'open_in_new'
       }
     ]
   },
@@ -92,12 +102,14 @@ export const MOBILE_LINKS: ILink[] = [
     name: 'Support',
     subLinks: [
       {
-        name: 'Tickets',
-        route: '/support'
+        name: 'Raise a Ticket',
+        route: '/support',
+        icon: 'help'
       },
       {
         name: 'FAQs',
-        route: '/support/faqs'
+        route: '/support/faqs',
+        icon: 'question_answer'
       }
     ]
   },
@@ -108,6 +120,7 @@ export const MOBILE_LINKS: ILink[] = [
         name: 'Join as Organizer',
         maxWidth: '60%',
         externalLink: environment.firebase.adminUrl,
+        icon: 'open_in_new'
       }
     ]
   },
@@ -117,27 +130,33 @@ export const MOBILE_LINKS: ILink[] = [
       {
         name: 'About',
         route: '/about',
+        icon: 'article'
       },
 
       {
         name: 'Freestyle',
         route: '/freestyle/home',
+        icon: 'movie_filter'
       },
       {
         name: 'Academies',
         route: '/academies',
+        icon: 'school'
       },
       {
         name: 'Equipment',
         route: '/equipment',
+        icon: 'add_shopping_cart'
       },
       {
         name: 'Settings',
         route: '/dashboard/account/profile',
+        icon: 'settings'
       },
       {
         name: 'Logout',
         isLogout: true,
+        icon: 'logout'
       },
     ]
   },
