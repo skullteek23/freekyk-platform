@@ -246,3 +246,19 @@ export interface ICancelData {
   uid: string,
   type: CancellationTypes,
 }
+
+export interface IMatchRequest {
+  matches: number;
+  perTeamPlayers: number;
+  location: {
+    country: string;
+    city: string;
+    state: string;
+  }
+  ground: string;
+  budget: number;
+  contactNo: number;
+  name: string;
+  date: number;
+  id?: string;
+}

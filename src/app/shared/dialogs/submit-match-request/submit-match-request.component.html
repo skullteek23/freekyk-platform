@@ -1,0 +1,68 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Request a Football Match</span>
+</mat-toolbar>
+<div class="feedback-container container-2" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+  <ng-container>
+    <div *ngIf="showCompletion" class="dialogData" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+      <app-tick-animation (finishAnimation)="onCloseDialog()"></app-tick-animation>
+      <span class="mat-caption">
+        Match Request Submitted! You will hear from us soon.
+      </span>
+    </div>
+  </ng-container>
+  <form *ngIf="!showCompletion" [formGroup]="requestForm" class="dialogData">
+    <div>I want to play</div>
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>Number of Matches</mat-label>
+      <input type="number" name="matches" matInput formControlName="matches" required>
+    </mat-form-field>
+    <div>with</div>
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>Players per team</mat-label>
+      <input type="number" name="perTeamPlayers" matInput formControlName="perTeamPlayers" required>
+    </mat-form-field>
+    <div>in location</div>
+    <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px">
+      <div class="dropdown-container" fxFlex.gt-sm="33%">
+        <app-searchable-form-field label="Country" [list]="countries$| async" [control]="locationCountry"
+          (selectionChange)="onSelectCountry($event)"></app-searchable-form-field>
+      </div>
+
+      <div class="dropdown-container" fxFlex-gt-sm="33%">
+        <app-searchable-form-field label="State" [list]="states$| async" [control]="locationState"
+          (selectionChange)="onSelectState($event)"></app-searchable-form-field>
+      </div>
+
+      <div class="dropdown-container" fxFlex-gt-sm="auto">
+        <app-searchable-form-field label="City" [list]="cities$| async"
+          [control]="locationCity"></app-searchable-form-field>
+      </div>
+    </div>
+    <div>preferably in ground </div>
+    <mat-form-field appearance="fill" color="primary">
+      <input type="text" name="ground" matInput formControlName="ground" required>
+    </mat-form-field>
+    <div>in a budget of</div>
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>Rupees per match</mat-label>
+      <input type="text" name="budget" matInput formControlName="budget" required>
+    </mat-form-field>
+    <div>Please contact me at this number</div>
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>Enter your contact number</mat-label>
+      <input type="number" name="contactNo" matInput formControlName="contactNo" required>
+    </mat-form-field>
+    <div>And my name is</div>
+    <mat-form-field appearance="fill" color="primary">
+      <mat-label>Enter your name</mat-label>
+      <input type="text" name="name" matInput formControlName="name" required>
+    </mat-form-field>
+  </form>
+</div>
+<div class="submit-button-container" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <button type="button" class="buttonText primaryButton" (click)="submit()"
+    [disabled]="isSubmitDisabled">Submit</button>
+</div>

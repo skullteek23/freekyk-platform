@@ -1,0 +1,49 @@
+<p class="dash-h5 align">Match Request from Players</p>
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container [matColumnDef]="tableColumns.name">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.name }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element[tableColumns.name]">
+        {{ element[tableColumns.name] }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>{{tableLength}} Request(s) </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.contactNo">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.contactNo }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element['contactNo']"> {{ element['contactNo'] }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.matches">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.matches }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element['matches']"> {{ element['matches']
+        }} ({{element.perTeamPlayers}}-Player Team)
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.budget">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.budget }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element['budget']"> {{ element['budget'] | currency: 'INR'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.location">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.location }}</th>
+      <td mat-cell *matCellDef="let element"
+        matTooltip="{{ element[tableColumns.location]?.city }}, {{element[tableColumns.location]?.state}}">
+        {{ element[tableColumns.location]?.city }}, {{element[tableColumns.location]?.state}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedCols;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedCols;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedCols;"></tr>
+  </table>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

@@ -45,6 +45,7 @@ import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
 import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.component';
+import { SubmitMatchRequestComponent } from './shared/dialogs/submit-match-request/submit-match-request.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.co
     FeedbackComponent,
     FeedbackButtonComponent,
     LiveSeasonComponent,
+    SubmitMatchRequestComponent,
   ],
   imports: [
     BrowserModule,

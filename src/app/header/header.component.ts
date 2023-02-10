@@ -17,6 +17,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
 
 @Component({
   selector: 'app-header',
@@ -148,6 +149,12 @@ export class HeaderComponent implements OnInit {
       this.onCloseMenu();
       this.router.navigate([link.route]);
     }
+  }
+
+  openMatchRequestForm() {
+    this.dialog.open(SubmitMatchRequestComponent, {
+      panelClass: 'fk-dialogs'
+    });
   }
 
   get playLinks(): ILink[] {

@@ -96,6 +96,7 @@ export class MainShellComponent implements OnDestroy, OnInit {
             if (adminData.role === AssignedRoles.superAdmin) {
               this.links.push({ name: 'manage admins', route: 'manage-requests', disabled: false });
               this.links.push({ name: 'configurations', route: 'configurations', disabled: false });
+              this.links.push({ name: 'match requests', route: 'match-requests', disabled: false });
             }
           }
           this.isLoading = false;
