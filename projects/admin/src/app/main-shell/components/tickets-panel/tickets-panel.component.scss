@@ -1,0 +1,36 @@
+table {
+  width: 100%;
+
+  .mat-column-id {
+    width: 10%;
+  }
+
+  .mat-column-name {
+    width: 20%;
+  }
+
+  .mat-column-message {
+    width: 30%;
+  }
+
+  .mat-column-response {
+    width: 20%;
+  }
+
+  .mat-column-status {
+    width: 7%;
+    padding-right: 10px;
+  }
+
+  .mat-column-timestamp {
+    width: 15%;
+  }
+
+
+
+  .message {
+    width: 100%;
+    display: inline-block;
+    max-width: 200px;
+  }
+}

@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Send Reply to User</span>
+</mat-toolbar>
+<form [formGroup]="replyForm" fxLayout="column" class="container-2" fxLayoutGap="20px">
+
+  <div class="mat-body-1">User's Message</div>
+  <div class="mat-body-2">{{ticket.message}}</div>
+
+  <mat-form-field class="box-size" appearance="outline">
+    <mat-label>Your Response</mat-label>
+    <textarea matInput formControlName="reply" cols="30" rows="10" [maxlength]="queryLimit"
+      placeholder="Please provide your response"></textarea>
+    <mat-hint align="end">{{replyForm.get('reply')?.value?.length}} / {{queryLimit}}</mat-hint>
+    <mat-error *ngIf="replyForm.get('reply')?.hasError('pattern')">
+      {{messages.error.notAllowedCharacter}}
+    </mat-error>
+  </mat-form-field>
+
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="20px"
+    fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center stretch">
+    <button [disabled]="replyForm.invalid" type="button" (click)="submit()" class="primaryButton buttonText">
+      Send Response
+    </button>
+  </div>
+</form>

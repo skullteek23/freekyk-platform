@@ -8,6 +8,13 @@ export enum TicketTypes {
   Season = 1, // generated for season related query by admins
   Profile = 2, // generated for profile-related query by users
 }
+
+export const TicketTypeMapping = {
+  [TicketTypes.Support]: 'Support Section',
+  [TicketTypes.Season]: 'Season related query',
+  [TicketTypes.Profile]: 'Profile Deactivation',
+}
+
 export interface ISupportTicket {
   status: TicketStatus;
   type: TicketTypes;

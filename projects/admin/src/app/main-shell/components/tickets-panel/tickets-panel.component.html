@@ -1,1 +1,68 @@
-<p>tickets-panel works!</p>
+<p class="dash-h5 align">Tickets</p>
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container [matColumnDef]="tableColumns.id">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.id }}</th>
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.id || LABEL_NA}}">
+        {{(element.id | textShorten: 5) || LABEL_NA}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> {{tableLength}} Ticket(s) </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.name">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.name }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="getValidName(element)">
+        {{ getValidName(element)}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.message">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.message }}</th>
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.message || LABEL_NA}}">
+        <span class="message ellipsis">
+          {{element.message || LABEL_NA}}
+        </span>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.response">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.response }}</th>
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.response || LABEL_NA}}">
+        <a (click)="replyTicket(element)">
+          <span class="material-icons-round">reply</span>
+        </a>
+        <span class="message ellipsis">
+          {{element.response || LABEL_NA}}
+        </span>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.status">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.status }}</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-select [value]="element.status" (selectionChange)="onChangeStatus(element, $event)">
+          <mat-option [value]="item.value" *ngFor="let item of TICKET_STATUS">{{item.viewValue}}</mat-option>
+        </mat-select>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="tableColumns.timestamp">
+      <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.timestamp }}</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element['timestamp']"> {{ element['timestamp'] | date:
+        'short'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedCols;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedCols;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedCols;"></tr>
+  </table>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>
