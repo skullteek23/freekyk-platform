@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers } from '@shared/interfaces/team.model';
+import { TeamBasicInfo, TeamMoreInfo, Tmember, TeamMembers, AGE_CATEGORY } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo, PlayerMoreInfo } from '@shared/interfaces/user.model';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { getRandomString, PLACEHOLDER_TEAM_LOGO, PLACEHOLDER_TEAM_PHOTO } from './utils/utilities';
@@ -97,18 +97,12 @@ export function getAge(birth: number) {
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
-export function calculateAppropriateAgeGroup(comparator: number) {
-  const allowedAgeCategories = [
-    { viewValue: 'Under-15', value: 15 },
-    { viewValue: 'Under-16', value: 16 },
-    { viewValue: 'Under-19', value: 19 },
-    { viewValue: 'Under-23', value: 23 },
-    { viewValue: 'Open', value: 99 }
-  ];
-  let start = 0;
+export function calculateAppropriateAgeGroup(comparator: number): AGE_CATEGORY {
+  const allowedAgeCategories: AGE_CATEGORY[] = [15, 16, 19, 23, 99];
+  let start: AGE_CATEGORY = 15;
   for (let i = 0; i < allowedAgeCategories.length; i++) {
-    if (comparator <= allowedAgeCategories[i].value) {
-      start = allowedAgeCategories[i].value;
+    if (comparator <= allowedAgeCategories[i]) {
+      start = allowedAgeCategories[i];
       break;
     }
   }

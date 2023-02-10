@@ -13,6 +13,14 @@
             Season name is already taken! Please choose another name
           </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Age Category for Participants</mat-label>
+          <mat-select formControlName="ageCategory">
+            <mat-option *ngFor="let option of ageCategoryList" [value]="option.value">
+              {{ option.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
 

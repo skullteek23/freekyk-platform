@@ -1,3 +1,4 @@
+import { ListOption } from './others.model';
 import { SocialMediaLinks } from './user.model';
 
 export const NO_TEAM = 'NO_TEAM';
@@ -12,9 +13,18 @@ export const allowedAgeCategories = [
   { viewValue: 'Under-16', value: 16 },
   { viewValue: 'Under-19', value: 19 },
   { viewValue: 'Under-23', value: 23 },
+  { viewValue: 'Under-30', value: 30 },
   { viewValue: 'Open', value: 99 }
 ];
 
+export const Formatters = {
+  formatAgeCategory: (key: AGE_CATEGORY): ListOption => {
+    const element = allowedAgeCategories.find(el => el.value === key)
+    return element || allowedAgeCategories[allowedAgeCategories.length - 1];
+  }
+}
+
+export type AGE_CATEGORY = 15 | 16 | 19 | 23 | 30 | 99;
 export interface TeamBasicInfo {
   tname: string;
   isVerified: boolean;
@@ -28,7 +38,7 @@ export interface TeamBasicInfo {
 }
 export interface TeamMoreInfo {
   tdateCreated: number;
-  tageCat: number;
+  tageCat: AGE_CATEGORY;
   captainName: string;
   tslogan?: string;
   tdesc?: string;

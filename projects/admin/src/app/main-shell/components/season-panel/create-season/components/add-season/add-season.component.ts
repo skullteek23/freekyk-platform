@@ -7,6 +7,7 @@ import { formsMessages } from '@shared/constants/messages';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ISeasonDetails, LastParticipationDate } from '@shared/interfaces/season.model';
 import { SeasonAdminService } from '../../../../../services/season-admin.service';
+import { allowedAgeCategories, Formatters } from '@shared/interfaces/team.model';
 
 @Component({
   selector: 'app-add-season',
@@ -25,11 +26,13 @@ export class AddSeasonComponent implements OnInit {
     LastParticipationDate.threeDayBefore,
     LastParticipationDate.oneWeekBefore,
   ];
+  readonly ageCategoryList = allowedAgeCategories;
 
   defaultImage: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
   detailsForm: FormGroup = new FormGroup({});
   messages = formsMessages;
   seasonsNamesList: string[] = [];
+  formatter = Formatters;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -54,6 +57,7 @@ export class AddSeasonComponent implements OnInit {
       ),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
       lastRegistrationDate: new FormControl(null),
+      ageCategory: new FormControl(null, [Validators.required])
     });
   }
 

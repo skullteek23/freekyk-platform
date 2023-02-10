@@ -18,6 +18,7 @@ import { environment } from 'environments/environment';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SEASON_OFFERS_MORE_INFO } from '@shared/web-content/WEBSITE_CONTENT';
+import { AGE_CATEGORY, Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
 
 export enum OperationStatus {
   default,
@@ -40,6 +41,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   ordersList: userOrder[] = [];
   subscriptions = new Subscription();
   status = OperationStatus.default;
+  formatter = Formatters
 
   constructor(
     private ngFire: AngularFirestore,
@@ -252,6 +254,9 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     } else if ((await this.isTeamNotAllowed(season.id))) {
       this.snackBarService.displayError('Participation is restricted to certain teams');
       return Promise.reject();
+    } else if ((await this.isTeamInvalidAgeGroup(season.ageCategory))) {
+      this.snackBarService.displayError('Your team age category is not allowed!');
+      return Promise.reject();
     } else if ((await this.isTeamParticipant(season.id))) {
       this.snackBarService.displayError('Team is already a participant');
       return Promise.reject();
@@ -266,6 +271,13 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   async isTeamParticipant(seasonID: string): Promise<boolean> {
     if (seasonID && this.teamID) {
       return (await this.ngFire.collection(`seasons/${seasonID}/participants`, query => query.where('tid', '==', this.teamID)).get().toPromise()).empty === false;
+    }
+    return false;
+  }
+
+  async isTeamInvalidAgeGroup(compareAgeCat: AGE_CATEGORY) {
+    if (this.teamID) {
+      return ((await this.ngFire.collection(`teams/${this.teamID}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as TeamMoreInfo).tageCat !== compareAgeCat
     }
     return false;
   }

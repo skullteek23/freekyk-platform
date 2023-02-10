@@ -34,6 +34,9 @@
         Team Entry Fees is
         <span class="mat-body-2 green">FREE</span>
       </span>
+      <span class="mat-body-1">
+        (Age group: {{formatter?.formatAgeCategory(season.ageCategory)?.viewValue}})
+      </span>
       <span class="mat-body-1 red">
         Registration ends on {{ season.lastRegDate | date: 'short' }}
       </span>

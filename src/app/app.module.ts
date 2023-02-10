@@ -46,6 +46,8 @@ import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.compone
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
 import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.component';
 import { SubmitMatchRequestComponent } from './shared/dialogs/submit-match-request/submit-match-request.component';
+import { PlayerService } from './services/player.service';
+import { TeamService } from './services/team.service';
 
 @NgModule({
   declarations: [
@@ -104,4 +106,9 @@ import { SubmitMatchRequestComponent } from './shared/dialogs/submit-match-reque
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    playerService: PlayerService,
+    teamService: TeamService
+  ) { }
+}

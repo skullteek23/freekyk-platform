@@ -1,7 +1,7 @@
 import { MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { IGroundSelection } from './ground.model';
 import { IDummyFixture, TournamentTypes } from './match.model';
-import { ITeamInfo } from './team.model';
+import { AGE_CATEGORY, ITeamInfo } from './team.model';
 
 export type statusType = 'PUBLISHED' | 'FINISHED' | 'CANCELLED' | 'REMOVED';
 export interface SeasonBasicInfo {
@@ -19,6 +19,7 @@ export interface SeasonBasicInfo {
   leftOverMatchCount: number;
   lastUpdated: number;
   createdBy: string;
+  ageCategory: AGE_CATEGORY;
   imgpath?: string;
   id?: string;
   discountedFees?: number;
@@ -73,6 +74,7 @@ export interface ISeasonDetails {
   rules: string;
   fees: number;
   discount: number;
+  ageCategory: AGE_CATEGORY;
   lastRegistrationDate: string
 }
 

@@ -22,7 +22,7 @@ export class MainShellComponent implements OnDestroy, OnInit {
   links: any[] = [
     { name: 'seasons', route: 'seasons', disabled: false },
     { name: 'grounds', route: 'grounds', disabled: false },
-    { name: 'my account', route: 'account', disabled: false }
+    { name: 'my account', route: 'account', disabled: false },
   ];
   subscriptions = new Subscription();
   user$: Observable<FirebaseUser>;
@@ -95,6 +95,7 @@ export class MainShellComponent implements OnDestroy, OnInit {
             this.role = this.authService.getUserRole(adminData.role);
             if (adminData.role === AssignedRoles.superAdmin) {
               this.links.push({ name: 'manage admins', route: 'manage-requests', disabled: false });
+              this.links.push({ name: 'Tickets', route: 'tickets', disabled: false });
               this.links.push({ name: 'configurations', route: 'configurations', disabled: false });
               this.links.push({ name: 'match requests', route: 'match-requests', disabled: false });
             }

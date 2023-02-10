@@ -35,7 +35,8 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
     status: 'PUBLISHED',
     leftOverMatchCount: fixtures.length,
     lastUpdated,
-    createdBy: data.adminID
+    createdBy: data.adminID,
+    ageCategory: data?.seasonDetails.ageCategory
   };
   const adminConfig = ((await db.collection('adminConfigs').doc('season').get()).data() as AdminConfigurationSeason)?.lastParticipationDate;
   const validOption = data?.seasonDetails.lastRegistrationDate === null && adminConfig ? adminConfig : data?.seasonDetails.lastRegistrationDate;

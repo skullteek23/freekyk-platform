@@ -51,6 +51,8 @@ import { AbortDialogComponent } from './components/season-panel/abort-dialog/abo
 import { RescheduleMatchDialogComponent } from './components/season-panel/reschedule-match-dialog/reschedule-match-dialog.component';
 import { AddSponsorComponent } from './components/season-panel/add-sponsor/add-sponsor.component';
 import { MatchRequestsPanelComponent } from './components/match-requests-panel/match-requests-panel.component';
+import { TicketsPanelComponent } from './components/tickets-panel/tickets-panel.component';
+
 
 const routes: Routes = [
   {
@@ -81,6 +83,7 @@ const routes: Routes = [
       { path: 'manage-requests', component: RegistrationsPanelComponent },
       { path: 'match-requests', component: MatchRequestsPanelComponent },
       { path: 'configurations', component: AdminConfigPanelComponent },
+      { path: 'tickets', component: TicketsPanelComponent },
     ]
   },
 ];
@@ -122,7 +125,8 @@ const routes: Routes = [
     AbortDialogComponent,
     RescheduleMatchDialogComponent,
     AddSponsorComponent,
-    MatchRequestsPanelComponent
+    MatchRequestsPanelComponent,
+    TicketsPanelComponent
   ],
   imports: [
     CommonModule,

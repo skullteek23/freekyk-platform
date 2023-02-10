@@ -119,6 +119,4 @@ import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dial
     PaymentService,
   ],
 })
-export class DashboardModule {
-  constructor(playerService: PlayerService, teamService: TeamService) { }
-}
+export class DashboardModule { }
