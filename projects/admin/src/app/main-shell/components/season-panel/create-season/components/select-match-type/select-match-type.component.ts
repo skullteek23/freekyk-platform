@@ -150,4 +150,16 @@ export class SelectMatchTypeComponent implements OnInit {
     return value === MATCH_TYPES_PACKAGES.PackageCustom;
   }
 
+  get locationCountry(): FormControl {
+    return ((this.matchSelectForm.get('location') as FormGroup).controls['country'] as FormControl);
+  }
+
+  get locationState(): FormControl {
+    return ((this.matchSelectForm.get('location') as FormGroup).controls['state'] as FormControl);
+  }
+
+  get locationCity(): FormControl {
+    return ((this.matchSelectForm.get('location') as FormGroup).controls['city'] as FormControl);
+  }
+
 }

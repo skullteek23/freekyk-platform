@@ -25,37 +25,24 @@
         {{messages.error.requiredField}}
       </mat-error>
     </mat-form-field>
+
     <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
-      <mat-form-field fxFlex.gt-sm="33%" appearance="outline" color="primary">
-        <mat-label>Country</mat-label>
-        <mat-select (selectionChange)="onSelectCountry($event.value)" formControlName="country" required>
-          <mat-option>--Select Country--</mat-option>
-          <mat-option *ngFor="let country of countries$ | async" [value]="country">
-            {{ country }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="dropdown-container" fxFlex.gt-sm="33%">
+        <app-searchable-form-field label="Country" [list]="countries$ | async" [control]="locationCountry"
+          (selectionChange)="onSelectCountry($event)"></app-searchable-form-field>
+      </div>
 
-      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
-        <mat-label>State</mat-label>
-        <mat-select (selectionChange)="onSelectState($event.value)" formControlName="state" required>
-          <mat-option>--Select State--</mat-option>
-          <mat-option *ngFor="let state of states$ | async" [value]="state">
-            {{ state }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="dropdown-container" fxFlex-gt-sm="33%">
+        <app-searchable-form-field label="State" [list]="states$ | async" [control]="locationState"
+          (selectionChange)="onSelectState($event)"></app-searchable-form-field>
+      </div>
 
-      <mat-form-field fxFlex.gt-sm appearance="outline" color="primary">
-        <mat-label>City</mat-label>
-        <mat-select formControlName="city" required>
-          <mat-option>--Select City--</mat-option>
-          <mat-option *ngFor="let city of cities$ | async" [value]="city">
-            {{ city }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="dropdown-container" fxFlex-gt-sm="auto">
+        <app-searchable-form-field label="City" [list]="cities$ | async"
+          [control]="locationCity"></app-searchable-form-field>
+      </div>
     </div>
+
   </section>
   <section fxLayout="column" class="team-selection" *ngIf="showAdditionFields">
     <mat-form-field appearance="outline" color="primary">

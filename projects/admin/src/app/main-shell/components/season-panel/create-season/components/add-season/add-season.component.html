@@ -31,11 +31,12 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-          <mat-label>Last date to participate</mat-label>
-          <input matInput [min]="currentDate" [max]="maxRegisDate" formControlName="lastRegistrationDate"
-            [matDatepicker]="startDate" required />
-          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-          <mat-datepicker #startDate></mat-datepicker>
+          <mat-label>Last date to take participants</mat-label>
+          <mat-select formControlName="lastRegistrationDate">
+            <mat-option *ngFor="let option of allowedParticipationDate" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">

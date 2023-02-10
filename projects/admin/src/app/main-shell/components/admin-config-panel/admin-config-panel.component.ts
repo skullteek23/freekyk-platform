@@ -48,7 +48,7 @@ export class AdminConfigPanelComponent implements OnInit {
     this.ngFire.collection('adminConfigs').doc('season').get().subscribe({
       next: (response) => {
         if (response && response.exists) {
-          const data = response.data() as any;
+          const data = response.data() as AdminConfigurationSeason;
           this.configForm.patchValue({
             ...data
           });

@@ -5,9 +5,8 @@ import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ISeasonDetails } from '@shared/interfaces/season.model';
+import { ISeasonDetails, LastParticipationDate } from '@shared/interfaces/season.model';
 import { SeasonAdminService } from '../../../../../services/season-admin.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-season',
@@ -20,11 +19,16 @@ export class AddSeasonComponent implements OnInit {
 
   readonly descriptionLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
   readonly rulesLimit = MatchConstants.LARGE_TEXT_CHARACTER_LIMIT;
+  readonly allowedParticipationDate = [
+    LastParticipationDate.sameDate,
+    LastParticipationDate.oneDayBefore,
+    LastParticipationDate.threeDayBefore,
+    LastParticipationDate.oneWeekBefore,
+  ];
 
   defaultImage: string = MatchConstantsSecondary.DEFAULT_PLACEHOLDER;
   detailsForm: FormGroup = new FormGroup({});
   messages = formsMessages;
-  currentDate = new Date();
   seasonsNamesList: string[] = [];
 
   constructor(
@@ -49,7 +53,7 @@ export class AddSeasonComponent implements OnInit {
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
       discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
-      lastRegistrationDate: new FormControl(null, [Validators.required]),
+      lastRegistrationDate: new FormControl(null),
     });
   }
 
@@ -96,8 +100,4 @@ export class AddSeasonComponent implements OnInit {
     return this.detailsForm.get('rules');
   }
 
-  get maxRegisDate(): Date {
-    const config = this.seasonAdminService.getAdminConfig();
-    return new Date(this.seasonAdminService.getMappedDateRange());
-  }
 }

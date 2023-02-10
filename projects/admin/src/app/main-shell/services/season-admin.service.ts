@@ -4,14 +4,13 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { GroundBooking, IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
+import { IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
 import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
 
 
 export interface Slot {
@@ -37,7 +36,6 @@ export class SeasonAdminService {
     private ngFunctions: AngularFireFunctions,
     private ngStorage: AngularFireStorage,
   ) {
-    this.getAdminConfigs();
   }
 
   getDummyFixtures(options: IDummyFixtureOptions): IDummyFixture[] {
@@ -210,31 +208,7 @@ export class SeasonAdminService {
     return this.adminConfigs;
   }
 
-  getMappedDateRange(): number {
-    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    if (!selectMatchTypeFormData) {
-      return 0;
-    }
-    const comparatorTimestamp = new Date(selectMatchTypeFormData.startDate).getTime();
-    if (this.adminConfigs && this.adminConfigs.hasOwnProperty('lastParticipationDate') && this.adminConfigs.lastParticipationDate) {
-      switch (this.adminConfigs.lastParticipationDate) {
-        case LastParticipationDate.sameDate:
-          return comparatorTimestamp;
-        case LastParticipationDate.oneDayBefore:
-          return comparatorTimestamp - MatchConstants.ONE_DAY_IN_MILLIS;
-        case LastParticipationDate.threeDayBefore:
-          return comparatorTimestamp - (3 * MatchConstants.ONE_DAY_IN_MILLIS);
-        case LastParticipationDate.oneWeekBefore:
-          return comparatorTimestamp - (7 * MatchConstants.ONE_DAY_IN_MILLIS);
-      }
-    }
-    return comparatorTimestamp;
-  }
 
-  isStartDateOverlap(startDate: number, booking: GroundBooking): boolean {
-    // return (startDate >= booking.bookingFrom && startDate <= booking.bookingTo);
-    return false;
-  }
 
   updateMatchReport(options: any): Promise<any> {
     if (!options) {
@@ -279,6 +253,8 @@ export class SeasonAdminService {
       case 'FINISHED':
         return { greenLight: true };
       case 'CANCELLED':
+        return { red: true };
+      case 'REMOVED':
         return { red: true };
       default:
         return {};

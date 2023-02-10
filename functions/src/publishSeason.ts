@@ -1,9 +1,10 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { IDummyFixture, KnockoutRounds, MatchFixture } from '@shared/interfaces/match.model';
+import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo, SeasonAbout, ISeasonCloudFnData } from '@shared/interfaces/season.model';
-import { DEFAULT_LOGO, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
+import { DEFAULT_LOGO, ONE_DAY_IN_MILLIS, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { GroundBooking } from '@shared/interfaces/ground.model';
 const db = admin.firestore();
 
@@ -36,6 +37,10 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
     lastUpdated,
     createdBy: data.adminID
   };
+  const adminConfig = ((await db.collection('adminConfigs').doc('season').get()).data() as AdminConfigurationSeason)?.lastParticipationDate;
+  const validOption = data?.seasonDetails.lastRegistrationDate === null && adminConfig ? adminConfig : data?.seasonDetails.lastRegistrationDate;
+  season.lastRegDate = decideLastDateRegistration(firstFixtureTimestamp, validOption);
+
   const seasonAbout: SeasonAbout = {
     description: data?.seasonDetails?.description,
     rules: data?.seasonDetails?.rules,
@@ -159,4 +164,19 @@ export function getRoundsList(totalTeams: number): number[] {
     }
   }
   return roundsList;
+}
+
+export function decideLastDateRegistration(startDate: number, option: string) {
+  switch (option) {
+    case 'Same as Tournament Start Date':
+      return startDate;
+    case '1 day before Start Date':
+      return startDate - ONE_DAY_IN_MILLIS;
+    case '3 days before Start Date':
+      return startDate - (3 * ONE_DAY_IN_MILLIS)
+    case '1 week before Start Date':
+      return startDate - (7 * ONE_DAY_IN_MILLIS)
+    default:
+      return startDate;
+  }
 }

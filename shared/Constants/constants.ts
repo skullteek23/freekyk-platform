@@ -21,7 +21,7 @@ export class MatchConstants {
   };
   static readonly START_DATE_DIFF = {
     // in milliseconds
-    MIN: 1,
+    MIN: 0,
     MAX: 90,
   };
   static readonly PARTICIPANTS_COUNT = {
