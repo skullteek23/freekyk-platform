@@ -30,6 +30,11 @@
           (seasonInfo$ | async)?.name }}</span>
       </div>
 
+      <mat-chip-list>
+        <mat-chip>Allowed age group: {{ formatter.formatAgeCategory((seasonInfo$ | async)?.ageCategory).viewValue}}
+        </mat-chip>
+      </mat-chip-list>
+
       <!-- <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
         {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
       </p> -->

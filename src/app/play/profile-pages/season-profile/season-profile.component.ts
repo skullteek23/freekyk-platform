@@ -23,6 +23,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import * as _ from 'lodash';
 import { QueryService } from '@app/services/query.service';
 import { MatchConstants } from '@shared/constants/constants';
+import { Formatters } from '@shared/interfaces/team.model';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class SeasonProfileComponent implements OnInit {
   currentDate = new Date();
   seasonInfo: SeasonBasicInfo;
   partners: ISeasonPartner[] = [];
+  formatter = Formatters;
 
   constructor(
     private snackBarService: SnackbarService,

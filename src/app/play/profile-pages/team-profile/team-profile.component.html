@@ -26,6 +26,9 @@
         </div>
         <!-- <button (click)="onShare()" class="primaryButton buttonText">Share</button> -->
       </div>
+      <p class="mat-body-1 align">
+        {{ formatter.formatAgeCategory((teamMoreInfo$ | async)?.tageCat).viewValue}} Team
+      </p>
 
       <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">
         {{ ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100 }}

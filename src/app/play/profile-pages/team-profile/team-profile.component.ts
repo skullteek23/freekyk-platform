@@ -9,7 +9,7 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { StatsTeam } from '@shared/interfaces/others.model';
-import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
+import { Formatters, TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 
@@ -33,10 +33,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   id: string;
   uid: string;
   subscriptions = new Subscription();
+  formatter = Formatters;
 
   constructor(
-    private snackBarService: SnackbarService,
-    private store: Store<{ dash: DashState }>,
     private router: Router,
     private route: ActivatedRoute,
     private ngFire: AngularFirestore,
