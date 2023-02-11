@@ -12,13 +12,8 @@ import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.compone
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
 import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
-import { DaHoAllFixturesComponent } from './dash-home/da-ho-all-fixtures/da-ho-all-fixtures.component';
-import { DaHoAllContestsComponent } from './dash-home/da-ho-all-contests/da-ho-all-contests.component';
-import { DaHoStatsCardComponent } from './dash-home/da-ho-stats-card/da-ho-stats-card.component';
-import { DaHoCompleteProfileComponent } from './dash-home/da-ho-complete-profile/da-ho-complete-profile.component';
 import { DaHoNotifsComponent } from './dash-home/da-ho-notifs/da-ho-notifs.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DaHoUpcomingMatchComponent } from './dash-home/da-ho-upcoming-match/da-ho-upcoming-match.component';
 import { DaTeJoinRequestsComponent } from './dash-team-manag/da-te-members/da-te-join-requests/da-te-join-requests.component';
 import { DaTeMembersComponent } from './dash-team-manag/da-te-members/da-te-members.component';
 import { DaTeCommunicationComponent } from './dash-team-manag/da-te-communication/da-te-communication.component';
@@ -47,8 +42,6 @@ import { LocationService } from '../../../shared/services/location-cities.servic
 import { environment } from 'environments/environment';
 import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
 import { PaymentService } from '../../../shared/services/payment.service';
-import { PlayerService } from '../services/player.service';
-import { TeamService } from '../services/team.service';
 import { MaterialModule } from '@shared/material.module';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -73,12 +66,7 @@ import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.compo
     AccAddressesComponent,
     AccTicketsComponent,
     DaHoProfileComponent,
-    DaHoAllFixturesComponent,
-    DaHoAllContestsComponent,
-    DaHoStatsCardComponent,
-    DaHoCompleteProfileComponent,
     DaHoNotifsComponent,
-    DaHoUpcomingMatchComponent,
     DaTeJoinRequestsComponent,
     DaTeMembersComponent,
     DaTeCommunicationComponent,

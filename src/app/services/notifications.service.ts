@@ -396,7 +396,7 @@ export class NotificationsService implements OnDestroy {
           tap((resp) => {
             if (!resp.isCaptain) {
               this.snackBarService.displayCustomMsg(
-                'Only a Captain can perform this action!'
+                'Only a team captain can perform this action!'
               );
             }
           }),

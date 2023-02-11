@@ -12,7 +12,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
 import { ListOption } from '@shared/interfaces/others.model';
-import { IActionShortcutData } from '@app/dashboard-action-shortcut-button/dashboard-action-shortcut-button.component';
+import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { TeamService } from '@app/services/team.service';
 
 @Component({

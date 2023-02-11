@@ -3,7 +3,7 @@
   <div class="stats-container" fxLayout="row wrap">
     <div class="statistic" fxFlex="50%" *ngFor="let option of options" fxLayout="row" fxLayoutGap="8px"
       fxLayoutAlign="center center">
-      <a fxLayout="column" fxLayoutAlign="center center">
+      <a fxLayout="column" fxLayoutAlign="center center" (click)="onOpenOption(option.value)">
         <span class="material-icons-round">{{option.icon}} </span>
         <span class="mat-body-1">{{option.value}} </span>
       </a>
