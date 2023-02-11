@@ -114,7 +114,7 @@ export const MOBILE_LINKS: ILink[] = [
     ]
   },
   {
-    name: 'Admin',
+    name: 'Organizer',
     subLinks: [
       {
         name: 'Join as Organizer',

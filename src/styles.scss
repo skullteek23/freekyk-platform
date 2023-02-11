@@ -699,19 +699,7 @@ mat-table {
 /* media queries- (min-width: 1280px) */
 
 /* custom buttons */
-.wide-button {
-  width: 100%;
-  height: 48px;
-  padding: 0 12px;
-  border-radius: var(--borderRadiusCard);
-  background-color: var(--primaryColor);
-  color: white;
-  border: none;
-}
 
-.wide-button:hover {
-  background-color: var(--primaryDarkColor);
-}
 
 .buttonText {
   font-size: 14px;
@@ -921,4 +909,12 @@ button.mat-button-base {
       height: calc(100% - 200px);
     }
   }
+}
+
+.dashboard-card {
+  border-radius: var(--dashCardBorder) !important;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+
 }

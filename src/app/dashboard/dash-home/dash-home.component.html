@@ -1,13 +1,44 @@
-<div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout="column" fxLayoutAlign.gt-md="center">
-  <!-- button loading -->
+<div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="12px"
+  fxLayoutGap.gt-sm="20px">
+
+
+  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%">
+    <span class="mat-body-1" *ngIf="playerName">
+      Hello, {{playerName}}
+    </span>
+    <app-dashboard-action-shortcut-button [data]="profileShortcutData"
+      (actionTrigger)="openProfile()"></app-dashboard-action-shortcut-button>
+
+    <app-dashboard-action-shortcut-button [data]="teamShortcutData"
+      (actionTrigger)="takeTeamAction()"></app-dashboard-action-shortcut-button>
+  </div>
+
+
+  <app-upcoming-match *ngIf="upcomingFixture" [fixture]="upcomingFixture"
+    [description]="upcomingFixtureDescription"></app-upcoming-match>
+
+  <app-my-matches fxFlex.gt-sm="100%" [teamName]="team" [matches]="teamMatches"></app-my-matches>
+
+  <app-my-stats-card [data]="stats"></app-my-stats-card>
+
+  <app-my-team-menu></app-my-team-menu>
+
+
+  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%">
+    <app-dashboard-action-shortcut-button [data]="ticketShortcutData"
+      (actionTrigger)="openTicketDialog()"></app-dashboard-action-shortcut-button>
+  </div>
+</div>
+
+
+
+
+<!-- <div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout="column" fxLayoutAlign.gt-md="center">
   <div *ngIf="showMobile && isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
     <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
   </div>
-  <!-- button loading -->
 
-  <!-- mobile buttons -->
   <div *ngIf="showMobile && !isLoading && nextStatus" fxLayout="column" fxLayoutGap="8px">
-    <!-- complete your profile button -->
     <button (click)="takeAction(nextStatus.action)" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="mat-body-1"> {{nextStatus.text}} </span>
@@ -16,29 +47,22 @@
       <span class="mat-caption"> {{currentStatusProfileCompletion.targetValue}}% Done </span>
       <span fxHide.gt-sm="true" class="material-icons-round">chevron_right</span>
     </button>
-    <!-- complete your profile button -->
   </div>
 
   <div fxLayoutGap="20px" fxLayout="column">
     <app-da-ho-profile></app-da-ho-profile>
     <app-da-ho-all-fixtures></app-da-ho-all-fixtures>
-    <!-- <app-da-ho-all-contests></app-da-ho-all-contests> -->
   </div>
 
   <div fxFlex.gt-sm="360px" fxLayout="column" fxLayoutAlign.md="center start" fxLayout.md="row wrap" fxLayoutGap="20px"
     class="right-boxes-container">
-    <!-- your stats -->
     <div [fxFlexOrder]="order1" class="cards-r maxh-cards-r">
       <app-da-ho-stats-card> </app-da-ho-stats-card>
     </div>
-    <!-- your stats -->
 
-    <!-- complete your profile section -->
     <app-da-ho-complete-profile fxHide.lt-md="true" [fxFlexOrder]="order2">
     </app-da-ho-complete-profile>
-    <!-- complete your profile section -->
 
-    <!-- your team card -->
     <mat-card [fxFlexOrder]="order3" class="cards-r side-padding mat-elevation-z8">
       <mat-tab-group [(selectedIndex)]="yourTeamIndex">
         <mat-tab label="Your Team">
@@ -73,23 +97,15 @@
         </mat-tab>
         <mat-tab label="Upcoming Match">
           <ng-template matTabContent>
-            <app-da-ho-upcoming-match></app-da-ho-upcoming-match>
           </ng-template>
         </mat-tab>
-        <!-- <mat-tab label="Invites Recieved">
-          <ng-template matTabContent>
-            <app-da-ho-invites-list></app-da-ho-invites-list>
-          </ng-template>
-        </mat-tab> -->
       </mat-tab-group>
     </mat-card>
-    <!-- your team card -->
 
     <app-da-ho-notifs fxFlex.md="100%" [fxFlexOrder]="order4"></app-da-ho-notifs>
   </div>
 
   <div *ngIf="showMobile && !isLoading" fxLayout="column" fxLayoutGap="8px">
-    <!-- raise a ticket button -->
     <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">live_help</span>
@@ -98,9 +114,7 @@
 
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <!-- raise a ticket button -->
   </div>
-  <!-- mobile buttons -->
-</div>
+</div> -->
 
 <app-loading *ngIf="isLoaderShown"></app-loading>

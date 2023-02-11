@@ -255,9 +255,7 @@ export class TeamService implements OnDestroy {
       .collection('allMatches', (query) =>
         query
           .where('teams', 'array-contains', tName)
-          .where('concluded', '==', false)
           .orderBy('date', 'asc')
-          .limit(MatchConstants.DEFAULT_DASHBOARD_FIXTURES_LIMIT)
       )
       .get()
       .pipe(
@@ -268,7 +266,6 @@ export class TeamService implements OnDestroy {
           )
         ),
         map((resp) => (resp.length === 0 ? [] : resp)),
-        map(resp => resp.filter(el => el.date > new Date().getTime()))
       )
       .toPromise();
     this.store.dispatch(new TeamActions.AddUpcomingMatches(upmSnap));

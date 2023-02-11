@@ -1,0 +1,17 @@
+.statistic {
+  height: 48px;
+}
+
+.red {
+  color: var(--red);
+}
+
+.yellow {
+  color: var(--premiumServiceColor);
+}
+
+@media screen and (min-width: 600px) {
+  .dashboard-card {
+    max-width: 360px;
+  }
+}

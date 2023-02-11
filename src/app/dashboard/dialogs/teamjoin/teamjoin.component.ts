@@ -12,6 +12,8 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
 import { ListOption } from '@shared/interfaces/others.model';
+import { IActionShortcutData } from '@app/dashboard-action-shortcut-button/dashboard-action-shortcut-button.component';
+import { TeamService } from '@app/services/team.service';
 
 @Component({
   selector: 'app-teamjoin',
@@ -32,16 +34,24 @@ export class TeamjoinComponent implements OnInit {
   filterTerm = '';
   isStepOneComplete = false;
 
+  shortcutData: IActionShortcutData;
+
   constructor(
     public dialogRef: MatDialogRef<TeamjoinComponent>,
     private ngFire: AngularFirestore,
     private ngFunc: AngularFireFunctions,
     private snackBarService: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private teamService: TeamService
   ) { }
 
   ngOnInit(): void {
     this.getTeams();
+    this.shortcutData = {
+      icon: 'add_circle',
+      actionLabel: 'Create your own team',
+
+    }
   }
 
   onCloseDialog(): void {
@@ -119,5 +129,9 @@ export class TeamjoinComponent implements OnInit {
       panelClass: 'large-dialogs',
       data
     })
+  }
+
+  onOpenTeamCreate() {
+    this.teamService.onOpenCreateTeamDialog();
   }
 }

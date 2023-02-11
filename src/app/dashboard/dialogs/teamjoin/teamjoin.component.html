@@ -91,5 +91,13 @@
         <mat-icon class="material-icons-round"> check_circle </mat-icon>
       </ng-template>
     </mat-vertical-stepper>
+
+    <mat-divider></mat-divider>
+    <div class="or-text">OR</div>
+    <br>
+    <div class="shortcut">
+      <app-dashboard-action-shortcut-button (actionTrigger)="onOpenTeamCreate()"
+        [data]="shortcutData"></app-dashboard-action-shortcut-button>
+    </div>
   </div>
 </div>

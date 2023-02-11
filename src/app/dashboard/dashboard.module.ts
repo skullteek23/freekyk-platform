@@ -55,6 +55,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-team-photo.component';
 import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dialog/join-team-request-dialog.component';
+import { UpcomingMatchComponent } from './dash-home/upcoming-match/upcoming-match.component';
+import { MyMatchesComponent } from './dash-home/my-matches/my-matches.component';
+import { MyStatsCardComponent } from './dash-home/my-stats-card/my-stats-card.component';
+import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +104,10 @@ import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dial
     DeactivateProfileRequestComponent,
     UploadTeamPhotoComponent,
     JoinTeamRequestDialogComponent,
+    UpcomingMatchComponent,
+    MyMatchesComponent,
+    MyStatsCardComponent,
+    MyTeamMenuComponent,
 
   ],
   imports: [

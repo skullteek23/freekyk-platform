@@ -76,6 +76,7 @@ import { PlayersListComponent } from './components/players-list/players-list.com
 import { SearchableFormFieldComponent } from '@shared/components/searchable-form-field/searchable-form-field.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TeamPlayerMembersListComponent } from '@shared/components/team-player-members-list/team-player-members-list.component';
+import { DashboardActionShortcutButtonComponent } from '@app/dashboard-action-shortcut-button/dashboard-action-shortcut-button.component';
 
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
@@ -146,7 +147,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PaymentOptionsDialogComponent,
     PlayersListComponent,
     SearchableFormFieldComponent,
-    TeamPlayerMembersListComponent
+    TeamPlayerMembersListComponent,
+    DashboardActionShortcutButtonComponent
   ],
   imports: [
     CommonModule,
@@ -224,7 +226,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PaymentOptionsDialogComponent,
     PlayersListComponent,
     SearchableFormFieldComponent,
-    TeamPlayerMembersListComponent
+    TeamPlayerMembersListComponent,
+    DashboardActionShortcutButtonComponent
   ],
 })
 export class SharedModule { }

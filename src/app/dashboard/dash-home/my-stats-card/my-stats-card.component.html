@@ -1,0 +1,17 @@
+<mat-card class="mat-elevation-z8 dashboard-card">
+  <span mat-card-title class="dash-h5">My Stats</span>
+
+  <div class="stats-container" fxLayout="row wrap" fxLayoutGap="5%">
+    <div class="statistic" fxFlex="45%" *ngFor="let statistic of data" fxLayout="row" fxLayoutGap="8px"
+      fxLayoutAlign="start center">
+      <span class="material-icons-round {{statistic.iconClass}}">
+        {{statistic.icon}}
+      </span>
+      <mat-chip-list class="mat-caption">
+        <mat-chip>
+          {{statistic.value}} {{statistic.label}}
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+</mat-card>
