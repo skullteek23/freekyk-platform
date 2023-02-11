@@ -85,8 +85,6 @@ export class InvitePlayersComponent implements OnInit {
   }
 
   sendInvites(): void {
-    console.log(this.invitesList);
-    return;
     if (this.invitesList.length) {
       const batch = this.ngFire.firestore.batch();
       for (const invite of this.invitesList) {
