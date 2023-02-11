@@ -9,7 +9,7 @@
     <app-players-list [cols]="COLS" [players]="players$ | async" (selectionChange)="createInvites($event)"
       [maxLimit]="15">
     </app-players-list>
-    <div class="button-container" fxLayoutAlign="end center">
+    <div class="button-container" fxLayoutAlign="center center">
       <button type="button" [disabled]="invitesList.length === 0" (click)="sendInvites()"
         class="primaryButton buttonText">
         Send Invites
