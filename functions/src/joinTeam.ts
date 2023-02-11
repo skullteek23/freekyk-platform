@@ -26,6 +26,7 @@ export async function teamJoin(data: { teamID: string, playerID: string }, conte
       type: 2,
       senderID: data.teamID,
       senderName: teamDetails.tname,
+      parentID: data.teamID,
       receiverID: data.playerID,
       date: new Date().getTime(),
       read: 0,

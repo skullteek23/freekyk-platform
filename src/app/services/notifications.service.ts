@@ -70,9 +70,9 @@ export class NotificationsService implements OnDestroy {
       case NotificationTypes.playerRejectInvite:
         this.snackBarService.displayCustomMsg('Your invite was rejected by player!');
         break;
-
-      default:
-        this.snackBarService.displayError('This notification is expired');
+      case NotificationTypes.playerAcceptInvite:
+        this.snackBarService.displayCustomMsg('Player is added to your team list');
+        this.router.navigate(['/dashboard', 'team-management']);
         break;
     }
   }
@@ -167,7 +167,7 @@ export class NotificationsService implements OnDestroy {
         if (response) {
           // user accepts invite
           const data = {
-            teamID: notification?.senderID,
+            teamID: notification?.parentID ? notification?.parentID : notification?.senderID,
             playerID: notification?.receiverID,
           };
 

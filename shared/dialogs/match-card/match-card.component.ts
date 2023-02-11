@@ -5,6 +5,7 @@ import { TeamMembers, Tmember } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';
 import { MatchFixtureOverview, MatchFixture, MatchLineup, MatchDayReport, MatchStatus } from '../../interfaces/match.model';
 import { ListOption } from '../../interfaces/others.model';
+import { PlayerCardComponent } from '../player-card/player-card.component';
 import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.component';
 
 @Component({
@@ -14,8 +15,8 @@ import { ViewGroundCardComponent } from '../view-ground-card/view-ground-card.co
 })
 export class MatchCardComponent implements OnInit {
 
-  homeLineup: string[] = [];
-  awayLineup: string[] = [];
+  homeLineup: Tmember[] = [];
+  awayLineup: Tmember[] = [];
   overViewData: MatchFixtureOverview;
   statsData: MatchDayReport;
   selectedIndex = 0;
@@ -67,13 +68,13 @@ export class MatchCardComponent implements OnInit {
     const homeData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.home.name)).get().toPromise());
     const awayData = (await this.ngFirestore.collection('teams', query => query.where('tname', '==', this.data.away.name)).get().toPromise());
     if (!homeData?.empty && homeData?.docs[0]?.exists) {
-      const membersList: string[] = ((await this.ngFirestore.collection(`teams/${homeData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
+      const membersList: Tmember[] = ((await this.ngFirestore.collection(`teams/${homeData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members;
       this.homeLineup = membersList;
     } else {
       this.homeLineup = [];
     }
     if (!awayData?.empty && awayData?.docs[0]?.exists) {
-      const membersList: string[] = ((await this.ngFirestore.collection(`teams/${awayData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members.map(el => el.name);
+      const membersList: Tmember[] = ((await this.ngFirestore.collection(`teams/${awayData?.docs[0].id}/additionalInfo`).doc('members').get().toPromise()).data() as TeamMembers).members
       this.awayLineup = membersList;
     } else {
       this.awayLineup = [];
@@ -100,6 +101,13 @@ export class MatchCardComponent implements OnInit {
     this.dialog.open(ViewGroundCardComponent, {
       panelClass: 'fk-dialogs',
       data
+    });
+  }
+
+  onOpenPlayerProfile(pid: string): void {
+    const dialogRef = this.dialog.open(PlayerCardComponent, {
+      panelClass: 'fk-dialogs',
+      data: pid,
     });
   }
 }
