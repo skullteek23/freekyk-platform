@@ -1,0 +1,18 @@
+.secondaryButton {
+  width: 100% !important;
+}
+
+.icon {
+  height: 26px;
+  width: 26px;
+  max-height: 26px;
+  max-width: 26px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}

@@ -1,0 +1,19 @@
+<button (click)="onOpenAction()" class="secondaryButton" fxLayout fxLayoutAlign="space-between center">
+  <div fxLayout fxLayoutGap="8px">
+    <div class="icon">
+      <span class="material-icons-round" *ngIf="data?.icon">
+        {{data.icon}}
+      </span>
+      <img [src]="data?.imgUrl" appFallbackImg class="avatar" *ngIf="data?.imgUrl">
+    </div>
+    <span class="mat-body-1"> {{data?.actionLabel}} </span>
+    <span class="mat-caption" fxLayoutAlign="center center" *ngIf="data?.secondaryLabel">
+      {{data.secondaryLabel}}
+    </span>
+    <span class="material-icons-round" fxLayoutAlign="center center" *ngIf="data?.secondaryIcon">
+      {{data.secondaryIcon}}
+    </span>
+  </div>
+
+  <span class="material-icons-round">chevron_right</span>
+</button>
