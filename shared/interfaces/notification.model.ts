@@ -5,6 +5,7 @@ export enum NotificationTypes {
   challengeTeam = 3,
   playerRejectInvite = 4,
   teamRejectInvite = 5,
+  playerAcceptInvite = 6,
 }
 
 export const NotificationTitles = [
@@ -14,6 +15,7 @@ export const NotificationTitles = [
   'Challenge received!',
   'Invite rejected by Player',
   'Invite rejected by Captain',
+  'Player has joined your team',
 ]
 
 export const NotificationFormatter = {

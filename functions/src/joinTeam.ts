@@ -22,7 +22,7 @@ export async function teamJoin(data: { teamID: string, playerID: string }, conte
     throw new functions.https.HttpsError('failed-precondition', 'Player is already in a team');
   } else {
     const batch = db.batch();
-    const notification: NotificationBasic = {
+    const playerNotification: NotificationBasic = {
       type: 2,
       senderID: data.teamID,
       senderName: teamDetails.tname,
@@ -45,17 +45,29 @@ export async function teamJoin(data: { teamID: string, playerID: string }, conte
         capId: teamDetails.captainId
       }
     }
+    const captainNotification: NotificationBasic = {
+      type: 6,
+      senderID: data.playerID,
+      senderName: playerDetails.name,
+      receiverID: teamDetails.captainId,
+      date: new Date().getTime(),
+      read: 0,
+      expire: 0,
+      receiverName: teamDetails.tname
+    }
 
     const memberRef = db.collection('teams').doc(data.teamID).collection('additionalInfo').doc('members');
     const playerRef = db.collection('players').doc(data.playerID);
     const notificationRef = db.collection('notifications').doc();
+    const notificationRef2 = db.collection('notifications').doc();
 
     batch.update(playerRef, { ...playerUpdate });
     batch.update(memberRef, {
       memCount: admin.firestore.FieldValue.increment(1),
       members: admin.firestore.FieldValue.arrayUnion(teamMember),
     });
-    batch.create(notificationRef, notification);
+    batch.create(notificationRef, playerNotification);
+    batch.create(notificationRef2, captainNotification);
 
     return batch.commit();
   }

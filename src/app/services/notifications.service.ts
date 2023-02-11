@@ -131,6 +131,7 @@ export class NotificationsService implements OnDestroy {
             type: NotificationTypes.teamRejectInvite,
             expire: 0,
           };
+          this.markExpired(notification.id);
           this.sendNotification(rejectNotification);
         }
       })
@@ -147,7 +148,7 @@ export class NotificationsService implements OnDestroy {
     const captainName = sessionStorage.getItem('name');
     const data: IJoinTeamDialogData = {
       requestHeading: 'Join team',
-      requestMessage: `Team ${notification.senderName}'s captain wants you to join his team. Are you sure?`,
+      requestMessage: `Team ${notification.senderName}'s captain wants you to join their team. Are you sure?`,
       team: {
         name: notification.senderName,
         captain: captainName
@@ -168,7 +169,7 @@ export class NotificationsService implements OnDestroy {
           const data = {
             teamID: notification?.senderID,
             playerID: notification?.receiverID,
-          }
+          };
 
           this.requestAcceptLoadingStatus.next(true);
           const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.JOIN_TEAM);
@@ -197,6 +198,7 @@ export class NotificationsService implements OnDestroy {
             type: NotificationTypes.playerRejectInvite,
             expire: 0,
           };
+          this.markExpired(notification.id);
           this.sendNotification(rejectNotification);
         }
       })

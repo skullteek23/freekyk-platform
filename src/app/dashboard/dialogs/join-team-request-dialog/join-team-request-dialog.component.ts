@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
@@ -32,7 +33,8 @@ export class JoinTeamRequestDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<JoinTeamRequestDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IJoinTeamDialogData,
     private ngFire: AngularFirestore,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -70,11 +72,23 @@ export class JoinTeamRequestDialogComponent implements OnInit {
   }
 
   accept() {
-    this.closeDialog(1);
+    this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe(response => {
+        if (response) {
+          this.closeDialog(1);
+        }
+      })
   }
 
   reject() {
-    this.closeDialog(0);
+    this.dialog.open(ConfirmationBoxComponent)
+      .afterClosed()
+      .subscribe(response => {
+        if (response) {
+          this.closeDialog(0);
+        }
+      })
   }
 
 }

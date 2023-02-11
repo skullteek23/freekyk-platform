@@ -178,7 +178,7 @@ export class TeamService implements OnDestroy {
 
   getTeamInvites(tid: string): Observable<NotificationBasic[]> {
     return this.ngFire
-      .collection('notifications', (query) => query.where('senderID', '==', tid))
+      .collection('notifications', (query) => query.where('parentID', '==', tid))
       .snapshotChanges()
       .pipe(
         map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as NotificationBasic) } as NotificationBasic))),
