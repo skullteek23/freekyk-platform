@@ -4,14 +4,15 @@
     fxLayoutGap="0px" fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <div fxLayout="column" fxLayoutAlign="center start">
-        <span class="mat-body-1"> {{ formatter?.formatTitle(notification.type) ?
+        <span class="ellipsis limit-width" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption"> {{
+          formatter?.formatTitle(notification.type) ?
           formatter?.formatTitle(notification.type) : 'NA'
           }}
         </span>
-        <span class="sec-menu mat-caption" *ngIf="notification?.senderName">
+        <span class="ellipsis limit-width sec-menu mat-caption" *ngIf="notification?.senderName">
           By {{ notification?.senderName && notification?.senderName !== 'null' ?
           notification?.senderName :
-          ('User#' + (notification.senderID | textShorten: 7)) }}
+          ('User#' + (notification.senderID)) }}
         </span>
       </div>
       <div fxLayoutAlign.lt-md="center center" fxLayout.lt-md="row-reverse" fxLayout.gt-sm="column"
@@ -24,8 +25,8 @@
             <span>Mark as Unread</span>
           </ng-container>
         </a>
-        <span fxHide.gt-sm="true" class="material-icons-round">chevron_right</span>
-        <span class="mat-body-2 notif_time" ngClass.lt-md="mat-caption">
+        <span fxHide.gt-sm="true" class="no-left material-icons-round">chevron_right</span>
+        <span class="mat-body-2 notif_time" ngClass.lt-md="mat-caption time-width">
           {{ notification.date | date: CUSTOM_FORMAT }}
         </span>
       </div>

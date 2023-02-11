@@ -6,8 +6,8 @@
 
 </mat-toolbar>
 <div class="feedback-container container-2" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="16px">
-  <span class="mat-body-1" [ngClass]="{'left-centered': data?.team}">
-    {{data.requestMessage}}
+  <span class="mat-body-1" [ngClass.gt-sm]="{'left-centered': data?.team, 'center': !data?.team}"
+    [innerHtml]="data.requestMessage">
   </span>
 
   <ng-container *ngIf="data?.team">

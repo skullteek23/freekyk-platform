@@ -4,7 +4,7 @@
   width: 100%;
   opacity: 0.8;
   border-radius: var(--borderRadiusCard);
-  padding: 8px 16px;
+  padding: 8px 12px;
   background-color: white;
 }
 
@@ -19,4 +19,18 @@
 
 .notif_time {
   color: var(--primaryColor);
+}
+
+@media screen and (max-width: 600px) {
+  .limit-width {
+    max-width: 165px;
+  }
+
+  .time-width {
+    width: 60px;
+  }
+
+  .no-left {
+    margin-left: 0 !important;
+  }
 }

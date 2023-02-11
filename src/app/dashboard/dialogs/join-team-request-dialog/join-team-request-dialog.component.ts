@@ -65,7 +65,7 @@ export class JoinTeamRequestDialogComponent implements OnInit {
       })
   }
 
-  closeDialog(value: number) {
+  closeDialog(value = null) {
     this.dialogRef.close(value);
   }
 

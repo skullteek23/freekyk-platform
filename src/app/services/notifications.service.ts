@@ -10,9 +10,7 @@ import {
   NotificationTypes,
 } from '@shared/interfaces/notification.model';
 import { SnackbarService } from './snackbar.service';
-import { InviteAcceptCardComponent } from '../dashboard/dialogs/invite-accept-card/invite-accept-card.component';
 import { DashState } from '../dashboard/store/dash.reducer';
-import { checkProfileComplete } from './team.service';
 import { InvitePlayersComponent } from '../dashboard/dialogs/invite-players/invite-players.component';
 import { IJoinTeamDialogData, JoinTeamRequestDialogComponent } from '@app/dashboard/dialogs/join-team-request-dialog/join-team-request-dialog.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
@@ -66,6 +64,12 @@ export class NotificationsService implements OnDestroy {
       case NotificationTypes.captainJoinInvite:
         this.openCaptainRequestDialog(notification);
         break;
+      case NotificationTypes.teamRejectInvite:
+        this.snackBarService.displayCustomMsg('Your invite was rejected by team captain!');
+        break;
+      case NotificationTypes.playerRejectInvite:
+        this.snackBarService.displayCustomMsg('Your invite was rejected by player!');
+        break;
 
       default:
         this.snackBarService.displayError('This notification is expired');
@@ -76,7 +80,7 @@ export class NotificationsService implements OnDestroy {
   openPlayerRequestDialog(notification: NotificationBasic) {
     const data: IJoinTeamDialogData = {
       requestHeading: 'Add Player to team',
-      requestMessage: 'Are you sure you want to add this player to your team?',
+      requestMessage: `${notification.senderName} wants to join your team. Are you sure?`,
       player: {
         uid: notification?.senderID,
         name: notification?.senderName
@@ -92,7 +96,8 @@ export class NotificationsService implements OnDestroy {
 
     dialogRef.afterClosed()
       .subscribe(response => {
-        if (response) {
+        if (response === 1) {
+          // captain accepts invite
           const tid = sessionStorage.getItem('tid');
           if (tid) {
             const data = {
@@ -114,16 +119,35 @@ export class NotificationsService implements OnDestroy {
                 this.snackBarService.displayError(error?.message)
               })
           }
+        } else if (response === 0) {
+          // captain rejects invite
+          const rejectNotification: NotificationBasic = {
+            read: 0,
+            senderID: notification.receiverID,
+            senderName: notification.receiverName,
+            receiverID: notification.senderID,
+            receiverName: notification.senderName,
+            date: new Date().getTime(),
+            type: NotificationTypes.teamRejectInvite,
+            expire: 0,
+          };
+          this.sendNotification(rejectNotification);
         }
       })
 
+  }
+
+  sendNotification(notification: NotificationBasic) {
+    return this.ngFire.collection('notifications').add(notification)
+      .then(() => this.snackBarService.displayCustomMsg(`${notification.receiverName} will be notified soon!`))
+      .catch(error => this.snackBarService.displayError('Notification send failed!'));
   }
 
   openCaptainRequestDialog(notification: NotificationBasic) {
     const captainName = sessionStorage.getItem('name');
     const data: IJoinTeamDialogData = {
       requestHeading: 'Join team',
-      requestMessage: 'Are you sure you want to join this team?',
+      requestMessage: `Team ${notification.senderName}'s captain wants you to join his team. Are you sure?`,
       team: {
         name: notification.senderName,
         captain: captainName
@@ -140,6 +164,7 @@ export class NotificationsService implements OnDestroy {
     dialogRef.afterClosed()
       .subscribe(response => {
         if (response) {
+          // user accepts invite
           const data = {
             teamID: notification?.senderID,
             playerID: notification?.receiverID,
@@ -159,6 +184,20 @@ export class NotificationsService implements OnDestroy {
               this.requestAcceptLoadingStatus.next(false);
               this.snackBarService.displayError(error?.message)
             })
+        } else if (response === 0) {
+
+          // user rejects invite
+          const rejectNotification: NotificationBasic = {
+            read: 0,
+            senderID: notification.receiverID,
+            senderName: notification.receiverName,
+            receiverID: notification.senderID ? notification.senderID : notification.parentID,
+            receiverName: notification.senderName,
+            date: new Date().getTime(),
+            type: NotificationTypes.playerRejectInvite,
+            expire: 0,
+          };
+          this.sendNotification(rejectNotification);
         }
       })
   }
@@ -267,44 +306,6 @@ export class NotificationsService implements OnDestroy {
   //       })
   //   );
   // }
-
-  async openTeamOffer(id: string, teamName: string): Promise<any> {
-    this.subscriptions.add(
-      this.store
-        .select('dash')
-        .pipe(map(checkProfileComplete), take(1))
-        .subscribe((data) => {
-          if (data === 1) {
-            this.snackBarService.displayCustomMsg(
-              'Complete your profile to proceed!'
-            );
-          } else if (data === 2) {
-            this.snackBarService.displayCustomMsg('Upload your Photo to proceed!');
-          } else {
-            const dialogRef = this.dialog.open(InviteAcceptCardComponent, {
-              data: teamName,
-              autoFocus: false,
-              restoreFocus: false,
-            });
-            this.subscriptions.add(
-              dialogRef
-                .afterClosed()
-                .pipe(
-                  map((resp) =>
-                    resp !== 'accept' && resp !== 'reject' ? null : resp
-                  ),
-                  tap((resp) =>
-                    resp === 'accept'
-                      ? this.router.navigate(['/dashboard', 'team-management'])
-                      : null
-                  )
-                )
-                .subscribe((response: 'accept' | 'reject' | null) => this.updTeamInviteByNotif(response, id))
-            );
-          }
-        })
-    );
-  }
 
   fetchAndGetAllNotifs(uid: string): Observable<NotificationBasic[]> {
     return this.ngFire

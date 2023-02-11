@@ -2,7 +2,9 @@ export enum NotificationTypes {
   playerJoinRequest = 0,
   captainJoinInvite = 1,
   teamWelcome = 2,
-  challengeTeam = 3
+  challengeTeam = 3,
+  playerRejectInvite = 4,
+  teamRejectInvite = 5,
 }
 
 export const NotificationTitles = [
@@ -10,6 +12,8 @@ export const NotificationTitles = [
   'Team Join Invite',
   'Welcome to the team!',
   'Challenge received!',
+  'Invite rejected by Player',
+  'Invite rejected by Captain',
 ]
 
 export const NotificationFormatter = {
@@ -28,5 +32,6 @@ export interface NotificationBasic {
   type: NotificationTypes,
   id?: string;
   expire: number;
+  parentID?: string;
 }
 

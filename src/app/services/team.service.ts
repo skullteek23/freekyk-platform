@@ -283,6 +283,7 @@ export class TeamService implements OnDestroy {
       mems.findIndex((tm) => tm.id === uid),
       1
     );
+
     const allPromises = [];
     allPromises.push(
       this.ngFire

@@ -68,17 +68,19 @@ export class InvitePlayersComponent implements OnInit {
   createInvites(selection: PlayerBasicInfo[]): void {
     this.invitesList = [];
     const tid = sessionStorage.getItem('tid');
+    const uid = localStorage.getItem('uid');
     if (selection.length) {
       selection.forEach((selection) => {
         this.invitesList.push({
           read: 0,
-          senderID: tid,
+          senderID: uid,
           senderName: this.data,
           receiverID: selection.id,
           date: new Date().getTime(),
           type: 1,
           expire: 0,
-          receiverName: selection.name
+          receiverName: selection.name,
+          parentID: tid
         });
       });
     }

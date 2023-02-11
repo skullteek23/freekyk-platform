@@ -70,6 +70,8 @@ export class DaHoAllFixturesComponent implements OnInit, OnDestroy {
                 this.allResults = [];
               }
             })
+        } else {
+          this.isLoading = false
         }
       })
 
