@@ -33,6 +33,7 @@ export class MyMatchesComponent implements OnInit {
 
   fixtures: MatchFixture[] = [];
   results: MatchFixture[] = [];
+  index = 0;
 
   constructor(
     private dialog: MatDialog

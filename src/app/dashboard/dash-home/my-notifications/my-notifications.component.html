@@ -4,12 +4,9 @@
     <a [routerLink]="['/dashboard', 'account', 'notifications']" class="mat-caption sec-menu">Show All</a>
   </div>
   <!-- list -->
-  <ul *ngIf="!notifications.length">
-    <li class="nofi">
-      <p class="mat-body-1 grey-bg line">No unread notifications!</p>
-    </li>
-  </ul>
-  <app-notifications-list [data]="notifications">
+  <app-no-items-message customText="No unread notifications!"
+    *ngIf="notifications?.length === 0"></app-no-items-message>
+  <app-notifications-list [data]="notifications" *ngIf="notifications.length">
   </app-notifications-list>
   <!-- list -->
 </mat-card>

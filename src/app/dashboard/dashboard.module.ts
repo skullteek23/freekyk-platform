@@ -12,7 +12,6 @@ import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.compone
 import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
 import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
 import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
-import { DaHoNotifsComponent } from './dash-home/da-ho-notifs/da-ho-notifs.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DaTeJoinRequestsComponent } from './dash-team-manag/da-te-members/da-te-join-requests/da-te-join-requests.component';
 import { DaTeMembersComponent } from './dash-team-manag/da-te-members/da-te-members.component';
@@ -28,7 +27,7 @@ import { TeamjoinComponent } from './dialogs/teamjoin/teamjoin.component';
 import { TeamsettingsComponent } from './dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from './dialogs/teamcreate/teamcreate.component';
 import { MemberListComponent } from './dash-team-manag/da-te-members/member-list/member-list.component';
-import { NotificationsListComponent } from './dash-home/da-ho-notifs/notifications-list/notifications-list.component';
+import { NotificationsListComponent } from './dash-home/notifications-list/notifications-list.component';
 import { InviteAcceptCardComponent } from './dialogs/invite-accept-card/invite-accept-card.component';
 import { UploadphotoComponent } from './dialogs/uploadphoto/uploadphoto.component';
 import { ActiveSquadComponent } from './dash-team-manag/da-te-communication/active-squad/active-squad.component';
@@ -67,7 +66,6 @@ import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifi
     AccAddressesComponent,
     AccTicketsComponent,
     DaHoProfileComponent,
-    DaHoNotifsComponent,
     DaTeJoinRequestsComponent,
     DaTeMembersComponent,
     DaTeCommunicationComponent,

@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class NoItemsMessageComponent {
   @Input() items = 'items';
+  @Input() customText = null;
 }

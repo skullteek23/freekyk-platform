@@ -1,9 +1,10 @@
 <mat-card class="mat-elevation-z8 dashboard-card">
   <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
     <span mat-card-title class="dash-h5 align">My Matches</span>
-    <a [routerLink]="['/play', 'fixtures']" class="mat-caption sec-menu">View all matches</a>
+    <a [routerLink]="['/play', 'fixtures']" *ngIf="!index" class="mat-caption sec-menu">View all fixtures</a>
+    <a [routerLink]="['/play', 'results']" *ngIf="index" class="mat-caption sec-menu">View all results</a>
   </div>
-  <mat-tab-group>
+  <mat-tab-group [(selectedIndex)]="index">
     <mat-tab label="Fixtures">
       <ul>
         <app-no-items-message items="fixtures" *ngIf="fixtures?.length === 0"></app-no-items-message>
