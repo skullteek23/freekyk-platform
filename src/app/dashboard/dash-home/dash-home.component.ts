@@ -179,14 +179,6 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/support'])
   }
 
-  getTeamInfo() {
-    this.userMatchesData
-  }
-
-  createTeam(): void {
-    this.teamService.onOpenCreateTeamDialog();
-  }
-
   openProfile() {
     if (this.profileProgress === 75) {
       this.onboardingStepsTrackerService.onShareProfile();

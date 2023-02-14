@@ -54,8 +54,10 @@ export class PlayerCardComponent implements OnInit {
         share()
       )
       .subscribe(response => {
-        this.data = response;
-        this.getAdditionalInfo();
+        if (response) {
+          this.data = response;
+          this.getAdditionalInfo();
+        }
       });
   }
 

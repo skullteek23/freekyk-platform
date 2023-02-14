@@ -52,6 +52,7 @@ import { UpcomingMatchComponent } from './dash-home/upcoming-match/upcoming-matc
 import { MyMatchesComponent } from './dash-home/my-matches/my-matches.component';
 import { MyStatsCardComponent } from './dash-home/my-stats-card/my-stats-card.component';
 import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.component';
+import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifications.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.compo
     MyMatchesComponent,
     MyStatsCardComponent,
     MyTeamMenuComponent,
+    MyNotificationsComponent,
 
   ],
   imports: [
