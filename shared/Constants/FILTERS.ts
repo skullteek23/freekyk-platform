@@ -3,11 +3,6 @@ import { ownershipTypes } from "@shared/interfaces/ground.model";
 
 export const SeasonsFilters: any = {
   Premium: ['Yes', 'No'],
-  'Containing Tournaments': [
-    'Freekyk Community Play',
-    'Freekyk Knockout Championship',
-    'Freekyk Premier League',
-  ],
   Status: ['Live', 'Finished', 'Cancelled']
 };
 export const PlayersFilters = {
@@ -46,7 +41,6 @@ export const GroundsFilters = {
 export const FilterHeadingMap = {
   Premium: 'premium',
   Location: 'locCity',
-  'Containing Tournaments': 'cont_tour',
   Team: 'team.name',
   Gender: 'gen',
   Verified: 'isVerified',
@@ -61,9 +55,6 @@ export const FilterHeadingMap = {
 export const FilterValueMap = {
   Yes: true,
   No: false,
-  'Freekyk Knockout Championship': 'FKC',
-  'Freekyk Premier League': 'FPL',
-  'Freekyk Community Play': 'FCP',
   Male: 'M',
   Female: 'F',
   Freekyk: 'FK',

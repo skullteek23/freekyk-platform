@@ -58,12 +58,13 @@ export class AdminPaymentComponent implements OnInit {
       this.paymentService.generateOrder(Number(fees), null)
         .then((response) => {
           if (response) {
-            const options: ICheckoutOptions = this.getSeasonCreationCheckoutOptions(fees);
+            const options: Partial<ICheckoutOptions> = this.getSeasonCreationCheckoutOptions(fees);
             options.order_id = response['id'];
             options.modal = {
               ondismiss: () => {
                 this.failure();
                 this.errorMessage = 'To proceed further, payment must be done!';
+                return 0;
               }
             }
             this.paymentService.openCheckoutPage(options);
@@ -82,7 +83,7 @@ export class AdminPaymentComponent implements OnInit {
     }
   }
 
-  getSeasonCreationCheckoutOptions(fees: string): ICheckoutOptions {
+  getSeasonCreationCheckoutOptions(fees: string): Partial<ICheckoutOptions> {
     const options = {
       ...UNIVERSAL_OPTIONS,
       description: `Season Creation Fees`,

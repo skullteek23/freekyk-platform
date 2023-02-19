@@ -1,21 +1,16 @@
 import { environment } from '../../environments/environment';
+import * as functions from 'firebase-functions';
 
 const Razorpay = require('razorpay');
 
 export async function generateOrder(data: any, context: any): Promise<any> {
   const options: any = {
     currency: 'INR',
+    partial_payment: true,
+    amount: Number(data.amount) * 100, // amount in paise
+    first_payment_min_amount: Number(data.minimumPartial) * 100,
+    receipt: data.uid
   };
-  if (data.hasOwnProperty('amount')) {
-    options['amount'] = Number(data.amount) * 100; // amount in paise
-  }
-  if (data.hasOwnProperty('amountPartial')) {
-    options['partial_payment'] = true;
-    options['first_payment_min_amount'] = Number(data.amountPartial) * 100; // amount in paise
-  }
-  if (data.hasOwnProperty('uid')) {
-    options['receipt'] = data.uid;
-  }
 
   const instanceOptions = {
     key_id: environment.razorPay.key_id,
@@ -23,13 +18,9 @@ export async function generateOrder(data: any, context: any): Promise<any> {
   }
   try {
     const instance = new Razorpay(instanceOptions);
-
-    if (instance) {
-      return instance.orders.create(options);
-    }
-    return true;
+    return instance.orders.create(options);
   } catch (error) {
-    return true;
+    throw new functions.https.HttpsError('unauthenticated', 'Error saving Order details!');
   }
 
 }

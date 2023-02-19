@@ -1,16 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { map, share, take } from 'rxjs/operators';
-import { ICheckoutOptions, PaymentService, PAYMENT_TYPE } from '@shared/services/payment.service';
+import { forkJoin } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ICheckoutOptions, PaymentService, } from '@shared/services/payment.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { OrderTypes, RazorPayOrder, userOrder } from '@shared/interfaces/order.model';
+import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { HOME, LOADING, SUCCESS, } from '../constants/constants';
 import * as fromApp from '../../store/app.reducer';
-import { Router } from '@angular/router';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CTAButtonPaymentOption, IPaymentOptions, PaymentOptionsDialogComponent } from '@shared/dialogs/payment-options-dialog/payment-options-dialog.component';
@@ -18,8 +15,10 @@ import { environment } from 'environments/environment';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SEASON_OFFERS_MORE_INFO } from '@shared/web-content/WEBSITE_CONTENT';
-import { AGE_CATEGORY, Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
+import { Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
 import { EnlargeService } from '@app/services/enlarge.service';
+import { ArraySorting } from '@shared/utils/array-sorting';
+import { Router } from '@angular/router';
 
 export enum OperationStatus {
   default,
@@ -32,17 +31,16 @@ export enum OperationStatus {
   templateUrl: './dash-participate.component.html',
   styleUrls: ['./dash-participate.component.scss'],
 })
-export class DashParticipateComponent implements OnInit, OnDestroy {
+export class DashParticipateComponent implements OnInit {
 
   readonly statusEnum = OperationStatus;
 
   teamID: string = null;
-  isUserAllowedParticipation = false;
   seasons: SeasonBasicInfo[] = [];
-  ordersList: userOrder[] = [];
-  subscriptions = new Subscription();
+  ordersList: Partial<RazorPayOrder>[] = [];
   status = OperationStatus.default;
-  formatter = Formatters
+  formatter = Formatters;
+  selectedSeason: SeasonBasicInfo = null;
 
   constructor(
     private ngFire: AngularFirestore,
@@ -50,129 +48,187 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private snackBarService: SnackbarService,
     private dialog: MatDialog,
-    private enlargeService: EnlargeService
+    private enlargeService: EnlargeService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.getSeasons();
-    this.getUserOrders();
-    this.getTeamInfo();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
-  getTeamInfo() {
-    this.subscriptions.add(this.store.select('team').pipe(take(1)).subscribe((data) => {
-      const uid = localStorage.getItem('uid');
-      if (data?.basicInfo?.tname) {
-        this.teamID = data?.basicInfo?.id;
-        this.isUserAllowedParticipation = data.basicInfo.captainId === uid && data.teamMembers.members.length >= ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT;
-      } else {
-        this.teamID = null;
-        this.isUserAllowedParticipation = false;
-      }
-    }));
   }
 
   getSeasons() {
+    const uid = localStorage.getItem('uid');
     this.status = OperationStatus.loading;
-    this.ngFire.collection('seasons').snapshotChanges()
-      .pipe(
-        map((resp) => {
-          if (resp) {
-            const seasons: SeasonBasicInfo[] = [];
-            resp.forEach(doc => {
-              const data = doc.payload.doc.data() as SeasonBasicInfo;
-              const id = doc.payload.doc.id;
-              const discountedFees = this.paymentService.getFeesAfterDiscount(data.feesPerTeam, data.discount);
-              if (data.status === 'PUBLISHED' || data.status === 'CANCELLED') {
-                seasons.push({ id, ...data, discountedFees } as SeasonBasicInfo);
-              }
-            });
-            return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
-          }
-          return [];
+    forkJoin([
+      this.ngFire.collection('seasons').get(),
+      this.ngFire.collection('orders', (query) => query.where('receipt', '==', uid)).get()
+    ]).subscribe({
+      next: (response) => {
+        if (response && response.length === 2) {
+          this.ordersList = response[1].docs.map(el => ({ id: el.id, ...el.data() as Partial<RazorPayOrder> }));
+          const list = response[0].docs.map(season => {
+            const docData = season.data() as SeasonBasicInfo;
+            const docID = season.id;
+            const slotExists = this.ordersList.find(order => order.seasonID === docID);
+
+            docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);;
+            if (slotExists) {
+              docData.slotBooked = true;
+              docData.isAmountDue = slotExists.amount_due > 0;
+            } else {
+              docData.slotBooked = false;
+              docData.isAmountDue = true;
+            }
+            docData.isFreeSeason = docData.discountedFees === 0;
+
+            return { id: docID, ...docData };
+          });
+          this.seasons = list.filter(season => season.status !== 'REMOVED' && season.status !== 'FINISHED');
+          this.seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
+        } else {
+          this.ordersList = [];
+          this.seasons = [];
         }
-        ),
-      )
+        this.status = OperationStatus.default;
+      },
+      error: () => {
+        this.snackBarService.displayError('Error getting seasons!');
+        this.status = OperationStatus.default;
+      }
+    });
+  }
+
+  initCheckoutFlow(season: SeasonBasicInfo) {
+    this.selectedSeason = season;
+    this.status = OperationStatus.loading;
+    this.isSeasonEntryValid(season)
+      .then(() => {
+        const order = this.ordersList.find(or => or.seasonID === season.id);
+        if (order) {
+          this.openPartialPaymentPage(order.id, order.amount_due);
+        } else {
+          this.paymentService.generateOrder(season.discountedFees, MatchConstants.MINIMUM_PAYMENT_AMOUNT)
+            .then(this.openNewCheckoutPage.bind(this, season.discountedFees))
+            .catch(this.onErrorOrderGeneration.bind(this))
+        }
+      })
+      .catch(() => {
+        this.status = OperationStatus.default;
+        this.selectedSeason = null;
+      })
+  }
+
+  openPartialPaymentPage(orderID: string, amountDue: number) {
+    const options: Partial<ICheckoutOptions> = {
+      ...UNIVERSAL_OPTIONS,
+      order_id: orderID,
+      amount: amountDue,
+      handler: this.handlePartialPaymentSuccess.bind(this),
+      modal: {
+        backdropclose: false,
+        escape: false,
+        confirm_close: true,
+        ondismiss: this.onClosePaymentPage.bind(this)
+      }
+    }
+    this.paymentService.openCheckoutPage(options);
+  }
+
+  openNewCheckoutPage(totalAmount: number, order: Partial<RazorPayOrder>) {
+    const options: Partial<ICheckoutOptions> = {
+      ...UNIVERSAL_OPTIONS,
+      order_id: order.id,
+      amount: totalAmount * 100,
+      handler: this.handlePaymentSuccess.bind(this),
+      modal: {
+        backdropclose: false,
+        escape: false,
+        confirm_close: true,
+        ondismiss: this.onClosePaymentPage.bind(this)
+      }
+    }
+    this.paymentService.openCheckoutPage(options);
+  }
+
+  onClosePaymentPage() {
+    window.location.reload();
+  }
+
+  onErrorOrderGeneration() {
+    this.status = OperationStatus.default;
+    this.snackBarService.displayError('Error generating order from Razorpay! Try again later');
+  }
+
+  handlePaymentSuccess(response) {
+    this.paymentService.verifyPayment(response)
       .subscribe({
-        next: (response) => {
-          this.status = OperationStatus.default;
-          if (response) {
-            this.seasons = response;
-          }
+        next: () => {
+          const allPromises = [];
+          const tid = sessionStorage.getItem('tid');
+          allPromises.push(this.paymentService.saveOrder(this.selectedSeason.id, OrderTypes.season, response).toPromise());
+          allPromises.push(this.paymentService.participate(this.selectedSeason, tid).toPromise());
+
+          Promise.all(allPromises)
+            .then(() => {
+              this.status = OperationStatus.success;
+              this.snackBarService.displayCustomMsg('Your Participation is confirmed!');
+            })
+            .catch((error) => {
+              this.status = OperationStatus.default;
+              this.snackBarService.displayError(error.message);
+            })
         },
-        error: () => {
-          this.snackBarService.displayError('Error getting seasons!');
-          this.status = OperationStatus.default;
+        error: (error) => {
+          this.snackBarService.displayError(error?.message);
         }
       });
   }
 
-  getUserOrders() {
-    const uid = localStorage.getItem('uid');
-    if (uid) {
-      this.subscriptions.add(
-        this.ngFire.collection('orders', (query) => query.where('by', '==', uid).where('type', '==', OrderTypes.season)).get()
-          .subscribe((res) => {
-            this.ordersList = !res.empty ? res.docs.map(el => el.data() as userOrder) : [];
-          })
-      );
-    }
+  handlePartialPaymentSuccess(response) {
+    this.paymentService.verifyPayment(response)
+      .subscribe({
+        next: () => {
+          this.paymentService.updateOrder(response).toPromise()
+            .then(() => {
+              this.status = OperationStatus.success;
+              this.snackBarService.displayCustomMsg('Your payment is completed!');
+            })
+            .catch((error) => {
+              this.status = OperationStatus.default;
+              this.snackBarService.displayError(error.message);
+            })
+        },
+        error: (error) => {
+          this.snackBarService.displayError(error?.message);
+        }
+      });
   }
 
   async openOffers(season: SeasonBasicInfo): Promise<void> {
+    this.selectedSeason = season;
     this.isSeasonEntryValid(season)
       .then(() => {
-        const data = this.getOffersData(season);
         const dialogRef = this.dialog.open(PaymentOptionsDialogComponent, {
           panelClass: 'large-dialogs',
-          data
+          data: this.getOffersData()
         });
 
         dialogRef.afterClosed()
-          .subscribe((response: CTAButtonPaymentOption) => {
-            if (response && !isNaN(response.amount) && response.amount > 0) {
-              this.initCheckoutFlow(season, response);
-            } else if (response?.amount === 0) {
+          .subscribe((dialogResponse: CTAButtonPaymentOption) => {
+            if (dialogResponse?.amount === 0) {
               this.participateInFreeSeason(season);
             }
           })
       })
-      .catch(() => { })
+      .catch(() => {
+        this.selectedSeason = null;
+      })
   }
 
-  initCheckoutFlow(seasonInfo: SeasonBasicInfo, selection: CTAButtonPaymentOption) {
-    this.status = OperationStatus.loading;
-    const totalAmount = this.paymentService.getFeesAfterDiscount(seasonInfo.feesPerTeam, seasonInfo.discount);
-    const partialAmount = selection.isPartial ? selection.amount : null;
-    this.paymentService.generateOrder(totalAmount, partialAmount)
-      .then(this.parseGeneratedOrder.bind(this, totalAmount, partialAmount))
-      .catch(this.handleOrderGenerationError.bind(this))
-
-  }
-
-  parseGeneratedOrder(totalAmount: number, partialAmount: number, order: RazorPayOrder) {
-    this.status = OperationStatus.default;
-    const options: ICheckoutOptions = {
-      ...UNIVERSAL_OPTIONS,
-      amount: totalAmount,
-    }
-    if (totalAmount !== partialAmount) {
-
-    }
-  }
-
-  handleOrderGenerationError() {
-    this.status = OperationStatus.default;
-    this.snackBarService.displayError('Error generating order from Razorpay! Try again later')
-  }
-
-  getOffersData(season: SeasonBasicInfo) {
+  getOffersData() {
+    const season = this.selectedSeason;
     const fees = this.paymentService.getFeesAfterDiscount(season.feesPerTeam, season.discount);
-    const expiryOffer = season.start_date - MatchConstants.ONE_HOUR_IN_MILLIS;
+    const expiryOffer = season.start_date;
     const options: IPaymentOptions[] = [];
     const offerPercent = 10;
     const amount1 = (offerPercent / 100) * fees;
@@ -183,14 +239,14 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
         {
           primary: true,
           text: `Book Now @ Rs.${amount1}`,
-          disabled: fees > 0,
+          disabled: false,
           amount: amount1,
           isPartial: true
         },
         {
           primary: false,
           text: `Pay Remaining Fee (Rs.${amount2})`,
-          disabled: true,
+          disabled: false,
           amount: amount2,
           isPartial: true
         }
@@ -204,14 +260,14 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     })
 
     const discount = 15;
-    const amount = discount / 100 * fees;
+    const amount = fees - (discount / 100 * fees);
     options.push({
-      subheading: `Pay full participation fees & get ${discount}% discount`,
+      subheading: `Pay full participation fees & get ${discount}% additional discount`,
       cta: [
         {
           primary: true,
           text: `Participate @Rs.${amount} `,
-          disabled: fees > 0,
+          disabled: false,
           amount,
           isPartial: false
         },
@@ -225,6 +281,14 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     })
     return options;
   }
+
+
+
+  onNavigateToFixtures() {
+    this.router.navigate(['/s', this.selectedSeason.name]);
+  }
+
+
 
   async participateInFreeSeason(season: SeasonBasicInfo): Promise<void> {
     this.dialog.open(ConfirmationBoxComponent).afterClosed()
@@ -247,55 +311,91 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   }
 
   async isSeasonEntryValid(season: SeasonBasicInfo): Promise<void> {
-    if (!this.isUserAllowedParticipation) {
-      this.snackBarService.displayError('Only team captains can make payments for the team');
+    if (await this.isUserNotCaptain()) {
+      this.snackBarService.displayCustomMsg('Only team captains can make payments for the team');
       return Promise.reject();
-    } else if (season.status !== 'PUBLISHED') {
-      this.snackBarService.displayError('Season is either cancelled or finished');
+    } else if (await this.isMembersNotEligible()) {
+      this.snackBarService.displayError(`Minimum players needed: ${ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT}`);
       return Promise.reject();
-    } else if ((await this.isTeamNotAllowed(season.id))) {
+    } else if ((await this.isTeamNotAllowed())) {
       this.snackBarService.displayError('Participation is restricted to certain teams');
       return Promise.reject();
-    } else if ((await this.isTeamInvalidAgeGroup(season.ageCategory))) {
+    } else if ((await this.isTeamInvalidAgeGroup())) {
       this.snackBarService.displayError('Your team age category is not allowed!');
       return Promise.reject();
-    } else if ((await this.isTeamParticipant(season.id))) {
+    } else if ((await this.isTeamParticipant())) {
       this.snackBarService.displayError('Team is already a participant');
       return Promise.reject();
-    } else if ((await this.isParticipationUnavailable(season.id, season.p_teams))) {
+    } else if ((await this.isParticipationUnavailable())) {
       this.snackBarService.displayError('All Participation slots are filled!');
+      return Promise.reject();
+    } else if (this.isSeasonCancelled()) {
+      this.snackBarService.displayCustomMsg('Season is cancelled by the organizer!');
+      return Promise.reject();
+    } else if (this.isSeasonFinished()) {
+      this.snackBarService.displayCustomMsg('Season is finished!');
       return Promise.reject();
     } else {
       return Promise.resolve();
     }
   }
 
-  async isTeamParticipant(seasonID: string): Promise<boolean> {
-    if (seasonID && this.teamID) {
-      return (await this.ngFire.collection(`seasons/${seasonID}/participants`, query => query.where('tid', '==', this.teamID)).get().toPromise()).empty === false;
+  isSeasonCancelled() {
+    return this.selectedSeason?.status === 'CANCELLED';
+  }
+
+  isSeasonFinished() {
+    return this.selectedSeason?.status === 'FINISHED';
+  }
+
+  async getTeamInfo() {
+    return await this.store.select('team').pipe(take(1)).toPromise();
+  }
+
+  async isUserNotCaptain(): Promise<boolean> {
+    const info = await this.getTeamInfo();
+    const uid = localStorage.getItem('uid');
+    if (uid && info) {
+      return info?.basicInfo?.captainId !== uid;
+    }
+    return true;
+  }
+
+  async isMembersNotEligible(): Promise<boolean> {
+    const info = await this.getTeamInfo();
+    const uid = localStorage.getItem('uid');
+    if (uid && info) {
+      return info.teamMembers.members.length < ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT;
+    }
+    return true;
+  }
+
+  async isTeamParticipant(): Promise<boolean> {
+    if (this.selectedSeason?.id && this.teamID) {
+      return (await this.ngFire.collection(`seasons/${this.selectedSeason?.id}/participants`, query => query.where('tid', '==', this.teamID)).get().toPromise()).empty === false;
     }
     return false;
   }
 
-  async isTeamInvalidAgeGroup(compareAgeCat: AGE_CATEGORY) {
-    if (compareAgeCat === 99) {
+  async isTeamInvalidAgeGroup() {
+    if (this.selectedSeason?.ageCategory === 99) {
       return false;
     } else if (this.teamID) {
-      return ((await this.ngFire.collection(`teams/${this.teamID}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as TeamMoreInfo).tageCat !== compareAgeCat
+      return ((await this.ngFire.collection(`teams/${this.teamID}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as TeamMoreInfo).tageCat !== this.selectedSeason?.ageCategory
     }
     return false;
   }
 
-  async isParticipationUnavailable(seasonID: string, maxCapacity: number): Promise<boolean> {
-    if (seasonID && this.teamID) {
-      return (await this.ngFire.collection(`seasons/${seasonID}/participants`).get().toPromise()).size >= maxCapacity;
+  async isParticipationUnavailable(): Promise<boolean> {
+    if (this.selectedSeason && this.teamID) {
+      return (await this.ngFire.collection(`seasons/${this.selectedSeason.id}/participants`).get().toPromise()).size >= this.selectedSeason.p_teams;
     }
     return false;
   }
 
-  async isTeamNotAllowed(seasonID: string): Promise<boolean> {
-    if (seasonID && this.teamID) {
-      const moreInfo = ((await this.ngFire.collection(`seasons/${seasonID}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as SeasonAbout);
+  async isTeamNotAllowed(): Promise<boolean> {
+    if (this.selectedSeason?.id && this.teamID) {
+      const moreInfo = ((await this.ngFire.collection(`seasons/${this.selectedSeason?.id}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as SeasonAbout);
       if (moreInfo.hasOwnProperty('allowedParticipants') && !moreInfo.allowedParticipants.includes(this.teamID)) {
         return true;
       }

@@ -6,7 +6,7 @@
 </div>
 <div *ngIf="status === statusEnum.success" class="loading-container" fxLayoutAlign="center center">
   <div class="loading-container" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
-    <app-tick-animation></app-tick-animation>
+    <app-tick-animation (finishAnimation)="onNavigateToFixtures()"></app-tick-animation>
     <span class="mat-body-1 center"> Payment Completed! <br> Freekyk wishes you all the best for your season. </span>
   </div>
 </div>
@@ -18,10 +18,8 @@
     fxLayoutAlign.lt-md="center center" fxLayout.lt-md="column">
     <mat-card class="dashboard-card mat-elevation-z8">
       <mat-card-header>
-        <mat-card-title class="dash-h5 season-title ellipsis">
-          <a routerLink="/s/{{season.name}}">
-            {{season.name}}
-          </a>
+        <mat-card-title class="dash-h5 season-title">
+          {{season.name}}
         </mat-card-title>
         <mat-card-subtitle class="mat-caption ellipsis">Registration ends on {{ season.lastRegDate | date: 'short'
           }}</mat-card-subtitle>
@@ -54,15 +52,27 @@
               <span class="mat-body-2">{{season.discountedFees | currency:'INR'}}</span>
             </mat-chip>
           </mat-chip-list>
-
         </div>
 
-        <mat-card-actions>
-          <button [disabled]="!isUserAllowedParticipation" mat-stroked-button (click)="openOffers(season)"
-            color="primary">
-            {{season.discountedFees > 0 ? 'Book your slot' : 'Participate'}}
+        <mat-card-actions *ngIf="season.isFreeSeason">
+          <button mat-stroked-button (click)="openOffers(season)" color="primary">
+            Participate
           </button>
         </mat-card-actions>
+        <mat-card-actions *ngIf="!season.isFreeSeason && season.isAmountDue">
+          <button mat-stroked-button (click)="initCheckoutFlow(season)" color="primary">
+            {{season.slotBooked ? 'Pay Remaining Amount' : 'Pay Now'}}
+          </button>
+        </mat-card-actions>
+        <ng-container *ngIf="season.slotBooked">
+          <div class="section-footer" fxLayoutAlign="start center" fxLayoutGap="8px">
+            <span class="material-icons-round filled">check_circle</span>
+            <span class="mat-caption ">Your slot has been booked.</span>
+            <a class="mat-caption" [routerLink]="['/play/fixtures']" [queryParams]="{Season: season.name}">
+              View fixtures
+            </a>
+          </div>
+        </ng-container>
       </mat-card-content>
     </mat-card>
   </li>

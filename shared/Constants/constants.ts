@@ -53,6 +53,7 @@ export class MatchConstants {
   static readonly RESCHEDULE_MINIMUM_GAP_MILLISECONDS = 86400000; // 24 Hours
   static readonly SEASON_CANCELLATION_ONT_PERCENTAGE_MODIFIER = 0.8 // 80 %
   static readonly CANCELLATION_FIRST_N_MATCHES = 3;
+  static readonly MINIMUM_PAYMENT_AMOUNT = 150;
 }
 export const PLAYING_POSITIONS = [
   {
@@ -109,7 +110,7 @@ export class ProfileConstants {
   static readonly ASK_QUESTION_TITLE = 200;
   static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
   static readonly MIN_TEAM_CREATION_ELIGIBLE_PLAYER_LIMIT = 0;
-  static readonly MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT = 1;
+  static readonly MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT = 6;
   static readonly MAX_TEAM_ELIGIBLE_PLAYER_LIMIT = 15;
   static readonly SUPPORT_QUERY_LIMIT = 1000;
   static readonly DEACTIVATION_REASON_LIMIT = 500;

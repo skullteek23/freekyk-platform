@@ -18,7 +18,7 @@
           </button>
         </div>
         <span class="mat-body-1 red">
-          Offers ends by {{paymentOption.offerExpiry | date: 'fullDate'}}
+          Offers ends by {{paymentOption.offerExpiry | date: 'short'}}
         </span>
         <a (click)="onReadMore(paymentOption.readMoreData)">Read More</a>
       </li>

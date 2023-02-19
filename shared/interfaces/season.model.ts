@@ -23,6 +23,9 @@ export interface SeasonBasicInfo {
   imgpath?: string;
   id?: string;
   discountedFees?: number;
+  slotBooked?: boolean;
+  isFreeSeason?: boolean;
+  isAmountDue?: boolean;
 }
 export interface SeasonAbout {
   description: string;
