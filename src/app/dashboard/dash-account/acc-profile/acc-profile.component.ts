@@ -14,7 +14,7 @@ import { LocationService } from '@shared/services/location-cities.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatchConstants, PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
 import { DeactivateProfileRequestComponent } from '@app/dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
-import { map, share } from 'rxjs/operators';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 @Component({
   selector: 'app-acc-profile',
   templateUrl: './acc-profile.component.html',
@@ -41,12 +41,15 @@ export class AccProfileComponent implements OnInit, OnDestroy {
   countries: string[] = [];
   states: string[] = [];
   cities: string[] = [];
+  profilePhoto: string;
   subscriptions = new Subscription();
   emptyControlArray = new FormControl(null, [
     Validators.required,
     Validators.pattern(RegexPatterns.alphaNumberWithSpace),
   ]);
   isDisableArrayButton = true;
+  isLoaderShown = false;
+  uploadImageTask: AngularFireUploadTask;
 
 
   constructor(
@@ -57,10 +60,12 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private snackBarService: SnackbarService,
     private locationService: LocationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private ngStorage: AngularFireStorage,
   ) { }
 
   ngOnInit(): void {
+    this.getProfilePhoto();
     this.initForm();
     this.getCountries();
     this.getSavedValues();
@@ -70,6 +75,16 @@ export class AccProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  getProfilePhoto() {
+    this.store.select('dash').subscribe(response => {
+      if (response) {
+        this.profilePhoto = response.playerMoreInfo.imgpath_lg
+      } else {
+        this.profilePhoto = null;
+      }
+    })
   }
 
   initForm() {
@@ -536,14 +551,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
     // backend code here
   }
 
-  onChangeCredentials(changeElement: 'email' | 'password'): void {
-    // log out user and then login again
-    this.dialog.open(UpdateInfoComponent, {
-      data: changeElement,
-      autoFocus: false,
-      disableClose: true,
-    });
-  }
+
 
   minimumAge(control: AbstractControl): Observable<Date> {
     return new Date(control?.value).getTime() >=
@@ -552,24 +560,28 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       : of(null);
   }
 
-  onDeactivateAccount(): void {
-    const dialogRef = this.dialog.open(DeactivateProfileRequestComponent, {
-      panelClass: 'fk-dialogs',
-    });
 
-    dialogRef.afterClosed().subscribe(userResponse => {
-      if (userResponse) {
-        this.ngFire.collection('tickets').doc(userResponse.id).set(userResponse)
-          .then(
-            () => {
-              this.snackBarService.displayCustomMsg('Account Deactivation Request Submitted!');
-              this.authService.onLogout();
-            }, err => {
-              this.snackBarService.displayError('Request raise failed!');
-            }
-          )
-          .catch(err => this.snackBarService.displayError());
-      }
-    });
+
+  async uploadPhoto(file: File): Promise<any> {
+    if (!file) {
+      this.snackBarService.displayError();
+      return;
+    }
+    const uid = localStorage.getItem('uid');
+    this.uploadImageTask = this.ngStorage.upload('/profileImages/profileimage_' + uid, file);
+    const downloadURL: string = await this.uploadImageTask.then((res) => res.ref.getDownloadURL());
+    if (downloadURL) {
+      return this.ngFire
+        .collection(`players/${uid}/additionalInfo`)
+        .doc('otherInfo')
+        .set({ imgpath_lg: downloadURL, }, { merge: true })
+        .then(() => {
+          this.snackBarService.displayCustomMsg('Your Profile Photo has been set!')
+        })
+        .catch(() => this.snackBarService.displayError())
+        .finally(() => {
+          this.isLoaderShown = false;
+        });
+    }
   }
 }

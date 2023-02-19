@@ -1,0 +1,13 @@
+.no-items,
+.scroll {
+  padding: 10px;
+}
+
+.list-container {
+  height: 75vh;
+
+  .scroll {
+    height: 100%;
+    overflow-y: auto;
+  }
+}

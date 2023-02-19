@@ -1,3 +1,7 @@
+.input-box {
+  padding: 10px;
+}
+
 .plAvatar {
   height: 32px;
   width: 32px;
@@ -43,7 +47,16 @@
   overflow: initial;
 }
 
+.table-container {
+  width: 100%;
+  max-height: 500px;
+  padding: 0 0 0 16px;
+  overflow-y: auto;
+  height: auto
+}
+
 table {
+  width: 100%;
   min-width: 700px;
   overflow-x: auto;
 }

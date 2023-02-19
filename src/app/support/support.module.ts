@@ -7,9 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FaqsComponent } from './faqs/faqs.component';
 import { MaterialModule } from '@shared/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AccTicketsComponent } from '@app/support/acc-tickets/acc-tickets.component';
 
 @NgModule({
-  declarations: [SupportComponent, FaqsComponent],
+  declarations: [SupportComponent, FaqsComponent, AccTicketsComponent],
   imports: [
     CommonModule, SharedModule, SupportRoutingModule, ReactiveFormsModule, FlexLayoutModule,
     MaterialModule

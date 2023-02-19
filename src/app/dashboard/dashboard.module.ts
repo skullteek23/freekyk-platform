@@ -8,19 +8,12 @@ import { DashAccountComponent } from './dash-account/dash-account.component';
 import { DashFooterComponent } from './dash-footer/dash-footer.component';
 import { DashParticipateComponent } from './dash-participate/dash-participate.component';
 import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
-import { AccNotifsComponent } from './dash-account/acc-notifs/acc-notifs.component';
-import { AccAddressesComponent } from './dash-account/acc-addresses/acc-addresses.component';
-import { AccTicketsComponent } from './dash-account/acc-tickets/acc-tickets.component';
-import { DaHoProfileComponent } from './dash-home/da-ho-profile/da-ho-profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DaTeJoinRequestsComponent } from './dash-team-manag/da-te-members/da-te-join-requests/da-te-join-requests.component';
 import { DaTeMembersComponent } from './dash-team-manag/da-te-members/da-te-members.component';
-import { DaTeCommunicationComponent } from './dash-team-manag/da-te-communication/da-te-communication.component';
 import { DaTeGalleryComponent } from './dash-team-manag/da-te-gallery/da-te-gallery.component';
-import { DaTeStatsComponent } from './dash-team-manag/da-te-stats/da-te-stats.component';
 import { DaTeProfileComponent } from './dash-team-manag/da-te-profile/da-te-profile.component';
 import { GalleryCardComponent } from './dash-team-manag/da-te-gallery/gallery-card/gallery-card.component';
-import { CurrentMatchComponent } from './dash-team-manag/da-te-communication/current-match/current-match.component';
 import { TeamActivityComponent } from './dash-team-manag/da-te-communication/team-activity/team-activity.component';
 
 import { TeamjoinComponent } from './dialogs/teamjoin/teamjoin.component';
@@ -30,9 +23,6 @@ import { MemberListComponent } from './dash-team-manag/da-te-members/member-list
 import { NotificationsListComponent } from './dash-home/notifications-list/notifications-list.component';
 import { InviteAcceptCardComponent } from './dialogs/invite-accept-card/invite-accept-card.component';
 import { UploadphotoComponent } from './dialogs/uploadphoto/uploadphoto.component';
-import { ActiveSquadComponent } from './dash-team-manag/da-te-communication/active-squad/active-squad.component';
-import { AskPlayerSelectorComponent } from './dash-team-manag/da-te-communication/ask-player-selector/ask-player-selector.component';
-import { UpcomingMatchTabComponent } from './dash-team-manag/da-te-communication/upcoming-match-tab/upcoming-match-tab.component';
 import { DaTeMangPlayersComponent } from './dash-team-manag/da-te-members/da-te-mang-players/da-te-mang-players.component';
 import { InvitePlayersComponent } from './dialogs/invite-players/invite-players.component';
 import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.component';
@@ -52,6 +42,10 @@ import { MyMatchesComponent } from './dash-home/my-matches/my-matches.component'
 import { MyStatsCardComponent } from './dash-home/my-stats-card/my-stats-card.component';
 import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.component';
 import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifications.component';
+import { TeamMembersComponent } from './dash-team-manag/team-members/team-members.component';
+import { ManageMembersComponent } from './dialogs/manage-members/manage-members.component';
+import { InvitedPlayersListComponent } from './dash-team-manag/invited-players-list/invited-players-list.component';
+import { TeamCommunicationComponent } from './dash-team-manag/team-communication/team-communication.component';
 
 @NgModule({
   declarations: [
@@ -62,18 +56,11 @@ import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifi
     DashFooterComponent,
     DashParticipateComponent,
     AccProfileComponent,
-    AccNotifsComponent,
-    AccAddressesComponent,
-    AccTicketsComponent,
-    DaHoProfileComponent,
     DaTeJoinRequestsComponent,
     DaTeMembersComponent,
-    DaTeCommunicationComponent,
     DaTeGalleryComponent,
-    DaTeStatsComponent,
     DaTeProfileComponent,
     GalleryCardComponent,
-    CurrentMatchComponent,
     TeamActivityComponent,
     TeamsettingsComponent,
     TeamcreateComponent,
@@ -82,9 +69,6 @@ import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifi
     NotificationsListComponent,
     InviteAcceptCardComponent,
     UploadphotoComponent,
-    ActiveSquadComponent,
-    AskPlayerSelectorComponent,
-    UpcomingMatchTabComponent,
     DaTeMangPlayersComponent,
     InvitePlayersComponent,
     TeamgalleryComponent,
@@ -96,6 +80,10 @@ import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifi
     MyStatsCardComponent,
     MyTeamMenuComponent,
     MyNotificationsComponent,
+    TeamMembersComponent,
+    ManageMembersComponent,
+    InvitedPlayersListComponent,
+    TeamCommunicationComponent,
 
   ],
   imports: [

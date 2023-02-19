@@ -8,115 +8,57 @@
   margin: 8px 0;
   box-sizing: border-box;
   border: 1px solid var(--grey3);
-  border-radius: var(--borderRadiusCard);
+  border-radius: var(--dashCardBorder);
   padding: 0 20px;
 }
 
 .premiumFixture {
-  border: 2px solid var(--premiumServiceColor);
+  border: 1px solid var(--premiumServiceColor);
 }
 
-.versus {
-  height: 40px;
-  width: 40px;
-}
-
-.round {
-  border-radius: 50%;
-}
-
-.box {
-  border-radius: var(--borderRadiusCard);
-}
-
-.team_name {
-  width: 70px;
-  max-width: 70px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scoreColor {
-  color: white;
-}
-
-.score {
-  height: 40px;
-  width: 40px;
-}
-
-.teams-container {
-  margin-left: auto;
-}
-
-@media only screen and (max-width: 359px) {
-  .hide {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .versus {
-    border-radius: 50%;
-    height: 8px;
-    width: 8px;
+@media screen and (max-width: 959px) {
+  .fixture {
+    height: 84px;
+    padding: 4px 8px;
   }
 
-  .team_name {
-    width: 50px;
-    max-width: 50px;
-    overflow: hidden;
-  }
+  .team-names {
+    height: 100%;
+    width: 72px;
+    max-width: 72px;
+    text-align: center;
 
-  .side-space {
-    padding: 0 0px 0 8px !important;
+    .team_name {
+      max-width: 100%;
+      height: 38px;
+      vertical-align: middle;
+      overflow: hidden;
+    }
   }
 
   .score {
-    height: 32px;
-    width: 32px;
-  }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 959px) {
-  .versus {
-    border-radius: 50%;
-    height: 8px;
-    width: 8px;
+    width: 45px;
+    max-width: 45px;
+    min-width: 45px;
+    text-align: center;
   }
 
-  .team_name {
-    width: 50px;
-    max-width: 50px;
+  .data {
+    width: 132px;
+    text-align: center;
+
+    .right {
+      text-align: center;
+
+    }
   }
 
-  .side-space {
-    padding: 0 0px 0 8px !important;
-  }
-}
-
-@media only screen and (min-width: 959px) and (max-width: 1279px) {
-  .fixture {
-    height: 56px;
-    width: 100%;
-    margin: 8px 0;
-    box-sizing: border-box;
+  .status-text {
+    max-width: 80px;
   }
 
-  .team_name {
-    width: 70px;
-    max-width: 70px;
-  }
-}
-
-@media only screen and (min-width: 1279px) {
-  .teams-container {
-    width: 40%;
-  }
-
-  .team_name {
-    width: 70px;
-    max-width: 70px;
+  .avatarSize {
+    height: 38px;
+    width: 38px;
   }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NotificationsService } from '@app/services/notifications.service';
 import { TeamService } from '@app/services/team.service';
 
 export enum TeamMenu {
@@ -25,7 +24,6 @@ export class MyTeamMenuComponent implements OnInit {
 
   constructor(
     private teamService: TeamService,
-    private notificationService: NotificationsService,
     private router: Router
   ) { }
 
@@ -41,7 +39,7 @@ export class MyTeamMenuComponent implements OnInit {
         this.teamService.onOpenCreateTeamDialog();
         break;
       case TeamMenu.invite:
-        this.notificationService.onOpenInvitePlayersDialog();
+        this.teamService.onOpenInvitePlayersDialog();
         break;
       case TeamMenu.manage:
         this.router.navigate(['/dashboard', 'team-management'])

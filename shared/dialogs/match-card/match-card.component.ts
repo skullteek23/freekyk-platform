@@ -17,9 +17,7 @@ export class MatchCardComponent implements OnInit {
 
   homeLineup: Tmember[] = [];
   awayLineup: Tmember[] = [];
-  overViewData: MatchFixtureOverview;
   statsData: MatchDayReport;
-  selectedIndex = 0;
   data: MatchFixture;
 
   constructor(
@@ -46,21 +44,10 @@ export class MatchCardComponent implements OnInit {
       .pipe(map((resp) => (resp.data() as MatchFixture)))
       .subscribe(response => {
         this.data = response;
-        this.getOverviewData();
         this.getMatchLineup();
         if (this.data.status === MatchStatus.STU || this.data.status === MatchStatus.STD) {
           this.getMatchReport();
         }
-      });
-  }
-
-  getOverviewData(): void {
-    this.ngFirestore
-      .collection('allMatches/' + this.data?.id + '/additionalInfo').doc('matchOverview')
-      .get()
-      .pipe(map((resp) => resp.data() as MatchFixtureOverview))
-      .subscribe(response => {
-        this.overViewData = response;
       });
   }
 
@@ -89,7 +76,6 @@ export class MatchCardComponent implements OnInit {
       .pipe(map((resp) => resp.data() as MatchDayReport))
       .subscribe(response => {
         this.statsData = response;
-        this.selectedIndex = 2
       });
   }
 

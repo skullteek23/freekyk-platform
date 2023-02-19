@@ -12,7 +12,6 @@ export class PhotoUploaderComponent {
   @Output() changeUpload = new EventEmitter<File>();
   @Input() actionBtnLabel = 'Browse Photo';
   @Input() url: string = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
-  // defaultImgUrl = MatchConstantsSecondary.DEFAULT_IMAGE_URL;
 
   readonly ACCEPTED_TYPES = ProfileConstants.ALLOWED_PHOTO_FILE_TYPES_TEAM;
 

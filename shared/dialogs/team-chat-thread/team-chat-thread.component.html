@@ -1,0 +1,74 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Chat Message</span>
+</mat-toolbar>
+<app-loading *ngIf="isLoaderShown"></app-loading>
+
+<div class="container-2">
+  <div class="chat-question">
+    <p class="mat-body-2">
+      {{data.title}}
+    </p>
+    <p class="mat-body-1">
+      {{data.description}}
+    </p>
+  </div>
+
+  <mat-divider></mat-divider>
+  <p class="mat-caption align">
+    {{repliesList.length}} replies are shown below
+  </p>
+
+  <div class="replies-list-container">
+    <mat-list>
+      <ng-container *ngFor="let replyItem of repliesList">
+        <mat-list-item *ngIf="!isEditMode || (isEditMode && editId === replyItem.id)">
+          <p matLine fxLayoutAlign="space-between center" fxLayout="row">
+            <span class="mat-body-1 ellipsis title">
+              {{replyItem.reply}}
+            </span>
+            <a class="material-icons-round clickable" [matMenuTriggerFor]="optionsMenu"
+              [matMenuTriggerData]="replyItem">more_vert</a>
+          </p>
+          <p matLine fxLayoutAlign="space-between center" fxLayout="row" class="sub-line">
+            <span class="mat-caption">By {{ replyItem.by }} </span>
+            <span class="mat-caption"> {{ replyItem.date | date: CUSTOM_FORMAT }} </span>
+          </p>
+        </mat-list-item>
+      </ng-container>
+    </mat-list>
+  </div>
+  <form [formGroup]="replyForm" class="reply-form" fxLayout="column" *ngIf="replyForm">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>{{isEditMode ? 'Update Reply': 'Add a reply'}}</mat-label>
+      <textarea matInput formControlName="replyValue" [maxlength]="queryDescLimit"
+        placeholder="Please provide a brief reply"></textarea>
+      <mat-hint align="end">{{replyForm.get('replyValue')?.value?.length}} / {{queryDescLimit}}</mat-hint>
+      <mat-error *ngIf="replyForm.get('replyValue')?.hasError('pattern')">
+        {{messages.error.notAllowedCharacter}}
+      </mat-error>
+    </mat-form-field>
+    <div class="reply-button-container">
+      <button type="button" (click)="onAddReply()" [disabled]="replyForm.invalid || !replyForm.dirty"
+        class="buttonText secondaryButton">
+        {{isEditMode ? 'Update': 'Add a reply'}}
+      </button>
+    </div>
+  </form>
+</div>
+
+<mat-menu #optionsMenu>
+  <ng-template matMenuContent let-aliasUID="byUID" let-replyID="id">
+    <a mat-menu-item *ngIf="aliasUID === uid" (click)="edit(replyID)">
+      <span class="mat-body-1">Edit</span>
+    </a>
+    <a mat-menu-item *ngIf="aliasUID === uid" (click)="delete(replyID)">
+      <span class="mat-body-1">Delete</span>
+    </a>
+    <a mat-menu-item>
+      <span class="mat-body-1" disabled>Report Abuse</span>
+    </a>
+  </ng-template>
+</mat-menu>

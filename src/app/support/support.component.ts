@@ -35,6 +35,7 @@ export class SupportComponent implements OnInit {
   };
   ticketForm: FormGroup;
   isTicketSubmitted = false;
+  isUser = localStorage.getItem('uid');
 
   constructor(
     private snackBarService: SnackbarService,

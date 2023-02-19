@@ -1,0 +1,32 @@
+<mat-card class="dashboard-card mat-elevation-z8">
+  <span mat-card-title class="dash-h5">Team Communication</span>
+  <div class="success" *ngIf="showSuccess" fxLayout="column">
+    <app-tick-animation (finishAnimation)="hideSuccess()">
+    </app-tick-animation>
+    <p class="mat-body-1">
+      Chat message posted and now visible to team members.
+    </p>
+  </div>
+  <div class="button-container--top" fxLayout="column" fxLayoutGap="12px">
+    <button (click)="openNewChat()" [disabled]="disableButton" class="link-button" fxFlex="100%" mat-stroked-button
+      color="primary">
+      <span class="material-icons-round external-icon">chat</span>
+      Start a new Chat
+    </button>
+  </div>
+  <mat-list>
+    <mat-list-item *ngFor="let chat of chatList; last as last" (click)="openChatThread(chat); $event.stopPropagation()">
+      <p matLine fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="mat-body-1 ellipsis title">
+          {{chat.title}}
+        </span>
+        <span class="material-icons-round">chevron_right</span>
+      </p>
+      <p matLine fxLayoutAlign="space-between center" fxLayout="row" class="sub-line">
+        <span class="mat-caption">By {{ chat.by }} </span>
+        <span class="mat-caption"> {{ chat.date | date: CUSTOM_FORMAT }} </span>
+      </p>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+<app-loading *ngIf="isLoaderShown"></app-loading>

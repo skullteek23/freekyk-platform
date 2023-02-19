@@ -1,5 +1,5 @@
 <mat-card class="mat-elevation-z8 dashboard-card">
-  <span mat-card-title class="dash-h5">My Stats</span>
+  <span mat-card-title class="dash-h5">{{label}}</span>
 
   <div class="stats-container" fxLayout="row wrap" fxLayoutGap="5%">
     <div class="statistic" fxFlex="45%" *ngFor="let statistic of data" fxLayout="row" fxLayoutGap="8px"

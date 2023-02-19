@@ -6,8 +6,7 @@
         <app-account-avatar [dataImg]="dataImg$ | async"></app-account-avatar>
         <span [matTooltip]="playerName | titlecase" class="mat-body-2 ellipsis player-name"> {{ playerName | titlecase
           }} </span>
-        <a *ngIf="(dataPos$ | async) == null; else plPos" [routerLink]="['/dashboard', 'account', 'profile']"
-          class="mat-caption">
+        <a *ngIf="(dataPos$ | async) == null; else plPos" [routerLink]="['/dashboard', 'account']" class="mat-caption">
           Add Playing Position
         </a>
         <ng-template #plPos>
@@ -35,7 +34,7 @@
         </a>
         <mat-divider class="second_divider"></mat-divider>
 
-        <a [routerLink]="['/dashboard', 'account', 'profile']" routerLinkActive="active" mat-list-item>
+        <a [routerLink]="['/dashboard', 'account']" routerLinkActive="active" mat-list-item>
           <span class="material-icons-round gap">settings</span>
           <span class="mat-body-1">Account & Settings</span>
         </a>
@@ -120,7 +119,7 @@
 <!-- dashboard content outlet - 2 -->
 
 <!-- bottom-nav-xs-screen -->
-<mat-toolbar *ngIf="onMobile" fxHide.gt-sm="true" class="bottom-nav" color="primary" fxLayoutAlign="space-evenly">
+<mat-toolbar fxHide.gt-sm="true" class="bottom-nav" color="primary" fxLayoutAlign="space-evenly">
   <a [routerLink]="['/dashboard', 'home']" routerLinkActive="router-link-active" fxLayout="column"
     fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Dashboard">
     <span class="material-icons-round"> dashboard </span>
@@ -136,10 +135,10 @@
     <span class="material-icons-round">sports_soccer</span>
     <span class="mat-caption">Participate</span>
   </a>
-  <a [routerLink]="['/support']" routerLinkActive="router-link-active" fxLayout="column" fxLayoutAlign="center center"
-    fxLayoutGap="0" matTooltip="Support">
-    <span class="material-icons-round"> help_outline </span>
-    <span class="mat-caption">Support</span>
+  <a [routerLink]="['/dashboard','account']" routerLinkActive="router-link-active" fxLayout="column"
+    fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Settings">
+    <span class="material-icons-round"> settings </span>
+    <span class="mat-caption">Settings</span>
   </a>
 </mat-toolbar>
 <!-- bottom-nav-xs-screen -->

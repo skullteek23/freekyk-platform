@@ -1,5 +1,5 @@
 <div fxLayoutGap="8px" fxLayout="column">
-  <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="center start">
+  <div class="team_info" fxLayoutGap="16px" fxLayoutAlign="space-between start">
     <div class="team" fxLayout="column" fxLayoutGap="8px">
       <div class="img_cont">
         <img [src]="matchData?.home?.logo" alt="profile image" appFallbackImg />
@@ -20,8 +20,8 @@
           [matTooltip]="formatters?.formatStatus(matchData?.status)?.shortMsg">
           <span [style.color]="formatters?.formatStatus(matchData?.status)?.textColor" class="status-text mat-caption">
             {{
-            MatchStatus[formatters?.formatStatus(matchData?.status)?.code] ?
-            MatchStatus[formatters?.formatStatus(matchData?.status)?.code] : 'NA'
+            formatters?.formatStatus(matchData?.status)?.shortMsg ?
+            (formatters?.formatStatus(matchData?.status)?.shortMsg | titlecase) : 'NA'
             }}
           </span>
         </mat-chip>
@@ -50,7 +50,7 @@
       <span class="mat-body-1 center"> {{ matchData?.away?.name }} </span>
     </div>
   </div>
-  <span class="mat-body-2 center" [style.color]="formatters?.formatStatus(matchData?.status)?.color">
+  <span class="mat-body-1 center">
     {{matchDesc}}
   </span>
 

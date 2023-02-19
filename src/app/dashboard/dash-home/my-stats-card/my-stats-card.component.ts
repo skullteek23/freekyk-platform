@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BasicStats } from '@shared/interfaces/user.model';
 
 export interface IStatisticsCard {
   icon: string;
@@ -14,6 +13,7 @@ export interface IStatisticsCard {
   styleUrls: ['./my-stats-card.component.scss']
 })
 export class MyStatsCardComponent implements OnInit {
+  @Input() label = 'My Stats';
 
   @Input() data: IStatisticsCard[];
 

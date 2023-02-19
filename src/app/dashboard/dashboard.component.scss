@@ -80,11 +80,11 @@
 }
 
 .bottom-nav {
-  position: fixed;
+  position: sticky;
   bottom: 0px;
   margin: auto;
   width: 100%;
-  z-index: 99;
+  z-index: 200;
 }
 
 .bottom-nav a {

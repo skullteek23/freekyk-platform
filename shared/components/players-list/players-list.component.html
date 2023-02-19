@@ -1,9 +1,11 @@
-<app-search-lg [isDisabled]="!dataSource?.data.length" searchPlaceholder="Search players by name"
-  (searchItem)="applyFilter($event)">
-</app-search-lg>
-<mat-error *ngIf="isInvalidSelection">
-  Selections are allowed only upto {{maxLimit}} players
-</mat-error>
+<div class="input-box">
+  <app-search-lg [isDisabled]="!dataSource?.data.length" searchPlaceholder="Search players by name"
+    (searchItem)="applyFilter($event)">
+  </app-search-lg>
+  <mat-error *ngIf="isInvalidSelection">
+    Selections are allowed only upto {{maxLimit}} players
+  </mat-error>
+</div>
 <div class="table-container">
   <table mat-table [dataSource]="dataSource" class="full-width-table players-table">
 
@@ -32,10 +34,9 @@
 
     <ng-container matColumnDef="player">
       <th mat-header-cell *matHeaderCellDef>Player</th>
-      <td mat-cell *matCellDef="let pl; let i = index" (click)="openProfile(pl)">
+      <td mat-cell *matCellDef="let pl; let i = index" (click)="openProfile(pl);$event.stopPropagation()">
         <div fxLayoutAlign="start center" fxLayoutGap="8px">
-          <img class="plAvatar" [src]="pl.imgpath_sm || 'assets/images/dummy_player_sm.jpg'" [alt]="pl.name"
-            loading="lazy" appFallbackImg />
+          <img class="plAvatar" [src]="pl.imgpath_sm" [alt]="pl.name" loading="lazy" appFallbackImg />
           <span class="mat-body-1 left">
             {{ pl.name | textShorten: 30 }}
           </span>
@@ -47,7 +48,7 @@
       <th mat-header-cell *matHeaderCellDef>Team</th>
       <td mat-cell *matCellDef="let pl">
         <span class="mat-body-1">
-          {{ pl.team ? pl.team.name : "No Team" }}
+          {{ pl.team ? pl.team.name : "-" }}
         </span>
       </td>
     </ng-container>

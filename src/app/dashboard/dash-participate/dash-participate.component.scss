@@ -1,91 +1,23 @@
-.mat-card {
-  padding: 20px;
-  border-radius: var(--borderRadiusCard);
-  overflow: hidden;
-  min-height: 60vh;
-}
-
-.list-container {
-  overflow-y: auto;
-  height: calc(60vh);
-  max-height: calc(60vh);
-  overflow-x: visible;
-  padding: 0 10px
-}
-
-.min-height {
-  height: 100vh;
-}
-
-.mat-subheading-1 {
-  margin-bottom: 0 !important;
-}
-
 .red {
   color: var(--red);
 }
 
-.green {
-  color: var(--primaryColor);
-}
-
-.tournament {
-  height: 150px;
-  margin: 8px 0;
-  width: 100%;
-  border-radius: var(--borderRadiusCard);
-  padding: 8px 16px;
-  background-repeat: no-repeat, repeat;
-  background-size: cover;
-  background-color: white;
-}
-
-.photo-container {
-  max-height: 130px;
-  min-height: 130px;
-  max-width: 300px;
-  width: 300px;
-  border-radius: var(--borderRadiusCard);
-  overflow: hidden;
-
-  img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-  }
-}
-
-.loading-container {
-  height: 60vh;
-}
-
-.margin-top {
-  margin-top: 20px;
-}
-
-.name:hover {
-  cursor: pointer;
-  text-decoration: underline;
+img {
+  max-height: 320px;
 }
 
 .striked {
   text-decoration: line-through;
 }
 
-@media only screen and (max-width: 959px) {
-  .tournament {
-    text-align: center;
-    width: 100%;
-    padding: 20px;
-    height: 100%;
-    margin: 8px 0;
-    width: 100%;
-    border-radius: var(--borderRadiusCard);
-    background-repeat: no-repeat, repeat;
-    background-size: cover;
-  }
+li {
+  margin-bottom: 16px;
+}
 
-  .photo-container {
-    max-height: 500px;
-  }
+.spaced-heading {
+  width: 100px;
+}
+
+.spacy {
+  margin-top: 12px;
 }

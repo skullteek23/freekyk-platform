@@ -185,10 +185,10 @@ export class AuthService {
 
   // success display functions
   private onSuccessLogIn(name: string | undefined | null): void {
-    this.snackbarService.displayCustomMsg(`Welcome back, ${name}!`);
+    // this.snackbarService.displayCustomMsg(`Welcome back, ${name}!`);
   }
   private onSuccessSignup(name: string | undefined | null): void {
-    this.snackbarService.displayCustomMsg(`Welcome, ${name}!`);
+    // this.snackbarService.displayCustomMsg(`Welcome, ${name}!`);
   }
   private onSuccesslogOut(): void {
     this.snackbarService.displayCustomMsg('Successfully logged out!');

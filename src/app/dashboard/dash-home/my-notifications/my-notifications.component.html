@@ -1,11 +1,7 @@
 <mat-card class="cards-r mat-elevation-z8" fxLayout="column">
-  <div fxLayout fxLayoutAlign="space-between center">
-    <span class="dash-h5 align">Notification</span>
-    <a [routerLink]="['/dashboard', 'account', 'notifications']" class="mat-caption sec-menu">Show All</a>
-  </div>
+  <span class="dash-h5 align">Notification</span>
   <!-- list -->
-  <app-no-items-message customText="No unread notifications!"
-    *ngIf="notifications?.length === 0"></app-no-items-message>
+  <app-no-items-message customText=" No notifications!" *ngIf="notifications?.length === 0"></app-no-items-message>
   <app-notifications-list [data]="notifications" *ngIf="notifications.length">
   </app-notifications-list>
   <!-- list -->

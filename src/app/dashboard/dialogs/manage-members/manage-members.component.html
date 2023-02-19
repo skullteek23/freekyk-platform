@@ -1,0 +1,13 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Manage Team Members</span>
+</mat-toolbar>
+<div class="container-2">
+  <div ngClass.lt-md="dialogData invite-players-card" ngClass.gt-sm="stepdata">
+    <app-team-player-members-list [showProfileButton]="false" [showRemoveButton]="true"
+      (selectRemovePlayer)="onRemovePlayer($event)" [captainID]="captainID" [list]="members">
+    </app-team-player-members-list>
+  </div>
+</div>

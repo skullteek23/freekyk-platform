@@ -1,19 +1,11 @@
-.mat-card {
-  border-radius: var(--borderRadiusCard);
+.dashboard-card {
+  margin-bottom: 16px;
 }
 
-mat-tab-group {
-  min-height: 100vh;
+.form {
+  width: 100%;
 }
 
-.nopad {
-  padding: 0 !important;
-
-  @media screen and (max-width: 600px) {
-    padding: 10px 0 0 0 !important;
-  }
-}
-
-.go-back-button {
-  padding: 10px;
+.back-button {
+  margin-bottom: 16px;
 }

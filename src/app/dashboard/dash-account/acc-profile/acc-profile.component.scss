@@ -41,5 +41,54 @@
 }
 
 .top-line {
-  margin-bottom: 8px !important;
+  margin-bottom: 12px !important;
+  margin-top: 12px !important;
+}
+
+.clubbed-fields {
+  width: 100%;
+}
+
+.mat-form-field-infix {
+  width: 100%;
+}
+
+.photo-container {
+  height: 200px;
+
+  img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+.photo_container {
+  overflow: hidden;
+  border-radius: var(--borderRadiusCard);
+  width: 300px;
+  height: 400px;
+  max-width: 360px;
+  max-height: 400px;
+  background-color: var(--grey4);
+  min-height: 100px;
+
+  .profile-photo-large {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+
+    @media screen and (min-width: 960px) and (max-width: 1279px) {
+      max-height: 360px;
+    }
+  }
+
+}
+
+.radio-group {
+  margin-bottom: 12px;
+
+  .radio-label-text {
+    width: 135px;
+  }
 }

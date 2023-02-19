@@ -4,8 +4,8 @@
   </button>
   <span class="mat-body-1">Invite Players to Team</span>
 </mat-toolbar>
-<div class="container-2">
-  <div ngClass.lt-md="dialogData invite-players-card" ngClass.gt-sm="stepdata">
+<mat-tab-group>
+  <mat-tab label="Send more Invites">
     <app-players-list [cols]="COLS" [players]="players$ | async" (selectionChange)="createInvites($event)"
       [maxLimit]="15">
     </app-players-list>
@@ -15,6 +15,9 @@
         Send Invites
       </button>
     </div>
-    <!-- </div> -->
-  </div>
-</div>
+  </mat-tab>
+  <mat-tab label="Pending invites">
+    <app-invited-players-list></app-invited-players-list>
+  </mat-tab>
+</mat-tab-group>
+<app-loading *ngIf="isLoaderShown"></app-loading>

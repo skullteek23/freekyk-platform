@@ -9,11 +9,11 @@ export const INCOMPLETE_PROFILE = 'INCOMPLETE_PROFILE';
 export const PHOTO_NOT_UPLOADED = 'PHOTO_NOT_UPLOADED';
 
 export const allowedAgeCategories = [
-  { viewValue: 'Under-15', value: 15 },
-  { viewValue: 'Under-16', value: 16 },
-  { viewValue: 'Under-19', value: 19 },
-  { viewValue: 'Under-23', value: 23 },
-  { viewValue: 'Under-30', value: 30 },
+  { viewValue: 'U-15', value: 15 },
+  { viewValue: 'U-16', value: 16 },
+  { viewValue: 'U-19', value: 19 },
+  { viewValue: 'U-23', value: 23 },
+  { viewValue: 'U-30', value: 30 },
   { viewValue: 'Open', value: 99 }
 ];
 
@@ -97,4 +97,22 @@ export class TeamStats {
 export interface ITeamInfo {
   id: string;
   name: string;
+}
+
+export interface IUserChat {
+  title: string;
+  description?: string;
+  referenceID: string; // either stores teamID or season ID
+  by: string;
+  byUID: string;
+  date: number;
+  id?: string
+}
+export interface IUserChatReply {
+  reply: string;
+  userChatID: string;
+  by: string; // contains Name
+  date: number;
+  byUID: string; // contains UID
+  id?: string;
 }

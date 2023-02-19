@@ -106,6 +106,7 @@ export class ProfileConstants {
   static readonly MAX_BIRTH_DATE_ALLOWED = '1 January 2016';
   static readonly BIO_MAX_LIMIT = 129;
   static readonly TEAM_DESC_MAX_LIMIT = 300;
+  static readonly ASK_QUESTION_TITLE = 200;
   static readonly TEAM_SLOGAN_MAX_LIMIT = 50;
   static readonly MIN_TEAM_CREATION_ELIGIBLE_PLAYER_LIMIT = 0;
   static readonly MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT = 1;

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { MAXIMUM_VALUE, OnboardingStepsTrackerService } from '@app/services/onboarding-steps-tracker.service';
 import { PlayerService } from '@app/services/player.service';
@@ -17,6 +17,7 @@ import { TeamState } from '../dash-team-manag/store/team.reducer';
 import { DashState } from '../store/dash.reducer';
 import { IMyMatchesData } from './my-matches/my-matches.component';
 import { IStatisticsCard } from './my-stats-card/my-stats-card.component';
+import { NotificationsService } from '@app/services/notifications.service';
 
 @Component({
   selector: 'app-dash-home',
@@ -48,15 +49,19 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     private ngFire: AngularFirestore,
     private snackbarService: SnackbarService,
     private router: Router,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private notificationService: NotificationsService
   ) { }
 
   ngOnInit(): void {
+
     this.createShortcutButtonData();
     this.getTeamFixtures();
     this.getPlayerName();
     this.getStats();
-    this.getOnboardingProgress();
+    this.subscriptions.add(this.notificationService.requestAcceptLoadingStatus.subscribe((response: boolean) => {
+      this.isLoaderShown = response;
+    }));
   }
 
   ngOnDestroy(): void {
@@ -70,7 +75,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
       this.profileShortcutData = {
         actionLabel: 'My Profile',
         secondaryLabel: this.profileProgress === MAXIMUM_VALUE ? null : label,
-        secondaryIcon: 'check_circle',
+        secondaryIcon: this.profileProgress === MAXIMUM_VALUE ? 'check_circle' : null,
         icon: 'account_circle',
       };
     }));
@@ -78,41 +83,55 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   }
 
   createShortcutButtonData() {
-    this.teamShortcutData = {
-      actionLabel: 'My Team',
-      icon: 'groups',
-    };
+
     this.ticketShortcutData = {
       actionLabel: 'Need help? Raise a ticket',
       icon: 'help'
     }
+    this.getOnboardingProgress();
+    this.getTeamStatus();
+  }
+
+  getTeamStatus() {
+    this.store.select('team').pipe(take(1))
+      .subscribe(response => {
+        if (response?.basicInfo.tname) {
+          this.teamShortcutData = {
+            actionLabel: 'My Team',
+            icon: 'groups',
+            secondaryIcon: 'check_circle'
+          };
+        } else {
+          this.teamShortcutData = {
+            actionLabel: 'Create or Join a Team',
+            icon: 'add_circle',
+          }
+        }
+      })
   }
 
   getTeamFixtures() {
     this.store.select('team').pipe(take(1))
       .subscribe({
         next: (response) => {
-          if (response) {
-            const data = response[0];
-            if (data?.upcomingMatches) {
-              const matchCopy = JSON.parse(JSON.stringify(data.upcomingMatches[0]));
+          if (response?.basicInfo?.tname !== null) {
+            if (response?.upcomingMatches) {
+              const matchCopy = JSON.parse(JSON.stringify(response.upcomingMatches[0]));
               this.upcomingFixture = matchCopy;
               this.upcomingFixture.status = ParseMatchProperties.getTimeDrivenStatus(matchCopy.status, matchCopy.date);
               this.upcomingFixtureDescription = ParseMatchProperties.getStatusDescription(this.upcomingFixture.status);
             } else {
               this.upcomingFixture = null;
             }
-            if (data?.basicInfo?.tname) {
-              this.userMatchesData.team = data.basicInfo.tname;
-              this.ngFire.collection('allMatches', (query) => query.where('teams', 'array-contains', data?.basicInfo?.tname))
-                .get()
-                .pipe(
-                  map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as MatchFixture) } as MatchFixture)))
-                )
-                .subscribe(response => {
-                  this.teamMatches = response?.length ? response : [];
-                })
-            }
+            this.userMatchesData.team = response.basicInfo.tname;
+            this.ngFire.collection('allMatches', (query) => query.where('teams', 'array-contains', response?.basicInfo?.tname))
+              .get()
+              .pipe(
+                map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as MatchFixture) } as MatchFixture)))
+              )
+              .subscribe(response => {
+                this.teamMatches = response?.length ? response : [];
+              })
           }
         },
         error: (error) => this.snackbarService.displayError('Error getting fixtures')
@@ -182,6 +201,10 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   openProfile() {
     if (this.profileProgress === 75) {
       this.onboardingStepsTrackerService.onShareProfile();
+    }
+    if (this.profileProgress === 25) {
+      this.router.navigate(['/dashboard', 'account']);
+      return;
     }
     const uid = localStorage.getItem('uid');
     const dialogRef = this.dialog.open(PlayerCardComponent, {

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { MemberResponseNotification } from '@shared/interfaces/team.model';
-import { TeamCommState } from '../store/teamComm.reducer';
+// import { TeamCommState } from '../da-te-communication/store/teamComm.reducer';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants } from '@shared/constants/constants';
 
@@ -22,42 +22,42 @@ export class TeamActivityComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private store: Store<{ teamComms: TeamCommState }>,
+    // private store: Store<{ teamComms: TeamCommState }>,
     private ngFireDb: AngularFireDatabase
   ) { }
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.store
-        .select('teamComms')
-        .pipe(
-          tap(
-            (resp) =>
-            (this.noLogs =
-              resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
-          ),
-          map((resp) => resp.currUpcomingMatchNo)
-        )
-        .subscribe((matchNo) => {
-          const tid = sessionStorage.getItem('tid');
-          this.teamActivityListLogs$ = this.ngFireDb
-            .list(`teamActivity/${tid}/activity${matchNo.toString()}`)
-            .valueChanges()
-            .pipe(
-              // tap((resp) => console.log(resp)),
-              map((resp: any[]) => resp.sort(ArraySorting.sortObjectByKey('time', 'desc'))),
-              map((resp: MemberResponseNotification[]) =>
-                resp.map(
-                  (r) =>
-                  ({
-                    content: r.content,
-                    time: new Date(r.time),
-                  } as MemberResponseNotification)
-                )
-              )
-            );
-        })
-    );
+    // this.subscriptions.add(
+    //   this.store
+    //     .select('teamComms')
+    //     .pipe(
+    //       tap(
+    //         (resp) =>
+    //         (this.noLogs =
+    //           resp.currUpcomingMatchNo < 0 && resp.currUpcomingMatchNo > 2)
+    //       ),
+    //       map((resp) => resp.currUpcomingMatchNo)
+    //     )
+    //     .subscribe((matchNo) => {
+    //       const tid = sessionStorage.getItem('tid');
+    //       this.teamActivityListLogs$ = this.ngFireDb
+    //         .list(`teamActivity/${tid}/activity${matchNo.toString()}`)
+    //         .valueChanges()
+    //         .pipe(
+    //           // tap((resp) => console.log(resp)),
+    //           map((resp: any[]) => resp.sort(ArraySorting.sortObjectByKey('time', 'desc'))),
+    //           map((resp: MemberResponseNotification[]) =>
+    //             resp.map(
+    //               (r) =>
+    //               ({
+    //                 content: r.content,
+    //                 time: new Date(r.time),
+    //               } as MemberResponseNotification)
+    //             )
+    //           )
+    //         );
+    //     })
+    // );
   }
 
   ngOnDestroy(): void {

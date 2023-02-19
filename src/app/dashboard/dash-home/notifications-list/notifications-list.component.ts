@@ -25,7 +25,15 @@ export class NotificationsListComponent implements OnInit {
     private notificationService: NotificationsService
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if (window.location.href.endsWith('#notifications')) {
+      const el = document.getElementById('notification-dashboard');
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
 
   onSelectNotification(notification: NotificationBasic): void {
     this.notificationService.onSelectNotification(notification);

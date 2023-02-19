@@ -19,6 +19,7 @@ import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confi
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SEASON_OFFERS_MORE_INFO } from '@shared/web-content/WEBSITE_CONTENT';
 import { AGE_CATEGORY, Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
+import { EnlargeService } from '@app/services/enlarge.service';
 
 export enum OperationStatus {
   default,
@@ -48,7 +49,8 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>,
     private paymentService: PaymentService,
     private snackBarService: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private enlargeService: EnlargeService
   ) { }
 
   ngOnInit(): void {
@@ -276,7 +278,9 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
   }
 
   async isTeamInvalidAgeGroup(compareAgeCat: AGE_CATEGORY) {
-    if (this.teamID) {
+    if (compareAgeCat === 99) {
+      return false;
+    } else if (this.teamID) {
       return ((await this.ngFire.collection(`teams/${this.teamID}/additionalInfo`).doc('moreInfo').get().toPromise()).data() as TeamMoreInfo).tageCat !== compareAgeCat
     }
     return false;
@@ -304,90 +308,7 @@ export class DashParticipateComponent implements OnInit, OnDestroy {
     window.open(environment.firebase.url + '/s/' + season, '_blank');
   }
 
-  // async onPayNow(season: SeasonBasicInfo): Promise<any> {
-  //   if (!season.id) {
-  //     return;
-  //   } else if (season.status === 'CANCELLED') {
-  //     this.snackBarService.displayError('Season is cancelled!');
-  //     return;
-  //   }
-  //   this.selectedSeason = season.name;
-  //   const teamInfo = await this.store.select('team').pipe(take(1)).toPromise();
-  //   const uid = localStorage.getItem('uid');
-  //   const restrictedParticipants: string[] = await this.getParticipantsInfo(season.id);
-  //   const isAvailableSlot: boolean = await this.isAvailableSlot(season.p_teams, season.id);
-  //   let errorMessage = '';
-  //   if (!teamInfo || !teamInfo.basicInfo || !teamInfo.basicInfo.tname) {
-  //     errorMessage = 'Join or Create a team to participate!';
-  //   } else if (!teamInfo || !teamInfo.teamMembers || teamInfo.teamMembers.memCount < ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT) {
-  //     errorMessage = `Minimum ${ProfileConstants.MIN_TEAM_PARTICIPATION_ELIGIBLE_PLAYER_LIMIT} players needed to perform this action!`;
-  //   } else if (!uid || !teamInfo.basicInfo || uid !== teamInfo.basicInfo.captainId) {
-  //     errorMessage = 'Only captains are allowed to make payment!';
-  //   } else if (restrictedParticipants && restrictedParticipants.includes(teamInfo?.basicInfo?.id) === false) {
-  //     errorMessage = 'Participants are restricted!';
-  //   } else if (!isAvailableSlot) {
-  //     errorMessage = 'Participation is full!';
-  //   } else {
-  //     this.paymentService.onLoadingStatusChange('loading');
-  //     this.initPayment(season, teamInfo.basicInfo.id);
-  //   }
-  //   if (errorMessage) {
-  //     this.snackBarService.displayError(errorMessage);
-  //     this.paymentService.onLoadingStatusChange('home');
-  //   }
-  // }
-
-  // initPayment(season: SeasonBasicInfo, teamId: string): void {
-  //   // minimum fees
-  //   const fees = this.paymentService.getFeesAfterDiscount(season.feesPerTeam, season.discount);
-  //   this.paymentService
-  //     .generateOrder(fees, null)
-  //     .then((res) => {
-  //       if (res) {
-  //         const options: ICheckoutOptions = this.paymentService.getCaptainCheckoutOptions(fees.toString());
-  //         options.order_id = res['id'];
-  //         options.failureRoute = '/dashboard/error';
-  //         options.handler = this.paymentSuccess.bind(this, season, teamId)
-  //         this.paymentService.openCheckoutPage(options);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       this.snackBarService.displayError();
-  //     });
-  // }
-
-  // paymentSuccess(season: SeasonBasicInfo, tid: string, response: any) {
-  //   if (season && tid && response) {
-  //     this.paymentService.verifyPayment(response).subscribe({
-  //       next: (status) => {
-  //         if (status) {
-  //           this.initParticipation(season, tid, response)
-  //             .subscribe({
-  //               next: (response) => {
-  //                 this.onLoadingStatusChange('success');
-  //               },
-  //               error: (err) => {
-  //                 this.onLoadingStatusChange('home');
-  //               }
-  //             });
-  //         } else {
-  //           this.onLoadingStatusChange('home');
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.onLoadingStatusChange('home');
-  //       }
-  //     })
-  //   }
-  // }
-
-  // async isAvailableSlot(maxTeams: number, sid: string): Promise<boolean> {
-  //   return (await this.ngFire.collection('seasons').doc(sid).collection('participants').get().toPromise()).docs.length < maxTeams;
-  // }
-
-  // async getParticipantsInfo(sid: string): Promise<string[]> {
-  //   const data = (await this.ngFire.collection('seasons').doc(sid).collection('additionalInfo').doc('moreInfo').get().toPromise()).data() as SeasonAbout;
-  //   return data?.allowedParticipants?.length > 0 ? data?.allowedParticipants : null;
-  // }
-
+  enlargePhoto(url: string) {
+    this.enlargeService.onOpenPhoto(url)
+  }
 }

@@ -1,95 +1,61 @@
-<div class="fixture" [ngClass]="{premiumFixture: fixture?.premium}" fxLayoutAlign.lt-md="center center"
-  fxLayoutAlign.gt-sm="space-between center">
-  <!-- date -->
-  <div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="center start">
-    <span class="mat-caption green">
-      {{ fixture.date | date: "shortTime" | lowercase }}
-    </span>
-    <span class="mat-caption">
-      {{ fixture.date | date: "mediumDate" }}</span>
-  </div>
-  <!-- date -->
+<mat-card class="fixture mat-elevation-z8" fxLayoutAlign="space-between center"
+  (click)="openFixture(); $event.stopPropagation()">
 
   <!-- teams  -->
-  <div class="teams-container" fxLayoutAlign="center center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
-    <div fxLayoutAlign="end center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
-      <span class="team_name right" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2"
-        [matTooltip]="fixture.home.name">
-        {{ fixture.home.name }}
-      </span>
+  <div class="teams-container" fxLayoutAlign="center center" fxLayoutGap.lt-md="0px" fxLayoutGap.gt-sm="20px">
+    <!-- home -->
+    <div fxLayoutAlign="center center" fxLayout.lt-md="column" class="team-names">
       <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.home.logo" alt="Team Logo" loading="lazy"
         appFallbackImg />
+      <span class="team_name mat-caption" [matTooltip]="fixture.home.name" fxLayoutAlign="center center">
+        {{ fixture.home.name }}
+      </span>
     </div>
-    <ng-template #score>
-      <div fxLayoutAlign="center center" fxLayoutGap="8px">
-        <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.home.hasOwnProperty('score') ? fixture.home.score : '-'
-            }}</span>
-        </div>
-        <div class="score box primary-bg" fxLayoutAlign="center center">
-          <span class="mat-body-2 scoreColor">{{ fixture.away.hasOwnProperty('score') ? fixture.away.score : '-'
-            }}</span>
-        </div>
-      </div>
-    </ng-template>
+
+    <!-- vs -->
     <div *ngIf="!isResult; else score" fxLayoutAlign="center center">
-      <span fxHide.gt-sm="true" class="versus round mat-caption" fxLayoutAlign="center center">
-        {{ "v" }}
-      </span>
-      <span fxHide.lt-md="true" class="grey-bg versus round mat-caption" fxLayoutAlign="center center">
-        {{ "vs" | uppercase }}
+      <span class="mat-caption score">
+        {{ "V" }}
       </span>
     </div>
-    <div fxLayoutAlign="start center" fxLayoutGap.lt-md="8px" fxLayoutGap.gt-sm="20px">
+
+    <!-- score -->
+    <ng-template #score>
+      <span class="mat-body-2 score">
+        {{scoreStr}}
+      </span>
+    </ng-template>
+
+    <!-- away -->
+    <div fxLayoutAlign="center center" fxLayout.lt-md="column" class="team-names">
       <img class="avatarSize" [ngClass]="{ hide: isResult }" [src]="fixture.away.logo" alt="Team Logo" loading="lazy"
         appFallbackImg />
 
-      <span class="team_name left" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-body-2"
-        [matTooltip]="fixture.away.name">
+      <span class="team_name mat-caption" [matTooltip]="fixture.away.name" fxLayoutAlign="center center">
         {{ fixture.away.name }}
       </span>
     </div>
   </div>
   <!-- teams  -->
-
-  <mat-chip-list fxHide.gt-sm="true">
-    <mat-chip [style.background]="formatters.formatStatus(fixture.status)?.color" class="status-chip"
-      [matTooltip]="formatters.formatStatus(fixture.status)?.shortMsg">
-      <span [style.color]="formatters.formatStatus(fixture.status)?.textColor" class="status-text mat-caption">
-        {{
-        matchStatus[formatters.formatStatus(fixture.status)?.code]
-        }}
-      </span>
-    </mat-chip>
-  </mat-chip-list>
-
-  <!-- action-button - small  -->
-  <button (click)="onOpenFixture()" fxHide.gt-sm="true" mat-icon-button matTooltip="Open Fixture"
-    fxLayoutAlign="center center">
-    <mat-icon class="material-icons-round">
-      keyboard_arrow_right
-    </mat-icon>
-  </button>
-  <!-- action-button - small  -->
-
-  <!-- action-button - large  -->
-  <div style="width:260px" fxHide.lt-md="true" fxLayoutAlign='end center' fxLayout fxLayoutGap="12px">
-    <mat-chip-list>
-      <mat-chip [style.background]="formatters.formatStatus(fixture.status)?.color" class="status-chip"
+  <div class="data" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px">
+    <mat-chip-list fxLayoutAlign="center center">
+      <mat-chip (click)="openFixture(); $event.stopPropagation()"
+        [style.background]="formatters.formatStatus(fixture.status)?.color" class="status-chip"
         [matTooltip]="formatters.formatStatus(fixture.status)?.shortMsg">
-        <span [style.color]="formatters.formatStatus(fixture.status)?.textColor" class="status-text mat-caption">
-          {{
-          formatters.formatStatus(fixture.status)?.shortMsg | titlecase
-          }}
+        <span [style.color]="formatters.formatStatus(fixture.status)?.textColor"
+          class="status-text mat-caption ellipsis">
+          {{ formatters.formatStatus(fixture.status)?.shortMsg | titlecase}}
         </span>
       </mat-chip>
-      <mat-chip>{{ fixture.type | uppercase }}</mat-chip>
+      <mat-chip fxHide.lt-md="true">{{ fixture.type | uppercase }}</mat-chip>
     </mat-chip-list>
-    <a (click)="onOpenFixture()">
-      <span class="mat-caption">
-        See more
-      </span>
-    </a>
+    <span class="mat-body-1 right">
+      {{ fixture.date | date: "shortTime" | lowercase }}
+    </span>
+
   </div>
-  <!-- action-button - large  -->
-</div>
+
+  <span class="material-icons-round clickable" matTooltip="Open Fixture">
+    chevron_right
+  </span>
+</mat-card>

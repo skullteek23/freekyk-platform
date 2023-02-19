@@ -8,94 +8,29 @@
 <div class="container-2" fxLayout="column" fxLayoutGap="20px">
   <app-match-detail-header [data]="data"></app-match-detail-header>
 
-  <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex" color="primary">
-    <mat-tab label="Overview" [disabled]="!data">
+  <mat-tab-group mat-align-tabs="start" color="primary">
+    <mat-tab label="Overview">
       <ng-template matTabContent>
         <div class="seperator" fxLayoutGap="16px" fxLayout="column">
-          <div class="basic" fxLayout="column" fxLayoutGap="16px">
-            <span class="dash-h5 align">
-              {{ "Basic details" | titlecase }}
+          <div fxLayoutAlign="space-between center">
+            <span class="mat-body-2">Kick Off</span>
+            <span class="mat-body-1">
+              {{ data?.date | date: "short" }}
             </span>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Kick Off</span>
-              <span class="mat-body-1">
-                {{ data?.date | date: "short" }}
-              </span>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Stadium/Ground</span><a matTooltip="View Ground" (click)="OnOpenGround()"
-                class="mat-body-1">{{
-                data?.ground }}</a>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Season Name</span><span class="mat-body-1">{{ data?.season }}</span>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Match Type</span><span class="mat-body-1"> {{ data?.type }} </span>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Match Referee</span><span [matTooltip]="overViewData?.ref_phno | contactNumber"
-                class="mat-body-1">{{ statsData?.referee }}</span>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Match Live Stream</span>
-              <a [href]="overViewData?.live_link" class="mat-body-2"> Available </a>
-            </div>
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Match Organizer</span><span [matTooltip]="overViewData?.org_phno | contactNumber"
-                class="mat-body-1"> {{ overViewData?.organizer }} </span>
-            </div>
-
-            <div fxLayoutAlign="space-between center">
-              <span class="mat-body-2">Refreshments Availability</span>
-              <span [matTooltip]="overViewData?.refresh_phno | contactNumber" class="mat-body-1">
-                {{ overViewData?.refresh ? "Available" : "No" }}
-              </span>
-            </div>
           </div>
-          <mat-divider></mat-divider>
-          <div class="other" fxLayout="column" fxLayoutGap="16px">
-            <span class="dash-h5 align">
-              {{ "Other details" | titlecase }}
-            </span>
-            <div fxLayoutAlign="start" fxLayout="column">
-              <span class="mat-body-2">Match Description</span><span class="mat-body-1">
-                {{ overViewData?.desc }}
-              </span>
-            </div>
+          <div fxLayoutAlign="space-between center">
+            <span class="mat-body-2">Stadium/Ground</span><a matTooltip="View Ground" (click)="OnOpenGround()"
+              class="mat-body-1">{{
+              data?.ground }}</a>
           </div>
-        </div>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Lineup">
-      <ng-template matTabContent>
-        <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column">
-          <div fxLayout="column" fxLayoutGap="16px">
-            <ng-container *ngIf="homeLineup?.length > 0">
-
-              <span class="dash-h5">
-                {{ data?.home.name + " Lineup" | titlecase }}
-              </span>
-              <app-team-player-members-list [list]="homeLineup"></app-team-player-members-list>
-            </ng-container>
-            <ng-container *ngIf="awayLineup?.length > 0">
-              <mat-divider></mat-divider>
-              <span class="dash-h5">
-                {{ data?.away.name + " Lineup" | titlecase }}
-              </span>
-              <app-team-player-members-list [list]="awayLineup"></app-team-player-members-list>
-            </ng-container>
+          <div fxLayoutAlign="space-between center">
+            <span class="mat-body-2">Season Name</span><span class="mat-body-1">{{ data?.season }}</span>
           </div>
-        </div>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Stats" [disabled]="!statsData">
-      <ng-template matTabContent>
-        <div class="seperator" fxLayoutGap="16px" fxLayout="column">
-          <div class="basic" fxLayout="column" fxLayoutGap="16px">
-            <span class="dash-h5 align">
-              {{ "Match Stats" | titlecase }}
-            </span>
+          <div fxLayoutAlign="space-between center">
+            <span class="mat-body-2">Match Type</span><span class="mat-body-1"> {{ data?.type }} </span>
+          </div>
+          <ng-container *ngIf="statsData">
+            <mat-divider></mat-divider>
             <div fxLayout="column" fxLayoutAlign="center start">
               <span class="mat-body-2">{{data?.home?.name}}'s Scorers</span>
               <span class="mat-body-1" *ngIf="!statsData?.scorers?.home.length">-</span>
@@ -124,7 +59,28 @@
                 {{ scorer }}
               </div>
             </div>
+          </ng-container>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Lineup">
+      <ng-template matTabContent>
+        <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column">
+          <div fxLayout="column" fxLayoutGap="16px">
+            <ng-container *ngIf="homeLineup?.length > 0">
 
+              <span class="mat-body-1">
+                {{ data?.home.name + " Lineup" | titlecase }}
+              </span>
+              <app-team-player-members-list [list]="homeLineup"></app-team-player-members-list>
+            </ng-container>
+            <ng-container *ngIf="awayLineup?.length > 0">
+              <mat-divider></mat-divider>
+              <span class="mat-body-1">
+                {{ data?.away.name + " Lineup" | titlecase }}
+              </span>
+              <app-team-player-members-list [list]="awayLineup"></app-team-player-members-list>
+            </ng-container>
           </div>
         </div>
       </ng-template>

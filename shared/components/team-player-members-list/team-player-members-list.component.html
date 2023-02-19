@@ -6,13 +6,18 @@
         <span class="mat-body-1">
           {{teamMember.name}}
         </span>
-        <span class="mat-body-1" *ngIf="captainID == teamMember.id">
+        <span class="mat-body-1" *ngIf="captainID === teamMember.id">
           (C)
         </span>
       </span>
-      <a (click)="openPlayerProfile(teamMember.id)" class="mat-caption">
+      <a *ngIf="showProfileButton" (click)="openPlayerProfile(teamMember.id)" class="mat-caption">
         View Profile
       </a>
+      <ng-container *ngIf="showRemoveButton">
+        <a *ngIf="captainID !== teamMember.id" (click)="removePlayer(teamMember.id)" class="red mat-caption">
+          Remove
+        </a>
+      </ng-container>
     </p>
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-caption"> {{ teamMember.pl_pos }} </span>

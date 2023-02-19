@@ -4,9 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
 import { IMatchRequest } from '@shared/interfaces/match.model';
-import { IFeedback } from '@shared/interfaces/ticket.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
 
@@ -87,15 +85,15 @@ export class SubmitMatchRequestComponent implements OnInit {
       return;
     }
     const request: IMatchRequest = {
-      matches: this.requestForm.value.matches,
-      perTeamPlayers: this.requestForm.value.perTeamPlayers,
+      matches: this.requestForm.value.matches.trim(),
+      perTeamPlayers: this.requestForm.value.perTeamPlayers.trim(),
       location: {
         country: this.requestForm.value.location.country,
         state: this.requestForm.value.location.state,
         city: this.requestForm.value.location.city,
       },
       ground: this.requestForm.value.ground.trim(),
-      budget: this.requestForm.value.budget,
+      budget: this.requestForm.value.budget.trim(),
       contactNo: this.requestForm.value.contactNo,
       name: this.requestForm.value.name.trim(),
       date: new Date().getTime()

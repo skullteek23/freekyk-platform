@@ -4,8 +4,8 @@
 }
 
 .kickoff {
-  width: 70px;
   margin-top: 20px;
+  width: 100%;
 }
 
 .score_rec {
@@ -39,4 +39,9 @@
   color: white;
   border-radius: 2px;
   background-color: var(--primaryColor);
+}
+
+.description {
+  border-radius: var(--borderRadiusCard);
+  color: white;
 }

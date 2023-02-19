@@ -1,0 +1,54 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="closeDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">{{data?.heading}}</span>
+</mat-toolbar>
+<div class="container-2" fxLayout="column" fxLayoutGap="20px"
+  [fxLayoutAlign]="!data?.showTips ? 'center center': 'start center'">
+  <form [formGroup]="questionForm" fxLayout="column" fxLayoutGap="20px">
+
+    <div class="tips" *ngIf="data.showTips">
+      <p class="mat-body-2">
+        Tips on getting your questions answered faster
+      </p>
+      <ul>
+        <li>Search to see if your question has been asked before</li>
+        <li>Ask you question in very detail</li>
+      </ul>
+    </div>
+
+    <mat-form-field color="primary" appearance="outline">
+      <mat-label>Title or Summary</mat-label>
+      <input type="text" matInput formControlName="title" [maxlength]="queryHeadingLimit"
+        placeholder="Please provide a brief summary">
+      <mat-hint align="end">{{questionForm.get('title')?.value?.length}} / {{queryHeadingLimit}}</mat-hint>
+      <mat-error *ngIf="questionForm.get('title')?.hasError('pattern')">
+        {{messages.error.notAllowedCharacter}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Details</mat-label>
+      <textarea matInput formControlName="description" cols="30" rows="10" [maxlength]="queryDescLimit"
+        placeholder="Please provide a description of your title"></textarea>
+      <mat-hint align="end">{{questionForm.get('description')?.value?.length}} / {{queryDescLimit}}</mat-hint>
+      <mat-error *ngIf="questionForm.get('description')?.hasError('pattern')">
+        {{messages.error.notAllowedCharacter}}
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="row">
+      <a (click)="closeDialog()">Discard</a>
+      <button [disabled]="questionForm.invalid" type="button" (click)="submit()" class="primaryButton buttonText"
+        fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+        <span class="material-icons-round">
+          {{data?.CTA?.icon}}
+        </span>
+        <span>
+          {{data?.CTA?.label}}
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

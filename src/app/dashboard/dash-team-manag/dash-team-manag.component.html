@@ -1,14 +1,35 @@
-<div fxLayoutGap="20px" fxLayout="column">
-  <!-- button loading -->
+<div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="20px"
+  fxLayoutGap.gt-sm="20px">
+
+  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%"
+    *ngIf="joinShortcutData || teamSettingsShortcutData">
+
+    <app-action-shortcut-button *ngIf="joinShortcutData" [data]="joinShortcutData"
+      (actionTrigger)="openJoinTeam()"></app-action-shortcut-button>
+    <app-action-shortcut-button *ngIf="teamSettingsShortcutData" [data]="teamSettingsShortcutData"
+      (actionTrigger)="openTeamSettings()"></app-action-shortcut-button>
+  </div>
+
+  <app-team-members></app-team-members>
+
+  <app-my-stats-card [data]="teamStats" label="My Team Statistics"></app-my-stats-card>
+
+  <app-action-shortcut-button *ngIf="teamGalleryShortcutData" [data]="teamGalleryShortcutData"
+    (actionTrigger)="openTeamGallery()"></app-action-shortcut-button>
+
+  <app-team-communication></app-team-communication>
+</div>
+
+
+
+
+<!-- <div fxLayoutGap="20px" fxLayout="column">
   <div *ngIf="showMobile && isLoading" class="_fixture" fxLayout="column" fxLayoutGap="16px">
     <span class="_button shine" *ngFor="let fixt of [1, 2, 3, 4]"></span>
   </div>
-  <!-- button loading -->
 
-  <!-- mobile buttons -->
   <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
 
-    <!-- join team button -->
     <button *ngIf="noTeam" (click)="joinTeam()" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">add_circle</span>
@@ -17,9 +38,7 @@
 
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <!-- join team button -->
 
-    <!-- create team  button -->
     <button *ngIf="noTeam" (click)="createTeam()" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutAlign="start center" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">edit</span>
@@ -28,42 +47,30 @@
 
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <!-- create team button -->
 
   </div>
 
-  <!-- team profile card -->
   <app-da-te-profile></app-da-te-profile>
-  <!-- team profile card -->
 
   <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="20px">
     <div fxFlex.gt-sm="50%" fxLayoutGap="20px" fxLayout="column">
-      <!-- members section -->
       <app-da-te-members></app-da-te-members>
-      <!-- members section -->
     </div>
 
     <div fxLayoutGap="20px" fxFlex.gt-sm="<grow>" fxLayout="column">
-      <!-- team stats -->
       <div fxFlex="nogrow">
         <app-da-te-stats></app-da-te-stats>
       </div>
-      <!-- team stats -->
 
-      <!-- team gallery -->
       <div fxFlex="nogrow">
         <app-da-te-gallery></app-da-te-gallery>
       </div>
-      <!-- team gallery-->
     </div>
   </div>
 
-  <!-- lg team communication -->
   <app-da-te-communication></app-da-te-communication>
-  <!-- lg team communication -->
 
   <div *ngIf="showMobile" fxLayout="column" fxLayoutGap="8px">
-    <!-- raise a ticket button -->
     <button [routerLink]="['/support']" class="wide-button" fxLayout fxLayoutAlign="space-between center">
       <div class="b-name" fxLayout fxLayoutGap="20px" fxLayoutGap.lt-sm="4px">
         <span class="material-icons-round">live_help</span>
@@ -72,6 +79,5 @@
 
       <span class="material-icons-round"> keyboard_arrow_right </span>
     </button>
-    <!-- raise a ticket button -->
   </div>
-</div>
+</div> -->

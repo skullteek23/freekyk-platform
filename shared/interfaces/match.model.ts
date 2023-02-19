@@ -18,31 +18,31 @@ export enum MatchStatus {
 
 export const StatusMessage = [
   // match time hasn't started
-  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'This match is on-time', color: '#4bb242', textColor: '#ffffff' },
+  { code: MatchStatus.ONT, shortMsg: 'On-time', description: 'Match is on-time.', color: '#4bb242', textColor: '#ffffff' },
 
   // match time is going on
-  { code: MatchStatus.ONG, shortMsg: 'live', description: 'This match is currently live!', color: '#ff5837', textColor: '#ffffff' },
+  { code: MatchStatus.ONG, shortMsg: 'live', description: 'Match is live!', color: '#ff5837', textColor: '#ffffff' },
 
   // match time has occurred
-  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'Match stats are not yet uploaded for this match! Please check back later.', color: '#fbbe28', textColor: '#000' },
+  { code: MatchStatus.SNU, shortMsg: 'pending', description: 'Match score is not yet updated by organizer.', color: '#fbbe28', textColor: '#000' },
 
   // match is rescheduled
-  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'This match is rescheduled by the organizer', color: '#a9a9a9', textColor: '#ffffff' },
+  { code: MatchStatus.RES, shortMsg: 'rescheduled', description: 'Match rescheduled by organizer.', color: '#a9a9a9', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'This match is cancelled by the organizer', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.CAN, shortMsg: 'cancelled', description: 'Match cancelled by organizer.', color: '#b60000', textColor: '#ffffff' },
 
   // match is cancelled by any manual action
-  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'This match is cancelled due to season cancellation by the organizer', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.CNS, shortMsg: 'cancelled season', description: 'Season cancelled by organizer.', color: '#b60000', textColor: '#ffffff' },
 
   // match is aborted by any manual action
-  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'This match is aborted by the organizer', color: '#b60000', textColor: '#ffffff' },
+  { code: MatchStatus.ABT, shortMsg: 'aborted', description: 'Match is aborted due to uncertain reasons.', color: '#b60000', textColor: '#ffffff' },
 
   // match stats are disputed
-  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'Match stats corrections is pending for this match! Please check back later.', color: '#f20505', textColor: '#ffffff' },
+  { code: MatchStatus.STD, shortMsg: 'conflict', description: 'Match stats corrections are pending by organizer.', color: '#f20505', textColor: '#ffffff' },
 
   // match stats are updated (at least once)
-  { code: MatchStatus.STU, shortMsg: 'finished', description: 'Match stats are updated by the organizer. Please check Stats section', color: '#00810f', textColor: '#ffffff' },
+  { code: MatchStatus.STU, shortMsg: 'finished', description: 'Match score and stats are updated by organizer', color: '#00810f', textColor: '#ffffff' },
 ]
 
 export class ParseMatchProperties {
@@ -248,15 +248,15 @@ export interface ICancelData {
 }
 
 export interface IMatchRequest {
-  matches: number;
-  perTeamPlayers: number;
+  matches: string;
+  perTeamPlayers: string;
   location: {
     country: string;
     city: string;
     state: string;
   }
   ground: string;
-  budget: number;
+  budget: string;
   contactNo: number;
   name: string;
   date: number;

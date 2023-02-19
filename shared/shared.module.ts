@@ -77,6 +77,8 @@ import { SearchableFormFieldComponent } from '@shared/components/searchable-form
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TeamPlayerMembersListComponent } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { ActionShortcutButtonComponent } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
+import { UserQuestionsCommunicationComponent } from '@shared/dialogs/user-questions-communication/user-questions-communication.component';
+import { TeamChatThreadComponent } from './dialogs/team-chat-thread/team-chat-thread.component';
 
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
@@ -148,7 +150,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlayersListComponent,
     SearchableFormFieldComponent,
     TeamPlayerMembersListComponent,
-    ActionShortcutButtonComponent
+    ActionShortcutButtonComponent,
+    UserQuestionsCommunicationComponent,
+    TeamChatThreadComponent
   ],
   imports: [
     CommonModule,
@@ -227,7 +231,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     PlayersListComponent,
     SearchableFormFieldComponent,
     TeamPlayerMembersListComponent,
-    ActionShortcutButtonComponent
+    ActionShortcutButtonComponent,
+    UserQuestionsCommunicationComponent,
+    TeamChatThreadComponent
   ],
 })
 export class SharedModule { }

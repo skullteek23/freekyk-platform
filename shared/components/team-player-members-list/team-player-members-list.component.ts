@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { Tmember } from '@shared/interfaces/team.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-team-player-members-list',
@@ -11,13 +12,16 @@ import { Tmember } from '@shared/interfaces/team.model';
 export class TeamPlayerMembersListComponent implements OnInit {
   @Input() list: Tmember[] = [];
   @Input() captainID: string = null;
+  @Input() showProfileButton = true;
+  @Input() showRemoveButton = false;
+
+  @Output() selectRemovePlayer = new Subject<string>();
 
   constructor(
     private dialog: MatDialog
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   openPlayerProfile(playerID: string) {
     const dialogRef = this.dialog.open(PlayerCardComponent, {
@@ -26,4 +30,7 @@ export class TeamPlayerMembersListComponent implements OnInit {
     });
   }
 
+  removePlayer(pid: string) {
+    this.selectRemovePlayer.next(pid);
+  }
 }

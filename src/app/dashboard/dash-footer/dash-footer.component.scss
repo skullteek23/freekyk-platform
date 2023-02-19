@@ -1,10 +1,10 @@
 .strip {
   height: 100px;
 }
+
 @media only screen and (max-width: 959px) {
   .strip {
-    height: 150px;
-    padding-bottom: 72px !important;
+    padding-bottom: 32px !important;
     padding-top: 20px;
   }
 }

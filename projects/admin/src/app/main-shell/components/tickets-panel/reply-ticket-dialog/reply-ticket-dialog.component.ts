@@ -31,7 +31,7 @@ export class ReplyTicketDialogComponent implements OnInit {
 
   initForm() {
     this.replyForm = new FormGroup({
-      reply: new FormControl(null, [Validators.required, Validators.maxLength(this.queryLimit), Validators.pattern(RegexPatterns.query)]),
+      reply: new FormControl(null, [Validators.required, Validators.maxLength(this.queryLimit)]),
     });
   }
 

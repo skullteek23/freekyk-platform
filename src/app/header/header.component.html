@@ -24,7 +24,7 @@
 
       <!-- notif icon - small -->
       <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-        (click)="onCloseMenu()" [routerLink]="['/dashboard', 'account', 'notifications']">
+        (click)="onCloseMenu()" [routerLink]="['/dashboard/home']">
         <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
           [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
           notifications
@@ -33,16 +33,16 @@
       <!-- notif icon - small -->
 
       <!-- cart icon - small -->
-      <button disabled matTooltip="Cart" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+      <!-- <button disabled matTooltip="Cart" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
         (click)="onCloseMenu()" [routerLink]="['/cart']">
         <mat-icon class="material-icons-round"> shopping_cart </mat-icon>
-      </button>
+      </button> -->
       <!-- cart icon - small -->
 
       <!-- account circle - small -->
       <div class="account-circle-container">
         <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
-          [routerLink]="['/dashboard', 'account', 'profile']" [dataImg]="profilePicture$ | async"
+          [routerLink]="['/dashboard', 'account']" [dataImg]="profilePicture$ | async"
           [margins]="false"></app-account-avatar>
       </div>
       <!-- account circle - small -->
@@ -118,17 +118,17 @@
         </button>
 
         <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-          [routerLink]="['/dashboard', 'account', 'notifications']">
+          [routerLink]="['/dashboard/home']">
           <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
             [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
             notifications
           </mat-icon>
         </button>
 
-        <button matTooltip="Cart" disabled *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+        <!-- <button matTooltip="Cart" disabled *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
           [routerLink]="['/cart']">
           <mat-icon *ngIf="!isLoading" class="material-icons-round">shopping_cart</mat-icon>
-        </button>
+        </button> -->
 
         <app-account-avatar matTooltip="User Settings" *ngIf="isLogged && !isLoading" [matMenuTriggerFor]="profileMenu"
           [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>

@@ -11,7 +11,6 @@ import {
 } from '@shared/interfaces/notification.model';
 import { SnackbarService } from './snackbar.service';
 import { DashState } from '../dashboard/store/dash.reducer';
-import { InvitePlayersComponent } from '../dashboard/dialogs/invite-players/invite-players.component';
 import { IJoinTeamDialogData, JoinTeamRequestDialogComponent } from '@app/dashboard/dialogs/join-team-request-dialog/join-team-request-dialog.component';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
@@ -388,29 +387,5 @@ export class NotificationsService implements OnDestroy {
     );
   }
 
-  onOpenInvitePlayersDialog(): void {
-    this.subscriptions.add(
-      this.store
-        .select('dash')
-        .pipe(
-          tap((resp) => {
-            if (!resp.isCaptain) {
-              this.snackBarService.displayCustomMsg(
-                'Only a team captain can perform this action!'
-              );
-            }
-          }),
-          filter((resp) => resp.isCaptain),
-          map((resp) => resp.hasTeam.name),
-          take(1)
-        )
-        .subscribe((tname) => {
-          this.dialog.open(InvitePlayersComponent, {
-            panelClass: 'large-dialogs',
-            disableClose: true,
-            data: tname,
-          });
-        })
-    );
-  }
+
 }

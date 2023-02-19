@@ -4,7 +4,7 @@ import * as TeamActions from '../dashboard/dash-team-manag/store/team.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { map, take, tap } from 'rxjs/operators';
+import { filter, map, take, tap } from 'rxjs/operators';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '@shared/interfaces/team.model';
 import { SnackbarService } from './snackbar.service';
@@ -21,6 +21,9 @@ import { UploadTeamPhotoComponent } from './../dashboard/dialogs/upload-team-pho
 import firebase from 'firebase/app';
 import { MatchConstants } from '@shared/constants/constants';
 import { NotificationBasic } from '@shared/interfaces/notification.model';
+import { InvitePlayersComponent } from '@app/dashboard/dialogs/invite-players/invite-players.component';
+import { ManageMembersComponent } from '@app/dashboard/dialogs/manage-members/manage-members.component';
+import { ICommunicationDialogData, UserQuestionsCommunicationComponent } from '@shared/dialogs/user-questions-communication/user-questions-communication.component';
 @Injectable({
   providedIn: 'root',
 })
@@ -46,7 +49,7 @@ export class TeamService implements OnDestroy {
       });
   }
 
-  onOpenTeamGalleryDialog(): void {
+  onOpenManageMembersDialog(): void {
     this.store
       .select('dash')
       .pipe(
@@ -58,6 +61,51 @@ export class TeamService implements OnDestroy {
           this.handlePermissionErrors(NO_TEAM);
         } else if (!state.isCaptain) {
           this.handlePermissionErrors(CAPTAIN_ONLY);
+        } else {
+          this.dialog.open(ManageMembersComponent, {
+            panelClass: 'large-dialogs',
+            disableClose: true
+          });
+        }
+      });
+  }
+
+
+
+  onOpenInvitePlayersDialog(): void {
+    this.store
+      .select('dash')
+      .pipe(
+        tap((resp) => {
+          if (!resp.isCaptain) {
+            this.snackBarService.displayCustomMsg(
+              'Only a team captain can perform this action!'
+            );
+          }
+        }),
+        filter((resp) => resp.isCaptain),
+        map((resp) => resp.hasTeam.name),
+        take(1)
+      )
+      .subscribe((tname) => {
+        this.dialog.open(InvitePlayersComponent, {
+          panelClass: 'large-dialogs',
+          disableClose: true,
+          data: tname,
+        });
+      })
+  }
+
+  onOpenTeamGalleryDialog(): void {
+    this.store
+      .select('dash')
+      .pipe(
+        map((currState) => ({ team: currState.hasTeam, isCaptain: currState.isCaptain })),
+        take(1)
+      )
+      .subscribe((state) => {
+        if (state.team === null) {
+          this.handlePermissionErrors(NO_TEAM);
         } else {
           this.dialog.open(TeamgalleryComponent, {
             panelClass: 'fk-dialogs',
@@ -122,7 +170,7 @@ export class TeamService implements OnDestroy {
 
   onIncompleteProfile(section: 'player' | 'freestyle'): void {
     this.handlePermissionErrors(INCOMPLETE_PROFILE);
-    this.router.navigate(['/dashboard', 'account', 'profile'], {
+    this.router.navigate(['/dashboard', 'account'], {
       fragment: section,
     });
   }

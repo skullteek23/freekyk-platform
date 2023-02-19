@@ -29,10 +29,17 @@ export class FixtureBasicComponent {
     this.formatters = Formatters;
   }
 
-  onOpenFixture() {
+  openFixture() {
     this.dialog.open(MatchCardComponent, {
       panelClass: 'fk-dialogs',
       data: this.fixture.id,
     });
+  }
+
+  get scoreStr(): string {
+    if (this.fixture.home.hasOwnProperty('score') && this.fixture.away.hasOwnProperty('score')) {
+      return `${this.fixture.home.score} - ${this.fixture.away.score}`
+    }
+    return `-`
   }
 }

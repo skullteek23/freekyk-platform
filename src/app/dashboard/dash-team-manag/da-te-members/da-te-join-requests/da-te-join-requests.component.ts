@@ -39,7 +39,7 @@ export class DaTeJoinRequestsComponent implements OnInit {
   }
 
   onInviteMore(): void {
-    this.notificationService.onOpenInvitePlayersDialog();
+    this.teamService.onOpenInvitePlayersDialog();
   }
 
   onOpenPlayerProfile(pid: string): void {

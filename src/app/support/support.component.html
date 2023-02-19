@@ -128,5 +128,10 @@
         <app-faqs></app-faqs>
       </ng-template>
     </mat-tab>
+    <mat-tab *ngIf="isUser">
+      <ng-template>
+        <app-acc-tickets></app-acc-tickets>
+      </ng-template>
+    </mat-tab>
   </mat-tab-group>
 </div>

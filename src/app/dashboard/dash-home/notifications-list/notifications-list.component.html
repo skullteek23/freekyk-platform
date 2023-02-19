@@ -1,7 +1,6 @@
 <ul>
-  <li class="notification mat-elevation-z4" [style.opacity]="notification.read === 1 ? '0.6' : '1'"
-    *ngFor="let notification of notifications" (click)="onSelectNotification(notification)" fxLayout="column"
-    fxLayoutGap="0px" fxLayoutAlign="center">
+  <li class="notification mat-elevation-z4" *ngFor="let notification of notifications"
+    (click)="onSelectNotification(notification)" fxLayout="column" fxLayoutGap="0px" fxLayoutAlign="center">
     <div fxLayoutAlign="space-between center" fxLayout>
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="ellipsis limit-width" ngClass.gt-sm="mat-body-1" ngClass.lt-md="mat-caption"> {{
@@ -25,7 +24,8 @@
             <span>Mark as Unread</span>
           </ng-container>
         </a>
-        <span fxHide.gt-sm="true" class="no-left material-icons-round">chevron_right</span>
+        <span fxHide.gt-sm="true" class="no-left material-icons-round">{{notification.read ===
+          1?'drafts':'chevron_right'}}</span>
         <span class="mat-body-2 notif_time" ngClass.lt-md="mat-caption time-width">
           {{ notification.date | date: CUSTOM_FORMAT }}
         </span>

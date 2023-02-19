@@ -1,0 +1,19 @@
+<div class="no-items">
+  <app-no-items-message *ngIf="invitesList.length === 0" items="pending invites"></app-no-items-message>
+</div>
+<div class="list-container">
+  <mat-list class="scroll">
+    <mat-list-item *ngFor="let invite of invitesList">
+      <div class="full-width-table" fxLayoutAlign="space-between center">
+        <div class="left-centered" fxLayout="column" fxLayoutAlign="center start">
+          <span class="mat-body-1" *ngIf="invite?.receiverName">{{ invite?.receiverName }} </span>
+          <span class="mat-caption" *ngIf="invite?.date">Invite sent on {{ invite?.date | date: CUSTOM_FORMAT }} </span>
+        </div>
+        <a (click)="onOpenPlayerProfile(invite?.receiverID)" class="mat-caption">
+          View Profile
+        </a>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+</div>

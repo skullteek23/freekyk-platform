@@ -20,10 +20,8 @@ export const RouteLinks = {
     { viewValue: 'participate', value: 'participate' },
   ],
   DASHBOARD_ACCOUNT: [
-    { viewValue: 'profile', value: 'profile' },
-    { viewValue: 'all notifications', value: 'notifications' },
-    { viewValue: 'addresses', value: 'addresses' },
-    { viewValue: 'tickets', value: 'tickets' },
+    { viewValue: 'my profile', value: 'profile' },
+    { viewValue: 'notifications', value: 'notifications' },
   ],
   OTHERS: [
     { viewValue: 'about', value: 'about' },
@@ -150,7 +148,7 @@ export const MOBILE_LINKS: ILink[] = [
       },
       {
         name: 'Settings',
-        route: '/dashboard/account/profile',
+        route: '/dashboard/account',
         icon: 'settings'
       },
       {
@@ -198,7 +196,7 @@ export const DESKTOP_LINKS: ILink[] = [
       },
       {
         name: 'Account & Settings',
-        route: '/dashboard/account/profile'
+        route: '/dashboard/account'
       },
       {
         name: 'Logout',

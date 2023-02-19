@@ -28,7 +28,7 @@ export class MyNotificationsComponent implements OnInit {
     this.subscriptions.add(this.notificationService.notifsChanged.subscribe(notifications => {
       if (notifications) {
         notifications.sort(ArraySorting.sortObjectByKey('date', 'desc'));
-        this.notifications = notifications.filter(el => !el.read);
+        this.notifications = notifications;
       }
     }));
   }

@@ -4,6 +4,7 @@ img {
   display: inline-block;
   border-radius: 10px;
 }
+
 .img_cont {
   height: 100px;
   width: 100px;
@@ -11,9 +12,11 @@ img {
   background: black;
   border-radius: 10px;
 }
+
 .kickoff {
   width: 70px;
 }
+
 .score_rec {
   height: 32px;
   width: 64px;
@@ -22,14 +25,17 @@ img {
   border-radius: 2px;
   background-color: var(--primaryColor);
 }
+
 .team {
   height: auto;
   width: 100px;
 }
-div > a {
+
+div>a {
   text-decoration: none;
   color: var(--primaryColor);
 }
+
 .other {
   margin-bottom: 20px;
 }
@@ -42,6 +48,7 @@ div > a {
     overflow-y: auto;
   }
 }
+
 @media only screen and (min-width: 600px) {
   mat-tab-group {
     height: 60%;
@@ -49,4 +56,12 @@ div > a {
     max-height: 60%;
     overflow-y: auto;
   }
+}
+
+.seperator {
+  margin-top: 20px;
+}
+
+mat-tab {
+  width: 50%;
 }

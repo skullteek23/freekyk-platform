@@ -26,6 +26,7 @@ export class InvitePlayersComponent implements OnInit {
   invitesList: NotificationBasic[] = [];
   players$: Observable<PlayerBasicInfo[]>;
   noPlayers = true;
+  isLoaderShown = false;
 
   constructor(
     public dialogRef: MatDialogRef<InvitePlayersComponent>,
@@ -87,8 +88,9 @@ export class InvitePlayersComponent implements OnInit {
   }
 
   sendInvites(): void {
-    if (this.invitesList.length) {
-      const batch = this.ngFire.firestore.batch();
+    const batch = this.ngFire.firestore.batch();
+    if (this.invitesList.length && batch) {
+      this.isLoaderShown = true;
       for (const invite of this.invitesList) {
         const colRef = this.ngFire.firestore.collection('notifications').doc();
         batch.set(colRef, invite);
@@ -96,10 +98,15 @@ export class InvitePlayersComponent implements OnInit {
       batch
         .commit()
         .then(() => {
+          this.isLoaderShown = false;
           this.snackBarService.displayCustomMsg('Invites sent successfully!');
           this.onCloseDialog();
         })
-        .catch(() => this.snackBarService.displayError());
+        .catch(() => {
+          this.isLoaderShown = false;
+          this.snackBarService.displayError()
+        }
+        );
     }
   }
 }

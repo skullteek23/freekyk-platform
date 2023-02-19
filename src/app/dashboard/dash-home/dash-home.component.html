@@ -1,8 +1,11 @@
-<div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="0" fxLayoutGap.gt-sm="20px">
+<div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap">
   <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%">
-    <span class="mat-body-1" *ngIf="playerName">
-      Hello, <span class="mat-body-2">{{playerName}}</span>
-    </span>
+    <div class="first-row" fxLayoutAlign="space-between center">
+      <span class="mat-body-1" *ngIf="playerName">
+        Hello, <span class="mat-body-2">{{playerName}}</span>
+      </span>
+      <a [routerLink]="['/dashboard', 'account']" class="mat-caption sec-menu">Edit Profile</a>
+    </div>
     <app-action-shortcut-button *ngIf="profileShortcutData" [data]="profileShortcutData"
       (actionTrigger)="openProfile()"></app-action-shortcut-button>
 
@@ -23,7 +26,8 @@
     <app-action-shortcut-button [data]="ticketShortcutData"
       (actionTrigger)="openTicketDialog()"></app-action-shortcut-button>
   </div>
-
-  <app-my-notifications></app-my-notifications>
+  <div id="notification-dashboard">
+    <app-my-notifications></app-my-notifications>
+  </div>
 </div>
 <app-loading *ngIf="isLoaderShown"></app-loading>
