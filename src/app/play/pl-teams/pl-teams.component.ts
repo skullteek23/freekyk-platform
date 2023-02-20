@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, share, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamsFilters } from '@shared/Constants/FILTERS';
 import { FilterData } from '@shared/interfaces/others.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
+import { ApiService } from '@shared/services/api.service';
+import { manipulateTeamData } from '@shared/utils/pipe-functions';
 
 @Component({
   selector: 'app-pl-teams',
@@ -25,7 +25,7 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private ngFire: AngularFirestore,
+    private apiService: ApiService,
     private mediaObs: MediaObserver,
     private queryService: QueryService
   ) { }
@@ -62,26 +62,12 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   }
 
   getTeams(): void {
-    this.teams$ = this.ngFire
-      .collection('teams', (ref) => ref.orderBy('tname'))
-      .get()
-      .pipe(
-        tap((val) => {
-          this.noTeams = val.empty;
-          this.isLoading = false;
-        }),
-        map((resp) =>
-          resp.docs.map(
-            (doc) =>
-            ({
-              id: doc.id,
-              ...(doc.data() as TeamBasicInfo),
-            } as TeamBasicInfo)
-          )
-        ),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
-        share()
-      );
+    this.teams$ = this.apiService.getTeams().pipe(
+      tap((val) => {
+        this.noTeams = val.length === 0;
+        this.isLoading = false;
+      }),
+    );
   }
 
   onQueryData(queryInfo): void {
@@ -91,8 +77,7 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
     this.teams$ = this.queryService
       .onQueryData(queryInfo, 'teams')
       .pipe(
-        map((resp) => resp.docs.map((doc) => doc.data() as TeamBasicInfo)),
-        map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
+        manipulateTeamData.bind(this)
       );
   }
 }

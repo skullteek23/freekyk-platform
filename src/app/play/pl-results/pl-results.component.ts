@@ -1,14 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { QueryService } from 'src/app/services/query.service';
-import { MatchFilters } from '@shared/Constants/FILTERS';
-import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
-import { FilterData } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
+import { tap } from 'rxjs/operators';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { ApiService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-results',
@@ -20,31 +14,14 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   isLoading = true;
   noResults = false;
   results$: Observable<MatchFixture[]>;
-  filterData: FilterData;
   subscriptions = new Subscription();
 
   constructor(
-    private ngFire: AngularFirestore,
-    private queryService: QueryService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
-    this.initSeasonFilter();
-    this.subscriptions.add(
-      this.route.queryParams.subscribe((params) => {
-        if (params && Object.keys(params).length) {
-          const filter = {
-            queryItem: Object.keys(params)[0],
-            queryValue: Object.values(params)[0]
-          };
-          this.onQueryResults(filter);
-        } else {
-          this.onQueryResults(null);
-        }
-      })
-    );
+    this.getResults();
   }
 
   ngOnDestroy(): void {
@@ -53,51 +30,15 @@ export class PlResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  initSeasonFilter() {
-    this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(
-        map((resp) => resp.docs.map((doc) => (doc.data() as SeasonBasicInfo))),
-        map((resp) => resp.filter((doc) => doc.status !== 'REMOVED').map(el => el.name))
-      )
-      .subscribe((resp) => {
-        this.filterData = {
-          defaultFilterPath: 'allMatches',
-          filtersObj: {
-            ...MatchFilters,
-            Season: resp,
-          },
-        };
-      });
-  }
-
-  onQueryResults(queryInfo): void {
+  getResults(): void {
     this.isLoading = true;
-    this.results$ = this.queryService
-      .onQueryMatches(queryInfo, 'allMatches', true)
+    this.results$ = this.apiService
+      .getResults()
       .pipe(
         tap((val) => {
-          this.noResults = val.empty;
-        }),
-        map((resp) => resp.docs.map((doc) => doc.data() as MatchFixture)),
-        map((resp) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
-        map(resp => resp.map(el => {
-          el.status = ParseMatchProperties.getTimeDrivenStatus(el.status, el.date);
-          return el;
-        })),
-        tap(() => {
+          this.noResults = val.length === 0;
           this.isLoading = false;
         }),
       );
-  }
-
-  onQueryData(queryInfo): void {
-    if (queryInfo) {
-      const queryParamKey = queryInfo?.queryItem;
-      this.router.navigate(['/play', 'results'], { queryParams: { [queryParamKey]: queryInfo.queryValue } });
-    } else {
-      this.router.navigate(['/play', 'results']);
-    }
   }
 }
