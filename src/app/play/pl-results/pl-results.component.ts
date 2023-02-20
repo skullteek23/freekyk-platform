@@ -11,7 +11,7 @@ import { ApiService } from '@shared/services/api.service';
 })
 export class PlResultsComponent implements OnInit, OnDestroy {
 
-  isLoading = true;
+  isLoaderShown = true;
   noResults = false;
   results$: Observable<MatchFixture[]>;
   subscriptions = new Subscription();
@@ -31,13 +31,13 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   }
 
   getResults(): void {
-    this.isLoading = true;
+    this.isLoaderShown = true;
     this.results$ = this.apiService
       .getResults()
       .pipe(
         tap((val) => {
           this.noResults = val.length === 0;
-          this.isLoading = false;
+          this.isLoaderShown = false;
         }),
       );
   }

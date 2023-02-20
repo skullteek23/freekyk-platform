@@ -1,20 +1,5 @@
 <h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Upcoming Fixtures</h4>
 <div fxLayout="column" fxLayoutGap="20px">
-  <!-- mobile filter -->
-  <!-- <app-filters-sm
-    fxHide.gt-sm="true"
-    [filterArray]="fixtFilters"
-  ></app-filters-sm> -->
-  <!-- mobile filter -->
-
-  <!-- desktop filters -->
-  <app-filters-lg *ngIf="!season" fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)">
-  </app-filters-lg>
-  <!-- desktop filters -->
-
-  <!-- loading -->
-  <app-bar-loading-shimmer *ngIf="isLoading"></app-bar-loading-shimmer>
-  <!-- loading -->
 
   <!-- fixtures list -->
   <ul class="container section-space-bottom fixture-container">
@@ -25,3 +10,4 @@
   </ul>
   <!-- fixtures list -->
 </div>
+<app-loading *ngIf="isLoaderShown"></app-loading>
