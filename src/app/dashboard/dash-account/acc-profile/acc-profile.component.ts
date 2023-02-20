@@ -567,6 +567,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
       this.snackBarService.displayError();
       return;
     }
+    this.isLoaderShown = true;
     const uid = localStorage.getItem('uid');
     this.uploadImageTask = this.ngStorage.upload('/profileImages/profileimage_' + uid, file);
     const downloadURL: string = await this.uploadImageTask.then((res) => res.ref.getDownloadURL());
