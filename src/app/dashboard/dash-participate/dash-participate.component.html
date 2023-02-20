@@ -1,6 +1,10 @@
 <div fxLayout="column" class="back-button">
-  <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton ">
-    Go to Dashboard
+  <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton" fxLayoutAlign="center center"
+    fxLayoutGap="8px">
+    <span class="material-icons-round">arrow_back</span>
+    <span>
+      Go to Dashboard
+    </span>
   </button>
 </div>
 <div mat-card-title fxLayoutAlign="start center" fxLayoutGap="8px" class="heading">
