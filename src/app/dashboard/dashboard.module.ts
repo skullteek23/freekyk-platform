@@ -46,6 +46,7 @@ import { TeamMembersComponent } from './dash-team-manag/team-members/team-member
 import { ManageMembersComponent } from './dialogs/manage-members/manage-members.component';
 import { InvitedPlayersListComponent } from './dash-team-manag/invited-players-list/invited-players-list.component';
 import { TeamCommunicationComponent } from './dash-team-manag/team-communication/team-communication.component';
+import { PendingPaymentComponent } from './dash-home/pending-payment/pending-payment.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { TeamCommunicationComponent } from './dash-team-manag/team-communication
     ManageMembersComponent,
     InvitedPlayersListComponent,
     TeamCommunicationComponent,
+    PendingPaymentComponent,
 
   ],
   imports: [

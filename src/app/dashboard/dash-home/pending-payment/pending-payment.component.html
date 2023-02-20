@@ -1,0 +1,25 @@
+<mat-card class="dashboard-card mat-elevation-z8">
+  <div class="title" fxLayoutAlign="start center" fxLayout="row" fxLayoutGap="8px">
+    <span class="dash-h5">Complete your Pending Payments</span>
+    <span class="material-icons-round red">error</span>
+  </div>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let pendingPayment of data; last as last"
+        (click)="openCheckoutFlow(pendingPayment); $event.stopPropagation()">
+        <p matLine fxLayoutAlign="space-between center">
+          <span class="mat-body-1 ellipsis">
+            {{pendingPayment.seasonName}}
+          </span>
+          <span class="material-icons-round">
+            chevron_right
+          </span>
+        </p>
+        <p matLine>
+          <span class="mat-caption red"> Pending Amount: {{ pendingPayment.amount_due | currency: 'INR'}} </span>
+        </p>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

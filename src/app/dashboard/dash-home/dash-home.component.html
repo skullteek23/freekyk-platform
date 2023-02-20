@@ -13,6 +13,8 @@
       (actionTrigger)="takeTeamAction()"></app-action-shortcut-button>
   </div>
 
+  <app-pending-payment *ngIf="isPendingOrder" [data]="pendingOrdersList"></app-pending-payment>
+
   <app-upcoming-match *ngIf="upcomingFixture" [fixture]="upcomingFixture"
     [description]="upcomingFixtureDescription"></app-upcoming-match>
 

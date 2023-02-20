@@ -1,29 +1,27 @@
-<section class="section-space-top section-space-bottom" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px">
-  <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="24px">
-    <div>
-      <h4>Description</h4>
-      <p [innerHtml]="data?.description" class="mat-body-1 preserve-white-space">
-      </p>
-    </div>
-    <div>
-      <h4>Venue Details</h4>
-      <p class="mat-body-1">
-        {{ venue?.city + ", " + venue?.state }}
-      </p>
-    </div>
-    <div>
-      <h4>Participation Payment Details</h4>
-      <p class="mat-body-1">
-        {{ data?.paymentMethod }}
-      </p>
-    </div>
-    <div>
-      <h4>Rules</h4>
-      <p [innerHtml]="data?.rules" class="mat-body-1 preserve-white-space">
-      </p>
-    </div>
+<section class="section-space-top section-space-bottom" fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="24px">
+  <div>
+    <h4>Description</h4>
+    <p [innerHtml]="data?.description" class="mat-body-1 preserve-white-space">
+    </p>
   </div>
-  <div fxLayout="column" fxFlex.gt-sm="50%">
+  <div>
+    <h4>Venue Details</h4>
+    <p class="mat-body-1">
+      {{ venue?.city + ", " + venue?.state }}
+    </p>
+  </div>
+  <div>
+    <h4>Participation Payment Details</h4>
+    <p class="mat-body-1">
+      {{ data?.paymentMethod }}
+    </p>
+  </div>
+  <div>
+    <h4>Rules</h4>
+    <p [innerHtml]="data?.rules" class="mat-body-1 preserve-white-space">
+    </p>
+  </div>
+  <!-- <div fxLayout="column" fxFlex.gt-sm="50%">
     <h4>Participants ({{isRestrictedParticipants ? 'Restricted' : 'Open For All'}})</h4>
     <span *ngIf="(participants$ | async)?.length === 0" class="mat-caption">
       No Participants yet!
@@ -39,5 +37,5 @@
         </p>
       </a>
     </mat-list>
-  </div>
+  </div> -->
 </section>

@@ -19,6 +19,7 @@ const routes: Routes = [
       },
       { path: 'team-management', component: DashTeamManagComponent },
       { path: 'participate', component: DashParticipateComponent },
+      { path: 'participate/:season', component: DashParticipateComponent },
       {
         path: 'account',
         component: DashAccountComponent,

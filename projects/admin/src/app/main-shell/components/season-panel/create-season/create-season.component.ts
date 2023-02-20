@@ -95,11 +95,11 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     }
   }
 
-  onFinishPayment(stepper: MatHorizontalStepper) {
-    if (this.paymentForm.valid) {
-      stepper.next();
-    }
-  }
+  // onFinishPayment(stepper: MatHorizontalStepper) {
+  //   if (this.paymentForm.valid) {
+  //     stepper.next();
+  //   }
+  // }
 
   onPublishSeason() {
     this.seasonID = this.ngFire.createId();

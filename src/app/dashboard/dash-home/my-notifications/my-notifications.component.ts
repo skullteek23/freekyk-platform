@@ -13,8 +13,10 @@ export class MyNotificationsComponent implements OnInit {
 
   isLoading = true;
   notifications: NotificationBasic[] = [];
+  notificationsCache: NotificationBasic[] = [];
   noNotification: boolean = false;
   subscriptions = new Subscription();
+  isShowUnread = true;
 
   constructor(
     private notificationService: NotificationsService
@@ -29,8 +31,19 @@ export class MyNotificationsComponent implements OnInit {
       if (notifications) {
         notifications.sort(ArraySorting.sortObjectByKey('date', 'desc'));
         this.notifications = notifications;
+        this.notificationsCache = JSON.parse(JSON.stringify(notifications));
+        this.onToggleNotifications(1);
       }
     }));
+  }
+
+  onToggleNotifications(status: number) {
+    this.isShowUnread = status === 1;
+    if (status === 1) {
+      this.notifications = this.notificationsCache.filter(el => !el.read);
+    } else {
+      this.notifications = JSON.parse(JSON.stringify(this.notificationsCache));
+    }
   }
 
 }

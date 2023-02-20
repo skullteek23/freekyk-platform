@@ -69,7 +69,7 @@
       </div>
     </mat-step>
 
-    <mat-step label="Payment" [editable]="false" [stepControl]="paymentForm">
+    <!-- <mat-step label="Payment" [editable]="false" [stepControl]="paymentForm">
       <app-admin-payment *ngIf="seasonStepper.selectedIndex === 5"></app-admin-payment>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center">
@@ -79,10 +79,10 @@
           Next
         </button>
       </div>
-    </mat-step>
+    </mat-step> -->
 
     <mat-step label="Publish" [editable]="false">
-      <ng-container *ngIf="seasonStepper.selectedIndex === 6 && isSeasonLive === false">
+      <ng-container *ngIf="seasonStepper.selectedIndex === 5 && isSeasonLive === false">
         <app-view-summary (clickNext)="onPublishSeason()"></app-view-summary>
       </ng-container>
       <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" *ngIf="isSeasonLive">

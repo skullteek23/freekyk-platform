@@ -18,6 +18,7 @@ import { DashState } from '../store/dash.reducer';
 import { IMyMatchesData } from './my-matches/my-matches.component';
 import { IStatisticsCard } from './my-stats-card/my-stats-card.component';
 import { NotificationsService } from '@app/services/notifications.service';
+import { RazorPayOrder } from '@shared/interfaces/order.model';
 
 @Component({
   selector: 'app-dash-home',
@@ -40,6 +41,8 @@ export class DashHomeComponent implements OnInit, OnDestroy {
   teamMatches: MatchFixture[] = [];
   playerName = 'User';
   stats: IStatisticsCard[] = [];
+  pendingOrdersList: Partial<RazorPayOrder>[] = [];
+  isPendingOrder = false;
 
   constructor(
     private teamService: TeamService,
@@ -79,8 +82,8 @@ export class DashHomeComponent implements OnInit, OnDestroy {
         icon: 'account_circle',
       };
     }));
-
   }
+
 
   createShortcutButtonData() {
 
@@ -90,6 +93,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
     }
     this.getOnboardingProgress();
     this.getTeamStatus();
+    this.getUserOrders();
   }
 
   getTeamStatus() {
@@ -115,7 +119,7 @@ export class DashHomeComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response?.basicInfo?.tname !== null) {
-            if (response?.upcomingMatches) {
+            if (response?.upcomingMatches?.length) {
               const matchCopy = JSON.parse(JSON.stringify(response.upcomingMatches[0]));
               this.upcomingFixture = matchCopy;
               this.upcomingFixture.status = ParseMatchProperties.getTimeDrivenStatus(matchCopy.status, matchCopy.date);
@@ -135,6 +139,29 @@ export class DashHomeComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => this.snackbarService.displayError('Error getting fixtures')
+      })
+  }
+
+  getUserOrders() {
+    const uid = localStorage.getItem('uid');
+    this.ngFire.collection('orders', (query) => query.where('receipt', '==', uid)).get()
+      .subscribe({
+        next: (response) => {
+          this.pendingOrdersList = [];
+          if (response?.docs.length) {
+            response.docs.forEach(doc => {
+              const docData = doc.data() as Partial<RazorPayOrder>;
+              if (docData.amount_due > 0) {
+                this.isPendingOrder = true;
+                this.pendingOrdersList.push({ ...docData, amount_due: docData.amount_due / 100 });
+              }
+            })
+          }
+        },
+        error: () => {
+          this.pendingOrdersList = [];
+          this.isPendingOrder = false;
+        }
       })
   }
 
@@ -211,5 +238,9 @@ export class DashHomeComponent implements OnInit, OnDestroy {
       panelClass: 'fk-dialogs',
       data: uid,
     });
+  }
+
+  navigateToParticipate() {
+    this.router.navigate(['/dashboard', 'participate']);
   }
 }

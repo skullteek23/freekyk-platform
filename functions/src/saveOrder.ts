@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 const db = admin.firestore();
 const Razorpay = require('razorpay');
 
-export async function saveRazorpayOrder(data: { seasonID: string, orderType: number, response: any }, context: any): Promise<any> {
+export async function saveRazorpayOrder(data: { seasonID: string, seasonName: string, orderType: number, response: any }, context: any): Promise<any> {
 
   const ORDER_ID = data?.response?.razorpay_order_id || null;
   const PAYMENT_ID = data?.response?.razorpay_payment_id || null;
@@ -17,6 +17,7 @@ export async function saveRazorpayOrder(data: { seasonID: string, orderType: num
     if (order && ORDER_ID && PAYMENT_ID) {
       order['razorpay_payment_id'] = PAYMENT_ID;
       order.seasonID = data?.seasonID;
+      order.seasonName = data?.seasonName;
       return db.collection('orders').doc(ORDER_ID).set(order);
     }
     return false;

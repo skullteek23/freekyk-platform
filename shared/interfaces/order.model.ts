@@ -15,6 +15,7 @@ export interface RazorPayOrder {
   status: string;
   razorpay_payment_id: string;
   seasonID: string;
+  seasonName: string;
   notes?: any[];
   offers?: any[];
   offer_id?: string;

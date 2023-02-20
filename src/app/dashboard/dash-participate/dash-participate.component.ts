@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
@@ -18,7 +18,8 @@ import { SEASON_OFFERS_MORE_INFO } from '@shared/web-content/WEBSITE_CONTENT';
 import { Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
 import { EnlargeService } from '@app/services/enlarge.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectionStrategy } from '@angular/compiler/src/compiler_facade_interface';
 
 export enum OperationStatus {
   default,
@@ -41,6 +42,7 @@ export class DashParticipateComponent implements OnInit {
   status = OperationStatus.default;
   formatter = Formatters;
   selectedSeason: SeasonBasicInfo = null;
+  selectedSeasonID: string = null;
 
   constructor(
     private ngFire: AngularFirestore,
@@ -49,10 +51,13 @@ export class DashParticipateComponent implements OnInit {
     private snackBarService: SnackbarService,
     private dialog: MatDialog,
     private enlargeService: EnlargeService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
+    this.selectedSeasonID = this.route.snapshot.params['season'];
     this.getSeasons();
   }
 
@@ -74,22 +79,27 @@ export class DashParticipateComponent implements OnInit {
             docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);;
             if (slotExists) {
               docData.slotBooked = true;
-              docData.isAmountDue = slotExists.amount_due > 0;
+              docData.isAmountDue = slotExists.amount_due / 100; // in rupees
             } else {
               docData.slotBooked = false;
-              docData.isAmountDue = true;
+              docData.isAmountDue = 0;
             }
             docData.isFreeSeason = docData.discountedFees === 0;
 
             return { id: docID, ...docData };
           });
           this.seasons = list.filter(season => season.status !== 'REMOVED' && season.status !== 'FINISHED');
-          this.seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
+          this.seasons.sort(ArraySorting.sortObjectByKey('isAmountDue', 'desc'));
         } else {
           this.ordersList = [];
           this.seasons = [];
         }
         this.status = OperationStatus.default;
+
+        if (this.selectedSeasonID && this.seasons.length && this.ordersList.length) {
+          const season = this.seasons.find(s => s.id === this.selectedSeasonID);
+          this.initCheckoutFlow(season);
+        }
       },
       error: () => {
         this.snackBarService.displayError('Error getting seasons!');
@@ -151,7 +161,9 @@ export class DashParticipateComponent implements OnInit {
   }
 
   onClosePaymentPage() {
-    window.location.reload();
+    this.router.navigate(['/dashboard/participate'])
+    this.status = OperationStatus.default;
+    this.cdr.detectChanges();
   }
 
   onErrorOrderGeneration() {
@@ -165,7 +177,7 @@ export class DashParticipateComponent implements OnInit {
         next: () => {
           const allPromises = [];
           const tid = sessionStorage.getItem('tid');
-          allPromises.push(this.paymentService.saveOrder(this.selectedSeason.id, OrderTypes.season, response).toPromise());
+          allPromises.push(this.paymentService.saveOrder(this.selectedSeason, OrderTypes.season, response).toPromise());
           allPromises.push(this.paymentService.participate(this.selectedSeason, tid).toPromise());
 
           Promise.all(allPromises)
@@ -282,13 +294,9 @@ export class DashParticipateComponent implements OnInit {
     return options;
   }
 
-
-
   onNavigateToFixtures() {
     this.router.navigate(['/s', this.selectedSeason.name]);
   }
-
-
 
   async participateInFreeSeason(season: SeasonBasicInfo): Promise<void> {
     this.dialog.open(ConfirmationBoxComponent).afterClosed()

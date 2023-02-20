@@ -1,3 +1,8 @@
+<div fxLayout="column" class="back-button">
+  <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton ">
+    Go to Dashboard
+  </button>
+</div>
 <div mat-card-title fxLayoutAlign="start center" fxLayoutGap="8px" class="heading">
   <span class="mat-body-1">
     Live Seasons
@@ -21,14 +26,18 @@
         <mat-card-title class="dash-h5 season-title">
           {{season.name}}
         </mat-card-title>
-        <mat-card-subtitle class="mat-caption ellipsis">Registration ends on {{ season.lastRegDate | date: 'short'
+        <mat-card-subtitle *ngIf="!season.slotBooked" class="mat-caption ellipsis">Registration ends on {{
+          season.lastRegDate | date: 'short'
           }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="season.slotBooked" class="mat-caption ellipsis">
+          Waiting for other teams to participate
+        </mat-card-subtitle>
       </mat-card-header>
 
       <img mat-card-image [src]="season.imgpath" alt="Season image" appFallbackImg
         (click)="enlargePhoto(season.imgpath)">
       <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
+        <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center" *ngIf="!season.slotBooked">
           <span class="spaced-heading">
             Age group:
           </span>
@@ -38,7 +47,7 @@
             </mat-chip>
           </mat-chip-list>
         </div>
-        <div class="spacy" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
+        <div class="spacy" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center" *ngIf="!season.slotBooked">
           <span class="spaced-heading">
             Fees per team:
           </span>
@@ -62,7 +71,9 @@
         <mat-card-actions *ngIf="!season.isFreeSeason && season.isAmountDue">
           <button mat-stroked-button (click)="initCheckoutFlow(season)" color="primary">
             {{season.slotBooked ? 'Pay Remaining Amount' : 'Pay Now'}}
+            {{season.slotBooked ? (season.isAmountDue | currency: 'INR') : ''}}
           </button>
+
         </mat-card-actions>
         <ng-container *ngIf="season.slotBooked">
           <div class="section-footer" fxLayoutAlign="start center" fxLayoutGap="8px">

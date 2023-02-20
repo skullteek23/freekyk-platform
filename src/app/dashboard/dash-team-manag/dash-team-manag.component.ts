@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Store } from '@ngrx/store';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { Subscription } from 'rxjs';
-import { map, filter, take } from 'rxjs/operators';
-import { PlayerService } from 'src/app/services/player.service';
+import { map, take } from 'rxjs/operators';
 import { TeamService } from 'src/app/services/team.service';
 import { IStatisticsCard } from '../dash-home/my-stats-card/my-stats-card.component';
 import { DashState } from '../store/dash.reducer';
@@ -29,33 +27,13 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
   teamStats: IStatisticsCard[] = [];
 
   constructor(
-    private mediaObs: MediaObserver,
     private teamService: TeamService,
-    private playerService: PlayerService,
     private store: Store<{ dash: DashState; team: TeamState; }>
   ) { }
 
   ngOnInit(): void {
     this.createShortcutData();
     this.getTeamStatistics();
-
-    // this.subscriptions.add(
-    //   this.mediaObs
-    //     .asObservable()
-    //     .pipe(
-    //       filter((changes: MediaChange[]) => changes.length > 0),
-    //       map((changes: MediaChange[]) => changes[0])
-    //     )
-    //     .subscribe((change: MediaChange) => {
-    //       if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-    //         this.showMobile = true;
-    //       } else {
-    //         this.showMobile = false;
-    //       }
-
-    //       this.isLoading = false;
-    //     })
-    // );
   }
 
   ngOnDestroy(): void {

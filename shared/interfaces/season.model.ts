@@ -25,7 +25,7 @@ export interface SeasonBasicInfo {
   discountedFees?: number;
   slotBooked?: boolean;
   isFreeSeason?: boolean;
-  isAmountDue?: boolean;
+  isAmountDue?: number;
 }
 export interface SeasonAbout {
   description: string;
