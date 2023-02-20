@@ -1,13 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { TeamMemberListFilter } from '@shared/Constants/FILTERS';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { FilterData, QueryInfo } from '@shared/interfaces/others.model';
 import { Tmember } from '@shared/interfaces/team.model';
-import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-te-members',
@@ -25,7 +22,6 @@ export class TeMembersComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private ngFire: AngularFirestore
   ) { }
 
   ngOnInit(): void {
