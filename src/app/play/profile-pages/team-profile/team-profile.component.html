@@ -53,7 +53,8 @@
   </mat-tab>
   <mat-tab label="Members">
     <ng-template matTabContent>
-      <app-te-members [members]="(members$ | async)?.members"></app-te-members>
+      <app-te-members [members]="(members$ | async)?.members"
+        [captainID]="(teamInfo$ | async)?.captainId"></app-te-members>
     </ng-template>
   </mat-tab>
   <mat-tab label="Gallery">

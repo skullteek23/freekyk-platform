@@ -17,6 +17,7 @@ import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 export class TeMembersComponent implements OnInit, OnDestroy {
 
   @Input() members: Tmember[] = [];
+  @Input() captainID: string;
 
   subscriptions = new Subscription();
   filterData: FilterData;

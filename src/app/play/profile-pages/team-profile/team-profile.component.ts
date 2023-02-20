@@ -1,13 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { tap, map, share, take } from 'rxjs/operators';
-import { DashState } from 'src/app/dashboard/store/dash.reducer';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { StatsTeam } from '@shared/interfaces/others.model';
 import { Formatters, TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
