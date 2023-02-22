@@ -14,7 +14,7 @@ import { DaTeMembersComponent } from './dash-team-manag/da-te-members/da-te-memb
 import { DaTeGalleryComponent } from './dash-team-manag/da-te-gallery/da-te-gallery.component';
 import { DaTeProfileComponent } from './dash-team-manag/da-te-profile/da-te-profile.component';
 import { GalleryCardComponent } from './dash-team-manag/da-te-gallery/gallery-card/gallery-card.component';
-import { TeamActivityComponent } from './dash-team-manag/da-te-communication/team-activity/team-activity.component';
+import { TeamActivityComponent } from './dash-team-manag/team-activity/team-activity.component';
 
 import { TeamjoinComponent } from './dialogs/teamjoin/teamjoin.component';
 import { TeamsettingsComponent } from './dialogs/teamsettings/teamsettings.component';

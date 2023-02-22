@@ -1,4 +1,4 @@
-<mat-card class="dashboard-card mat-elevation-z8" *ngIf="season">
+<mat-card class="dashboard-card mat-elevation-z8" *ngIf="season" (click)="openFlow(); $event.stopPropagation()">
   <mat-card-header>
     <mat-card-title>
       <span class="dash-h5 season-title">
@@ -13,7 +13,8 @@
     </mat-card-subtitle>
   </mat-card-header>
 
-  <img mat-card-image [src]="season.imgpath" alt="Season image" appFallbackImg (click)="enlargePhoto(season.imgpath)">
+  <img mat-card-image [src]="season.imgpath" alt="Season image" appFallbackImg
+    (click)="enlargePhoto(season.imgpath); $event.stopPropagation()">
   <mat-card-content>
     <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center" *ngIf="!season.slotBooked">
       <span class="spaced-heading">
@@ -42,12 +43,12 @@
     </div>
 
     <mat-card-actions *ngIf="season.isFreeSeason">
-      <button mat-stroked-button (click)="openOffer()" color="primary">
+      <button mat-stroked-button (click)="openOffer(); $event.stopPropagation()" color="primary">
         Participate
       </button>
     </mat-card-actions>
     <mat-card-actions *ngIf="!season.isFreeSeason">
-      <button mat-stroked-button (click)="initCheckoutFlow()" color="primary">
+      <button mat-stroked-button (click)="initCheckoutFlow(); $event.stopPropagation()" color="primary">
         {{season.slotBooked ? 'Pay Remaining Amount' : 'Pay Now'}}
         {{season.slotBooked ? (season.isAmountDue | currency: 'INR') : ''}}
       </button>

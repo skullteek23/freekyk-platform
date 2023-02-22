@@ -10,9 +10,11 @@
   object-fit: cover;
 }
 
-.mat-column-Player {
+.mat-column-player {
   min-width: 125px !important;
   text-align: left;
+  max-width: 200px;
+  padding-right: 20px !important;
 }
 
 .mat-column-Team,
@@ -21,12 +23,6 @@
   min-width: 125px !important;
   max-width: 200px !important;
   text-align: left;
-}
-
-.mat-column-Jersey {
-  width: 100px !important;
-  margin-left: 20px !important;
-  text-align: center !important;
 }
 
 .underline {
@@ -52,7 +48,7 @@
   max-height: 500px;
   padding: 0 0 0 16px;
   overflow-y: auto;
-  height: auto
+  height: auto;
 }
 
 table {

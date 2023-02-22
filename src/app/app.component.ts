@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         // if (event instanceof NavigationEnd && !event.url.includes('/dashboard/home')) {
         this.dashOpen = event.url.includes('dashboard');
-        window.scrollTo(0, 0);
       }
     });
     this.loadingService._loadingStatusChange.subscribe(response => {

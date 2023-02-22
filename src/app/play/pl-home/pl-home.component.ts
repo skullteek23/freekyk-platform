@@ -45,10 +45,12 @@ export class PlHomeComponent implements OnInit {
         next: (response) => {
           if (response?.length) {
             this.upcomingSeason = response[0];
+            window.scrollTo(0, 0);
           }
         },
         error: (error) => {
           this.upcomingSeason = null;
+          window.scrollTo(0, 0);
         }
       });
   }
@@ -103,7 +105,7 @@ export class PlHomeComponent implements OnInit {
     if (uid) {
       this.router.navigate(['/dashboard/participate', this.upcomingSeason.id]);
     } else {
-      this.router.navigate(['/play/seasons']);
+      this.router.navigate(['/s', this.upcomingSeason.name]);
     }
   }
 

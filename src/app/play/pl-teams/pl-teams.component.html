@@ -1,26 +1,14 @@
-<h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Teams</h4>
+<!-- <h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Teams</h4>
 <div fxLayout="column" fxLayoutGap="20px">
-  <!-- mobile filter -->
-  <!-- <app-filters-sm
-    fxHide.gt-sm="true"
-    [filterArray]="teFilters"
-  ></app-filters-sm> -->
-  <!-- mobile filter -->
-
-  <!-- desktop filters -->
   <app-filters-lg (changeFilter)="onQueryData($event)" fxHide.lt-md="true" [data]="filterData"></app-filters-lg>
-  <!-- desktop filters -->
 
   <app-search-lg [isDisabled]="(teams$ | async)?.length === 0" searchPlaceholder="Search teams by name, location"
     (searchItem)="filterTerm = $event">
   </app-search-lg>
 
-  <!-- loading -->
   <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
-  <!-- loading -->
 
   <div class="container section-space-bottom">
-    <!-- for small screens -->
     <mat-list *ngIf="onMobile; else lgScreen">
       <mat-list-item [routerLink]="['/t', team.tname]" *ngFor="
           let team of teams$
@@ -43,15 +31,11 @@
         <mat-divider *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>
-    <!-- for small screens -->
 
-    <!-- for large screens -->
     <ng-template #lgScreen>
-      <!-- no teams -->
       <ng-template #placeholder>
         <app-no-items-message items="teams"></app-no-items-message>
       </ng-template>
-      <!-- no teams -->
 
       <mat-grid-list *ngIf="noTeams == false; else placeholder" [cols]="cols" rowHeight="340px" gutterSize="20px">
         <mat-grid-tile [routerLink]="['/t', team.tname]" appElevateOnHover *ngFor="
@@ -79,6 +63,27 @@
         </mat-grid-tile>
       </mat-grid-list>
     </ng-template>
-    <!-- for large screens -->
   </div>
-</div>
+</div> -->
+
+<mat-card class="feature-card">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/find_your_team.svg" alt="Freekyk Play Seasons Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Teams</span>
+      <p class="mat-body-1 center description">
+        Create your own team or join an existing team to participate in seasons.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<section class="features-section">
+  <app-no-items-message *ngIf="!teams.length"></app-no-items-message>
+  <app-search-lg searchPlaceholder="Search for a Team" (searchItem)="applyFilter($event)"></app-search-lg>
+  <ul>
+    <li *ngFor="let team of teams">
+      <app-teams-list [team]="team"></app-teams-list>
+    </li>
+  </ul>
+</section>

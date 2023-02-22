@@ -5,7 +5,7 @@ import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.mod
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { manipulateFixtureData, manipulateGroundData, manipulateLiveSeasonData, manipulatePlayerData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateTeamData } from '@shared/utils/pipe-functions';
+import { manipulateFixtureData, manipulateGroundData, manipulatePlayerData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateTeamData } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable } from 'rxjs';
 
 @Injectable({
@@ -27,7 +27,11 @@ export class ApiService {
   }
 
   getSeasons(limit?: number): Observable<SeasonBasicInfo[]> {
-    return this.angularFirestore.collection('seasons', (query) => query.where('status', '!=', 'REMOVED')).get()
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '!=', 'REMOVED').limit(limit);
+    }
+    return this.angularFirestore.collection('seasons', query).get()
       .pipe(manipulateSeasonData.bind(this))
   }
 
@@ -63,7 +67,7 @@ export class ApiService {
   getLiveSeasons(): Observable<SeasonBasicInfo[]> {
     const currentTimestamp = new Date().getTime();
     return this.angularFirestore.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).get()
-      .pipe(manipulateLiveSeasonData.bind(this))
+      .pipe(manipulateSeasonData.bind(this))
   }
 
   getTeams(limit?: number): Observable<TeamBasicInfo[]> {

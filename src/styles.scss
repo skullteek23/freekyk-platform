@@ -980,3 +980,15 @@ section.features-section {
   padding-right: 12px;
   padding-left: 12px;
 }
+
+.all-players-container {
+  .table-container {
+    max-height: 100% !important;
+    overflow-y: none !important;
+    height: 100% !important;
+
+    th.mat-header-cell:first-of-type {
+      padding-right: 12px !important;
+    }
+  }
+}

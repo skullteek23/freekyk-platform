@@ -35,4 +35,12 @@ export class SeasonParticipateCardComponent implements OnInit {
     this.openCheckout.next();
   }
 
+  openFlow() {
+    if (this.season.isFreeSeason) {
+      this.openOffer();
+    } else {
+      this.initCheckoutFlow();
+    }
+  }
+
 }
