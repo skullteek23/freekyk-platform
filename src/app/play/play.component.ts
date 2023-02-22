@@ -4,6 +4,10 @@ import { Subscription } from 'rxjs';
 import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
 import { PLAY_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 import { ListOption } from '@shared/interfaces/others.model';
+import { MatDialog } from '@angular/material/dialog';
+import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
+import { SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { ApiService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-play',
@@ -18,9 +22,12 @@ export class PlayComponent implements OnInit, OnDestroy {
   playLinks: ListOption[] = RouteLinks.PLAY;
   subscriptions = new Subscription();
   activeLink = '';
+  seasonsList: SeasonBasicInfo[] = [];
 
   constructor(
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
@@ -43,5 +50,24 @@ export class PlayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  getLiveSeasons() {
+    this.apiService.getLiveSeasons()
+      .subscribe({
+        next: (response) => {
+          this.seasonsList = response;
+        },
+        error: () => {
+          this.seasonsList = [];
+        }
+      });
+  }
+
+  openLiveSeason(data: SeasonBasicInfo) {
+    this.dialog.open(LiveSeasonComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
   }
 }

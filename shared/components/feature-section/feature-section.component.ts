@@ -1,7 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LOREM_IPSUM } from '../../web-content/WEBSITE_CONTENT';
-import { FeatureSectionContent } from '../../interfaces/others.model';
+
+export interface IFeatureSectionData {
+  title: string;
+  imgUrl: string;
+  subtitle: string;
+  content: string;
+  cta: {
+    label: string;
+    route: string
+  };
+}
 
 @Component({
   selector: 'app-feature-section',
@@ -9,16 +18,7 @@ import { FeatureSectionContent } from '../../interfaces/others.model';
   styleUrls: ['./feature-section.component.scss'],
 })
 export class FeatureSectionComponent implements OnInit {
-  @Input('invert') flexOrderInvert = false;
-  @Input('featureContent') content: FeatureSectionContent = {
-    subHeading: 'Heading',
-    CTA: {
-      text: 'Explore More',
-      link: '/',
-    },
-    desc: LOREM_IPSUM,
-  };
-  @Input() svg = 'assets/svgs/Banner/play_banner_small.svg';
+  @Input() data: IFeatureSectionData = null;
 
   constructor(
     private router: Router
@@ -26,7 +26,9 @@ export class FeatureSectionComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onNavigate(route: string): void {
-    this.router.navigate([route]);
+  onNavigate(): void {
+    if (this.data.cta?.route) {
+      this.router.navigate([this.data.cta.route]);
+    }
   }
 }

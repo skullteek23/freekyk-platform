@@ -79,6 +79,9 @@ import { TeamPlayerMembersListComponent } from '@shared/components/team-player-m
 import { ActionShortcutButtonComponent } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { UserQuestionsCommunicationComponent } from '@shared/dialogs/user-questions-communication/user-questions-communication.component';
 import { TeamChatThreadComponent } from './dialogs/team-chat-thread/team-chat-thread.component';
+import { OverlayButtonsComponent } from './components/overlay-buttons/overlay-buttons.component';
+import { SeasonParticipateCardComponent } from './components/season-participate-card/season-participate-card.component';
+import { TeamsListComponent } from './components/teams-list/teams-list.component';
 
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
@@ -152,7 +155,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     TeamPlayerMembersListComponent,
     ActionShortcutButtonComponent,
     UserQuestionsCommunicationComponent,
-    TeamChatThreadComponent
+    TeamChatThreadComponent,
+    OverlayButtonsComponent,
+    SeasonParticipateCardComponent, TeamsListComponent
   ],
   imports: [
     CommonModule,
@@ -233,7 +238,9 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     TeamPlayerMembersListComponent,
     ActionShortcutButtonComponent,
     UserQuestionsCommunicationComponent,
-    TeamChatThreadComponent
+    TeamChatThreadComponent,
+    OverlayButtonsComponent,
+    SeasonParticipateCardComponent, TeamsListComponent
   ],
 })
 export class SharedModule { }

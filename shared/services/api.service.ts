@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { manipulateFixtureData, manipulateGroundData, manipulatePlayerData, manipulateSeasonData, manipulateTeamData } from '@shared/utils/pipe-functions';
-import { Observable } from 'rxjs';
+import { manipulateFixtureData, manipulateGroundData, manipulateLiveSeasonData, manipulatePlayerData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateTeamData } from '@shared/utils/pipe-functions';
+import { forkJoin, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +17,61 @@ export class ApiService {
     private angularFirestore: AngularFirestore
   ) { }
 
-  getPlayers(): Observable<PlayerBasicInfo[]> {
-    return this.angularFirestore.collection('players').get()
+  getPlayers(limit?: number): Observable<PlayerBasicInfo[]> {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.limit(limit);
+    }
+    return this.angularFirestore.collection('players', query).get()
       .pipe(manipulatePlayerData.bind(this));
   }
 
-  getSeasons(): Observable<SeasonBasicInfo[]> {
-    return this.angularFirestore.collection('seasons').get()
+  getSeasons(limit?: number): Observable<SeasonBasicInfo[]> {
+    return this.angularFirestore.collection('seasons', (query) => query.where('status', '!=', 'REMOVED')).get()
       .pipe(manipulateSeasonData.bind(this))
   }
 
-  getTeams(): Observable<TeamBasicInfo[]> {
-    return this.angularFirestore.collection('teams').get()
+  getPublishedSeasons(limit?: number): Observable<SeasonBasicInfo[]> {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '==', 'PUBLISHED').limit(limit);
+    } else {
+      query = (query) => query.where('status', '==', 'PUBLISHED')
+    }
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(manipulateSeasonData.bind(this))
+  }
+
+  getPublishedSeasonWithPaymentInfo(limit?: number): Observable<SeasonBasicInfo[]> {
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      let query;
+      if (limit && limit > 0) {
+        query = (query) => query.where('status', '==', 'PUBLISHED').limit(limit);
+      } else {
+        query = (query) => query.where('status', '==', 'PUBLISHED')
+      }
+      return forkJoin([
+        this.angularFirestore.collection('seasons', query).get(),
+        this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', uid)).get()
+      ]).pipe(manipulateSeasonOrdersData.bind(this))
+    } else {
+      return this.getPublishedSeasons(limit);
+    }
+  }
+
+  getLiveSeasons(): Observable<SeasonBasicInfo[]> {
+    const currentTimestamp = new Date().getTime();
+    return this.angularFirestore.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).get()
+      .pipe(manipulateLiveSeasonData.bind(this))
+  }
+
+  getTeams(limit?: number): Observable<TeamBasicInfo[]> {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.limit(limit);
+    }
+    return this.angularFirestore.collection('teams', query).get()
       .pipe(manipulateTeamData.bind(this))
   }
 

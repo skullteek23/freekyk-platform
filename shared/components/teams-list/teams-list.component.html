@@ -1,0 +1,31 @@
+<mat-card class="dashboard-card mat-elevation-z8" (click)="openTeam(); $event.stopPropagation()">
+  <mat-card-header>
+    <mat-card-title>
+      <span class="dash-h5 align ellipsis">
+        {{team.tname}}
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="team.captainName">
+      <span class="mat-caption">
+        Team Captain: {{team.captainName}}
+      </span>
+    </mat-card-subtitle>
+    <img mat-card-avatar [src]="team.imgpath_logo" alt="{{team.tname}}'s Logo">
+  </mat-card-header>
+  <img mat-card-image src="{{team.imgpath}}" alt="{{team.tname}}'s Photo">
+  <mat-card-content *ngIf="team.locCity && team.locState" fxLayoutAlign="start center" fxLayoutGap="4px">
+    <span class="material-icons-round">
+      place
+    </span>
+    <span class="mat-body-1 center ellipsis">
+      {{ (team.locCity) + ", " + (team.locState) }}
+    </span>
+  </mat-card-content>
+  <mat-card-actions>
+    <button color="primary" mat-button (click)="openTeam(); $event.stopPropagation()" fxLayout="column"
+      fxLayoutAlign="center center" fxLayoutGap="8px">
+      <span> View team </span>
+      <span class="material-icons-round"> chevron_right </span>
+    </button>
+  </mat-card-actions>
+</mat-card>

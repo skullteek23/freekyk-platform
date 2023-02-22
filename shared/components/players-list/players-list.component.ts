@@ -19,6 +19,7 @@ export class PlayersListComponent implements OnInit {
     }
   }
   @Input() cols = ['jersey', 'player', 'Team', 'Location', 'PlayingPos'];
+  @Input() showSearch = true;
   @Input() maxLimit = 1;
   @Output() selectionChange = new Subject<PlayerBasicInfo[]>();
 

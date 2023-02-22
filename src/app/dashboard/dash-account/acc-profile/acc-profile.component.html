@@ -54,9 +54,9 @@
         </mat-radio-group>
       </div>
       <div class="clubbed-fields" fxLayout="row" fxLayoutGap="20px">
-        <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%" appearance="outline" color="primary">
+        <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%" appearance="outline" color="primary" floatLabel="always">
           <mat-label>My Playing Position</mat-label>
-          <mat-select required formControlName="pl_pos">
+          <mat-select required formControlName="pl_pos" placeholder="Select Position">
             <mat-optgroup *ngFor="let group of positions" [label]="group.position">
               <mat-option *ngFor="let name of group.pos_name" [value]="name">
                 {{ name }}
@@ -65,9 +65,9 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field fxFlex.gt-sm="33%" fxFlex="auto" appearance="outline" color="primary">
+        <mat-form-field fxFlex.gt-sm="33%" fxFlex="auto" appearance="outline" color="primary" floatLabel="always">
           <mat-label>My Jersey Number</mat-label>
-          <input required type="tel" matInput name="jer_no" formControlName="jer_no" />
+          <input required type="tel" matInput name="jer_no" formControlName="jer_no" placeholder="Jersey #" />
           <mat-error *ngIf="this.playingInfoForm.get('jer_no')?.hasError('pattern')">
             Only numbers are allowed!
           </mat-error>

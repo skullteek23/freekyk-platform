@@ -1,50 +1,29 @@
-<section class="section-space-bottom primary-bg whiteText">
-  <div
-    class="container"
-    ngClass.gt-sm="longSpace"
-    ngClass.lt-md="compactSpace"
-    fxLayout="column"
-    fxLayoutGap="24px"
-  >
-    <div fxLayout="column" fxLayoutGap="8px">
-      <h4 *ngIf="!isVeSteps; else veHeading" class="mat-subheading-1 left">
-        {{ "Why choose Freekyk " + serviceName + "?" }}
-      </h4>
-      <ng-template #veHeading>
-        <h4 class="mat-subheading-1 left">Our Editing Process</h4>
-      </ng-template>
-      <span class="mat-body-1 left">
-        {{ content.subHeading }}
-      </span>
-    </div>
-    <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px">
-      <li
-        fxFlex="100%"
-        fxFlex.gt-sm="50%"
-        fxLayoutGap="16px"
-        *ngFor="let point of content.listPoints; let i = index"
-        fxLayoutAlign="start center"
-      >
-        <div
-          fxFlex="40px"
-          class="step_number mat-body-1"
-          fxLayoutAlign="center center"
-        >
-          {{ i + 1 }}
-        </div>
-        <div
-          fxLayout="column"
-          fxLayoutAlign="start start"
-          fxLayoutGap.lt-md="8px"
-        >
-          <span *ngIf="isVeSteps" class="mat-body-1">
-            {{ "Step " + point }}
-          </span>
-          <span class="left mat-body-2">
-            {{ point }}
-          </span>
-        </div>
-      </li>
-    </ul>
+<div class="container primary-bg whiteText compactSpace" *ngIf="content" fxLayout="column" fxLayoutGap="24px">
+  <div fxLayout="column" fxLayoutGap="8px">
+    <h4 class="mat-subheading-1 left">
+      {{ content.heading }}
+      <!-- {{ "Why choose Freekyk " + serviceName + "?" }} -->
+    </h4>
+    <span class="mat-body-1 left">
+      {{ content.description }}
+    </span>
   </div>
-</section>
+  <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px" *ngIf="content.listPoints">
+    <li fxFlex="100%" fxFlex.gt-sm="50%" fxLayoutGap="16px" *ngFor="let point of content.listPoints; let i = index"
+      fxLayoutAlign="start center">
+      <div fxFlex="40px" class="step_number mat-body-1" fxLayoutAlign="center center">
+        {{ i + 1 }}
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap.lt-md="8px">
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <span class="left mat-body-2" *ngIf="point.heading">
+            {{ point.heading }}
+          </span>
+          <span class="left mat-caption desc" *ngIf="point.description">
+            {{ point.description }}
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

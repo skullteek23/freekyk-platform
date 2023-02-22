@@ -1,0 +1,39 @@
+  .logo-image {
+    object-fit: contain;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .overlay-logo {
+    width: 96px;
+    height: 96px;
+    border: 5px var(--grey4) solid;
+    background-color: #fff;
+    top: 7rem;
+    left: 50%;
+    margin-left: -50px;
+    position: absolute;
+    z-index: 10;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .teamContainer {
+    height: 100%;
+    width: 100%;
+    background-color: var(--grey4);
+  }
+
+  .box-image {
+    max-height: 50%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .content {
+    padding: 40px 16px 8px;
+  }
+
+  .mat-card-title {
+    margin-bottom: 0px !important;
+  }

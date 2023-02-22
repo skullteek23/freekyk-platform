@@ -1,17 +1,20 @@
-<section class="feature-section" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center center"
-  fxLayoutAlign="space-evenly center" fxLayoutGap="8px">
-  <div [fxFlexOrder.gt-sm]="flexOrderInvert ? '1' : '2'" fxFlexOrder="1" class="placeholder"
-    fxLayoutAlign="center center">
-    <img [src]="svg" alt="Illustration" appFallbackImg />
-  </div>
-  <div [fxFlexOrder.gt-sm]="flexOrderInvert ? '2' : '1'" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
-    fxLayoutAlign.gt-sm="center start" fxLayoutGap="8px" ngClass.gt-sm="content">
-    <h4 class="mat-subheading-1 align">{{ content.subHeading | titlecase }}</h4>
-    <p class="mat-body-1 align" [innerHTML]="content.desc"></p>
-    <button [disabled]="content.CTA.disabled" color="primary" mat-button (click)="onNavigate(content.CTA.link)"
-      fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-      <span> {{ content.CTA.text }} </span>
-      <span class="material-icons-round"> keyboard_arrow_right </span>
+<mat-card class="dashboard-card mat-elevation-z8" (click)="onNavigate()">
+  <mat-card-title *ngIf="data.title" class="dash-h5 season-title">
+    {{data.title}}
+  </mat-card-title>
+  <mat-card-subtitle *ngIf="data.subtitle" class="mat-caption ellipsis">
+    {{data.subtitle}}
+  </mat-card-subtitle>
+
+  <img mat-card-image [src]="data.imgUrl" alt="Illustration" *ngIf="data.imgUrl" />
+  <mat-card-content *ngIf="data.content">
+    <p [innerHTML]="data.content" class="sec-menu mat-caption"></p>
+  </mat-card-content>
+  <mat-card-actions *ngIf="data.cta">
+    <button color="primary" mat-button (click)="onNavigate(); $event.stopPropagation()" fxLayout="column"
+      fxLayoutAlign="center center" fxLayoutGap="8px">
+      <span> {{ data.cta.label }} </span>
+      <span class="material-icons-round"> chevron_right </span>
     </button>
-  </div>
-</section>
+  </mat-card-actions>
+</mat-card>

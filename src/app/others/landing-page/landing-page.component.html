@@ -1,70 +1,35 @@
-<div fxLayout="column">
-  <!-- banner-section -->
-  <app-hero-section [headline]="true" [overline]="false" [title]="false" [landingPage]="true"
-    imageSource="assets/svgs/Banner/main_banner.svg" [description]="mainContent"></app-hero-section>
-  <!-- banner-section -->
-
-  <div fxHide.gt-sm="true" class="floating-button-container" fxLayoutAlign="center center">
-    <button [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA" matTooltip="Get started">
-      {{ 'get started' | titlecase }}
-    </button>
-    <button class="live-season floating-live" matTooltip="Upcoming Seasons" mat-mini-fab
-      [matMenuTriggerFor]="seasonMenu">
-      <span class="material-icons-round red">sensors</span>
-    </button>
-  </div>
-
-  <!-- features -->
-  <div class="what-we-offer" fxLayoutAlign="center start">
-    <h4 class="mat-subheading-1">{{ "What we offer?" | titlecase }}</h4>
-  </div>
-  <div class="container section-space-bottom" ngClass.lt-md="section-space-top" fxLayout="column" fxLayoutGap="48px"
-    fxLayoutGap.gt-sm="120px">
-    <app-feature-section svg="assets/svgs/Banner/play_banner_small.svg"
-      [featureContent]="fkPlayContent"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/freestyle_banner_small.svg" [featureContent]="fkFreestyleContent"
-      [invert]="true"></app-feature-section>
-  </div>
-  <app-action-strip elementSpacing="space-between center" [compact]="true"></app-action-strip>
-  <div class="container section-space-bottom section-space-top" fxLayout="column" fxLayoutGap="48px"
-    fxLayoutGap.gt-sm="120px">
-    <app-feature-section svg="assets/svgs/Banner/academy_banner_small.svg"
-      [featureContent]="fkAcademiesContent"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/equipment_banner_small.svg" [featureContent]="fkEquipmentContent"
-      [invert]="true"></app-feature-section>
-  </div>
-  <app-action-strip formCTA="Partner With Us" heading="Ready to join us as a partner?"
-    elementSpacing="space-between center" [enablePartnerForm]="true" [compact]="true"></app-action-strip>
-  <!-- features -->
-
-  <!-- why choose fk -->
-  <app-why-choose-section [content]="whyChoose"></app-why-choose-section>
-  <!-- why choose fk -->
-
-  <!-- covid-19 -->
-  <app-covid-section></app-covid-section>
-  <!-- covid-19 -->
-
-  <!-- community proof -->
-  <!-- <section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="8px"
-    fxLayoutAlign.lt-md="center center">
-    <h4 class="mat-subheading-1 align">A Few Glimpses of Our Football Community</h4>
-    <div class="slider-container" (window:resize)="onResizeSlider()">
-      <ng-image-slider [infinite]="true" [imageSize]="responsiveSize" [manageImageRatio]="true" [videoAutoPlay]="true"
-        [lazyLoading]="true" [images]="sliderContent"></ng-image-slider>
-    </div>
-  </section> -->
-  <!-- community proof -->
-
-  <!-- community numbers -->
-  <app-community-numbers-section [content]="communityNumbersContent"></app-community-numbers-section>
-  <!-- community numbers -->
-</div>
 <app-feedback-button fxShow.gt-sm="false"></app-feedback-button>
 
-<mat-menu #seasonMenu [hasBackdrop]="true" backdropClass="cdk-overlay-dark-backdrop">
-  <span class="mat-body-2 align">Upcoming Seasons</span>
-  <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
-    <span class="mat-body-1">{{ season.name }}</span>
-  </a>
-</mat-menu>
+<app-overlay-buttons></app-overlay-buttons>
+
+<div class="banner-container">
+  <img src="assets/svgs/Banner/main_banner.svg" alt="Freekyk Banner Image">
+</div>
+
+<section class="banner-text" fxLayout="column" fxLayoutGap="12px">
+  <span class="overline center">#YahaKhelSakteHain</span>
+  <span class="mat-title ">
+    Join India's Largest Football Network
+  </span>
+  <span class="mat-body-1 ">
+    Love football but don't know where to play and with whom to play?<br>
+    Sign up and participate NOW!
+  </span>
+</section>
+
+<section>
+  <app-why-choose-section [content]="whyChoose"></app-why-choose-section>
+  <app-action-strip elementSpacing="space-between center" [compact]="true"></app-action-strip>
+</section>
+
+<section class="features-section">
+  <h4 class="mat-subheading-1 align">What we offer?</h4>
+  <app-feature-section [data]="playData"></app-feature-section>
+  <app-feature-section [data]="freestyleData"></app-feature-section>
+  <app-feature-section [data]="equipmentData"></app-feature-section>
+  <app-feature-section [data]="academiesData"></app-feature-section>
+</section>
+
+<section>
+  <app-community-numbers-section [content]="communityNumbersContent"></app-community-numbers-section>
+</section>

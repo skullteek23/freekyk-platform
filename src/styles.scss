@@ -12,6 +12,8 @@ body {
 
 .cdk-overlay-dark-backdrop {
   background: rgba(0, 0, 0, 0.32);
+
+
 }
 
 :root {
@@ -55,7 +57,7 @@ ul {
 }
 
 h4 {
-  margin: 0 0 0 0 !important
+  margin: 0 0 0 0 !important;
 }
 
 p>ul {
@@ -380,9 +382,7 @@ mat-table {
 }
 
 .overline {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 14px;
   line-height: 16.1803398875px;
 }
 
@@ -444,7 +444,7 @@ mat-table {
   }
 
   .align {
-    text-align: center;
+    text-align: left;
   }
 
   .circles {
@@ -919,6 +919,15 @@ button.mat-button-base {
   padding: 12px !important;
 }
 
+.feature-card {
+  border-radius: 0 !important;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  padding: 0 12px !important;
+  box-shadow: none !important;
+}
+
 .red {
   color: var(--red);
 }
@@ -965,4 +974,9 @@ mat-card {
   mat-card-actions {
     margin-left: unset !important;
   }
+}
+
+section.features-section {
+  padding-right: 12px;
+  padding-left: 12px;
 }

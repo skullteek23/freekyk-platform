@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FREESTYLE_PAGE, LANDING_PAGE, } from '@shared/web-content/WEBSITE_CONTENT';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-action-strip',
@@ -16,8 +17,8 @@ export class ActionStripComponent implements OnInit {
   @Input() enablePartnerForm = false;
   @Input() enableFreestyleTrainingForm = false;
 
-  private partnerForm = LANDING_PAGE.partnerWithUsFormLink;
-  private trainingForm = FREESTYLE_PAGE.trainingFormLink;
+  readonly partnerForm = environment.forms.partner;
+  readonly trainingForm = FREESTYLE_PAGE.trainingFormLink;
 
   constructor(
     private router: Router

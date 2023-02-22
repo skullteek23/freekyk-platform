@@ -1,17 +1,3 @@
-.content {
-  max-width: 320px;
-}
-img {
-  height: 100% !important;
-  width: auto !important;
-  object-fit: cover;
-}
-.placeholder {
-  overflow: hidden;
-}
-@media only screen and (min-width: 599px) and (max-width: 959px) {
-  img {
-    height: 100% !important;
-    width: auto !important;
-  }
+mat-card {
+  margin-top: 20px;
 }

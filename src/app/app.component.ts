@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,11 @@ export class AppComponent implements OnInit, OnDestroy {
   menuOpen = false;
   dashOpen = false;
   routeSubscription: Subscription = new Subscription();
+  isLoaderShown = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
         window.scrollTo(0, 0);
       }
     });
+    this.loadingService._loadingStatusChange.subscribe(response => {
+      this.isLoaderShown = response;
+    })
   }
 
   onOpenMenu(eventValue: any): any {

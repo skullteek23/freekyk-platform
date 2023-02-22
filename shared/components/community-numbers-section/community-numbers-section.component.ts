@@ -1,6 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CommunityNumbersContent } from '../../interfaces/others.model';
 import { Router } from '@angular/router';
+
+export interface ICommunityNumberData {
+  heading: string,
+  desc: string,
+  numbers: { label: string, value: string, route: string }[]
+};
 
 @Component({
   selector: 'app-community-numbers-section',
@@ -9,11 +14,7 @@ import { Router } from '@angular/router';
 })
 export class CommunityNumbersSectionComponent implements OnInit {
 
-  @Input() content: CommunityNumbersContent = {
-    heading: '',
-    desc: '',
-    numbers: {},
-  };
+  @Input() content: ICommunityNumberData = null;
 
   constructor(
     private router: Router
@@ -23,5 +24,9 @@ export class CommunityNumbersSectionComponent implements OnInit {
 
   onNavigate() {
     this.router.navigate(['/signup']);
+  }
+
+  onLearnMore(route: string) {
+    this.router.navigate([route]);
   }
 }

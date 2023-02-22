@@ -1,0 +1,32 @@
+.floating-button-container {
+  width: 100%;
+  z-index: 500;
+
+  .floating-CTA {
+    border-color: white !important;
+    position: fixed;
+    z-index: 500;
+    bottom: 20px;
+  }
+
+  .floating-live {
+    border-color: white !important;
+    position: fixed;
+    bottom: 20px;
+    right: 10%;
+    z-index: 500;
+  }
+
+  .live-season {
+    z-index: 500;
+    background-color: white !important;
+
+    span {
+      color: var(--red) !important;
+    }
+  }
+}
+
+.heading {
+  padding-left: 12px;
+}

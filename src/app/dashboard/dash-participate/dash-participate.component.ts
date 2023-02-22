@@ -19,7 +19,6 @@ import { Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
 import { EnlargeService } from '@app/services/enlarge.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectionStrategy } from '@angular/compiler/src/compiler_facade_interface';
 
 export enum OperationStatus {
   default,
@@ -76,13 +75,13 @@ export class DashParticipateComponent implements OnInit {
             const docID = season.id;
             const slotExists = this.ordersList.find(order => order.seasonID === docID);
 
-            docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);;
+            docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
             if (slotExists) {
               docData.slotBooked = true;
               docData.isAmountDue = slotExists.amount_due / 100; // in rupees
             } else {
               docData.slotBooked = false;
-              docData.isAmountDue = 0;
+              docData.isAmountDue = null;
             }
             docData.isFreeSeason = docData.discountedFees === 0;
 

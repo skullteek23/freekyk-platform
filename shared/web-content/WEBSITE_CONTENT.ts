@@ -5,7 +5,7 @@ export const LOREM_IPSUM_VERY_SHORT = `Lorem ipsum dolor sit amet, consectetur a
 export const LOREM_IPSUM_SHORT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris.`;
 export const LOREM_IPSUM_MEDIUM = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, efficitur lobortis nunc. Aenean interdum consequat nunc a dignissim. Nulla dictum et metus id consequat. Integer dictum dapibus quam id volutpat. Morbi sed mollis est. Praesent convallis eros eu tellus lobortis, ac accumsan tellus feugiat. Nunc consectetur tempor mi a maximus. Vivamus metus libero, accumsan eu semper ut, finibus nec purus. Vestibulum mattis, erat vitae iaculis suscipit, magna augue auctor diam, ac imperdiet est purus ut eros. Proin faucibus lorem lectus, in malesuada nunc tincidunt nec. Donec nunc enim, rutrum eget volutpat eget, fringilla quis mi. Donec fermentum.`;
 export const LOREM_IPSUM_LONG = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed tortor finibus, molestie augue at, efficitur elit. Pellentesque nec lorem ornare, vehicula nulla vel, fringilla elit. Mauris lacus lacus, tincidunt quis risus eu, efficitur lobortis nunc. Aenean interdum consequat nunc a dignissim. Nulla dictum et metus id consequat. Integer dictum dapibus quam id volutpat. Sed interdum augue ac risus dapibus, a cursus massa hendrerit. Vestibulum id metus sed mauris mattis efficitur ac at augue. Pellentesque quis nibh lacinia dui consectetur blandit vel eget erat. Nulla facilisi. Praesent pretium vitae lectus posuere posuere. Quisque odio lectus, varius et tellus vitae, tempus ornare ipsum. Morbi sed mollis est. Praesent convallis eros eu tellus lobortis, ac accumsan tellus feugiat. Nunc consectetur tempor mi a maximus. Vivamus metus libero, accumsan eu semper ut, finibus nec purus. Vestibulum mattis, erat vitae iaculis suscipit, magna augue auctor diam, ac imperdiet est purus ut eros. Proin faucibus lorem lectus, in malesuada nunc tincidunt nec. Donec nunc enim, rutrum eget volutpat eget, fringilla quis mi. Donec fermentum tincidunt felis ac pharetra. Praesent quis faucibus nulla. Aliquam tortor mauris, tempus quis lorem ac, euismod lobortis velit. Nullam et ante quis purus vestibulum faucibus. Mauris eu lobortis magna. Nulla facilisi. Proin placerat ligula ut neque tristique cursus. Mauris in pharetra elit, ut vulputate diam.`;
-const EXPLORE_MORE = 'Explore More';
+const EXPLORE_MORE = 'Learn More';
 
 export const COVID_PRECAUTIONS = {
   heading: `Redefining Safety Standards`,
@@ -23,6 +23,7 @@ export const LANDING_PAGE = {
       text: EXPLORE_MORE,
       link: '/play/home',
     },
+    subtitle: ``,
     desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.<br/><ul><br/><li>Build or join your perfect team</li><li>Play leagues, knockouts and community matches</li><li>Get personalized footballing experience</li></ul>`,
   },
   freekykFreestyle: {
@@ -31,7 +32,8 @@ export const LANDING_PAGE = {
       text: EXPLORE_MORE,
       link: '/freestyle/home',
     },
-    desc: `As Idowu Koyenikan wrote, ”All you need is a ball” ;)<br/>Are you a football freestyler, but not getting enough contests to prove your talent?<br/>Get access to World’s first football freestyler’s profile management platform where you can<br/><ul><br/><li>Maintain video list of freestyling skills you can perform</li><li>Add all brand collaborations to your profile</li><li>Participate in exciting local and global contests</li></ul>`,
+    subtitle: ``,
+    desc: `Get access to World’s first football freestyler’s profile management platform where you can<br/><ul><br/><li>Maintain video list of freestyling skills you can perform</li><li>Add all brand collaborations to your profile</li><li>Participate in exciting local and global contests</li></ul>`,
   },
   freekykAcademies: {
     subHeading: `Freekyk Academies`,
@@ -39,6 +41,7 @@ export const LANDING_PAGE = {
       text: EXPLORE_MORE,
       link: '/academies',
     },
+    subtitle: ``,
     desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.<br/><ul><br/><li>Build or join your perfect team</li><li>Play leagues, knockouts and community matches</li><li>Get personalized footballing experience</li></ul>`,
   },
   freekykEquipment: {
@@ -47,9 +50,9 @@ export const LANDING_PAGE = {
       text: EXPLORE_MORE,
       link: '/equipment',
     },
+    subtitle: ``,
     desc: `For all football equipment sellers, it is now easier to sell your football products to the target audience. Freekyk Equipment helps you to<br/><ul><br/><li>Grow your business by increased discoverability to target audience</li><li>Understand customer’s need more accurately and increase number of order</li><li>Create coupons, limited time offers, discounts and set competitive prices</li></ul>`,
   },
-  partnerWithUsFormLink: `https://docs.google.com/forms/d/e/1FAIpQLSc3fyIEjHjN4ivkaYt-ZDe4ejR2TmTCY07IedCtbReJH7KioA/viewform`,
   whyChooseFreekyk: {
     subHeading: `We are a team of football lovers working towards making a local-but-professional football game a hassle free experience`,
     listPoints: [
@@ -59,15 +62,25 @@ export const LANDING_PAGE = {
       `A new approach to nurture your love for football at local level`,
     ],
   },
+  howItWorks: {
+    heading: 'How it works?',
+    description: `Playing football now made even simpler.`,
+    listPoints: [
+      { heading: `Create profile`, description: `Sign up for an account and finish your profile.` },
+      { heading: `Get a team`, description: `Create a team and invite your friends to join.` },
+      { heading: `Participate and Pay`, description: `Participate in an upcoming season and book your slot in seconds.` },
+      { heading: `Let's Play!`, description: `Show up on the matchday, play against your opponents and view stats in your profile after each match.` },
+    ],
+  },
   communityNumbers: {
     heading: `A powerful football community`,
     desc: `A vast community of football lovers, academies, ground / Futsal owners, referees, coaches and freestylers. Join us to get the best footballing experience!`,
-    numbers: {
-      Players: '400+',
-      Freestylers: '200+',
-      Teams: '20+',
-      Matches: '150+',
-    },
+    numbers: [
+      { label: 'Players', value: '400+', route: '/play/players', },
+      { label: 'Seasons', value: '200+', route: '/play/seasons', },
+      { label: 'Teams', value: '20+', route: '/play/teams', },
+      { label: 'Matches', value: '150+', route: '/play/results', },
+    ]
   },
   // communityMedia: [
   //   {
@@ -164,6 +177,7 @@ export const PLAY_PAGE = {
     },
   },
   whyChoosePlay: {
+    heading: 'Why choose Freekyk Play?',
     subHeading: `At local level, we manage  player’s profiles, team’s profiles, seasons, tournaments, fixtures, results, and final standings as per the type of the matches`,
     listPoints: [
       `Get professional at local level`,
@@ -214,6 +228,7 @@ export const FREESTYLE_PAGE = {
     },
   },
   whyChooseFreestyle: {
+    heading: 'Why Choose Freekyk Freestyle?',
     subHeading: `Even though, freestyling in India is at a very nascent stage, Freekyk Freestyling is a professional platform for all freestlyers who can nurture their talent and love for freestyling.`,
     listPoints: [
       `Get  professional at global level`,

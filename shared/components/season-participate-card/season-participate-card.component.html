@@ -1,0 +1,65 @@
+<mat-card class="dashboard-card mat-elevation-z8" *ngIf="season">
+  <mat-card-header>
+    <mat-card-title>
+      <span class="dash-h5 season-title">
+        {{season.name}}
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="!season.slotBooked" class="mat-caption ellipsis">Registration ends on {{
+      season.lastRegDate | date: 'short'
+      }}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="season.slotBooked" class="mat-caption ellipsis">
+      Waiting for other teams to participate
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <img mat-card-image [src]="season.imgpath" alt="Season image" appFallbackImg (click)="enlargePhoto(season.imgpath)">
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center" *ngIf="!season.slotBooked">
+      <span class="spaced-heading">
+        Age group:
+      </span>
+      <mat-chip-list>
+        <mat-chip>
+          {{formatter?.formatAgeCategory(season.ageCategory)?.viewValue}}
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <div class="spacy" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center" *ngIf="!season.slotBooked">
+      <span class="spaced-heading">
+        Fees per team:
+      </span>
+      <mat-chip-list>
+        <mat-chip *ngIf="season.discountedFees === 0">
+          <span class="green">FREE</span>
+        </mat-chip>
+        <mat-chip *ngIf="season.discountedFees > 0">
+          <span class="striked mat-caption" *ngIf="season.discountedFees !== season.feesPerTeam">{{
+            season.feesPerTeam | currency:'INR' }}</span>&nbsp;
+          <span class="mat-body-2">{{season.discountedFees | currency:'INR'}}</span>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <mat-card-actions *ngIf="season.isFreeSeason">
+      <button mat-stroked-button (click)="openOffer()" color="primary">
+        Participate
+      </button>
+    </mat-card-actions>
+    <mat-card-actions *ngIf="!season.isFreeSeason">
+      <button mat-stroked-button (click)="initCheckoutFlow()" color="primary">
+        {{season.slotBooked ? 'Pay Remaining Amount' : 'Pay Now'}}
+        {{season.slotBooked ? (season.isAmountDue | currency: 'INR') : ''}}
+      </button>
+    </mat-card-actions>
+    <ng-container *ngIf="season.slotBooked">
+      <div class="section-footer" fxLayoutAlign="start center" fxLayoutGap="8px">
+        <span class="material-icons-round filled">check_circle</span>
+        <span class="mat-caption ">Your slot has been booked.</span>
+        <a class="mat-caption" [routerLink]="['/play/fixtures']" [queryParams]="{Season: season.name}">
+          View fixtures
+        </a>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

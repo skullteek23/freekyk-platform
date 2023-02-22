@@ -1,36 +1,54 @@
-<h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Freekyk Play</h4>
-<div fxLayout="column">
-  <!-- features -->
-  <div class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="48px"
-    fxLayoutGap.gt-sm="120px">
-    <app-feature-section DialogData="perfect team" svg="assets/svgs/Banner/find_your_team.svg"
-      [featureContent]="findTeamContent"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/be_part_of_seasons.svg" [featureContent]="seasonsContent"
-      [invert]="true"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/fpl.svg" [featureContent]="fplContent"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/fkc.svg" [featureContent]="fkcContent"
-      [invert]="true"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/fcp.svg" [featureContent]="fcpContent"></app-feature-section>
-    <app-feature-section svg="assets/svgs/Banner/customise_your_experience.svg" [featureContent]="customizeContent"
-      [invert]="true"></app-feature-section>
+<mat-card class="feature-card">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/play_banner.svg" alt="Freekyk Play Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Play</span>
+      <p class="mat-body-1 center description">
+        The best solution for individuals, societies, schools, colleges and companies who want to play well organized
+        football seasons.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<section *ngIf="upcomingSeason" class="features-section">
+  <div mat-card-title fxLayoutAlign="space-between center" class="heading">
+    <div fxLayoutAlign="start center" fxLayoutGap="8px">
+      <span class="material-icons-round red">sensors</span>
+      <h4 class="mat-subheading-1 align">Upcoming Season</h4>
+    </div>
+    <a (click)="showAllSeason()" class="mat-caption">Show more</a>
   </div>
-  <!-- features -->
+  <app-season-participate-card [season]="upcomingSeason" (openCheckout)="participate()"
+    (openOffers)="openOffers()"></app-season-participate-card>
+</section>
 
-  <!-- action-strip-mini -->
-  <div class="section-space-top">
-    <app-action-strip [compact]="true"></app-action-strip>
+<section>
+  <app-why-choose-section [content]="whyChoose">
+  </app-why-choose-section>
+</section>
+
+<section *ngIf="players.length" class="features-section">
+  <div mat-card-title fxLayoutAlign="space-between center" class="heading">
+    <h4 class="mat-subheading-1 align">Freekyk Players</h4>
+    <a (click)="showAllPlayers()" class="mat-caption">Show more</a>
   </div>
-  <!-- action-strip-mini -->
+  <app-players-list [players]="players" [showSearch]="false"></app-players-list>
+</section>
 
-  <!-- why choose fk -->
-  <app-why-choose-section [content]="whyChooseContent" name="Play"></app-why-choose-section>
-  <!-- why choose fk -->
+<app-action-strip elementSpacing="space-between center" [compact]="true"></app-action-strip>
 
-  <!-- covid-19 -->
-  <app-covid-section></app-covid-section>
-  <!-- covid-19 -->
+<section *ngIf="teams.length" class="features-section">
+  <div mat-card-title fxLayoutAlign="space-between center" class="heading">
+    <h4 class="mat-subheading-1 align">Freekyk Teams</h4>
+    <a (click)="showAllTeams()" class="mat-caption">Show more</a>
+  </div>
+  <ul>
+    <li *ngFor="let team of teams">
+      <app-teams-list [team]="team"></app-teams-list>
+    </li>
+  </ul>
+</section>
 
-  <!-- community numbers -->
-  <app-community-numbers-section [content]="communityNumbers"></app-community-numbers-section>
-  <!-- community numbers -->
-</div>
+<app-community-numbers-section [content]="communityNumbers"></app-community-numbers-section>

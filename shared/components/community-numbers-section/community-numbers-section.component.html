@@ -2,10 +2,10 @@
   fxLayoutAlign.gt-sm="space-between center" fxLayoutGap.lt-md="20px">
   <div fxFlex.gt-sm="50%" fxLayout="column" fxLayoutGap="8px">
     <h4 class="mat-subheading-1 align">{{ content.heading | titlecase }}</h4>
-    <span class="mat-body-1 align">
+    <p class="mat-caption sec-menu">
       {{ content.desc }}
-    </span>
-    <div class="cta-button" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.lt-md="center center">
+    </p>
+    <div class="cta-button" fxLayoutAlign="start center">
       <button color="primary" mat-button (click)="onNavigate()" fxLayout="column" fxLayoutAlign="center center"
         fxLayoutGap="8px">
         <span> {{'get started' | titlecase}} </span>
@@ -15,12 +15,15 @@
   </div>
   <div fxFlex.gt-sm="30%">
     <mat-grid-list cols="2" gutterSize="20px">
-      <mat-grid-tile *ngFor="let figure of content.numbers | keyvalue" class="mat-elevation-z4">
+      <mat-grid-tile *ngFor="let figure of content.numbers" class="mat-elevation-z4">
         <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="8px">
           <h2 class="numbers">{{ figure.value }}</h2>
-          <p>
-            {{ figure.key }}
-          </p>
+          <a class="mat-body-1" fxLayoutAlign="center center" fxLayoutGap="0px" (click)="onLearnMore(figure.route)">
+            <span>
+              {{ figure.label }}
+            </span>
+            <span class="material-icons-round">chevron_right</span>
+          </a>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
