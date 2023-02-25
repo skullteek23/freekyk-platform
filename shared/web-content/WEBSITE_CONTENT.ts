@@ -24,7 +24,7 @@ export const LANDING_PAGE = {
       link: '/play/home',
     },
     subtitle: ``,
-    desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.<br/><ul><br/><li>Build or join your perfect team</li><li>Play leagues, knockouts and community matches</li><li>Get personalized footballing experience</li></ul>`,
+    desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.`,
   },
   freekykFreestyle: {
     subHeading: `Freekyk Freestyle`,
@@ -33,7 +33,7 @@ export const LANDING_PAGE = {
       link: '/freestyle/home',
     },
     subtitle: ``,
-    desc: `Get access to World’s first football freestyler’s profile management platform where you can<br/><ul><br/><li>Maintain video list of freestyling skills you can perform</li><li>Add all brand collaborations to your profile</li><li>Participate in exciting local and global contests</li></ul>`,
+    desc: `Get access to World’s first football freestyler’s profile management platform where you can participate in exciting local and global contests`,
   },
   freekykAcademies: {
     subHeading: `Freekyk Academies`,
@@ -42,7 +42,7 @@ export const LANDING_PAGE = {
       link: '/academies',
     },
     subtitle: ``,
-    desc: `The best solution for individuals, societies, schools, colleges and companies who want to play well organized football seasons.<br/><ul><br/><li>Build or join your perfect team</li><li>Play leagues, knockouts and community matches</li><li>Get personalized footballing experience</li></ul>`,
+    desc: `Looking for a right academy to nurture your football skills? Get access to amazing academies, professional coaches in no time and their training sessions.`,
   },
   freekykEquipment: {
     subHeading: `Freekyk Equipment`,

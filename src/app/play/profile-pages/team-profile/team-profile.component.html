@@ -42,7 +42,7 @@
 <!-- intro-section -->
 
 <!-- content -->
-<mat-tab-group class="container section-space-bottom" fxHide.lt-md="true">
+<mat-tab-group mat-stretch-tabs class="container section-space-bottom" fxHide.lt-md="true">
   <mat-tab label="Overview">
     <ng-template matTabContent>
       <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{

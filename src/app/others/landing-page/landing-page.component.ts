@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
+import { Router } from '@angular/router';
 import { IFeatureSectionData } from '@shared/components/feature-section/feature-section.component';
 import { IPointersComponentData } from '@shared/components/why-choose-section/why-choose-section.component';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ApiService } from '@shared/services/api.service';
 import { LANDING_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
@@ -18,17 +18,16 @@ export class LandingPageComponent implements OnInit {
   // readonly fkFreestyleContent = LANDING_PAGE.freekykFreestyle;
   // readonly fkAcademiesContent = LANDING_PAGE.freekykAcademies;
   // readonly fkEquipmentContent = LANDING_PAGE.freekykEquipment;
-  readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   // readonly sliderContent = LANDING_PAGE.communityMedia;
+  readonly communityNumbersContent = LANDING_PAGE.communityNumbers;
   readonly whyChoose: IPointersComponentData = LANDING_PAGE.howItWorks;
-
   readonly playData: IFeatureSectionData = {
     title: LANDING_PAGE.freekykPlay.subHeading,
     subtitle: LANDING_PAGE.freekykPlay.subtitle,
     imgUrl: 'assets/svgs/Banner/play_banner.svg',
     content: LANDING_PAGE.freekykPlay.desc,
     cta: {
-      label: 'Learn More',
+      label: 'Open Freekyk Play',
       route: '/play/home'
     }
   }
@@ -38,7 +37,7 @@ export class LandingPageComponent implements OnInit {
     imgUrl: 'assets/svgs/Banner/freestyle_banner.svg',
     content: LANDING_PAGE.freekykFreestyle.desc,
     cta: {
-      label: 'Learn More',
+      label: 'Open Freekyk Freestyle',
       route: '/freestyle/home'
     }
 
@@ -49,7 +48,7 @@ export class LandingPageComponent implements OnInit {
     imgUrl: 'assets/svgs/Banner/equipment_banner.svg',
     content: LANDING_PAGE.freekykEquipment.desc,
     cta: {
-      label: 'Learn More',
+      label: 'Open Freekyk Equipment',
       route: '/equipment'
     }
   }
@@ -59,19 +58,91 @@ export class LandingPageComponent implements OnInit {
     imgUrl: 'assets/svgs/Banner/academy_banner.svg',
     content: LANDING_PAGE.freekykAcademies.desc,
     cta: {
-      label: 'Learn More',
+      label: 'Open Freekyk Academies',
       route: '/academies'
     }
   }
 
-  responsiveSize;
   seasonsList: SeasonBasicInfo[] = [];
+  fixtures: MatchFixture[] = [];
+  matchesLabel: string = null;
 
   constructor(
-    private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.getLiveFixtures();
+  }
+
+  resetLabel() {
+    this.matchesLabel = 'Our Matches';
+  }
+
+  getLiveFixtures() {
+    this.apiService.getLiveFixtures(5)
+      .subscribe({
+        next: (response) => {
+          if (response?.length) {
+            this.fixtures = response;
+            this.matchesLabel = `Top ${response?.length} Live Fixtures`;
+          } else {
+            this.getFixtures();
+          }
+        },
+        error: () => {
+          this.fixtures = [];
+          this.resetLabel();
+        }
+      })
+  }
+
+  getFixtures() {
+    this.apiService.getFixtures(5)
+      .subscribe({
+        next: (response) => {
+          if (response?.length) {
+            this.fixtures = response;
+            this.matchesLabel = `Upcoming Fixtures`;
+          } else {
+            this.getResults();
+          }
+        },
+        error: () => {
+          this.fixtures = [];
+          this.resetLabel();
+        }
+      })
+  }
+
+  getResults() {
+    this.apiService.getResults(5)
+      .subscribe({
+        next: (response) => {
+          if (response?.length) {
+            this.fixtures = response;
+            this.matchesLabel = `Match Results`;
+          }
+        },
+        error: () => {
+          this.fixtures = [];
+          this.resetLabel();
+        }
+      })
+  }
+
+  onNavigate(data: any): void {
+    if (data?.cta?.route) {
+      this.router.navigate([data.cta.route]);
+    }
+  }
+
+  onNavigateSeasons(data: any): void {
+    this.router.navigate(['/play', 'seasons']);
+  }
+
+  showAllFixtures() {
+    this.router.navigate(['/play', 'fixtures'])
   }
 }

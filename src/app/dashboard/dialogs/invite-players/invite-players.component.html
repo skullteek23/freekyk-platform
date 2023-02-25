@@ -4,7 +4,7 @@
   </button>
   <span class="mat-body-1">Invite Players to Team</span>
 </mat-toolbar>
-<mat-tab-group>
+<mat-tab-group mat-stretch-tabs>
   <mat-tab label="Send more Invites">
     <app-players-list [cols]="COLS" [players]="players$ | async" (selectionChange)="createInvites($event)"
       [maxLimit]="15">

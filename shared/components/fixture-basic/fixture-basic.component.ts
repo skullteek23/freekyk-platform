@@ -12,7 +12,7 @@ export class FixtureBasicComponent {
 
   readonly matchStatus = MatchStatus;
 
-  @Input('matchData') set matchData(value: MatchFixture) {
+  @Input() set matchData(value: MatchFixture) {
     if (value) {
       this.fixture = value;
       this.isResult = ParseMatchProperties.isResult(value.date);

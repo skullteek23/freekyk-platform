@@ -4,7 +4,6 @@ import { PlFixturesComponent } from './pl-fixtures/pl-fixtures.component';
 import { PlGroundsComponent } from './pl-grounds/pl-grounds.component';
 import { PlHomeComponent } from './pl-home/pl-home.component';
 import { PlPlayersComponent } from './pl-players/pl-players.component';
-import { PlResultsComponent } from './pl-results/pl-results.component';
 import { PlSeasonsComponent } from './pl-seasons/pl-seasons.component';
 import { PlStandingsComponent } from './pl-standings/pl-standings.component';
 import { PlTeamsComponent } from './pl-teams/pl-teams.component';
@@ -21,7 +20,7 @@ const routes: Routes = [
       { path: 'players/:uid', component: PlPlayersComponent },
       { path: 'teams', component: PlTeamsComponent },
       { path: 'fixtures', component: PlFixturesComponent },
-      { path: 'results', component: PlResultsComponent },
+      { path: 'results', component: PlFixturesComponent },
       { path: 'standings', component: PlStandingsComponent },
       { path: 'grounds', component: PlGroundsComponent },
     ],

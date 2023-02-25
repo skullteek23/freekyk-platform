@@ -1,7 +1,7 @@
 <mat-toolbar class="white-bg" [disabled]="menuState" appStickyNav panelClass="sticky-header">
   <div class="container" ngClass.lt-md="nogap" fxLayoutAlign="space-between center">
     <!-- brand logo -->
-    <a class="logo" (click)="onCloseMenu()" [routerLink]="['/']" fxLayoutAlign="center center">
+    <a class="logo" (click)="onCloseMenu(); scrollTop()" [routerLink]="['/']" fxLayoutAlign="center center">
       <img src="assets/images/brand_logo_2.png" alt="Freekyk Logo" />
     </a>
     <!-- brand logo -->

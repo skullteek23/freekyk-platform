@@ -3,7 +3,7 @@
     [overline]="false" [CTA]="null"></app-hero-section>
 </div>
 <div style="margin-top: 20px" class="container section-space-bottom">
-  <mat-tab-group (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="activeIndex">
+  <mat-tab-group mat-stretch-tabs (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="activeIndex">
     <mat-tab label="Help & Support">
       <ng-template matTabContent>
         <div style="padding: 20px 8px" fxLayout="column" fxLayoutGap.lt-md="16px" fxLayoutGap.gt-sm="20px">

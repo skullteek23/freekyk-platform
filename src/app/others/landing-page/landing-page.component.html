@@ -24,7 +24,43 @@
 
 <section class="features-section">
   <h4 class="mat-subheading-1 align">What we offer?</h4>
-  <app-feature-section [data]="playData"></app-feature-section>
+  <mat-card class="dashboard-card mat-elevation-z8" (click)="onNavigate(playData);$event.stopPropagation()">
+    <mat-card-title *ngIf="playData.title" class="dash-h5 season-title">
+      {{playData.title}}
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="playData.subtitle" class="mat-caption ellipsis">
+      {{playData.subtitle}}
+    </mat-card-subtitle>
+
+    <img mat-card-image [src]="playData.imgUrl" alt="Illustration" *ngIf="playData.imgUrl" />
+    <mat-card-content *ngIf="playData.content">
+      <p [innerHTML]="playData.content" class="sec-menu mat-caption"></p>
+
+      <div class="fixtures-container" *ngIf="fixtures.length">
+        <div fxLayoutAlign="space-between center" class="heading">
+          <span class="mat-body-2 align">Upcoming Matches</span>
+          <a (click)="showAllFixtures(); $event.stopPropagation()" class="mat-caption">Show more</a>
+        </div>
+        <ul>
+          <li *ngFor="let fixture of fixtures">
+            <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
+          </li>
+        </ul>
+        <button color="primary" mat-button (click)="onNavigateSeasons(playData); $event.stopPropagation()"
+          fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
+          <span> Looking to participate? View our seasons </span>
+          <span class="material-icons-round"> arrow_right_alt </span>
+        </button>
+      </div>
+    </mat-card-content>
+    <mat-card-actions *ngIf="playData.cta">
+      <button color="primary" mat-button (click)="onNavigate(playData); $event.stopPropagation()" fxLayout="column"
+        fxLayoutAlign="center center" fxLayoutGap="8px">
+        <span> {{ playData.cta.label }} </span>
+        <span class="material-icons-round"> chevron_right </span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
   <app-feature-section [data]="freestyleData"></app-feature-section>
   <app-feature-section [data]="equipmentData"></app-feature-section>
   <app-feature-section [data]="academiesData"></app-feature-section>

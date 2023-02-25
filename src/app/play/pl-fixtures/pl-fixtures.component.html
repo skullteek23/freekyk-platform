@@ -1,13 +1,28 @@
-<h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Upcoming Fixtures</h4>
-<div fxLayout="column" fxLayoutGap="20px">
-
-  <!-- fixtures list -->
-  <ul class="container section-space-bottom fixture-container">
-    <app-no-items-message *ngIf="noFixtures" items="fixtures"></app-no-items-message>
-    <li *ngFor="let fixture of fixtures$ | async; last as last">
-      <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
-    </li>
-  </ul>
-  <!-- fixtures list -->
-</div>
+<mat-card class="feature-card">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/play_banner.svg" alt="Freekyk Play Image">
+</mat-card>
+<section>
+  <mat-tab-group mat-stretch-tabs (selectedTabChange)="onTabChange($event.index)" [(selectedIndex)]="selectedIndex">
+    <mat-tab label="Fixtures">
+      <ng-template matTabContent>
+        <app-no-items-message *ngIf="!fixtures.length" items="fixtures"></app-no-items-message>
+        <ul>
+          <li *ngFor="let fixture of fixtures">
+            <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
+          </li>
+        </ul>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Results">
+      <ng-template matTabContent>
+        <app-no-items-message *ngIf="!results.length" items="results"></app-no-items-message>
+        <ul>
+          <li *ngFor="let result of results">
+            <app-fixture-basic [matchData]="result"></app-fixture-basic>
+          </li>
+        </ul>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</section>
 <app-loading *ngIf="isLoaderShown"></app-loading>

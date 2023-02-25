@@ -98,6 +98,10 @@ export class HeaderComponent implements OnInit {
       });
   }
 
+  scrollTop() {
+    window.scrollTo(0, 0);
+  }
+
   onToggleMenu(): void {
     this.menuState = !this.menuState;
     this.menOpen.next(this.menuState);

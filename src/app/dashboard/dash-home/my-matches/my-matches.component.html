@@ -4,7 +4,7 @@
     <a [routerLink]="['/play', 'fixtures']" *ngIf="!index" class="mat-caption sec-menu">View all fixtures</a>
     <a [routerLink]="['/play', 'results']" *ngIf="index" class="mat-caption sec-menu">View all results</a>
   </div>
-  <mat-tab-group [(selectedIndex)]="index">
+  <mat-tab-group mat-stretch-tabs [(selectedIndex)]="index">
     <mat-tab label="Fixtures">
       <ul>
         <app-no-items-message items="fixtures" *ngIf="fixtures?.length === 0"></app-no-items-message>

@@ -1,6 +1,6 @@
 <form [formGroup]="groundForm" class="select-ground-form-container" fxLayout="column">
   <section class="section-container" fxLayout="column">
-    <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onLoadTabs()">
+    <mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onLoadTabs()">
       <mat-tab>
         <ng-template mat-tab-label>
           Private Grounds
