@@ -9,162 +9,52 @@
   overflow-x: auto;
   width: 100%;
 }
+
 .points {
   font-weight: 800;
   font-family: "Open Sans";
   font-size: 15px;
 }
-.team-name {
-  width: 100px;
-  max-width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.extra-width-table {
+  width: 400px;
+  max-width: 600px;
 }
-.mat-column-Team {
+
+img {
+  min-width: 32px;
+}
+
+.points {
+  font-weight: bold;
+}
+
+.mat-column-position {
+  width: 30px;
+  text-align: center;
+}
+
+.mat-column-team {
+  text-align: left;
+  padding-left: 5px;
   padding-right: 10px;
+  max-width: 173px;
+  width: 173px;
 }
-@media only screen and (max-width: 359px) {
-  .extra-width-table {
-    width: 400px;
-    max-width: 600px;
-  }
-  .hideAvatar {
-    display: none;
-  }
-  .mat-column-Team {
-    width: 15%;
-    text-align: left;
-  }
 
-  .mat-column-P,
-  .mat-column-W,
-  .mat-column-D,
-  .mat-column-GA,
-  .mat-column-GF,
-  .mat-column-GD,
-  .mat-column-L {
-    width: 5%;
-    text-align: center;
-  }
-  img {
-    min-width: 32px;
-  }
-  .mat-column-pos {
-    width: 10%;
-    padding-right: 10px;
-    text-align: center;
-  }
-  .mat-column-Pts {
-    width: 10%;
-    text-align: center;
-  }
-  .points {
-    font-weight: 600;
-    font-family: "Open Sans";
-    font-size: 15px;
-  }
+.mat-column-played,
+.mat-column-won,
+.mat-column-draw,
+.mat-column-lost,
+.mat-column-goalsFor,
+.mat-column-goalsAgainst,
+.mat-column-goalDiff,
+.mat-column-points {
+  width: 42px;
+  max-width: 42px;
+  text-align: center;
 }
-@media only screen and (min-width: 360px) and (max-width: 767px) {
-  .extra-width-table {
-    width: 500px;
-    max-width: 600px;
-  }
-  .mat-column-Team {
-    width: 15%;
-    text-align: left;
-  }
-  .mat-column-P,
-  .mat-column-W,
-  .mat-column-D,
-  .mat-column-GA,
-  .mat-column-GF,
-  .mat-column-GD,
-  .mat-column-L {
-    width: 5%;
-    text-align: center;
-  }
 
-  .mat-column-pos {
-    width: 10%;
-    padding-right: 10px;
-    text-align: center;
-  }
-  .mat-column-Pts {
-    width: 9%;
-    text-align: center;
-  }
-  .points {
-    font-weight: 700;
-    font-family: "Open Sans";
-    font-size: 15px;
-  }
-}
-@media only screen and (min-width: 768px) and (max-width: 959px) {
-  .extra-width-table {
-    width: 100%;
-    max-width: 100%;
-  }
-  .mat-column-Team {
-    width: 40%;
-    text-align: left;
-  }
-  .mat-column-P,
-  .mat-column-W,
-  .mat-column-D,
-  .mat-column-GA,
-  .mat-column-GF,
-  .mat-column-GD,
-  .mat-column-L {
-    width: 7%;
-    text-align: center;
-  }
-
-  .team-name {
-    width: 200px;
-    max-width: 200px;
-  }
-  .mat-column-pos {
-    width: 10%;
-    padding-right: 10px;
-    text-align: center;
-  }
-  .mat-column-Pts {
-    width: 7%;
-    text-align: center;
-  }
-}
-@media only screen and (min-width: 960px) {
-  .extra-width-table {
-    width: 100%;
-    max-width: 100%;
-  }
-  .mat-column-Team {
-    width: 36%;
-    text-align: left;
-  }
-  .mat-column-P,
-  .mat-column-W,
-  .mat-column-D,
-  .mat-column-GA,
-  .mat-column-GF,
-  .mat-column-GD,
-  .mat-column-L {
-    width: 7%;
-    text-align: center;
-  }
-
-  .team-name {
-    width: 400px;
-    max-width: 400px;
-  }
-  .mat-column-pos {
-    width: 8%;
-    padding-right: 10px;
-    text-align: center;
-  }
-  .mat-column-Pts {
-    width: 7%;
-    text-align: center;
-  }
+.full-width {
+  height: 100%;
 }

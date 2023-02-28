@@ -1,12 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { MatTabGroup } from '@angular/material/tabs';
-import { forkJoin, Observable, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { MatchFixture, MatchStatus, TournamentTypes } from '@shared/interfaces/match.model';
-import { CommunityLeaderboard, FilterData, LeagueTableModel, } from '@shared/interfaces/others.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { forkJoin, Subscription } from 'rxjs';
+import { MatchFixture } from '@shared/interfaces/match.model';
+import { LeagueTableModel, } from '@shared/interfaces/others.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { PlayConstants } from '../play.constants';
+import { ApiService } from '@shared/services/api.service';
+import { FormControl } from '@angular/forms';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 
 @Component({
   selector: 'app-pl-standings',
@@ -15,54 +15,21 @@ import { PlayConstants } from '../play.constants';
 })
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
-  @Input() set selectedSeason(value: string) {
-    this.seasonChosen = value;
-    this.ngOnInit();
-  }
-  @Input() showFilters = true;
-
-  activeIndex = 0;
-  cpStandings: CommunityLeaderboard[] = [];
-  filterData: FilterData;
-  knockoutFixtures: MatchFixture[] = [];
-  leagueData: LeagueTableModel[] = [];
-  onMobile = false;
   subscriptions = new Subscription();
-  seasonChosen = '';
-
-  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+  seasonsList: SeasonBasicInfo[] = [];
+  seasonsStrList: string[] = [];
+  seasonFormControl: FormControl = new FormControl();
+  isLoaderShown = false;
+  leagueRowsData: LeagueTableModel[] = [];
+  knockoutData: IKnockoutData = null;
 
   constructor(
-    private ngFire: AngularFirestore
+    private apiService: ApiService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    this.filterData = {
-      defaultFilterPath: '',
-      filtersObj: {},
-    };
-    if (this.seasonChosen) {
-      this.onQuerySeason(this.seasonChosen);
-    }
-    this.ngFire
-      .collection('seasons')
-      .get()
-      .pipe(
-        map((resp) =>
-          resp.docs.map((doc) => (doc.data() as SeasonBasicInfo)),
-        ),
-        map((resp) =>
-          resp.filter((doc) => doc.status !== 'REMOVED').map(el => el.name),
-        )
-      )
-      .subscribe((resp) => {
-        this.filterData = {
-          defaultFilterPath: 'standings',
-          filtersObj: {
-            'Select Season': resp,
-          },
-        };
-      });
+    this.getSeasons();
   }
 
   ngOnDestroy(): void {
@@ -71,83 +38,63 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onQueryData(queryInfo): void {
-    if (queryInfo) {
-      this.onQuerySeason(queryInfo.queryValue);
-    } else {
-      this.cpStandings = [];
-      this.knockoutFixtures = [];
-      this.leagueData = [];
-    }
-  }
-
-  onQuerySeason(seasonName: string): void {
-    if (seasonName) {
-      this.seasonChosen = seasonName;
-      forkJoin([this.getMatchesByType('FKC'), this.getMatchesByType('FCP'), this.getSeasonID()])
-        .pipe(switchMap(resp => {
-          if (resp && resp[2] && resp.length === 3) {
-            this.knockoutFixtures = resp[0] as MatchFixture[];
-            this.cpStandings = (resp[1] as MatchFixture[]).map(element => {
-              const penaltyScores: string[] = element?.tie_breaker?.split('-');
-              let winner = PlayConstants.MATCH_DRAW;
-              if (element?.home?.score > element?.away?.score) {
-                winner = element.home.name;
-              } else if (element?.home?.score < element?.away?.score) {
-                winner = element.away.name;
-              } else if (penaltyScores && penaltyScores.length === 2 && element.hasOwnProperty('tie_breaker') && element.tie_breaker !== '') {
-                winner = penaltyScores[0] > penaltyScores[1] ? element.home.name : element.away.name;
-              } else if (element.status < MatchStatus.SNU) {
-                winner = PlayConstants.TO_BE_DECIDED;
-              }
-              const CPdata: CommunityLeaderboard = {
-                home: {
-                  name: element.home.name,
-                  logo: element.home.logo,
-                },
-                away: {
-                  name: element.away.name,
-                  logo: element.away.logo,
-                },
-                winner,
-                stadium: element.ground,
-              };
-              return CPdata;
-            });
-            return this.ngFire.collection('leagues').doc(resp[2]).get();
-          } else {
-            return null;
-          }
-        }))
-        .subscribe(response => {
+  getSeasons() {
+    this.isLoaderShown = true;
+    this.apiService.getSeasons()
+      .subscribe({
+        next: (response) => {
+          this.seasonsStrList = [];
           if (response) {
-            const data = response.data() as LeagueTableModel;
-            this.leagueData = response.exists && data ? Object.values(data) : [];
-            this.updateSelectedTab();
+            response.forEach(el => {
+              if (el.cont_tour.includes('FKC') || el.cont_tour.includes('FPL')) {
+                this.seasonsStrList.push(el.name);
+                this.seasonsList.push(el);
+              }
+            });
+            if (this.seasonsStrList.length) {
+              this.seasonFormControl.setValue(this.seasonsStrList[0]);
+              this.onSelectSeason(this.seasonsStrList[0]);
+            }
           }
-        });
-    } else {
-      this.cpStandings = [];
-      this.knockoutFixtures = [];
-      this.leagueData = [];
+          this.isLoaderShown = false;
+          window.scrollTo(0, 0);
+        },
+        error: () => {
+          this.seasonsList = [];
+          this.seasonsStrList = [];
+          this.isLoaderShown = false;
+          window.scrollTo(0, 0);
+          this.snackbarService.displayError('Unable to get seasons!');
+        },
+      })
+  }
+
+  onSelectSeason(selection: string) {
+    const selectedSeason = this.seasonsList.find(el => el.name === selection);
+    if (selectedSeason) {
+      this.isLoaderShown = true;
+      forkJoin([
+        this.apiService.getKnockoutMatches(selectedSeason.name),
+        this.apiService.getLeagueTable(selectedSeason),
+      ])
+        .subscribe({
+          next: (response) => {
+            if (response?.length === 2) {
+              this.knockoutData = response[0] || null;
+              this.leagueRowsData = response[1] || [];
+            }
+            this.isLoaderShown = false;
+          },
+          error: (err) => {
+            console.log(err)
+            this.knockoutData = null;
+            this.leagueRowsData = [];
+            this.isLoaderShown = false;
+            this.snackbarService.displayError('Season standings not found! Try again later');
+          }
+        })
     }
   }
 
-  updateSelectedTab() {
-    if (this.cpStandings.length) {
-      this.activeIndex = 0;
-    } else if (this.knockoutFixtures.length) {
-      this.activeIndex = 1;
-    } else if (this.leagueData.length) {
-      this.activeIndex = 2;
-    }
-  }
 
-  getSeasonID(): Observable<string> {
-    return this.ngFire.collection('seasons', (query) => query.where('name', '==', this.seasonChosen)).get().pipe(map((res) => !res.empty ? res.docs[0].id : null));
-  }
-
-  getMatchesByType(matchType: TournamentTypes): Observable<any> {
-    return this.ngFire.collection('allMatches', (query) => query.where('season', '==', this.seasonChosen).where('type', '==', matchType)).get().pipe(map((res) => !res.empty ? res.docs.map(doc => doc.data() as MatchFixture[]) : []));
-  }
 }

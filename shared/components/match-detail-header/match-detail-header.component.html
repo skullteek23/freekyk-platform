@@ -13,7 +13,7 @@
       </span>
 
       <span class="score_rec mat-body-2" fxLayoutAlign="center center">
-        {{ matchData?.date | date: "HH:mm" }}
+        {{ matchData?.date | date: "h:mm a" }}
       </span>
       <mat-chip-list fxLayoutAlign="center center">
         <mat-chip [style.background]="formatters?.formatStatus(matchData?.status)?.color" class="status-chip"

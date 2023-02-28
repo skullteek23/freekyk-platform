@@ -54,7 +54,7 @@ export const MOBILE_LINKS: ILink[] = [
         icon: 'stadium'
       },
       {
-        name: 'Fixtures',
+        name: 'Matches',
         route: '/play/fixtures',
         icon: 'calendar_month'
       },
@@ -72,11 +72,6 @@ export const MOBILE_LINKS: ILink[] = [
         name: 'Players',
         route: '/play/players',
         icon: 'sports_handball'
-      },
-      {
-        name: 'Results',
-        route: '/play/results',
-        icon: 'event_available'
       },
       {
         name: 'Teams',

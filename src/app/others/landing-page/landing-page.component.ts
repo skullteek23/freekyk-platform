@@ -86,7 +86,7 @@ export class LandingPageComponent implements OnInit {
         next: (response) => {
           if (response?.length) {
             this.fixtures = response;
-            this.matchesLabel = `Top ${response?.length} Live Fixtures`;
+            this.matchesLabel = `Live Matches`;
           } else {
             this.getFixtures();
           }

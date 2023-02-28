@@ -80,7 +80,6 @@ export const Formatters = {
 
 export interface MatchFixture {
   date: number;
-  concluded: boolean;
   home: {
     name: string;
     logo: string;
@@ -149,7 +148,6 @@ export interface tempFullFixtureData {
 }
 export interface IDummyFixture {
   date: number;
-  concluded: boolean;
   season: string;
   premium: boolean;
   type: TournamentTypes;

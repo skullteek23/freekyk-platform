@@ -10,10 +10,10 @@
 
 .score_rec {
   height: 32px;
-  width: 64px;
+  width: 72px;
   display: inline-block;
   color: white;
-  border-radius: 2px;
+  border-radius: var(--borderRadiusCard);
   background-color: var(--primaryColor);
 }
 

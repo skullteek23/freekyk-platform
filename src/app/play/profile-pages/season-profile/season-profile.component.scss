@@ -1,105 +1,147 @@
-.banner {
-  height: 600px;
+// .banner {
+//   height: 600px;
+// }
+
+// .banner-text {
+//   max-width: 500px;
+// }
+
+// .bannerPhoto img {
+//   height: 100%;
+//   object-fit: cover;
+//   width: 100%;
+// }
+
+// .back-button {
+//   margin: 20px 0;
+// }
+
+// ._bar {
+//   height: 100%;
+//   width: 500px;
+// }
+
+// .nav-links {
+//   margin-top: 20px;
+// }
+
+
+// @media only screen and (max-width: 599px) {
+//   .bannerPhoto {
+//     height: 250px;
+//     width: 100%;
+//     border-radius: var(--borderRadiusCard) !important;
+//     overflow: hidden;
+//   }
+// }
+
+// @media only screen and (min-width: 600px) and (max-width: 959px) {
+//   .bannerPhoto {
+//     height: 300px;
+//     width: auto;
+//     max-width: 70%;
+//     border-radius: var(--borderRadiusCard) !important;
+//     overflow: hidden;
+//   }
+// }
+
+// @media only screen and (min-width: 960px) {
+//   .bannerPhoto {
+//     height: 100%;
+//     // margin-right: 15%;
+//     width: auto;
+//     max-width: 60%;
+//     overflow: hidden;
+//     border-radius: var(--borderRadiusCard) !important;
+//   }
+// }
+
+// @media only screen and (min-width: 960px) and (max-width: 1279px) {
+//   .hero-text {
+//     max-width: 450px;
+//   }
+// }
+
+// .content-box {
+//   margin-bottom: 20px;
+// }
+
+// mat-chip-list.age-group-chip {
+//   margin-bottom: 12px;
+// }
+
+section {
+  padding: 0 10px;
+  margin-top: 16px;
 }
 
-.banner-text {
-  max-width: 500px;
+img {
+  max-height: 320px;
 }
 
-.bannerPhoto img {
-  height: 100%;
-  object-fit: cover;
+.striked {
+  text-decoration: line-through;
+}
+
+.spaced-heading {
+  width: 100px;
+}
+
+.spacy {
+  margin-top: 12px;
+}
+
+.partners {
   width: 100%;
-}
+  margin-bottom: 12px;
 
-.back-button {
-  margin: 20px 0;
-}
-
-._bar {
-  height: 100%;
-  width: 500px;
-}
-
-.nav-links {
-  margin-top: 20px;
-}
-
-.partner-list {
-  margin-bottom: 16px;
-  width: 100%;
-
-  .list-container {
-    margin-top: 16px;
+  .partner-container-list {
     overflow-x: auto;
     max-width: 100%;
 
-    .partner {
-      @media screen and (max-width: 600px) {
-        height: 60px;
-        max-height: 60px;
-        min-height: 60px;
-      }
-
-      // width: 150px;
-      // max-width: 150px;
-      // height: 150px;
-      // max-height: 150px;
+    .partner-container {
+      margin-right: 12px;
+      max-height: auto;
+      max-width: 100px;
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+      height: auto;
       overflow: hidden;
-      background-color: var(--grey4);
 
-      a {
+      .img-container {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+
         img {
-          height: 100%;
+          height: auto;
           width: 100%;
-          max-width: 200px;
           object-fit: contain;
         }
+      }
+
+      .text-container {
+        width: 100%;
+        text-align: center;
       }
     }
   }
 }
 
-@media only screen and (max-width: 599px) {
-  .bannerPhoto {
-    height: 250px;
-    width: 100%;
-    border-radius: var(--borderRadiusCard) !important;
-    overflow: hidden;
-  }
+.back-button {
+  margin-bottom: 16px;
+  padding: 0 16px;
 }
 
-@media only screen and (min-width: 600px) and (max-width: 959px) {
-  .bannerPhoto {
-    height: 300px;
-    width: auto;
-    max-width: 70%;
-    border-radius: var(--borderRadiusCard) !important;
-    overflow: hidden;
-  }
+.sub-important-text {
+  color: rgba(0, 0, 0, 0.54)
 }
 
-@media only screen and (min-width: 960px) {
-  .bannerPhoto {
-    height: 100%;
-    // margin-right: 15%;
-    width: auto;
-    max-width: 60%;
-    overflow: hidden;
-    border-radius: var(--borderRadiusCard) !important;
-  }
+.no-padding-card {
+  padding: 0 !important;
 }
 
-@media only screen and (min-width: 960px) and (max-width: 1279px) {
-  .hero-text {
-    max-width: 450px;
-  }
-}
-
-.content-box {
-  margin-bottom: 20px;
-}
-
-mat-chip-list.age-group-chip {
-  margin-bottom: 12px;
+.mat-card-title.spacy-title {
+  padding: 12px 12px 0 12px;
 }

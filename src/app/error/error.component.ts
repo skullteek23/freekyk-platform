@@ -18,6 +18,7 @@ export class ErrorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.errorMessage = this.route.snapshot.data.message;
     this.errorCode = this.route.snapshot.data.code;
     if (!this.errorMessage && !this.errorCode) {

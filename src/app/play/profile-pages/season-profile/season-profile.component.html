@@ -1,158 +1,116 @@
-<!-- intro-section -->
-<div class="grey-bg">
-  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
-    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
-      <img [src]="(seasonInfo$ | async)?.imgpath" [alt]="(seasonInfo$ | async)?.name" appFallbackImg />
-    </div>
-
-    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
-      <button fxHide.lt-md="true" [routerLink]="['/play', 'seasons']" mat-mini-fab color="primary" class="back-button">
-        <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
-      </button>
-
-      <div *ngIf="partners.length" class="partner-list" fxLayout="column" fxLayoutAlign.lt-md="start center"
-        fxLayoutAlign="start start">
-        <span class="mat-body-1">In association with:</span>
-        <div class="list-container" fxLayout="row nowrap" fxLayoutAlign="center center" fxLayoutGap="20px">
-          <div class="partner" *ngFor="let partner of partners" [matTooltip]="partner.name"
-            fxLayoutAlign="center center">
-            <a [href]="partner.website" target="_blank">
-              <img [src]="partner.imgpath" [alt]="partner.name" appFallbackImg>
-            </a>
+<div fxLayout="column" class="back-button">
+  <button [routerLink]="['/play/seasons']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      View all Seasons
+    </span>
+  </button>
+</div>
+<section>
+  <mat-card class="dashboard-card mat-elevation-z8" *ngIf="season">
+    <mat-card-header>
+      <mat-card-title>
+        <span class="dash-h5 season-title">
+          {{season?.name}}
+        </span>
+      </mat-card-title>
+      <mat-card-subtitle class="mat-caption ellipsis">Registration ends on {{ season?.lastRegDate | date: 'short' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="season?.imgpath" alt="Season image" appFallbackImg
+      (click)="enlargePhoto(); $event.stopPropagation()">
+    <mat-card-content>
+      <!-- partners -->
+      <div *ngIf="partners.length" class="partners">
+        <div class="mat-caption">In association with:</div>
+        <div class="list-container" fxLayout="row" class="partner-container-list">
+          <div *ngFor="let partner of partners" class="partner-container" fxLayoutAlign="end start" fxLayout="column">
+            <div class="img-container" fxLayoutAlign="center center">
+              <img src="{{partner.imgpath}}" [alt]="partner.name" appFallbackImg>
+            </div>
+            <div class="text-container">
+              <span class="mat-body-1 ellipsis">
+                {{partner.name}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
-        <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
-          (seasonInfo$ | async)?.name }}</span>
-      </div>
-
+      <!-- tournament info -->
       <mat-chip-list class="age-group-chip">
-        <mat-chip>Allowed age group: {{ formatter.formatAgeCategory((seasonInfo$ | async)?.ageCategory).viewValue}}
+        <mat-chip class="mat-caption">
+          Age group:&nbsp;
+          <span class="mat-caption">
+            {{ formatter.formatAgeCategory(season?.ageCategory).viewValue}}
+          </span>
+        </mat-chip>
+        <mat-chip class="mat-caption">
+          Total Slots:&nbsp;
+          <span class="mat-caption">
+            {{ season?.p_teams }} Teams
+          </span>
+        </mat-chip>
+        <mat-chip class="mat-caption">
+          Starts on:&nbsp;
+          <span class="mat-caption">
+            {{ season?.start_date | date: 'fullDate'}}
+          </span>
+        </mat-chip>
+        <mat-chip *ngIf="season.discountedFees === 0" selected>
+          Fees:&nbsp;
+          <span class="green">FREE</span>
+        </mat-chip>
+        <mat-chip *ngIf="season.discountedFees > 0" selected>
+          Fees:&nbsp;
+          <span class="striked mat-caption" *ngIf="season.discountedFees !== season.feesPerTeam">
+            {{ season.feesPerTeam | currency:'INR' }}</span>&nbsp;
+          <span class="mat-body-2">{{season.discountedFees | currency:'INR'}} (per team)</span>
+        </mat-chip>
+        <mat-chip *ngIf="groundsList" class="mat-caption">
+          Ground(s):&nbsp;
+          <a *ngFor="let ground of groundsList" class="mat-caption"
+            (click)="openGround(ground); $event.stopPropagation()">{{ground.viewValue}}</a>
         </mat-chip>
       </mat-chip-list>
+    </mat-card-content>
+    <mat-card-actions fxLayoutAlign="center center">
 
-      <!-- <p class="mat-body-1 align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">
-        {{ (seasonMoreInfo$ | async)?.description | textShorten: 100 }}
-      </p> -->
-      <p class="mat-body-1 align">
-        Starts on {{(seasonInfo$ | async)?.start_date | date: 'fullDate'}}
-      </p>
-      <p class="mat-body-1 align">
-        Fees per team : {{(seasonInfo$ | async)?.feesPerTeam | currency:'INR':true}}
-      </p>
-      <p class="mat-body-1 align">
-        Total Teams : {{(seasonInfo$ | async)?.p_teams}}
-      </p>
-      <p class="mat-body-1 align">
-        Ground(s): <a *ngFor="let ground of seasonGroundsList" (click)="OnOpenGround(ground)">{{ground.viewValue}}</a>
-      </p>
+      <button class="link-button" (click)="participate(); $event.stopPropagation()" mat-stroked-button color="primary">
+        <span class="material-icons-round red">whatshot</span>
+        PARTICIPATE NOW
+      </button>
+    </mat-card-actions>
+    <mat-card-footer>
 
-      <div fxLayout.gt-sm fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign.gt-sm="start center"
-        fxLayoutAlign.lt-md="stretch center">
-        <button (click)="onParticipate()" *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'"
-          class="primaryButton buttonText">
-          <div fxLayoutGap="8px" fxLayoutAlign="center center">
-            <span matTooltip="Participate in this season">Participate</span>
-          </div>
-        </button>
+    </mat-card-footer>
+  </mat-card>
+</section>
+<section>
+  <mat-card class="dashboard-card no-padding-card">
+    <mat-card-title class="spacy-title">
+      <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="dash-h5 align"> Matches</span>
+        <a [routerLink]="['/play', 'fixtures']" class="mat-caption sec-menu">View all matches</a>
       </div>
-      <!-- <div fxLayoutAlign="start center" class="nav-links">
-        Go to&nbsp;<a [routerLink]="['/play', 'fixtures']" [queryParams]="{Season: this.seasonName}"
-          *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'"> Fixtures /&nbsp;</a><a
-          [routerLink]="['/play', 'results']" [queryParams]="{Season: this.seasonName}">Results /&nbsp;</a><a
-          [routerLink]="['/play', 'standings']" [queryParams]="{Season: this.seasonName}">Standings</a>
-      </div> -->
-    </div>
-  </section>
-</div>
-<!-- intro-section -->
+    </mat-card-title>
+    <mat-card-content class="fixture-content-season-profile">
+      <app-fixtures-results-tabs [matches]="matches" [showActionBtn]="false"></app-fixtures-results-tabs>
+    </mat-card-content>
+  </mat-card>
+</section>
 
-<!-- content -->
-<mat-tab-group mat-stretch-tabs class="container section-space-bottom season-fixtures-container" fxHide.lt-md="true">
-  <mat-tab label="Fixtures">
-    <ng-template matTabContent>
-      <app-se-fixtures [list]="seasonFixtures"></app-se-fixtures>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Overview">
-    <ng-template matTabContent>
-      <app-se-overview [seasonId]="sid" [venue]="{
-          city: (seasonInfo$ | async)?.locCity,
-          state: (seasonInfo$ | async)?.locState
-        }" [data]="seasonMoreInfo$ | async"></app-se-overview>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Gallery">
-    <ng-template matTabContent>
-      <app-se-gallery [photos]="photos$ | async"></app-se-gallery>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Statistics">
-    <ng-template matTabContent>
-      <app-se-stats [stats]="stats$ | async"></app-se-stats>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Results">
-    <ng-template matTabContent>
-      <app-se-fixtures [list]="seasonResults">
-      </app-se-fixtures>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Standings">
-    <ng-template matTabContent>
-      <app-pl-standings [selectedSeason]="seasonInfo?.name" [showFilters]="false"></app-pl-standings>
-    </ng-template>
-  </mat-tab>
-</mat-tab-group>
-<!-- content -->
-
-<div class="section-space-bottom season-fixtures-container" fxHide.gt-sm="true">
-  <div class="content-box container">
-    <p class="dash-h5">Fixtures</p>
-    <app-se-fixtures [list]="seasonFixtures"></app-se-fixtures>
-  </div>
-
-  <div class="content-box container">
-
-    <p class="dash-h5">Overview</p>
-    <app-se-overview [seasonId]="sid" [venue]="{
-      city: (seasonInfo$ | async)?.locCity,
-      state: (seasonInfo$ | async)?.locState
-    }" [data]="seasonMoreInfo$ | async"></app-se-overview>
-  </div>
-
-  <div class="content-box container" *ngIf="seasonResults.length">
-    <p class="dash-h5">Results</p>
-    <app-se-fixtures [list]="seasonResults"></app-se-fixtures>
-  </div>
-
-  <div class="content-box">
-    <p class="dash-h5 container">Standings</p>
-    <app-pl-standings [selectedSeason]="seasonInfo?.name" [showFilters]="false"></app-pl-standings>
-  </div>
-
-  <div class="content-box container">
-    <p class="dash-h5">Statistics</p>
-    <app-se-stats [stats]="stats$ | async"></app-se-stats>
-  </div>
-
-  <div class="content-box container" *ngIf="(photos$ | async)?.length">
-    <p class="dash-h5">Gallery</p>
-    <app-se-gallery [photos]="photos$ | async"></app-se-gallery>
-  </div>
-
-  <div fxLayout.gt-sm fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign.gt-sm="start center"
-    fxLayoutAlign.lt-md="stretch center">
-    <button (click)="onParticipate()" *ngIf="(seasonInfo$ | async)?.status === 'PUBLISHED'"
-      class="primaryButton buttonText">
-      <div fxLayoutGap="8px" fxLayoutAlign="center center">
-        <span matTooltip="Participate in this season">Participate</span>
+<section>
+  <mat-card class="dashboard-card mat-elevation-z8">
+    <mat-card-title>
+      <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="dash-h5 align"> Standings</span>
+        <a [routerLink]="['/play', 'standings']" class="mat-caption sec-menu">View all standings</a>
       </div>
-    </button>
-  </div>
-
-</div>
+    </mat-card-title>
+    <mat-card-content>
+      <app-standings-tabs [knockoutData]="knockoutData" [leagueData]="leagueRowsData"></app-standings-tabs>
+    </mat-card-content>
+  </mat-card>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

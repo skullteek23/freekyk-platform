@@ -1,5 +1,6 @@
 <div fxHide.gt-sm="true" class="floating-button-container" fxLayoutAlign="center center">
-  <button [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA" matTooltip="Get started">
+  <button *ngIf="!uid" [routerLink]="['/signup']" class="primaryButton buttonText floating-CTA"
+    matTooltip="Get started">
     {{ 'get started' | titlecase }}
   </button>
   <button class="live-season floating-live" matTooltip="Upcoming Seasons" mat-mini-fab [matMenuTriggerFor]="seasonMenu">

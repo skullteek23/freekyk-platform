@@ -105,7 +105,7 @@ export class PlHomeComponent implements OnInit {
     if (uid) {
       this.router.navigate(['/dashboard/participate', this.upcomingSeason.id]);
     } else {
-      this.router.navigate(['/s', this.upcomingSeason.name]);
+      this.router.navigate(['/s', this.upcomingSeason.id]);
     }
   }
 

@@ -42,15 +42,19 @@
       </mat-chip-list>
     </div>
 
-    <mat-card-actions *ngIf="season.isFreeSeason">
-      <button mat-stroked-button (click)="openOffer(); $event.stopPropagation()" color="primary">
+    <mat-card-actions fxLayout="row" fxLayoutGap="0px">
+      <button *ngIf="season.isFreeSeason" mat-stroked-button (click)="openOffer(); $event.stopPropagation()"
+        color="primary">
         Participate
       </button>
-    </mat-card-actions>
-    <mat-card-actions *ngIf="!season.isFreeSeason">
-      <button mat-stroked-button (click)="initCheckoutFlow(); $event.stopPropagation()" color="primary">
+      <button *ngIf="!season.isFreeSeason" mat-stroked-button (click)="initCheckoutFlow(); $event.stopPropagation()"
+        color="primary">
         {{season.slotBooked ? 'Pay Remaining Amount' : 'Pay Now'}}
-        {{season.slotBooked ? (season.isAmountDue | currency: 'INR') : ''}}
+      </button>
+      <button mat-button (click)="onNavigate(); $event.stopPropagation()" fxLayout="column"
+        fxLayoutAlign="center center" fxLayoutGap="8px">
+        <span> View Info </span>
+        <span class="material-icons-round"> chevron_right </span>
       </button>
     </mat-card-actions>
     <ng-container *ngIf="season.slotBooked">

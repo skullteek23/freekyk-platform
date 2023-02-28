@@ -33,7 +33,7 @@ export class LiveSeasonComponent implements OnInit {
   }
 
   onNavigate() {
-    this.router.navigate(['/s', this.data.name])
+    this.router.navigate(['/s', this.data.id])
     this.onCloseDialog();
   }
 

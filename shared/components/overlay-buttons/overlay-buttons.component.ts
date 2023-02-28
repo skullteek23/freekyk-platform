@@ -12,6 +12,7 @@ import { ApiService } from '@shared/services/api.service';
 export class OverlayButtonsComponent implements OnInit {
 
   seasonsList: SeasonBasicInfo[] = [];
+  uid = null;
 
   constructor(
     private dialog: MatDialog,
@@ -19,6 +20,7 @@ export class OverlayButtonsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.uid = localStorage.getItem('uid');
     this.getLiveSeasons();
   }
 

@@ -1,7 +1,5 @@
 <app-feedback-button fxShow.gt-sm="false"></app-feedback-button>
 
-<app-overlay-buttons></app-overlay-buttons>
-
 <div class="banner-container">
   <img src="assets/svgs/Banner/main_banner.svg" alt="Freekyk Banner Image">
 </div>
@@ -38,7 +36,7 @@
 
       <div class="fixtures-container" *ngIf="fixtures.length">
         <div fxLayoutAlign="space-between center" class="heading">
-          <span class="mat-body-2 align">Upcoming Matches</span>
+          <span class="mat-body-2 align">{{matchesLabel}}</span>
           <a (click)="showAllFixtures(); $event.stopPropagation()" class="mat-caption">Show more</a>
         </div>
         <ul>

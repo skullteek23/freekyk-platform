@@ -1,0 +1,29 @@
+<mat-tab-group mat-stretch-tabs [(selectedIndex)]="index" animationDuration="0ms">
+  <mat-tab label="Fixtures">
+    <ul>
+      <app-no-items-message items="fixtures" *ngIf="fixtures?.length === 0"></app-no-items-message>
+      <li *ngFor="let fixture of fixtures">
+        <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
+      </li>
+    </ul>
+    <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="fixtures?.length === 0 && showActionBtn">
+      <button class="link-button" fxFlex="100%" (click)="openMatchRequestForm()" mat-stroked-button color="primary">
+        <span class="material-icons-round external-icon">sports_soccer</span>
+        Request a Football Match!
+      </button>
+      <button class="link-button" fxFlex="100%" [routerLink]="['/dashboard', 'participate']" mat-stroked-button
+        color="primary">
+        <span class="material-icons-round external-icon">sports_soccer</span>
+        Participate!
+      </button>
+    </div>
+  </mat-tab>
+  <mat-tab label="Results">
+    <ul>
+      <app-no-items-message items="results" *ngIf="results?.length === 0"></app-no-items-message>
+      <li *ngFor="let result of results">
+        <app-fixture-basic [matchData]="result"></app-fixture-basic>
+      </li>
+    </ul>
+  </mat-tab>
+</mat-tab-group>

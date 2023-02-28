@@ -1,0 +1,21 @@
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab label="Knockout">
+    <ng-template matTabContent>
+      <div class="bracket-container">
+        <ng-container *ngIf="knockoutData">
+          <app-knockout-bracket [data]="knockoutData"></app-knockout-bracket>
+        </ng-container>
+        <ng-container *ngIf="!knockoutData">
+          <app-no-items-message items="knockout brackets"></app-no-items-message>
+        </ng-container>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="League">
+    <ng-template matTabContent>
+      <ng-container *ngIf="leagueData">
+        <app-pl-st-league [data]="leagueData"></app-pl-st-league>
+      </ng-container>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

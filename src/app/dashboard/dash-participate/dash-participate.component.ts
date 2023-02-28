@@ -294,7 +294,7 @@ export class DashParticipateComponent implements OnInit {
   }
 
   onNavigateToFixtures() {
-    this.router.navigate(['/s', this.selectedSeason.name]);
+    this.router.navigate(['/s', this.selectedSeason.id]);
   }
 
   async participateInFreeSeason(season: SeasonBasicInfo): Promise<void> {
@@ -409,10 +409,6 @@ export class DashParticipateComponent implements OnInit {
       return false;
     }
     return false;
-  }
-
-  goToSeason(season: string): void {
-    window.open(environment.firebase.url + '/s/' + season, '_blank');
   }
 
   enlargePhoto(url: string) {

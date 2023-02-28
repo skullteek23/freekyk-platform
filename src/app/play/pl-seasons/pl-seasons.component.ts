@@ -72,6 +72,6 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   }
 
   openSeason(season: SeasonBasicInfo) {
-    this.router.navigate(['/s', season.name]);
+    this.router.navigate(['/s', season.id]);
   }
 }

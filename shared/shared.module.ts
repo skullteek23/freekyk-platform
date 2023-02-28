@@ -61,9 +61,6 @@ import { FileUploaderComponent } from './components/file-uploader/file-uploader.
 import { HourToDate } from './pipes/hour-to-date.pipe';
 import { ActionStripComponent } from './components/action-strip/action-strip.component';
 import { PlStandingsComponent } from '@app/play/pl-standings/pl-standings.component';
-import { PlStCommunityPlayComponent } from '@app/play/pl-standings/pl-st-community-play/pl-st-community-play.component';
-import { KnockoutStripComponent } from '@app/play/pl-standings/pl-st-knockout/knockout-strip/knockout-strip.component';
-import { PlStKnockoutComponent } from '@app/play/pl-standings/pl-st-knockout/pl-st-knockout.component';
 import { PlStLeagueComponent } from '@app/play/pl-standings/pl-st-league/pl-st-league.component';
 import { environment } from 'environments/environment';
 import { ShareButtonsConfig, ShareModule } from 'ngx-sharebuttons';
@@ -82,7 +79,10 @@ import { TeamChatThreadComponent } from './dialogs/team-chat-thread/team-chat-th
 import { OverlayButtonsComponent } from './components/overlay-buttons/overlay-buttons.component';
 import { SeasonParticipateCardComponent } from './components/season-participate-card/season-participate-card.component';
 import { TeamsListComponent } from './components/teams-list/teams-list.component';
-
+import { FixturesResultsTabsComponent } from './components/fixtures-results-tabs/fixtures-results-tabs.component';
+import { StandingsTabsComponent } from './components/standings-tabs/standings-tabs.component';
+import { KnockoutBracketComponent } from './components/knockout-bracket/knockout-bracket.component';
+import { NgTournamentTreeModule } from 'ng-tournament-tree';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -143,9 +143,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     ActionStripComponent,
     PlStandingsComponent,
     PlStLeagueComponent,
-    PlStKnockoutComponent,
-    PlStCommunityPlayComponent,
-    KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
     ViewGroundCardComponent,
@@ -157,7 +154,11 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     UserQuestionsCommunicationComponent,
     TeamChatThreadComponent,
     OverlayButtonsComponent,
-    SeasonParticipateCardComponent, TeamsListComponent
+    SeasonParticipateCardComponent,
+    TeamsListComponent,
+    FixturesResultsTabsComponent,
+    StandingsTabsComponent,
+    KnockoutBracketComponent
   ],
   imports: [
     CommonModule,
@@ -167,6 +168,7 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     YouTubePlayerModule,
     ClipboardModule,
     RouterModule,
+    NgTournamentTreeModule,
     NgxMatSelectSearchModule,
     ShareModule.withConfig(customConfig),
   ],
@@ -226,9 +228,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     ActionStripComponent,
     PlStandingsComponent,
     PlStLeagueComponent,
-    PlStKnockoutComponent,
-    PlStCommunityPlayComponent,
-    KnockoutStripComponent,
     FallbackImgDirective,
     SocialGroupComponent,
     ViewGroundCardComponent,
@@ -240,7 +239,11 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     UserQuestionsCommunicationComponent,
     TeamChatThreadComponent,
     OverlayButtonsComponent,
-    SeasonParticipateCardComponent, TeamsListComponent
+    SeasonParticipateCardComponent,
+    TeamsListComponent,
+    FixturesResultsTabsComponent,
+    StandingsTabsComponent,
+    KnockoutBracketComponent
   ],
 })
 export class SharedModule { }

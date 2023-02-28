@@ -1,23 +1,28 @@
 import { PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
-import { map, share } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
-import { SeasonBasicInfo } from "@shared/interfaces/season.model";
+import { ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
 import { TeamBasicInfo } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
 import { GroundBasicInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
+import { LeagueTableModel } from "@shared/interfaces/others.model";
+import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
 
-export function manipulatePlayerData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>) {
+export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats { }
+export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
+export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
+
+export function manipulatePlayerData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as PlayerBasicInfo), } as PlayerBasicInfo))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-    share()
   );
 }
 
-export function manipulateSeasonData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>): Observable<SeasonBasicInfo[]> {
+export function manipulateSeasonData(source: Observable<ngFireDocQuery>): Observable<SeasonBasicInfo[]> {
   return source.pipe(
     map(response => {
       const seasonList: SeasonBasicInfo[] = [];
@@ -37,11 +42,36 @@ export function manipulateSeasonData(source: Observable<firebase.firestore.Query
       return seasonList;
     }),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-    share()
   );
 }
 
-export function manipulateSeasonOrdersData(source: Observable<[firebase.firestore.QuerySnapshot<unknown>, firebase.firestore.QuerySnapshot<unknown>]>): Observable<SeasonBasicInfo[]> {
+export function manipulateSeasonBulkData(
+  source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>
+): Observable<Partial<SeasonAllInfo>> {
+  return source.pipe(
+    map(response => {
+      let data: Partial<SeasonAllInfo> = {};
+      if (response?.length === 4) {
+        const data_1: SeasonBasicInfo = response[0].exists ? ({ id: response[0].id, ...response[0].data() as SeasonBasicInfo }) : null;
+        const data_2: SeasonAbout = response[1].exists ? ({ ...response[1].data() as SeasonAbout }) : null;
+        const data_3: SeasonStats = response[2].exists ? ({ ...response[2].data() as SeasonStats }) : null;
+        const data_4: SeasonMedia = response[3].exists ? ({ ...response[3].data() as SeasonMedia }) : null;
+        if (data_1 || data_2 || data_3 || data_4) {
+          data = {
+            ...data_1,
+            ...data_2,
+            ...data_3,
+            ...data_4,
+            discountedFees: getFeesAfterDiscount(data_1.feesPerTeam, data_1.discount)
+          }
+        }
+      }
+      return data;
+    }),
+  );
+}
+
+export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, ngFireDocQuery]>): Observable<SeasonBasicInfo[]> {
   return source.pipe(
     map(response => {
       const seasonList: SeasonBasicInfo[] = [];
@@ -72,15 +102,14 @@ export function manipulateSeasonOrdersData(source: Observable<[firebase.firestor
   );
 }
 
-export function manipulateTeamData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>) {
+export function manipulateTeamData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as TeamBasicInfo), } as TeamBasicInfo))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
-    share()
   );
 }
 
-export function manipulateMatchData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>): Observable<MatchFixture[]> {
+export function manipulateMatchData(source: Observable<ngFireDocQuery>): Observable<MatchFixture[]> {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => {
       const data = doc.data() as MatchFixture;
@@ -96,33 +125,132 @@ export function manipulateMatchData(source: Observable<firebase.firestore.QueryS
   );
 }
 
-export function manipulateFixtureData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>) {
+export function manipulateFixtureData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    manipulateMatchData.bind(this),
+    manipulateMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date'))),
-    share()
   );
 }
 
-export function manipulateResultData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>) {
+export function manipulateResultData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    manipulateMatchData.bind(this),
+    manipulateMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
-    share()
   );
 }
 
-export function manipulateGroundData(source: Observable<firebase.firestore.QuerySnapshot<unknown>>) {
+export function manipulateGroundData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as GroundBasicInfo), } as GroundBasicInfo))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-    share()
   );
 }
 
-export function getFeesAfterDiscount(fees: number, discount: number): number {
+export function manipulateSeasonPartnerData(source: Observable<ngFireDocQuery>) {
+  return source.pipe(
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ISeasonPartner), } as ISeasonPartner))),
+  );
+}
+
+export function manipulateLeagueData(source: Observable<ngFireDoc>): Observable<LeagueTableModel[]> {
+  return source.pipe(
+    map((resp) => {
+      let tableData: LeagueTableModel[] = [];
+
+      if (resp?.exists) {
+        tableData = Object.values(resp.data())
+      }
+      return tableData;
+    }),
+  );
+}
+
+export function manipulateKnockoutData(source: Observable<ngFireDocQuery>): Observable<IKnockoutData> {
+  return source.pipe(
+    manipulateMatchData,
+    map((resp: MatchFixture[]) => createKnockoutData(resp)),
+  );
+}
+
+function getFeesAfterDiscount(fees: number, discount: number): number {
   if (fees === 0) {
     return 0;
   }
   return (fees - ((discount / 100) * fees));
+}
+
+function createKnockoutData(matches: MatchFixture[]): IKnockoutData {
+  const round2matches = matches.filter(el => el.fkcRound === 2);
+  const round4matches = matches.filter(el => el.fkcRound === 4);
+  const round8matches = matches.filter(el => el.fkcRound === 8);
+  const round16matches = matches.filter(el => el.fkcRound === 16);
+
+  const data: Partial<IKnockoutData> = {};
+  data.match = round2matches[0];
+  if (round4matches.length) {
+    data.next = [
+      {
+        match: round4matches[0]
+      },
+      {
+        match: round4matches[1]
+      },
+    ]
+  }
+
+  if (round8matches.length) {
+    data.next[0].next = [
+      {
+        match: round8matches[0]
+      },
+      {
+        match: round8matches[1]
+      },
+    ]
+    data.next[1].next = [
+      {
+        match: round8matches[2]
+      },
+      {
+        match: round8matches[3]
+      },
+    ]
+  }
+
+  if (round16matches.length) {
+    data.next[0].next[0].next = [
+      {
+        match: round16matches[0]
+      },
+      {
+        match: round16matches[1]
+      },
+    ]
+    data.next[1].next[0].next = [
+      {
+        match: round16matches[2]
+      },
+      {
+        match: round16matches[3]
+      }
+    ]
+    data.next[0].next[1].next = [
+      {
+        match: round16matches[4]
+      },
+      {
+        match: round16matches[5]
+      }
+    ]
+    data.next[1].next[1].next = [
+      {
+        match: round16matches[6]
+      },
+      {
+        match: round16matches[7]
+      }
+    ]
+  }
+
+  return data as IKnockoutData;
 }

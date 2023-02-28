@@ -1,7 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { PlayConstants } from '../../play.constants';
@@ -11,14 +8,12 @@ import { PlayConstants } from '../../play.constants';
   templateUrl: './pl-st-league.component.html',
   styleUrls: ['./pl-st-league.component.scss'],
 })
-export class PlStLeagueComponent implements OnInit, OnDestroy {
+export class PlStLeagueComponent {
 
   readonly TO_BE_DECIDED = PlayConstants.TO_BE_DECIDED;
 
-  cols: string[] = [];
-  isNoData = false;
-  LeagueDataSource: LeagueTableModel[] = [];
-  subscriptions = new Subscription();
+  cols: string[] = ['position', 'team', 'played', 'won', 'draw', 'lost', 'points', 'goalsFor', 'goalsAgainst', 'goalDiff'];
+  dataSource: LeagueTableModel[] = [];
 
   @Input() set data(value: LeagueTableModel[]) {
     if (value) {
@@ -27,28 +22,7 @@ export class PlStLeagueComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private mediaObs: MediaObserver) { }
-
-  ngOnInit() {
-    this.subscriptions.add(this.mediaObs.asObservable()
-      .pipe(
-        filter((changes: MediaChange[]) => changes.length > 0),
-        map((changes: MediaChange[]) => changes[0])
-      )
-      .subscribe((change: MediaChange) => {
-        if (change.mqAlias === 'sm' || change.mqAlias === 'xs') {
-          this.cols = ['pos', 'Team', 'W', 'D', 'L', 'Pts', 'P', 'GF', 'GA', 'GD',];
-        } else {
-          this.cols = ['pos', 'Team', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts'];
-        }
-      }));
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
-  }
+  constructor() { }
 
   setDataSource(value: LeagueTableModel[]) {
     const tableData = value
@@ -59,6 +33,6 @@ export class PlStLeagueComponent implements OnInit, OnDestroy {
         gd: val.gf - val.ga,
       } as LeagueTableModel))
       .sort((a, b) => b.pts - a.pts);
-    this.LeagueDataSource = tableData;
+    this.dataSource = tableData;
   }
 }

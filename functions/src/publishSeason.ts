@@ -120,7 +120,6 @@ export function getPublishableFixture(data: IDummyFixture[]) {
   return data.map(val => ({
     id: val.id,
     date: val.date,
-    concluded: false,
     home: {
       name: TO_BE_DECIDED,
       logo: DEFAULT_LOGO

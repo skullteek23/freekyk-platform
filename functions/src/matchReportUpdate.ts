@@ -194,7 +194,6 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     newHomeObj['score'] = g_home;
     newAwayObj['score'] = g_away;
     const update: Partial<MatchFixture> = {
-      concluded: true,
       home: newHomeObj,
       away: newAwayObj,
       status: 8
@@ -240,7 +239,6 @@ export async function matchReportUpdate(data: any, context: any): Promise<any> {
     const nextRound: number = Number(fixtureData.fkcRound) / FKC_ROUND_MULTIPLIER;
     const availableNextRoundMatches: MatchFixture[] = (await db.collection('allMatches')
       .where('fkcRound', '==', nextRound)
-      .where('concluded', '==', false)
       .where('type', '==', 'FKC')
       .where('season', '==', fixtureData.season)
       .get()).docs.map(doc => doc.data() as MatchFixture);

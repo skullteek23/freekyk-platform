@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   dashOpen = false;
   routeSubscription: Subscription = new Subscription();
   isLoaderShown = false;
+  showFloatingButton = true;
 
   constructor(
     private router: Router,
@@ -26,6 +27,11 @@ export class AppComponent implements OnInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         // if (event instanceof NavigationEnd && !event.url.includes('/dashboard/home')) {
         this.dashOpen = event.url.includes('dashboard');
+        if (event.url.includes('dashboard') || event.url.includes('login') || event.url.includes('signup')) {
+          this.showFloatingButton = false;
+        } else {
+          this.showFloatingButton = true;
+        }
       }
     });
     this.loadingService._loadingStatusChange.subscribe(response => {

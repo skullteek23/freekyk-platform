@@ -73,7 +73,6 @@ export class SeasonAdminService {
         away: 'TBD',
         id: this.getMID(matchType, i),
         date: groundSlots[i].slot,
-        concluded: false,
         premium: groundSlots[i].ownType === 'PRIVATE',
         season: options.season,
         type: matchType,

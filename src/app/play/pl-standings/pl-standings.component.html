@@ -1,40 +1,15 @@
-<h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Season Standings</h4>
-<div fxLayout="column" fxLayoutGap="20px">
-  <!-- mobile filter -->
-  <!-- <app-filters-sm
-    fxHide.gt-sm="true"
-    [filterArray]="stFilters"
-  ></app-filters-sm> -->
-  <!-- mobile filter -->
-  <ng-container *ngIf="showFilters">
-    <!-- desktop filters -->
-    <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
-    <!-- desktop filters -->
-    <div class="container" *ngIf="!seasonChosen">
-      <span class="mat-body-1 no-items">
-        No season selected! Please select a season
-      </span>
-    </div>
-  </ng-container>
-
-  <!-- tab groups -->
-  <mat-tab-group class="container section-space-bottom" [(selectedIndex)]="activeIndex">
-    <mat-tab label="FCP Leaderboard" [disabled]="!cpStandings.length">
-      <ng-template matTabContent>
-        <app-pl-st-community-play [data]="cpStandings"></app-pl-st-community-play>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Knockout Tournament" [disabled]="!knockoutFixtures.length">
-      <ng-template matTabContent>
-        <app-pl-st-knockout [season]="seasonChosen" [fixtures]="knockoutFixtures">
-        </app-pl-st-knockout>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="League Table" [disabled]="!leagueData.length">
-      <ng-template matTabContent>
-        <app-pl-st-league [data]="leagueData"></app-pl-st-league>
-      </ng-template>
-    </mat-tab> -->
-  </mat-tab-group>
-  <!-- tab groups -->
-</div>
+<mat-card class="feature-card">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/fkc.svg" alt="Freekyk Standings Image">
+  <mat-card-content>
+    <p class="mat-body-1 description">
+      For standings, select a season
+    </p>
+  </mat-card-content>
+</mat-card>
+<section class="features-section less-margin">
+  <app-searchable-form-field [control]="seasonFormControl" [required]="true" [list]="seasonsStrList" label="Season"
+    (selectionChange)="onSelectSeason($event)">
+  </app-searchable-form-field>
+  <app-standings-tabs [knockoutData]="knockoutData" [leagueData]="leagueRowsData"></app-standings-tabs>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

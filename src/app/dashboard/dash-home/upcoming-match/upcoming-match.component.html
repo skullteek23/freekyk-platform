@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z8 dashboard-card">
   <span mat-card-title class="dash-h5">My Upcoming Match</span>
   <app-match-detail-header [data]="fixture"></app-match-detail-header>
-  <div fxLayoutAlign="center center">
+  <div fxLayoutAlign="center center" class="button-container">
     <button (click)="onOpenFixture()" class="secondaryButton buttonText">
       View Fixture Details
     </button>

@@ -2,8 +2,7 @@
   <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
     <mat-icon class="material-icons-round"> close </mat-icon>
   </button>
-  <span *ngIf="!data?.concluded" class="mat-body-1"> Fixture Details </span>
-  <span *ngIf="data?.concluded" class="mat-body-1">Result Details</span>
+  <span class="mat-body-1"> Match Details </span>
 </mat-toolbar>
 <div class="container-2" fxLayout="column" fxLayoutGap="20px">
   <app-match-detail-header [data]="data"></app-match-detail-header>

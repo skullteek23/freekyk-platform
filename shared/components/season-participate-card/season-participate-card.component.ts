@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { EnlargeService } from '@app/services/enlarge.service';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { Formatters } from '@shared/interfaces/team.model';
@@ -17,7 +18,8 @@ export class SeasonParticipateCardComponent implements OnInit {
   formatter = Formatters;
 
   constructor(
-    private enlargeService: EnlargeService
+    private enlargeService: EnlargeService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +42,12 @@ export class SeasonParticipateCardComponent implements OnInit {
       this.openOffer();
     } else {
       this.initCheckoutFlow();
+    }
+  }
+
+  onNavigate() {
+    if (this.season?.id) {
+      this.router.navigate(['/s', this.season.id]);
     }
   }
 

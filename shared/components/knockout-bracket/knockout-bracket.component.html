@@ -1,0 +1,56 @@
+<div class="wrapper" *ngIf="data?.match">
+  <div class="item">
+    <div class="item-parent" (click)="openMatch(data?.match.id)"
+      [ngClass]="{'not-last-item-child': data?.next?.length}">
+      <mat-card class="dashboard-card mat-elevation-z8">
+        <mat-card-content>
+          <div class="match-container">
+            <div class="team" fxLayoutAlign="start center">
+              <div class="score" *ngIf="isMatchScored">
+                <span class="mat-body-2">
+                  {{data?.match?.home.score}}
+                </span>
+              </div>
+              <img class="avatarSize" [src]="data.match.home.logo" alt="{{data.match.home.name}} Logo" appFallbackImg />
+              <span class="mat-caption sec-menu" *ngIf="isTBD">
+                {{ TO_BE_DECIDED }}
+              </span>
+              <span class="mat-caption left ellipsis" *ngIf="!isTBD">
+                {{ data.match.home.name }}
+              </span>
+            </div>
+            <div class="team" fxLayoutAlign="start center">
+              <div class="score" *ngIf="isMatchScored">
+                <span class="mat-body-2">
+                  {{data?.match?.away.score}}
+                </span>
+              </div>
+              <img class="avatarSize" [src]="data.match.away.logo" alt="{{data.match.away.name}} Logo" appFallbackImg />
+              <span class="mat-caption sec-menu" *ngIf="!isTBDAway">
+                {{ TO_BE_DECIDED }}
+              </span>
+              <span class="mat-caption left ellipsis" *ngIf="!isTBDAway">
+                {{ data.match.away.name }}
+              </span>
+            </div>
+            <ng-template #time>
+              <div class="sec-menu ellipsis center mat-caption" fxLayoutAlign="center center" fxLayoutGap="8px">
+                FT <span class="material-icons-round">chevron_right</span>
+              </div>
+            </ng-template>
+            <div class="sec-menu ellipsis center mat-caption" *ngIf="!isMatchScored; else time">
+              {{data.match.date | date: 'EEEE h:mm a'}}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="item-childrens" *ngIf="data?.next && data?.next[0]?.match !== undefined">
+      <div class="item-child" *ngFor="let item of data?.next">
+        <ng-container *ngIf="item">
+          <app-knockout-bracket [data]="item"></app-knockout-bracket>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

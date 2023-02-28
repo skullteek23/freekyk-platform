@@ -105,12 +105,12 @@ export class UpdateMatchReportComponent implements OnInit {
   getMatchInfo(): void {
     this.isLoaderShown = true;
     this.ngFire.collection('allMatches').doc(this.data).get().pipe(map(resp => resp.data() as MatchFixture)).subscribe(data => {
-      if (data?.concluded === false) {
+      if (data?.home.hasOwnProperty('score') === false) {
         this.fixture = data;
         this.homeTeam = this.fixture?.home?.name;
         this.awayTeam = this.fixture?.away?.name;
         this.getInvolvedPlayersList();
-      } else if (data && data.concluded === true) {
+      } else if (data?.home.hasOwnProperty('score')) {
         this.isLoaderShown = false;
         this.snackbarService.displayError('Match data already submitted!');
         this.onCloseDialog();

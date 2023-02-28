@@ -427,7 +427,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
           home: data.home.name,
           away: data.away.name,
           date: data.date,
-          concluded: data.concluded,
           premium: data.premium,
           season: data.season,
           type: data.type,
@@ -508,7 +507,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   goToURL() {
     if (this.seasonData?.name && environment) {
       const SEASON_URL = environment?.firebase?.url + '/s/';
-      window.open(`${SEASON_URL}${this.seasonData?.name}`, '_blank');
+      window.open(`${SEASON_URL}${this.seasonData?.id}`, '_blank');
     }
   }
 

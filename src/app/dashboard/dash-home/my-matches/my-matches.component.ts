@@ -17,18 +17,7 @@ export class IMyMatchesData {
 })
 export class MyMatchesComponent implements OnInit {
 
-  @Input() set matches(value: MatchFixture[]) {
-    if (value) {
-      value.forEach(match => {
-        if (ParseMatchProperties.isResult(match.date)) {
-          this.fixtures.push(match);
-        } else {
-          this.results.push(match);
-        }
-      });
-    }
-  }
-
+  @Input() matches: MatchFixture[] = [];
   @Input() teamName: string = null;
 
   fixtures: MatchFixture[] = [];
