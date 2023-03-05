@@ -4,12 +4,20 @@
     <p class="mat-body-1 description">
       For standings, select a season
     </p>
+
   </mat-card-content>
 </mat-card>
 <section class="features-section less-margin">
   <app-searchable-form-field [control]="seasonFormControl" [required]="true" [list]="seasonsStrList" label="Season"
     (selectionChange)="onSelectSeason($event)">
   </app-searchable-form-field>
+  <p>
+    <button mat-button (click)="onNavigate(); $event.stopPropagation()" fxLayout="column" fxLayoutAlign="center center"
+      fxLayoutGap="8px">
+      <span> Show Season Info </span>
+      <span class="material-icons-round"> chevron_right </span>
+    </button>
+  </p>
   <app-standings-tabs [knockoutData]="knockoutData" [leagueData]="leagueRowsData"></app-standings-tabs>
 </section>
 <app-loading *ngIf="isLoaderShown"></app-loading>

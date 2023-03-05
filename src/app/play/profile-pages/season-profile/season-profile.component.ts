@@ -66,6 +66,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
               this.getSeasonMatches();
               this.getSeasonStandings();
               this.getSeasonPartners();
+            } else {
+              this.router.navigate(['error'])
             }
             this.isLoaderShown = false;
             window.scrollTo(0, 0);

@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api.service';
 import { FormControl } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pl-standings',
@@ -25,7 +26,8 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -93,6 +95,13 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
             this.snackbarService.displayError('Season standings not found! Try again later');
           }
         })
+    }
+  }
+
+  onNavigate() {
+    const selectedSeason = this.seasonsList.find(el => el.name === this.seasonFormControl?.value);
+    if (selectedSeason) {
+      this.router.navigate(['/s', selectedSeason.id])
     }
   }
 

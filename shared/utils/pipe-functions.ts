@@ -64,9 +64,11 @@ export function manipulateSeasonBulkData(
             ...data_4,
             discountedFees: getFeesAfterDiscount(data_1.feesPerTeam, data_1.discount)
           }
+          return data;
         }
+        return null;
       }
-      return data;
+      return null;
     }),
   );
 }
