@@ -2,20 +2,14 @@
   <mat-tab label="Knockout">
     <ng-template matTabContent>
       <div class="bracket-container">
-        <ng-container *ngIf="knockoutData">
-          <app-knockout-bracket [data]="knockoutData"></app-knockout-bracket>
-        </ng-container>
-        <ng-container *ngIf="!knockoutData">
-          <app-no-items-message items="knockout brackets"></app-no-items-message>
-        </ng-container>
+        <app-no-items-message *ngIf="!knockoutData" items="knockout brackets"></app-no-items-message>
+        <app-knockout-bracket *ngIf="knockoutData" [data]="knockoutData"></app-knockout-bracket>
       </div>
     </ng-template>
   </mat-tab>
   <mat-tab label="League">
     <ng-template matTabContent>
-      <ng-container *ngIf="leagueData">
-        <app-pl-st-league [data]="leagueData"></app-pl-st-league>
-      </ng-container>
+      <app-pl-st-league *ngIf="leagueData" [data]="leagueData"></app-pl-st-league>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
