@@ -83,6 +83,7 @@ import { FixturesResultsTabsComponent } from './components/fixtures-results-tabs
 import { StandingsTabsComponent } from './components/standings-tabs/standings-tabs.component';
 import { KnockoutBracketComponent } from './components/knockout-bracket/knockout-bracket.component';
 import { MyStatsCardComponent } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
+import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -159,7 +160,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     FixturesResultsTabsComponent,
     StandingsTabsComponent,
     KnockoutBracketComponent,
-    MyStatsCardComponent
+    MyStatsCardComponent,
+    LiveSeasonComponent
   ],
   imports: [
     CommonModule,
@@ -244,7 +246,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     FixturesResultsTabsComponent,
     StandingsTabsComponent,
     KnockoutBracketComponent,
-    MyStatsCardComponent
+    MyStatsCardComponent,
+    LiveSeasonComponent
   ],
 })
 export class SharedModule { }

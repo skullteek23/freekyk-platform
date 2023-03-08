@@ -36,7 +36,6 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
-import { LiveSeasonComponent } from './shared/dialogs/live-season/live-season.component';
 import { SubmitMatchRequestComponent } from './shared/dialogs/submit-match-request/submit-match-request.component';
 import { PlayerService } from './services/player.service';
 import { TeamService } from './services/team.service';
@@ -62,7 +61,6 @@ import { TeamService } from './services/team.service';
     TeamProfileComponent,
     FeedbackComponent,
     FeedbackButtonComponent,
-    LiveSeasonComponent,
     SubmitMatchRequestComponent,
   ],
   imports: [
