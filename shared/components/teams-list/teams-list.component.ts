@@ -19,7 +19,7 @@ export class TeamsListComponent implements OnInit {
   }
 
   openTeam() {
-    this.router.navigate(['/t', this.team.tname]);
+    this.router.navigate(['/t', this.team.id]);
   }
 
 }

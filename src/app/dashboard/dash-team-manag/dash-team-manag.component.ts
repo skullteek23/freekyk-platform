@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { Subscription } from 'rxjs';
@@ -13,7 +14,7 @@ import { TeamState } from './store/team.reducer';
   templateUrl: './dash-team-manag.component.html',
   styleUrls: ['./dash-team-manag.component.scss'],
 })
-export class DashTeamManagComponent implements OnInit, OnDestroy {
+export class DashTeamManagComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isLoading = true;
   noTeam = false;
@@ -28,12 +29,24 @@ export class DashTeamManagComponent implements OnInit, OnDestroy {
 
   constructor(
     private teamService: TeamService,
-    private store: Store<{ dash: DashState; team: TeamState; }>
+    private store: Store<{ dash: DashState; team: TeamState; }>,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.createShortcutData();
     this.getTeamStatistics();
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.add(this.route.fragment.subscribe(response => {
+      if (response) {
+        const element = document.getElementById(response);
+        if (element) {
+          element.scrollIntoView();
+        }
+      }
+    }));
   }
 
   ngOnDestroy(): void {

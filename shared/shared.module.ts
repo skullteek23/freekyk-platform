@@ -82,7 +82,7 @@ import { TeamsListComponent } from './components/teams-list/teams-list.component
 import { FixturesResultsTabsComponent } from './components/fixtures-results-tabs/fixtures-results-tabs.component';
 import { StandingsTabsComponent } from './components/standings-tabs/standings-tabs.component';
 import { KnockoutBracketComponent } from './components/knockout-bracket/knockout-bracket.component';
-import { NgTournamentTreeModule } from 'ng-tournament-tree';
+import { MyStatsCardComponent } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 
@@ -158,7 +158,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     TeamsListComponent,
     FixturesResultsTabsComponent,
     StandingsTabsComponent,
-    KnockoutBracketComponent
+    KnockoutBracketComponent,
+    MyStatsCardComponent
   ],
   imports: [
     CommonModule,
@@ -168,7 +169,6 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     YouTubePlayerModule,
     ClipboardModule,
     RouterModule,
-    NgTournamentTreeModule,
     NgxMatSelectSearchModule,
     ShareModule.withConfig(customConfig),
   ],
@@ -243,7 +243,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     TeamsListComponent,
     FixturesResultsTabsComponent,
     StandingsTabsComponent,
-    KnockoutBracketComponent
+    KnockoutBracketComponent,
+    MyStatsCardComponent
   ],
 })
 export class SharedModule { }

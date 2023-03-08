@@ -1,13 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { tap, map, share, take } from 'rxjs/operators';
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { StatsTeam } from '@shared/interfaces/others.model';
-import { Formatters, TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
+import { Formatters, TeamBasicInfo, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
+import { ApiService } from '@shared/services/api.service';
+import { TeamAllInfo } from '@shared/utils/pipe-functions';
+import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { NotificationsService } from '@app/services/notifications.service';
+import { NotificationBasic, NotificationTypes } from '@shared/interfaces/notification.model';
+import { TeamService } from '@app/services/team.service';
 
 @Component({
   selector: 'app-team-profile',
@@ -16,7 +21,7 @@ import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 })
 export class TeamProfileComponent implements OnInit, OnDestroy {
 
-  isLoading = true;
+  isLoaderShown = true;
   teamInfo$: Observable<TeamBasicInfo>;
   teamMoreInfo$: Observable<TeamMoreInfo>;
   teamName = '';
@@ -31,18 +36,34 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   formatter = Formatters;
 
+  teamID: string = null;
+  team: Partial<TeamAllInfo> = null;
+  teamStats: IStatisticsCard[] = [];
+  teamMedia: any[] = [];
+  isTeamMember = false;
+  hasTeam = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ngFire: AngularFirestore,
     private enlargeService: EnlargeService,
-    private socialShareService: SocialShareService
+    private socialShareService: SocialShareService,
+    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private notificationService: NotificationsService,
+    private teamService: TeamService
   ) { }
 
   ngOnInit(): void {
-    this.uid = localStorage.getItem('uid');
-    this.teamName = this.route.snapshot.params.teamName;
-    this.getTeamInfo(this.teamName);
+    this.formatter = Formatters;
+    this.subscriptions.add(this.route.params.subscribe({
+      next: (params) => {
+        if (params && params.hasOwnProperty('teamid')) {
+          this.teamID = params['teamid'];
+          this.getTeamInfo();
+        }
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -51,157 +72,118 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTeamInfo(tName: string): void {
-    this.teamInfo$ = this.ngFire
-      .collection('teams', (query) =>
-        query.where('tname', '==', tName).limit(1)
-      )
-      .get()
-      .pipe(
-        tap((resp) => {
-          if (!resp.empty) {
-            const id = resp.docs[0].id;
-            this.getTeamMoreInfo(id);
-            this.getTeamMembers(id);
-            this.getStats(id);
-            this.getTeamMedia(id);
+  getTeamInfo(): void {
+    this.apiService.getAllTeamInfo(this.teamID)
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.team = response;
+            this.getPlayerInfo();
+            this.createTeamStats();
+            this.createTeamMedia();
           } else {
-            this.error = resp.empty;
-            this.router.navigate(['error']);
+            this.router.navigate(['error'])
           }
-        }),
-        map((resp) =>
-          resp.docs.map(
-            (doc) =>
-            ({
-              id: doc.id,
-              ...(doc.data() as TeamBasicInfo),
-            } as TeamBasicInfo)
-          )
-        ),
-        map((resp) => resp[0]),
-        tap((resp) => {
-          this.imgPath = resp?.imgpath;
-          this.id = resp.captainId;
-        }),
-        share()
-      );
+          this.isLoaderShown = false;
+          window.scrollTo(0, 0);
+        },
+        error: () => {
+          this.isLoaderShown = false;
+          this.team = null;
+          window.scrollTo(0, 0);
+          this.router.navigate(['/error']);
+        }
+      });
   }
 
-  getTeamMoreInfo(tid: string): void {
-    this.teamMoreInfo$ = this.ngFire
-      .collection(`teams/${tid}/additionalInfo`)
-      .doc('moreInfo')
-      .get()
-      .pipe(
-        tap(() => (this.isLoading = false)),
-        map(
-          (resp) =>
-            ({ id: resp.id, ...(resp.data() as TeamMoreInfo) } as TeamMoreInfo)
-        ),
-        share()
-      );
-  }
-
-  getStats(tid: string): void {
-    this.stats$ = this.ngFire
-      .collection(`teams/${tid}/additionalInfo`)
-      .doc('statistics')
-      .get()
-      .pipe(
-        map((resp) => {
-          if (resp.exists) {
-            return resp.data() as TeamStats;
-          }
-        }),
-        map(
-          (resp) =>
-          ({
-            'FKC Played': resp?.fkc_played.toString() || '0',
-            'FCP Played': resp?.fcp_played.toString() || '0',
-            'FPL Played': resp?.fpl_played.toString() || '0',
-            Goals: resp?.g.toString() || '0',
-            Wins: resp?.w.toString() || '0',
-            Losses: resp?.l.toString() || '0',
-            'Red cards': resp?.rcards.toString() || '0',
-            'Yellow cards': resp?.ycards.toString() || '0',
-            'Goals Conceded': resp?.g_conceded.toString() || '0',
-          } as StatsTeam)
-        )
-      );
-  }
-
-  getTeamMedia(tid: string): void {
-    this.media$ = this.ngFire
-      .collection(`teams/${tid}/additionalInfo`)
-      .doc('media')
-      .get()
-      .pipe(
-        map((resp) => {
-          if (resp.exists) {
-            return (resp.data() as TeamMedia).media;
-          }
-          return [];
-        })
-      );
-  }
-
-  getTeamMembers(tid: string): void {
-    this.members$ = this.ngFire
-      .collection(`teams/${tid}/additionalInfo`)
-      .doc('members')
-      .get()
-      .pipe(
-        map((resp) => {
-          if (resp.exists) {
-            return resp.data() as TeamMembers;
+  getPlayerInfo() {
+    const uid = localStorage.getItem('uid');
+    if (uid) {
+      this.apiService.getPlayer(uid)
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.isTeamMember = response.team?.id === this.team.id;
+              this.hasTeam = response?.team !== null;
+            } else {
+              this.isTeamMember = false;
+            }
           }
         })
-      );
+    } else {
+      this.isTeamMember = false;
+    }
   }
 
-  onChallengeTeam(): void {
-    // if (this.isOwnTeam) {
-    //   return;
-    // }
-    // this.subscriptions.add(this.store
-    //   .select('dash')
-    //   .pipe(map((resp) => resp))
-    //   .subscribe(async (team) => {
-    //     if (team && team.hasTeam == null) {
-    //       this.snackBarService.displayCustomMsg('Join or create a team to perform this action!');
-    //     } else if (team.hasTeam.capId !== this.uid) {
-    //       this.snackBarService.displayCustomMsg('Only a Captain can perform this action!');
-    //     } else {
-    //       const notif: NotificationBasic = {
-    //         type: 'team challenge',
-    //         senderId: this.uid,
-    //         receiverId: this.id,
-    //         date: new Date().getTime(),
-    //         title: 'Team Challenge Recieved',
-    //         read: false,
-    //         senderName: team.hasTeam.name,
-    //       };
-    //       this.ngFire
-    //         .collection(`players/${this.id}/Notifications`)
-    //         .add(notif)
-    //         .then(() => this.snackBarService.displayCustomMsg('Challenge Notification sent to team captain.'))
-    //         .catch(() => this.snackBarService.displayError());
-    //     }
-    //   }));
+  createTeamStats() {
+    this.teamStats = [];
+    this.teamStats.push({ icon: 'sports_soccer', label: 'Goals', value: this.team?.g || 0 })
+    this.teamStats.push({ icon: 'flag', label: 'Wins', value: this.team?.w || 0 })
+    this.teamStats.push({ icon: 'cancel_presentation', label: 'Losses', value: this.team?.l || 0 })
+    this.teamStats.push({ icon: 'sports_soccer', label: 'Matches', value: (this.team?.fkc_played + this.team?.fcp_played + this.team?.fpl_played) || 0, })
+    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.rcards || 0, iconClass: 'red' })
+    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.ycards || 0, iconClass: 'yellow' })
+    this.teamStats.push({ icon: 'sports_handball', label: 'Conceded', value: this.team?.g_conceded || 0, })
   }
 
-  onEnlargePhoto(): void {
-    this.enlargeService.onOpenPhoto(this.imgPath);
+  createTeamMedia() {
+    this.teamMedia = [];
+    if (this.team?.media?.length) {
+      this.team.media.forEach(element => {
+        this.teamMedia.push({ image: element, thumbImage: element })
+      });
+    }
   }
 
-  get isOwnTeam(): boolean {
-    return this.id === this.uid;
+  enlargePhoto(): void {
+    if (this.team?.imgpath) {
+      this.enlargeService.onOpenPhoto(this.team.imgpath);
+    }
   }
 
-  onShare() {
-    const data = new ShareData();
-    data.share_url = `/t/${this.teamName}`;
-    this.socialShareService.onShare(data);
+  share() {
+    if (this.team.id) {
+      const data = new ShareData();
+      data.share_url = `/t/${this.team.id}`;
+      this.socialShareService.onShare(data);
+    }
+  }
+
+  joinTeam() {
+    if (!this.hasTeam) {
+      const tid = sessionStorage.getItem('tid');
+      this.teamService.onOpenJoinTeamDialog();
+    }
+  }
+
+  challengeTeam() {
+    const uid = localStorage.getItem('uid');
+    const tid = sessionStorage.getItem('tid');
+    if (!tid) {
+      this.snackbarService.displayError('Join a team!');
+      this.manageTeam();
+    } else {
+      this.isLoaderShown = true;
+      const notification: NotificationBasic = {
+        type: NotificationTypes.challengeTeam,
+        senderID: uid,
+        receiverID: this.team.captainId,
+        date: new Date().getTime(),
+        receiverName: this.team.captainName,
+        read: 0,
+        expire: 0,
+        senderName: tid,
+      };
+      this.notificationService.sendNotification(notification)
+        .finally(() => this.isLoaderShown = false);
+    }
+  }
+
+  manageTeam(isCommunication = false) {
+    if (isCommunication) {
+      this.router.navigate(['/dashboard/team-management'], { fragment: 'communication' });
+    } else {
+      this.router.navigate(['/dashboard/team-management']);
+    }
   }
 }

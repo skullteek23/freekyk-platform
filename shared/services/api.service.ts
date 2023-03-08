@@ -7,7 +7,7 @@ import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { manipulateFixtureData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulatePlayerData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamData, SeasonAllInfo } from '@shared/utils/pipe-functions';
+import { manipulateFixtureData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulatePlayerData, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -26,7 +26,14 @@ export class ApiService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('players', query).get()
-      .pipe(manipulatePlayerData.bind(this));
+      .pipe(manipulatePlayersData);
+  }
+
+  getPlayer(docID: string): Observable<PlayerBasicInfo> {
+    if (docID) {
+      return this.angularFirestore.collection('players').doc(docID).get()
+        .pipe(manipulatePlayerData);
+    }
   }
 
   getSeasons(limit?: number): Observable<SeasonBasicInfo[]> {
@@ -35,7 +42,7 @@ export class ApiService {
       query = (query) => query.where('status', '!=', 'REMOVED').limit(limit);
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonData.bind(this))
+      .pipe(manipulateSeasonData)
   }
 
   getPublishedSeasons(limit?: number): Observable<SeasonBasicInfo[]> {
@@ -46,7 +53,7 @@ export class ApiService {
       query = (query) => query.where('status', '==', 'PUBLISHED')
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonData.bind(this))
+      .pipe(manipulateSeasonData)
   }
 
   getPublishedSeasonWithPaymentInfo(limit?: number): Observable<SeasonBasicInfo[]> {
@@ -61,7 +68,7 @@ export class ApiService {
       return forkJoin([
         this.angularFirestore.collection('seasons', query).get(),
         this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', uid)).get()
-      ]).pipe(manipulateSeasonOrdersData.bind(this))
+      ]).pipe(manipulateSeasonOrdersData)
     } else {
       return this.getPublishedSeasons(limit);
     }
@@ -72,7 +79,7 @@ export class ApiService {
     currentDate.setHours(0, 0, 0, 0);
     const currentTimestamp = currentDate.getTime();
     return this.angularFirestore.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).get()
-      .pipe(manipulateSeasonData.bind(this))
+      .pipe(manipulateSeasonData)
   }
 
   getAllMatches(limit?: number): Observable<MatchFixture[]> {
@@ -81,7 +88,7 @@ export class ApiService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData.bind(this))
+      .pipe(manipulateFixtureData)
   }
 
   getTeams(limit?: number): Observable<TeamBasicInfo[]> {
@@ -90,7 +97,19 @@ export class ApiService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('teams', query).get()
-      .pipe(manipulateTeamData.bind(this))
+      .pipe(manipulateTeamData)
+  }
+
+  getAllTeamInfo(docID: string): Observable<Partial<TeamAllInfo>> {
+    if (docID) {
+      return forkJoin([
+        this.angularFirestore.collection('teams').doc(docID).get(),
+        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('moreInfo').get(),
+        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('statistics').get(),
+        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('media').get(),
+        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('members').get(),
+      ]).pipe(manipulateTeamBulkData)
+    }
   }
 
   getFixtures(limit?: number): Observable<MatchFixture[]> {
@@ -102,7 +121,7 @@ export class ApiService {
       query = (query) => query.where('date', '>', comparator)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData.bind(this))
+      .pipe(manipulateFixtureData)
   }
 
   getLiveFixtures(limit?: number): Observable<MatchFixture[]> {
@@ -115,7 +134,7 @@ export class ApiService {
       query = (query) => query.where('date', '>', comparator).where('date', '<', currentTime)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData.bind(this))
+      .pipe(manipulateFixtureData)
   }
 
   getResults(limit?: number): Observable<MatchFixture[]> {
@@ -127,12 +146,12 @@ export class ApiService {
       query = (query) => query.where('date', '<=', comparator)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData.bind(this))
+      .pipe(manipulateFixtureData)
   }
 
   getGrounds(): Observable<GroundBasicInfo[]> {
     return this.angularFirestore.collection('grounds').get()
-      .pipe(manipulateGroundData.bind(this))
+      .pipe(manipulateGroundData)
   }
 
   getAllSeasonInfo(docID: string): Observable<Partial<SeasonAllInfo>> {
@@ -141,14 +160,14 @@ export class ApiService {
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('moreInfo').get(),
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('statistics').get(),
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('media').get(),
-    ]).pipe(manipulateSeasonBulkData.bind(this))
+    ]).pipe(manipulateSeasonBulkData)
   }
 
   getSeasonMatches(season: string): Observable<MatchFixture[]> {
     if (season) {
       const query = (query) => query.where('season', '==', season)
       return this.angularFirestore.collection('allMatches', query).get()
-        .pipe(manipulateFixtureData.bind(this))
+        .pipe(manipulateFixtureData)
     }
   }
 
@@ -156,7 +175,7 @@ export class ApiService {
     if (season) {
       const query = (query) => query.where('season', '==', season).where('type', '==', 'FKC')
       return this.angularFirestore.collection('allMatches', query).get()
-        .pipe(manipulateKnockoutData.bind(this))
+        .pipe(manipulateKnockoutData)
     }
   }
 
@@ -172,7 +191,7 @@ export class ApiService {
     if (seasonID) {
       const query = (query) => query.where('seasonID', '==', seasonID)
       return this.angularFirestore.collection('partners', query).get()
-        .pipe(manipulateSeasonPartnerData.bind(this))
+        .pipe(manipulateSeasonPartnerData)
     }
   }
 }

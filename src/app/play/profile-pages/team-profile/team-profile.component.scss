@@ -1,70 +1,29 @@
-.banner {
-  height: 600px;
+section {
+  padding: 0 10px;
+  margin-top: 16px;
 }
 
-.banner-text {
-  max-width: 500px;
-}
-
-.bannerPhoto img {
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
+img {
+  max-height: 320px;
 }
 
 .back-button {
-  margin: 20px 0;
+  margin-bottom: 16px;
+  padding: 0 16px;
 }
 
-._bar {
-  height: 100%;
-  width: 300px;
+.sub-important-text {
+  color: rgba(0, 0, 0, 0.54)
 }
 
-.circle {
-  height: 100px;
-  width: 100px;
-  margin: 20px 0;
-  overflow: hidden;
-  border-radius: 50%;
-  background-color: var(--grey4);
+.no-padding-card {
+  padding: 0 !important;
 }
 
-.content-box {
+.mat-card-title.spacy-title {
+  padding: 12px 12px 0 12px;
+}
+
+.last-section {
   margin-bottom: 20px;
-}
-
-@media only screen and (max-width: 599px) {
-  .bannerPhoto {
-    height: 250px;
-    width: 100%;
-    border-radius: var(--borderRadiusCard) !important;
-    overflow: hidden;
-  }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 959px) {
-  .bannerPhoto {
-    height: 300px;
-    width: auto;
-    max-width: 70%;
-    border-radius: var(--borderRadiusCard) !important;
-    overflow: hidden;
-  }
-}
-
-@media only screen and (min-width: 960px) {
-  .bannerPhoto {
-    height: 360px;
-    width: auto;
-    max-width: 45%;
-    overflow: hidden;
-    border-radius: var(--borderRadiusCard) !important;
-  }
-}
-
-@media only screen and (min-width: 960px) and (max-width: 1279px) {
-  .hero-text {
-    max-width: 450px;
-  }
 }

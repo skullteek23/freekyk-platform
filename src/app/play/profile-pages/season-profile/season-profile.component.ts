@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { ISeasonPartner } from '@shared/interfaces/season.model';
+import { ISeasonPartner, SeasonMedia } from '@shared/interfaces/season.model';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +12,7 @@ import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import { Subscription } from 'rxjs';
 import { Formatters } from '@shared/interfaces/team.model';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
+import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
@@ -21,6 +22,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
 
   isLoaderShown = false;
   season: Partial<SeasonAllInfo> = null;
+  seasonStats: IStatisticsCard[] = [];
+  seasonMedia: any[] = [];
   seasonID: string = null;
   matches: MatchFixture[] = [];
   knockoutData: IKnockoutData = null;
@@ -28,7 +31,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   partners: ISeasonPartner[] = [];
   groundsList: ListOption[] = [];
   subscriptions = new Subscription();
-  formatter: any
+  formatter: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -63,6 +66,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
             if (response) {
               this.season = response;
               this.seasonID = response.id;
+              this.createSeasonStats();
+              this.createSeasonMedia();
               this.getSeasonMatches();
               this.getSeasonStandings();
               this.getSeasonPartners();
@@ -142,6 +147,22 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
             this.partners = [];
           }
         })
+    }
+  }
+
+  createSeasonStats() {
+    this.seasonStats = [];
+    this.seasonStats.push({ icon: 'sports_soccer', label: 'Goals', value: this.season?.g || 0 });
+    this.seasonStats.push({ icon: 'style', label: 'Red Cards', value: this.season?.rcards || 0, iconClass: 'red' });
+    this.seasonStats.push({ icon: 'style', label: 'Yellow Cards', value: this.season?.ycards || 0, iconClass: 'yellow' });
+  }
+
+  createSeasonMedia() {
+    this.seasonMedia = [];
+    if (this.season?.photos?.length) {
+      this.season.photos.forEach(element => {
+        this.seasonMedia.push({ image: element, thumbImage: element })
+      });
     }
   }
 

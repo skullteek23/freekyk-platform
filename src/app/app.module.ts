@@ -27,18 +27,10 @@ import { GroundProfileComponent } from './play/profile-pages/ground-profile/grou
 import { PlayerProfileComponent } from './play/profile-pages/player-profile/player-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
-import { SeGalleryComponent } from './play/profile-pages/season-profile/se-gallery/se-gallery.component';
-import { SeOverviewComponent } from './play/profile-pages/season-profile/se-overview/se-overview.component';
-import { SeStatsComponent } from './play/profile-pages/season-profile/se-stats/se-stats.component';
-import { TeGalleryComponent } from './play/profile-pages/team-profile/te-gallery/te-gallery.component';
-import { TeMembersComponent } from './play/profile-pages/team-profile/te-members/te-members.component';
-import { TeOverviewComponent } from './play/profile-pages/team-profile/te-overview/te-overview.component';
-import { TeStatsComponent } from './play/profile-pages/team-profile/te-stats/te-stats.component';
-// import { NgImageSliderModule } from 'ng-image-slider';
+import { NgImageSliderModule } from 'ng-image-slider';
 import { SharedModule } from '@shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { environment } from 'environments/environment';
-import { SeFixturesComponent } from './play/profile-pages/season-profile/se-fixtures/se-fixtures.component';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
@@ -68,14 +60,6 @@ import { TeamService } from './services/team.service';
     PlayerProfileComponent,
     SeasonProfileComponent,
     TeamProfileComponent,
-    TeOverviewComponent,
-    TeMembersComponent,
-    TeGalleryComponent,
-    TeStatsComponent,
-    SeOverviewComponent,
-    SeGalleryComponent,
-    SeStatsComponent,
-    SeFixturesComponent,
     FeedbackComponent,
     FeedbackButtonComponent,
     LiveSeasonComponent,
@@ -97,7 +81,7 @@ import { TeamService } from './services/team.service';
       logOnly: environment.production,
       maxAge: 5,
     }),
-    // NgImageSliderModule,
+    NgImageSliderModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },

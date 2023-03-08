@@ -1,102 +1,116 @@
-<!-- intro-section -->
-<div class="grey-bg">
-  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
-    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
-      <img [src]="(teamInfo$ | async)?.imgpath" [alt]="(teamInfo$ | async)?.tname" appFallbackImg />
-    </div>
+<div fxLayout="column" class="back-button">
+  <button [routerLink]="['/play/teams']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      View all Teams
+    </span>
+  </button>
+</div>
 
-    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
-      <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
-      Freekyk - India's No.1 Football Network
-    </span> -->
-      <button fxHide.lt-md="true" [routerLink]="['/play', 'teams']" mat-mini-fab color="primary" class="back-button">
-        <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
-      </button>
-      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
-        <span class="overline align">Freekyk Team</span>
-        <div fxLayoutGap="20px" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
-          <div class="circle" fxLayoutAlign="center center">
-            <img [src]="(teamInfo$ | async)?.imgpath_logo" alt="Logo" appFallbackImg />
-          </div>
-          <span [ngClass]="{shine: isLoading,_bar: isLoading,hideText: isLoading}" class="mat-title align">
-            {{ (teamInfo$ | async)?.tname }}
+<section>
+  <mat-card class="dashboard-card mat-elevation-z8" *ngIf="team">
+    <mat-card-header>
+      <mat-card-title>
+        <span class="dash-h5 season-title">
+          {{team.tname}}
+        </span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <mat-chip-list>
+          <mat-chip *ngIf="team.tageCat">
+            {{ formatter.formatAgeCategory(team.tageCat).viewValue}} Team
+          </mat-chip>
+          <mat-chip *ngIf="team.captainName">
+            {{team.captainName}} (C)
+          </mat-chip>
+        </mat-chip-list>
+
+      </mat-card-subtitle>
+      <img mat-card-avatar [src]="team.imgpath_logo" alt="{{team.tname}}'s Logo">
+    </mat-card-header>
+    <img mat-card-image [src]="team.imgpath" alt="Team image" appFallbackImg
+      (click)="enlargePhoto(); $event.stopPropagation()">
+    <mat-card-content>
+      <p innerHTML="'{{team.tslogan}}'" *ngIf="team.tslogan"></p>
+      <p class="mat-caption" [innerHTML]="team.tdesc" *ngIf="team.tdesc"></p>
+      <div class="actionscontainer" fxLayoutAlign="start center" fxLayoutGap="8px">
+
+        <div *ngIf="team.locCity && team.locState" class="location-container" fxLayoutAlign="start center"
+          fxLayoutGap="4px">
+          <span class="material-icons-round">
+            place
+          </span>
+          <span class="mat-body-1 center ellipsis">
+            {{ (team.locCity) + ", " + (team.locState) }}
           </span>
         </div>
-        <!-- <button (click)="onShare()" class="primaryButton buttonText">Share</button> -->
       </div>
-      <p class="mat-body-1 align">
-        {{ formatter.formatAgeCategory((teamMoreInfo$ | async)?.tageCat).viewValue}} Team
-      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="buttons-container" fxLayout="row">
+        <ng-container *ngIf="!isTeamMember">
+          <button fxFlex="45%" class="link-button" [disabled]="hasTeam" (click)="joinTeam(); $event.stopPropagation()"
+            mat-stroked-button color="primary">
+            <span class="material-icons-round">add_circle</span>
+            Join this team
+          </button>
+          <button fxFlex="auto" class="link-button" [disabled]="!hasTeam"
+            (click)="challengeTeam(); $event.stopPropagation()" mat-stroked-button color="primary">
+            <span class="material-icons-round">outlined_flag</span>
+            Challenge Team
+          </button>
+        </ng-container>
+        <ng-container *ngIf="isTeamMember">
+          <button *ngIf="isTeamMember" fxFlex="auto" class="link-button"
+            (click)="manageTeam(); $event.stopPropagation()" mat-stroked-button color="primary">
+            <span class="material-icons-round">settings</span>
+            Manage Team
+          </button>
+          <button *ngIf="isTeamMember" fxFlex="45%" class="link-button"
+            (click)="manageTeam(true); $event.stopPropagation()" mat-stroked-button color="primary">
+            <span class="material-icons-round">send</span>
+            Start a Chat
+          </button>
+        </ng-container>
 
-      <p [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }" class="mat-body-1 align">
-        {{ ((teamMoreInfo$ | async)?.tdesc ? (teamMoreInfo$ | async)?.tdesc : "No Description") | textShorten:100 }}
-      </p>
-      <button *ngIf="!isOwnTeam" [disabled]="true" (click)="onChallengeTeam()" class="primaryButton buttonText">
-        Challenge Team
-      </button>
-    </div>
-  </section>
-</div>
-<!-- intro-section -->
+      </div>
+    </mat-card-actions>
+    <mat-card-footer>
 
-<!-- content -->
-<mat-tab-group mat-stretch-tabs class="container section-space-bottom" fxHide.lt-md="true">
-  <mat-tab label="Overview">
-    <ng-template matTabContent>
-      <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{
-          city: (teamInfo$ | async)?.locCity,
-          state: (teamInfo$ | async)?.locState
-        }"></app-te-overview>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Members">
-    <ng-template matTabContent>
-      <app-te-members [members]="(members$ | async)?.members"
-        [captainID]="(teamInfo$ | async)?.captainId"></app-te-members>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Gallery">
-    <ng-template matTabContent>
-      <app-te-gallery [photos]="media$ | async"></app-te-gallery>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Stats">
-    <ng-template matTabContent>
-      <app-te-stats [data]="stats$ | async"></app-te-stats>
-    </ng-template>
-  </mat-tab>
-</mat-tab-group>
-<!-- content -->
+    </mat-card-footer>
+  </mat-card>
+</section>
 
-<div class="section-space-bottom season-fixtures-container" fxHide.gt-sm="true">
-  <div class="content-box container">
-    <p class="dash-h5">Overview</p>
-    <app-te-overview [data]="teamMoreInfo$ | async" [loc]="{
-      city: (teamInfo$ | async)?.locCity,
-      state: (teamInfo$ | async)?.locState
-    }"></app-te-overview>
-  </div>
+<section *ngIf="team?.members?.length">
+  <mat-card class="dashboard-card mat-elevation-z8">
+    <mat-card-title>
+      <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="dash-h5 align">Team Members</span>
+        <span class="mat-caption sec-menu">Count: {{team.memCount}}</span>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <app-team-player-members-list [captainID]="team.captainId" [list]="team.members"></app-team-player-members-list>
+    </mat-card-content>
+  </mat-card>
+</section>
 
-  <div class="content-box container">
-    <p class="dash-h5">Members</p>
-    <app-te-members [members]="(members$ | async)?.members"></app-te-members>
-  </div>
+<section [ngClass]="{'last-section': !teamMedia?.length}">
+  <app-my-stats-card [data]="teamStats" label="Team Statistics">
+  </app-my-stats-card>
+</section>
 
-  <div class="content-box container" *ngIf="(media$ | async)?.length">
-    <p class="dash-h5">Gallery</p>
-    <app-te-gallery [photos]="media$ | async"></app-te-gallery>
-  </div>
+<section class="last-section" *ngIf="teamMedia?.length">
+  <mat-card class="dashboard-card mat-elevation-z8">
+    <mat-card-title>
+      <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="dash-h5 align">Team Gallery</span>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <ng-image-slider [images]="teamMedia"></ng-image-slider>
+    </mat-card-content>
+  </mat-card>
+</section>
 
-  <div class="content-box container">
-    <p class="dash-h5">Statistics</p>
-    <app-te-stats [data]="stats$ | async"></app-te-stats>
-  </div>
-
-  <div fxLayoutAlign="center center">
-    <button *ngIf="!isOwnTeam" (click)="onChallengeTeam()" class="primaryButton buttonText">
-      Challenge Team
-    </button>
-  </div>
-</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

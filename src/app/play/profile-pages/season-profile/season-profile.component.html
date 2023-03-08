@@ -100,7 +100,7 @@
   </mat-card>
 </section>
 
-<section class="last-section">
+<section>
   <mat-card class="dashboard-card mat-elevation-z8">
     <mat-card-title>
       <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
@@ -113,4 +113,23 @@
     </mat-card-content>
   </mat-card>
 </section>
+
+<section [ngClass]="{'last-section': !seasonMedia?.length}">
+  <app-my-stats-card [data]="seasonStats" label="Season Statistics">
+  </app-my-stats-card>
+</section>
+
+<section class="last-section" *ngIf="seasonMedia?.length">
+  <mat-card class="dashboard-card mat-elevation-z8">
+    <mat-card-title>
+      <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+        <span class="dash-h5 align"> Gallery</span>
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <ng-image-slider [images]="seasonMedia"></ng-image-slider>
+    </mat-card-content>
+  </mat-card>
+</section>
+
 <app-loading *ngIf="isLoaderShown"></app-loading>

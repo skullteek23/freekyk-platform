@@ -11928,6 +11928,14 @@
       "integrity": "sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==",
       "dev": true
     },
+    "ng-image-slider": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/ng-image-slider/-/ng-image-slider-3.0.1.tgz",
+      "integrity": "sha512-LOHf1U6aHhFSbuC6VkJBXjjH36nuSJ7ZMRMyvJJUli4hGaKtI1u0Duczkz5Dm9EpH7G54PNgFMtd3g8Gb0eZog==",
+      "requires": {
+        "tslib": "^2.0.0"
+      }
+    },
     "ngx-mat-select-search": {
       "version": "3.3.0",
       "resolved": "https://registry.npmjs.org/ngx-mat-select-search/-/ngx-mat-select-search-3.3.0.tgz",

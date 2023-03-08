@@ -1,5 +1,5 @@
 <mat-list>
-  <mat-list-item *ngFor="let teamMember of list; last as last">
+  <mat-list-item *ngFor="let teamMember of members; last as last">
     <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
@@ -10,9 +10,8 @@
           (C)
         </span>
       </span>
-      <a *ngIf="showProfileButton" (click)="openPlayerProfile(teamMember.id)" class="mat-caption">
-        View Profile
-      </a>
+      <span class="material-icons-round" *ngIf="showProfileButton"
+        (click)="openPlayerProfile(teamMember.id)">chevron_right</span>
       <ng-container *ngIf="showRemoveButton">
         <a *ngIf="captainID !== teamMember.id" (click)="removePlayer(teamMember.id)" class="red mat-caption">
           Remove

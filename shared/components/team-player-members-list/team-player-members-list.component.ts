@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { Tmember } from '@shared/interfaces/team.model';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -10,12 +11,19 @@ import { Subject } from 'rxjs';
   styleUrls: ['./team-player-members-list.component.scss']
 })
 export class TeamPlayerMembersListComponent implements OnInit {
-  @Input() list: Tmember[] = [];
+  @Input() set list(value: Tmember[]) {
+    if (value) {
+      value.sort(ArraySorting.sortObjectByKey('pl_pos'));
+      this.members = value;
+    }
+  }
   @Input() captainID: string = null;
   @Input() showProfileButton = true;
   @Input() showRemoveButton = false;
 
   @Output() selectRemovePlayer = new Subject<string>();
+
+  members: Tmember[] = [];
 
   constructor(
     private dialog: MatDialog

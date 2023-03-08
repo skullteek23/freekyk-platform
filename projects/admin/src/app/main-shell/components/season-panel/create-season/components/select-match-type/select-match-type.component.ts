@@ -97,13 +97,13 @@ export class SelectMatchTypeComponent implements OnInit {
     this.evaluateAvailableMatchType(event);
   }
 
-  evaluateAvailableMatchType(event: number) {
+  evaluateAvailableMatchType(teamCount: number) {
     this.tourTypesFiltered = [];
     this.tourTypesFiltered.push('FCP');
-    if (MatchConstants.ALLOWED_KNOCKOUT_BRACKETS.includes(event)) {
+    if (MatchConstants.ALLOWED_KNOCKOUT_BRACKETS.includes(teamCount)) {
       this.tourTypesFiltered.push('FKC');
     }
-    if (event > 2) {
+    if (teamCount > 2) {
       this.tourTypesFiltered.push('FPL');
     }
   }

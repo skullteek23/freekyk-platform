@@ -39,7 +39,7 @@ import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-tea
 import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dialog/join-team-request-dialog.component';
 import { UpcomingMatchComponent } from './dash-home/upcoming-match/upcoming-match.component';
 import { MyMatchesComponent } from './dash-home/my-matches/my-matches.component';
-import { MyStatsCardComponent } from './dash-home/my-stats-card/my-stats-card.component';
+
 import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.component';
 import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifications.component';
 import { TeamMembersComponent } from './dash-team-manag/team-members/team-members.component';
@@ -78,7 +78,6 @@ import { PendingPaymentComponent } from './dash-home/pending-payment/pending-pay
     JoinTeamRequestDialogComponent,
     UpcomingMatchComponent,
     MyMatchesComponent,
-    MyStatsCardComponent,
     MyTeamMenuComponent,
     MyNotificationsComponent,
     TeamMembersComponent,
