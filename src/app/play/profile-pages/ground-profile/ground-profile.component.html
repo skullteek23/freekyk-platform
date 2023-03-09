@@ -1,4 +1,4 @@
-<!-- intro-section -->
+<!--
 <div class="grey-bg">
   <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
     ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
@@ -8,9 +8,7 @@
 
     <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
       fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
-      <!-- <span ngClass.gt-sm="mat-headline" class="align" ngClass.lt-md="mat-title">
-      Freekyk - India's No.1 Football Network
-    </span> -->
+
       <button fxHide.lt-md="true" [routerLink]="['/play', 'grounds']" mat-mini-fab color="primary" class="back-button">
         <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
       </button>
@@ -23,9 +21,7 @@
     </div>
   </section>
 </div>
-<!-- intro-section -->
 
-<!-- content -->
 <section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="24px">
   <div>
     <h4>Ground Location</h4>
@@ -72,6 +68,65 @@
       {{ (groundMoreInfo$ | async)?.goalpost ? "Yes" : "No" }}
     </p>
   </div>
-</section>
+</section> -->
 
-<!-- content -->
+<div fxLayout="column" class="back-button">
+  <button [routerLink]="['/play/grounds']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      View all grounds
+    </span>
+  </button>
+</div>
+
+<section>
+  <mat-card class="dashboard-card mat-elevation-z8" *ngIf="ground">
+    <mat-card-header>
+      <mat-card-title>
+        <span class="dash-h5 season-title">
+          {{ground.name}}
+        </span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <mat-chip-list>
+          <mat-chip *ngIf="ground.ownType">
+            {{ ground.ownType | titlecase }}
+          </mat-chip>
+          <mat-chip *ngIf="ground.fieldType">
+            {{ formatter?.formatTurf(ground.fieldType) }}
+          </mat-chip>
+        </mat-chip-list>
+
+      </mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="ground.imgpath" alt="{{ground.name}}'s Photo" appFallbackImg
+      (click)="enlargePhoto(); $event.stopPropagation()">
+    <mat-card-content>
+      <div class="actionscontainer" fxLayoutAlign="start center" fxLayoutGap="8px">
+
+        <div *ngIf="ground.locCity && ground.locState" class="location-container" fxLayoutAlign="start center"
+          fxLayoutGap="4px">
+          <span class="material-icons-round">
+            place
+          </span>
+          <span class="mat-body-1 center ellipsis">
+            {{ (ground.locCity) + ", " + (ground.locState) }}
+          </span>
+        </div>
+      </div>
+      <div class="buttons-container" fxLayout="column" fxLayoutGap="8px">
+        <button class="link-button" fxFlex="100%" (click)="requestMatch()" mat-stroked-button color="primary">
+          <span class="material-icons-round external-icon">sports_soccer</span>
+          Request a Football Match!
+        </button>
+        <button class="link-button" (click)="share(); $event.stopPropagation()" mat-stroked-button color="primary">
+          <span class="material-icons-round">share</span>
+          Share with friends
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>
+<section class="last-section" *ngIf="groundFacilities.length">
+  <app-my-stats-card label="Ground Facilities" [data]="groundFacilities" [showChip]="false"></app-my-stats-card>
+</section>

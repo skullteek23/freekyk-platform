@@ -6,13 +6,14 @@ import firebase from 'firebase/app';
 import { ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
 import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
-import { GroundBasicInfo } from "@shared/interfaces/ground.model";
+import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
 import { LeagueTableModel, StatsTeam } from "@shared/interfaces/others.model";
 import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
 
 export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface TeamAllInfo extends TeamBasicInfo, TeamMoreInfo, TeamMembers, TeamMedia, TeamStats { };
+export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
 export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
 export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
 
@@ -96,6 +97,28 @@ export function manipulateTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc,
             ...data_3,
             ...data_4,
             ...data_5,
+          }
+          return data;
+        }
+        return null;
+      }
+      return null;
+    }),
+  );
+}
+
+export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDoc]>): Observable<Partial<GroundAllInfo>> {
+  return source.pipe(
+    map(response => {
+      let data: Partial<GroundAllInfo> = {};
+      if (response?.length === 2) {
+        const data_1: GroundBasicInfo = response[0].exists ? ({ id: response[0].id, ...response[0].data() as GroundBasicInfo }) : null;
+        const data_2: GroundMoreInfo = response[1].exists ? ({ ...response[1].data() as GroundMoreInfo }) : null;
+
+        if (data_1 || data_2) {
+          data = {
+            ...data_1,
+            ...data_2,
           }
           return data;
         }

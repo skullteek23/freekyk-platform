@@ -7,11 +7,16 @@
       <span class="material-icons-round {{statistic.iconClass}}">
         {{statistic.icon}}
       </span>
-      <mat-chip-list class="mat-caption">
+      <mat-chip-list class="mat-caption" *ngIf="showChip; else simple">
         <mat-chip>
           {{statistic.value}} {{statistic.label}}
         </mat-chip>
       </mat-chip-list>
+      <ng-template #simple>
+        <span class="mat-caption">
+          {{statistic.value}} {{statistic.label}}
+        </span>
+      </ng-template>
     </div>
   </div>
 </mat-card>

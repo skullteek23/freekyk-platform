@@ -7,7 +7,7 @@ import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { manipulateFixtureData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulatePlayerData, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulatePlayerData, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -154,7 +154,14 @@ export class ApiService {
       .pipe(manipulateGroundData)
   }
 
-  getAllSeasonInfo(docID: string): Observable<Partial<SeasonAllInfo>> {
+  getGroundAllInfo(docID: string): Observable<Partial<GroundAllInfo>> {
+    return forkJoin([
+      this.angularFirestore.collection('grounds').doc(docID).get(),
+      this.angularFirestore.collection('groundDetails').doc(docID).get(),
+    ]).pipe(manipulateGroundBulkData)
+  }
+
+  getSeasonAllInfo(docID: string): Observable<Partial<SeasonAllInfo>> {
     return forkJoin([
       this.angularFirestore.collection('seasons').doc(docID).get(),
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('moreInfo').get(),

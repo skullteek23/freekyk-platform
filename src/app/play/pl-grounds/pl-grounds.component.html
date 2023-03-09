@@ -1,52 +1,52 @@
-<h4 class="mat-subheading-1 align" fxHide.gt-sm="true">Grounds</h4>
-<div fxLayout="column" fxLayoutGap="20px">
-  <!-- mobile filter -->
-  <!-- <app-filters-sm
-    fxHide.gt-sm="true"
-    [filterArray]="groundsFilters"
-  ></app-filters-sm> -->
-  <!-- mobile filter -->
+<mat-card class="feature-card">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/play_banner_small.svg"
+    alt="Freekyk Play Grounds Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Grounds</span>
+      <p class="mat-body-1 center description">
+        Find grounds in your area and show up to play!
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<section class="features-section">
+  <app-no-items-message *ngIf="!grounds.length"></app-no-items-message>
+  <app-search-lg searchPlaceholder="Search for a Ground" (searchItem)="applyFilter($event)"></app-search-lg>
+  <ul>
+    <li *ngFor="let ground of grounds">
+      <mat-card class="mat-elevation-z8 dashboard-card" *ngIf="ground"
+        (click)="openGround(ground); $event.stopPropagation()">
+        <mat-card-header>
+          <mat-card-title *ngIf="ground.name">
+            <span class="dash-h5 align ellipsis">
+              {{ground.name}}
+            </span>
+          </mat-card-title>
 
-  <!-- desktop filters -->
-  <app-filters-lg fxHide.lt-md="true" [data]="filterData" (changeFilter)="onQueryData($event)"></app-filters-lg>
-  <!-- desktop filters -->
-
-  <!-- loading -->
-  <app-card-loading-shimmer *ngIf="isLoading"></app-card-loading-shimmer>
-  <!-- loading -->
-
-  <!-- list -->
-  <div class="container section-space-bottom">
-    <!-- no seasons -->
-    <ng-template #placeholder>
-      <app-no-items-message items="grounds"></app-no-items-message>
-    </ng-template>
-    <!-- no seasons -->
-
-    <!-- grounds -->
-    <mat-grid-list *ngIf="noGrounds == false; else placeholder" [cols]="columns" gutterSize="20px">
-      <mat-grid-tile appElevateOnHover *ngFor="let ground of grounds$ | async">
-        <div class="groundContainer" [ngClass]="{ 'premiumBorder-2': ground.ownType == 'PRIVATE' }">
-          <img [routerLink]="['/ground', ground.id]" class="box-image" [src]="ground.imgpath" alt="Football Ground"
-            loading="lazy" appFallbackImg />
-          <div class="content" fxLayoutAlign="space-between start">
-            <div [routerLink]="['/ground', ground.id]" fxLayout="column" fxLayoutAlign="center start">
-              <span class="mat-body-1 left">
-                {{ ground.name | textShorten: 50 }}
-              </span>
-              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-                <span> Playability Level: </span>
-                <span class="quality">{{ ground.playLvl | uppercase }}</span>
-              </div>
-            </div>
-            <button disabled mat-icon-button color="primary">
-              <mat-icon class="material-icons-round"> share </mat-icon>
-            </button>
+        </mat-card-header>
+        <img mat-card-image [src]="ground.imgpath" [alt]="ground.name" appFallbackImg>
+        <mat-card-content *ngIf="ground.locCity && ground.locState">
+          <div fxLayoutAlign="start center" fxLayoutGap="8px">
+            <span class="material-icons-round">
+              place
+            </span>
+            <span class="mat-caption">
+              {{ground.locCity}}, {{ground.locState}}
+            </span>
           </div>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-    <!-- grounds -->
-  </div>
-  <!-- list -->
-</div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button color="primary" mat-button (click)="openGround(ground); $event.stopPropagation()" fxLayout="column"
+            fxLayoutAlign="center center" fxLayoutGap="8px">
+            <span> View ground </span>
+            <span class="material-icons-round"> chevron_right </span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </li>
+  </ul>
+</section>
+<app-loading *ngIf="isLoaderShown">
+</app-loading>

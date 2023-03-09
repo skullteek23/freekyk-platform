@@ -60,7 +60,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   getSeasonInfo(): void {
     if (this.seasonID) {
       this.isLoaderShown = true;
-      this.apiService.getAllSeasonInfo(this.seasonID)
+      this.apiService.getSeasonAllInfo(this.seasonID)
         .subscribe({
           next: (response) => {
             if (response) {

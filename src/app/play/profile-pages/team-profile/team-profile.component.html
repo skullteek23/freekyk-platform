@@ -45,39 +45,37 @@
           </span>
         </div>
       </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <div class="buttons-container" fxLayout="row">
-        <ng-container *ngIf="!isTeamMember">
-          <button fxFlex="45%" class="link-button" [disabled]="hasTeam" (click)="joinTeam(); $event.stopPropagation()"
-            mat-stroked-button color="primary">
-            <span class="material-icons-round">add_circle</span>
-            Join this team
-          </button>
-          <button fxFlex="auto" class="link-button" [disabled]="!hasTeam"
-            (click)="challengeTeam(); $event.stopPropagation()" mat-stroked-button color="primary">
-            <span class="material-icons-round">outlined_flag</span>
-            Challenge Team
-          </button>
-        </ng-container>
-        <ng-container *ngIf="isTeamMember">
-          <button *ngIf="isTeamMember" fxFlex="auto" class="link-button"
+      <div class="buttons-container" fxLayout="column">
+        <button class="link-button" *ngIf="!userTeamID" (click)="joinTeam(); $event.stopPropagation()"
+          mat-stroked-button color="primary">
+          <span class="material-icons-round">add_circle</span>
+          Join Team
+        </button>
+        <button class="link-button" [disabled]="!isUserCaptain"
+          *ngIf="userTeamID && !isSelectedTeamMember && !isSelectedTeamCaptain"
+          (click)="challengeTeam(); $event.stopPropagation()" mat-stroked-button color="primary">
+          <span class="material-icons-round">outlined_flag</span>
+          Challenge Team
+          <span *ngIf="!isUserCaptain">(Captain only)</span>
+        </button>
+        <ng-container *ngIf="isSelectedTeamMember">
+          <button [disabled]="!isSelectedTeamCaptain" class="link-button"
             (click)="manageTeam(); $event.stopPropagation()" mat-stroked-button color="primary">
             <span class="material-icons-round">settings</span>
             Manage Team
           </button>
-          <button *ngIf="isTeamMember" fxFlex="45%" class="link-button"
-            (click)="manageTeam(true); $event.stopPropagation()" mat-stroked-button color="primary">
+          <button class="link-button" (click)="manageTeam(true); $event.stopPropagation()" mat-stroked-button
+            color="primary">
             <span class="material-icons-round">send</span>
-            Start a Chat
+            Chat with Members
           </button>
         </ng-container>
-
+        <button class="link-button" (click)="share(); $event.stopPropagation()" mat-stroked-button color="primary">
+          <span class="material-icons-round">share</span>
+          Share with friends
+        </button>
       </div>
-    </mat-card-actions>
-    <mat-card-footer>
-
-    </mat-card-footer>
+    </mat-card-content>
   </mat-card>
 </section>
 

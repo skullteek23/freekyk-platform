@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export interface IStatisticsCard {
   icon: string;
   label: string;
-  value: number;
+  value: string | number;
   iconClass?: string
 }
 
@@ -14,8 +14,8 @@ export interface IStatisticsCard {
 })
 export class MyStatsCardComponent implements OnInit {
   @Input() label = 'My Stats';
-
   @Input() data: IStatisticsCard[];
+  @Input() showChip = true;
 
   constructor() { }
 

@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { StatsTeam } from '@shared/interfaces/others.model';
-import { Formatters, TeamBasicInfo, TeamMembers, TeamMoreInfo, TeamStats, } from '@shared/interfaces/team.model';
+import { Formatters } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 import { ApiService } from '@shared/services/api.service';
 import { TeamAllInfo } from '@shared/utils/pipe-functions';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
-import { SnackbarService } from '@app/services/snackbar.service';
 import { NotificationsService } from '@app/services/notifications.service';
 import { NotificationBasic, NotificationTypes } from '@shared/interfaces/notification.model';
 import { TeamService } from '@app/services/team.service';
@@ -21,27 +19,18 @@ import { TeamService } from '@app/services/team.service';
 })
 export class TeamProfileComponent implements OnInit, OnDestroy {
 
-  isLoaderShown = true;
-  teamInfo$: Observable<TeamBasicInfo>;
-  teamMoreInfo$: Observable<TeamMoreInfo>;
-  teamName = '';
-  stats$: Observable<StatsTeam>;
-  members$: Observable<TeamMembers>;
-  media$: Observable<string[]>;
-  noPhotos = false;
-  error = false;
-  imgPath: string;
-  id: string;
-  uid: string;
-  subscriptions = new Subscription();
-  formatter = Formatters;
-
   teamID: string = null;
+  isLoaderShown = true;
   team: Partial<TeamAllInfo> = null;
   teamStats: IStatisticsCard[] = [];
   teamMedia: any[] = [];
   isTeamMember = false;
+  formatter = Formatters;
   hasTeam = false;
+  userID: string = null;
+  userTeamID: string = null;
+  isUserCaptain = false;
+  subscriptions = new Subscription();
 
   constructor(
     private router: Router,
@@ -49,12 +38,13 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private enlargeService: EnlargeService,
     private socialShareService: SocialShareService,
     private apiService: ApiService,
-    private snackbarService: SnackbarService,
     private notificationService: NotificationsService,
     private teamService: TeamService
   ) { }
 
   ngOnInit(): void {
+    this.userID = localStorage.getItem('uid') || null;
+    this.userTeamID = sessionStorage.getItem('tid') || null;
     this.formatter = Formatters;
     this.subscriptions.add(this.route.params.subscribe({
       next: (params) => {
@@ -82,7 +72,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             this.createTeamStats();
             this.createTeamMedia();
           } else {
-            this.router.navigate(['error'])
+            this.router.navigate(['error']);
           }
           this.isLoaderShown = false;
           window.scrollTo(0, 0);
@@ -105,6 +95,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
             if (response) {
               this.isTeamMember = response.team?.id === this.team.id;
               this.hasTeam = response?.team !== null;
+              this.isUserCaptain = response?.team ? response?.team?.capId === uid : false;
             } else {
               this.isTeamMember = false;
             }
@@ -117,20 +108,20 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
 
   createTeamStats() {
     this.teamStats = [];
-    this.teamStats.push({ icon: 'sports_soccer', label: 'Goals', value: this.team?.g || 0 })
-    this.teamStats.push({ icon: 'flag', label: 'Wins', value: this.team?.w || 0 })
-    this.teamStats.push({ icon: 'cancel_presentation', label: 'Losses', value: this.team?.l || 0 })
-    this.teamStats.push({ icon: 'sports_soccer', label: 'Matches', value: (this.team?.fkc_played + this.team?.fcp_played + this.team?.fpl_played) || 0, })
-    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.rcards || 0, iconClass: 'red' })
-    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.ycards || 0, iconClass: 'yellow' })
-    this.teamStats.push({ icon: 'sports_handball', label: 'Conceded', value: this.team?.g_conceded || 0, })
+    this.teamStats.push({ icon: 'sports_soccer', label: 'Goals', value: this.team?.g || 0 });
+    this.teamStats.push({ icon: 'flag', label: 'Wins', value: this.team?.w || 0 });
+    this.teamStats.push({ icon: 'cancel_presentation', label: 'Losses', value: this.team?.l || 0 });
+    this.teamStats.push({ icon: 'sports_soccer', label: 'Matches', value: (this.team?.fkc_played + this.team?.fcp_played + this.team?.fpl_played) || 0, });
+    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.rcards || 0, iconClass: 'red' });
+    this.teamStats.push({ icon: 'style', label: 'Cards', value: this.team?.ycards || 0, iconClass: 'yellow' });
+    this.teamStats.push({ icon: 'sports_handball', label: 'Conceded', value: this.team?.g_conceded || 0, });
   }
 
   createTeamMedia() {
     this.teamMedia = [];
     if (this.team?.media?.length) {
       this.team.media.forEach(element => {
-        this.teamMedia.push({ image: element, thumbImage: element })
+        this.teamMedia.push({ image: element, thumbImage: element });
       });
     }
   }
@@ -150,29 +141,25 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
 
   joinTeam() {
-    if (!this.hasTeam) {
-      const tid = sessionStorage.getItem('tid');
+    if (this.userTeamID) {
       this.teamService.onOpenJoinTeamDialog();
+    } else {
+      this.router.navigate(['/dashboard/team-management']);
     }
   }
 
   challengeTeam() {
-    const uid = localStorage.getItem('uid');
-    const tid = sessionStorage.getItem('tid');
-    if (!tid) {
-      this.snackbarService.displayError('Join a team!');
-      this.manageTeam();
-    } else {
+    if (this.userTeamID && !this.isSelectedTeamMember && !this.isSelectedTeamCaptain) {
       this.isLoaderShown = true;
       const notification: NotificationBasic = {
         type: NotificationTypes.challengeTeam,
-        senderID: uid,
+        senderID: this.userID,
         receiverID: this.team.captainId,
         date: new Date().getTime(),
         receiverName: this.team.captainName,
         read: 0,
         expire: 0,
-        senderName: tid,
+        senderName: this.userTeamID,
       };
       this.notificationService.sendNotification(notification)
         .finally(() => this.isLoaderShown = false);
@@ -185,5 +172,13 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/dashboard/team-management']);
     }
+  }
+
+  get isSelectedTeamCaptain(): boolean {
+    return this.userID && this.userID === this.team.captainId;
+  }
+
+  get isSelectedTeamMember(): boolean {
+    return this.userTeamID && this.userTeamID === this.team.id;
   }
 }
