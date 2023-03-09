@@ -1,5 +1,6 @@
 <mat-list>
-  <mat-list-item *ngFor="let teamMember of members; last as last">
+  <mat-list-item *ngFor="let teamMember of members; last as last"
+    (click)="openPlayerProfile(teamMember.id); $event.stopPropagation()">
     <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
@@ -11,9 +12,10 @@
         </span>
       </span>
       <span class="material-icons-round" *ngIf="showProfileButton"
-        (click)="openPlayerProfile(teamMember.id)">chevron_right</span>
+        (click)="openPlayerProfile(teamMember.id); $event.stopPropagation()">chevron_right</span>
       <ng-container *ngIf="showRemoveButton">
-        <a *ngIf="captainID !== teamMember.id" (click)="removePlayer(teamMember.id)" class="red mat-caption">
+        <a *ngIf="captainID !== teamMember.id" (click)="removePlayer(teamMember.id); $event.stopPropagation()"
+          class="red mat-caption">
           Remove
         </a>
       </ng-container>

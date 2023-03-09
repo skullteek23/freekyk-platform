@@ -32,10 +32,12 @@ export class TeamPlayerMembersListComponent implements OnInit {
   ngOnInit(): void { }
 
   openPlayerProfile(playerID: string) {
-    const dialogRef = this.dialog.open(PlayerCardComponent, {
-      panelClass: 'fk-dialogs',
-      data: playerID,
-    });
+    if (this.showProfileButton) {
+      const dialogRef = this.dialog.open(PlayerCardComponent, {
+        panelClass: 'fk-dialogs',
+        data: playerID,
+      });
+    }
   }
 
   removePlayer(pid: string) {
