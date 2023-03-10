@@ -21,14 +21,12 @@ export class FixturesResultsTabsComponent implements OnInit {
         }
       });
     }
-    this.index = this.fixtures.length !== 0 ? 0 : 1;
   }
 
   @Input() showActionBtn = true;
 
   fixtures: MatchFixture[] = [];
   results: MatchFixture[] = [];
-  index = 0;
 
   constructor(
     private dialog: MatDialog

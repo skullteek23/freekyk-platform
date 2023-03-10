@@ -1,4 +1,4 @@
-<mat-tab-group mat-stretch-tabs [(selectedIndex)]="index" animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs animationDuration="0ms">
   <mat-tab label="Fixtures">
     <ul>
       <app-no-items-message items="fixtures" *ngIf="fixtures?.length === 0"></app-no-items-message>
