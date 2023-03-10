@@ -1,4 +1,6 @@
+import { IPlayer } from '@shared/interfaces/user.model';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 const db = admin.firestore();
 const auth = admin.auth();
@@ -10,10 +12,12 @@ export async function newProfile(data: { name: string; uid: string }, context: a
   const allPromises: any[] = [];
 
   if (UID && name) {
-    allPromises.push(auth.updateUser(UID, { displayName: name }));
-    allPromises.push(db.collection('players').doc(UID).set({ name, team: null }));
+    const playerProfile: Partial<IPlayer> = {};
+    playerProfile.name = name;
+    allPromises.push(auth.updateUser(UID, { displayName: playerProfile.name }));
+    allPromises.push(db.collection('players').doc(UID).set({ ...playerProfile }));
 
     return Promise.all(allPromises);
   }
-  return false;
+  throw new functions.https.HttpsError('invalid-argument', 'Invalid name!');
 }
