@@ -1,0 +1,59 @@
+<section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="32px"
+  fxLayoutGap.lt-md="20px" fxLayoutAlign="stretch center">
+  <h2 class="mat-title center">
+    Log in
+  </h2>
+  <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+    <button (click)="loginWithGoogle()" class="buttonText secondaryButton wb" fxLayoutAlign="center center"
+      fxLayoutGap="8px" fxLayout>
+      <img class="iconSize" src="assets/svgs/google.svg" alt="Google Icon" />
+      <span> Login with Google </span>
+    </button>
+    <!-- <button (click)="onFacebookLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" appFallbackImg/>
+      <span> Continue with Facebook </span>
+    </button> -->
+  </div>
+  <span class="mat-body-1">OR</span>
+  <form [formGroup]="authForm" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center" class="auth-form">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput name="email" autocomplete="email" formControlName="email" />
+      <mat-error *ngIf="email?.hasError('pattern')">
+        Invalid email! Please try again
+      </mat-error>
+      <mat-error *ngIf="email?.hasError('required')">
+        Required Field!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput name="password" formControlName="password" />
+      <mat-error *ngIf="password?.hasError('pattern')">
+        Password should have atleast 1 lowercase letter, 1 uppercase letter, 1
+        number, 1 special character
+      </mat-error>
+      <mat-error *ngIf="password?.hasError('required')">
+        Required Field!
+      </mat-error>
+    </mat-form-field>
+    <button type="button" (click)="login()" [disabled]="authForm.invalid" class="buttonText primaryButton wb">
+      Login
+    </button>
+    <p class="mat-caption terms">
+      By continuing, you agree to Freekyk's <a [routerLink]="['/terms']">Terms & Conditions</a> and <a
+        [routerLink]="['/privacypolicy']">Privacy Policy</a>.
+    </p>
+    <a (click)="onForgotPassword()" class="forgot_password mat-caption">
+      Forgot Password?
+    </a>
+  </form>
+  <div class="new-to-freekyk">
+    <mat-divider></mat-divider>
+    <p class="mat-caption center">
+      New to Freekyk? <a [routerLink]="['/signup']">Create an Account</a>
+    </p>
+  </div>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

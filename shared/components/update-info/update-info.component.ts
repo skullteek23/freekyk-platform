@@ -43,11 +43,11 @@ export class UpdateInfoComponent implements OnInit {
   }
 
   onChangeSubmit() {
-    if (this.data == 'email') {
-      this.authService.onChangeEmail(this.newEmailForm.get('email')?.value);
-    } else {
-      this.authService.onChangePassword(this.newPassForm.get('pass')?.value);
-    }
+    // if (this.data == 'email') {
+    //   this.authService.onChangeEmail(this.newEmailForm.get('email')?.value);
+    // } else {
+    //   this.authService.onChangePassword(this.newPassForm.get('pass')?.value);
+    // }
     this.onDialogClose();
   }
 }

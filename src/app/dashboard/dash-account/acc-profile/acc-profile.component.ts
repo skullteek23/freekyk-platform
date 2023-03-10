@@ -347,7 +347,7 @@ export class AccProfileComponent implements OnInit, OnDestroy {
         //       ...newBasicDetails
         //     })
         // );
-        allPromises.push(this.authService.updateAuthDisplayName(newBasicDetails.name));
+        allPromises.push(this.authService.updateDisplayName(newBasicDetails.name));
         allPromises.push(
           this.ngFire
             .collection('players')

@@ -1,0 +1,69 @@
+<section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="32px"
+  fxLayoutGap.lt-md="20px" fxLayoutAlign="stretch center">
+  <h2 class="mat-title center">
+    Get started
+  </h2>
+  <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+    <button (click)="signupWithGoogle()" class="buttonText secondaryButton wb" fxLayoutAlign="center center"
+      fxLayoutGap="8px" fxLayout>
+      <img class="iconSize" src="assets/svgs/google.svg" alt="Google Icon" />
+      <span> Signup with Google </span>
+    </button>
+    <!-- <button (click)="onFacebookLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
+      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" appFallbackImg/>
+      <span> Continue with Facebook </span>
+    </button> -->
+  </div>
+  <span class="mat-body-1">OR</span>
+  <form [formGroup]="authForm" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center" class="auth-form">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Full Name</mat-label>
+      <input type="text" autocomplete="name" matInput name="name" formControlName="name" />
+      <mat-error *ngIf="name?.hasError('pattern')">
+        Invalid Name! Please try again
+      </mat-error>
+      <mat-error *ngIf="name?.hasError('required')">
+        Required Field!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput name="email" autocomplete="email" formControlName="email" />
+      <mat-error *ngIf="email?.hasError('pattern')">
+        Invalid email! Please try again
+      </mat-error>
+      <mat-error *ngIf="email?.hasError('required')">
+        Required Field!
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput name="password" formControlName="password" />
+      <mat-hint *ngIf="password?.value?.length < 8" align="end">
+        {{ password?.value?.length > 0 ? password?.value?.length : 0 }} / 8
+      </mat-hint>
+      <mat-error *ngIf="password?.hasError('pattern')">
+        Password should have atleast 1 lowercase letter, 1 uppercase letter, 1
+        number, 1 special character
+      </mat-error>
+      <mat-error *ngIf="password?.hasError('required')">
+        Required Field!
+      </mat-error>
+    </mat-form-field>
+    <button type="button" (click)="signup()" [disabled]="authForm.invalid" class="buttonText primaryButton wb">
+      Take me to Dashboard
+    </button>
+    <p class="mat-caption terms">
+      By continuing, you agree to Freekyk's <a [routerLink]="['/terms']">Terms & Conditions</a> and <a
+        [routerLink]="['/privacypolicy']">Privacy Policy</a>.
+    </p>
+  </form>
+  <div class="new-to-freekyk">
+    <mat-divider></mat-divider>
+    <p class="mat-caption center">
+      Already have an account? <a [routerLink]="['/login']">Login</a>
+    </p>
+  </div>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

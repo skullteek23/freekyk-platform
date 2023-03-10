@@ -22,7 +22,6 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { MaterialModule } from '@shared/material.module';
 import { StoreModule } from '@ngrx/store';
 import * as fromApp from './store/app.reducer';
-import { LoginUiComponent } from './auth/login-ui/login-ui.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { PlayerProfileComponent } from './play/profile-pages/player-profile/player-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
@@ -53,7 +52,6 @@ import { TeamService } from './services/team.service';
     LogoutComponent,
     LandingPageComponent,
     SignupComponent,
-    LoginUiComponent,
     GroundProfileComponent,
     PlayerProfileComponent,
     SeasonProfileComponent,

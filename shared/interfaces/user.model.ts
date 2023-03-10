@@ -24,6 +24,25 @@ export interface PlayerMoreInfo {
   prof_tours?: string[];
 }
 
+export interface IPlayer {
+  name: string;
+  teamID: string;
+  imgpath: string;
+  locCity: string;
+  locState: string;
+  locCountry: string;
+  gender: 'M' | 'F';
+  position: string;
+}
+
+export interface IPlayerMore {
+  nickname: string;
+  bio: string;
+  strongFoot: 'L' | 'R';
+  born: number;
+  jerseyNo: number;
+}
+
 export interface FsBasic {
   name: string;
   nickname: string;

@@ -91,7 +91,7 @@ export interface uData {
 }
 export interface logDetails {
   email: string;
-  pass: string;
+  password: string;
   name?: string;
 }
 export interface statsIcon {
