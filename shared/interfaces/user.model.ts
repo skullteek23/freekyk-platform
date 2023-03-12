@@ -1,3 +1,32 @@
+export interface IPlayer {
+  name: string;
+  teamID: string;
+  imgpath: string;
+  locCity: string;
+  locState: string;
+  locCountry: string;
+  gender: 'M' | 'F';
+  position: string;
+  id?: string
+}
+
+export interface IPlayerMore {
+  nickname: string;
+  bio: string;
+  strongFoot: 'L' | 'R';
+  born: number;
+  jerseyNo: number;
+  id?: string;
+}
+export interface IPlayerStats {
+  apps: number;
+  g: number;
+  w: number;
+  rcards: number;
+  ycards: number;
+  l: number;
+  id?: string
+}
 
 export interface PlayerBasicInfo {
   name: string;
@@ -24,24 +53,6 @@ export interface PlayerMoreInfo {
   prof_tours?: string[];
 }
 
-export interface IPlayer {
-  name: string;
-  teamID: string;
-  imgpath: string;
-  locCity: string;
-  locState: string;
-  locCountry: string;
-  gender: 'M' | 'F';
-  position: string;
-}
-
-export interface IPlayerMore {
-  nickname: string;
-  bio: string;
-  strongFoot: 'L' | 'R';
-  born: number;
-  jerseyNo: number;
-}
 
 export interface FsBasic {
   name: string;
@@ -60,14 +71,6 @@ export interface SocialMediaLinks {
   yt: string;
   fb: string;
   tw: string;
-}
-export interface BasicStats {
-  apps: number;
-  g: number;
-  w: number;
-  rcards: number;
-  ycards: number;
-  l: number;
 }
 export interface FsStats {
   sk_lvl: number;

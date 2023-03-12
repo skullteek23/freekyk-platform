@@ -3,13 +3,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, MatchStatus, ParseMatchProperties } from '@shared/interfaces/match.model';
+import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
-import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulatePlayerData, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { IPlayer, PlayerBasicInfo } from '@shared/interfaces/user.model';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,23 @@ export class ApiService {
     if (docID) {
       return this.angularFirestore.collection('players').doc(docID).get()
         .pipe(manipulatePlayerData);
+    }
+  }
+
+  getPlayerV2(docID: string): Observable<IPlayer> {
+    if (docID) {
+      return this.angularFirestore.collection('players').doc(docID).get()
+        .pipe(manipulatePlayerDataV2);
+    }
+  }
+
+  getPlayerAllInfo(docID: string): Observable<Partial<PlayerAllInfo>> {
+    if (docID) {
+      return forkJoin([
+        this.angularFirestore.collection('players').doc(docID).get(),
+        this.angularFirestore.collection('playerMore').doc(docID).get(),
+        this.angularFirestore.collection('playerStatistics').doc(docID).get()
+      ]).pipe(manipulatePlayerBulkData)
     }
   }
 
@@ -67,7 +84,7 @@ export class ApiService {
       }
       return forkJoin([
         this.angularFirestore.collection('seasons', query).get(),
-        this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', uid)).get()
+        this.getUserOrders(uid)
       ]).pipe(manipulateSeasonOrdersData)
     } else {
       return this.getPublishedSeasons(limit);
@@ -100,7 +117,7 @@ export class ApiService {
       .pipe(manipulateTeamData)
   }
 
-  getAllTeamInfo(docID: string): Observable<Partial<TeamAllInfo>> {
+  getTeamAllInfo(docID: string): Observable<Partial<TeamAllInfo>> {
     if (docID) {
       return forkJoin([
         this.angularFirestore.collection('teams').doc(docID).get(),
@@ -109,6 +126,22 @@ export class ApiService {
         this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('media').get(),
         this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('members').get(),
       ]).pipe(manipulateTeamBulkData)
+    }
+  }
+
+  getTeamFixtures(teamID: string): Observable<MatchFixture[]> {
+    if (teamID) {
+      return this.angularFirestore.collection('allMatches', query => query.where('teams', 'array-contains', teamID)).get()
+        .pipe(manipulateFixtureData)
+    }
+  }
+
+  getUpcomingFixture(teamID: string): Observable<MatchFixture[]> {
+    if (teamID) {
+      const comparator = ParseMatchProperties.getComparatorTimestampForBackendQuery();
+      const query = (query) => query.where('date', '>', comparator).where('teams', 'array-contains', teamID).orderBy('date', 'asc').limit(1)
+      return this.angularFirestore.collection('allMatches', query).get()
+        .pipe(manipulateFixtureData)
     }
   }
 
@@ -199,6 +232,20 @@ export class ApiService {
       const query = (query) => query.where('seasonID', '==', seasonID)
       return this.angularFirestore.collection('partners', query).get()
         .pipe(manipulateSeasonPartnerData)
+    }
+  }
+
+  getUserPendingOrders(userID: string): Observable<Partial<RazorPayOrder>[]> {
+    if (userID) {
+      return this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', userID)).get()
+        .pipe(manipulatePendingOrderData)
+    }
+  }
+
+  getUserOrders(userID: string): Observable<Partial<RazorPayOrder>[]> {
+    if (userID) {
+      return this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', userID)).get()
+        .pipe(manipulateOrdersData)
     }
   }
 }

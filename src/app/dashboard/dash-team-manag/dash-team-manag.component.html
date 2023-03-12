@@ -21,10 +21,12 @@
 
   <app-team-members></app-team-members>
 
-  <app-my-stats-card [data]="teamStats" label="My Team Statistics"></app-my-stats-card>
+  <app-my-stats-card [data]="teamStats" *ngIf="teamStats" label="My Team Statistics"></app-my-stats-card>
 
   <app-action-shortcut-button *ngIf="teamGalleryShortcutData" [data]="teamGalleryShortcutData"
     (actionTrigger)="openTeamGallery()"></app-action-shortcut-button>
   <div id="communication"> </div>
   <app-team-communication></app-team-communication>
 </div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

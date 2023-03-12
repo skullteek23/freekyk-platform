@@ -1,4 +1,4 @@
-import { PlayerBasicInfo } from "@shared/interfaces/user.model";
+import { BasicStats, IPlayer, IPlayerMore, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
@@ -14,6 +14,8 @@ import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-brac
 export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface TeamAllInfo extends TeamBasicInfo, TeamMoreInfo, TeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
+export interface PlayerAllInfo extends IPlayer, IPlayerMore, BasicStats { };
+
 export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
 export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
 
@@ -27,6 +29,12 @@ export function manipulatePlayersData(source: Observable<ngFireDocQuery>) {
 export function manipulatePlayerData(source: Observable<ngFireDoc>): Observable<PlayerBasicInfo> {
   return source.pipe(
     map((resp) => ({ id: resp.id, ...(resp.data() as PlayerBasicInfo), } as PlayerBasicInfo)),
+  );
+}
+
+export function manipulatePlayerDataV2(source: Observable<ngFireDoc>): Observable<IPlayer> {
+  return source.pipe(
+    map((resp) => ({ id: resp.id, ...(resp.data() as IPlayer), } as IPlayer)),
   );
 }
 
@@ -69,6 +77,29 @@ export function manipulateSeasonBulkData(source: Observable<[ngFireDoc, ngFireDo
             ...data_3,
             ...data_4,
             discountedFees: getFeesAfterDiscount(data_1.feesPerTeam, data_1.discount)
+          }
+          return data;
+        }
+        return null;
+      }
+      return null;
+    }),
+  );
+}
+
+export function manipulatePlayerBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<PlayerAllInfo>> {
+  return source.pipe(
+    map(response => {
+      let data: Partial<PlayerAllInfo> = {};
+      if (response?.length === 3) {
+        const data_1: IPlayer = response[0].exists ? ({ id: response[0].id, ...response[0].data() as IPlayer }) : null;
+        const data_2: IPlayerMore = response[1].exists ? ({ ...response[1].data() as IPlayerMore }) : null;
+        const data_3: IPlayerStats = response[2].exists ? ({ ...response[2].data() as IPlayerStats }) : null;
+        if (data_1 || data_2 || data_3) {
+          data = {
+            ...data_1,
+            ...data_2,
+            ...data_3,
           }
           return data;
         }
@@ -129,12 +160,12 @@ export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDo
   );
 }
 
-export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, ngFireDocQuery]>): Observable<SeasonBasicInfo[]> {
+export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, Partial<RazorPayOrder>[]]>): Observable<SeasonBasicInfo[]> {
   return source.pipe(
     map(response => {
       const seasonList: SeasonBasicInfo[] = [];
       if (response?.length === 2) {
-        const orderList = response[1].docs.map(el => ({ id: el.id, ...el.data() as Partial<RazorPayOrder> })) || [];
+        const orderList = response[1];
         response[0].forEach(season => {
           const docData = season.data() as SeasonBasicInfo;
           const docID = season.id;
@@ -164,6 +195,12 @@ export function manipulateTeamData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as TeamBasicInfo), } as TeamBasicInfo))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
+  );
+}
+
+export function manipulateOrdersData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
+  return source.pipe(
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as Partial<RazorPayOrder>), } as Partial<RazorPayOrder>))),
   );
 }
 
@@ -207,6 +244,22 @@ export function manipulateGroundData(source: Observable<ngFireDocQuery>) {
 export function manipulateSeasonPartnerData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ISeasonPartner), } as ISeasonPartner))),
+  );
+}
+
+export function manipulatePendingOrderData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
+  return source.pipe(
+    map((resp) => {
+      const data: Partial<RazorPayOrder>[] = [];
+      resp.docs.map((doc) => {
+        const docData = doc.data() as Partial<RazorPayOrder>;
+        if (docData.amount_due > 0) {
+          data.push({ ...docData, amount_due: docData.amount_due / 100 });
+        }
+      })
+      return data;
+    }
+    ),
   );
 }
 

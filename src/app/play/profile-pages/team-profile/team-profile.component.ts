@@ -63,7 +63,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
 
   getTeamInfo(): void {
-    this.apiService.getAllTeamInfo(this.teamID)
+    this.apiService.getTeamAllInfo(this.teamID)
       .subscribe({
         next: (response) => {
           if (response) {

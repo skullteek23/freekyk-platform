@@ -69,7 +69,11 @@ export class LoginComponent implements OnInit {
   }
 
   postLogin(user: authUser) {
-    sessionStorage.setItem('name', user.user.displayName);
+    this.authService.storeUserInfo({
+      name: user.user.displayName,
+      id: user.user.uid,
+      email: user.user.email
+    });
     this.isLoaderShown = false;
     this.router.navigate(['/dashboard/home']);
   }

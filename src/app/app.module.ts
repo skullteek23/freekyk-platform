@@ -86,8 +86,5 @@ import { TeamService } from './services/team.service';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(
-    playerService: PlayerService,
-    teamService: TeamService
-  ) { }
+  constructor() { }
 }

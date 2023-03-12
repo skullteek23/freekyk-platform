@@ -1,8 +1,8 @@
 <div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap">
   <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%">
     <div class="first-row" fxLayoutAlign="space-between center">
-      <span class="mat-body-1" *ngIf="playerName">
-        Hello, <span class="mat-body-2">{{playerName}}</span>
+      <span class="mat-body-1" *ngIf="player?.name">
+        Hello, <span class="mat-body-2">{{player.name || 'New user'}}</span>
       </span>
       <a [routerLink]="['/dashboard', 'account']" class="mat-caption sec-menu">Edit Profile</a>
     </div>
@@ -13,18 +13,17 @@
       (actionTrigger)="takeTeamAction()"></app-action-shortcut-button>
   </div>
 
-  <app-pending-payment *ngIf="isPendingOrder" [data]="pendingOrdersList"></app-pending-payment>
+  <app-pending-payment *ngIf="pendingOrdersList.length" [data]="pendingOrdersList"></app-pending-payment>
 
-  <app-upcoming-match *ngIf="upcomingFixture" [fixture]="upcomingFixture"
-    [description]="upcomingFixtureDescription"></app-upcoming-match>
+  <app-upcoming-match *ngIf="upcomingFixture" [fixture]="upcomingFixture"></app-upcoming-match>
 
-  <app-my-matches fxFlex.gt-sm="100%" [teamName]="team" [matches]="teamMatches"></app-my-matches>
+  <app-my-matches fxFlex.gt-sm="100%" [matches]="teamMatches"></app-my-matches>
 
   <app-my-stats-card [data]="stats"></app-my-stats-card>
 
   <app-my-team-menu></app-my-team-menu>
 
-  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%">
+  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%" *ngIf="ticketShortcutData">
     <app-action-shortcut-button [data]="ticketShortcutData"
       (actionTrigger)="openTicketDialog()"></app-action-shortcut-button>
   </div>

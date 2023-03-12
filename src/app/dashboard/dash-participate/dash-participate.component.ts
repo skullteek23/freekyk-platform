@@ -19,6 +19,7 @@ import { Formatters, TeamMoreInfo } from '@shared/interfaces/team.model';
 import { EnlargeService } from '@app/services/enlarge.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DashboardService } from '../dashboard.service';
 
 export enum OperationStatus {
   default,
@@ -52,7 +53,8 @@ export class DashParticipateComponent implements OnInit {
     private enlargeService: EnlargeService,
     private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dashboardService: DashboardService
   ) { }
 
   ngOnInit(): void {

@@ -1,5 +1,4 @@
-<!-- lg-screen-sidenav -->
-<mat-sidenav-container *ngIf="!onMobile">
+<!-- <mat-sidenav-container *ngIf="!onMobile">
   <mat-sidenav #sidenav [(opened)]="sidenavOpenState" [mode]="getMode()" position="start">
     <div (window:resize)="onResizeScreen()" fxLayoutAlign="center center" fxLayout="column">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
@@ -55,7 +54,6 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="side-padding">
-    <!-- small-sidepanel -->
     <aside fxFlex="56px" class="sidepanel mat-elevation-z4" fxLayoutAlign="start center" fxLayout="column"
       *ngIf="!sidenav.opened">
       <div class="box" fxLayoutAlign="center center" fxLayout="column">
@@ -95,31 +93,25 @@
         </a>
       </mat-nav-list>
     </aside>
-    <!-- small-sidepanel -->
 
-    <!-- dashboard content outlet - 1 -->
     <div class="container section-space-bottom section-space-top">
       <router-outlet></router-outlet>
       <footer>
         <app-dash-footer></app-dash-footer>
       </footer>
     </div>
-    <!-- dashboard content outlet - 1 -->
   </mat-sidenav-content>
-</mat-sidenav-container>
-<!-- lg-screen-sidenav -->
+</mat-sidenav-container> -->
 
-<!-- dashboard content outlet - 2 -->
-<div *ngIf="onMobile" class="container product grey-bg">
+<div class="container product grey-bg">
   <router-outlet></router-outlet>
 </div>
-<footer *ngIf="onMobile">
+<footer>
   <app-dash-footer></app-dash-footer>
 </footer>
-<!-- dashboard content outlet - 2 -->
 
 <!-- bottom-nav-xs-screen -->
-<mat-toolbar fxHide.gt-sm="true" class="bottom-nav" color="primary" fxLayoutAlign="space-evenly">
+<mat-toolbar class="bottom-nav" color="primary" fxLayoutAlign="space-evenly">
   <a [routerLink]="['/dashboard', 'home']" routerLinkActive="router-link-active" fxLayout="column"
     fxLayoutAlign="center center" fxLayoutGap="0" matTooltip="Dashboard">
     <span class="material-icons-round"> dashboard </span>
