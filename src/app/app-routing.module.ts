@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { ProductProfileComponent } from './equipment/profile-pages/product-profile/product-profile.component';
 import { ErrorComponent } from './error/error.component';
 import { AboutComponent } from './others/about/about.component';
 import { LandingPageComponent } from './others/landing-page/landing-page.component';
@@ -20,8 +18,7 @@ const routes: Routes = [
   { path: '', component: LandingPageComponent },
   {
     path: 'login',
-    component: LoginComponent,
-    ...canActivate(redirectLoggedInToDashboard),
+    redirectTo: 'signup'
   },
   {
     path: 'signup',
@@ -31,21 +28,6 @@ const routes: Routes = [
   {
     path: 'play',
     loadChildren: () => import('./play/play.module').then((m) => m.PlayModule),
-  },
-  {
-    path: 'freestyle',
-    loadChildren: () =>
-      import('./freestyle/freestyle.module').then((m) => m.FreestyleModule),
-  },
-  {
-    path: 'equipment',
-    loadChildren: () =>
-      import('./equipment/equipment.module').then((m) => m.EquipmentModule),
-  },
-  {
-    path: 'academies',
-    loadChildren: () =>
-      import('./academies/academies.module').then((m) => m.AcademiesModule),
   },
   {
     path: 'dashboard',
@@ -61,7 +43,6 @@ const routes: Routes = [
   { path: 't/:teamid', component: TeamProfileComponent },
   { path: 's/:seasonid', component: SeasonProfileComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
-  { path: 'product/:productid', component: ProductProfileComponent },
   { path: 'about', component: AboutComponent },
   { path: 'privacypolicy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },

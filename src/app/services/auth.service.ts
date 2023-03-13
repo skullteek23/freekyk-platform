@@ -8,17 +8,22 @@ import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
 
 export type authUser = firebase.auth.UserCredential;
+export type confirmationResult = firebase.auth.ConfirmationResult;
 export interface User {
   id: string;
   name: string;
   email: string
 }
+export const INDIAN_DIAL_PREFIX = '+91';
+var reCaptchaVerifier;
+var grecaptcha;
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class AuthService {
+
 
   constructor(
     private router: Router,
@@ -49,6 +54,24 @@ export class AuthService {
       return this.ngAuth.createUserWithEmailAndPassword(logData.email, logData.password);
     }
     console.log('invalid details');
+  }
+
+  signupWithPhoneNumber(input: number) {
+    if (input) {
+      reCaptchaVerifier = new firebase.auth.RecaptchaVerifier('phone-signup-button', {
+        size: 'invisible'
+      });
+      return this.ngAuth.signInWithPhoneNumber(`${INDIAN_DIAL_PREFIX}${input.toString()}`, reCaptchaVerifier);
+    }
+    console.log('invalid details');
+  }
+
+  resetCaptcha() {
+    reCaptchaVerifier.render().then(function (widgetId) {
+      if (grecaptcha) {
+        grecaptcha.reset(widgetId);
+      }
+    });
   }
 
   onLogout(): void {

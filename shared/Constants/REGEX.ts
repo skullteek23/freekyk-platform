@@ -1,7 +1,7 @@
 export class RegexPatterns {
   static readonly youtube = `(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu.be/|/v=|^youtu.be/|watch%3Fv%3D)([a-zA-Z0-9_-]{11})+`;
   static readonly num = `^[0-9]*$`;
-  static readonly phoneNumber = `^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$`;
+  static readonly phoneNumber = `^[0-9]{10}$`;
   static readonly query = `^[a-zA-Z"0-9 ,:!.?\'/]*$`;
   static readonly alpha = `^[a-zA-Z]*$`;
   static readonly socialProfileLink = `^[a-zA-Z0-9_-]*$`;

@@ -93,10 +93,10 @@
       </button>
       <!-- Live Seasons icon -->
 
-      <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/login']"
+      <!-- <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/login']"
         class="buttonText secondaryButton">
         Login
-      </button>
+      </button> -->
 
       <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/signup']"
         class="buttonText primaryButton">
@@ -174,9 +174,9 @@
 <!-- Mobile Expanded view -->
 <div class="full-header" *ngIf="menuState" fxLayout="column" fxLayoutGap="20px">
   <div fxLayout="column" fxLayoutGap="8px">
-    <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/login']" class="buttonText secondaryButton">
+    <!-- <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/login']" class="buttonText secondaryButton">
       Login
-    </button>
+    </button> -->
     <button *ngIf="isLogged" (click)="onToggleMenu()" [routerLink]="['/dashboard/home']"
       class="buttonText secondaryButton">
       Go to Dashboard

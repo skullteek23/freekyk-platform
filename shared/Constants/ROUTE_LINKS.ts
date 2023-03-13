@@ -126,21 +126,21 @@ export const MOBILE_LINKS: ILink[] = [
         icon: 'article'
       },
 
-      {
-        name: 'Freestyle',
-        route: '/freestyle/home',
-        icon: 'movie_filter'
-      },
-      {
-        name: 'Academies',
-        route: '/academies',
-        icon: 'school'
-      },
-      {
-        name: 'Equipment',
-        route: '/equipment',
-        icon: 'add_shopping_cart'
-      },
+      // {
+      //   name: 'Freestyle',
+      //   route: '/freestyle/home',
+      //   icon: 'movie_filter'
+      // },
+      // {
+      //   name: 'Academies',
+      //   route: '/academies',
+      //   icon: 'school'
+      // },
+      // {
+      //   name: 'Equipment',
+      //   route: '/equipment',
+      //   icon: 'add_shopping_cart'
+      // },
       {
         name: 'Settings',
         route: '/dashboard/account',
@@ -164,18 +164,18 @@ export const DESKTOP_LINKS: ILink[] = [
         name: 'About',
         route: '/about',
       },
-      {
-        name: 'Freestyle',
-        route: '/freestyle/home',
-      },
-      {
-        name: 'Academies',
-        route: '/academies',
-      },
-      {
-        name: 'Equipment',
-        route: '/equipment',
-      },
+      // {
+      //   name: 'Freestyle',
+      //   route: '/freestyle/home',
+      // },
+      // {
+      //   name: 'Academies',
+      //   route: '/academies',
+      // },
+      // {
+      //   name: 'Equipment',
+      //   route: '/equipment',
+      // },
       {
         name: 'Partner With Us',
         externalLink: environment.forms.partner,

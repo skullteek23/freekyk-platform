@@ -15,7 +15,6 @@ import { TermsComponent } from './others/terms/terms.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ErrorComponent } from './error/error.component';
-import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { LandingPageComponent } from './others/landing-page/landing-page.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -35,9 +34,6 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
-import { PlayerService } from './services/player.service';
-import { TeamService } from './services/team.service';
-
 
 @NgModule({
   declarations: [
@@ -48,7 +44,6 @@ import { TeamService } from './services/team.service';
     HeaderComponent,
     FooterComponent,
     ErrorComponent,
-    LoginComponent,
     LogoutComponent,
     LandingPageComponent,
     SignupComponent,

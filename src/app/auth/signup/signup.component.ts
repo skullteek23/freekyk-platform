@@ -1,9 +1,8 @@
-import { AuthService, authUser } from '@app/services/auth.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { AuthService, authUser, confirmationResult, INDIAN_DIAL_PREFIX } from '@app/services/auth.service';
+import { Component, Input, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { logDetails } from '@shared/interfaces/others.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,8 +12,16 @@ import { Router } from '@angular/router';
 })
 export class SignupComponent implements OnInit {
 
+  readonly prefix = INDIAN_DIAL_PREFIX;
+
   authForm: FormGroup;
+  otpForm: FormGroup;
   isLoaderShown = false;
+  isInvalidOtp = false;
+  otpConfirmation: confirmationResult = null;
+  formInput = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6'];
+
+  @ViewChildren('formRow') rows: any;
 
   constructor(
     private authService: AuthService,
@@ -28,30 +35,25 @@ export class SignupComponent implements OnInit {
 
   initForm(): void {
     this.authForm = new FormGroup({
-      email: new FormControl(null, [
+      number: new FormControl(null, [
         Validators.required,
-        Validators.pattern(RegexPatterns.email),
+        Validators.pattern(RegexPatterns.phoneNumber),
+        Validators.maxLength(10),
+        Validators.minLength(10),
       ]),
-      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
     });
   }
 
-  signup(): void {
-    if (this.authForm.valid) {
-      this.isLoaderShown = true;
-      const userData: logDetails = {
-        email: this.email?.value?.trim(),
-        password: this.password?.value?.trim(),
-        name: this.name?.value?.trim(),
-      };
-      this.authService.signup(userData)
-        .then(this.postSignup.bind(this))
-        .catch((error) => {
-          this.isLoaderShown = false;
-          this.authService.handleAuthError(error)
-        })
-    }
+  initOtpForm() {
+    this.otpForm = this.toFormGroup(this.formInput);
+  }
+
+  toFormGroup(elements) {
+    const group: any = {};
+    elements.forEach(key => {
+      group[key] = new FormControl('', Validators.required);
+    });
+    return new FormGroup(group);
   }
 
   signupWithGoogle(): void {
@@ -65,15 +67,61 @@ export class SignupComponent implements OnInit {
       })
   }
 
+  signupWithPhoneNumber() {
+    if (this.authForm.valid) {
+      this.isLoaderShown = true;
+      this.initOtpForm();
+      this.authService.signupWithPhoneNumber(this.number.value)
+        .then(confirmationResult => {
+          this.otpConfirmation = confirmationResult;
+          this.isLoaderShown = false;
+          setTimeout(() => {
+            this.setFocusOnOtpDigit(0);
+          }, 400);
+        })
+        .catch(error => {
+          this.authService.resetCaptcha();
+        })
+    }
+  }
+
+  verifyOTP() {
+    if (this.otpForm.valid) {
+      this.isLoaderShown = true;
+      const formValue = this.otpForm.value;
+      let otp = '';
+      for (const key in formValue) {
+        if (formValue.hasOwnProperty(key)) {
+          otp = otp.concat(formValue[key]);
+        }
+      }
+      this.otpConfirmation.confirm(otp)
+        .then((user) => {
+          this.isInvalidOtp = false;
+          this.postSignup(user);
+        })
+        .catch(error => {
+          // Invalid OTP
+          this.setFocusOnOtpDigit(0);
+          this.isInvalidOtp = true;
+          this.otpForm.reset();
+        })
+        .finally(() => {
+          this.isLoaderShown = false;
+        })
+    }
+  }
+
   postSignup(user: authUser) {
-    const name = this.name?.value.trim();
-    this.authService.createProfile(name, user.user.uid)
-      .then(() => {
-        sessionStorage.setItem('name', name);
-        this.router.navigate(['/dashboard/participate'])
-      })
-      .catch((error) => this.authService.handleAuthError(error))
-      .finally(() => this.isLoaderShown = false);
+    this.isLoaderShown = false;
+    // const name = this.name?.value.trim();
+    // this.authService.createProfile(name, user.user.uid)
+    //   .then(() => {
+    //     sessionStorage.setItem('name', name);
+    //     this.router.navigate(['/dashboard/participate'])
+    //   })
+    //   .catch((error) => this.authService.handleAuthError(error))
+    //   .finally(() => this.isLoaderShown = false);
   }
 
   resetForm(): void {
@@ -81,15 +129,60 @@ export class SignupComponent implements OnInit {
     this.authForm.markAsUntouched();
   }
 
-  get password() {
-    return this.authForm.get('password');
+  resetOtp(): void {
+    this.isInvalidOtp = false;
+    this.otpConfirmation = null;
+    this.authService.resetCaptcha();
   }
 
-  get email() {
-    return this.authForm.get('email');
+  onNavigateBack() {
+    this.resetOtp();
   }
 
-  get name() {
-    return this.authForm.get('name');
+  keyUpEvent(event, index) {
+    let pos = index;
+    if (event.keyCode === 8 && event.which === 8) {
+      pos = index - 1;
+    } else {
+      pos = index + 1;
+    }
+    if (pos > -1 && pos < this.formInput.length) {
+      this.setFocusOnOtpDigit(pos);
+    }
+    const element = document.getElementById('otp-verify-button');
+    if (pos === this.formInput.length && element) {
+      element.focus();
+    }
+  }
+
+  setFocusOnOtpDigit(index: number) {
+    if (this.rows._results[index].nativeElement) {
+      this.rows._results[index].nativeElement.focus();
+    }
+  }
+
+  get number() {
+    return this.authForm.get('number');
+  }
+
+  get otp() {
+    return this.otpForm.get('otp');
   }
 }
+
+// signup(): void {
+//   if (this.authForm.valid) {
+//     this.isLoaderShown = true;
+//     const userData: logDetails = {
+//       email: this.email?.value?.trim(),
+//       password: 'this.password?.value?.trim()',
+//       name: this.name?.value?.trim(),
+//     };
+//     this.authService.signup(userData)
+//       .then(this.postSignup.bind(this))
+//       .catch((error) => {
+//         this.isLoaderShown = false;
+//         this.authService.handleAuthError(error)
+//       })
+//   }
+// }

@@ -3,31 +3,22 @@
   <h2 class="mat-title center">
     Get started
   </h2>
-  <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
-    <button (click)="signupWithGoogle()" class="buttonText secondaryButton wb" fxLayoutAlign="center center"
-      fxLayoutGap="8px" fxLayout>
-      <img class="iconSize" src="assets/svgs/google.svg" alt="Google Icon" />
-      <span> Signup with Google </span>
-    </button>
-    <!-- <button (click)="onFacebookLogin()" [disabled]="disableAllButtons" class="buttonText secondaryButton wb"
-      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
-      <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" appFallbackImg/>
-      <span> Continue with Facebook </span>
-    </button> -->
-  </div>
-  <span class="mat-body-1">OR</span>
-  <form [formGroup]="authForm" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center" class="auth-form">
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label>Full Name</mat-label>
-      <input type="text" autocomplete="name" matInput name="name" formControlName="name" />
-      <mat-error *ngIf="name?.hasError('pattern')">
-        Invalid Name! Please try again
+
+  <form [formGroup]="authForm" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center" class="auth-form"
+    *ngIf="!otpConfirmation">
+    <mat-form-field appearance="standard" color="primary">
+      <span class="country-code-prefix" matPrefix>{{prefix}}</span>
+      <mat-label>Phone Number</mat-label>
+      <input type="tel" autocomplete="number" matInput name="number" formControlName="number"
+        placeholder="Enter 10-digit mobile number" />
+      <mat-error *ngIf="number?.hasError('pattern') || number?.hasError('maxLength') || number?.hasError('minLength')">
+        Please provide a valid number
       </mat-error>
-      <mat-error *ngIf="name?.hasError('required')">
-        Required Field!
+      <mat-error *ngIf="number?.hasError('required')">
+        Required field
       </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="outline" color="primary">
+    <!-- <mat-form-field appearance="outline" color="primary">
       <mat-label>Email</mat-label>
       <input type="email" matInput name="email" autocomplete="email" formControlName="email" />
       <mat-error *ngIf="email?.hasError('pattern')">
@@ -50,20 +41,61 @@
       <mat-error *ngIf="password?.hasError('required')">
         Required Field!
       </mat-error>
-    </mat-form-field>
-    <button type="button" (click)="signup()" [disabled]="authForm.invalid" class="buttonText primaryButton wb">
-      Take me to Dashboard
+    </mat-form-field> -->
+    <button [disabled]="authForm.invalid" (click)="signupWithPhoneNumber()" id="phone-signup-button"
+      class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+      Continue
     </button>
     <p class="mat-caption terms">
       By continuing, you agree to Freekyk's <a [routerLink]="['/terms']">Terms & Conditions</a> and <a
         [routerLink]="['/privacypolicy']">Privacy Policy</a>.
     </p>
   </form>
-  <div class="new-to-freekyk">
+  <form [formGroup]="otpForm" *ngIf="otpForm && otpConfirmation">
+    <div>
+      <span class="dash-h5 otp-title">OTP Verification</span>
+    </div>
+    <div>
+      <span class="mat-caption" *ngIf="number?.value">Verification code sent to (+91) {{number?.value}}</span>
+    </div>
+    <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+      <div *ngFor="let input of formInput;  index as i">
+        <mat-form-field appearance="outline" color="primary">
+          <input #formRow matInput type="tel" formControlName="{{input}}" class="form-control" maxlength="1"
+            (keyup)="keyUpEvent($event, i)">
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-error *ngIf="isInvalidOtp" class="mat-error-invalid-otp">Invalid OTP</mat-error>
+    <button type="submit" [disabled]="otpForm.invalid" (click)="verifyOTP()" id="otp-verify-button"
+      class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+      Verify
+    </button>
+  </form>
+  <div *ngIf="otpConfirmation" class="unable-to-signin">
+    <mat-divider></mat-divider>
+    <span class="mat-body-1"> Unable to signup?</span>
+    <a (click)="onNavigateBack()"> Try another way </a>
+  </div>
+  <ng-container *ngIf="!otpConfirmation">
+    <span class="mat-body-1">OR</span>
+    <div class="signin-buttons" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+      <button (click)="signupWithGoogle()" class="buttonText secondaryButton wb" fxLayoutAlign="start center"
+        fxLayoutGap="8px" fxLayout>
+        <img class="iconSize" src="assets/svgs/google.svg" alt="Google Icon" />
+        <span> Continue with Google </span>
+      </button>
+      <button disabled class="buttonText secondaryButton wb" fxLayoutAlign="start center" fxLayoutGap="8px" fxLayout>
+        <img class="iconSize" src="../../assets/svgs/facebook.svg" alt="Facebook" appFallbackImg />
+        <span> Continue with Facebook </span>
+      </button>
+    </div>
+  </ng-container>
+  <!-- <div class="new-to-freekyk">
     <mat-divider></mat-divider>
     <p class="mat-caption center">
       Already have an account? <a [routerLink]="['/login']">Login</a>
     </p>
-  </div>
+  </div> -->
 </section>
 <app-loading *ngIf="isLoaderShown"></app-loading>
