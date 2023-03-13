@@ -71,6 +71,7 @@ export class SignupComponent implements OnInit {
     if (this.authForm.valid) {
       this.isLoaderShown = true;
       this.initOtpForm();
+      this.authService.resetCaptcha();
       this.authService.signupWithPhoneNumber(this.number.value)
         .then(confirmationResult => {
           this.otpConfirmation = confirmationResult;
