@@ -58,20 +58,24 @@ export class AuthService {
 
   signupWithPhoneNumber(input: number) {
     if (input) {
-      reCaptchaVerifier = new firebase.auth.RecaptchaVerifier('phone-signup-button', {
-        size: 'invisible'
-      });
+      if (!reCaptchaVerifier) {
+        reCaptchaVerifier = new firebase.auth.RecaptchaVerifier('phone-signup-button', {
+          size: 'invisible'
+        });
+      }
       return this.ngAuth.signInWithPhoneNumber(`${INDIAN_DIAL_PREFIX}${input.toString()}`, reCaptchaVerifier);
     }
     console.log('invalid details');
   }
 
   resetCaptcha() {
-    reCaptchaVerifier.render().then(function (widgetId) {
-      if (grecaptcha) {
-        grecaptcha.reset(widgetId);
-      }
-    });
+    if (reCaptchaVerifier) {
+      reCaptchaVerifier.render().then(function (widgetId) {
+        if (grecaptcha) {
+          grecaptcha.reset(widgetId);
+        }
+      });
+    }
   }
 
   onLogout(): void {
