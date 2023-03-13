@@ -51,7 +51,7 @@ export class SignupComponent implements OnInit {
   toFormGroup(elements) {
     const group: any = {};
     elements.forEach(key => {
-      group[key] = new FormControl('', Validators.required);
+      group[key] = new FormControl('', [Validators.required, Validators.pattern(RegexPatterns.num)]);
     });
     return new FormGroup(group);
   }
@@ -63,7 +63,7 @@ export class SignupComponent implements OnInit {
       .then(this.postSignup.bind(this))
       .catch((error) => {
         this.isLoaderShown = false;
-        this.authService.handleAuthError(error)
+        this.authService.handleAuthError(error);
       })
   }
 
@@ -74,14 +74,15 @@ export class SignupComponent implements OnInit {
       this.authService.signupWithPhoneNumber(this.number.value)
         .then(confirmationResult => {
           this.otpConfirmation = confirmationResult;
-          this.isLoaderShown = false;
           setTimeout(() => {
             this.setFocusOnOtpDigit(0);
           }, 400);
         })
         .catch(error => {
           this.authService.resetCaptcha();
+          this.authService.handleAuthError(error);
         })
+        .finally(() => this.isLoaderShown = false)
     }
   }
 

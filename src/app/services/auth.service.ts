@@ -107,41 +107,31 @@ export class AuthService {
 
   // error display functions
   passwordIncorrect(): void {
-    this.snackbarService.displayCustomMsg('Incorrect password! Please try again');
+    this.snackbarService.displayError('Incorrect password! Please try again');
   }
   passwordWeak(): void {
-    this.snackbarService.displayCustomMsg(
-      'Password too weak! Please try another one'
-    );
+    this.snackbarService.displayError('Password too weak! Please try another one');
   }
   emailIncorrect(): void {
-    this.snackbarService.displayCustomMsg('Incorrect email! Please try again');
+    this.snackbarService.displayError('Incorrect email! Please try again');
   }
   emailAlreadyRegistered(): void {
-    this.snackbarService.displayCustomMsg(
-      'Email already registered! Please try another one'
-    );
+    this.snackbarService.displayError('Email already registered! Please try another one');
   }
   accountNotExist(): void {
-    this.snackbarService.displayCustomMsg(
-      'Account does not exist! Please sign up'
-    );
+    this.snackbarService.displayError('Account does not exist! Please sign up');
   }
   sessionExpired(): void {
-    this.snackbarService.displayCustomMsg('Session Expired! Please login again');
+    this.snackbarService.displayError('Session Expired! Please login again');
   }
   tooManyRequests(): void {
-    this.snackbarService.displayCustomMsg(
-      'Request error! Please try again after sometime'
-    );
+    this.snackbarService.displayError('Request error! Please try again after sometime');
   }
   popupClosedByUser(): void {
-    this.snackbarService.displayCustomMsg('Please sign in using the popup box');
+    this.snackbarService.displayError('Please sign in using the popup box');
   }
   networkFail(): void {
-    this.snackbarService.displayCustomMsg(
-      'Please check your internet connection'
-    );
+    this.snackbarService.displayError('Please check your internet connection');
   }
   // error display functions
 

@@ -25,7 +25,6 @@ import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-re
 })
 export class HeaderComponent implements OnInit {
 
-  readonly mobileLinks = MOBILE_LINKS;
   readonly desktopLinks = DESKTOP_LINKS;
 
   readonly adminURL = environment?.firebase?.adminRegister || '';
@@ -34,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   isLoading = true;
   isLogged = false;
+  mobileLinks = MOBILE_LINKS;
   seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
   profilePicture$: Observable<string | null>;
@@ -64,6 +64,8 @@ export class HeaderComponent implements OnInit {
           map((resp) => (resp > 5 ? '5+' : resp)),
           share()
         );
+        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
+        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
       } else {
         this.isLogged = false;
       }
@@ -164,9 +166,6 @@ export class HeaderComponent implements OnInit {
     return this.mobileLinks.find(el => el.name === 'Freekyk Play')?.subLinks;
   }
 
-  get freestyleLinks(): ILink[] {
-    return this.mobileLinks.find(el => el.name === 'Freekyk Freestyle')?.subLinks;
-  }
 
   get moreDesktopLinks(): ILink[] {
     return this.desktopLinks.find(el => el.name === 'More')?.subLinks;

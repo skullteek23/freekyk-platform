@@ -49,24 +49,9 @@ export const MOBILE_LINKS: ILink[] = [
         icon: 'grass'
       },
       {
-        name: 'Grounds',
-        route: '/play/grounds',
-        icon: 'stadium'
-      },
-      {
-        name: 'Matches',
-        route: '/play/fixtures',
-        icon: 'calendar_month'
-      },
-      {
         name: 'Seasons',
         route: '/play/seasons',
         icon: 'try'
-      },
-      {
-        name: 'Standings',
-        route: '/play/standings',
-        icon: 'leaderboard'
       },
       {
         name: 'Players',
@@ -77,6 +62,21 @@ export const MOBILE_LINKS: ILink[] = [
         name: 'Teams',
         route: '/play/teams',
         icon: 'diversity_3'
+      },
+      {
+        name: 'Matches',
+        route: '/play/fixtures',
+        icon: 'calendar_month'
+      },
+      {
+        name: 'Standings',
+        route: '/play/standings',
+        icon: 'leaderboard'
+      },
+      {
+        name: 'Grounds',
+        route: '/play/grounds',
+        icon: 'stadium'
       },
     ]
   },
@@ -141,16 +141,16 @@ export const MOBILE_LINKS: ILink[] = [
       //   route: '/equipment',
       //   icon: 'add_shopping_cart'
       // },
-      {
-        name: 'Settings',
-        route: '/dashboard/account',
-        icon: 'settings'
-      },
-      {
-        name: 'Logout',
-        isLogout: true,
-        icon: 'logout'
-      },
+      // {
+      //   name: 'Settings',
+      //   route: '/dashboard/account',
+      //   icon: 'settings'
+      // },
+      // {
+      //   name: 'Logout',
+      //   isLogout: true,
+      //   icon: 'logout'
+      // },
     ]
   },
 

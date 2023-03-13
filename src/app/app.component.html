@@ -12,4 +12,4 @@
 </footer>
 <app-feedback-button fxShow.lt-md="false"></app-feedback-button>
 <app-loading *ngIf="isLoaderShown"></app-loading>
-<app-overlay-buttons *ngIf="showFloatingButton"></app-overlay-buttons>
+<app-overlay-buttons *ngIf="showFloatingButton && !menuOpen"></app-overlay-buttons>
