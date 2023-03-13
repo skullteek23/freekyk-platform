@@ -115,6 +115,8 @@ export class SignupComponent implements OnInit {
 
   postSignup(user: authUser) {
     this.isLoaderShown = false;
+    alert('signed in!');
+    this.router.navigate(['/dashboard/home'])
     // const name = this.name?.value.trim();
     // this.authService.createProfile(name, user.user.uid)
     //   .then(() => {
