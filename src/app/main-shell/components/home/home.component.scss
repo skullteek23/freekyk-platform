@@ -1,0 +1,29 @@
+section {
+  padding: 12px;
+
+  .name {
+    width: 100%;
+    margin-bottom: 12px;
+
+    span {
+      width: 100%;
+    }
+  }
+
+  .shortcuts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+
+    &_last {
+      margin-bottom: 12px;
+    }
+  }
+
+  .quick-links {
+    .heading {
+      margin-bottom: 12px;
+    }
+  }
+}

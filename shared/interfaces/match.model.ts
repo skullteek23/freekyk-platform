@@ -45,6 +45,12 @@ export const StatusMessage = [
   { code: MatchStatus.STU, shortMsg: 'finished', description: 'Match score and stats are updated by organizer', color: '#00810f', textColor: '#ffffff' },
 ]
 
+export const TournamentTypes = {
+  FKC: 'Knockout Tournament',
+  FPL: 'League',
+  FCP: 'Instant Match'
+}
+
 export class ParseMatchProperties {
   static getTimeDrivenStatus(status: MatchStatus, matchTimestamp: number): MatchStatus {
     const currentTimestamp = new Date().getTime();
@@ -75,6 +81,9 @@ export class ParseMatchProperties {
 export const Formatters = {
   formatStatus: (key: number): any => {
     return StatusMessage[key];
+  },
+  formatTournamentType: (key: TournamentTypes): any => {
+    return TournamentTypes[key];
   }
 }
 

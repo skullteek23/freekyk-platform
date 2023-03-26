@@ -34,14 +34,15 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
+import { BottomNavComponent } from './main-shell/components/bottom-nav/bottom-nav.component';
+import { MainShellModule } from './main-shell/main-shell.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     AboutComponent,
-    PrivacyComponent,
-    TermsComponent,
     HeaderComponent,
+    BottomNavComponent,
     FooterComponent,
     ErrorComponent,
     LogoutComponent,
@@ -71,6 +72,7 @@ import { FeedbackButtonComponent } from '@shared/components/feedback-button/feed
       maxAge: 5,
     }),
     NgImageSliderModule,
+    MainShellModule
   ],
   providers: [
     { provide: REGION, useValue: 'asia-south1' },

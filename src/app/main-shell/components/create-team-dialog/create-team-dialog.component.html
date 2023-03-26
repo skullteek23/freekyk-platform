@@ -1,0 +1,50 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/teams']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Create a Team</span>
+</div>
+<mat-vertical-stepper>
+  <mat-step label="Fill out Team Details" [stepControl]="teamDetailsForm">
+    <form [formGroup]="teamDetailsForm" fxLayoutAlign="center center" fxLayout="column">
+      <div class="logo-container">
+        <app-photo-uploading-circle (changeUpload)="onSelectTeamLogo($event)"></app-photo-uploading-circle>
+        <span class="mat-caption label" *ngIf="logo.invalid">
+          Choose Team Logo
+        </span>
+      </div>
+      <mat-form-field color="primary">
+        <mat-label>Team Name</mat-label>
+        <input type="text" matInput name="team-name" formControlName="name" />
+        <mat-error *ngIf="teamDetailsForm.get('name').errors?.nameTaken">
+          Team name is already taken! Please choose another name
+        </mat-error>
+        <mat-error *ngIf="teamDetailsForm.get('name').hasError('pattern')">
+          Only letters, numbers and spaces are allowed
+        </mat-error>
+      </mat-form-field>
+      <div class="action-buttons-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+        <button type="button" class="primaryButton buttonText" [disabled]="teamDetailsForm.invalid"
+          (click)="createTeam()">
+          Create
+        </button>
+        <p class="mat-caption left">
+          By continuing, you agree to Freekyk's <a [routerLink]="['/terms']">Terms & Conditions</a> and <a
+            [routerLink]="['/privacypolicy']">Privacy Policy</a>.
+        </p>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step label="Finish">
+    <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
+      <app-tick-animation></app-tick-animation>
+      <span class="mat-caption center">Wuhooo! Your team is LIVE.</span>
+      <span class="mat-caption center">You're now {{ teamDetailsForm.value.name + "'s" }} Captain!</span>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

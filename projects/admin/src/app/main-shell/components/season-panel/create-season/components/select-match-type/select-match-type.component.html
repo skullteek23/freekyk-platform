@@ -27,10 +27,10 @@
     </mat-form-field>
 
     <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
-      <div class="dropdown-container" fxFlex.gt-sm="33%">
+      <!-- <div class="dropdown-container" fxFlex.gt-sm="33%">
         <app-searchable-form-field label="Country" [list]="countries$ | async" [control]="locationCountry"
           (selectionChange)="onSelectCountry($event)"></app-searchable-form-field>
-      </div>
+      </div> -->
 
       <div class="dropdown-container" fxFlex-gt-sm="33%">
         <app-searchable-form-field label="State" [list]="states$ | async" [control]="locationState"
@@ -59,7 +59,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Containing Tournaments</mat-label>
-      <mat-select formControlName="containingTournaments" multiple required>
+      <mat-select formControlName="type" required>
         <mat-option *ngFor="let type of tourTypesFiltered" [value]="type">
           {{ type }}
         </mat-option>

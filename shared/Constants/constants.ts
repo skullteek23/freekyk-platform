@@ -144,7 +144,7 @@ export enum MATCH_TYPES_PACKAGES {
   PackageOne = 'One match of 2 teams',
   PackageTwo = 'One knockout of 4 Teams',
   PackageThree = 'One league of 4 Teams',
-  PackageCustom = 'Full Season of 4+ Teams'
+  PackageCustom = 'Custom Tournament of 4+ Teams'
 };
 export enum DAYS {
   'Sun',

@@ -1,8 +1,8 @@
 <div fxLayout="column" class="back-button">
-  <button [routerLink]="['/play/teams']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+  <button [routerLink]="['/teams']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
     <span>
-      View all Teams
+      Go back
     </span>
   </button>
 </div>
@@ -12,7 +12,7 @@
     <mat-card-header>
       <mat-card-title>
         <span class="dash-h5 season-title">
-          {{team.tname}}
+          {{team.name}}
         </span>
       </mat-card-title>
       <mat-card-subtitle>
@@ -20,19 +20,19 @@
           <mat-chip *ngIf="team.tageCat">
             {{ formatter.formatAgeCategory(team.tageCat).viewValue}} Team
           </mat-chip>
-          <mat-chip *ngIf="team.captainName">
-            {{team.captainName}} (C)
+          <mat-chip *ngIf="team?.captain?.name">
+            {{team.captain.name}} (C)
           </mat-chip>
         </mat-chip-list>
 
       </mat-card-subtitle>
-      <img mat-card-avatar [src]="team.imgpath_logo" alt="{{team.tname}}'s Logo">
+      <img mat-card-avatar [src]="team.imgpath_logo" alt="{{team.name}}'s Logo">
     </mat-card-header>
     <img mat-card-image [src]="team.imgpath" alt="Team image" appFallbackImg
       (click)="enlargePhoto(); $event.stopPropagation()">
     <mat-card-content>
-      <p innerHTML="'{{team.tslogan}}'" *ngIf="team.tslogan"></p>
-      <p class="mat-caption" [innerHTML]="team.tdesc" *ngIf="team.tdesc"></p>
+      <p innerHTML="'{{team.slogan}}'" *ngIf="team.slogan"></p>
+      <p class="mat-caption" [innerHTML]="team.description" *ngIf="team.description"></p>
       <div class="actionscontainer" fxLayoutAlign="start center" fxLayoutGap="8px">
 
         <div *ngIf="team.locCity && team.locState" class="location-container" fxLayoutAlign="start center"
@@ -88,7 +88,8 @@
       </div>
     </mat-card-title>
     <mat-card-content>
-      <app-team-player-members-list [captainID]="team.captainId" [list]="team.members"></app-team-player-members-list>
+      <app-team-player-members-list [captainID]="team?.captain?.id || null"
+        [list]="team.members"></app-team-player-members-list>
     </mat-card-content>
   </mat-card>
 </section>

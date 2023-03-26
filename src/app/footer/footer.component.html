@@ -1,67 +1,28 @@
-<div fxLayout="column" class="container upper_space" fxLayout.gt-sm="row" fxLayoutGap.lt-md="20px"
-  fxLayoutAlign.gt-sm="space-between start">
-  <!-- product links -->
-  <ul fxFlexOrder="1">
-    <h4 matSubheader>Products</h4>
-    <a *ngFor="let link of productLinks" [routerLink]="[link.route]" fxLayoutAlign="start center">
-      <span class="mat-body-1">{{ link.name | titlecase }}</span>
-    </a>
-    <a [href]="adminURL" target="_blank" fxLayoutAlign="start center">
-      <span class="mat-body-1">{{ 'admin' | titlecase }}</span>
-    </a>
-  </ul>
-  <!-- product links -->
-
-  <!-- about links -->
-  <ul fxFlexOrder="2">
-    <h4 matSubheader>About</h4>
-    <a *ngFor="let link of aboutLinks" [routerLink]="[link.route]" fxLayoutAlign="start center">
-      <span class="mat-body-1">{{ link.name | titlecase }}</span>
-    </a>
-  </ul>
-  <!-- about links -->
-
+<div fxLayout="column" class="container upper_space" fxLayoutGap="20px">
   <!-- follow links -->
-  <ul fxFlexOrder="3">
-    <h4 matSubheader>Follow Us</h4>
-    <a href="{{fb}}freekyk" target="_blank" fxLayoutAlign="start center">
-      <div class="iconSize">
+  <div class="follow-link" fxLayoutGap="12px" fxLayout="column">
+    <span class="dash-h5 center">Follow Us!</span>
+    <div class="social-list" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
+      <a href="{{fb}}freekyk" target="_blank" fxLayoutAlign="start center">
         <img src="assets/svgs/facebook.svg" alt="facebook" appFallbackImg />
-      </div>
-      <span class="mat-body-1"> Facebook </span>
-    </a>
-    <a href="{{ig}}freekyk_india" target="_blank" fxLayoutAlign="start center">
-      <div class="iconSize">
+      </a>
+      <a href="{{ig}}freekyk_india" target="_blank" fxLayoutAlign="start center">
         <img src="assets/svgs/instagram.svg" alt="instagram" appFallbackImg />
-      </div>
-      <span class="mat-body-1"> Instagram </span>
-    </a>
-    <!-- <a href="{{tw}}freekyk_india" fxLayoutAlign="start center">
-      <div class="iconSize">
-        <img src="assets/svgs/twitter.svg" alt="twitter" appFallbackImg />
-      </div>
-      <span class="mat-body-1"> Twitter </span>
-    </a> -->
-    <a href="{{yt}}UCTPWvfgbyHa8K-XX2Nw1X3w" target="_blank" fxLayoutAlign="start center">
-      <div class="iconSize">
+      </a>
+      <a href="{{yt}}UCTPWvfgbyHa8K-XX2Nw1X3w" target="_blank" fxLayoutAlign="start center">
         <img src="assets/svgs/youtube.svg" alt="youtube" appFallbackImg />
-      </div>
-      <span class="mat-body-1"> Youtube </span>
-    </a>
-    <a href="{{linkedIn}}freekyk-india" target="_blank" fxLayoutAlign="start center">
-      <div class="iconSize">
+      </a>
+      <a href="{{linkedIn}}freekyk-india" target="_blank" fxLayoutAlign="start center">
         <img src="assets/svgs/linkedin.svg" alt="linkedin" appFallbackImg />
-      </div>
-      <span class="mat-body-1"> LinkedIn </span>
-    </a>
-  </ul>
+      </a>
+    </div>
+  </div>
   <!-- follow links -->
 
   <mat-divider fxHide.gt-sm="true"></mat-divider>
 
   <!-- freekyk intro -->
-  <div fxFlexOrder.gt-sm="0" fxFlexOrder="4" fxFlex.gt-sm="25%" fxLayout="column" fxLayoutAlign="space-evenly start"
-    fxLayoutGap="20px" class="gap-bottom">
+  <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutGap="20px" class="gap-bottom">
     <a class="logo" [routerLink]="['/']" fxLayoutAlign="start center">
       <img src="assets/images/brand_logo_2.png" alt="Freekyk Logo" appFallbackImg />
     </a>
@@ -69,8 +30,8 @@
       Freekyk is an online platform which facilitates end-to-end football for
       all passionate football lovers without any interruptions.
     </p>
-    <p class="mat-caption">Copyright © 2023. Freekyk. All rights reserved.</p>
     <div fxLayoutGap="20px">
+      <p class="mat-body-1">Copyright © 2023. Freekyk.<br> All rights reserved.</p>
       <a [routerLink]="['/terms']" class="mat-caption"> Terms & Conditions </a>
       <a [routerLink]="['/privacypolicy']" class="mat-caption">
         Privacy Policy

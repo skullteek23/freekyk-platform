@@ -1,22 +1,20 @@
-a {
-  margin-bottom: 16px;
+.social-list {
   width: 100%;
-}
-a div {
-  margin-right: 16px;
-}
-.upper_space {
-  min-height: 320px;
-  margin-top: 32px;
-  margin-bottom: 32px;
-}
-@media only screen and (max-width: 959px) {
-  .gap-bottom {
-    margin-bottom: 32px;
+
+  a {
+    img {
+      max-height: 32px;
+      max-width: 32px;
+      height: 32px;
+      width: 32px;
+    }
   }
 }
-.mat-subheading-1 {
-  margin: 0 !important;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
+
+.follow-link {
+  margin-top: 12px;
+}
+
+.gap-bottom {
+  margin-bottom: 32px;
 }

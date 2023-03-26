@@ -1,0 +1,12 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+</div>
+<section class="pl-fixture-wrapper">
+  <app-fixtures-results-tabs [matches]="matches"></app-fixtures-results-tabs>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

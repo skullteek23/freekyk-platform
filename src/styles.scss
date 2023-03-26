@@ -1010,3 +1010,18 @@ section.features-section {
     vertical-align: middle;
   }
 }
+
+.mat-badge-small .mat-badge-content {
+  width: 28px;
+  border-radius: var(--dashCardBorder);
+}
+
+.router-link-active {
+  .mat-caption {
+    opacity: 1 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: var(--primaryColor) !important;
+  }
+
+}

@@ -13,10 +13,10 @@
   <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%"
     *ngIf="joinShortcutData || teamSettingsShortcutData">
 
-    <app-action-shortcut-button *ngIf="joinShortcutData" [data]="joinShortcutData"
+    <!-- <app-action-shortcut-button *ngIf="joinShortcutData" [data]="joinShortcutData"
       (actionTrigger)="openJoinTeam()"></app-action-shortcut-button>
     <app-action-shortcut-button *ngIf="teamSettingsShortcutData" [data]="teamSettingsShortcutData"
-      (actionTrigger)="openTeamSettings()"></app-action-shortcut-button>
+      (actionTrigger)="openTeamSettings()"></app-action-shortcut-button> -->
   </div>
 
   <app-team-members></app-team-members>

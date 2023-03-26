@@ -44,6 +44,28 @@ export interface TeamMoreInfo {
   tdesc?: string;
   tSocials?: SocialMediaLinks | null;
 }
+export interface ITeam {
+  name: string;
+  imgpath: string;
+  imgpath_logo: string;
+  captain: {
+    id: string,
+    name: string
+  };
+  locState: string;
+  locCity: string;
+  tdateCreated: number;
+  tageCat: AGE_CATEGORY;
+  id?: string;
+}
+export interface ITeamDescription {
+  slogan?: string;
+  description?: string;
+}
+
+export interface ITeamMembers {
+  members: string[];
+}
 
 export interface TeamStats {
   fkc_played: number;

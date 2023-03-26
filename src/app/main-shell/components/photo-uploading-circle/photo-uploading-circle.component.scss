@@ -1,0 +1,25 @@
+.photo-container {
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+
+  span {
+    color: white;
+  }
+}

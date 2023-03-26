@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-overlay-buttons',
@@ -16,7 +16,7 @@ export class OverlayButtonsComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {

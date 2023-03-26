@@ -8,7 +8,7 @@ import { TeamService } from 'src/app/services/team.service';
 import { IStatisticsCard } from './my-stats-card/my-stats-card.component';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { DashboardService } from '../dashboard.service';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { PlayerAllInfo } from '@shared/utils/pipe-functions';
 
 @Component({
@@ -32,7 +32,7 @@ export class DashHomeComponent implements OnInit {
     private teamService: TeamService,
     private dialog: MatDialog,
     private router: Router,
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private dashboardService: DashboardService
   ) { }
 
@@ -65,16 +65,16 @@ export class DashHomeComponent implements OnInit {
   }
 
   createShortcutButtonData() {
-    this.ticketShortcutData = {
-      actionLabel: 'Need help? Raise a ticket',
-      icon: 'help'
-    }
-    this.profileShortcutData = this.dashboardService.getProfileProgress(this.player);
-    this.teamShortcutData = {
-      actionLabel: this.hasTeam ? 'My Team' : 'Create or Join a Team',
-      icon: 'groups',
-      secondaryIcon: this.hasTeam ? 'check_circle' : 'add_circle'
-    };
+    // this.ticketShortcutData = {
+    //   actionLabel: 'Need help? Raise a ticket',
+    //   icon: 'help'
+    // }
+    // this.profileShortcutData = this.dashboardService.getProfileProgress(this.player);
+    // this.teamShortcutData = {
+    //   actionLabel: this.hasTeam ? 'My Team' : 'Create or Join a Team',
+    //   icon: 'groups',
+    //   secondaryIcon: this.hasTeam ? 'check_circle' : 'add_circle'
+    // };
   }
 
   getMyMatches() {

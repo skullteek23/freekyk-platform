@@ -5,7 +5,7 @@ import { EnlargeService } from 'src/app/services/enlarge.service';
 import { Formatters } from '@shared/interfaces/team.model';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { TeamAllInfo } from '@shared/utils/pipe-functions';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 import { NotificationsService } from '@app/services/notifications.service';
@@ -37,7 +37,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private enlargeService: EnlargeService,
     private socialShareService: SocialShareService,
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private notificationService: NotificationsService,
     private teamService: TeamService
   ) { }
@@ -93,9 +93,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response) => {
             if (response) {
-              this.isTeamMember = response.team?.id === this.team.id;
-              this.hasTeam = response?.team !== null;
-              this.isUserCaptain = response?.team ? response?.team?.capId === uid : false;
+              this.isTeamMember = response.teamID === this.team.id;
+              this.hasTeam = response?.teamID !== null;
+              this.isUserCaptain = response?.isCaptain;
             } else {
               this.isTeamMember = false;
             }
@@ -154,9 +154,9 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
       const notification: NotificationBasic = {
         type: NotificationTypes.challengeTeam,
         senderID: this.userID,
-        receiverID: this.team.captainId,
+        receiverID: this.team.captain.id,
         date: new Date().getTime(),
-        receiverName: this.team.captainName,
+        receiverName: this.team.captain.name,
         read: 0,
         expire: 0,
         senderName: this.userTeamID,
@@ -175,7 +175,7 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
   }
 
   get isSelectedTeamCaptain(): boolean {
-    return this.userID && this.userID === this.team.captainId;
+    return this.userID && this.userID === this.team.captain.id;
   }
 
   get isSelectedTeamMember(): boolean {

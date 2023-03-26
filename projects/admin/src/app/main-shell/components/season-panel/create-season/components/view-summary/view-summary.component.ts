@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
+import { Formatters } from '@shared/interfaces/match.model';
 import { ISeasonSummaryData, ISummaryDataSource, ISelectMatchType, ISelectTeam, ISelectGrounds, ISeasonFixtures, ISeasonDetails } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 
@@ -21,6 +22,7 @@ export class ViewSummaryComponent implements OnInit {
   cols = ['label', 'value'];
   summaryData: Partial<ISeasonSummaryData>;
   dataSource = new MatTableDataSource<ISummaryDataSource>([]);
+  formatter: any;
 
   constructor(
     private dialog: MatDialog,
@@ -31,6 +33,7 @@ export class ViewSummaryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.formatter = Formatters;
     this.initSummary();
     this.setDataSource();
   }
@@ -47,14 +50,14 @@ export class ViewSummaryComponent implements OnInit {
       data.startDate = this.getDate(seasonFixturesFormData?.fixtures[0]?.date, 'fullDate');
       data.endDate = this.getDate(seasonFixturesFormData?.fixtures[seasonFixturesFormData?.fixtures?.length - 1]?.date, 'fullDate');
       data.grounds = selectGroundFormData.map(ground => ground.name).join(", ");
-      data.location = selectMatchTypeFormData.location.city + ", " + selectMatchTypeFormData.location.state + ", " + selectMatchTypeFormData.location.country;
-      data.discount = seasonDetailsFormData.discount;
-      data.containingTournaments = selectMatchTypeFormData.containingTournaments.join(", ");
+      data.location = selectMatchTypeFormData.location.city + ", " + selectMatchTypeFormData.location.state + ", India";
+      // data.discount = seasonDetailsFormData.discount;
+      data.type = selectMatchTypeFormData.type;
 
       let finalFees = seasonDetailsFormData.fees.toString();
-      if (seasonDetailsFormData.discount > 0) {
-        finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount).toString();
-      }
+      // if (seasonDetailsFormData.discount > 0) {
+      //   finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount).toString();
+      // }
       data.fees = this.currencyPipe.transform(finalFees, 'INR');
 
       if (selectTeamFormData) {
@@ -82,9 +85,9 @@ export class ViewSummaryComponent implements OnInit {
       data.push({ label: 'Location', value: this.summaryData.location });
       data.push({ label: 'Season Starts on', value: this.summaryData.startDate });
       data.push({ label: 'Allowed Participants', value: this.summaryData.participants });
-      data.push({ label: 'Discount (%)', value: this.summaryData.discount });
-      data.push({ label: 'Fees per Team (After discount)', value: this.summaryData.fees });
-      data.push({ label: 'Tournaments', value: this.summaryData.containingTournaments });
+      // data.push({ label: 'Discount (%)', value: this.summaryData.discount });
+      data.push({ label: 'Entry Fees (per team)', value: this.summaryData.fees });
+      data.push({ label: 'Tournament Type', value: this.formatter.formatTournamentType(this.summaryData.type) });
       data.push({ label: 'Stadiums', value: this.summaryData.grounds });
       data.push({ label: 'Season Ends on', value: this.summaryData.endDate });
       this.dataSource = new MatTableDataSource<ISummaryDataSource>(data);

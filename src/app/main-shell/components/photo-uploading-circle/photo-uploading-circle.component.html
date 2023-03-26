@@ -1,0 +1,11 @@
+<div class="cont" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="16px"
+  (click)="photoInput.click(); $event.stopPropagation()">
+  <div class="photo-container" fxLayout fxLayoutAlign="center center">
+    <img [src]="url" class="preview" alt="Choose Team logo" id="preview-image" #preview />
+    <input hidden type="file" name="photoInput" [accept]="types" #photoInput (change)="onBrowsePhoto($event, preview)"
+      id="file" />
+    <div class="overlay" fxLayoutAlign="center center">
+      <span class="material-icons-round">photo_camera</span>
+    </div>
+  </div>
+</div>

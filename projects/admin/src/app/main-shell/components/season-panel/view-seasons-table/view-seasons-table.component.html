@@ -17,14 +17,17 @@
       <th mat-header-cell *matHeaderCellDef>Season</th>
       <td class="row" mat-cell *matCellDef="let data">
         <div fxLayoutGap="8px" fxLayoutAlign="start center">
-          <span class="mat-body-2">
-            {{ data.name }}
-          </span>
           <span *ngIf="isSeasonLive(data.status)" matTooltip="Live" class="material-icons-round red">sensors</span>
           <span *ngIf="isSeasonFinished(data.status)" matTooltip="Finished"
             class="material-icons-round greenLight">assignment_turned_in</span>
           <span *ngIf="isSeasonCancelled(data.status)" matTooltip="Cancelled"
             class="material-icons-round red">event_busy</span>
+          <span class="mat-body-2">
+            {{ data.name }}
+          </span>
+          <mat-chip-list>
+            <mat-chip>{{formatter.formatTournamentType(data.type)}}</mat-chip>
+          </mat-chip-list>
         </div>
       </td>
     </ng-container>
@@ -32,7 +35,7 @@
       <th mat-header-cell *matHeaderCellDef>Start Date</th>
       <td class="row" mat-cell *matCellDef="let data">
         <span class="mat-body-2">
-          {{ data?.start_date | date: 'fullDate' }}
+          {{ data?.startDate | date: 'fullDate' }}
         </span>
       </td>
     </ng-container>

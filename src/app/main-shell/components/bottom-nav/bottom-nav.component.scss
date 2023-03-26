@@ -1,0 +1,28 @@
+aside {
+  position: sticky;
+  bottom: 0px;
+  margin: auto;
+  width: 100%;
+  z-index: 200;
+}
+
+.mat-toolbar {
+  background-color: white;
+
+}
+
+.bottom-nav a {
+  color: black;
+  opacity: 0.5;
+  margin: 0 !important;
+}
+
+.router-link-active {
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  color: var(--primaryColor) !important;
+}
+
+mat-divider {
+  border: 0.5px solid var(--grey5);
+}

@@ -3,10 +3,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
+import { ISeason, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAdminService } from '../../../services/season-admin.service';
 import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
+import { Formatters } from '@shared/interfaces/match.model';
 
 @Component({
   selector: 'app-view-seasons-table',
@@ -16,8 +17,9 @@ import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
   cols = ['sno', 'season', 'startDate', 'status'];
-  seasons: SeasonBasicInfo[] = [];
+  seasons: ISeason[] = [];
   subscriptions = new Subscription();
+  formatter: any;
 
   constructor(
     private ngFire: AngularFirestore,
@@ -26,6 +28,7 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.formatter = Formatters;
     this.getSeasons();
   }
 
@@ -47,8 +50,8 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
           }
           this.subscriptions.add(this.ngFire.collection('seasons', queryFn).snapshotChanges()
             .pipe(
-              map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as SeasonBasicInfo), } as SeasonBasicInfo))),
-              map(resp => resp.sort(ArraySorting.sortObjectByKey('lastUpdated', 'desc')))
+              map((docs) => docs.map((doc) => ({ id: doc.payload.doc.id, ...(doc.payload.doc.data() as ISeason), } as ISeason))),
+              map(resp => resp.sort(ArraySorting.sortObjectByKey('name', 'desc')))
             )
             .subscribe((resp) => (this.seasons = resp)));
         }
@@ -57,7 +60,7 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   }
 
   createSeason() {
-    this.router.navigate(['/seasons/create',]);
+    this.router.navigate(['/seasons/create']);
   }
 
   isSeasonLive(status: statusType): boolean {

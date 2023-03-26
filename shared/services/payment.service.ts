@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { OrderTypes } from '@shared/interfaces/order.model';
+import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { Router } from '@angular/router';
+import { FunctionsApiService } from './functions-api.service';
+import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 declare let Razorpay: any;
 
 export enum LoadingStatus {
@@ -59,6 +63,9 @@ export class PaymentService {
 
   constructor(
     private ngFunc: AngularFireFunctions,
+    private functionsApiService: FunctionsApiService,
+
+    private router: Router
   ) { }
 
   async generateOrder(amount: number, minAmount: number): Promise<any> {
@@ -95,12 +102,12 @@ export class PaymentService {
     return verifyPaymentFunc({ ...response });
   }
 
-  participate(season: SeasonBasicInfo, participantId: string) {
+  participate(season: Partial<SeasonAllInfo>, participantId: string) {
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SEASON_PARTICIPATION);
     return participateFunc({ season, participantId });
   }
 
-  saveOrder(season: SeasonBasicInfo, orderType: OrderTypes, response: any) {
+  saveOrder(season: Partial<SeasonAllInfo>, orderType: OrderTypes, response: any) {
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SAVE_RAZORPAY_ORDER);
     return participateFunc({ seasonID: season.id, seasonName: season.name, orderType, response });
   }
@@ -116,4 +123,28 @@ export class PaymentService {
     }
     return (fees - ((discount / 100) * fees));
   }
+
+  async getOrder(season: Partial<SeasonAllInfo>, uid: string): Promise<Partial<RazorPayOrder>> {
+    const data = { uid, season };
+    return this.functionsApiService.generateOrder(data);
+  }
+
+
+  // handlePartialPaymentSuccess(response) {
+  //   this.verifyPayment(response)
+  //     .subscribe({
+  //       next: () => {
+  //         this.updateOrder(response).toPromise()
+  //           .then(() => {
+  //             this.snackBarService.displayCustomMsg('Your payment is completed!');
+  //           })
+  //           .catch((error) => {
+  //             this.snackBarService.displayError(error.message);
+  //           })
+  //       },
+  //       error: (error) => {
+  //         this.snackBarService.displayError(error?.message);
+  //       }
+  //     });
+  // }
 }

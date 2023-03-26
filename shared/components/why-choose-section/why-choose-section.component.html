@@ -1,17 +1,16 @@
-<div class="container primary-bg whiteText compactSpace" *ngIf="content" fxLayout="column" fxLayoutGap="24px">
-  <div fxLayout="column" fxLayoutGap="8px">
-    <h4 class="mat-subheading-1 left">
+<section class="container primary-bg whiteText compactSpace" *ngIf="content" fxLayout="column" fxLayoutGap="12px">
+  <div fxLayout="column">
+    <span class="dash-h5 ">
       {{ content.heading }}
-      <!-- {{ "Why choose Freekyk " + serviceName + "?" }} -->
-    </h4>
-    <span class="mat-body-1 left">
+    </span>
+    <span class="mat-caption ">
       {{ content.description }}
     </span>
   </div>
   <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px" *ngIf="content.listPoints">
     <li fxFlex="100%" fxFlex.gt-sm="50%" fxLayoutGap="16px" *ngFor="let point of content.listPoints; let i = index"
-      fxLayoutAlign="start center">
-      <div fxFlex="40px" class="step_number mat-body-1" fxLayoutAlign="center center">
+      fxLayoutAlign="start start">
+      <div fxFlex="40px" class="step_number mat-body-2" fxLayoutAlign="center center">
         {{ i + 1 }}
       </div>
       <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap.lt-md="8px">
@@ -26,4 +25,4 @@
       </div>
     </li>
   </ul>
-</div>
+</section>

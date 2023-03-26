@@ -4,7 +4,7 @@ export const CLOUD_FUNCTIONS = {
   CREATE_TEAM: 'createTeam',
   JOIN_TEAM: 'joinTeam',
   DELETE_TEAM: 'deleteTeam',
-  GENERATE_RAZORPAY_ORDER: 'generateRazorpayOrder',
+  GENERATE_RAZORPAY_ORDER: 'getValidOrder',
   SAVE_RAZORPAY_ORDER: 'saveOrder',
   UPDATE_RAZORPAY_ORDER: 'updateOrder',
   VERIFY_PAYMENT: 'verifyPayment',

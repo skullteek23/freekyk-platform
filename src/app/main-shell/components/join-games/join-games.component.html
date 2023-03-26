@@ -1,0 +1,57 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+</div>
+<mat-card class="feature-card" *ngIf="noGame">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/be_part_of_seasons.svg"
+    alt="Freekyk Play Seasons Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Seasons</span>
+      <p class="mat-body-1 center description">
+        Pre-defined tournament formats consisting of Premier
+        Leagues, Knockouts & community plays good enough to give you the perfect football experience.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<section>
+  <div>
+    <span class="dash-h5 heading">Instant Matches</span>
+    <ul class="instant-matches-list">
+      <li *ngFor="let item of instantMatchesList">
+        <app-game [game]="item"></app-game>
+      </li>
+    </ul>
+    <app-no-items-message items="instant matches" *ngIf="!instantMatchesList.length"></app-no-items-message>
+  </div>
+</section>
+<section>
+  <div>
+    <span class="dash-h5">Leagues (for captains)</span>
+    <ul class="instant-matches-list">
+      <li *ngFor="let item of leaguesList">
+        <app-game [game]="item"></app-game>
+      </li>
+    </ul>
+    <app-no-items-message items="league matches" *ngIf="!leaguesList.length"></app-no-items-message>
+  </div>
+</section>
+<section>
+  <div>
+    <span class="dash-h5">Knockouts (for captains)</span>
+    <ul class="instant-matches-list">
+      <li *ngFor="let item of knockoutGamesList">
+        <app-game [game]="item"></app-game>
+      </li>
+    </ul>
+    <app-no-items-message items="knockout matches" *ngIf="!knockoutGamesList.length"></app-no-items-message>
+  </div>
+</section>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

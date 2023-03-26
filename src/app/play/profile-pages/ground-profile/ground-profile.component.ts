@@ -14,7 +14,7 @@ import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GroundAllInfo } from '@shared/utils/pipe-functions';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 
 @Component({
@@ -48,7 +48,7 @@ export class GroundProfileComponent implements OnInit, OnDestroy {
     private router: Router,
     private socialShareService: SocialShareService,
     private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {

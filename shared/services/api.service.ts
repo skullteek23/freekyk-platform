@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ValidationErrors } from '@angular/forms';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
-import { MatchFixture, MatchStatus, ParseMatchProperties } from '@shared/interfaces/match.model';
+import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { TeamBasicInfo } from '@shared/interfaces/team.model';
-import { IPlayer, PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { ITeam } from '@shared/interfaces/team.model';
+import { IPlayer } from '@shared/interfaces/user.model';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class ApiGetService {
 
   constructor(
     private angularFirestore: AngularFirestore
   ) { }
 
-  getPlayers(limit?: number): Observable<PlayerBasicInfo[]> {
+  getPlayers(limit?: number): Observable<IPlayer[]> {
     let query;
     if (limit && limit > 0) {
       query = (query) => query.limit(limit);
@@ -29,10 +30,10 @@ export class ApiService {
       .pipe(manipulatePlayersData);
   }
 
-  getPlayer(docID: string): Observable<PlayerBasicInfo> {
+  getPlayer(docID: string): Observable<IPlayer> {
     if (docID) {
       return this.angularFirestore.collection('players').doc(docID).get()
-        .pipe(manipulatePlayerData);
+        .pipe(manipulatePlayerDataV2);
     }
   }
 
@@ -108,7 +109,7 @@ export class ApiService {
       .pipe(manipulateFixtureData)
   }
 
-  getTeams(limit?: number): Observable<TeamBasicInfo[]> {
+  getTeams(limit?: number): Observable<ITeam[]> {
     let query;
     if (limit && limit > 0) {
       query = (query) => query.limit(limit);
@@ -247,5 +248,56 @@ export class ApiService {
       return this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', userID)).get()
         .pipe(manipulateOrdersData)
     }
+  }
+
+  getCommunityPlays(limit?: number) {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FCP').limit(limit);
+    } else {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FCP')
+    }
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(manipulateSeasonDataV2)
+  }
+
+  getLeagues(limit?: number) {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FPL').limit(limit);
+    } else {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FPL')
+    }
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(manipulateSeasonDataV2)
+  }
+
+  getKnockouts(limit?: number) {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FKC').limit(limit);
+    } else {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FKC')
+    }
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(manipulateSeasonDataV2)
+  }
+
+  checkDuplicateTeamName(comparator: string): Observable<ValidationErrors | null> {
+    return this.angularFirestore.collection('teams', (query) => query.where('name', '==', comparator).limit(1)).get()
+      .pipe(parseTeamDuplicity);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiSetService {
+  constructor(
+    private angularFirestore: AngularFirestore
+  ) { }
+
+  updateTeamInfo(update: Partial<ITeam>, docID: string) {
+    return this.angularFirestore.collection('teams').doc(docID).update({ ...update })
   }
 }

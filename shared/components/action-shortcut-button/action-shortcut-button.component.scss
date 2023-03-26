@@ -1,18 +1,36 @@
-.secondaryButton {
-  width: 100% !important;
-}
+.shortcut-button-shared {
+  margin-bottom: 12px;
 
-.icon {
-  height: 26px;
-  width: 26px;
-  max-height: 26px;
-  max-width: 26px;
-  overflow: hidden;
-  border-radius: 50%;
-}
+  .action-button {
+    border: 50%;
+    height: 48px;
+    width: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    border: 1px solid var(--grey1);
+  }
 
-.avatar {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
+  .text-container {
+    width: 70px;
+    min-width: 70px;
+    height: 40px;
+
+    @media screen and (max-width: 359px) {
+      width: 100%;
+      min-width: 40px;
+    }
+
+    span {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  .avatar {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
 }

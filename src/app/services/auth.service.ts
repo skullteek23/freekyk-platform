@@ -68,6 +68,11 @@ export class AuthService {
     console.log('invalid details');
   }
 
+  saveUserCred(user: authUser) {
+    localStorage.setItem('uid', user.user.uid);
+    localStorage.setItem('name', user.user.displayName);
+  }
+
   resetCaptcha() {
     if (reCaptchaVerifier) {
       reCaptchaVerifier.render().then(function (widgetId) {

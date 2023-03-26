@@ -4,12 +4,7 @@
 <main [fxHide]="menuOpen">
   <router-outlet></router-outlet>
 </main>
-<aside [fxHide]="menuOpen || dashOpen">
-  <app-action-strip [compact]="false"></app-action-strip>
-</aside>
+<app-bottom-nav [fxHide]="menuOpen" [links]="links"></app-bottom-nav>
 <footer [fxHide]="menuOpen || dashOpen">
   <app-footer></app-footer>
 </footer>
-<app-feedback-button fxShow.lt-md="false"></app-feedback-button>
-<app-loading *ngIf="isLoaderShown"></app-loading>
-<app-overlay-buttons *ngIf="showFloatingButton && !menuOpen"></app-overlay-buttons>

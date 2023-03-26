@@ -1,6 +1,7 @@
 export interface IPlayer {
   name: string;
   teamID: string;
+  isCaptain: boolean;
   imgpath: string;
   locCity: string;
   locState: string;

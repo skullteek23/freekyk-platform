@@ -27,6 +27,29 @@ export interface SeasonBasicInfo {
   isFreeSeason?: boolean;
   isAmountDue?: number;
 }
+
+export interface ISeason {
+  name: string;
+  city: string;
+  state: string;
+  fees: number;
+  type: TournamentTypes;
+  startDate: number;
+  participatingTeams: number;
+  status: statusType;
+  createdBy: string;
+  lastRegistrationDate: number;
+  ageCategory: AGE_CATEGORY;
+  leftOverMatchCount: number;
+  id?: string;
+  imgpath?: string;
+}
+
+export interface ISeasonDescription {
+  description: string;
+  rules: string;
+  allowedParticipants?: string[];
+}
 export interface SeasonAbout {
   description: string;
   rules: string;
@@ -63,12 +86,11 @@ export interface ISelectMatchType {
   package: MATCH_TYPES_PACKAGES;
   startDate: string;
   location: {
-    country: string;
     state: string;
     city: string;
   }
   participatingTeamsCount: number;
-  containingTournaments: TournamentTypes[]
+  type: TournamentTypes
 }
 
 export interface ISeasonDetails {
@@ -76,7 +98,7 @@ export interface ISeasonDetails {
   description: string;
   rules: string;
   fees: number;
-  discount: number;
+  // discount: number;
   ageCategory: AGE_CATEGORY;
   lastRegistrationDate: string
 }
@@ -105,9 +127,9 @@ export interface ISeasonSummaryData {
   grounds: string;
   location: string;
   fees: string;
-  discount: number;
+  // discount: number;
   participants: string;
-  containingTournaments: string;
+  type: string;
 }
 
 export interface ISummaryDataSource {

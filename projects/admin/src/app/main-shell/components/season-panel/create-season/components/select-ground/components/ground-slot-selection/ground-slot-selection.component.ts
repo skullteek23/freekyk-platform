@@ -120,7 +120,7 @@ export class GroundSlotSelectionComponent implements OnInit, OnDestroy {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
     if (selectMatchTypeFormData && Object.keys(selectMatchTypeFormData).length) {
       this.startDateTimestamp = new Date(selectMatchTypeFormData.startDate).getTime();
-      this.maxLimit = this.seasonAdminService.getTotalMatches(selectMatchTypeFormData.containingTournaments, selectMatchTypeFormData.participatingTeamsCount);
+      this.maxLimit = this.seasonAdminService.getTotalMatches(selectMatchTypeFormData.type, selectMatchTypeFormData.participatingTeamsCount);
     }
     const startDate = new Date(this.startDateTimestamp);
     const endDate = new Date(this.startDateTimestamp);

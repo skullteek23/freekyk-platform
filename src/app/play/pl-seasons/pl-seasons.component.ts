@@ -9,7 +9,7 @@ import { PlayConstants } from '../play.constants';
 import { SocialShareService } from '@app/services/social-share.service';
 import { FilterData } from '@shared/interfaces/others.model';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { manipulateSeasonData } from '@shared/utils/pipe-functions';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
@@ -33,7 +33,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
   columns: number;
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private queryService: QueryService,
     private socialShareService: SocialShareService,
     private router: Router,

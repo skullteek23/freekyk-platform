@@ -38,13 +38,13 @@ export class GenerateFixturesComponent implements OnInit {
 
     if (selectMatchTypeFormData && selectGroundFormData && seasonDetailsFormData) {
       options.grounds = selectGroundFormData;
-      options.fcpMatches = selectMatchTypeFormData.containingTournaments.includes('FCP')
+      options.fcpMatches = selectMatchTypeFormData.type === 'FCP'
         ? this.seasonAdminService.calculateTotalCPMatches(selectMatchTypeFormData.participatingTeamsCount)
         : 0;
-      options.fkcMatches = selectMatchTypeFormData.containingTournaments.includes('FKC')
+      options.fkcMatches = selectMatchTypeFormData.type === 'FKC'
         ? this.seasonAdminService.calculateTotalKnockoutMatches(selectMatchTypeFormData.participatingTeamsCount)
         : 0;
-      options.fplMatches = selectMatchTypeFormData.containingTournaments.includes('FPL')
+      options.fplMatches = selectMatchTypeFormData.type === 'FPL'
         ? this.seasonAdminService.calculateTotalLeagueMatches(selectMatchTypeFormData.participatingTeamsCount)
         : 0;
       options.season = seasonDetailsFormData.name;

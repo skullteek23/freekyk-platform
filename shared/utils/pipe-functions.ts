@@ -3,16 +3,18 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
-import { ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
-import { TeamBasicInfo, TeamMedia, TeamMembers, TeamMoreInfo, TeamStats } from "@shared/interfaces/team.model";
+import { ISeason, ISeasonDescription, ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
+import { ITeam, ITeamDescription, TeamBasicInfo, TeamMedia, TeamMembers, TeamStats } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
 import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
-import { LeagueTableModel, StatsTeam } from "@shared/interfaces/others.model";
+import { LeagueTableModel } from "@shared/interfaces/others.model";
 import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
+import { ValidationErrors } from "@angular/forms";
 
-export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
-export interface TeamAllInfo extends TeamBasicInfo, TeamMoreInfo, TeamMembers, TeamMedia, TeamStats { };
+// export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
+export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
+export interface TeamAllInfo extends ITeam, ITeamDescription, TeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
 export interface PlayerAllInfo extends IPlayer, IPlayerMore, BasicStats { };
 
@@ -21,7 +23,7 @@ export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
 
 export function manipulatePlayersData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as PlayerBasicInfo), } as PlayerBasicInfo))),
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as IPlayer), } as IPlayer))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
@@ -61,13 +63,113 @@ export function manipulateSeasonData(source: Observable<ngFireDocQuery>): Observ
   );
 }
 
+export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
+  return source.pipe(
+    map(response => {
+      let seasonList: ISeason[] = [];
+      if (!response.empty) {
+        response.forEach(season => {
+          const docData = season.data() as ISeason;
+          const docID = season.id;
+          if (docData.status === 'PUBLISHED') {
+            seasonList.push({ id: docID, ...docData });
+          }
+        });
+      } else {
+        seasonList = [
+          {
+            name: 'WellClub A',
+            imgpath: null,
+            city: 'Ghaziabad',
+            state: 'Uttar Pradesh',
+            fees: 2500,
+            type: 'FCP',
+            startDate: new Date().getTime(),
+            participatingTeams: 4,
+            status: 'PUBLISHED',
+            createdBy: 'asjkgkj2g3kj52g3',
+            lastRegistrationDate: new Date().getTime() + 10000000,
+            ageCategory: 99,
+            leftOverMatchCount: 1
+          },
+          {
+            name: 'WellClub A',
+            imgpath: null,
+            city: 'Ghaziabad',
+            state: 'Uttar Pradesh',
+            fees: 2500,
+            type: 'FCP',
+            startDate: new Date().getTime(),
+            participatingTeams: 4,
+            status: 'PUBLISHED',
+            createdBy: 'asjkgkj2g3kj52g3',
+            lastRegistrationDate: new Date().getTime() + 10000000,
+            ageCategory: 99,
+            leftOverMatchCount: 1
+          },
+          {
+            name: 'WellClub A',
+            imgpath: null,
+            city: 'Ghaziabad',
+            state: 'Uttar Pradesh',
+            fees: 2500,
+            type: 'FCP',
+            startDate: new Date().getTime(),
+            participatingTeams: 4,
+            status: 'PUBLISHED',
+            createdBy: 'asjkgkj2g3kj52g3',
+            lastRegistrationDate: new Date().getTime() + 10000000,
+            ageCategory: 99,
+            leftOverMatchCount: 1
+
+          },
+          {
+            name: 'WellClub A',
+            imgpath: null,
+            city: 'Ghaziabad',
+            state: 'Uttar Pradesh',
+            fees: 2500,
+            type: 'FCP',
+            startDate: new Date().getTime(),
+            participatingTeams: 4,
+            status: 'PUBLISHED',
+            createdBy: 'asjkgkj2g3kj52g3',
+            lastRegistrationDate: new Date().getTime() + 10000000,
+            ageCategory: 99,
+            leftOverMatchCount: 1
+
+          },
+          {
+            name: 'WellClub A',
+            imgpath: null,
+            city: 'Ghaziabad',
+            state: 'Uttar Pradesh',
+            fees: 2500,
+            type: 'FCP',
+            startDate: new Date().getTime(),
+            participatingTeams: 4,
+            status: 'PUBLISHED',
+            createdBy: 'asjkgkj2g3kj52g3',
+            lastRegistrationDate: new Date().getTime() + 10000000,
+            ageCategory: 99,
+            leftOverMatchCount: 1
+
+          }
+        ];
+      }
+      return seasonList;
+    }),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+  );
+}
+
 export function manipulateSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<SeasonAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<SeasonAllInfo> = {};
       if (response?.length === 4) {
-        const data_1: SeasonBasicInfo = response[0].exists ? ({ id: response[0].id, ...response[0].data() as SeasonBasicInfo }) : null;
-        const data_2: SeasonAbout = response[1].exists ? ({ ...response[1].data() as SeasonAbout }) : null;
+        const data_1: ISeason = response[0].exists ? ({ id: response[0].id, ...response[0].data() as ISeason }) : null;
+        const data_2: ISeasonDescription = response[1].exists ? ({ ...response[1].data() as ISeasonDescription }) : null;
         const data_3: SeasonStats = response[2].exists ? ({ ...response[2].data() as SeasonStats }) : null;
         const data_4: SeasonMedia = response[3].exists ? ({ ...response[3].data() as SeasonMedia }) : null;
         if (data_1 || data_2 || data_3 || data_4) {
@@ -76,7 +178,6 @@ export function manipulateSeasonBulkData(source: Observable<[ngFireDoc, ngFireDo
             ...data_2,
             ...data_3,
             ...data_4,
-            discountedFees: getFeesAfterDiscount(data_1.feesPerTeam, data_1.discount)
           }
           return data;
         }
@@ -115,8 +216,8 @@ export function manipulateTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc,
     map(response => {
       let data: Partial<TeamAllInfo> = {};
       if (response?.length === 5) {
-        const data_1: TeamBasicInfo = response[0].exists ? ({ id: response[0].id, ...response[0].data() as TeamBasicInfo }) : null;
-        const data_2: TeamMoreInfo = response[1].exists ? ({ ...response[1].data() as TeamMoreInfo }) : null;
+        const data_1: ITeam = response[0].exists ? ({ id: response[0].id, ...response[0].data() as ITeam }) : null;
+        const data_2: ITeamDescription = response[1].exists ? ({ ...response[1].data() as ITeamDescription }) : null;
         const data_3: TeamStats = response[2].exists ? ({ ...response[2].data() as TeamStats }) : null;
         const data_4: TeamMembers = response[3].exists ? ({ ...response[3].data() as TeamMembers }) : null;
         const data_5: TeamMedia = response[4].exists ? ({ ...response[4].data() as TeamMedia }) : null;
@@ -193,8 +294,8 @@ export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, P
 
 export function manipulateTeamData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as TeamBasicInfo), } as TeamBasicInfo))),
-    map(resp => resp.sort(ArraySorting.sortObjectByKey('tname'))),
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ITeam), } as ITeam))),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
 
@@ -276,12 +377,20 @@ export function manipulateLeagueData(source: Observable<ngFireDoc>): Observable<
   );
 }
 
+export function parseTeamDuplicity(source: Observable<ngFireDocQuery>): Observable<ValidationErrors | null> {
+  return source.pipe(
+    map(resp => resp.empty ? null : { nameTaken: true })
+  )
+}
+
 export function manipulateKnockoutData(source: Observable<ngFireDocQuery>): Observable<IKnockoutData> {
   return source.pipe(
     manipulateMatchData,
     map((resp: MatchFixture[]) => createKnockoutData(resp)),
   );
 }
+
+
 
 function getFeesAfterDiscount(fees: number, discount: number): number {
   if (fees === 0) {

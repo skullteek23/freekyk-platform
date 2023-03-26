@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -20,15 +20,22 @@ export class SignupComponent implements OnInit {
   isInvalidOtp = false;
   otpConfirmation: confirmationResult = null;
   formInput = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6'];
+  callbackUrl: string = null;
 
   @ViewChildren('formRow') rows: any;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams.hasOwnProperty('callback')) {
+      this.callbackUrl = decodeURIComponent(queryParams.callback);
+    }
+    console.log(this.callbackUrl);
     this.initForm();
     window.scrollTo(0, 0);
   }
@@ -115,8 +122,12 @@ export class SignupComponent implements OnInit {
 
   postSignup(user: authUser) {
     this.isLoaderShown = false;
-    alert('signed in!');
-    this.router.navigate(['/dashboard/home'])
+    this.authService.saveUserCred(user);
+    if (this.callbackUrl) {
+      this.router.navigate([this.callbackUrl]);
+    } else {
+      this.router.navigate(['/'])
+    }
     // const name = this.name?.value.trim();
     // this.authService.createProfile(name, user.user.uid)
     //   .then(() => {

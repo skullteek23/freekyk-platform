@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { TeamAllInfo } from '@shared/utils/pipe-functions';
 import { Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class DashTeamManagComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor(
     private teamService: TeamService,
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private dashboardService: DashboardService
   ) { }
 
@@ -102,31 +102,31 @@ export class DashTeamManagComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   createShortcutData() {
-    if (!this.team?.id) {
-      this.joinShortcutData = {
-        actionLabel: 'Create or Join a Team',
-        icon: 'add_circle',
-      }
-      this.teamGalleryShortcutData = null;
-    } else {
-      this.joinShortcutData = null;
-      this.teamGalleryShortcutData = {
-        actionLabel: 'My Team Gallery',
-        icon: 'photo_library'
-      }
-    }
-    if (this.team?.captainId === this.getUID()) {
-      this.teamSettingsShortcutData = {
-        actionLabel: 'Team Settings',
-        icon: 'tune'
-      }
-    } else {
-      this.teamSettingsShortcutData = null
-    }
-    this.ticketShortcutData = {
-      actionLabel: 'Need help? Raise a ticket',
-      icon: 'help'
-    }
+    // if (!this.team?.id) {
+    //   this.joinShortcutData = {
+    //     actionLabel: 'Create or Join a Team',
+    //     icon: 'add_circle',
+    //   }
+    //   this.teamGalleryShortcutData = null;
+    // } else {
+    //   this.joinShortcutData = null;
+    //   this.teamGalleryShortcutData = {
+    //     actionLabel: 'My Team Gallery',
+    //     icon: 'photo_library'
+    //   }
+    // }
+    // if (this.team?.captainId === this.getUID()) {
+    //   this.teamSettingsShortcutData = {
+    //     actionLabel: 'Team Settings',
+    //     icon: 'tune'
+    //   }
+    // } else {
+    //   this.teamSettingsShortcutData = null
+    // }
+    // this.ticketShortcutData = {
+    //   actionLabel: 'Need help? Raise a ticket',
+    //   icon: 'help'
+    // }
   }
 
   createTeamStatistics() {

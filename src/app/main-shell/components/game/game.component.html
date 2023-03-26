@@ -1,0 +1,19 @@
+<mat-card class="dashboard-card mat-elevation-z8" *ngIf="game">
+  <mat-card-content>
+    <mat-card-title>
+      <span class="mat-body-2">
+        {{game.name}}
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="game.city && game.state">
+      <span class="mat-body-2">
+        {{game.city}}, {{game.state}}
+      </span>
+    </mat-card-subtitle>
+  </mat-card-content>
+  <mat-card-actions fxLayoutAlign="end center">
+    <button mat-raised-button color="primary" (click)="joinGame()">
+      Join
+    </button>
+  </mat-card-actions>
+</mat-card>
