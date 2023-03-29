@@ -22,7 +22,7 @@ export async function teamCreation(data: { name: string, captainID: string }, co
       throw new functions.https.HttpsError('failed-precondition', 'Incomplete profile');
     }
 
-    const captainAge = getAge(captainMoreInfo.born);
+    const captainAge = getAge(captainInfo.born);
 
     teamInfo = {
       name: teamName,
