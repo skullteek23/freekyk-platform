@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { Router } from '@angular/router';
 import { logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
+import { Observable } from 'rxjs';
+import { ApiGetService } from '@shared/services/api.service';
+import { map } from 'rxjs/operators';
 
 export type authUser = firebase.auth.UserCredential;
+export type authUserMain = authUser['user'];
 export type confirmationResult = firebase.auth.ConfirmationResult;
 export interface User {
   id: string;
@@ -24,19 +27,17 @@ var grecaptcha;
 
 export class AuthService {
 
+  private _user: authUserMain = null;
 
   constructor(
-    private router: Router,
     private snackbarService: SnackbarService,
     private ngAuth: AngularFireAuth,
-    private ngFunc: AngularFireFunctions
+    private ngFunc: AngularFireFunctions,
+    private apiService: ApiGetService
   ) {
-    // ngAuth.onAuthStateChanged((user) => {
-    //   if (user !== null) {
-    //     // localStorage.setItem('uid', user.uid);
-    //     // sessionStorage.setItem('name', user.displayName);
-    //   }
-    // });
+    ngAuth.onAuthStateChanged(user => {
+      this._user = user;
+    });
   }
 
   login(logData: logDetails): Promise<authUser> {
@@ -83,15 +84,32 @@ export class AuthService {
     }
   }
 
+  isLoggedIn(): Observable<authUserMain> {
+    return this.ngAuth.authState;
+  }
+
+  isEligible(docID: string): Observable<boolean> {
+    return this.apiService.getPlayerOnboardingStatus(docID);
+  }
+
   onLogout(): void {
     this.ngAuth.signOut()
       .then(() => {
         this.snackbarService.displayCustomMsg('Logged out!');
         localStorage.removeItem('uid');
+        this.resetUser();
         sessionStorage.clear();
         location.href = '/';
       })
       .catch((error) => this.handleAuthError(error.code));
+  }
+
+  resetUser() {
+    this._user = null;
+  }
+
+  getUser(): authUserMain {
+    return this._user;
   }
 
   storeUserInfo(data: User) {

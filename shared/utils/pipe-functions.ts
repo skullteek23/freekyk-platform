@@ -383,6 +383,10 @@ export function parseTeamDuplicity(source: Observable<ngFireDocQuery>): Observab
   )
 }
 
+export function parseOnboardingStatus(source: Observable<ngFireDoc>): Observable<boolean> {
+  return source.pipe(map(resp => resp.exists))
+}
+
 export function manipulateKnockoutData(source: Observable<ngFireDocQuery>): Observable<IKnockoutData> {
   return source.pipe(
     manipulateMatchData,

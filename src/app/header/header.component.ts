@@ -1,7 +1,7 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { AccountAvatarService } from '../services/account-avatar.service';
@@ -13,7 +13,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
@@ -23,7 +23,7 @@ import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-re
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   readonly desktopLinks = DESKTOP_LINKS;
 
@@ -33,11 +33,13 @@ export class HeaderComponent implements OnInit {
 
   isLoading = true;
   isLogged = false;
+  isOnboarding = false;
   mobileLinks = MOBILE_LINKS;
   seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
   profilePicture$: Observable<string | null>;
   notificationCount$: Observable<number | string>;
+  subscriptions = new Subscription();
 
   treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
   dataSource = new MatTreeNestedDataSource<ILink>();
@@ -64,6 +66,7 @@ export class HeaderComponent implements OnInit {
           map((resp) => (resp > 5 ? '5+' : resp)),
           share()
         );
+        this.mobileLinks = MOBILE_LINKS.slice();
         this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
         this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
       } else {
@@ -71,6 +74,15 @@ export class HeaderComponent implements OnInit {
       }
       this.isLoading = false;
     });
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.isOnboarding = event.url.includes('onboarding');
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   hasChild = (_: number, node: ILink) => !!node.subLinks && node.subLinks.length > 0;

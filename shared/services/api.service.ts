@@ -1,7 +1,10 @@
+import { AuthService } from '@admin/services/auth.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ValidationErrors } from '@angular/forms';
+import { authUserMain, User } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
+import { FirebaseUser } from '@shared/interfaces/admin.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
@@ -9,7 +12,7 @@ import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -287,17 +290,39 @@ export class ApiGetService {
     return this.angularFirestore.collection('teams', (query) => query.where('name', '==', comparator).limit(1)).get()
       .pipe(parseTeamDuplicity);
   }
+
+  getPlayerOnboardingStatus(docID: string): Observable<boolean> {
+    return this.angularFirestore.collection('players').doc(docID).get()
+      .pipe(parseOnboardingStatus);
+  }
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiSetService {
+export class ApiPostService {
   constructor(
-    private angularFirestore: AngularFirestore
+    private angularFirestore: AngularFirestore,
+    private authService: AuthService
   ) { }
 
-  updateTeamInfo(update: Partial<ITeam>, docID: string) {
+  updateTeamInfo(update: Partial<ITeam>, docID: string): Promise<any> {
     return this.angularFirestore.collection('teams').doc(docID).update({ ...update })
+  }
+
+  updateProfile(data: { displayName?: string, photoURL?: string }, user: authUserMain): Promise<any> {
+    return user.updateProfile(data);
+  }
+
+  addPlayer(data: Partial<IPlayer>, image: File): Promise<any> {
+    const user = this.authService.getUser();
+    if (!data || !user || !image) {
+      return;
+    }
+    const allPromises = [];
+    allPromises.push(this.angularFirestore.collection('players').doc(user.uid).set(data));
+    allPromises.push(this.updateProfile({ displayName: data.name, photoURL: data.imgpath }, user))
+
+    return Promise.all(allPromises);
   }
 }

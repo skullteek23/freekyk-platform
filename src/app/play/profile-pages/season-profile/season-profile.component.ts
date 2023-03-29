@@ -18,6 +18,7 @@ import { ICheckoutOptions, PaymentService } from '@shared/services/payment.servi
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { OrderTypes } from '@shared/interfaces/order.model';
+import { AuthService, authUserMain } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
@@ -47,7 +48,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private snackBarService: SnackbarService,
     private location: Location,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -80,7 +82,6 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
               this.getSeasonMatches();
               this.getSeasonStandings();
               this.getSeasonPartners();
-
               const qParams = this.route.snapshot.queryParams;
               if (window.location.href.endsWith('/pay')) {
                 this.participate();
@@ -187,33 +188,46 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  async participate(): Promise<any> {
-    const uid = localStorage.getItem('uid');
-    if (!uid) {
-      const encodedString = encodeURIComponent('/game/' + this.season.id + '/pay');
-      this.router.navigate(['/signup'], { queryParams: { callback: encodedString } });
-    } else {
-      this.showLoader();
-      const order = await this.paymentService.getOrder(this.season, uid);
-      if (order && order.amount_due > 0) {
-        const options: Partial<ICheckoutOptions> = {
-          ...UNIVERSAL_OPTIONS,
-          order_id: order.id,
-          amount: order.amount_due * 100,
-          handler: this.handlePaymentSuccess.bind(this),
-          modal: {
-            backdropclose: false,
-            escape: false,
-            confirm_close: true,
-            ondismiss: this.dismissDialog.bind(this)
+  getStarted(): void {
+    this.showLoader();
+    this.redirectToUrl('/signup');
+  }
+
+  participate(): void {
+    this.authService.isLoggedIn().subscribe({
+      next: async (user) => {
+        if (user) {
+          this.showLoader();
+          const order = await this.paymentService.getOrder(this.seasonID, user.uid);
+          if (order && order.amount_due > 0) {
+            if (order.amount_due > 0) {
+              const options: Partial<ICheckoutOptions> = {
+                ...UNIVERSAL_OPTIONS,
+                order_id: order.id,
+                amount: order.amount_due * 100,
+                handler: this.handlePaymentSuccess.bind(this),
+                modal: {
+                  backdropclose: false,
+                  escape: false,
+                  confirm_close: true,
+                  ondismiss: this.dismissDialog.bind(this)
+                }
+              }
+              this.paymentService.openCheckoutPage(options);
+            } else {
+              this.hideLoader();
+              this.router.navigate(['/my-matches']);
+            }
           }
+          this.hideLoader();
         }
-        this.paymentService.openCheckoutPage(options);
-      } else {
-        this.hideLoader();
-        this.router.navigate(['/my-matches'])
       }
-    }
+    })
+  }
+
+  redirectToUrl(path: string): void {
+    const encodedString = encodeURIComponent('/game/' + this.season.id + '/pay');
+    this.router.navigate([path], { queryParams: { callback: encodedString } });
   }
 
   handlePaymentSuccess(response) {
@@ -221,7 +235,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           const allPromises = [];
-          allPromises.push(this.paymentService.saveOrder(this.season, OrderTypes.season, response).toPromise());
+          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, response).toPromise());
           // const tid = sessionStorage.getItem('tid');
           // allPromises.push(this.participate(season, tid).toPromise());
 
@@ -245,9 +259,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   dismissDialog() {
     this.hideLoader();
     this.cdr.detectChanges();
-    this.location.go('/game/' + this.season.id);
+    this.location.go('/game/' + this.seasonID);
   }
-
 
   hideLoader() {
     this.isLoaderShown = false;
@@ -269,7 +282,6 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       { viewValue: 'Date: ', value: '' },
       { viewValue: 'Entry Fees(per team): ', value: '' },
       { viewValue: 'Ground(s): ', value: '' },
-      { viewValue: '', value: '' }
     ]
   }
 }

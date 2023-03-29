@@ -8,6 +8,7 @@ export interface IPlayer {
   locCountry: string;
   gender: 'M' | 'F';
   position: string;
+  born: number;
   id?: string
 }
 
@@ -15,7 +16,6 @@ export interface IPlayerMore {
   nickname: string;
   bio: string;
   strongFoot: 'L' | 'R';
-  born: number;
   jerseyNo: number;
   id?: string;
 }

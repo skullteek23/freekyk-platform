@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { ILink } from '@shared/Constants/ROUTE_LINKS';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +19,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'football-platform-v1';
   menuOpen = false;
-  dashOpen = false;
+  isOnboarding = false;
+  subscriptions = new Subscription();
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.isOnboarding = event.url.includes('onboarding');
+      }
+    }));
+  }
 
   onOpenMenu(eventValue: any): any {
     this.menuOpen = eventValue;
@@ -29,6 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): any {
     localStorage.removeItem('uid');
+    this.subscriptions.unsubscribe();
   }
 
 }

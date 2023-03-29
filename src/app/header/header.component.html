@@ -5,168 +5,170 @@
       <img src="assets/images/brand_logo_2.png" alt="Freekyk Logo" />
     </a>
     <!-- brand logo -->
+    <ng-container *ngIf="!isOnboarding">
+      <!-- mobile menu on logged -->
+      <div fxHide.gt-sm="true" fxLayoutAlign="center center" fxLayoutGap="4px">
+        <div *ngIf="isLoading && !isLogged" fxLayoutAlign="center center" fxLayoutGap="8px">
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+        </div>
 
-    <!-- mobile menu on logged -->
-    <div fxHide.gt-sm="true" fxLayoutAlign="center center" fxLayoutGap="4px">
-      <div *ngIf="isLoading && !isLogged" fxLayoutAlign="center center" fxLayoutGap="8px">
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-      </div>
-
-      <!-- whatsApp icon - small -->
-      <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-        (click)="openSocialGroupDialog();onCloseMenu()">
-        <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
-      </button>
-      <!-- whatsApp icon - small -->
-
-      <!-- notif icon - small -->
-      <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-        (click)="onCloseMenu()" [routerLink]="['/dashboard/home']">
-        <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
-          [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
-          notifications
-        </mat-icon>
-      </button>
-      <!-- notif icon - small -->
-
-      <!-- cart icon - small -->
-      <!-- <button disabled matTooltip="Cart" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-        (click)="onCloseMenu()" [routerLink]="['/cart']">
-        <mat-icon class="material-icons-round"> shopping_cart </mat-icon>
-      </button> -->
-      <!-- cart icon - small -->
-
-      <!-- account circle - small -->
-      <div class="account-circle-container">
-        <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
-          [routerLink]="['/dashboard', 'account']" [dataImg]="profilePicture$ | async"
-          [margins]="false"></app-account-avatar>
-      </div>
-      <!-- account circle - small -->
-
-      <!-- ham menu - small -->
-      <button mat-icon-button color="primary" (click)="onToggleMenu()">
-        <mat-icon *ngIf="!menuState; else close" class="material-icons-round">
-          menu
-        </mat-icon>
-        <ng-template #close>
-          <mat-icon class="material-icons-round"> close </mat-icon>
-        </ng-template>
-      </button>
-      <!-- ham menu - small -->
-    </div>
-    <!-- mobile menu on logged -->
-
-    <!-- menu - large -->
-    <div fxHide.lt-md="true" fxLayout fxLayoutGap="20px" fxLayoutAlign="center center">
-      <a [matMenuTriggerFor]="playMenu" fxLayoutAlign="center center">
-        <span class="mat-body-1">Play</span>
-      </a>
-      <a fxLayoutAlign="center center" routerLink="/support">
-        <span class="mat-body-1">Support</span>
-      </a>
-      <a fxLayoutAlign="center center" [href]="adminURL" target="_blank">
-        <span class="mat-body-1">Admin</span>
-      </a>
-      <!-- <a [matMenuTriggerFor]="freestyleMenu" fxLayoutAlign="center center">
-        <span class="mat-body-1">Freestyle</span>
-      </a>
-      <a [routerLink]="['/academies']" fxLayoutAlign="center center">
-        <span class="mat-body-1">Academies</span>
-      </a>
-      <a [routerLink]="['/equipment']" fxLayoutAlign="center center">
-        <span class="mat-body-1">Equipment</span>
-      </a> -->
-      <a [matMenuTriggerFor]="moreMenu" fxLayoutAlign="center center">
-        <span class="mat-body-1">More</span>
-      </a>
-
-      <mat-divider style="height: 30px" [vertical]="true"></mat-divider>
-
-      <!-- Live Seasons icon -->
-      <button class="live-season" fxHide.lt-md="true" matTooltip="Upcoming Seasons" mat-icon-button color="primary"
-        [matMenuTriggerFor]="seasonMenu">
-        <span class="material-icons-round red">sensors</span>
-      </button>
-      <!-- Live Seasons icon -->
-
-      <!-- <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/login']"
-        class="buttonText secondaryButton">
-        Login
-      </button> -->
-
-      <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/signup']"
-        class="buttonText primaryButton">
-        Get Started
-      </button>
-
-      <div *ngIf="isLoading && !isLogged" fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-        <span class="circles shine"></span>
-      </div>
-
-
-      <div fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
+        <!-- whatsApp icon - small -->
         <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-          (click)="openSocialGroupDialog()">
+          (click)="openSocialGroupDialog();onCloseMenu()">
           <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
         </button>
+        <!-- whatsApp icon - small -->
 
+        <!-- notif icon - small -->
         <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-          [routerLink]="['/dashboard/home']">
+          (click)="onCloseMenu()" [routerLink]="['/dashboard/home']">
           <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
             [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
             notifications
           </mat-icon>
         </button>
+        <!-- notif icon - small -->
 
-        <!-- <button matTooltip="Cart" disabled *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-          [routerLink]="['/cart']">
-          <mat-icon *ngIf="!isLoading" class="material-icons-round">shopping_cart</mat-icon>
-        </button> -->
+        <!-- cart icon - small -->
+        <!-- <button disabled matTooltip="Cart" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+      (click)="onCloseMenu()" [routerLink]="['/cart']">
+      <mat-icon class="material-icons-round"> shopping_cart </mat-icon>
+    </button> -->
+        <!-- cart icon - small -->
 
-        <app-account-avatar matTooltip="User Settings" *ngIf="isLogged && !isLoading" [matMenuTriggerFor]="profileMenu"
-          [dataImg]="profilePicture$ | async" [margins]="false"></app-account-avatar>
+        <!-- account circle - small -->
+        <div class="account-circle-container">
+          <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
+            [routerLink]="['/dashboard', 'account']" [dataImg]="profilePicture$ | async"
+            [margins]="false"></app-account-avatar>
+        </div>
+        <!-- account circle - small -->
 
+        <!-- ham menu - small -->
+        <button mat-icon-button color="primary" (click)="onToggleMenu()">
+          <mat-icon *ngIf="!menuState; else close" class="material-icons-round">
+            menu
+          </mat-icon>
+          <ng-template #close>
+            <mat-icon class="material-icons-round"> close </mat-icon>
+          </ng-template>
+        </button>
+        <!-- ham menu - small -->
       </div>
+      <!-- mobile menu on logged -->
 
-      <mat-menu #playMenu>
-        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of playLinks">
-          <span class="mat-body-1">{{ link.name }}</span>
+      <!-- menu - large -->
+      <div fxHide.lt-md="true" fxLayout fxLayoutGap="20px" fxLayoutAlign="center center">
+        <a [matMenuTriggerFor]="playMenu" fxLayoutAlign="center center">
+          <span class="mat-body-1">Play</span>
         </a>
-      </mat-menu>
+        <a fxLayoutAlign="center center" routerLink="/support">
+          <span class="mat-body-1">Support</span>
+        </a>
+        <a fxLayoutAlign="center center" [href]="adminURL" target="_blank">
+          <span class="mat-body-1">Admin</span>
+        </a>
+        <!-- <a [matMenuTriggerFor]="freestyleMenu" fxLayoutAlign="center center">
+      <span class="mat-body-1">Freestyle</span>
+    </a>
+    <a [routerLink]="['/academies']" fxLayoutAlign="center center">
+      <span class="mat-body-1">Academies</span>
+    </a>
+    <a [routerLink]="['/equipment']" fxLayoutAlign="center center">
+      <span class="mat-body-1">Equipment</span>
+    </a> -->
+        <a [matMenuTriggerFor]="moreMenu" fxLayoutAlign="center center">
+          <span class="mat-body-1">More</span>
+        </a>
 
-      <!-- <mat-menu #freestyleMenu>
-        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of freestyleLinks">
-          <span class="mat-body-1">{{ link.name }}</span>
-        </a>
-      </mat-menu> -->
+        <mat-divider style="height: 30px" [vertical]="true"></mat-divider>
 
-      <mat-menu #moreMenu>
-        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of moreDesktopLinks">
-          <span class="mat-body-1">{{ link.name }}</span>
-        </a>
-      </mat-menu>
+        <!-- Live Seasons icon -->
+        <button class="live-season" fxHide.lt-md="true" matTooltip="Upcoming Seasons" mat-icon-button color="primary"
+          [matMenuTriggerFor]="seasonMenu">
+          <span class="material-icons-round red">sensors</span>
+        </button>
+        <!-- Live Seasons icon -->
 
-      <mat-menu #profileMenu>
-        <a mat-menu-item (click)="openLink(link)" *ngFor="let link of profileAvatarLinks">
-          <span class="mat-body-1">{{ link.name }}</span>
-        </a>
-      </mat-menu>
+        <!-- <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/login']"
+      class="buttonText secondaryButton">
+      Login
+    </button> -->
 
-      <mat-menu #seasonMenu>
-        <span class="mat-body-2 align">Upcoming Seasons</span>
-        <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
-          <span class="mat-body-1">{{ season.name }}</span>
-        </a>
-      </mat-menu>
-    </div>
-    <!-- menu - large -->
+        <button fxHide.lt-md="true" *ngIf="!isLogged && !isLoading" [routerLink]="['/signup']"
+          class="buttonText primaryButton">
+          Get Started
+        </button>
+
+        <div *ngIf="isLoading && !isLogged" fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+          <span class="circles shine"></span>
+        </div>
+
+
+        <div fxHide.lt-md="true" fxLayoutAlign="center center" fxLayoutGap="8px">
+          <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+            (click)="openSocialGroupDialog()">
+            <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
+          </button>
+
+          <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+            [routerLink]="['/dashboard/home']">
+            <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
+              [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
+              notifications
+            </mat-icon>
+          </button>
+
+          <!-- <button matTooltip="Cart" disabled *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+        [routerLink]="['/cart']">
+        <mat-icon *ngIf="!isLoading" class="material-icons-round">shopping_cart</mat-icon>
+      </button> -->
+
+          <app-account-avatar matTooltip="User Settings" *ngIf="isLogged && !isLoading"
+            [matMenuTriggerFor]="profileMenu" [dataImg]="profilePicture$ | async"
+            [margins]="false"></app-account-avatar>
+
+        </div>
+
+        <mat-menu #playMenu>
+          <a mat-menu-item (click)="openLink(link)" *ngFor="let link of playLinks">
+            <span class="mat-body-1">{{ link.name }}</span>
+          </a>
+        </mat-menu>
+
+        <!-- <mat-menu #freestyleMenu>
+      <a mat-menu-item (click)="openLink(link)" *ngFor="let link of freestyleLinks">
+        <span class="mat-body-1">{{ link.name }}</span>
+      </a>
+    </mat-menu> -->
+
+        <mat-menu #moreMenu>
+          <a mat-menu-item (click)="openLink(link)" *ngFor="let link of moreDesktopLinks">
+            <span class="mat-body-1">{{ link.name }}</span>
+          </a>
+        </mat-menu>
+
+        <mat-menu #profileMenu>
+          <a mat-menu-item (click)="openLink(link)" *ngFor="let link of profileAvatarLinks">
+            <span class="mat-body-1">{{ link.name }}</span>
+          </a>
+        </mat-menu>
+
+        <mat-menu #seasonMenu>
+          <span class="mat-body-2 align">Upcoming Seasons</span>
+          <a *ngFor="let season of seasonsList" mat-menu-item (click)="openLiveSeason(season)">
+            <span class="mat-body-1">{{ season.name }}</span>
+          </a>
+        </mat-menu>
+      </div>
+      <!-- menu - large -->
+    </ng-container>
   </div>
 </mat-toolbar>
 

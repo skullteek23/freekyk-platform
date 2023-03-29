@@ -4,7 +4,7 @@
 <main [fxHide]="menuOpen">
   <router-outlet></router-outlet>
 </main>
-<app-bottom-nav [fxHide]="menuOpen" [links]="links"></app-bottom-nav>
-<footer [fxHide]="menuOpen || dashOpen">
+<app-bottom-nav [fxHide]="menuOpen || isOnboarding" [links]="links"></app-bottom-nav>
+<footer [fxHide]="menuOpen || isOnboarding">
   <app-footer></app-footer>
 </footer>

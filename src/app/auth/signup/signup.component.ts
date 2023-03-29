@@ -31,11 +31,6 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const queryParams = this.route.snapshot.queryParams;
-    if (queryParams.hasOwnProperty('callback')) {
-      this.callbackUrl = decodeURIComponent(queryParams.callback);
-    }
-    console.log(this.callbackUrl);
     this.initForm();
     window.scrollTo(0, 0);
   }
@@ -64,6 +59,10 @@ export class SignupComponent implements OnInit {
   }
 
   signupWithGoogle(): void {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     this.resetForm();
     this.isLoaderShown = true;
     this.authService.loginWithGoogle()
@@ -75,6 +74,10 @@ export class SignupComponent implements OnInit {
   }
 
   signupWithPhoneNumber() {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     if (this.authForm.valid) {
       this.isLoaderShown = true;
       this.initOtpForm();
@@ -94,6 +97,10 @@ export class SignupComponent implements OnInit {
   }
 
   verifyOTP() {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     if (this.otpForm.valid) {
       this.isLoaderShown = true;
       const formValue = this.otpForm.value;
@@ -123,19 +130,12 @@ export class SignupComponent implements OnInit {
   postSignup(user: authUser) {
     this.isLoaderShown = false;
     this.authService.saveUserCred(user);
-    if (this.callbackUrl) {
-      this.router.navigate([this.callbackUrl]);
-    } else {
-      this.router.navigate(['/'])
-    }
-    // const name = this.name?.value.trim();
-    // this.authService.createProfile(name, user.user.uid)
-    //   .then(() => {
-    //     sessionStorage.setItem('name', name);
-    //     this.router.navigate(['/dashboard/participate'])
-    //   })
-    //   .catch((error) => this.authService.handleAuthError(error))
-    //   .finally(() => this.isLoaderShown = false);
+    this.redirectLoggedUser();
+  }
+
+  redirectLoggedUser() {
+    const callbackEncoded = encodeURIComponent(this.callbackUrl || '/');
+    this.router.navigate(['/onboarding'], { queryParams: { callback: callbackEncoded } });
   }
 
   resetForm(): void {
@@ -183,20 +183,3 @@ export class SignupComponent implements OnInit {
     return this.otpForm.get('otp');
   }
 }
-
-// signup(): void {
-//   if (this.authForm.valid) {
-//     this.isLoaderShown = true;
-//     const userData: logDetails = {
-//       email: this.email?.value?.trim(),
-//       password: 'this.password?.value?.trim()',
-//       name: this.name?.value?.trim(),
-//     };
-//     this.authService.signup(userData)
-//       .then(this.postSignup.bind(this))
-//       .catch((error) => {
-//         this.isLoaderShown = false;
-//         this.authService.handleAuthError(error)
-//       })
-//   }
-// }

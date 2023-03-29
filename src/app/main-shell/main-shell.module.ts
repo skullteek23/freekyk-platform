@@ -24,6 +24,7 @@ import { PhotoUploadingCircleComponent } from './components/photo-uploading-circ
 import { MyMatchesComponent } from './components/my-matches/my-matches.component';
 import { RouterModule } from '@angular/router';
 import { GameComponent } from './components/game/game.component';
+import { OnboardingComponent } from './onboarding/onboarding.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { GameComponent } from './components/game/game.component';
     PhotoUploadingCircleComponent,
     MyMatchesComponent,
     GameComponent,
+    OnboardingComponent,
   ],
   imports: [
     CommonModule,
@@ -72,6 +74,7 @@ import { GameComponent } from './components/game/game.component';
     PhotoUploadingCircleComponent,
     MyMatchesComponent,
     GameComponent,
+    OnboardingComponent
   ]
 })
 export class MainShellModule { }

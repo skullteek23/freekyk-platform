@@ -58,11 +58,11 @@
             {{ season?.startDate | date: 'fullDate'}}
           </span>
         </mat-chip>
-        <mat-chip *ngIf="season.fees === 0" selected>
+        <mat-chip *ngIf="season.fees === 0">
           Fees:&nbsp;
           <span class="green mat-body-2">FREE</span>
         </mat-chip>
-        <mat-chip *ngIf="season.fees > 0" selected>
+        <mat-chip *ngIf="season.fees > 0">
           Fees:&nbsp;
           <!-- <span class="striked mat-caption" *ngIf="season.discountedFees !== season.feesPerTeam">
             {{ season.feesPerTeam | currency:'INR' }}</span>&nbsp; -->
@@ -80,15 +80,7 @@
         </mat-chip>
       </mat-chip-list>
     </mat-card-content>
-    <mat-card-actions fxLayoutAlign="center center">
-
-      <button class="link-button" (click)="participate(); $event.stopPropagation()" mat-stroked-button color="primary">
-        <span class="material-icons-round red">whatshot</span>
-        PARTICIPATE NOW
-      </button>
-    </mat-card-actions>
     <mat-card-footer>
-
     </mat-card-footer>
   </mat-card>
 </section>
@@ -137,5 +129,15 @@
     </mat-card-content>
   </mat-card>
 </section>
+
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">whatshot</span>
+    <span>
+      PARTICIPATE NOW
+    </span>
+  </button>
+</div>
 
 <app-loading *ngIf="isLoaderShown"></app-loading>

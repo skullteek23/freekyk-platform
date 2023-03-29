@@ -177,7 +177,7 @@ export class DashParticipateComponent implements OnInit {
         next: () => {
           const allPromises = [];
           const tid = sessionStorage.getItem('tid');
-          allPromises.push(this.paymentService.saveOrder(this.selectedSeason, OrderTypes.season, response).toPromise());
+          // allPromises.push(this.paymentService.saveOrder(this.selectedSeason, OrderTypes.season, response).toPromise());
           allPromises.push(this.paymentService.participate(this.selectedSeason, tid).toPromise());
 
           Promise.all(allPromises)

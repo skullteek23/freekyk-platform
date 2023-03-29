@@ -32,10 +32,12 @@ export class FindPlayersComponent implements OnInit {
             this.playersList = response;
           }
           this.isLoaderShown = false;
+          window.scrollTo(0, 0)
         },
         error: () => {
           this.playersList = [];
           this.isLoaderShown = false;
+          window.scrollTo(0, 0)
         }
       })
   }

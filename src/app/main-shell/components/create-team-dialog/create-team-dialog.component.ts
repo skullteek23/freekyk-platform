@@ -5,7 +5,7 @@ import { MatVerticalStepper } from '@angular/material/stepper';
 import { FunctionsApiService } from '@shared/services/functions-api.service';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
-import { ApiGetService, ApiSetService } from '@shared/services/api.service';
+import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { RULES } from '@shared/web-content/MATCH-RELATED';
 import { Observable } from 'rxjs';
 import { StorageApiService } from '@shared/services/storage-api.service';
@@ -26,7 +26,7 @@ export class CreateTeamDialogComponent implements OnInit {
 
   constructor(
     private apiService: ApiGetService,
-    private apiSetService: ApiSetService,
+    private apiPostService: ApiPostService,
     private dialog: MatDialog,
     private functionsApiService: FunctionsApiService,
     private storageApiService: StorageApiService,
@@ -35,6 +35,7 @@ export class CreateTeamDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    window.scrollTo(0, 0)
   }
 
   initForm() {
@@ -110,7 +111,7 @@ export class CreateTeamDialogComponent implements OnInit {
       const url = await this.storageApiService.getPublicUrl(this.logo.value, path);
       const update: Partial<ITeam> = {}
       update.imgpath_logo = url;
-      return this.apiSetService.updateTeamInfo(update, docID);
+      return this.apiPostService.updateTeamInfo(update, docID);
     }
   }
 

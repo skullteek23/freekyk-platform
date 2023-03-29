@@ -12,8 +12,8 @@
     <form [formGroup]="teamDetailsForm" fxLayoutAlign="center center" fxLayout="column">
       <div class="logo-container">
         <app-photo-uploading-circle (changeUpload)="onSelectTeamLogo($event)"></app-photo-uploading-circle>
-        <span class="mat-caption label" *ngIf="logo.invalid">
-          Choose Team Logo
+        <span class="mat-caption label">
+          Add a Team Logo
         </span>
       </div>
       <mat-form-field color="primary">

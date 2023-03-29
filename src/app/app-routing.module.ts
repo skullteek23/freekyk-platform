@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
+import { OnboardingGuard } from './auth/onboarding.guard';
+import { SignupGuardGuard } from './auth/signup-guard.guard';
 import { SignupComponent } from './auth/signup/signup.component';
 import { DashAccountComponent } from './dashboard/dash-account/dash-account.component';
 import { MyMatchesComponent } from './dashboard/dash-home/my-matches/my-matches.component';
@@ -18,62 +20,47 @@ import { LeaderboardComponent } from './main-shell/components/leaderboard/leader
 import { OrganizeSeasonComponent } from './main-shell/components/organize-season/organize-season.component';
 import { RewardsComponent } from './main-shell/components/rewards/rewards.component';
 import { ViewMatchesComponent } from './main-shell/components/view-matches/view-matches.component';
+import { OnboardingComponent } from './main-shell/onboarding/onboarding.component';
 import { PrivacyComponent } from './others/privacy/privacy.component';
 import { TermsComponent } from './others/terms/terms.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
-
+const AuthSignupGuard = () => redirectLoggedInTo(['/onboarding']);
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
+
   { path: 'games', component: JoinGamesComponent },
   { path: 'game/:seasonid', component: SeasonProfileComponent },
   { path: 'game/:seasonid/pay', component: SeasonProfileComponent },
-  { path: 'matches', component: ViewMatchesComponent },
-  { path: 'team/:teamid', component: TeamProfileComponent },
-  { path: 'ground/:groundid', component: GroundProfileComponent },
-  { path: 'teams/create', component: CreateTeamDialogComponent },
-  { path: 'players', component: FindPlayersComponent },
-  { path: 'grounds', component: FindGroundsComponent },
-  { path: 'teams', component: GetTeamComponent },
-  { path: 'challenges', component: ChallengesComponent },
+
   { path: 'create-instant-match', component: CreateInstantMatchComponent },
+  { path: 'matches', component: ViewMatchesComponent },
+  { path: 'become-organizer', component: OrganizeSeasonComponent },
+
+  { path: 'teams', component: GetTeamComponent },
+  { path: 'teams/create', component: CreateTeamDialogComponent },
+  { path: 'team/:teamid', component: TeamProfileComponent },
+
+  { path: 'grounds', component: FindGroundsComponent },
+  { path: 'ground/:groundid', component: GroundProfileComponent },
+
+  { path: 'players', component: FindPlayersComponent },
+  { path: 'challenges', component: ChallengesComponent },
   { path: 'rewards', component: RewardsComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
-  { path: 'become-organizer', component: OrganizeSeasonComponent },
+
   { path: 'my-matches', component: MyMatchesComponent },
   { path: 'my-team', component: DashTeamManagComponent },
   { path: 'profile', component: DashAccountComponent },
-  { path: 'support', loadChildren: () => import('./support/support.module').then(m => m.SupportModule) },
 
-  { path: 'signup', component: SignupComponent },
-  // { path: 'home', loadChildren: () => import('./main-shell/main-shell.module').then(m => m.MainShellModule) },
-  {
-    path: 'login',
-    redirectTo: 'signup'
-  },
-  {
-    path: 'play',
-    loadChildren: () => import('./play/play.module').then((m) => m.PlayModule),
-  },
+  { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },
+  { path: 'onboarding', component: OnboardingComponent, canActivate: [OnboardingGuard] },
+  { path: 'login', redirectTo: 'signup' },
+
   { path: 'privacypolicy', component: PrivacyComponent },
   { path: 'terms', component: TermsComponent },
-  {
-    path: 'dashboard',
-    loadChildren: () =>
-      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-  },
-  // {
-  //   path: 'support',
-  //   loadChildren: () =>
-  //     import('./support/support.module').then((m) => m.SupportModule),
-  // },
-  // { path: 'p/:playerid', component: PlayerProfileComponent },
-  // { path: 't/:teamid', component: TeamProfileComponent },
-  // { path: 's/:seasonid', component: SeasonProfileComponent },
-  // { path: 'about', component: AboutComponent },
-  // { path: 'privacypolicy', component: PrivacyComponent },
-  // { path: 'terms', component: TermsComponent },
+  { path: 'support', loadChildren: () => import('./support/support.module').then(m => m.SupportModule) },
 
   {
     path: 'error',
@@ -81,8 +68,10 @@ const routes: Routes = [
     data: {
       message: 'We are sorry, but the page you requested was not found!',
       code: '404',
-    },
+    }
   },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule) },
+  { path: 'play', loadChildren: () => import('./play/play.module').then((m) => m.PlayModule) },
   { path: '**', redirectTo: 'error' },
 ];
 
