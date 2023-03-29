@@ -7,7 +7,7 @@
   </button>
   <span class="dash-h5 heading">Find a Team near you</span>
 </div>
-<mat-card class="feature-card" *ngIf="!teamsList.length && !isLoaderShown">
+<mat-card class="feature-card" *ngIf="!teamsListCache.length && !isLoaderShown">
   <img class="play_image" mat-card-image src="assets/svgs/Banner/find_your_team.svg" alt="Freekyk Play Seasons Image">
   <mat-card-content>
     <div fxLayoutAlign="center" fxLayout="column">
@@ -20,7 +20,8 @@
   </mat-card-content>
 </mat-card>
 <section>
-  <mat-list *ngIf="teamsList.length">
+  <app-search-lg searchPlaceholder="Search a Team" (searchItem)="applySearch($event)"></app-search-lg>
+  <mat-list *ngIf="teamsListCache.length">
     <mat-list-item *ngFor="let team of teamsList" (click)="openTeam(team)">
       <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
         <div class="image">

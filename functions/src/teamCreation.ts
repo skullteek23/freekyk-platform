@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { AGE_CATEGORY, ITeam, ITeamMembers } from '@shared/interfaces/team.model';
-import { IPlayer, IPlayerMore } from '@shared/interfaces/user.model';
+import { IPlayer } from '@shared/interfaces/user.model';
 import { getRandomString } from './utils/utilities';
 
 const db = admin.firestore();
@@ -15,10 +15,9 @@ export async function teamCreation(data: { name: string, captainID: string }, co
 
   if (captainID && teamName) {
     const captainInfo = (await db.collection('players').doc(captainID).get()).data() as IPlayer;
-    const captainMoreInfo = ((await db.collection(`players/${captainID}/additionalInfo`).doc('otherInfo').get()).data() as IPlayerMore);
 
     // Exit if player has incomplete profile
-    if (!captainInfo || !captainInfo.locCity || !captainInfo.position || !captainInfo.imgpath || !captainMoreInfo) {
+    if (!captainInfo || !captainInfo.locCity || !captainInfo.position || !captainInfo.imgpath) {
       throw new functions.https.HttpsError('failed-precondition', 'Incomplete profile');
     }
 

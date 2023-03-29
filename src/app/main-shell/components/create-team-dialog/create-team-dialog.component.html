@@ -7,9 +7,10 @@
   </button>
   <span class="dash-h5 heading">Create a Team</span>
 </div>
-<mat-vertical-stepper>
+<mat-vertical-stepper #stepper>
   <mat-step label="Fill out Team Details" [stepControl]="teamDetailsForm">
-    <form [formGroup]="teamDetailsForm" fxLayoutAlign="center center" fxLayout="column">
+    <form [formGroup]="teamDetailsForm" fxLayoutAlign="center center" fxLayout="column"
+      *ngIf="stepper.selectedIndex === 0">
       <div class="logo-container">
         <app-photo-uploading-circle (changeUpload)="onSelectTeamLogo($event)"></app-photo-uploading-circle>
         <span class="mat-caption label">
@@ -38,7 +39,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step label="Finish">
+  <mat-step label="Finish" *ngIf="stepper.selectedIndex === 1">
     <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
       <app-tick-animation></app-tick-animation>
       <span class="mat-caption center">Wuhooo! Your team is LIVE.</span>

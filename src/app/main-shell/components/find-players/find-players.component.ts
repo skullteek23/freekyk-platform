@@ -12,6 +12,7 @@ import { ApiGetService } from '@shared/services/api.service';
 export class FindPlayersComponent implements OnInit {
 
   playersList: IPlayer[] = [];
+  playersListCache: IPlayer[] = [];
   isLoaderShown = false;
 
   constructor(
@@ -30,12 +31,14 @@ export class FindPlayersComponent implements OnInit {
         next: (response) => {
           if (response) {
             this.playersList = response;
+            this.playersListCache = JSON.parse(JSON.stringify(response));
           }
           this.isLoaderShown = false;
           window.scrollTo(0, 0)
         },
         error: () => {
           this.playersList = [];
+          this.playersListCache = [];
           this.isLoaderShown = false;
           window.scrollTo(0, 0)
         }
@@ -49,4 +52,11 @@ export class FindPlayersComponent implements OnInit {
     });
   }
 
+  applySearch(searchValue: string) {
+    if (searchValue) {
+      this.playersList = this.playersListCache.filter(el => el.name.toLowerCase().includes(searchValue.toLowerCase()));
+    } else {
+      this.playersList = JSON.parse(JSON.stringify(this.playersListCache));
+    }
+  }
 }

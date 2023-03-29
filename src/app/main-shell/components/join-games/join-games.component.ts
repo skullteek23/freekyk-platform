@@ -19,6 +19,7 @@ export class JoinGamesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoaderShown = true;
     this.getInstantMatches();
     this.getLeagues();
     this.getKnockouts();

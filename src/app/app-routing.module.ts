@@ -35,13 +35,11 @@ const routes: Routes = [
   {
     path: 'game/:seasonid/pay',
     component: SeasonProfileComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
 
   {
     path: 'create-instant-match',
     component: CreateInstantMatchComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
   { path: 'matches', component: ViewMatchesComponent },
   { path: 'become-organizer', component: OrganizeSeasonComponent },
@@ -49,7 +47,6 @@ const routes: Routes = [
   { path: 'teams', component: GetTeamComponent },
   {
     path: 'teams/create', component: CreateTeamDialogComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
   { path: 'team/:teamid', component: TeamProfileComponent },
 
@@ -63,15 +60,12 @@ const routes: Routes = [
 
   {
     path: 'my-matches', component: MyMatchesComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
   {
     path: 'my-team', component: DashTeamManagComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
   {
     path: 'profile', component: DashAccountComponent,
-    ...canActivate(redirectUnauthorizedGuard)
   },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },

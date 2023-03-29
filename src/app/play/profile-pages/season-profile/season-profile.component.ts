@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { ISeasonPartner } from '@shared/interfaces/season.model';
@@ -62,6 +62,11 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
         }
       }
     }));
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd && event?.url?.endsWith('/pay')) {
+        this.participate();
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -82,7 +87,6 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
               this.getSeasonMatches();
               this.getSeasonStandings();
               this.getSeasonPartners();
-              const qParams = this.route.snapshot.queryParams;
               if (window.location.href.endsWith('/pay')) {
                 this.participate();
               }
@@ -198,8 +202,11 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       next: async (user) => {
         if (user) {
           this.showLoader();
+          if (!this.seasonID) {
+            this.seasonID = this.route.snapshot.params['seasonid'];
+          }
           const order = await this.paymentService.getOrder(this.seasonID, user.uid);
-          if (order && order.amount_due > 0) {
+          if (order) {
             if (order.amount_due > 0) {
               const options: Partial<ICheckoutOptions> = {
                 ...UNIVERSAL_OPTIONS,

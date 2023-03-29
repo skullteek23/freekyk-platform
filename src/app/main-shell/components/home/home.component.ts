@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { IPointersComponentData } from '@shared/components/why-choose-section/why-choose-section.component';
 import { ListOption } from '@shared/interfaces/others.model';
@@ -35,10 +36,19 @@ export class HomeComponent implements OnInit {
   playerName = 'Footballer';
 
   constructor(
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.authService.isLoggedIn()
+      .subscribe({
+        next: (user) => {
+          if (user?.displayName) {
+            this.playerName = user.displayName;
+          }
+        }
+      })
     window.scrollTo(0, 0);
   }
 

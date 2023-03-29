@@ -17,6 +17,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -43,6 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
   dataSource = new MatTreeNestedDataSource<ILink>();
+  photoUrl: string = null;
 
   constructor(
     private dialog: MatDialog,
@@ -50,30 +52,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private notificationService: NotificationsService,
     private avatarServ: AccountAvatarService,
     private ngFire: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
-    this.profilePicture$ = this.avatarServ.getProfilePicture();
     this.getLiveSeasons();
-    this.ngAuth.user.subscribe((user) => {
-      if (user !== null) {
-        this.isLogged = true;
-        this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
-          map((resp) => (!!resp ? resp : null)),
-          map((resp) => (resp > 5 ? '5+' : resp)),
-          share()
-        );
-        this.mobileLinks = MOBILE_LINKS.slice();
-        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
-        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
-      } else {
-        this.isLogged = false;
+    this.authService.isLoggedIn().subscribe({
+      next: (user) => {
+        if (user) {
+          this.isLogged = true;
+          this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
+            map((resp) => (!!resp ? resp : null)),
+            map((resp) => (resp > 5 ? '5+' : resp)),
+            share()
+          );
+          this.mobileLinks = MOBILE_LINKS.slice();
+          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
+          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
+          this.photoUrl = user.photoURL;
+        }
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    });
+    })
     this.subscriptions.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.isOnboarding = event.url.includes('onboarding');

@@ -42,8 +42,7 @@
         <!-- account circle - small -->
         <div class="account-circle-container">
           <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
-            [routerLink]="['/dashboard', 'account']" [dataImg]="profilePicture$ | async"
-            [margins]="false"></app-account-avatar>
+            [routerLink]="['/dashboard', 'account']" [dataImg]="photoUrl" [margins]="false"></app-account-avatar>
         </div>
         <!-- account circle - small -->
 
@@ -131,8 +130,7 @@
       </button> -->
 
           <app-account-avatar matTooltip="User Settings" *ngIf="isLogged && !isLoading"
-            [matMenuTriggerFor]="profileMenu" [dataImg]="profilePicture$ | async"
-            [margins]="false"></app-account-avatar>
+            [matMenuTriggerFor]="profileMenu" [dataImg]="photoUrl" [margins]="false"></app-account-avatar>
 
         </div>
 
@@ -175,15 +173,15 @@
 
 <!-- Mobile Expanded view -->
 <div class="full-header" *ngIf="menuState" fxLayout="column" fxLayoutGap="20px">
-  <div fxLayout="column" fxLayoutGap="8px">
+  <div fxLayout="column" fxLayoutGap="8px" *ngIf="!isLogged">
     <!-- <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/login']" class="buttonText secondaryButton">
       Login
     </button> -->
-    <button *ngIf="isLogged" (click)="onToggleMenu()" [routerLink]="['/dashboard/home']"
+    <!-- <button *ngIf="isLogged" (click)="onToggleMenu()" [routerLink]="['/']"
       class="buttonText secondaryButton">
       Go to Dashboard
-    </button>
-    <button *ngIf="!isLogged" (click)="onToggleMenu()" [routerLink]="['/signup']" class="buttonText primaryButton">
+    </button> -->
+    <button (click)="onToggleMenu()" [routerLink]="['/signup']" class="buttonText primaryButton">
       Get Started
     </button>
   </div>
