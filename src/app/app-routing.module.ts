@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { canActivate, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
 import { OnboardingGuard } from './auth/onboarding.guard';
 import { SignupGuardGuard } from './auth/signup-guard.guard';
@@ -26,20 +26,31 @@ import { TermsComponent } from './others/terms/terms.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
-const AuthSignupGuard = () => redirectLoggedInTo(['/onboarding']);
+const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
 
   { path: 'games', component: JoinGamesComponent },
   { path: 'game/:seasonid', component: SeasonProfileComponent },
-  { path: 'game/:seasonid/pay', component: SeasonProfileComponent },
+  {
+    path: 'game/:seasonid/pay',
+    component: SeasonProfileComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
 
-  { path: 'create-instant-match', component: CreateInstantMatchComponent },
+  {
+    path: 'create-instant-match',
+    component: CreateInstantMatchComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
   { path: 'matches', component: ViewMatchesComponent },
   { path: 'become-organizer', component: OrganizeSeasonComponent },
 
   { path: 'teams', component: GetTeamComponent },
-  { path: 'teams/create', component: CreateTeamDialogComponent },
+  {
+    path: 'teams/create', component: CreateTeamDialogComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
   { path: 'team/:teamid', component: TeamProfileComponent },
 
   { path: 'grounds', component: FindGroundsComponent },
@@ -50,9 +61,18 @@ const routes: Routes = [
   { path: 'rewards', component: RewardsComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
 
-  { path: 'my-matches', component: MyMatchesComponent },
-  { path: 'my-team', component: DashTeamManagComponent },
-  { path: 'profile', component: DashAccountComponent },
+  {
+    path: 'my-matches', component: MyMatchesComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
+  {
+    path: 'my-team', component: DashTeamManagComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
+  {
+    path: 'profile', component: DashAccountComponent,
+    ...canActivate(redirectUnauthorizedGuard)
+  },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },
   { path: 'onboarding', component: OnboardingComponent, canActivate: [OnboardingGuard] },
