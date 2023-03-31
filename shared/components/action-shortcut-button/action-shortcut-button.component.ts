@@ -6,6 +6,7 @@ export class IActionShortcutData {
   label: string = 'Home';
   highlight: boolean;
   route: string = null;
+  disabled?: boolean = false;
   svg?: string = null;
 }
 

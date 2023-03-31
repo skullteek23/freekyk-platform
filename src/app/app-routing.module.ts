@@ -20,12 +20,14 @@ import { LeaderboardComponent } from './main-shell/components/leaderboard/leader
 import { OrganizeSeasonComponent } from './main-shell/components/organize-season/organize-season.component';
 import { RewardsComponent } from './main-shell/components/rewards/rewards.component';
 import { ViewMatchesComponent } from './main-shell/components/view-matches/view-matches.component';
-import { OnboardingComponent } from './main-shell/onboarding/onboarding.component';
+import { OnboardingComponent } from './main-shell/components/onboarding/onboarding.component';
 import { PrivacyComponent } from './others/privacy/privacy.component';
 import { TermsComponent } from './others/terms/terms.component';
 import { GroundProfileComponent } from './play/profile-pages/ground-profile/ground-profile.component';
 import { SeasonProfileComponent } from './play/profile-pages/season-profile/season-profile.component';
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
+import { JoinTeamDialogComponent } from './main-shell/components/join-team-dialog/join-team-dialog.component';
+import { OnboardUserGuard } from './auth/onboard-user.guard';
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
@@ -46,8 +48,9 @@ const routes: Routes = [
 
   { path: 'teams', component: GetTeamComponent },
   {
-    path: 'teams/create', component: CreateTeamDialogComponent,
+    path: 'teams/create', component: CreateTeamDialogComponent, canActivate: [OnboardUserGuard]
   },
+  { path: 'teams/join', component: JoinTeamDialogComponent },
   { path: 'team/:teamid', component: TeamProfileComponent },
 
   { path: 'grounds', component: FindGroundsComponent },
@@ -63,6 +66,12 @@ const routes: Routes = [
   },
   {
     path: 'my-team', component: DashTeamManagComponent,
+    ...canActivate(redirectUnauthorizedGuard),
+    children: [
+      { path: 'invite', component: DashTeamManagComponent },
+      { path: 'settings', component: DashTeamManagComponent },
+      { path: 'gallery', component: DashTeamManagComponent },
+    ]
   },
   {
     path: 'profile', component: DashAccountComponent,

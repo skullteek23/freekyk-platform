@@ -1,5 +1,5 @@
 <div class="back-button" fxLayoutAlign="start center">
-  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+  <button [routerLink]="['..']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
     <span>
       Go back
@@ -8,7 +8,7 @@
   <span class="dash-h5 heading">Welcome to Freekyk!</span>
 </div>
 <mat-vertical-stepper #stepper>
-  <mat-step label="Tell us about yourself" [stepControl]="nameDetailsForm">
+  <mat-step label="Tell us about yourself" [stepControl]="nameDetailsForm" [editable]="stepper.selectedIndex < 2">
     <form [formGroup]="nameDetailsForm" fxLayoutAlign="center start" fxLayout="column"
       *ngIf="stepper.selectedIndex === 0 && nameDetailsForm">
       <div class="logo-container">
@@ -47,7 +47,7 @@
       </div>
     </form>
   </mat-step>
-  <mat-step label="More">
+  <mat-step label="More" [editable]="stepper.selectedIndex < 2" [stepControl]="locationForm">
     <form [formGroup]="locationForm" fxLayoutAlign="center start" fxLayout="column"
       *ngIf="stepper.selectedIndex === 1 && locationForm">
       <div class="dropdown-container">

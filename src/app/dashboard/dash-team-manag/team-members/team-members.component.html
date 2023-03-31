@@ -1,25 +1,25 @@
 <mat-card class="dashboard-card mat-elevation-z8">
   <div fxLayout fxLayoutAlign="space-between center">
     <span mat-card-title class="dash-h5 align">My Team Members</span>
-    <a (click)="onManageMembers()" *ngIf="isCaptain" class="mat-caption sec-menu">
+    <a (click)="manageTeam()" *ngIf="captainID" class="mat-caption sec-menu">
       Manage
     </a>
   </div>
   <div class="button-container" fxLayout="column" fxLayoutGap="12px">
     <button (click)="openInviteDialog()" class="link-button" fxFlex="100%" mat-stroked-button
-      [disabled]="!members.length" color="primary">
+      [disabled]="!membersList.length" color="primary">
       <span class="material-icons-round external-icon">group_add</span>
       Invite players
     </button>
   </div>
   <!-- list -->
   <app-no-items-message customText="Team members will show here after joining a team!"
-    *ngIf="members?.length === 0"></app-no-items-message>
+    *ngIf="membersList?.length === 0"></app-no-items-message>
 
-  <app-team-player-members-list *ngIf="members.length" [captainID]="captainID"
-    [list]="members"></app-team-player-members-list>
+  <app-team-player-members-list *ngIf="membersList.length" [list]="membersList"
+    [captainID]="captainID"></app-team-player-members-list>
 
-  <div class="button-container--top" *ngIf="!members.length" fxLayout="column" fxLayoutGap="12px">
+  <div class="button-container--top" *ngIf="!membersList.length" fxLayout="column" fxLayoutGap="12px">
     <button (click)="openJoinTeam()" class="link-button" fxFlex="100%" mat-stroked-button color="primary">
       <span class="material-icons-round external-icon">add_circle</span>
       Create or Join a Team

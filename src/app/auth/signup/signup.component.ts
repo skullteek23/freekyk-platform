@@ -27,10 +27,12 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
+
     this.initForm();
     window.scrollTo(0, 0);
   }
@@ -119,6 +121,7 @@ export class SignupComponent implements OnInit {
           // Invalid OTP
           this.setFocusOnOtpDigit(0);
           this.isInvalidOtp = true;
+          this.snackbarService.displayError('Invalid OTP! Please try again.')
           this.otpForm.reset();
         })
         .finally(() => {
@@ -129,7 +132,7 @@ export class SignupComponent implements OnInit {
 
   postSignup(user: authUser) {
     this.isLoaderShown = false;
-    this.authService.saveUserCred(user);
+    this.authService.saveUserCred(user.user);
     this.redirectLoggedUser();
   }
 

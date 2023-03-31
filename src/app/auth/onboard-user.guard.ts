@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SignupGuardGuard implements CanActivate {
+export class OnboardUserGuard implements CanActivate {
 
   constructor(
     private authService: AuthService,
@@ -19,22 +19,20 @@ export class SignupGuardGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.authService.isLoggedIn()
       .pipe(switchMap(async user => {
-        const callbackUrl = route?.queryParams['callback'] || '/';
+        const callbackUrl = state.url;
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
         if (user) {
           const result = await this.authService.isProfileExists(user);
           if (result) {
-            // Player is onboard, navigate to callback url
-            this.router.navigate([decodeURIComponent(callbackUrl)]);
-            return false;
+            return true;
           } else {
-            // Player is not onboard, navigate to onboarding screen
-            this.router.navigate(['/onboarding'], { queryParams: { callback: encodedCallbackUrl } });
+            this.router.navigate(['/onboarding'], { queryParams: { callback: encodedCallbackUrl } })
             return false;
           }
         } else {
-          // Player is not logged in, continue navigation
-          return true;
+          // Player is not logged in, redirect to signup
+          this.router.navigate(['/signup'], { queryParams: { callback: encodedCallbackUrl } });
+          return false;
         }
       }))
   }

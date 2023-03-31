@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ValidationErrors } from '@angular/forms';
 import { authUserMain, User } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
+import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { FirebaseUser } from '@shared/interfaces/admin.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
@@ -12,7 +13,7 @@ import { LeagueTableModel } from '@shared/interfaces/others.model';
 import { ISeasonPartner, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonOrdersData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -40,11 +41,12 @@ export class ApiGetService {
     }
   }
 
-  getPlayerV2(docID: string): Observable<IPlayer> {
-    if (docID) {
-      return this.angularFirestore.collection('players').doc(docID).get()
-        .pipe(manipulatePlayerDataV2);
+  getTeamPlayers(listIDs: string[]): Observable<ITeamPlayer[]> {
+    if (listIDs.length) {
+      return this.getPlayers()
+        .pipe(manipulateTeamPlayerData.bind(this, listIDs))
     }
+    return null;
   }
 
   getPlayerAllInfo(docID: string): Observable<Partial<PlayerAllInfo>> {
@@ -118,6 +120,11 @@ export class ApiGetService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('teams', query).get()
+      .pipe(manipulateTeamsData)
+  }
+
+  getTeam(teamID: string): Observable<ITeam> {
+    return this.angularFirestore.collection('teams').doc(teamID).get()
       .pipe(manipulateTeamData)
   }
 
@@ -125,12 +132,13 @@ export class ApiGetService {
     if (docID) {
       return forkJoin([
         this.angularFirestore.collection('teams').doc(docID).get(),
-        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('moreInfo').get(),
-        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('statistics').get(),
-        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('media').get(),
-        this.angularFirestore.collection(`teams/${docID}/additionalInfo`).doc('members').get(),
+        this.angularFirestore.collection('teamMore').doc(docID).get(),
+        this.angularFirestore.collection('teamStatistics').doc(docID).get(),
+        this.angularFirestore.collection('teamMedia').doc(docID).get(),
+        this.angularFirestore.collection('teamMembers').doc(docID).get(),
       ]).pipe(manipulateTeamBulkData)
     }
+    return null;
   }
 
   getTeamFixtures(teamID: string): Observable<MatchFixture[]> {

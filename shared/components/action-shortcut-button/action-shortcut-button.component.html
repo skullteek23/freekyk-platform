@@ -1,7 +1,7 @@
 <div class="shortcut-button-shared" fxLayout="column" fxLayoutAlign="stretch center" fxLayoutGap="4px">
-  <button mat-icon-button (click)="clickAction()" color="primary" type="button" class="action-button"
-    matBadge="{{data.highlight ? 'New' : ''}}" matBadgeColor="warn" matBadgeOverlap="true" matBadgeSize="small"
-    matBadgePosition="after" fxLayoutAlign="space-between center">
+  <button [disabled]="data.disabled" mat-icon-button (click)="clickAction()" color="primary" type="button"
+    class="action-button" matBadge="{{data.highlight ? 'New' : ''}}" matBadgeColor="warn" matBadgeOverlap="true"
+    matBadgeSize="small" matBadgePosition="after" fxLayoutAlign="space-between center">
     <span class="material-icons-round" *ngIf="data?.icon"> {{data.icon}} </span>
     <img [src]="data?.svg" appFallbackImg class="avatar" *ngIf="data?.svg">
   </button>

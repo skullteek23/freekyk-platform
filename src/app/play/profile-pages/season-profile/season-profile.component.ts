@@ -248,12 +248,12 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
 
           Promise.all(allPromises)
             .then(() => {
-              this.hideLoader();
               this.snackBarService.displayCustomMsg('Your Participation is confirmed!');
+              this.hideLoader();
             })
             .catch((error) => {
-              this.hideLoader();
               this.snackBarService.displayError(error?.message);
+              this.hideLoader();
             })
         },
         error: (error) => {
@@ -264,6 +264,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   }
 
   dismissDialog() {
+    console.log('dismissed')
     this.hideLoader();
     this.cdr.detectChanges();
     this.location.go('/game/' + this.seasonID);

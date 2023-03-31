@@ -39,9 +39,19 @@
       </div>
     </form>
   </mat-step>
-  <mat-step label="Finish" *ngIf="stepper.selectedIndex === 1">
-    <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
+  <mat-step label="Finish">
+    <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px"
+      *ngIf="stepper.selectedIndex === 1">
       <app-tick-animation></app-tick-animation>
+      <span class="mat-body-1 center">You're all set, Let's PLAY!!</span>
+      <div class="buttons-container" fxLayoutAlign="center center" fxLayoutGap="12px">
+        <button type="button" (click)="invitePlayers()" class="secondaryButton buttonText">
+          Invite Players
+        </button>
+        <button type="button" (click)="navigateOut()" class="primaryButton buttonText">
+          Continue
+        </button>
+      </div>
       <span class="mat-caption center">Wuhooo! Your team is LIVE.</span>
       <span class="mat-caption center">You're now {{ teamDetailsForm.value.name + "'s" }} Captain!</span>
     </div>

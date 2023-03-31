@@ -7,7 +7,6 @@ import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { ApiGetService } from '@shared/services/api.service';
-import { map } from 'rxjs/operators';
 
 export type authUser = firebase.auth.UserCredential;
 export type authUserMain = authUser['user'];
@@ -37,6 +36,7 @@ export class AuthService {
   ) {
     ngAuth.onAuthStateChanged(user => {
       this._user = user;
+      this.saveUserCred(user);
     });
   }
 
@@ -65,13 +65,18 @@ export class AuthService {
         });
       }
       return this.ngAuth.signInWithPhoneNumber(`${INDIAN_DIAL_PREFIX}${input.toString()}`, reCaptchaVerifier);
+    } else {
+      console.log('invalid details');
+      this.snackbarService.displayError('Unknown error occurred! Try again later')
+      return Promise.reject();
     }
-    console.log('invalid details');
   }
 
-  saveUserCred(user: authUser) {
-    localStorage.setItem('uid', user.user.uid);
-    localStorage.setItem('name', user.user.displayName);
+  saveUserCred(user: authUserMain) {
+    if (user) {
+      localStorage.setItem('uid', user.uid);
+      localStorage.setItem('name', user.displayName);
+    }
   }
 
   resetCaptcha() {
@@ -88,8 +93,8 @@ export class AuthService {
     return this.ngAuth.authState;
   }
 
-  isEligible(docID: string): Observable<boolean> {
-    return this.apiService.getPlayerOnboardingStatus(docID);
+  async isProfileExists(user: authUserMain): Promise<boolean> {
+    return await this.apiService.getPlayerOnboardingStatus(user.uid).toPromise();
   }
 
   onLogout(): void {
@@ -152,7 +157,7 @@ export class AuthService {
     this.snackbarService.displayError('Session Expired! Please login again');
   }
   tooManyRequests(): void {
-    this.snackbarService.displayError('Request error! Please try again after sometime');
+    this.snackbarService.displayError('Too many requests! Please try again after sometime');
   }
   popupClosedByUser(): void {
     this.snackbarService.displayError('Please sign in using the popup box');
@@ -198,8 +203,19 @@ export class AuthService {
       case 'auth/popup-closed-by-user':
         this.popupClosedByUser();
         break;
+      case 'auth/invalid-phone-number':
+        this.snackbarService.displayError('The format of the phone number provided is incorrect');
+        break;
+      case 'auth/invalid-app-credential':
+        this.snackbarService.displayError('Error: Invalid App Credential');
+        window.location.reload();
+        break;
+      case 'auth/captcha-check-failed':
+        this.snackbarService.displayError('Error: Hostname match not found');
+        window.location.reload();
+        break;
       default:
-        this.snackbarService.displayError('Error occurred!');
+        this.snackbarService.displayError('Unknown error occurred!');
         break;
     }
   }

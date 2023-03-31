@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 import { StorageApiService } from '@shared/services/storage-api.service';
 import { ITeam } from '@shared/interfaces/team.model';
 import { Router } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 @Component({
   selector: 'app-create-team-dialog',
@@ -30,7 +32,9 @@ export class CreateTeamDialogComponent implements OnInit {
     private dialog: MatDialog,
     private functionsApiService: FunctionsApiService,
     private storageApiService: StorageApiService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -69,39 +73,33 @@ export class CreateTeamDialogComponent implements OnInit {
   }
 
   async createTeam(): Promise<any> {
-    if (this.teamDetailsForm.invalid) {
+    const teamName = this.name.value;
+    if (this.teamDetailsForm.invalid && !teamName) {
       return;
     }
-    const uid = localStorage.getItem('uid');
-    const teamName = this.name.value;
 
-    if (uid && teamName) {
-      this.isLoaderShown = true;
-      const data = {
-        name: teamName,
-        captainID: uid
-      };
-      const teamCreationSnapshot = await this.functionsApiService.createTeam(data);
-      if (teamCreationSnapshot) {
-        console.log('team created!');
-        this.uploadPhoto(teamCreationSnapshot)
-          .then(() => {
-            this.stepper.next();
-          })
-          .catch(() => {
-            console.log('Error Occurred!')
-          })
-          .finally(() => {
-            this.isLoaderShown = false;
-          })
-      } else {
-        console.log('Team is not created!');
-        this.isLoaderShown = false;
-      }
+    this.isLoaderShown = true;
+    const data = {
+      name: teamName,
+      captainID: this.authService.getUser().uid
+    };
+    const teamCreationSnapshot = await this.functionsApiService.createTeam(data);
+    if (teamCreationSnapshot) {
+      this.uploadPhoto(teamCreationSnapshot)
+        .then(() => {
+          console.log('team created!');
+          this.stepper.next();
+        })
+        .catch(() => {
+          console.log('Error Occurred!')
+        })
+        .finally(() => {
+          this.isLoaderShown = false;
+        })
     } else {
-      console.log('User is not logged in!');
-      const encodedString = encodeURIComponent('/teams/create');
-      this.router.navigate(['/signup'], { queryParams: { callback: encodedString } });
+      console.log('Team is not created!');
+      this.snackbarService.displayError();
+      this.isLoaderShown = false;
     }
   }
 
@@ -113,6 +111,14 @@ export class CreateTeamDialogComponent implements OnInit {
       update.imgpath_logo = url;
       return this.apiPostService.updateTeamInfo(update, docID);
     }
+  }
+
+  navigateOut() {
+    this.router.navigate(['/my-team']);
+  }
+
+  invitePlayers() {
+    this.router.navigate(['/my-team', 'invite']);
   }
 
   get logo() {

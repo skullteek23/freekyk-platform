@@ -1,32 +1,25 @@
-<div fxLayout="column" class="back-button">
-  <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton" fxLayoutAlign="center center"
-    fxLayoutGap="8px">
-    <span class="material-icons-round">chevron_left</span>
-    <span>
-      Go to Dashboard
+<section class="container grey-bg">
+  <div class="name">
+    <span class="mat-body-1" *ngIf="team?.name">
+      You're a member of Team <span class="mat-body-2">{{ team?.name }}.</span>
     </span>
-  </button>
-</div>
-<div class="cards-container" fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="20px"
-  fxLayoutGap.gt-sm="20px">
-
-  <div class="shortcuts" fxLayoutGap="12px" fxLayout="column" fxFlex.gt-sm="100%"
-    *ngIf="joinShortcutData || teamSettingsShortcutData">
-
-    <!-- <app-action-shortcut-button *ngIf="joinShortcutData" [data]="joinShortcutData"
-      (actionTrigger)="openJoinTeam()"></app-action-shortcut-button>
-    <app-action-shortcut-button *ngIf="teamSettingsShortcutData" [data]="teamSettingsShortcutData"
-      (actionTrigger)="openTeamSettings()"></app-action-shortcut-button> -->
+    <span class="mat-body-1" *ngIf="!team || !team.name">
+      You do not have a team yet!
+    </span>
   </div>
-
-  <app-team-members></app-team-members>
+  <ul class="shortcuts">
+    <li class="shortcut" *ngFor="let shortcut of shortcuts">
+      <app-action-shortcut-button (actionClick)="selectAction($event)" [data]="shortcut"></app-action-shortcut-button>
+    </li>
+  </ul>
+</section>
+<router-outlet></router-outlet>
+<section fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="20px" fxLayoutGap.gt-sm="20px">
+  <app-team-members [members]="team?.members" [captainID]="team?.captain?.id"></app-team-members>
 
   <app-my-stats-card [data]="teamStats" *ngIf="teamStats" label="My Team Statistics"></app-my-stats-card>
 
-  <app-action-shortcut-button *ngIf="teamGalleryShortcutData" [data]="teamGalleryShortcutData"
-    (actionTrigger)="openTeamGallery()"></app-action-shortcut-button>
   <div id="communication"> </div>
   <app-team-communication></app-team-communication>
-</div>
-
+</section>
 <app-loading *ngIf="isLoaderShown"></app-loading>

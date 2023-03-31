@@ -21,7 +21,7 @@
   </mat-card-content>
 </mat-card>
 <section>
-  <app-search-lg searchPlaceholder="Search a Team" (searchItem)="applySearch($event)"></app-search-lg>
+  <app-search-lg searchPlaceholder="Search a Player" (searchItem)="applySearch($event)"></app-search-lg>
   <mat-list *ngIf="playersListCache.length">
     <mat-list-item *ngFor="let player of playersList" (click)="openProfile(player)">
       <mat-card class="mat-elevation-z8 dashboard-card player-container" fxLayoutAlign="start center"

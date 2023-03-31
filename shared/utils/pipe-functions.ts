@@ -1,20 +1,21 @@
 import { BasicStats, IPlayer, IPlayerMore, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
 import { ISeason, ISeasonDescription, ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
-import { ITeam, ITeamDescription, TeamBasicInfo, TeamMedia, TeamMembers, TeamStats } from "@shared/interfaces/team.model";
+import { ITeam, ITeamDescription, ITeamMembers, TeamBasicInfo, TeamMedia, TeamMembers, TeamStats } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
 import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
 import { LeagueTableModel } from "@shared/interfaces/others.model";
 import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
 import { ValidationErrors } from "@angular/forms";
+import { ITeamPlayer } from "@shared/components/team-player-members-list/team-player-members-list.component";
 
 // export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
-export interface TeamAllInfo extends ITeam, ITeamDescription, TeamMembers, TeamMedia, TeamStats { };
+export interface TeamAllInfo extends ITeam, ITeamDescription, ITeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
 export interface PlayerAllInfo extends IPlayer, IPlayerMore, BasicStats { };
 
@@ -25,6 +26,14 @@ export function manipulatePlayersData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as IPlayer), } as IPlayer))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+  );
+}
+export function manipulateTeamPlayerData(list: string[], source: Observable<IPlayer[]>): Observable<ITeamPlayer[]> {
+  return source.pipe(
+    map((resp) => resp
+      .filter(player => list.includes(player.id))
+      .map(player => ({ name: player.name, id: player.id, position: player.position, imgpath: player.imgpath }))),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('position'))),
   );
 }
 
@@ -219,7 +228,7 @@ export function manipulateTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc,
         const data_1: ITeam = response[0].exists ? ({ id: response[0].id, ...response[0].data() as ITeam }) : null;
         const data_2: ITeamDescription = response[1].exists ? ({ ...response[1].data() as ITeamDescription }) : null;
         const data_3: TeamStats = response[2].exists ? ({ ...response[2].data() as TeamStats }) : null;
-        const data_4: TeamMembers = response[3].exists ? ({ ...response[3].data() as TeamMembers }) : null;
+        const data_4: ITeamMembers = response[3].exists ? ({ ...response[3].data() as ITeamMembers }) : null;
         const data_5: TeamMedia = response[4].exists ? ({ ...response[4].data() as TeamMedia }) : null;
 
         if (data_1 || data_2 || data_3 || data_4 || data_5) {
@@ -292,10 +301,16 @@ export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, P
   );
 }
 
-export function manipulateTeamData(source: Observable<ngFireDocQuery>) {
+export function manipulateTeamsData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ITeam), } as ITeam))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+  );
+}
+
+export function manipulateTeamData(source: Observable<ngFireDoc>) {
+  return source.pipe(
+    map((resp) => ({ id: resp.id, ...(resp.data() as ITeam), } as ITeam)),
   );
 }
 

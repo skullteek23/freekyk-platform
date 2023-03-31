@@ -24,7 +24,8 @@ import { PhotoUploadingCircleComponent } from './components/photo-uploading-circ
 import { MyMatchesComponent } from './components/my-matches/my-matches.component';
 import { RouterModule } from '@angular/router';
 import { GameComponent } from './components/game/game.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
+import { OnboardingComponent } from './components/onboarding/onboarding.component';
+import { JoinTeamDialogComponent } from './components/join-team-dialog/join-team-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { OnboardingComponent } from './onboarding/onboarding.component';
     MyMatchesComponent,
     GameComponent,
     OnboardingComponent,
+    JoinTeamDialogComponent,
   ],
   imports: [
     CommonModule,

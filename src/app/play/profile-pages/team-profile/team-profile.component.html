@@ -1,5 +1,5 @@
-<div fxLayout="column" class="back-button">
-  <button [routerLink]="['/teams']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
     <span>
       Go back
@@ -84,12 +84,11 @@
     <mat-card-title>
       <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
         <span class="dash-h5 align">Team Members</span>
-        <span class="mat-caption sec-menu">Count: {{team.memCount}}</span>
+        <span class="mat-caption sec-menu">Count: {{team?.members?.length}}</span>
       </div>
     </mat-card-title>
     <mat-card-content>
-      <app-team-player-members-list [captainID]="team?.captain?.id || null"
-        [list]="team.members"></app-team-player-members-list>
+      <app-team-player-members-list [captainID]="team?.captain?.id || null" [list]="[]"></app-team-player-members-list>
     </mat-card-content>
   </mat-card>
 </section>
