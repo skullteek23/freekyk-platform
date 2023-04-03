@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -7,7 +8,7 @@ import { Subject } from 'rxjs';
   templateUrl: './searchable-form-field.component.html',
   styleUrls: ['./searchable-form-field.component.scss']
 })
-export class SearchableFormFieldComponent implements OnInit {
+export class SearchableFormFieldComponent implements OnInit, AfterViewInit {
 
   @Input() control = new FormControl();
   @Input() required = true;
@@ -19,9 +20,11 @@ export class SearchableFormFieldComponent implements OnInit {
     } else {
       this.control.disable();
     }
+    this.openSelector();
   }
   @Input() label = 'Label';
   @Output() selectionChange = new Subject<string>();
+  @ViewChild(MatSelect) select: MatSelect;
 
   listOptions: string[] = []
   listOptionsCache: string[] = [];
@@ -30,6 +33,16 @@ export class SearchableFormFieldComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+    this.openSelector();
+  }
+
+  openSelector() {
+    if (this.listOptionsCache?.length && this.select) {
+      this.select.open();
+    }
   }
 
   filterList() {

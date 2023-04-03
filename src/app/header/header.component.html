@@ -24,7 +24,7 @@
 
         <!-- notif icon - small -->
         <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-          (click)="onCloseMenu()" [routerLink]="['/dashboard/home']">
+          (click)="onCloseMenu()" [routerLink]="['/notifications']">
           <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
             [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
             notifications

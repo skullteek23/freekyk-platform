@@ -19,13 +19,13 @@ export class SignupGuardGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.authService.isLoggedIn()
       .pipe(switchMap(async user => {
-        const callbackUrl = route?.queryParams['callback'] || '/';
-        const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+        // queryParams always contains encoded callback Url
+        const encodedCallbackUrl = route?.queryParams['callback'] || '/';
         if (user) {
           const result = await this.authService.isProfileExists(user);
           if (result) {
             // Player is onboard, navigate to callback url
-            this.router.navigate([decodeURIComponent(callbackUrl)]);
+            this.router.navigate([decodeURIComponent(encodedCallbackUrl)]);
             return false;
           } else {
             // Player is not onboard, navigate to onboarding screen

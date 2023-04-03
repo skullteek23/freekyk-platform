@@ -21,6 +21,7 @@ export class SignupComponent implements OnInit {
   otpConfirmation: confirmationResult = null;
   formInput = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6'];
   callbackUrl: string = null;
+  errorMessage = '';
 
   @ViewChildren('formRow') rows: any;
 
@@ -32,7 +33,6 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.initForm();
     window.scrollTo(0, 0);
   }
@@ -114,14 +114,13 @@ export class SignupComponent implements OnInit {
       }
       this.otpConfirmation.confirm(otp)
         .then((user) => {
-          this.isInvalidOtp = false;
+          this.errorMessage = '';
           this.postSignup(user);
         })
         .catch(error => {
-          // Invalid OTP
+          // Invalid OTP Or Account disabled
           this.setFocusOnOtpDigit(0);
-          this.isInvalidOtp = true;
-          this.snackbarService.displayError('Invalid OTP! Please try again.')
+          this.authService.handleAuthError(error);
           this.otpForm.reset();
         })
         .finally(() => {
@@ -131,14 +130,16 @@ export class SignupComponent implements OnInit {
   }
 
   postSignup(user: authUser) {
-    this.isLoaderShown = false;
     this.authService.saveUserCred(user.user);
     this.redirectLoggedUser();
   }
 
   redirectLoggedUser() {
+    const queryParams = this.route.snapshot.queryParams;
+    this.callbackUrl = queryParams.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/';
     const callbackEncoded = encodeURIComponent(this.callbackUrl || '/');
     this.router.navigate(['/onboarding'], { queryParams: { callback: callbackEncoded } });
+    this.isLoaderShown = false;
   }
 
   resetForm(): void {
@@ -147,7 +148,7 @@ export class SignupComponent implements OnInit {
   }
 
   resetOtp(): void {
-    this.isInvalidOtp = false;
+    this.errorMessage = '';
     this.otpConfirmation = null;
     this.authService.resetCaptcha();
   }

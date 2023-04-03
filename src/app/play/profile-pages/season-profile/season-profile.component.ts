@@ -233,7 +233,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   }
 
   redirectToUrl(path: string): void {
-    const encodedString = encodeURIComponent('/game/' + this.season.id + '/pay');
+    const encodedString = encodeURIComponent(`/game/${this.season.id}/pay`);
     this.router.navigate([path], { queryParams: { callback: encodedString } });
   }
 

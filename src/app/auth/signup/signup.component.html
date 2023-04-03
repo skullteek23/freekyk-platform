@@ -18,8 +18,8 @@
         Required field
       </mat-error>
     </mat-form-field>
-    <button [disabled]="authForm.invalid" (click)="signupWithPhoneNumber()" class="buttonText primaryButton wb"
-      fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
+    <button type="button" [disabled]="authForm.invalid" (click)="signupWithPhoneNumber()"
+      class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
       Continue
     </button>
     <p class="mat-caption terms">
@@ -42,7 +42,6 @@
         </mat-form-field>
       </div>
     </div>
-    <mat-error *ngIf="isInvalidOtp" class="mat-error-invalid-otp">Invalid OTP</mat-error>
     <button type="submit" [disabled]="otpForm.invalid" (click)="verifyOTP()" id="otp-verify-button"
       class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
       Verify

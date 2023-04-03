@@ -8,7 +8,7 @@
   <span class="dash-h5 heading">Welcome to Freekyk!</span>
 </div>
 <mat-vertical-stepper #stepper>
-  <mat-step label="Tell us about yourself" [stepControl]="nameDetailsForm" [editable]="stepper.selectedIndex < 2">
+  <mat-step label="Update your details" [stepControl]="nameDetailsForm" [editable]="stepper.selectedIndex < 2">
     <form [formGroup]="nameDetailsForm" fxLayoutAlign="center start" fxLayout="column"
       *ngIf="stepper.selectedIndex === 0 && nameDetailsForm">
       <div class="logo-container">
@@ -26,10 +26,11 @@
       </mat-form-field>
       <mat-form-field fxFlex.gt-sm="30%" color="primary">
         <mat-label>Enter your birthdate</mat-label>
-        <input matInput name="born" formControlName="born" [matDatepicker]="picker" />
+        <input matInput name="born" formControlName="born" [matDatepicker]="picker" [max]="maxDate"
+          (focus)="picker.open()" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="nameDetailsForm.get('born')?.errors?.underAge">
+        <mat-datepicker #picker startView="multi-year" touchUi="true"></mat-datepicker>
+        <mat-error *ngIf="nameDetailsForm.get('born')?.errors?.underAg || nameDetailsForm.get('born')?.errors?.max">
           Minimum Age must be 6 years!
         </mat-error>
       </mat-form-field>
@@ -42,7 +43,7 @@
       </div>
       <div class="action-buttons-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
         <button type="button" class="primaryButton buttonText" [disabled]="nameDetailsForm.invalid" matStepperNext>
-          Next
+          Continue
         </button>
       </div>
     </form>
@@ -71,7 +72,7 @@
       <div class="action-buttons-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
         <button type="button" (click)="submit(stepper)" class="primaryButton buttonText"
           [disabled]="locationForm.invalid">
-          Save & Next
+          Continue
         </button>
       </div>
 

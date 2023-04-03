@@ -5,7 +5,7 @@ import { logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ApiGetService } from '@shared/services/api.service';
 
 export type authUser = firebase.auth.UserCredential;
@@ -27,6 +27,7 @@ var grecaptcha;
 export class AuthService {
 
   private _user: authUserMain = null;
+  private _photoChanged = new Subject<string>();
 
   constructor(
     private snackbarService: SnackbarService,
@@ -37,7 +38,12 @@ export class AuthService {
     ngAuth.onAuthStateChanged(user => {
       this._user = user;
       this.saveUserCred(user);
+      this.updatePhoto(user?.photoURL);
     });
+  }
+
+  updatePhoto(url: string) {
+    this._photoChanged.next(url || null);
   }
 
   login(logData: logDetails): Promise<authUser> {
@@ -91,6 +97,10 @@ export class AuthService {
 
   isLoggedIn(): Observable<authUserMain> {
     return this.ngAuth.authState;
+  }
+
+  getPhoto(): Subject<string> {
+    return this._photoChanged;
   }
 
   async isProfileExists(user: authUserMain): Promise<boolean> {
@@ -169,54 +179,62 @@ export class AuthService {
 
   // error mapper
   handleAuthError(error): void {
-    switch (error.code) {
-      case 'auth/email-already-in-use':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/account-exists-with-different-credential':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/network-request-failed':
-        this.networkFail();
-        break;
-      case 'auth/invalid-email':
-        this.emailIncorrect();
-        break;
-      case 'auth/wrong-password':
-        this.passwordIncorrect();
-        break;
-      case 'auth/weak-password':
-        this.passwordWeak();
-        break;
-      case 'auth/id-token-expired':
-        this.sessionExpired();
-        break;
-      case 'auth/user-not-found':
-        this.accountNotExist();
-        break;
-      case 'auth/uid-already-exists':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/too-many-requests':
-        this.tooManyRequests();
-        break;
-      case 'auth/popup-closed-by-user':
-        this.popupClosedByUser();
-        break;
-      case 'auth/invalid-phone-number':
-        this.snackbarService.displayError('The format of the phone number provided is incorrect');
-        break;
-      case 'auth/invalid-app-credential':
-        this.snackbarService.displayError('Error: Invalid App Credential');
-        window.location.reload();
-        break;
-      case 'auth/captcha-check-failed':
-        this.snackbarService.displayError('Error: Hostname match not found');
-        window.location.reload();
-        break;
-      default:
-        this.snackbarService.displayError('Unknown error occurred!');
-        break;
+    if (error?.code) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/account-exists-with-different-credential':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/network-request-failed':
+          this.networkFail();
+          break;
+        case 'auth/invalid-email':
+          this.emailIncorrect();
+          break;
+        case 'auth/wrong-password':
+          this.passwordIncorrect();
+          break;
+        case 'auth/weak-password':
+          this.passwordWeak();
+          break;
+        case 'auth/id-token-expired':
+          this.sessionExpired();
+          break;
+        case 'auth/user-not-found':
+          this.accountNotExist();
+          break;
+        case 'auth/uid-already-exists':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/too-many-requests':
+          this.tooManyRequests();
+          break;
+        case 'auth/popup-closed-by-user':
+          this.popupClosedByUser();
+          break;
+        case 'auth/invalid-phone-number':
+          this.snackbarService.displayError('The format of the phone number provided is incorrect');
+          break;
+        case 'auth/invalid-app-credential':
+          this.snackbarService.displayError('Error: Invalid App Credential');
+          window.location.reload();
+          break;
+        case 'auth/invalid-verification-code':
+          this.snackbarService.displayError('Error: Invalid OTP');
+          break;
+        case 'auth/user-disabled':
+          this.snackbarService.displayError('Error: Account disabled by Admin');
+          break;
+        case 'auth/captcha-check-failed':
+          this.snackbarService.displayError('Error: Hostname match not found');
+          window.location.reload();
+          break;
+        default:
+          this.snackbarService.displayError('Unknown error occurred!');
+          break;
+      }
     }
   }
   // error mapper

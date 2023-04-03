@@ -28,6 +28,7 @@ import { SeasonProfileComponent } from './play/profile-pages/season-profile/seas
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
 import { JoinTeamDialogComponent } from './main-shell/components/join-team-dialog/join-team-dialog.component';
 import { OnboardUserGuard } from './auth/onboard-user.guard';
+import { MyNotificationsComponent } from './dashboard/dash-home/my-notifications/my-notifications.component';
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
@@ -75,6 +76,9 @@ const routes: Routes = [
   },
   {
     path: 'profile', component: DashAccountComponent,
+  },
+  {
+    path: 'notifications', component: MyNotificationsComponent,
   },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },

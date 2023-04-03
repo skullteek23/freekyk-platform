@@ -60,6 +60,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
     this.getLiveSeasons();
+    this.authService.getPhoto().subscribe({
+      next: response => {
+        this.photoUrl = response;
+      },
+    })
     this.authService.isLoggedIn().subscribe({
       next: (user) => {
         if (user) {
@@ -72,7 +77,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.mobileLinks = MOBILE_LINKS.slice();
           this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
           this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
-          this.photoUrl = user.photoURL;
+
         }
         this.isLoading = false;
       }
