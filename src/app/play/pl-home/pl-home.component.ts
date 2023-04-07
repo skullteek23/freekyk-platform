@@ -40,19 +40,19 @@ export class PlHomeComponent implements OnInit {
   }
 
   getUpcomingSeason() {
-    this.apiService.getPublishedSeasonWithPaymentInfo(1)
-      .subscribe({
-        next: (response) => {
-          if (response?.length) {
-            this.upcomingSeason = response[0];
-            window.scrollTo(0, 0);
-          }
-        },
-        error: (error) => {
-          this.upcomingSeason = null;
-          window.scrollTo(0, 0);
-        }
-      });
+    // this.apiService.getPublishedSeasonWithPaymentInfo(1)
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response?.length) {
+    //         this.upcomingSeason = response[0];
+    //         window.scrollTo(0, 0);
+    //       }
+    //     },
+    //     error: (error) => {
+    //       this.upcomingSeason = null;
+    //       window.scrollTo(0, 0);
+    //     }
+    //   });
   }
 
   getTeams() {

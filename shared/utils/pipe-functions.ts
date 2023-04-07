@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
-import { ISeason, ISeasonDescription, ISeasonPartner, SeasonAbout, SeasonBasicInfo, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
+import { ISeason, ISeasonDescription, ISeasonPartner, SeasonAbout, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
 import { ITeam, ITeamDescription, ITeamMembers, TeamBasicInfo, TeamMedia, TeamMembers, TeamStats } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
 import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
@@ -13,7 +13,7 @@ import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-brac
 import { ValidationErrors } from "@angular/forms";
 import { ITeamPlayer } from "@shared/components/team-player-members-list/team-player-members-list.component";
 
-// export interface SeasonAllInfo extends SeasonBasicInfo, SeasonAbout, SeasonStats, SeasonMedia { };
+// export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
 export interface TeamAllInfo extends ITeam, ITeamDescription, ITeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
@@ -49,28 +49,28 @@ export function manipulatePlayerDataV2(source: Observable<ngFireDoc>): Observabl
   );
 }
 
-export function manipulateSeasonData(source: Observable<ngFireDocQuery>): Observable<SeasonBasicInfo[]> {
-  return source.pipe(
-    map(response => {
-      const seasonList: SeasonBasicInfo[] = [];
-      if (!response.empty) {
-        response.forEach(season => {
-          const docData = season.data() as SeasonBasicInfo;
-          const docID = season.id;
-          docData.discountedFees = getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
-          docData.slotBooked = false;
-          docData.isAmountDue = null;
-          docData.isFreeSeason = docData.discountedFees === 0;
-          if (docData.status === 'PUBLISHED') {
-            seasonList.push({ id: docID, ...docData });
-          }
-        });
-      }
-      return seasonList;
-    }),
-    map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
-  );
-}
+// export function manipulateSeasonData(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
+//   return source.pipe(
+//     map(response => {
+//       const seasonList: ISeason[] = [];
+//       if (!response.empty) {
+//         response.forEach(season => {
+//           const docData = season.data() as ISeason;
+//           const docID = season.id;
+//           docData.discountedFees = getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
+//           docData.slotBooked = false;
+//           docData.isAmountDue = null;
+//           docData.isFreeSeason = docData.discountedFees === 0;
+//           if (docData.status === 'PUBLISHED') {
+//             seasonList.push({ id: docID, ...docData });
+//           }
+//         });
+//       }
+//       return seasonList;
+//     }),
+//     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+//   );
+// }
 
 export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
   return source.pipe(
@@ -84,91 +84,16 @@ export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Obse
             seasonList.push({ id: docID, ...docData });
           }
         });
-      } else {
-        seasonList = [
-          {
-            name: 'WellClub A',
-            imgpath: null,
-            city: 'Ghaziabad',
-            state: 'Uttar Pradesh',
-            fees: 2500,
-            type: 'FCP',
-            startDate: new Date().getTime(),
-            participatingTeams: 4,
-            status: 'PUBLISHED',
-            createdBy: 'asjkgkj2g3kj52g3',
-            lastRegistrationDate: new Date().getTime() + 10000000,
-            ageCategory: 99,
-            leftOverMatchCount: 1
-          },
-          {
-            name: 'WellClub A',
-            imgpath: null,
-            city: 'Ghaziabad',
-            state: 'Uttar Pradesh',
-            fees: 2500,
-            type: 'FCP',
-            startDate: new Date().getTime(),
-            participatingTeams: 4,
-            status: 'PUBLISHED',
-            createdBy: 'asjkgkj2g3kj52g3',
-            lastRegistrationDate: new Date().getTime() + 10000000,
-            ageCategory: 99,
-            leftOverMatchCount: 1
-          },
-          {
-            name: 'WellClub A',
-            imgpath: null,
-            city: 'Ghaziabad',
-            state: 'Uttar Pradesh',
-            fees: 2500,
-            type: 'FCP',
-            startDate: new Date().getTime(),
-            participatingTeams: 4,
-            status: 'PUBLISHED',
-            createdBy: 'asjkgkj2g3kj52g3',
-            lastRegistrationDate: new Date().getTime() + 10000000,
-            ageCategory: 99,
-            leftOverMatchCount: 1
-
-          },
-          {
-            name: 'WellClub A',
-            imgpath: null,
-            city: 'Ghaziabad',
-            state: 'Uttar Pradesh',
-            fees: 2500,
-            type: 'FCP',
-            startDate: new Date().getTime(),
-            participatingTeams: 4,
-            status: 'PUBLISHED',
-            createdBy: 'asjkgkj2g3kj52g3',
-            lastRegistrationDate: new Date().getTime() + 10000000,
-            ageCategory: 99,
-            leftOverMatchCount: 1
-
-          },
-          {
-            name: 'WellClub A',
-            imgpath: null,
-            city: 'Ghaziabad',
-            state: 'Uttar Pradesh',
-            fees: 2500,
-            type: 'FCP',
-            startDate: new Date().getTime(),
-            participatingTeams: 4,
-            status: 'PUBLISHED',
-            createdBy: 'asjkgkj2g3kj52g3',
-            lastRegistrationDate: new Date().getTime() + 10000000,
-            ageCategory: 99,
-            leftOverMatchCount: 1
-
-          }
-        ];
       }
       return seasonList;
     }),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
+  );
+}
+
+export function manipulateSeasonNamesData(source: Observable<ISeason[]>): Observable<string[]> {
+  return source.pipe(
+    map(resp => resp.map(resp => resp.name))
   );
 }
 
@@ -270,36 +195,36 @@ export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDo
   );
 }
 
-export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, Partial<RazorPayOrder>[]]>): Observable<SeasonBasicInfo[]> {
-  return source.pipe(
-    map(response => {
-      const seasonList: SeasonBasicInfo[] = [];
-      if (response?.length === 2) {
-        const orderList = response[1];
-        response[0].forEach(season => {
-          const docData = season.data() as SeasonBasicInfo;
-          const docID = season.id;
-          const slotExists = orderList.find(order => order.seasonID === docID);
+// export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, Partial<RazorPayOrder>[]]>): Observable<ISeason[]> {
+//   return source.pipe(
+//     map(response => {
+//       const seasonList: ISeason[] = [];
+//       if (response?.length === 2) {
+//         const orderList = response[1];
+//         response[0].forEach(season => {
+//           const docData = season.data() as ISeason;
+//           const docID = season.id;
+//           const slotExists = orderList.find(order => order.seasonID === docID);
 
-          docData.discountedFees = getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
-          if (slotExists) {
-            docData.slotBooked = true;
-            docData.isAmountDue = slotExists.amount_due / 100; // in rupees
-          } else {
-            docData.slotBooked = false;
-            docData.isAmountDue = null;
-          }
-          docData.isFreeSeason = docData.discountedFees === 0;
-          if (docData.status === 'PUBLISHED') {
-            seasonList.push({ id: docID, ...docData });
-          }
-        });
-      }
-      return seasonList;
-    }),
-    map(resp => resp.sort(ArraySorting.sortObjectByKey('isAmountDue', 'desc'))),
-  );
-}
+//           docData.discountedFees = getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
+//           if (slotExists) {
+//             docData.slotBooked = true;
+//             docData.isAmountDue = slotExists.amount_due / 100; // in rupees
+//           } else {
+//             docData.slotBooked = false;
+//             docData.isAmountDue = null;
+//           }
+//           docData.isFreeSeason = docData.discountedFees === 0;
+//           if (docData.status === 'PUBLISHED') {
+//             seasonList.push({ id: docID, ...docData });
+//           }
+//         });
+//       }
+//       return seasonList;
+//     }),
+//     map(resp => resp.sort(ArraySorting.sortObjectByKey('isAmountDue', 'desc'))),
+//   );
+// }
 
 export function manipulateTeamsData(source: Observable<ngFireDocQuery>) {
   return source.pipe(

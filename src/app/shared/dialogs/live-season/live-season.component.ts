@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { EnlargeService } from '@app/services/enlarge.service';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { ISeason, SeasonBasicInfo } from '@shared/interfaces/season.model';
 
 @Component({
   selector: 'app-live-season',
@@ -15,7 +15,7 @@ export class LiveSeasonComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<LiveSeasonComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SeasonBasicInfo,
+    @Inject(MAT_DIALOG_DATA) public data: ISeason,
     private enlargeService: EnlargeService,
     private socialShareService: SocialShareService,
     private router: Router

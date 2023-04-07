@@ -40,16 +40,13 @@ const routes: Routes = [
     component: SeasonProfileComponent,
   },
 
-  {
-    path: 'create-instant-match',
-    component: CreateInstantMatchComponent,
-  },
   { path: 'matches', component: ViewMatchesComponent },
+  { path: 'match/create', component: CreateInstantMatchComponent },
   { path: 'become-organizer', component: OrganizeSeasonComponent },
 
   { path: 'teams', component: GetTeamComponent },
   {
-    path: 'teams/create', component: CreateTeamDialogComponent, canActivate: [OnboardUserGuard]
+    path: 'team/create', component: CreateTeamDialogComponent, canActivate: [OnboardUserGuard]
   },
   { path: 'teams/join', component: JoinTeamDialogComponent },
   { path: 'team/:teamid', component: TeamProfileComponent },

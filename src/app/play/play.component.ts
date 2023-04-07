@@ -56,7 +56,7 @@ export class PlayComponent implements OnInit, OnDestroy {
     this.apiService.getLiveSeasons()
       .subscribe({
         next: (response) => {
-          this.seasonsList = response;
+          // this.seasonsList = response;
         },
         error: () => {
           this.seasonsList = [];

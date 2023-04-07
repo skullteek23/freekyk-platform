@@ -10,7 +10,6 @@ import { SocialShareService } from '@app/services/social-share.service';
 import { FilterData } from '@shared/interfaces/others.model';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 import { ApiGetService } from '@shared/services/api.service';
-import { manipulateSeasonData } from '@shared/utils/pipe-functions';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 
@@ -52,7 +51,7 @@ export class PlSeasonsComponent implements OnInit, OnDestroy {
     this.apiService.getSeasons().subscribe({
       next: (response) => {
         if (response) {
-          this.seasons = response;
+          // this.seasons = response;
           window.scrollTo(0, 0);
         }
       },

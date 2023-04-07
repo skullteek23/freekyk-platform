@@ -54,9 +54,9 @@ export class GetTeamComponent implements OnInit {
     this.authService.isLoggedIn().subscribe({
       next: (user) => {
         if (user) {
-          this.router.navigate(['/teams', 'create']);
+          this.router.navigate(['/team', 'create']);
         } else {
-          const encodedUrl = encodeURIComponent('/teams/create');
+          const encodedUrl = encodeURIComponent('/team/create');
           this.router.navigate(['/signup'], { queryParams: { callback: encodedUrl } });
         }
       }

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
     { icon: 'sports_soccer', label: 'Join a game', highlight: true, route: '/games' },
     { icon: 'groups', label: 'Find a team', highlight: false, route: '/teams' },
     { icon: 'tour', label: 'Challenges', highlight: false, route: '/challenges' },
-    { icon: 'sports_handball', label: 'Create match', highlight: false, route: '/create-instant-match' },
+    { icon: 'sports_handball', label: 'Create match', highlight: false, route: '/match/create' },
   ];
   readonly actionShortcutDataRow_2: IActionShortcutData[] = [
     { icon: 'emoji_events', label: 'Rewards', highlight: false, route: '/rewards' },
