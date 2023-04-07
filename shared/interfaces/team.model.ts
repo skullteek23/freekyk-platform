@@ -14,7 +14,7 @@ export const allowedAgeCategories = [
   { viewValue: 'U-19', value: 19 },
   { viewValue: 'U-23', value: 23 },
   { viewValue: 'U-30', value: 30 },
-  { viewValue: 'Open', value: 99 }
+  { viewValue: 'Open Age', value: 99 }
 ];
 
 export const Formatters = {

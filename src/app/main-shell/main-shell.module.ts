@@ -26,6 +26,7 @@ import { RouterModule } from '@angular/router';
 import { GameComponent } from './components/game/game.component';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { JoinTeamDialogComponent } from './components/join-team-dialog/join-team-dialog.component';
+import { PickupGameProfileComponent } from './components/pickup-game-profile/pickup-game-profile.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { JoinTeamDialogComponent } from './components/join-team-dialog/join-team
     GameComponent,
     OnboardingComponent,
     JoinTeamDialogComponent,
+    PickupGameProfileComponent,
   ],
   imports: [
     CommonModule,

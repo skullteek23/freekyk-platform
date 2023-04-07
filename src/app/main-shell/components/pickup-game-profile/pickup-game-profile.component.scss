@@ -1,0 +1,38 @@
+section {
+  padding: 0 10px;
+  margin-top: 16px;
+}
+
+.small-icon {
+  font-size: 20px;
+}
+
+.match-time {
+  margin-bottom: 20px !important;
+}
+
+.team-container {
+  width: 100%;
+
+  .team {
+
+    .team-title {
+      width: 100%;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    ul li {
+      width: 100%;
+      margin-bottom: 12px;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.last-section {
+  height: 200px;
+}

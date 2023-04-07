@@ -1,0 +1,125 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/games']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+</div>
+
+<section fxLayout="column" fxLayoutGap="4px" *ngIf="season">
+  <span class="mat-body-1">
+    Freekyk Pick Up Game
+  </span>
+  <span class="dash-h5">
+    {{season?.name}}
+  </span>
+  <p fxLayoutAlign="start center">
+    <span class="mat-body-1">
+      Game starts&nbsp;
+    </span>
+    <span class="mat-body-2">
+      {{startDate}} @ <a (click)="openGround(ground)"> {{ground?.viewValue}}</a>
+    </span>
+    <span class="material-icons-round small-icon">open_in_new</span>
+  </p>
+  <p>
+    Location:
+    <span class="mat-body-2">
+      {{season?.city}}, {{season?.state}}
+    </span>
+  </p>
+
+  <p class="match-time">
+    Match Time:
+    <span class="mat-body-2">
+      {{season?.startDate | date: 'h a'}} - {{season?.startDate + oneHourMilliseconds | date: 'h a'}}
+    </span>
+  </p>
+
+  <mat-chip-list>
+    <mat-chip selected>
+      {{season?.fees | currency: 'INR'}} per person
+    </mat-chip>
+    <mat-chip>
+      7v7 Format
+    </mat-chip>
+    <mat-chip fxLayoutAlign="start center">
+      <span class="material-icons-round">
+        groups
+      </span>
+      <span class="mat-body-1">
+        &nbsp;{{ageCatFormatter?.formatAgeCategory(season?.ageCategory)?.viewValue}}
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+</section>
+
+<section>
+  <mat-card class="dashboard-card mat-elevation-z4">
+    <mat-card-content>
+      <div class="team-container" fxLayout="row" fxLayout="space-between center" fxLayoutGap="12px">
+        <div class="first-team team" fxFlex="50%">
+          <span class="mat-body-1 center team-title">
+            Team A
+          </span>
+          <ul>
+            <li *ngFor="let slot of slotsA" class="button-slot">
+              <button [color]="addedSlotsA.includes(slot) ? 'primary' : ''" mat-raised-button (click)="addSlotA(slot)">
+                <span class="material-icons-round">
+                  person
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="second-team team" fxFlex="auto">
+          <span class="mat-body-1 center team-title">
+            Team B
+          </span>
+          <ul>
+            <li *ngFor="let slot of slotsB" class="button-slot">
+              <button [color]="addedSlotsB.includes(slot) ? 'primary' : ''" mat-raised-button (click)="addSlotB(slot)">
+                <span class="material-icons-round">
+                  person
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<section fxLayout="column" fxLayoutGap="4px" class="last-section">
+  <p>
+    Full Match Recording:
+    <span class="mat-body-2">
+      Yes
+    </span>
+  </p>
+  <p>
+    Reporting Time:
+    <span class="mat-body-2" *ngIf="reportingTime">
+      {{reportingTime | date: 'h:mm a'}}
+    </span>
+  </p>
+  <p>
+    Cancellation Charges:
+    <span class="mat-body-2">
+      50%
+    </span>
+  </p>
+</section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="payableFees > 0">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <!-- <span class="material-icons-round external-icon">whatshot</span> -->
+    <span>
+      Confirm & Pay {{payableFees | currency: 'INR'}}
+    </span>
+  </button>
+</div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

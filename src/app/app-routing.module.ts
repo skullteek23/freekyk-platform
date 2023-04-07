@@ -29,6 +29,7 @@ import { TeamProfileComponent } from './play/profile-pages/team-profile/team-pro
 import { JoinTeamDialogComponent } from './main-shell/components/join-team-dialog/join-team-dialog.component';
 import { OnboardUserGuard } from './auth/onboard-user.guard';
 import { MyNotificationsComponent } from './dashboard/dash-home/my-notifications/my-notifications.component';
+import { PickupGameProfileComponent } from './main-shell/components/pickup-game-profile/pickup-game-profile.component';
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
@@ -38,6 +39,11 @@ const routes: Routes = [
   {
     path: 'game/:seasonid/pay',
     component: SeasonProfileComponent,
+  },
+  { path: 'pickup-game/:seasonid', component: PickupGameProfileComponent },
+  {
+    path: 'pickup-game/:seasonid/pay',
+    component: PickupGameProfileComponent,
   },
 
   { path: 'matches', component: ViewMatchesComponent },

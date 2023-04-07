@@ -20,7 +20,11 @@ export class GameComponent implements OnInit {
 
   joinGame() {
     if (this.game.id) {
-      this.router.navigate(['/game', this.game.id])
+      if (this.game.type === 'FCP') {
+        this.router.navigate(['/pickup-game', this.game.id])
+      } else {
+        this.router.navigate(['/game', this.game.id])
+      }
     }
   }
 }

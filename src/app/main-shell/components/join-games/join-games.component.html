@@ -20,18 +20,17 @@
     </div>
   </mat-card-content>
 </mat-card>
-<section>
+<section *ngIf="instantMatchesList.length">
   <div>
-    <span class="dash-h5 heading">Instant Matches</span>
+    <span class="dash-h5 heading">Pickup Games</span>
     <ul class="instant-matches-list">
       <li *ngFor="let item of instantMatchesList">
         <app-game [game]="item"></app-game>
       </li>
     </ul>
-    <app-no-items-message items="instant matches" *ngIf="!instantMatchesList.length"></app-no-items-message>
   </div>
 </section>
-<section>
+<section *ngIf="leaguesList.length">
   <div>
     <span class="dash-h5">Leagues (for captains)</span>
     <ul class="instant-matches-list">
@@ -39,10 +38,9 @@
         <app-game [game]="item"></app-game>
       </li>
     </ul>
-    <app-no-items-message items="league matches" *ngIf="!leaguesList.length"></app-no-items-message>
   </div>
 </section>
-<section>
+<section *ngIf="knockoutGamesList.length">
   <div>
     <span class="dash-h5">Knockouts (for captains)</span>
     <ul class="instant-matches-list">
