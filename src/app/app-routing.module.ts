@@ -45,6 +45,10 @@ const routes: Routes = [
     path: 'pickup-game/:seasonid/pay',
     component: PickupGameProfileComponent,
   },
+  {
+    path: 'pickup-game/:seasonid/waiting-list',
+    component: PickupGameProfileComponent,
+  },
 
   { path: 'matches', component: ViewMatchesComponent },
   { path: 'match/create', component: CreateInstantMatchComponent },

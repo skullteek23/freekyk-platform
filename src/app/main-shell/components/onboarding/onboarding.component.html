@@ -53,11 +53,11 @@
       *ngIf="stepper.selectedIndex === 1 && locationForm">
       <div class="dropdown-container">
         <app-searchable-form-field fxFlex="auto" label="Select State" [list]="states" [control]="state"
-          (selectionChange)="onSelectState($event)"></app-searchable-form-field>
+          (selectionChange)="onSelectState($event)" [enableOpenOnResponse]="true"></app-searchable-form-field>
       </div>
       <div class="dropdown-container">
-        <app-searchable-form-field fxFlex="auto" label="Select City" [list]="cities"
-          [control]="city"></app-searchable-form-field>
+        <app-searchable-form-field fxFlex="auto" label="Select City" [list]="cities" [control]="city"
+          [enableOpenOnResponse]="true"></app-searchable-form-field>
       </div>
       <mat-form-field color="primary">
         <mat-label>Select your Playing Position</mat-label>

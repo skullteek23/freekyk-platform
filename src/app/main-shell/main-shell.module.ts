@@ -27,6 +27,7 @@ import { GameComponent } from './components/game/game.component';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { JoinTeamDialogComponent } from './components/join-team-dialog/join-team-dialog.component';
 import { PickupGameProfileComponent } from './components/pickup-game-profile/pickup-game-profile.component';
+import { WaitingListDialogComponent } from './components/waiting-list-dialog/waiting-list-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { PickupGameProfileComponent } from './components/pickup-game-profile/pic
     OnboardingComponent,
     JoinTeamDialogComponent,
     PickupGameProfileComponent,
+    WaitingListDialogComponent,
   ],
   imports: [
     CommonModule,

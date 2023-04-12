@@ -6,7 +6,8 @@ import { newProfile } from './newProfile';
 import { teamCreation } from './teamCreation';
 import { onDelete } from './deleteTeam';
 import { paymentVerification } from './paymentVerification';
-import { fetchOrder } from './generateOrder';
+import { fetchOrder } from './getOrder';
+import { generateOrder } from './generateOrder';
 import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 import { createAdminUser } from './createAdminUser';
@@ -24,6 +25,7 @@ export const createTeam = functions.region('asia-south1').https.onCall(teamCreat
 export const joinTeam = functions.region('asia-south1').https.onCall(teamJoin);
 export const deleteTeam = functions.region('asia-south1').https.onCall(onDelete);
 export const getValidOrder = functions.region('asia-south1').https.onCall(fetchOrder);
+export const getNewOrder = functions.region('asia-south1').https.onCall(generateOrder);
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
 export const saveOrder = functions.region('asia-south1').https.onCall(saveRazorpayOrder);
 export const participateSeason = functions.region('asia-south1').https.onCall(seasonParticipation);

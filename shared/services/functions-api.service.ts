@@ -34,6 +34,15 @@ export class FunctionsApiService {
     }
   }
 
+  generateNewOrder(data: any): Promise<Partial<RazorPayOrder>> {
+    if (data) {
+      const callable = this.ngFirebaseFunctions.httpsCallable(CLOUD_FUNCTIONS.GENERATE_NEW_RAZORPAY_ORDER);
+      return callable(data)
+        .pipe(this.handleError.bind(this))
+        .toPromise();
+    }
+  }
+
   handleError(source: Observable<any>): Observable<any> {
     return source.pipe(
       catchError((error) => {

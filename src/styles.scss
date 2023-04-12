@@ -1038,3 +1038,17 @@ section.features-section {
     background-color: var(--primaryColor);
   }
 }
+
+.waiting-list-buttons-container {
+  height: 48px !important;
+  position: sticky;
+  bottom: 0;
+  z-index: 200;
+
+  .full-button {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 !important;
+    background-color: var(--primaryColor);
+  }
+}

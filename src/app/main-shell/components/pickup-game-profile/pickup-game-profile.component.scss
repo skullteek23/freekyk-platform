@@ -33,6 +33,17 @@ section {
   }
 }
 
+.waiting-list-container {
+  width: 100%;
+  margin-bottom: 16px;
+  margin-left: auto;
+  text-align: end;
+
+  span {
+    margin-right: 17px;
+  }
+}
+
 .last-section {
   height: 200px;
 }

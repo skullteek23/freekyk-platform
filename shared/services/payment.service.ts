@@ -129,6 +129,11 @@ export class PaymentService {
     return this.functionsApiService.generateOrder(data);
   }
 
+  getNewOrder(uid: string, fees: string): Promise<Partial<RazorPayOrder>> {
+    const data = { uid, fees };
+    return this.functionsApiService.generateNewOrder(data);
+  }
+
 
   // handlePartialPaymentSuccess(response) {
   //   this.verifyPayment(response)

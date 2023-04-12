@@ -23,6 +23,7 @@ export class SearchableFormFieldComponent implements OnInit, AfterViewInit {
     this.openSelector();
   }
   @Input() label = 'Label';
+  @Input() enableOpenOnResponse = false;
   @Output() selectionChange = new Subject<string>();
   @ViewChild(MatSelect) select: MatSelect;
 
@@ -40,7 +41,7 @@ export class SearchableFormFieldComponent implements OnInit, AfterViewInit {
   }
 
   openSelector() {
-    if (this.listOptionsCache?.length && this.select) {
+    if (this.listOptionsCache?.length && this.select && this.enableOpenOnResponse) {
       this.select.open();
     }
   }

@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Join Waiting List of the Season</span>
+</mat-toolbar>
+<div class="container-2">
+  <div class="heading">
+    <span class="dash-h5">
+      Waiting List
+    </span>
+  </div>
+  <ul>
+    <li *ngFor="let item of list" fxLayoutAlign="start center" fxLayoutGap="8px">
+      <span class="mat-body-1">
+        {{item.viewValue}}
+      </span>
+      <span class="material-icons-round filled">
+        check_circle
+      </span>
+    </li>
+  </ul>
+  <app-no-items-message customText="waiting list is empty" *ngIf="!list.length"></app-no-items-message>
+</div>
+<div class="waiting-list-buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="!isUserAlreadyWaiting">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="addToWaitingList(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <!-- <span class="material-icons-round external-icon">whatshot</span> -->
+    <span>
+      Join Now @ {{data.fees | currency: 'INR'}}
+    </span>
+  </button>
+</div>
+<div class="waiting-list-buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="isUserAlreadyWaiting">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="onCloseDialog(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <!-- <span class="material-icons-round external-icon">whatshot</span> -->
+    <span>
+      Close
+    </span>
+  </button>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

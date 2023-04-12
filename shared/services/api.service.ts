@@ -6,14 +6,15 @@ import { authUserMain, User } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { FirebaseUser } from '@shared/interfaces/admin.model';
+import { IPickupGameSlot } from '@shared/interfaces/game.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
-import { LeagueTableModel } from '@shared/interfaces/others.model';
+import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
 import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -308,6 +309,26 @@ export class ApiGetService {
     return this.getSeasons()
       .pipe(manipulateSeasonNamesData);
   }
+
+  getSeasonBookedSlots(seasonID: string): Observable<IPickupGameSlot[]> {
+    return this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get()
+      .pipe(manipulatePickupSlotData)
+  }
+
+  getSeasonWaitingList(seasonID: string): Observable<ListOption[]> {
+    return forkJoin([
+      this.angularFirestore.collection('waitingList', query => query.where('seasonID', '==', seasonID)).get(),
+      this.getPlayers()
+    ])
+      .pipe(manipulateWaitingListData)
+  }
+
+  getSeasonBookedSlotsWithNames(seasonID: string): Observable<IPickupGameSlot[]> {
+    return forkJoin([
+      this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get(),
+      this.getPlayers()
+    ]).pipe(manipulatePickupSlotWithNamesData)
+  }
 }
 
 @Injectable({
@@ -318,6 +339,18 @@ export class ApiPostService {
     private angularFirestore: AngularFirestore,
     private authService: AuthService
   ) { }
+
+  savePickupSlot(doc: IPickupGameSlot): Promise<any> {
+    return this.angularFirestore.collection('/pickupSlots').add(doc);
+  }
+
+  saveWaitingListEntry(doc: IPickupGameSlot): Promise<any> {
+    return this.angularFirestore.collection('/waitingList').add(doc);
+  }
+
+  updatePickupSlot(docID: string, update: Partial<IPickupGameSlot>): Promise<any> {
+    return this.angularFirestore.collection('/pickupSlots').doc(docID).update({ ...update });
+  }
 
   updateTeamInfo(update: Partial<ITeam>, docID: string): Promise<any> {
     return this.angularFirestore.collection('teams').doc(docID).update({ ...update })

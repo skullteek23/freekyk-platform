@@ -8,10 +8,11 @@ import { ITeam, ITeamDescription, ITeamMembers, TeamBasicInfo, TeamMedia, TeamMe
 import { MatchFixture, ParseMatchProperties } from "@shared/interfaces/match.model";
 import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
-import { LeagueTableModel } from "@shared/interfaces/others.model";
+import { LeagueTableModel, ListOption } from "@shared/interfaces/others.model";
 import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
 import { ValidationErrors } from "@angular/forms";
 import { ITeamPlayer } from "@shared/components/team-player-members-list/team-player-members-list.component";
+import { IPickupGameSlot } from "@shared/interfaces/game.model";
 
 // export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
@@ -94,6 +95,42 @@ export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Obse
 export function manipulateSeasonNamesData(source: Observable<ISeason[]>): Observable<string[]> {
   return source.pipe(
     map(resp => resp.map(resp => resp.name))
+  );
+}
+
+export function manipulatePickupSlotData(source: Observable<ngFireDocQuery>): Observable<IPickupGameSlot[]> {
+  return source.pipe(
+    map((resp) => resp.docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot)))
+  );
+}
+
+export function manipulateWaitingListData(source: Observable<[ngFireDocQuery, IPlayer[]]>): Observable<ListOption[]> {
+  return source.pipe(
+    map(resp => {
+      let list: ListOption[] = [];
+      if (resp.length === 2) {
+        const slotsTemp = resp[0].docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot))
+        const players = resp[1];
+        list = slotsTemp.map(slot => ({ value: slot.uid, viewValue: players.find(el => el.id === slot.uid).name }));
+      }
+      return list;
+    }),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('viewValue'))),
+  );
+}
+
+export function manipulatePickupSlotWithNamesData(source: Observable<[ngFireDocQuery, IPlayer[]]>): Observable<IPickupGameSlot[]> {
+  return source.pipe(
+    map(resp => {
+      let pickupSlots: IPickupGameSlot[] = [];
+      if (resp.length === 2) {
+        const slotsTemp = resp[0].docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot))
+        const players = resp[1];
+        pickupSlots = slotsTemp.map(slot => ({ ...slot, name: players.find(el => el.id === slot.uid).name }));
+      }
+      return pickupSlots;
+    }),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
 
