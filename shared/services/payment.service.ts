@@ -107,12 +107,14 @@ export class PaymentService {
     return participateFunc({ season, participantId });
   }
 
-  saveOrder(seasonID: string, orderType: OrderTypes, response: any) {
+  saveOrder(seasonID: string, orderType: OrderTypes, description: string, response: any) {
+    console.log(response);
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SAVE_RAZORPAY_ORDER);
-    return participateFunc({ seasonID, orderType, response });
+    return participateFunc({ seasonID, orderType, description, response });
   }
 
   updateOrder(response: any) {
+
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.UPDATE_RAZORPAY_ORDER);
     return participateFunc({ response });
   }

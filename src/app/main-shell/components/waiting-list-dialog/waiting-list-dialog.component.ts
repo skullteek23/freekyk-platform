@@ -77,6 +77,7 @@ export class WaitingListDialogComponent implements OnInit {
       if (order) {
         const options: Partial<ICheckoutOptions> = {
           ...UNIVERSAL_OPTIONS,
+          description: `1 Waiting List Entry`,
           order_id: order.id,
           amount: this.data.fees * 100,
           handler: this.handlePaymentSuccess.bind(this),
@@ -104,7 +105,7 @@ export class WaitingListDialogComponent implements OnInit {
         .subscribe({
           next: () => {
             const allPromises = [];
-            allPromises.push(this.paymentService.saveOrder(this.data.id, OrderTypes.season, response).toPromise());
+            allPromises.push(this.paymentService.saveOrder(this.data.id, OrderTypes.season, `1 Waiting List Entry`, response).toPromise());
             allPromises.push(this.saveToWaitingList(response['razorpay_order_id']));
 
             Promise.all(allPromises)

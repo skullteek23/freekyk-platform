@@ -22,18 +22,18 @@ export class DeactivateProfileRequestComponent {
   }
 
   sendRequestToAdmin() {
-    const uid = localStorage.getItem('uid');
-    if (this.isReasonValid && uid) {
-      const ticket: ISupportTicket = {
-        status: TicketStatus.Open,
-        type: TicketTypes.Profile,
-        timestamp: new Date().getTime(),
-        uid,
-        message: `Deactivate Profile - ${this.reason.trim()}`,
-      }
-      this.onCloseDialogWithData(ticket);
-      this.reason = null;
-    }
+    // const uid = localStorage.getItem('uid');
+    // if (this.isReasonValid && uid) {
+    //   const ticket: ISupportTicket = {
+    //     status: TicketStatus.Open,
+    //     type: TicketTypes.Profile,
+    //     timestamp: new Date().getTime(),
+    //     uid,
+    //     message: `Deactivate Profile - ${this.reason.trim()}`,
+    //   }
+    //   this.onCloseDialogWithData(ticket);
+    //   this.reason = null;
+    // }
   }
 
   onCloseDialogWithData(data: ISupportTicket) {

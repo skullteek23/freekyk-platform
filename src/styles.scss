@@ -869,7 +869,8 @@ button.mat-button-base {
 .faq-container {
   .mat-expansion-panel-header {
     @media screen and (max-width: 600px) {
-      height: 125px !important;
+      height: auto;
+      padding: 12px !important;
     }
   }
 
@@ -1039,16 +1040,34 @@ section.features-section {
   }
 }
 
-.waiting-list-buttons-container {
-  height: 48px !important;
-  position: sticky;
-  bottom: 0;
-  z-index: 200;
+.large-dialogs,
+.fk-dialogs {
+  .buttons-container {
+    height: 48px !important;
+    position: sticky;
+    bottom: 0;
+    z-index: 200;
 
-  .full-button {
-    height: 100%;
-    width: 100%;
-    border-radius: 0 !important;
-    background-color: var(--primaryColor);
+    .full-button {
+      height: 100%;
+      width: 100%;
+      border-radius: 0 !important;
+      background-color: var(--primaryColor);
+    }
   }
+}
+
+.my-orders-wrapper {
+  app-no-items-message {
+    ul>li {
+      height: 300px !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.active-link-group {
+  border-bottom: 2px solid var(--primaryColor);
 }

@@ -16,14 +16,13 @@ export const TicketTypeMapping = {
 }
 
 export interface ISupportTicket {
+  title: string;
+  date: number;
   status: TicketStatus;
   type: TicketTypes;
-  timestamp: number;
-  uid: string;
-  id?: string;
-  response?: string;
-  contactInfo?: IContactDetails;
-  message?: string;
+  description?: string;
+  byUID?: string;
+  id?: string
 }
 
 export interface IContactDetails {

@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
-import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
 import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
@@ -27,7 +25,6 @@ import { AuthService } from '@app/services/auth.service';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   readonly desktopLinks = DESKTOP_LINKS;
-
   readonly adminURL = environment?.firebase?.adminRegister || '';
 
   @Output() menOpen = new Subject<boolean>();
@@ -38,7 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   mobileLinks = MOBILE_LINKS;
   seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
-  profilePicture$: Observable<string | null>;
   notificationCount$: Observable<number | string>;
   subscriptions = new Subscription();
 
@@ -48,9 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private ngAuth: AngularFireAuth,
     private notificationService: NotificationsService,
-    private avatarServ: AccountAvatarService,
     private ngFire: AngularFirestore,
     private router: Router,
     private authService: AuthService
@@ -75,8 +69,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             share()
           );
           this.mobileLinks = MOBILE_LINKS.slice();
-          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
-          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
+          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'My Account')]?.subLinks?.push({ name: 'Logout', isLogout: true, icon: 'logout' });
+          // this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
 
         }
         this.isLoading = false;

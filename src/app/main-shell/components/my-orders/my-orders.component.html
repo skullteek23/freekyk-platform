@@ -1,0 +1,56 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/account']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">My Orders</span>
+</div>
+
+<mat-card class="feature-card my-orders-wrapper" *ngIf="!orders.length && !isLoaderShown">
+  <mat-card-content>
+    <app-no-items-message customText="Currently, there are no orders to display."></app-no-items-message>
+    <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="12px">
+      <button class="link-button" [routerLink]="['/games']" fxFlex="100%" mat-stroked-button color="primary">
+        <span class="material-icons-round external-icon">shop_two</span>
+        Shop Now
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<section>
+  <mat-list *ngIf="orders?.length">
+    <mat-list-item *ngFor="let order of orders" (click)="openOrder(order)">
+      <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
+        <div class="image">
+          <img src="assets/images/placeholder_product.png" alt="Product Order" appFallbackImg>
+        </div>
+        <div class="description" fxLayoutAlign="space-between center">
+          <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
+            <span class="mat-body-2" *ngIf="order.seasonName; else orderNumber">
+              {{order.seasonName}}
+            </span>
+            <ng-template #orderNumber>
+              <span class="mat-body-2">
+                Order#{{order.id}}
+              </span>
+            </ng-template>
+            <span class="mat-caption" *ngIf="order?.description">
+              {{order?.description}}
+            </span>
+            <span class="mat-body-1" *ngIf="order.amount >= 0">
+              {{(order.amount / 100) | currency: 'INR'}}
+            </span>
+          </div>
+          <span class="material-icons-round clickable">
+            chevron_right
+          </span>
+        </div>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>
+</section>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

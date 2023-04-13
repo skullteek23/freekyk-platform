@@ -28,6 +28,11 @@ import { OnboardingComponent } from './components/onboarding/onboarding.componen
 import { JoinTeamDialogComponent } from './components/join-team-dialog/join-team-dialog.component';
 import { PickupGameProfileComponent } from './components/pickup-game-profile/pickup-game-profile.component';
 import { WaitingListDialogComponent } from './components/waiting-list-dialog/waiting-list-dialog.component';
+import { FooterComponent } from '@app/footer/footer.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { MyAccountComponent } from './components/my-account/my-account.component';
+import { MyAddressesComponent } from './components/my-addresses/my-addresses.component';
+import { OrderComponent } from './components/order/order.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +57,11 @@ import { WaitingListDialogComponent } from './components/waiting-list-dialog/wai
     JoinTeamDialogComponent,
     PickupGameProfileComponent,
     WaitingListDialogComponent,
+    FooterComponent,
+    MyOrdersComponent,
+    MyAccountComponent,
+    MyAddressesComponent,
+    OrderComponent,
   ],
   imports: [
     CommonModule,

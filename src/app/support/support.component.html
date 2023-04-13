@@ -1,137 +1,32 @@
-<div>
-  <app-hero-section [description]="description" [imageSource]="activePage.svg" [title]="activePage.title"
-    [overline]="false" [CTA]="null"></app-hero-section>
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
 </div>
-<div style="margin-top: 20px" class="container section-space-bottom">
-  <mat-tab-group mat-stretch-tabs (selectedTabChange)="onChangeTab($event)" [(selectedIndex)]="activeIndex">
-    <mat-tab label="Help & Support">
-      <ng-template matTabContent>
-        <div style="padding: 20px 8px" fxLayout="column" fxLayoutGap.lt-md="16px" fxLayoutGap.gt-sm="20px">
-          <!-- faq jump button -->
-          <div ngClass.gt-sm="section-space-bottom" fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutGap="8px"
-            fxLayoutAlign.gt-sm="space-between center" fxLayoutAlign.lt-md="center stretch">
-            <span class="mat-caption center" fxFlexOrder.gt-sm="1" fxFlexOrder.lt-md="2">
-              Check our FAQs Section to see if your question or issue has
-              already been addressed.
-            </span>
-            <button fxFlexOrder.gt-sm="2" fxFlexOrder.lt-md="1" fxFlex.gt-sm="50%" (click)="activeIndex = 1"
-              class="buttonText secondaryButton">
-              Go to FAQs
-            </button>
-          </div>
-          <!-- faq jump button -->
-
-          <mat-divider fxHide.gt-sm="true"></mat-divider>
-
-          <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign.gt-sm="space-between center"
-            ngClass.gt-sm="section-space-bottom section-space-top" fxLayoutGap="0px" fxLayoutGap.lt-md="20px">
-            <!-- Ticket Form -->
-            <ng-template #successBox>
-              <div class="completed">
-                <div class="success-container" fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="center center">
-                  <app-tick-animation></app-tick-animation>
-                  <p style="text-align: center">
-                    Your enquiry has been successfully submitted!<br>
-                    Please check your email for further follow-ups.
-                  </p>
-                </div>
-              </div>
-            </ng-template>
-            <ng-container *ngIf="!isTicketSubmitted; else successBox">
-              <div fxFlex.gt-sm="45%" fxLayout="column" fxLayoutGap="16px">
-                <span class="mat-subheading-1 center"> Raise an Enquiry </span>
-                <form [formGroup]="ticketForm" (ngSubmit)="onSubmitTicket()" fxLayout="column">
-                  <mat-form-field appearance="outline" color="primary">
-                    <mat-label>Enter your name</mat-label>
-                    <input type="text" matInput name="name" formControlName="name" />
-                  </mat-form-field>
-                  <mat-form-field appearance="outline" color="primary">
-                    <mat-label>Enter your mobile number</mat-label>
-                    <input type="number" matInput name="ph_number" formControlName="ph_number" />
-                  </mat-form-field>
-                  <mat-form-field appearance="outline" color="primary">
-                    <mat-label>Enter your email address</mat-label>
-                    <input type="email" matInput name="email" formControlName="email" />
-                  </mat-form-field>
-                  <mat-form-field appearance="outline" color="primary">
-                    <mat-label>Tell us your query/message</mat-label>
-                    <textarea type="text" matInput name="query" formControlName="query"></textarea>
-                    <mat-hint align="end">{{ticketForm.get('query')?.value?.length}} / {{queryLimit}}</mat-hint>
-                    <mat-error *ngIf="ticketForm.get('query')?.hasError('pattern')">
-                      {{messages.error.notAllowedCharacter}}
-                    </mat-error>
-                  </mat-form-field>
-                  <div fxLayout="column" fxLayoutAlign="center center">
-                    <button [disabled]="!ticketForm.valid" type="button" (click)="onSubmitTicket()"
-                      class="buttonText primaryButton">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </ng-container>
-            <!-- Ticket Form -->
-
-            <mat-divider fxHide.gt-sm="true"></mat-divider>
-            <mat-divider fxFlex.gt-sm="5%" fxHide.lt-md="true" [vertical]="true"></mat-divider>
-
-            <!-- Other Information -->
-            <aside fxFlex.gt-sm="45%" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
-              <!-- <p fxLayout="column">
-                <span class="mat-body-1 center"> Call us at </span>
-                <span class="mat-subheading-2 center highlight">
-                  +91-9999999999
-                </span>
-                <span class="mat-caption center">
-                  (Mon - Sat, 10am to 9pm)
-                </span>
-              </p> -->
-
-              <p fxLayout="column">
-                <span class="mat-body-1 center"> Email us at </span>
-                <span class="mat-subheading-2 highlight center">
-                  admin@freekyk.com
-                </span>
-              </p>
-
-              <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
-                <span class="mat-body-1 center">
-                  You can also reach out to us on our social media platforms
-                </span>
-                <div fxLayout fxLayoutAlign="center center" fxLayoutGap="16px">
-                  <a href="{{fb}}freekyk" target="_blank">
-                    <img class="iconSize" src="assets/svgs/facebook.svg" alt="facebook" appFallbackImg />
-                  </a>
-                  <a href="{{ig}}freekyk_india" target="_blank">
-                    <img class="iconSize" src="assets/svgs/instagram.svg" alt="instagram" appFallbackImg />
-                  </a>
-                  <a href="{{tw}}">
-                    <img class="iconSize" src="assets/svgs/twitter.svg" alt="twitter" target="_blank" appFallbackImg />
-                  </a>
-                  <a href="{{yt}}">
-                    <img class="iconSize" src="assets/svgs/youtube.svg" alt="youtube" target="_blank" appFallbackImg />
-                  </a>
-                  <a href="{{linkedIn}}company/freekyk-india/">
-                    <img class="iconSize" src="assets/svgs/linkedin.svg" alt="linkedin" target="_blank"
-                      appFallbackImg />
-                  </a>
-                </div>
-              </div>
-            </aside>
-            <!-- Other Information -->
-          </div>
-        </div>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="FAQs">
-      <ng-template matTabContent>
-        <app-faqs></app-faqs>
-      </ng-template>
-    </mat-tab>
-    <mat-tab *ngIf="isUser">
-      <ng-template>
-        <app-acc-tickets></app-acc-tickets>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+<section>
+  <div class="sub-header-container">
+    <nav mat-tab-nav-bar color="primary">
+      <a mat-tab-link *ngFor="let link of links" class="link" routerLinkActive="active-link-group"
+        (click)="activeLink = link.value" [routerLink]="[link.value]" [active]="activeLink === link.value">
+        {{ link.viewValue}}
+      </a>
+    </nav>
+  </div>
+  <div class="tab-content">
+    <router-outlet></router-outlet>
+  </div>
+</section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button (click)="openTicketForm()"
+    fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">add</span>
+    <span>
+      Raise a Ticket
+    </span>
+  </button>
 </div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

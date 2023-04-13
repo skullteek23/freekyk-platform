@@ -210,6 +210,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
             if (order.amount_due > 0) {
               const options: Partial<ICheckoutOptions> = {
                 ...UNIVERSAL_OPTIONS,
+                description: 'All Players',
                 order_id: order.id,
                 amount: order.amount_due * 100,
                 handler: this.handlePaymentSuccess.bind(this),
@@ -242,7 +243,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           const allPromises = [];
-          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, response).toPromise());
+          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, 'All Players', response).toPromise());
           // const tid = sessionStorage.getItem('tid');
           // allPromises.push(this.participate(season, tid).toPromise());
 

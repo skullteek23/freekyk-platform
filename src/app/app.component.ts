@@ -14,7 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { name: 'Home', route: '/', icon: 'home' },
     { name: 'My Matches', route: '/my-matches', icon: 'sports_soccer' },
     { name: 'My Team', route: '/my-team', icon: 'groups' },
-    { name: 'Profile', route: '/profile', icon: 'manage_accounts' },
+    { name: 'Account', route: '/account', icon: 'person' },
   ]
 
   title = 'football-platform-v1';

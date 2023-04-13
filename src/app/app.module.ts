@@ -43,7 +43,6 @@ import { MainShellModule } from './main-shell/main-shell.module';
     AboutComponent,
     HeaderComponent,
     BottomNavComponent,
-    FooterComponent,
     ErrorComponent,
     LogoutComponent,
     LandingPageComponent,

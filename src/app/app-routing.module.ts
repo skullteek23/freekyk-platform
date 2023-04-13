@@ -30,8 +30,16 @@ import { JoinTeamDialogComponent } from './main-shell/components/join-team-dialo
 import { OnboardUserGuard } from './auth/onboard-user.guard';
 import { MyNotificationsComponent } from './dashboard/dash-home/my-notifications/my-notifications.component';
 import { PickupGameProfileComponent } from './main-shell/components/pickup-game-profile/pickup-game-profile.component';
+import { PlStandingsComponent } from './play/pl-standings/pl-standings.component';
+import { PlGroundsComponent } from './play/pl-grounds/pl-grounds.component';
+import { MyOrdersComponent } from './main-shell/components/my-orders/my-orders.component';
+import { MyAccountComponent } from './main-shell/components/my-account/my-account.component';
+import { MyAddressesComponent } from './main-shell/components/my-addresses/my-addresses.component';
+import { OrderComponent } from './main-shell/components/order/order.component';
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 const routes: Routes = [
+  { path: 'home', pathMatch: 'full', redirectTo: '' },
+  { path: 'app', pathMatch: 'full', redirectTo: '' },
   { path: '', pathMatch: 'full', component: HomeComponent },
 
   { path: 'games', component: JoinGamesComponent },
@@ -61,10 +69,11 @@ const routes: Routes = [
   { path: 'teams/join', component: JoinTeamDialogComponent },
   { path: 'team/:teamid', component: TeamProfileComponent },
 
-  { path: 'grounds', component: FindGroundsComponent },
+  { path: 'grounds', component: PlGroundsComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
 
   { path: 'players', component: FindPlayersComponent },
+  { path: 'standings', component: PlStandingsComponent },
   { path: 'challenges', component: ChallengesComponent },
   { path: 'rewards', component: RewardsComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
@@ -81,12 +90,13 @@ const routes: Routes = [
       { path: 'gallery', component: DashTeamManagComponent },
     ]
   },
-  {
-    path: 'profile', component: DashAccountComponent,
-  },
-  {
-    path: 'notifications', component: MyNotificationsComponent,
-  },
+
+  { path: 'account', component: MyAccountComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'edit-profile', component: DashAccountComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'notifications', component: MyNotificationsComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'addresses', component: MyAddressesComponent, ...canActivate(redirectUnauthorizedGuard) },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },
   { path: 'onboarding', component: OnboardingComponent, canActivate: [OnboardingGuard] },

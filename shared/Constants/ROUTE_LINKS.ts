@@ -37,123 +37,77 @@ export interface ILink {
   isLogout?: true,
   maxWidth?: string;
   icon?: string;
+  isOpen?: boolean;
 }
 
 export const MOBILE_LINKS: ILink[] = [
   {
     name: 'Freekyk Play',
     subLinks: [
-      {
-        name: 'Home',
-        route: '/play/home',
-        icon: 'grass'
-      },
-      {
-        name: 'Seasons',
-        route: '/play/seasons',
-        icon: 'try'
-      },
-      {
-        name: 'Players',
-        route: '/play/players',
-        icon: 'sports_handball'
-      },
-      {
-        name: 'Teams',
-        route: '/play/teams',
-        icon: 'diversity_3'
-      },
-      {
-        name: 'Matches',
-        route: '/play/fixtures',
-        icon: 'calendar_month'
-      },
-      {
-        name: 'Standings',
-        route: '/play/standings',
-        icon: 'leaderboard'
-      },
-      {
-        name: 'Grounds',
-        route: '/play/grounds',
-        icon: 'stadium'
-      },
+      // { name: 'Home', route: '/play/home', icon: 'grass' },
+      // { name: 'Seasons', route: '/play/seasons', icon: 'try' },
+      { name: 'Players', route: '/players', icon: 'sports_handball' },
+      { name: 'Teams', route: '/teams', icon: 'diversity_3' },
+      { name: 'Matches', route: '/matches', icon: 'calendar_month' },
+      { name: 'Grounds', route: '/grounds', icon: 'stadium' },
+      { name: 'Standings', route: '/standings', icon: 'leaderboard' },
     ]
   },
   {
-    name: 'Partner With Us',
+    name: 'Organizers & Partners',
     subLinks: [
-      {
-        name: 'Request a callback',
-        maxWidth: '60%',
-        externalLink: environment.forms.partner,
-        icon: 'open_in_new'
-      }
+      { name: 'Join as Organizer', maxWidth: '60%', externalLink: environment.firebase.adminUrl, icon: 'open_in_new' },
+      { name: 'Request a callback', maxWidth: '60%', externalLink: environment.forms.partner, icon: 'open_in_new' }
     ]
   },
   {
-    name: 'Support',
+    name: 'My Account',
     subLinks: [
-      {
-        name: 'Raise a Ticket',
-        route: '/support',
-        icon: 'help'
-      },
-      {
-        name: 'FAQs',
-        route: '/support/faqs',
-        icon: 'question_answer'
-      }
+      { name: 'Orders', route: '/orders', icon: 'list_alt' },
+      { name: 'Notifications', route: '/notifications', icon: 'notifications' },
+      { name: 'Addresses', route: '/addresses', icon: 'import_contacts' },
+      // { name: 'Logout', isLogout: true, icon: 'logout' },
     ]
   },
   {
-    name: 'Organizer',
+    name: 'Help & Support',
     subLinks: [
-      {
-        name: 'Join as Organizer',
-        maxWidth: '60%',
-        externalLink: environment.firebase.adminUrl,
-        icon: 'open_in_new'
-      }
-    ]
-  },
-  {
-    name: 'More',
-    subLinks: [
-      {
-        name: 'About',
-        route: '/about',
-        icon: 'article'
-      },
-
-      // {
-      //   name: 'Freestyle',
-      //   route: '/freestyle/home',
-      //   icon: 'movie_filter'
-      // },
-      // {
-      //   name: 'Academies',
-      //   route: '/academies',
-      //   icon: 'school'
-      // },
-      // {
-      //   name: 'Equipment',
-      //   route: '/equipment',
-      //   icon: 'add_shopping_cart'
-      // },
-      // {
-      //   name: 'Settings',
-      //   route: '/dashboard/account',
-      //   icon: 'settings'
-      // },
-      // {
-      //   name: 'Logout',
-      //   isLogout: true,
-      //   icon: 'logout'
-      // },
+      { name: 'Raise a Ticket', route: '/support/tickets', icon: 'help' },
+      { name: 'FAQs', route: '/support/faqs', icon: 'question_answer' }
     ]
   },
 
+  // {
+  //   name: 'Organizer',
+  //   subLinks: [
+  //   ]
+  // },
+
+  // {
+  //   name: 'Freestyle',
+  //   route: '/freestyle/home',
+  //   icon: 'movie_filter'
+  // },
+  // {
+  //   name: 'Academies',
+  //   route: '/academies',
+  //   icon: 'school'
+  // },
+  // {
+  //   name: 'Equipment',
+  //   route: '/equipment',
+  //   icon: 'add_shopping_cart'
+  // },
+  // {
+  //   name: 'Settings',
+  //   route: '/dashboard/account',
+  //   icon: 'settings'
+  // },
+  // {
+  //   name: 'Logout',
+  //   isLogout: true,
+  //   icon: 'logout'
+  // },
 ];
 
 export const DESKTOP_LINKS: ILink[] = [

@@ -22,7 +22,7 @@
   </ul>
   <app-no-items-message customText="waiting list is empty" *ngIf="!list.length"></app-no-items-message>
 </div>
-<div class="waiting-list-buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="!isUserAlreadyWaiting">
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="!isUserAlreadyWaiting">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="addToWaitingList(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <!-- <span class="material-icons-round external-icon">whatshot</span> -->
@@ -31,7 +31,7 @@
     </span>
   </button>
 </div>
-<div class="waiting-list-buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="isUserAlreadyWaiting">
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="isUserAlreadyWaiting">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="onCloseDialog(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <!-- <span class="material-icons-round external-icon">whatshot</span> -->

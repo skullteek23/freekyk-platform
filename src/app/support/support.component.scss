@@ -1,9 +1,11 @@
-.highlight {
-  color: var(--primaryColor);
+.link {
+  width: 50%;
 }
 
-@media only screen and (min-width: 959px) {
-  .completed {
-    margin-left: 50px;
-  }
+.mat-tab-nav-bar {
+  width: 100%;
 }
+
+// .tab-content {
+//   height: 100vh;
+// }

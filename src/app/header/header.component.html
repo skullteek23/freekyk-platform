@@ -41,8 +41,8 @@
 
         <!-- account circle - small -->
         <div class="account-circle-container">
-          <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading"
-            [routerLink]="['/dashboard', 'account']" [dataImg]="photoUrl" [margins]="false"></app-account-avatar>
+          <app-account-avatar (click)="onCloseMenu()" *ngIf="isLogged && !isLoading" [routerLink]="['account']"
+            [dataImg]="photoUrl" [margins]="false"></app-account-avatar>
         </div>
         <!-- account circle - small -->
 
@@ -117,7 +117,7 @@
           </button>
 
           <button matTooltip="Notifications" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
-            [routerLink]="['/dashboard/home']">
+            [routerLink]="['/notifications']">
             <mat-icon [matBadge]="notificationCount$ | async" matBadgeSize="small"
               [matBadgeColor]="(notificationCount$ | async) == 0 ? 'primary' : 'accent'" class="material-icons-round">
               notifications

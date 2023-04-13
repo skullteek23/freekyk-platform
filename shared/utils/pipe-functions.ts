@@ -13,6 +13,7 @@ import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-brac
 import { ValidationErrors } from "@angular/forms";
 import { ITeamPlayer } from "@shared/components/team-player-members-list/team-player-members-list.component";
 import { IPickupGameSlot } from "@shared/interfaces/game.model";
+import { ISupportTicket } from "@shared/interfaces/ticket.model";
 
 // export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
@@ -108,10 +109,15 @@ export function manipulateWaitingListData(source: Observable<[ngFireDocQuery, IP
   return source.pipe(
     map(resp => {
       let list: ListOption[] = [];
-      if (resp.length === 2) {
+      if (resp.length === 2 && !resp[0].empty) {
         const slotsTemp = resp[0].docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot))
         const players = resp[1];
-        list = slotsTemp.map(slot => ({ value: slot.uid, viewValue: players.find(el => el.id === slot.uid).name }));
+        slotsTemp.forEach(element => {
+          const playerData = players.find(el => el.id === element.uid);
+          if (playerData) {
+            list.push({ value: element.uid, viewValue: playerData.name });
+          }
+        })
       }
       return list;
     }),
@@ -302,6 +308,13 @@ export function manipulateFixtureData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     manipulateMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date'))),
+  );
+}
+
+export function manipulateTicketData(source: Observable<ngFireDocQuery>): Observable<ISupportTicket[]> {
+  return source.pipe(
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ISupportTicket), } as ISupportTicket))),
+    map((resp: ISupportTicket[]) => resp.sort(ArraySorting.sortObjectByKey('timestamp', 'desc'))),
   );
 }
 

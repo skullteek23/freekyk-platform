@@ -239,8 +239,10 @@ export class PickupGameProfileComponent implements OnInit {
         if (user && this.payableFees > 0) {
           this.showLoader();
           const order = await this.paymentService.getNewOrder(user.uid, this.payableFees.toString());
+          const totalSlots = this.displayedSlots.filter(el => el.selected).length;
           const options: Partial<ICheckoutOptions> = {
             ...UNIVERSAL_OPTIONS,
+            description: `${totalSlots} Slots`,
             order_id: order.id,
             amount: this.payableFees * 100,
             handler: this.handlePaymentSuccess.bind(this),
@@ -266,7 +268,8 @@ export class PickupGameProfileComponent implements OnInit {
         .subscribe({
           next: () => {
             const allPromises = [];
-            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, response).toPromise());
+            const totalSlots = this.displayedSlots.filter(el => el.selected).length;
+            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, `${totalSlots} Slots`, response).toPromise());
             allPromises.push(this.updatePickupSlot(response['razorpay_order_id']));
 
             Promise.all(allPromises)

@@ -31,6 +31,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTreeModule } from '@angular/material/tree';
+import { CdkTreeModule } from '@angular/cdk/tree';
 // angular material
 
 @NgModule({
@@ -67,8 +68,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatBadgeModule,
-    MatTreeModule
-
+    MatTreeModule,
+    CdkTreeModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -102,7 +103,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatAutocompleteModule,
     MatPaginatorModule,
     MatBadgeModule,
-    MatTreeModule
+    MatTreeModule,
+    CdkTreeModule
   ],
 })
 export class MaterialModule { }

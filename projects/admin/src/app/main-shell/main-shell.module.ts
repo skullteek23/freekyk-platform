@@ -52,7 +52,6 @@ import { RescheduleMatchDialogComponent } from './components/season-panel/resche
 import { AddSponsorComponent } from './components/season-panel/add-sponsor/add-sponsor.component';
 import { MatchRequestsPanelComponent } from './components/match-requests-panel/match-requests-panel.component';
 import { TicketsPanelComponent } from './components/tickets-panel/tickets-panel.component';
-import { ReplyTicketDialogComponent } from './components/tickets-panel/reply-ticket-dialog/reply-ticket-dialog.component';
 
 
 const routes: Routes = [
@@ -128,7 +127,6 @@ const routes: Routes = [
     AddSponsorComponent,
     MatchRequestsPanelComponent,
     TicketsPanelComponent,
-    ReplyTicketDialogComponent
   ],
   imports: [
     CommonModule,

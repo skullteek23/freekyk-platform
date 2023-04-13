@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     { icon: 'emoji_events', label: 'Rewards', highlight: false, route: '/rewards' },
     { icon: 'leaderboard', label: ' Leaderboard', highlight: true, route: '/leaderboard' },
     { icon: 'record_voice_over', label: 'Be an organizer', highlight: true, route: '/become-organizer' },
-    { icon: 'support_agent', label: 'Support', highlight: false, route: '/support' },
+    { icon: 'support_agent', label: 'Support', highlight: false, route: '/support/faqs' },
   ];
   readonly quickLinks: ListOption[] = [
     { viewValue: 'Players', value: '/players' },

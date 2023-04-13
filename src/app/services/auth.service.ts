@@ -108,15 +108,18 @@ export class AuthService {
   }
 
   onLogout(): void {
-    this.ngAuth.signOut()
-      .then(() => {
-        this.snackbarService.displayCustomMsg('Logged out!');
-        localStorage.removeItem('uid');
-        this.resetUser();
-        sessionStorage.clear();
-        location.href = '/';
-      })
-      .catch((error) => this.handleAuthError(error.code));
+    const user = this.getUser();
+    if (user) {
+      this.ngAuth.signOut()
+        .then(() => {
+          this.snackbarService.displayCustomMsg('Logged out!');
+          localStorage.removeItem('uid');
+          this.resetUser();
+          sessionStorage.clear();
+          location.href = '/';
+        })
+        .catch((error) => this.handleAuthError(error.code));
+    }
   }
 
   resetUser() {

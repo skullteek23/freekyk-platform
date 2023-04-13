@@ -21,4 +21,5 @@ export interface RazorPayOrder {
   offer_id?: string;
   receipt?: string;
   type?: OrderTypes;
+  description?: string;
 }
