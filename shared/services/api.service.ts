@@ -330,6 +330,7 @@ export class ApiGetService {
 
   getPickupSlotByOrder(order: Partial<RazorPayOrder>): Observable<IPickupGameSlot[]> {
     if (order) {
+      console.log(order.id)
       return this.angularFirestore.collection('pickupSlots', (query) => query.where('orderID', '==', order.id)).get()
         .pipe(manipulatePickupSlotData)
     }
@@ -400,6 +401,10 @@ export class ApiPostService {
 
   updateTeamInfo(update: Partial<ITeam>, docID: string): Promise<any> {
     return this.angularFirestore.collection('teams').doc(docID).update({ ...update })
+  }
+
+  updateOrder(update: Partial<RazorPayOrder>, docID: string): Promise<any> {
+    return this.angularFirestore.collection('orders').doc(docID).update({ ...update })
   }
 
   updateProfile(data: { displayName?: string, photoURL?: string }, user: authUserMain): Promise<any> {

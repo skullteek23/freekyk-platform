@@ -314,10 +314,7 @@ export class PickupGameProfileComponent implements OnInit, OnDestroy {
 
   openOrder(orderID: string) {
     if (orderID) {
-      this.dialog.open(OrderComponent, {
-        panelClass: 'large-dialogs',
-        data: orderID
-      })
+      this.router.navigate(['/order', orderID]);
     }
   }
 

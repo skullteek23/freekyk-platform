@@ -85,7 +85,6 @@ import { PendingPaymentComponent } from './dash-home/pending-payment/pending-pay
     InvitedPlayersListComponent,
     TeamCommunicationComponent,
     PendingPaymentComponent,
-
   ],
   imports: [
     SharedModule,

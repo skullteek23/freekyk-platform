@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { Subscription } from 'rxjs';
-import { OrderComponent } from '../order/order.component';
 
 @Component({
   selector: 'app-my-orders',
@@ -22,19 +20,11 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private apiService: ApiGetService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.getOrders();
-    this.subscriptions.add(this.route.params.subscribe({
-      next: (params) => {
-        if (params && params.hasOwnProperty('orderid')) {
-          this.openOrder(params['orderid']);
-        }
-      }
-    }));
   }
 
   ngOnDestroy(): void {
@@ -62,13 +52,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   }
 
   openOrder(orderID: string) {
-    if (orderID) {
-      this.selectedOrderID = orderID;
-      this.dialog.open(OrderComponent, {
-        panelClass: 'large-dialogs',
-        data: this.selectedOrderID
-      })
-    }
+    this.router.navigate(['order', orderID]);
   }
 
   showLoader() {

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-select-quantity',
@@ -12,14 +12,30 @@ export class SelectQuantityComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<SelectQuantityComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: number
   ) { }
 
-  ngOnInit(): void {
-    this.onCloseDialog();
+  ngOnInit(): void { }
+
+  onCloseDialog(quantity: number): void {
+    this.dialogRef.close(quantity);
   }
 
-  onCloseDialog(): void {
-    this.dialogRef.close(this.quantity);
+  close(): void {
+    this.dialogRef.close();
   }
+
+  decrement() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  increment() {
+    if (this.quantity < this.data) {
+      this.quantity++;
+    }
+  }
+
 
 }

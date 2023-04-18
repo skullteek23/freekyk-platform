@@ -18,7 +18,7 @@ import { TermsComponent } from '@app/others/terms/terms.component';
 import { PrivacyComponent } from '@app/others/privacy/privacy.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateTeamDialogComponent } from './components/create-team-dialog/create-team-dialog.component';
 import { PhotoUploadingCircleComponent } from './components/photo-uploading-circle/photo-uploading-circle.component';
 import { MyMatchesComponent } from './components/my-matches/my-matches.component';
@@ -70,6 +70,7 @@ import { SelectQuantityComponent } from './components/select-quantity/select-qua
     HttpClientModule,
     MaterialModule,
     SharedModule,
+    FormsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     RouterModule.forChild([])

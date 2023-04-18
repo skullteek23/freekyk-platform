@@ -1,8 +1,8 @@
 mat-list {
   width: 100%;
+  height: calc(100vh - 157px);
+  overflow-y: auto;
 
-  // max-height: 400px;
-  // overflow-y: auto;
   padding: 12px;
 
   mat-list-item {
