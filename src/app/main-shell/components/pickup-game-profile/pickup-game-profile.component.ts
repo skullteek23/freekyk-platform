@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
@@ -27,14 +27,13 @@ import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-
   templateUrl: './pickup-game-profile.component.html',
   styleUrls: ['./pickup-game-profile.component.scss']
 })
-export class PickupGameProfileComponent implements OnInit {
+export class PickupGameProfileComponent implements OnInit, OnDestroy {
 
   readonly customDateFormat = MatchConstants.GROUND_SLOT_DATE_FORMAT;
   readonly oneHourMilliseconds = 3600000;
 
   readonly ONE_SIDE_COUNT = 7;
 
-  subscriptions = new Subscription();
   seasonID: string = null;
   season: Partial<SeasonAllInfo> = null;
   isLoaderShown = false;
@@ -49,6 +48,8 @@ export class PickupGameProfileComponent implements OnInit {
   emptySlotsCount = 0;
   playerUID: string = null;
   waitingList: ListOption[] = [];
+  subscriptions = new Subscription();
+  slotsSubscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -82,6 +83,11 @@ export class PickupGameProfileComponent implements OnInit {
     }));
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+    this.slotsSubscriptions.unsubscribe();
+  }
+
   initUser() {
     this.authService.isLoggedIn()
       .subscribe(response => {
@@ -94,7 +100,7 @@ export class PickupGameProfileComponent implements OnInit {
   getSeasonInfo(): void {
     if (this.seasonID) {
       this.showLoader();
-      this.apiService.getSeasonAllInfo(this.seasonID)
+      this.subscriptions.add(this.apiService.getSeasonAllInfo(this.seasonID)
         .subscribe({
           next: (response) => {
             if (response) {
@@ -118,7 +124,7 @@ export class PickupGameProfileComponent implements OnInit {
             window.scrollTo(0, 0);
             this.router.navigate(['/error']);
           }
-        })
+        }))
     }
   }
 
@@ -158,7 +164,7 @@ export class PickupGameProfileComponent implements OnInit {
 
   getSeasonBookedSlots() {
     if (this.seasonID) {
-      this.apiService.addSeasonSlotListener(this.seasonID)
+      this.slotsSubscriptions.add(this.apiService.addSeasonSlotListener(this.seasonID)
         .subscribe({
           next: (response) => {
             if (response) {
@@ -170,7 +176,7 @@ export class PickupGameProfileComponent implements OnInit {
             this.allSlots = [];
             this.createBookedSlotList();
           }
-        })
+        }))
     }
   }
 
@@ -323,7 +329,7 @@ export class PickupGameProfileComponent implements OnInit {
           next: () => {
             const allPromises = [];
             const totalSlots = this.displayedSlots.filter(el => el.selected).length;
-            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, `${totalSlots} Slots`, response).toPromise());
+            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, `${totalSlots} Slot(s)`, response).toPromise());
             allPromises.push(this.updatePickupSlot(response['razorpay_order_id']));
 
             Promise.all(allPromises)
@@ -331,6 +337,7 @@ export class PickupGameProfileComponent implements OnInit {
                 this.snackBarService.displayCustomMsg('Your slot has been booked!');
                 this.openOrder(response['razorpay_order_id']);
                 this.resetFees();
+                this.slotsSubscriptions.unsubscribe();
               })
               .catch((error) => {
                 this.snackBarService.displayError(error?.message);
