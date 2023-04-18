@@ -6,23 +6,21 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
-import { IPickupGameSlot } from '@shared/interfaces/game.model';
+import { IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { OrderTypes } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
+import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { OrderComponent } from '../order/order.component';
 import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-dialog.component';
 
-export interface ISlotOption {
-  booked: boolean;
-  name: string;
-  selected: boolean;
-}
+
 
 @Component({
   selector: 'app-pickup-game-profile',
@@ -44,11 +42,13 @@ export class PickupGameProfileComponent implements OnInit {
   match: MatchFixture;
   ground: ListOption;
   ageCatFormatter: any;
-  displayedSlots: ISlotOption[] = [];
+  displayedSlots: Partial<ISlotOption>[] = [];
   allSlots: IPickupGameSlot[] = [];
   reportingTime: number = null;
   payableFees = 0;
   emptySlotsCount = 0;
+  playerUID: string = null;
+  waitingList: ListOption[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -63,6 +63,7 @@ export class PickupGameProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initUser();
     this.ageCatFormatter = Formatters;
     this.subscriptions.add(this.route.params.subscribe({
       next: (params) => {
@@ -81,6 +82,15 @@ export class PickupGameProfileComponent implements OnInit {
     }));
   }
 
+  initUser() {
+    this.authService.isLoggedIn()
+      .subscribe(response => {
+        if (response) {
+          this.playerUID = response.uid;
+        }
+      });
+  }
+
   getSeasonInfo(): void {
     if (this.seasonID) {
       this.showLoader();
@@ -93,6 +103,7 @@ export class PickupGameProfileComponent implements OnInit {
               this.createStartDate();
               this.getSeasonMatches();
               this.getSeasonBookedSlots();
+
               this.reportingTime = this.season.startDate - (MatchConstants.ONE_HOUR_IN_MILLIS / 4);
               this.payableFees = 0;
             } else {
@@ -123,6 +134,10 @@ export class PickupGameProfileComponent implements OnInit {
     this.router.navigate([path], { queryParams: { callback: encodedString } });
   }
 
+  getWaitingList() {
+    return this.apiService.getSeasonWaitingList(this.seasonID).toPromise();
+  }
+
   getSeasonMatches() {
     if (this.season?.name) {
       this.apiService.getSeasonMatches(this.season.name)
@@ -143,7 +158,7 @@ export class PickupGameProfileComponent implements OnInit {
 
   getSeasonBookedSlots() {
     if (this.seasonID) {
-      this.apiService.getSeasonBookedSlotsWithNames(this.seasonID)
+      this.apiService.addSeasonSlotListener(this.seasonID)
         .subscribe({
           next: (response) => {
             if (response) {
@@ -174,7 +189,7 @@ export class PickupGameProfileComponent implements OnInit {
     }
   }
 
-  selectSlot(slot: ISlotOption) {
+  selectSlot(slot: Partial<ISlotOption>, index: number) {
     if (slot.booked) {
       return;
     }
@@ -187,36 +202,66 @@ export class PickupGameProfileComponent implements OnInit {
     }
   }
 
-  createBookedSlotList() {
+  async createBookedSlotList() {
     this.displayedSlots = [];
     this.emptySlotsCount = 0;
-    for (let i = 0; i < 14; i++) {
-      if (this.allSlots.hasOwnProperty(i)) {
-        for (let j = 0; j < this.allSlots[i].slots; j++) {
-          if (this.displayedSlots.findIndex(el => el.name === this.allSlots[i].name) > -1) {
-            this.displayedSlots.push({
-              name: `${this.getShortenText(this.allSlots[i].name, 8)} +${j}`,
-              booked: true,
-              selected: false
-            })
-          } else {
-            this.displayedSlots.push({
-              name: this.allSlots[i].name,
-              booked: true,
-              selected: false
-            })
+
+    // Adding booked slots
+    this.allSlots.forEach(el => {
+      if (Array.isArray(el.slots)) {
+        el.slots.forEach((position, index) => {
+          const slot: Partial<ISlotOption> = {
+            name: this.getShortenText(el.name, 8) + this.getEnumerableIndex(index),
+            booked: true,
+            selected: false,
+            uid: el.uid,
+            position: position
           }
-        }
-      } else if (this.displayedSlots.length < 14) {
-        this.displayedSlots.push({
+          this.displayedSlots.push(slot);
+        });
+      }
+    });
+
+    if (this.displayedSlots.length < 14) {
+
+      // Add Waiting List members
+      const waitingList = await this.getWaitingList();
+      waitingList.forEach((waitee, index) => {
+        const slot: Partial<ISlotOption> = {
+          name: waitee.viewValue,
+          booked: true,
+          selected: false,
+          uid: waitee.value,
+          position: this.displayedSlots.length + index
+        };
+        this.displayedSlots.push(slot);
+      });
+    }
+
+    if (this.displayedSlots.length < 14) {
+      // Adding empty slots where position is not booked
+      for (let i = 0; i < 14; i++) {
+        const emptySlot: Partial<ISlotOption> = {
           name: '',
           booked: false,
-          selected: false
-        })
-
+          selected: false,
+          uid: null,
+          position: i
+        }
+        if (!this.displayedSlots.find(el => el.position === i)) {
+          this.displayedSlots.push(emptySlot);
+        }
       }
     }
+    this.displayedSlots.sort(ArraySorting.sortObjectByKey('position'));
     this.emptySlotsCount = this.displayedSlots.filter(el => !el.name).length;
+  }
+
+  getEnumerableIndex(index: number) {
+    if (index >= 1) {
+      return `+${index}`;
+    }
+    return '';
   }
 
   getShortenText(value: string, maxLength: number): string {
@@ -261,6 +306,15 @@ export class PickupGameProfileComponent implements OnInit {
     })
   }
 
+  openOrder(orderID: string) {
+    if (orderID) {
+      this.dialog.open(OrderComponent, {
+        panelClass: 'large-dialogs',
+        data: orderID
+      })
+    }
+  }
+
   handlePaymentSuccess(response): void {
     this.showLoader();
     if (response) {
@@ -275,12 +329,13 @@ export class PickupGameProfileComponent implements OnInit {
             Promise.all(allPromises)
               .then(() => {
                 this.snackBarService.displayCustomMsg('Your slot has been booked!');
+                this.openOrder(response['razorpay_order_id']);
+                this.resetFees();
               })
               .catch((error) => {
                 this.snackBarService.displayError(error?.message);
               })
               .finally(() => {
-                this.getSeasonInfo();
                 this.hideLoader();
               })
           },
@@ -295,18 +350,37 @@ export class PickupGameProfileComponent implements OnInit {
     }
   }
 
+  resetFees() {
+    this.payableFees = 0;
+  }
+
   updatePickupSlot(orderID: string) {
-    const totalSlots = this.displayedSlots.filter(el => el.selected).length;
-    const existingSlot = this.allSlots.find(el => el.uid === this.authService.getUser().uid);
-    if (existingSlot) {
-      const update: Partial<IPickupGameSlot> = {
-        slots: existingSlot.slots + totalSlots
+    const selectedPositions: number[] = [];
+
+    this.displayedSlots.forEach(slot => {
+      if (slot.selected) {
+        selectedPositions.push(slot.position);
       }
+    });
+
+    let existingSlot: IPickupGameSlot;
+    const uid = this.authService.getUser()?.uid || null;
+
+    if (uid) {
+      existingSlot = this.allSlots.find(el => el.uid === uid);
+    }
+
+    const update: Partial<IPickupGameSlot> = {
+      slots: selectedPositions
+    }
+
+    if (existingSlot) {
+      update.slots = update.slots.concat(existingSlot.slots);
       return this.apiPostService.updatePickupSlot(existingSlot.id, update);
     } else {
       const data: IPickupGameSlot = {
-        slots: totalSlots,
-        uid: this.authService.getUser().uid,
+        slots: selectedPositions,
+        uid: uid,
         timestamp: new Date().getTime(),
         orderID,
         seasonID: this.seasonID

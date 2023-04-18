@@ -5,6 +5,7 @@ import { IActionShortcutData } from '@shared/components/action-shortcut-button/a
 import { IPointersComponentData } from '@shared/components/why-choose-section/why-choose-section.component';
 import { ListOption } from '@shared/interfaces/others.model';
 import { LANDING_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
   readonly actionShortcutDataRow_2: IActionShortcutData[] = [
     { icon: 'emoji_events', label: 'Rewards', highlight: false, route: '/rewards' },
     { icon: 'leaderboard', label: ' Leaderboard', highlight: true, route: '/leaderboard' },
-    { icon: 'record_voice_over', label: 'Be an organizer', highlight: true, route: '/become-organizer' },
+    { icon: 'record_voice_over', label: 'Be an organizer', highlight: true, route: null, extLink: environment.firebase.adminRegister },
     { icon: 'support_agent', label: 'Support', highlight: false, route: '/support/faqs' },
   ];
   readonly quickLinks: ListOption[] = [
@@ -53,7 +54,9 @@ export class HomeComponent implements OnInit {
   }
 
   selectAction(action: IActionShortcutData) {
-    if (action.route) {
+    if (action.extLink) {
+      window.open(action.extLink, '_blank');
+    } else if (action.route) {
       this.router.navigate([action.route])
     }
   }

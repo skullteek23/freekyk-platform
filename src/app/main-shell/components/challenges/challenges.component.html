@@ -1,1 +1,12 @@
-<p>challenges works!</p>
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Challenges</span>
+</div>
+<section>
+  <app-fixtures-results-tabs [showActionBtn]="false"></app-fixtures-results-tabs>
+</section>

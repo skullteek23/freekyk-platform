@@ -7,15 +7,16 @@ import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-brac
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
-import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
+import { MatchFixture, ParseMatchProperties, TournamentTypes } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
 import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
-import { forkJoin, Observable, of } from 'rxjs';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,11 @@ export class ApiGetService {
     }
     return this.angularFirestore.collection('seasons', query).get()
       .pipe(manipulateSeasonDataV2)
+  }
+
+  getSeasonType(seasonID: string): Observable<TournamentTypes> {
+    return this.angularFirestore.collection('seasons').doc(seasonID).get()
+      .pipe(manipulateSeasonTypeData)
   }
 
   getPublishedSeasons(limit?: number): Observable<ISeason[]> {
@@ -262,6 +268,13 @@ export class ApiGetService {
     }
   }
 
+  getOrder(orderID: string): Observable<Partial<RazorPayOrder>> {
+    if (orderID) {
+      return this.angularFirestore.collection('orders').doc(orderID).get()
+        .pipe(manipulateOrderData)
+    }
+  }
+
   getCommunityPlays(limit?: number) {
     let query;
     if (limit && limit > 0) {
@@ -322,11 +335,12 @@ export class ApiGetService {
     ]).pipe(manipulateWaitingListData)
   }
 
-  getSeasonBookedSlotsWithNames(seasonID: string): Observable<IPickupGameSlot[]> {
-    return forkJoin([
-      this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get(),
+  addSeasonSlotListener(seasonID: string): Observable<IPickupGameSlot[]> {
+    return combineLatest([
+      this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).snapshotChanges(),
       this.getPlayers()
-    ]).pipe(manipulatePickupSlotWithNamesData)
+    ])
+      .pipe(manipulatePickupSlotDataListener);
   }
 
   getUserTickets(userID: string): Observable<ISupportTicket[]> {

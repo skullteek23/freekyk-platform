@@ -1,13 +1,17 @@
 
-// export type TeamSelected = 'home' | 'away';
-
+export interface ISlotOption {
+  booked: boolean;
+  name: string;
+  selected: boolean;
+  position: number;
+  uid: string;
+}
 export interface IPickupGameSlot {
   orderID: string;
   seasonID: string;
-  // teamSelected: TeamSelected;
   timestamp: number;
   uid: string;
-  slots: number;
+  slots: number[];
   name?: string;
   id?: string;
 }

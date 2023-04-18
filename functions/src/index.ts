@@ -15,6 +15,7 @@ import { seasonParticipation } from './seasonParticipation';
 import { seasonCancellation } from './seasonCancellation';
 import { teamJoin } from './joinTeam';
 import { saveRazorpayOrder } from './saveOrder';
+import { initRefundOrder } from './refundOrder';
 
 
 // callable functions
@@ -26,6 +27,7 @@ export const joinTeam = functions.region('asia-south1').https.onCall(teamJoin);
 export const deleteTeam = functions.region('asia-south1').https.onCall(onDelete);
 export const getValidOrder = functions.region('asia-south1').https.onCall(fetchOrder);
 export const getNewOrder = functions.region('asia-south1').https.onCall(generateOrder);
+export const refundOrder = functions.region('asia-south1').https.onCall(initRefundOrder);
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
 export const saveOrder = functions.region('asia-south1').https.onCall(saveRazorpayOrder);
 export const participateSeason = functions.region('asia-south1').https.onCall(seasonParticipation);

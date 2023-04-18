@@ -64,34 +64,24 @@
       </div>
     </mat-card-title>
     <mat-card-content>
-      <div class="team-container" fxLayout="row" fxLayout="space-between center" fxLayoutGap="12px">
-        <div class="first-team team" fxFlex="50%">
-          <span class="mat-body-1 center team-title">
+      <div class="team-container" fxLayout="column">
+        <div class="team-names-container" fxLayoutAlign="space-between center">
+          <span class="mat-body-1 center team-title team-title--first">
             Team A
           </span>
-          <ul>
-            <li *ngFor="let slot of displayedSlots| slice: 0:7" class="button-slot">
-              <button [color]="slot.selected ? 'primary' : ''" mat-raised-button [disabled]="slot.booked"
-                (click)="selectSlot(slot)">
-                <span class="material-icons-round">
-                  person
-                </span>
-                <span class="mat-caption" *ngIf="slot.name">
-                  {{slot.name}}
-                </span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div class="second-team team" fxFlex="auto">
-          <span class="mat-body-1 center team-title">
+          <span class="mat-body-1 center team-title team-title--second">
             Team B
           </span>
-          <ul>
-            <li *ngFor="let slot of displayedSlots| slice: 7:14" class="button-slot">
-              <button [color]="slot.selected ? 'primary' : ''" mat-raised-button [disabled]="slot.booked"
-                (click)="selectSlot(slot)">
-                <span class="material-icons-round">
+        </div>
+        <div class="team">
+          <ul fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center" class="list-container">
+            <li *ngFor="let slot of displayedSlots; let i = index" class="button-slot">
+              <button [ngClass]="{'user-booked': playerUID && slot.uid === playerUID}"
+                [color]="slot.selected ? 'primary' : ''" mat-raised-button (click)="selectSlot(slot, i)">
+                <span class="material-icons-round filled" *ngIf="slot.booked">
+                  check_circle
+                </span>
+                <span class="material-icons-round" *ngIf="!slot.booked">
                   person
                 </span>
                 <span class="mat-caption" *ngIf="slot.name">
@@ -103,13 +93,13 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-footer>
+    <!-- <mat-card-footer *ngIf="emptySlotsCount === 0">
       <div class="waiting-list-container">
         <span class="mat-caption">
           Didn't get slots? <a (click)="openWaitingList()"> Join Waiting List</a>
         </span>
       </div>
-    </mat-card-footer>
+    </mat-card-footer> -->
   </mat-card>
 </section>
 

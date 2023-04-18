@@ -22,7 +22,7 @@
 
 <section>
   <mat-list *ngIf="orders?.length">
-    <mat-list-item *ngFor="let order of orders" (click)="openOrder(order)">
+    <mat-list-item *ngFor="let order of orders" (click)="openOrder(order.id)">
       <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
         <div class="image">
           <img src="assets/images/placeholder_product.png" alt="Product Order" appFallbackImg>

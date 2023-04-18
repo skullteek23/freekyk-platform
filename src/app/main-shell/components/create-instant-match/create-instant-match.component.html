@@ -7,7 +7,7 @@
   </button>
   <span class="dash-h5 heading">Create an Instant Match</span>
 </div>
-<section>
+<section class="main-content">
   <!-- <mat-vertical-stepper #stepper>
     <mat-step label="Update your details" [stepControl]="nameDetailsForm" [editable]="stepper.selectedIndex < 2">
       <form [formGroup]="nameDetailsForm" fxLayoutAlign="center start" fxLayout="column"
@@ -90,6 +90,10 @@
       </div>
     </mat-step>
   </mat-vertical-stepper> -->
+  <section>
+    <app-no-items-message [centerText]="true"
+      customText="Uh-Oh! Instant match creator is not available."></app-no-items-message>
+  </section>
 </section>
 <section>
   <div class="buttons-container" fxLayout="column" fxLayoutGap="12px">

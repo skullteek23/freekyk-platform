@@ -95,7 +95,7 @@ const routes: Routes = [
   { path: 'edit-profile', component: DashAccountComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'notifications', component: MyNotificationsComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
-  { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'order/:orderid', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'addresses', component: MyAddressesComponent, ...canActivate(redirectUnauthorizedGuard) },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },

@@ -1,1 +1,12 @@
-<p>leaderboard works!</p>
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Leaderboard</span>
+</div>
+<section>
+  <app-no-items-message [centerText]="true" customText="Uh-Oh! Leaderboard is not available."></app-no-items-message>
+</section>

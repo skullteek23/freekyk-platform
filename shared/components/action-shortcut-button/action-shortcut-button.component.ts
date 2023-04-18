@@ -6,6 +6,7 @@ export class IActionShortcutData {
   label: string = 'Home';
   highlight: boolean;
   route: string = null;
+  extLink?: string = null;
   disabled?: boolean = false;
   svg?: string = null;
 }
@@ -26,9 +27,7 @@ export class ActionShortcutButtonComponent implements OnInit {
   }
 
   clickAction() {
-    if (this.data?.route) {
-      this.actionClick.next(this.data);
-    }
+    this.actionClick.next(this.data);
   }
 
 }

@@ -10,6 +10,7 @@ export class OrganizeSeasonComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

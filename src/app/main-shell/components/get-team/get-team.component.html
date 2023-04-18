@@ -19,7 +19,7 @@
     </div>
   </mat-card-content>
 </mat-card>
-<section>
+<section class="main-content">
   <app-search-lg searchPlaceholder="Search a Team" (searchItem)="applySearch($event)"></app-search-lg>
   <mat-list *ngIf="teamsListCache.length">
     <mat-list-item *ngFor="let team of teamsList" (click)="openTeam(team)">
@@ -43,15 +43,15 @@
       </mat-card>
     </mat-list-item>
   </mat-list>
-  <div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
-    <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button (click)="createTeam()"
-      fxLayoutAlign="center center" fxLayoutGap="4px">
-      <span class="material-icons-round external-icon">add</span>
-      <span>
-        Create Team
-      </span>
-    </button>
-  </div>
 </section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button (click)="createTeam()"
+    fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">add</span>
+    <span>
+      Create Team
+    </span>
+  </button>
+</div>
 
 <app-loading *ngIf="isLoaderShown"></app-loading>

@@ -16,7 +16,7 @@
         </div>
 
         <!-- whatsApp icon - small -->
-        <button matTooltip="Join Us" *ngIf="isLogged && !isLoading" mat-icon-button color="primary"
+        <button matTooltip="Join Us" *ngIf="!isLoading" mat-icon-button color="primary"
           (click)="openSocialGroupDialog();onCloseMenu()">
           <img src="assets/svgs/whatsapp_bw.svg" alt="WhatsApp Icon" class="whatsapp-icon">
         </button>

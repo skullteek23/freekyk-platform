@@ -132,7 +132,7 @@ export class WaitingListDialogComponent implements OnInit {
 
   saveToWaitingList(orderID: string) {
     const data: IPickupGameSlot = {
-      slots: 1,
+      slots: [],
       uid: this.authService.getUser().uid,
       timestamp: new Date().getTime(),
       orderID,
