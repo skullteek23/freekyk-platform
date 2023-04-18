@@ -328,6 +328,13 @@ export class ApiGetService {
       .pipe(manipulatePickupSlotData)
   }
 
+  getPickupSlotByOrder(order: Partial<RazorPayOrder>): Observable<IPickupGameSlot[]> {
+    if (order) {
+      return this.angularFirestore.collection('pickupSlots', (query) => query.where('orderID', '==', order.id)).get()
+        .pipe(manipulatePickupSlotData)
+    }
+  }
+
   getSeasonWaitingList(seasonID: string): Observable<ListOption[]> {
     return forkJoin([
       this.angularFirestore.collection('waitingList', query => query.where('seasonID', '==', seasonID)).get(),
@@ -385,6 +392,10 @@ export class ApiPostService {
 
   updatePickupSlot(docID: string, update: Partial<IPickupGameSlot>): Promise<any> {
     return this.angularFirestore.collection('/pickupSlots').doc(docID).update({ ...update });
+  }
+
+  deletePickupSlot(docID: string): Promise<any> {
+    return this.angularFirestore.collection('/pickupSlots').doc(docID).delete();
   }
 
   updateTeamInfo(update: Partial<ITeam>, docID: string): Promise<any> {

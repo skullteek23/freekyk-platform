@@ -316,6 +316,7 @@ export function manipulateTeamData(source: Observable<ngFireDoc>) {
 export function manipulateOrdersData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as Partial<RazorPayOrder>), } as Partial<RazorPayOrder>))),
+    map(resp => resp.sort(ArraySorting.sortObjectByKey('created_at', 'desc'))),
   );
 }
 

@@ -287,7 +287,7 @@ export class PickupGameProfileComponent implements OnInit {
           const totalSlots = this.displayedSlots.filter(el => el.selected).length;
           const options: Partial<ICheckoutOptions> = {
             ...UNIVERSAL_OPTIONS,
-            description: `${totalSlots} Slots`,
+            description: `${totalSlots} Slot(s)`,
             order_id: order.id,
             amount: this.payableFees * 100,
             handler: this.handlePaymentSuccess.bind(this),
