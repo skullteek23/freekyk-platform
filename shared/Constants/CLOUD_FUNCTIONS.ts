@@ -8,6 +8,7 @@ export const CLOUD_FUNCTIONS = {
   GENERATE_NEW_RAZORPAY_ORDER: 'getNewOrder',
   SAVE_RAZORPAY_ORDER: 'saveOrder',
   UPDATE_RAZORPAY_ORDER: 'updateOrder',
+  REFUND_RAZORPAY_ORDER: 'refundOrder',
   VERIFY_PAYMENT: 'verifyPayment',
   SEASON_PARTICIPATION: 'participateSeason',
   UPDATE_MATCH_REPORT: 'updateMatchReport',

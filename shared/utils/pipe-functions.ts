@@ -101,6 +101,12 @@ export function manipulateSeasonNamesData(source: Observable<ISeason[]>): Observ
   );
 }
 
+export function manipulateSeasonData(source: Observable<ngFireDoc>): Observable<ISeason> {
+  return source.pipe(
+    map(resp => ({ id: resp.id, ...resp.data() as ISeason }))
+  );
+}
+
 export function manipulateSeasonTypeData(source: Observable<ngFireDoc>): Observable<TournamentTypes> {
   return source.pipe(
     map(resp => resp.exists ? (resp.data() as ISeason).type : null)

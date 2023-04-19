@@ -14,7 +14,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -73,6 +73,11 @@ export class ApiGetService {
   getSeasonType(seasonID: string): Observable<TournamentTypes> {
     return this.angularFirestore.collection('seasons').doc(seasonID).get()
       .pipe(manipulateSeasonTypeData)
+  }
+
+  getSeason(docID: string): Observable<ISeason> {
+    return this.angularFirestore.collection('seasons').doc(docID).get()
+      .pipe(manipulateSeasonData)
   }
 
   getPublishedSeasons(limit?: number): Observable<ISeason[]> {

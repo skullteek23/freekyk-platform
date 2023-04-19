@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -5,7 +6,7 @@ import { AuthService } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
-import { OrderTypes } from '@shared/interfaces/order.model';
+import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
@@ -14,7 +15,8 @@ import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 @Component({
   selector: 'app-waiting-list-dialog',
   templateUrl: './waiting-list-dialog.component.html',
-  styleUrls: ['./waiting-list-dialog.component.scss']
+  styleUrls: ['./waiting-list-dialog.component.scss'],
+  providers: [DatePipe]
 })
 export class WaitingListDialogComponent implements OnInit {
 
@@ -30,6 +32,7 @@ export class WaitingListDialogComponent implements OnInit {
     private paymentService: PaymentService,
     private authService: AuthService,
     private router: Router,
+    private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: Partial<SeasonAllInfo>
   ) { }
 
@@ -105,7 +108,11 @@ export class WaitingListDialogComponent implements OnInit {
         .subscribe({
           next: () => {
             const allPromises = [];
-            allPromises.push(this.paymentService.saveOrder(this.data.id, OrderTypes.season, `1 Waiting List Entry`, response).toPromise());
+            const options: Partial<RazorPayOrder> = {
+              description: '1',
+              notes: [`Purchased 1 waiting list slot on ${this.datePipe.transform(new Date(), 'short')}`]
+            }
+            allPromises.push(this.paymentService.saveOrder(this.data.id, OrderTypes.season, options, response).toPromise());
             allPromises.push(this.saveToWaitingList(response['razorpay_order_id']));
 
             Promise.all(allPromises)

@@ -33,14 +33,22 @@
           View Game
         </button>
       </mat-card-title>
-      <mat-card-subtitle>
-        <span class="mat-body-2">
-          {{order.description}}
-        </span>
-      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="content">
+        <div class="activity-container">
+          <div class="dash-h5 heading">
+            Activity
+          </div>
+          <div class="mat-caption sec-menu" *ngIf="order?.notes?.length === 0">
+            No Activity!
+          </div>
+          <ol *ngIf="order?.notes?.length">
+            <li *ngFor="let item of order?.notes">
+              {{item}}
+            </li>
+          </ol>
+        </div>
         <div class="dash-h5 heading">
           Details
         </div>
@@ -79,7 +87,7 @@
   <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
     Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
   </div>
-  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" *ngIf="currentSlotsCount">
     <a (click)="cancelOrder()" class="mat-body-1" mat-button color="warn">
       Cancel Order
     </a>

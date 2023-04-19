@@ -1,12 +1,22 @@
 section {
   padding: 12px;
+  max-height: calc(100vh - 157px);
+  overflow-y: auto;
 }
 
 .content {
   margin-top: 20px;
 
+  .activity-container {
+    margin-bottom: 20px;
+
+    ol {
+      list-style-type: disc !important;
+    }
+  }
+
   .table {
-    margin-top: 25px;
+    margin-top: 8px;
 
     mat-divider {
       position: initial !important;
