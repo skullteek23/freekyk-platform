@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
@@ -8,7 +9,7 @@ import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { OrderTypes } from '@shared/interfaces/order.model';
+import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
@@ -17,7 +18,6 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { OrderComponent } from '../order/order.component';
 import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-dialog.component';
 
 
@@ -25,9 +25,10 @@ import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-
 @Component({
   selector: 'app-pickup-game-profile',
   templateUrl: './pickup-game-profile.component.html',
-  styleUrls: ['./pickup-game-profile.component.scss']
+  styleUrls: ['./pickup-game-profile.component.scss'],
+  providers: [DatePipe]
 })
-export class PickupGameProfileComponent implements OnInit, OnDestroy {
+export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
 
   readonly customDateFormat = MatchConstants.GROUND_SLOT_DATE_FORMAT;
   readonly oneHourMilliseconds = 3600000;
@@ -60,10 +61,11 @@ export class PickupGameProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private snackBarService: SnackbarService,
-    private apiPostService: ApiPostService
+    private apiPostService: ApiPostService,
+    private datePipe: DatePipe
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.initUser();
     this.ageCatFormatter = Formatters;
     this.subscriptions.add(this.route.params.subscribe({
@@ -75,9 +77,10 @@ export class PickupGameProfileComponent implements OnInit, OnDestroy {
       }
     }));
     this.subscriptions.add(this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationEnd && event?.url?.endsWith('/pay')) {
+      if (event instanceof NavigationStart && event?.url?.endsWith('/pay')) {
+        this.showLoader();
         this.participate();
-      } else if (event instanceof NavigationEnd && event?.url?.endsWith('/waiting-list')) {
+      } else if (event instanceof NavigationStart && event?.url?.endsWith('/waiting-list')) {
         this.openWaitingList();
       }
     }));
@@ -314,7 +317,7 @@ export class PickupGameProfileComponent implements OnInit, OnDestroy {
 
   openOrder(orderID: string) {
     if (orderID) {
-      this.router.navigate(['/order', orderID]);
+      this.router.navigate(['/order', orderID])
     }
   }
 
@@ -326,7 +329,11 @@ export class PickupGameProfileComponent implements OnInit, OnDestroy {
           next: () => {
             const allPromises = [];
             const totalSlots = this.displayedSlots.filter(el => el.selected).length;
-            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, `${totalSlots} Slot(s)`, response).toPromise());
+            const options: Partial<RazorPayOrder> = {
+              description: totalSlots.toString(),
+              notes: [`Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`]
+            }
+            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, options, response).toPromise());
             allPromises.push(this.updatePickupSlot(response['razorpay_order_id']));
 
             Promise.all(allPromises)

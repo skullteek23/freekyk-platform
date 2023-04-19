@@ -8,6 +8,7 @@ import { FunctionsApiService } from './functions-api.service';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
+import { ISeason } from '@shared/interfaces/season.model';
 declare let Razorpay: any;
 
 export enum LoadingStatus {
@@ -107,10 +108,10 @@ export class PaymentService {
     return participateFunc({ season, participantId });
   }
 
-  saveOrder(seasonID: string, orderType: OrderTypes, description: string, response: any) {
+  saveOrder(seasonID: string, orderType: number, options: Partial<RazorPayOrder>, response: any) {
     console.log(response);
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SAVE_RAZORPAY_ORDER);
-    return participateFunc({ seasonID, orderType, description, response });
+    return participateFunc({ seasonID, orderType, options, response });
   }
 
   updateOrder(response: any) {
@@ -134,6 +135,13 @@ export class PaymentService {
   getNewOrder(uid: string, fees: string): Promise<Partial<RazorPayOrder>> {
     const data = { uid, fees };
     return this.functionsApiService.generateNewOrder(data);
+  }
+
+  initOrderRefund(order: Partial<RazorPayOrder>, refundAmt: number) {
+    if (order?.id && refundAmt) {
+      const myFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.REFUND_RAZORPAY_ORDER);
+      return myFunc({ paymentID: order?.razorpay_payment_id, refundAmt }).toPromise();
+    }
   }
 
 

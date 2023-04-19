@@ -1,17 +1,21 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
+import { ISeason } from '@shared/interfaces/season.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
+import { PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
 import { SelectQuantityComponent } from '../select-quantity/select-quantity.component';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss']
+  styleUrls: ['./order.component.scss'],
+  providers: [DatePipe]
 })
 export class OrderComponent implements OnInit, OnDestroy {
 
@@ -22,6 +26,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
   orderID: string;
   isLoaderShown = false;
+  season: ISeason;
 
   constructor(
     private router: Router,
@@ -29,8 +34,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     private apiPostService: ApiPostService,
     private snackbarService: SnackbarService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
-    // private paymentService: PaymentService
+    private route: ActivatedRoute,
+    private datePipe: DatePipe,
+    private paymentService: PaymentService
   ) { }
 
   ngOnInit(): void {
@@ -56,6 +62,7 @@ export class OrderComponent implements OnInit, OnDestroy {
           next: response => {
             if (response) {
               this.order = response;
+              this.getSeason();
               this.calculateGst();
               this.showSuccess = true;
             }
@@ -79,18 +86,26 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/orders']);
   }
 
+  getSeason() {
+    if (this.order.seasonID) {
+      this.apiService.getSeason(this.order.seasonID).subscribe({
+        next: (response) => {
+          this.season = response;
+        },
+        error: () => {
+          this.season = null;
+        }
+      })
+    }
+  }
+
   openSeason() {
-    if (this.order?.seasonID) {
-      this.apiService.getSeasonType(this.order?.seasonID)
-        .subscribe({
-          next: (response) => {
-            if (response === 'FCP') {
-              this.router.navigate(['/pickup-game', this.order.seasonID]);
-            } else {
-              this.router.navigate(['/game', this.order.seasonID]);
-            }
-          }
-        })
+    if (this.order?.seasonID && this.season) {
+      if (this.season.type === 'FCP') {
+        this.router.navigate(['/pickup-game', this.order.seasonID]);
+      } else {
+        this.router.navigate(['/game', this.order.seasonID]);
+      }
     }
   }
 
@@ -99,57 +114,79 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   cancelOrder() {
-    const slotsInOrder = Number(this.order?.description?.split(" ")[0] || 0);
-    if (slotsInOrder > 1) {
-      const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slotsInOrder })
+    const slots = this.currentSlotsCount;
+    if (slots > 1) {
+      const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slots })
       dialogRef.afterClosed()
         .subscribe({
           next: (response) => {
-            if (response > 0 && response <= slotsInOrder) {
+            if (response > 0 && response <= slots) {
               this.parsPickupSlot(response);
             }
           }
         })
-    } else if (slotsInOrder === 1) {
+    } else if (slots === 1) {
       this.parsPickupSlot(1);
+    } else {
+      this.snackbarService.displayError('Error: No slots to cancel!');
     }
   }
 
   async parsPickupSlot(response: number) {
     this.isLoaderShown = true;
+    const slots = this.currentSlotsCount;
     const pickupSlots = (await this.apiService.getPickupSlotByOrder(this.order).toPromise());
     if (pickupSlots && pickupSlots[0]) {
-      const slot = pickupSlots[0];
-      slot.slots.sort();
+      pickupSlots[0].slots.sort();
+      const slot = JSON.parse(JSON.stringify(pickupSlots[0]));
       for (let i = 0; i < response; i++) {
-        slot.slots.pop();
+        if (slot.slots.length) {
+          slot.slots.pop();
+        }
       }
-      console.log(slot);
       const update: Partial<IPickupGameSlot> = {
         slots: slot.slots
       }
-      const allPromises = [];
-      if (slot.slots.length === 0) {
-        const update: Partial<RazorPayOrder> = {
-          description: `${slot.slots.length} Slot(s)`
+      this.order.notes.push(`Cancelled ${response} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`);
+      const orderUpdate: Partial<RazorPayOrder> = {
+        notes: this.order.notes,
+        description: `${slots - response}`
+      }
+
+      // Refund Amount is 50% of total cancellable slots amount
+      let refundAmt = 0;
+      refundAmt = (response * this.season.fees) / 2;
+
+      if (refundAmt > 0) {
+        const allPromises = [];
+        allPromises.push(this.apiPostService.updateOrder(orderUpdate, this.orderID));
+        allPromises.push(this.paymentService.initOrderRefund(this.order, refundAmt));
+        if (slot.slots.length <= 0) {
+          allPromises.push(this.apiPostService.deletePickupSlot(slot.id));
+        } else {
+          allPromises.push(this.apiPostService.updatePickupSlot(slot.id, update));
         }
 
-        allPromises.push(this.apiPostService.deletePickupSlot(slot.id));
-        allPromises.push(this.apiPostService.updateOrder(update, this.orderID));
-      } else {
-        allPromises.push(this.apiPostService.updatePickupSlot(slot.id, update));
+
+        Promise.all(allPromises)
+          .then(() => {
+            this.snackbarService.displayCustomMsg(response + ' Slot(s) cancelled successfully!')
+          })
+          .catch(() => {
+            this.snackbarService.displayError();
+          })
+          .finally(() => {
+            this.getOrder();
+            this.isLoaderShown = false;
+          })
       }
-      // allPromises.push(this.paymentService.initOrderRefund(this.order.id));
-      Promise.all(allPromises)
-        .then(() => {
-          this.snackbarService.displayCustomMsg('Order cancelled successfully!')
-        })
-        .catch(() => {
-          this.snackbarService.displayError();
-        })
-        .finally(() => {
-          this.isLoaderShown = false;
-        })
+    } else {
+      this.isLoaderShown = false;
+      this.snackbarService.displayError('Error: Pickup slot not found!')
     }
+  }
+
+  get currentSlotsCount() {
+    return Number(this.order?.description);
   }
 }

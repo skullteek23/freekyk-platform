@@ -3,8 +3,8 @@ import * as functions from 'firebase-functions';
 
 const Razorpay = require('razorpay');
 
-export async function initRefundOrder(data: { orderID: string, refundAmt: string }, context: any): Promise<any> {
-  if (!data?.orderID || !data?.refundAmt) {
+export async function initRefundOrder(data: { paymentID: string, refundAmt: string }, context: any): Promise<any> {
+  if (!data?.paymentID || !data?.refundAmt) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again');
   }
 
@@ -15,7 +15,7 @@ export async function initRefundOrder(data: { orderID: string, refundAmt: string
   }
   try {
     const instance = new Razorpay(instanceOptions);
-    return instance.payments.refund(data?.orderID, { amount: Number(refund) * 100 });
+    return instance.payments.refund(data?.paymentID, { amount: Number(refund) * 100 });
   } catch (error) {
     throw new functions.https.HttpsError('unauthenticated', 'Error generating details!');
   }

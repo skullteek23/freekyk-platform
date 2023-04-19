@@ -243,7 +243,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           const allPromises = [];
-          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, 'All Players', response).toPromise());
+          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, { description: 'All Players' }, response).toPromise());
           // const tid = sessionStorage.getItem('tid');
           // allPromises.push(this.participate(season, tid).toPromise());
 

@@ -37,11 +37,11 @@
                 Order#{{order.id}}
               </span>
             </ng-template>
-            <span class="mat-caption" *ngIf="order?.description">
-              {{order?.description}}
-            </span>
             <span class="mat-body-1" *ngIf="order.amount >= 0">
               {{(order.amount / 100) | currency: 'INR'}}
+            </span>
+            <span class="mat-caption sec-menu">
+              Ordered on {{order?.created_at * 1000 | date: 'mediumDate'}}
             </span>
           </div>
           <span class="material-icons-round clickable">
