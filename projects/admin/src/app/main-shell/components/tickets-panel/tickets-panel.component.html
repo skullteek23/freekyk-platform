@@ -10,19 +10,19 @@
       <td mat-footer-cell *matFooterCellDef> {{tableLength}} Ticket(s) </td>
     </ng-container>
 
-    <ng-container [matColumnDef]="tableColumns.name">
+    <!-- <ng-container [matColumnDef]="tableColumns.name">
       <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.name }}</th>
       <td mat-cell *matCellDef="let element" [matTooltip]="getValidName(element)">
         {{ getValidName(element)}}
       </td>
       <td mat-footer-cell *matFooterCellDef> </td>
-    </ng-container>
+     </ng-container> -->
 
     <ng-container [matColumnDef]="tableColumns.message">
       <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.message }}</th>
-      <td mat-cell *matCellDef="let element" matTooltip="{{element.message || LABEL_NA}}">
+      <td mat-cell *matCellDef="let element" matTooltip="{{element.description || LABEL_NA}}">
         <span class="message ellipsis">
-          {{element.message || LABEL_NA}}
+          {{element.title || LABEL_NA}}
         </span>
       </td>
       <td mat-footer-cell *matFooterCellDef> </td>
@@ -31,7 +31,7 @@
     <ng-container [matColumnDef]="tableColumns.response">
       <th mat-header-cell *matHeaderCellDef> {{ tableUIColumns.response }}</th>
       <td mat-cell *matCellDef="let element" matTooltip="{{element.response || LABEL_NA}}">
-        <a (click)="replyTicket(element)">
+        <a (click)="openChatThread(element)">
           <span class="material-icons-round">reply</span>
         </a>
         <span class="message ellipsis">

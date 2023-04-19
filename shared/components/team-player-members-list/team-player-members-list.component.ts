@@ -1,9 +1,15 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
-import { Tmember } from '@shared/interfaces/team.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { Subject } from 'rxjs';
+
+export interface ITeamPlayer {
+  name: string;
+  id: string;
+  position: string;
+  imgpath: string;
+}
 
 @Component({
   selector: 'app-team-player-members-list',
@@ -11,9 +17,9 @@ import { Subject } from 'rxjs';
   styleUrls: ['./team-player-members-list.component.scss']
 })
 export class TeamPlayerMembersListComponent implements OnInit {
-  @Input() set list(value: Tmember[]) {
+  @Input() set list(value: ITeamPlayer[]) {
     if (value) {
-      value.sort(ArraySorting.sortObjectByKey('pl_pos'));
+      value.sort(ArraySorting.sortObjectByKey('position'));
       this.members = value;
     }
   }
@@ -23,7 +29,7 @@ export class TeamPlayerMembersListComponent implements OnInit {
 
   @Output() selectRemovePlayer = new Subject<string>();
 
-  members: Tmember[] = [];
+  members: ITeamPlayer[] = [];
 
   constructor(
     private dialog: MatDialog

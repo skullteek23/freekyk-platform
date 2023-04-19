@@ -1,75 +1,3 @@
-<!--
-<div class="grey-bg">
-  <section class="container product" ngClass.lt-md="section-space-bottom" fxLayout="column" fxLayout.gt-sm="row"
-    ngClass.gt-sm="banner" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-between center" fxLayoutGap="20px">
-    <div (click)="onEnlargePhoto()" fxFlexOrder.gt-sm="2" fxFlexOrder="1" class="bannerPhoto">
-      <img [src]="(groundInfo$ | async)?.imgpath" alt="Ground Image" appFallbackImg />
-    </div>
-
-    <div fxFlexOrder.gt-sm="1" fxFlexOrder="2" fxLayout="column" fxLayoutAlign="center center"
-      fxLayoutAlign.gt-sm="center start" ngClass.gt-sm="banner-text">
-
-      <button fxHide.lt-md="true" [routerLink]="['/play', 'grounds']" mat-mini-fab color="primary" class="back-button">
-        <mat-icon class="material-icons-round">keyboard_arrow_left</mat-icon>
-      </button>
-      <div fxLayoutAlign.lt-md="center center" fxLayoutAlign.gt-sm="center start" fxLayout="column">
-        <span class="overline align">Football Ground</span>
-        <span class="mat-title align" [ngClass]="{ shine: isLoading, _bar: isLoading, hideText: isLoading }">{{
-          (groundInfo$ | async)?.name }}</span>
-      </div>
-      <button (click)="onShare()" class="primaryButton buttonText">Share</button>
-    </div>
-  </section>
-</div>
-
-<section class="container section-space-top section-space-bottom" fxLayout="column" fxLayoutGap="24px">
-  <div>
-    <h4>Ground Location</h4>
-    <p class="mat-body-1">
-      {{
-      (groundInfo$ | async)?.locCity + ", " + (groundInfo$ | async)?.locState
-      }}
-    </p>
-  </div>
-  <div>
-    <h4>Parking Facility</h4>
-    <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.parking ? "Yes" : "No" }}
-    </p>
-  </div>
-  <div>
-    <h4>Food and Beverages Facility</h4>
-    <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.foodBev ? "Yes" : "No" }}
-    </p>
-  </div>
-  <div>
-    <h4>Washroom Facility</h4>
-    <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.washroom ? "Yes" : "No" }}
-    </p>
-  </div>
-  <div>
-    <h4>Field Type</h4>
-    <p class="mat-body-1">
-      {{ formatter.formatTurf((groundInfo$ | async)?.fieldType) }}
-    </p>
-  </div>
-
-  <div>
-    <h4>Play Level</h4>
-    <p class="mat-body-1">
-      {{ (groundInfo$ | async)?.playLvl | titlecase }}
-    </p>
-  </div>
-  <div>
-    <h4>Goalpost Available</h4>
-    <p class="mat-body-1">
-      {{ (groundMoreInfo$ | async)?.goalpost ? "Yes" : "No" }}
-    </p>
-  </div>
-</section> -->
-
 <div fxLayout="column" class="back-button">
   <button [routerLink]="['/play/grounds']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
@@ -114,7 +42,7 @@
           </span>
         </div>
       </div>
-      <div class="buttons-container" fxLayout="column" fxLayoutGap="8px">
+      <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="8px">
         <button class="link-button" fxFlex="100%" (click)="requestMatch()" mat-stroked-button color="primary">
           <span class="material-icons-round external-icon">sports_soccer</span>
           Request a Football Match!

@@ -1,6 +1,11 @@
 .mat-form-field {
   width: 100%;
 }
+
 input:disabled {
   cursor: not-allowed !important;
+}
+
+.search-container {
+  padding: 0 12px;
 }

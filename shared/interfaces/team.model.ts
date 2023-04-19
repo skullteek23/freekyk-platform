@@ -14,7 +14,7 @@ export const allowedAgeCategories = [
   { viewValue: 'U-19', value: 19 },
   { viewValue: 'U-23', value: 23 },
   { viewValue: 'U-30', value: 30 },
-  { viewValue: 'Open', value: 99 }
+  { viewValue: 'Open Age', value: 99 }
 ];
 
 export const Formatters = {
@@ -43,6 +43,28 @@ export interface TeamMoreInfo {
   tslogan?: string;
   tdesc?: string;
   tSocials?: SocialMediaLinks | null;
+}
+export interface ITeam {
+  name: string;
+  imgpath: string;
+  imgpath_logo: string;
+  captain: {
+    id: string,
+    name: string
+  };
+  locState: string;
+  locCity: string;
+  tdateCreated: number;
+  tageCat: AGE_CATEGORY;
+  id?: string;
+}
+export interface ITeamDescription {
+  slogan?: string;
+  description?: string;
+}
+
+export interface ITeamMembers {
+  members: string[];
 }
 
 export interface TeamStats {

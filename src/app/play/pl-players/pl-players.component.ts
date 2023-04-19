@@ -5,7 +5,7 @@ import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.com
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-players',
@@ -21,7 +21,7 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private location: Location,
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {
@@ -39,19 +39,20 @@ export class PlPlayersComponent implements OnInit, OnDestroy {
   }
 
   getPlayers(): void {
-    this.apiService.getPlayers()
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.players = response;
-            window.scrollTo(0, 0);
-          }
-        },
-        error: (response) => {
-          this.players = [];
-          window.scrollTo(0, 0);
-        },
-      });
+    // this.apiService.getPlayers()
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response) {
+    //         this.players = response;
+    //         window.scrollTo(0, 0);
+    //       }
+    //     },
+    //     error: (response) => {
+    //       this.players = [];
+    //       window.scrollTo(0, 0);
+    //     },
+    //   });
+    this.players = [];
   }
 
   openPlayerCard(playerID: string) {

@@ -1,0 +1,136 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/games']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+</div>
+
+<section fxLayout="column" fxLayoutGap="4px" *ngIf="season">
+  <div fxLayoutAlign="space-between center">
+    <span class="dash-h5">
+      {{season?.name}}
+    </span>
+    <span class="mat-body-2 red" *ngIf="emptySlotsCount">
+      {{emptySlotsCount}} slots left!!
+    </span>
+  </div>
+  <p>
+    <span class="mat-body-1">
+      Game starts&nbsp;
+    </span>
+    <span class="mat-body-2">
+      {{startDate}} @ <a (click)="openGround(ground)"> {{ground?.viewValue}}</a>
+    </span>
+  </p>
+  <p>
+    Located in
+    <span class="mat-body-2">
+      {{season?.city}}, {{season?.state}}
+    </span>
+  </p>
+
+  <p class="match-time">
+    Match time is
+    <span class="mat-body-2">
+      {{season?.startDate | date: 'h a'}} - {{season?.startDate + oneHourMilliseconds | date: 'h a'}}
+    </span>
+  </p>
+
+  <mat-chip-list>
+    <mat-chip selected>
+      {{season?.fees | currency: 'INR'}} per person
+    </mat-chip>
+    <mat-chip>
+      7v7 Format
+    </mat-chip>
+    <mat-chip fxLayoutAlign="start center">
+      <span class="material-icons-round">
+        groups
+      </span>
+      <span class="mat-body-1">
+        &nbsp;{{ageCatFormatter?.formatAgeCategory(season?.ageCategory)?.viewValue}}
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+</section>
+
+<section>
+  <mat-card class="dashboard-card mat-elevation-z4">
+    <mat-card-title>
+      <div class="dash-h5 center">
+        Pick Your Slot(s)
+      </div>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="team-container" fxLayout="column">
+        <div class="team-names-container" fxLayoutAlign="space-between center">
+          <span class="mat-body-1 center team-title team-title--first">
+            Team A
+          </span>
+          <span class="mat-body-1 center team-title team-title--second">
+            Team B
+          </span>
+        </div>
+        <div class="team">
+          <ul fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center" class="list-container">
+            <li *ngFor="let slot of displayedSlots; let i = index" class="button-slot">
+              <button [ngClass]="{'user-booked': playerUID && slot.uid === playerUID}"
+                [color]="slot.selected ? 'primary' : ''" mat-raised-button (click)="selectSlot(slot, i)">
+                <span class="material-icons-round filled" *ngIf="slot.booked">
+                  check_circle
+                </span>
+                <span class="material-icons-round" *ngIf="!slot.booked">
+                  person
+                </span>
+                <span class="mat-caption" *ngIf="slot.name">
+                  {{slot.name}}
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-footer *ngIf="emptySlotsCount === 0">
+      <div class="waiting-list-container">
+        <span class="mat-caption">
+          Didn't get slots? <a (click)="openWaitingList()"> Join Waiting List</a>
+        </span>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</section>
+
+<section fxLayout="column" fxLayoutGap="4px" class="last-section">
+  <p>
+    Full Match Recording:
+    <span class="mat-body-2">
+      Yes
+    </span>
+  </p>
+  <p>
+    Reporting Time:
+    <span class="mat-body-2" *ngIf="reportingTime">
+      {{reportingTime | date: 'h:mm a'}}
+    </span>
+  </p>
+  <p>
+    Cancellation Charges:
+    <span class="mat-body-2">
+      50%
+    </span>
+  </p>
+</section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="payableFees > 0">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <!-- <span class="material-icons-round external-icon">whatshot</span> -->
+    <span>
+      Confirm & Pay {{payableFees | currency: 'INR'}}
+    </span>
+  </button>
+</div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

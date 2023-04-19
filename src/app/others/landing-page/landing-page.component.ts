@@ -4,7 +4,7 @@ import { IFeatureSectionData } from '@shared/components/feature-section/feature-
 import { IPointersComponentData } from '@shared/components/why-choose-section/why-choose-section.component';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { LANDING_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
@@ -68,7 +68,7 @@ export class LandingPageComponent implements OnInit {
   matchesLabel: string = null;
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private router: Router
   ) { }
 

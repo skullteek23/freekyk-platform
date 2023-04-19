@@ -7,7 +7,7 @@ import { ListOption } from '@shared/interfaces/others.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-play',
@@ -27,7 +27,7 @@ export class PlayComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class PlayComponent implements OnInit, OnDestroy {
     this.apiService.getLiveSeasons()
       .subscribe({
         next: (response) => {
-          this.seasonsList = response;
+          // this.seasonsList = response;
         },
         error: () => {
           this.seasonsList = [];

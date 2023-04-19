@@ -1,0 +1,25 @@
+.back-button {
+  padding: 12px 12px 0px;
+}
+
+section {
+  padding: 12px;
+}
+
+.details-container {
+  width: 100%;
+}
+
+.quick-links {
+  .heading {
+    margin-bottom: 12px;
+  }
+}
+
+mat-card {
+  .card-image {
+    max-height: 100px;
+    margin: auto;
+    object-fit: scale-down;
+  }
+}

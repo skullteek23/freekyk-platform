@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { IDummyFixture, KnockoutRounds, MatchFixture } from '@shared/interfaces/match.model';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { LeagueTableModel } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo, SeasonAbout, ISeasonCloudFnData } from '@shared/interfaces/season.model';
+import { ISeason, ISeasonDescription, ISeasonCloudFnData } from '@shared/interfaces/season.model';
 import { DEFAULT_LOGO, ONE_DAY_IN_MILLIS, sortObjectByKey, TO_BE_DECIDED } from './utils/utilities';
 import { GroundBooking } from '@shared/interfaces/ground.model';
 const db = admin.firestore();
@@ -20,32 +20,27 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again later');
   }
 
-  const lastUpdated = new Date().getTime();
-  const season: SeasonBasicInfo = {
+  const season: ISeason = {
     name: data?.seasonDetails?.name,
-    locCity: data?.matchType?.location?.city,
-    locState: data?.matchType?.location?.state,
-    premium: data?.grounds?.length !== 0 && data?.grounds[0].ownType === 'PRIVATE',
-    p_teams: data?.matchType?.participatingTeamsCount,
-    start_date: firstFixtureTimestamp,
-    cont_tour: data?.matchType?.containingTournaments,
-    feesPerTeam: data?.seasonDetails?.fees,
-    discount: data?.seasonDetails?.discount,
-    lastRegDate: new Date(data?.seasonDetails.lastRegistrationDate).getTime(),
+    city: data?.matchType?.location?.city,
+    state: data?.matchType?.location?.state,
+    participatingTeams: data?.matchType?.participatingTeamsCount,
+    startDate: firstFixtureTimestamp,
+    type: data?.matchType?.type,
+    fees: data?.seasonDetails?.fees,
+    lastRegistrationDate: new Date(data?.seasonDetails.lastRegistrationDate).getTime(),
     status: 'PUBLISHED',
     leftOverMatchCount: fixtures.length,
-    lastUpdated,
     createdBy: data.adminID,
-    ageCategory: data?.seasonDetails.ageCategory
+    ageCategory: data?.seasonDetails.ageCategory,
   };
   const adminConfig = ((await db.collection('adminConfigs').doc('season').get()).data() as AdminConfigurationSeason)?.lastParticipationDate;
   const validOption = data?.seasonDetails.lastRegistrationDate === null && adminConfig ? adminConfig : data?.seasonDetails.lastRegistrationDate;
-  season.lastRegDate = decideLastDateRegistration(firstFixtureTimestamp, validOption);
+  season.lastRegistrationDate = decideLastDateRegistration(firstFixtureTimestamp, validOption);
 
-  const seasonAbout: SeasonAbout = {
+  const seasonAbout: ISeasonDescription = {
     description: data?.seasonDetails?.description,
     rules: data?.seasonDetails?.rules,
-    paymentMethod: 'Online',
   };
 
   // When participants are pre-selected, save allowed participants
@@ -77,7 +72,7 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
 
   // Not configured for multiple leagues in a season
   // Posting empty league table if season contains league
-  if (season.cont_tour.includes('FPL')) {
+  if (season.type === 'FPL') {
     const emptyTable = getEmptyLeagueTable(data.seasonID, data.matchType.participatingTeamsCount);
     const tableRef = db.collection('leagues').doc(data.seasonID);
     if (emptyTable) {
@@ -87,7 +82,7 @@ export async function seasonPublish(data: ISeasonCloudFnData, context: any): Pro
 
   // Not configured for multiple knockout in a season
   // Setting up empty knockout stage matches if season contains knockout tournament
-  if (season.cont_tour.includes('FKC')) {
+  if (season.type === 'FKC') {
     const knockoutFixtures = fixtures.filter(el => el.type === 'FKC');
     knockoutFixtures.sort(sortObjectByKey('date'));
     const roundsList = getRoundsList(data.matchType.participatingTeamsCount);

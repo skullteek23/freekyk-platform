@@ -1,18 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Location } from "@angular/common";
 import { EnlargeService } from 'src/app/services/enlarge.service';
-import { ISeasonPartner, SeasonMedia } from '@shared/interfaces/season.model';
-import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
+import { ISeasonPartner } from '@shared/interfaces/season.model';
+import { MatchFixture } from '@shared/interfaces/match.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import * as _ from 'lodash';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import { Subscription } from 'rxjs';
 import { Formatters } from '@shared/interfaces/team.model';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
+import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
+import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { OrderTypes } from '@shared/interfaces/order.model';
+import { AuthService, authUserMain } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
@@ -38,7 +44,12 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
     private enlargeService: EnlargeService,
     private router: Router,
     private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiGetService,
+    private paymentService: PaymentService,
+    private snackBarService: SnackbarService,
+    private location: Location,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +60,11 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
           this.seasonID = params['seasonid'];
           this.getSeasonInfo();
         }
+      }
+    }));
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd && event?.url?.endsWith('/pay')) {
+        this.participate();
       }
     }));
   }
@@ -71,6 +87,9 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
               this.getSeasonMatches();
               this.getSeasonStandings();
               this.getSeasonPartners();
+              if (window.location.href.endsWith('/pay')) {
+                this.participate();
+              }
             } else {
               this.router.navigate(['error'])
             }
@@ -106,7 +125,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   }
 
   getSeasonStandings() {
-    if (this.season.cont_tour.includes('FKC')) {
+    if (this.season.type === 'FKC') {
       this.apiService.getKnockoutMatches(this.season.name)
         .subscribe({
           next: (response) => {
@@ -119,7 +138,7 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
           }
         })
     }
-    if (this.season.cont_tour.includes('FPL')) {
+    if (this.season.type === 'FPL') {
       this.apiService.getLeagueTable(this.season)
         .subscribe({
           next: (response) => {
@@ -173,10 +192,91 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  getStarted(): void {
+    this.showLoader();
+    this.redirectToUrl('/signup');
+  }
+
   participate(): void {
-    if (this.season?.id) {
-      this.router.navigate(['/dashboard/participate', this.season.id]);
-    }
+    this.authService.isLoggedIn().subscribe({
+      next: async (user) => {
+        if (user) {
+          this.showLoader();
+          if (!this.seasonID) {
+            this.seasonID = this.route.snapshot.params['seasonid'];
+          }
+          const order = await this.paymentService.getOrder(this.seasonID, user.uid);
+          if (order) {
+            if (order.amount_due > 0) {
+              const options: Partial<ICheckoutOptions> = {
+                ...UNIVERSAL_OPTIONS,
+                description: 'All Players',
+                order_id: order.id,
+                amount: order.amount_due * 100,
+                handler: this.handlePaymentSuccess.bind(this),
+                modal: {
+                  backdropclose: false,
+                  escape: false,
+                  confirm_close: true,
+                  ondismiss: this.dismissDialog.bind(this)
+                }
+              }
+              this.paymentService.openCheckoutPage(options);
+            } else {
+              this.hideLoader();
+              this.router.navigate(['/my-matches']);
+            }
+          }
+          this.hideLoader();
+        }
+      }
+    })
+  }
+
+  redirectToUrl(path: string): void {
+    const encodedString = encodeURIComponent(`/game/${this.season.id}/pay`);
+    this.router.navigate([path], { queryParams: { callback: encodedString } });
+  }
+
+  handlePaymentSuccess(response) {
+    this.paymentService.verifyPayment(response)
+      .subscribe({
+        next: () => {
+          const allPromises = [];
+          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, 'All Players', response).toPromise());
+          // const tid = sessionStorage.getItem('tid');
+          // allPromises.push(this.participate(season, tid).toPromise());
+
+          Promise.all(allPromises)
+            .then(() => {
+              this.snackBarService.displayCustomMsg('Your Participation is confirmed!');
+              this.hideLoader();
+            })
+            .catch((error) => {
+              this.snackBarService.displayError(error?.message);
+              this.hideLoader();
+            })
+        },
+        error: (error) => {
+          this.hideLoader();
+          this.snackBarService.displayError(error?.message);
+        }
+      });
+  }
+
+  dismissDialog() {
+    console.log('dismissed')
+    this.hideLoader();
+    this.cdr.detectChanges();
+    this.location.go('/game/' + this.seasonID);
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false;
+  }
+
+  showLoader() {
+    this.isLoaderShown = true;
   }
 
   enlargePhoto(): void {
@@ -191,7 +291,6 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       { viewValue: 'Date: ', value: '' },
       { viewValue: 'Entry Fees(per team): ', value: '' },
       { viewValue: 'Ground(s): ', value: '' },
-      { viewValue: '', value: '' }
     ]
   }
 }

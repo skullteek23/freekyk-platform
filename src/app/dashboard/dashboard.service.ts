@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MAXIMUM_VALUE } from '@app/services/onboarding-steps-tracker.service';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { PlayerAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class DashboardService {
   private team: Partial<TeamAllInfo> = null;
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   get _player(): Partial<PlayerAllInfo> {

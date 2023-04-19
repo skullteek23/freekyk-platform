@@ -1,19 +1,11 @@
-<button (click)="onOpenAction()" class="secondaryButton" fxLayout fxLayoutAlign="space-between center">
-  <div fxLayout fxLayoutGap="8px">
-    <div class="icon">
-      <span class="material-icons-round" *ngIf="data?.icon">
-        {{data.icon}}
-      </span>
-      <img [src]="data?.imgUrl" appFallbackImg class="avatar" *ngIf="data?.imgUrl">
-    </div>
-    <span class="mat-body-1"> {{data?.actionLabel}} </span>
-    <span class="mat-caption" fxLayoutAlign="center center" *ngIf="data?.secondaryLabel">
-      {{data.secondaryLabel}}
-    </span>
-    <span class="material-icons-round" fxLayoutAlign="center center" *ngIf="data?.secondaryIcon">
-      {{data.secondaryIcon}}
-    </span>
+<div class="shortcut-button-shared" fxLayout="column" fxLayoutAlign="stretch center" fxLayoutGap="4px">
+  <button [disabled]="data.disabled" mat-icon-button (click)="clickAction()" color="primary" type="button"
+    class="action-button" matBadge="{{data.highlight ? 'New' : ''}}" matBadgeColor="warn" matBadgeOverlap="true"
+    matBadgeSize="small" matBadgePosition="after" fxLayoutAlign="space-between center">
+    <span class="material-icons-round" *ngIf="data?.icon"> {{data.icon}} </span>
+    <img [src]="data?.svg" appFallbackImg class="avatar" *ngIf="data?.svg">
+  </button>
+  <div class="text-container" fxLayout fxLayoutAlign="center center">
+    <span class="mat-caption"> {{data?.label}} </span>
   </div>
-
-  <span class="material-icons-round">chevron_right</span>
-</button>
+</div>

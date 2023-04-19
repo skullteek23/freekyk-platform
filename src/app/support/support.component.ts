@@ -2,14 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
-import { heroCallToAction } from '@shared/interfaces/others.model';
+import { heroCallToAction, ListOption } from '@shared/interfaces/others.model';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { SUPPORT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
+import { Subscription } from 'rxjs';
+import { ICommunicationDialogData, UserQuestionsCommunicationComponent } from '@shared/dialogs/user-questions-communication/user-questions-communication.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '@app/services/auth.service';
+import { ApiPostService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-support',
@@ -18,94 +23,82 @@ import { SUPPORT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 })
 export class SupportComponent implements OnInit {
 
-  readonly fb = MatchConstants.SOCIAL_MEDIA_PRE.fb;
-  readonly ig = MatchConstants.SOCIAL_MEDIA_PRE.ig;
-  readonly tw = MatchConstants.SOCIAL_MEDIA_PRE.tw;
-  readonly yt = MatchConstants.SOCIAL_MEDIA_PRE.yt;
-  readonly linkedIn = MatchConstants.SOCIAL_MEDIA_PRE.linkedIn;
-  readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
-  readonly messages = formsMessages;
-  readonly description = SUPPORT_PAGE.banner;
-
-  activeIndex = 0;
-  activePage: {
-    svg: string;
-    title: string;
-    CTA: heroCallToAction | false;
-  };
-  ticketForm: FormGroup;
-  isTicketSubmitted = false;
-  isUser = localStorage.getItem('uid');
+  subscriptions = new Subscription();
+  links: ListOption[] = [
+    { value: '/support/faqs', viewValue: 'FAQs' },
+    { value: '/support/tickets', viewValue: 'My Tickets' }
+  ];
+  activeLink = '';
+  isLoaderShown = false;
 
   constructor(
     private snackBarService: SnackbarService,
-    private ngFire: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private apiPostService: ApiPostService
   ) { }
 
   ngOnInit(): void {
-    if (this.router.url.includes('faqs')) {
-      this.activeIndex = 1;
-      this.activePage = {
-        svg: 'assets/svgs/Banner/faqs.svg',
-        title: 'FAQs',
-        CTA: false,
-      };
-    } else {
-      this.activeIndex = 0;
-      this.activePage = {
-        svg: 'assets/svgs/Banner/support.svg',
-        title: 'help & support',
-        CTA: { name: 'raise a ticket', route: '/support' },
-      };
-    }
-    this.initForm();
+    this.subscriptions.add(
+      this.router.events.subscribe((event: any) => {
+        if (event instanceof NavigationEnd) {
+          this.activeLink = event.url.slice('/support/'.length);
+          window.scrollTo(0, 0);
+        }
+      })
+    )
   }
 
-  initForm(): void {
-    this.ticketForm = new FormGroup({
-      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
-      ph_number: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.phoneNumber)]),
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      query: new FormControl(null, [Validators.required, Validators.maxLength(this.queryLimit), Validators.pattern(RegexPatterns.query)]),
+  openTicketForm() {
+    const data: ICommunicationDialogData = {
+      heading: 'Raise a Ticket!',
+      showTips: false,
+      CTA: {
+        icon: 'send',
+        label: 'Submit'
+      }
+    }
+    const dialogRef = this.dialog.open(UserQuestionsCommunicationComponent, {
+      panelClass: 'large-dialogs',
+      disableClose: true,
+      data
     });
+
+    dialogRef.afterClosed()
+      .subscribe(response => {
+        if (response?.hasOwnProperty('title')) {
+          // this.saveQuestion(response);
+          this.saveTicket(response);
+        }
+      })
   }
 
-  onSubmitTicket(): void {
-    if (this.ticketForm.valid) {
-      const ticket: ISupportTicket = {
-        status: TicketStatus.Open,
-        contactInfo: {
-          name: String(this.ticketForm.value.name)?.trim(),
-          email: String(this.ticketForm.value.email)?.trim(),
-          phone_no: String(this.ticketForm.value.ph_number)?.trim(),
-        },
-        type: TicketTypes.Support,
-        timestamp: new Date().getTime(),
-        message: String(this.ticketForm.value.query)?.trim(),
-        uid: 'NA'
-      }
-      const uid = localStorage.getItem('uid');
-      if (uid) {
-        ticket.uid = uid;
-      }
-      this.ngFire.collection('tickets').add(ticket)
-        .then(() => {
-          this.isTicketSubmitted = true;
-          this.snackBarService.displayCustomMsg('Enquiry submitted successfully!');
-        })
-        .catch(() => this.snackBarService.displayError())
-        .finally(() => {
-          this.ticketForm.reset();
-        });
-    }
-  }
+  saveTicket(response) {
+    this.authService.isLoggedIn().subscribe({
+      next: user => {
+        this.isLoaderShown = true;
+        const ticket: Partial<ISupportTicket> = {};
+        if (user) {
+          ticket['byUID'] = user.uid;
+        }
+        ticket['title'] = response.title;
+        ticket['description'] = response.description;
+        ticket['date'] = new Date().getTime();
+        ticket['status'] = TicketStatus.Open;
+        ticket['type'] = TicketTypes.Support;
 
-  onChangeTab(ev: MatTabChangeEvent): void {
-    if (ev.index === 1) {
-      this.router.navigate(['/support', 'faqs']);
-    } else {
-      this.router.navigate(['/support']);
-    }
+        this.apiPostService.saveTicket(ticket)
+          .then(() => {
+            this.snackBarService.displayCustomMsg('Ticket created successfully!');
+          })
+          .catch(() => {
+            this.snackBarService.displayError('Error: Unable to save ticket!');
+          })
+          .finally(() => {
+            this.isLoaderShown = false;
+          })
+      }
+    })
   }
 }

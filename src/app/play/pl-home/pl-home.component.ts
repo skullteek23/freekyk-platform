@@ -4,7 +4,7 @@ import { IPointersComponentData } from '@shared/components/why-choose-section/wh
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';
 import { LANDING_PAGE, PLAY_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 
@@ -29,7 +29,7 @@ export class PlHomeComponent implements OnInit {
   players: PlayerBasicInfo[] = [];
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private router: Router,
   ) { }
 
@@ -40,47 +40,49 @@ export class PlHomeComponent implements OnInit {
   }
 
   getUpcomingSeason() {
-    this.apiService.getPublishedSeasonWithPaymentInfo(1)
-      .subscribe({
-        next: (response) => {
-          if (response?.length) {
-            this.upcomingSeason = response[0];
-            window.scrollTo(0, 0);
-          }
-        },
-        error: (error) => {
-          this.upcomingSeason = null;
-          window.scrollTo(0, 0);
-        }
-      });
+    // this.apiService.getPublishedSeasonWithPaymentInfo(1)
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response?.length) {
+    //         this.upcomingSeason = response[0];
+    //         window.scrollTo(0, 0);
+    //       }
+    //     },
+    //     error: (error) => {
+    //       this.upcomingSeason = null;
+    //       window.scrollTo(0, 0);
+    //     }
+    //   });
   }
 
   getTeams() {
-    this.apiService.getTeams(4)
-      .subscribe({
-        next: (response) => {
-          if (response && response.length) {
-            this.teams = response;
-          }
-        },
-        error: (error) => {
-          this.teams = [];
-        },
-      })
+    // this.apiService.getTeams(4)
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response && response.length) {
+    //         this.teams = response;
+    //       }
+    //     },
+    //     error: (error) => {
+    //       this.teams = [];
+    //     },
+    //   })
+    this.teams = [];
   }
 
   getPlayers() {
-    this.apiService.getPlayers(20)
-      .subscribe({
-        next: (response) => {
-          if (response && response.length) {
-            this.players = response;
-          }
-        },
-        error: (error) => {
-          this.players = [];
-        },
-      })
+    // this.apiService.getPlayers(20)
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response && response.length) {
+    //         this.players = response;
+    //       }
+    //     },
+    //     error: (error) => {
+    //       this.players = [];
+    //     },
+    //   })
+    this.players = [];
   }
 
   showAllSeason() {

@@ -1,0 +1,11 @@
+<aside>
+  <mat-divider></mat-divider>
+  <mat-toolbar class="bottom-nav" fxLayoutAlign="space-evenly">
+    <a routerLink="{{link.route}}" routerLinkActive="router-link-active" [routerLinkActiveOptions]="{exact: true}"
+      fxLayout="column" fxLayoutAlign="center center" [matTooltip]="link.name" *ngFor="let link of links">
+      <span class="material-icons-round" *ngIf="link.icon"> {{link.icon}} </span>
+      <span class="mat-caption" *ngIf="link.name">{{link.name}}</span>
+    </a>
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+</aside>

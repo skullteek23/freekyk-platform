@@ -6,11 +6,11 @@
       </span>
       <a [routerLink]="['/dashboard', 'account']" class="mat-caption sec-menu">Edit Profile</a>
     </div>
-    <app-action-shortcut-button *ngIf="profileShortcutData" [data]="profileShortcutData"
+    <!-- <app-action-shortcut-button *ngIf="profileShortcutData" [data]="profileShortcutData"
       (actionTrigger)="openProfile()"></app-action-shortcut-button>
 
     <app-action-shortcut-button *ngIf="teamShortcutData" [data]="teamShortcutData"
-      (actionTrigger)="takeTeamAction()"></app-action-shortcut-button>
+      (actionTrigger)="takeTeamAction()"></app-action-shortcut-button> -->
   </div>
 
   <app-pending-payment *ngIf="pendingOrdersList.length" [data]="pendingOrdersList"></app-pending-payment>

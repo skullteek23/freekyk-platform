@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { RegexPatterns } from '@shared/Constants/REGEX';
-import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
-import { ProfileConstants } from '@shared/constants/constants';
+import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
+import { AuthService } from '@app/services/auth.service';
+import { ApiGetService, ApiPostService } from '@shared/services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { IUserChat } from '@shared/interfaces/team.model';
+import { TeamChatThreadComponent } from '@shared/dialogs/team-chat-thread/team-chat-thread.component';
 
 @Component({
   selector: 'app-acc-tickets',
@@ -17,18 +17,19 @@ import { formsMessages } from '@shared/constants/messages';
 export class AccTicketsComponent implements OnInit {
 
   readonly queryLimit = ProfileConstants.SUPPORT_QUERY_LIMIT;
+  readonly CUSTOM_FORMAT = MatchConstants.NOTIFICATION_DATE_FORMAT;
   readonly messages = formsMessages;
 
-  ticketStatus = true;
-  newTicketForm: FormGroup = new FormGroup({});
-  additionAvailable = true;
-  showForm = false;
-  myTickets$: Observable<ISupportTicket[]>;
-  noTickets = false;
+  tickets: ISupportTicket[] = [];
+  isLoaderShown = false;
+  isLogged = false;
 
   constructor(
     private snackBarService: SnackbarService,
-    private ngFire: AngularFirestore
+    private authService: AuthService,
+    private apiService: ApiGetService,
+    private dialog: MatDialog,
+    private apiPostService: ApiPostService
   ) { }
 
   ngOnInit(): void {
@@ -36,25 +37,124 @@ export class AccTicketsComponent implements OnInit {
   }
 
   getTickets(): void {
-    const uid = localStorage.getItem('uid');
-    if (uid) {
-      this.myTickets$ = this.ngFire
-        .collection('tickets', query => query.where('uid', '==', uid))
-        .snapshotChanges()
-        .pipe(
-          tap((resp) => (this.noTickets = resp.length === 0)),
-          map((resp) =>
-            resp.map(
-              (doc) =>
-              ({
-                id: doc.payload.doc.id,
-                ...(doc.payload.doc.data() as ISupportTicket),
-              } as ISupportTicket)
-            )
-          )
-        );
-    }
+    this.showLoader();
+    this.authService.isLoggedIn().subscribe({
+      next: user => {
+        this.isLogged = user && user.hasOwnProperty('uid');
+        if (user) {
+          this.showLoader();
+          this.apiService.getUserTickets(user.uid)
+            .subscribe({
+              next: (response) => {
+                if (response) {
+                  this.tickets = response;
+                }
+                this.hideLoader();
+              },
+              error: () => {
+                this.snackBarService.displayError('Unable to get tickets.');
+                this.hideLoader();
+              }
+            })
+        } else {
+          this.hideLoader();
+          this.tickets = [];
+        }
+      }
+    });
   }
+
+  // openTicketForm() {
+  //   const data: ICommunicationDialogData = {
+  //     heading: 'Raise a Ticket!',
+  //     showTips: true,
+  //     CTA: {
+  //       icon: 'send',
+  //       label: 'Submit'
+  //     }
+  //   }
+  //   const dialogRef = this.dialog.open(UserQuestionsCommunicationComponent, {
+  //     panelClass: 'large-dialogs',
+  //     disableClose: true,
+  //     data
+  //   });
+
+  //   dialogRef.afterClosed()
+  //     .subscribe(response => {
+  //       if (response?.hasOwnProperty('title')) {
+  //         // this.saveQuestion(response);
+  //         this.saveTicket(response);
+  //       }
+  //     })
+  // }
+
+  openChatThread(value: ISupportTicket) {
+    const chat: Partial<IUserChat> = {
+      title: value.title,
+      description: value.description,
+      byUID: value.byUID,
+      date: value.date,
+      id: value.id,
+    }
+    this.dialog.open(TeamChatThreadComponent, {
+      panelClass: 'large-dialogs',
+      disableClose: false,
+      data: chat
+    }).afterClosed().subscribe({
+      next: (response) => {
+        if (response === 'delete-thread') {
+          this.deleteTicket(value.id);
+        }
+      }
+    })
+  }
+
+  deleteTicket(ticketID: string) {
+    if (ticketID) {
+      this.isLoaderShown = true;
+      this.apiPostService.deleteTicket(ticketID)
+        .then(() => {
+          this.snackBarService.displayCustomMsg('Ticket deleted successfully!');
+        })
+        .catch(() => {
+          this.snackBarService.displayError('Error: Unable to delete ticket!');
+        })
+        .finally(() => {
+          this.isLoaderShown = false;
+          this.getTickets();
+        })
+    }
+
+  }
+
+  // saveTicket(response) {
+  //   this.authService.isLoggedIn().subscribe({
+  //     next: user => {
+  //       this.isLoaderShown = true;
+  //       const ticket: Partial<ISupportTicket> = {};
+  //       if (user) {
+  //         ticket['byUID'] = user.uid;
+  //       }
+  //       ticket['title'] = response.title;
+  //       ticket['description'] = response.description;
+  //       ticket['date'] = new Date().getTime();
+  //       ticket['status'] = TicketStatus.Open;
+  //       ticket['type'] = TicketTypes.Support;
+
+  //       this.apiPostService.saveTicket(ticket)
+  //         .then(() => {
+  //           this.snackBarService.displayCustomMsg('Ticket created successfully!');
+  //         })
+  //         .catch(() => {
+  //           this.snackBarService.displayError('Error: Unable to save ticket!');
+  //         })
+  //         .finally(() => {
+  //           this.isLoaderShown = false;
+  //           this.getTickets();
+  //         })
+  //     }
+  //   })
+  // }
 
   getColor(status: TicketStatus): string {
     switch (status) {
@@ -64,17 +164,6 @@ export class AccTicketsComponent implements OnInit {
         return 'var(--premiumServiceColor)';
       case TicketStatus.Open:
         return 'grey';
-    }
-  }
-
-  getIcon(status: TicketStatus): string {
-    switch (status) {
-      case TicketStatus.Closed:
-        return 'check_circle';
-      case TicketStatus.Pending:
-        return 'pending';
-      case TicketStatus.Open:
-        return 'inventory';
     }
   }
 
@@ -89,69 +178,22 @@ export class AccTicketsComponent implements OnInit {
     }
   }
 
-  onOpenTicketForm(): void {
-    this.additionAvailable = false;
-    this.showForm = true;
-    this.newTicketForm = new FormGroup({
-      name: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(RegexPatterns.alphaWithSpace),
-      ]),
-      ph_number: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(RegexPatterns.phoneNumber),
-      ]),
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      query: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(this.queryLimit),
-        Validators.pattern(RegexPatterns.query),
-      ]),
-    });
-  }
-
-  onDeleteTicket(ticketID: string): void {
-    // backend code goes here
-    this.ngFire
-      .collection('tickets')
-      .doc(ticketID)
-      .delete()
-      .then(() => this.snackBarService.displayCustomMsg('Ticket deleted successfully!'))
-      .catch(() => this.snackBarService.displayError());
-  }
-
-  resetAll(): void {
-    this.additionAvailable = true;
-    this.showForm = false;
-    this.newTicketForm.reset();
-  }
-
-  onSubmitTicket(): void {
-    const uid = localStorage.getItem('uid');
-    const ticket: ISupportTicket = {
-      status: TicketStatus.Open,
-      contactInfo: {
-        name: String(this.newTicketForm.value.name)?.trim(),
-        email: String(this.newTicketForm.value.email)?.trim(),
-        phone_no: String(this.newTicketForm.value.ph_number)?.trim(),
-      },
-      type: TicketTypes.Support,
-      uid,
-      timestamp: new Date().getTime(),
-      message: String(this.newTicketForm.value.query)?.trim()
+  getIcon(status: TicketStatus): string {
+    switch (status) {
+      case TicketStatus.Closed:
+        return 'check_circle';
+      case TicketStatus.Pending:
+        return 'pending';
+      case TicketStatus.Open:
+        return 'inventory';
     }
-    this.ngFire.collection('tickets').add(ticket)
-      .then(() => {
-        this.snackBarService.displayCustomMsg('Ticket raised successfully!');
-      })
-      .catch(() => this.snackBarService.displayError())
-      .finally(() => {
-        this.resetAll();
-      });
   }
 
-  finishSubmission(): void {
-    this.resetAll();
-    this.snackBarService.displayCustomMsg('Ticket submitted successfully!');
+  showLoader() {
+    this.isLoaderShown = true
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false
   }
 }

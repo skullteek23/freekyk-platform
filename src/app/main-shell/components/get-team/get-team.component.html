@@ -1,0 +1,57 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Find a Team near you</span>
+</div>
+<mat-card class="feature-card" *ngIf="!teamsListCache.length && !isLoaderShown">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/find_your_team.svg" alt="Freekyk Play Seasons Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Teams</span>
+      <p class="mat-body-1 center description">
+        Create your own team or join an existing team to participate in seasons.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<section class="main-content">
+  <app-search-lg searchPlaceholder="Search a Team" (searchItem)="applySearch($event)"></app-search-lg>
+  <mat-list *ngIf="teamsListCache.length">
+    <mat-list-item *ngFor="let team of teamsList" (click)="openTeam(team)">
+      <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
+        <div class="image">
+          <img [src]="team.imgpath_logo" [alt]="team.name" appFallbackImg>
+        </div>
+        <div class="description" fxLayoutAlign="space-between center">
+          <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
+            <span class="mat-body-1">
+              {{team.name || team['tname']}}
+            </span>
+            <span class="mat-caption sec-menu" *ngIf="team.locCity || team.locState">
+              {{team.locCity}}, {{team.locState}}
+            </span>
+          </div>
+          <span class="material-icons-round clickable">
+            chevron_right
+          </span>
+        </div>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>
+</section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button (click)="createTeam()"
+    fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">add</span>
+    <span>
+      Create Team
+    </span>
+  </button>
+</div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

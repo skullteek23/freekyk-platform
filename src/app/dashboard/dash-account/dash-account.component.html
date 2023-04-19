@@ -1,4 +1,4 @@
-<div fxLayout="column" class="back-button">
+<!-- <div fxLayout="column" class="back-button">
   <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton" fxLayoutAlign="center center"
     fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
@@ -6,7 +6,7 @@
       Go to Dashboard
     </span>
   </button>
-</div>
+</div> -->
 
 <mat-card class="dashboard-card mat-elevation-z8">
   <span class="dash-h5">My Profile Settings</span>
@@ -19,7 +19,7 @@
       (For security reasons, changing your email or password requires you to
       re-login to your account)
     </span>
-    <div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+    <div class="button-container" fxLayout="column" fxLayoutGap="12px">
       <button class="link-button" fxFlex="100%" (click)="onChangeCredentials('password')" mat-stroked-button
         color="primary">
         <span class="material-icons-round external-icon">password</span>

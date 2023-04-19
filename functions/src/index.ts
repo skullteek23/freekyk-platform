@@ -6,9 +6,8 @@ import { newProfile } from './newProfile';
 import { teamCreation } from './teamCreation';
 import { onDelete } from './deleteTeam';
 import { paymentVerification } from './paymentVerification';
+import { fetchOrder } from './getOrder';
 import { generateOrder } from './generateOrder';
-import { generateThumbnail } from './trigger_functions/generateThumbnail';
-import { environment } from '../../environments/environment';
 import { matchReportUpdate } from './matchReportUpdate';
 import { seasonPublish } from './publishSeason';
 import { createAdminUser } from './createAdminUser';
@@ -16,7 +15,7 @@ import { seasonParticipation } from './seasonParticipation';
 import { seasonCancellation } from './seasonCancellation';
 import { teamJoin } from './joinTeam';
 import { saveRazorpayOrder } from './saveOrder';
-import { updateRazorpayOrder } from './updateOrder';
+import { initRefundOrder } from './refundOrder';
 
 
 // callable functions
@@ -26,10 +25,11 @@ export const sendJoinRequest = functions.region('asia-south1').https.onCall(join
 export const createTeam = functions.region('asia-south1').https.onCall(teamCreation);
 export const joinTeam = functions.region('asia-south1').https.onCall(teamJoin);
 export const deleteTeam = functions.region('asia-south1').https.onCall(onDelete);
-export const generateRazorpayOrder = functions.region('asia-south1').https.onCall(generateOrder);
+export const getValidOrder = functions.region('asia-south1').https.onCall(fetchOrder);
+export const getNewOrder = functions.region('asia-south1').https.onCall(generateOrder);
+export const refundOrder = functions.region('asia-south1').https.onCall(initRefundOrder);
 export const verifyPayment = functions.region('asia-south1').https.onCall(paymentVerification);
 export const saveOrder = functions.region('asia-south1').https.onCall(saveRazorpayOrder);
-export const updateOrder = functions.region('asia-south1').https.onCall(updateRazorpayOrder);
 export const participateSeason = functions.region('asia-south1').https.onCall(seasonParticipation);
 export const updateMatchReport = functions.region('asia-south1').https.onCall(matchReportUpdate);
 export const publishSeason = functions.region('asia-south1').https.onCall(seasonPublish);
@@ -39,6 +39,6 @@ export const cancelSeason = functions.region('asia-south1').https.onCall(seasonC
 
 // trigger functions
 // export const onUpdateMatch = functions.region('asia-south1').firestore.document('allMatches/{matchId}').onUpdate(matchUpdateTrigger);
-export const onUploadProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
+// export const onUploadProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
 // export const generateTicketMail = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize();
 // trigger functions

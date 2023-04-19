@@ -11,7 +11,6 @@ import * as fromApp from '../../store/app.reducer';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { CTAButtonPaymentOption, IPaymentOptions, PaymentOptionsDialogComponent } from '@shared/dialogs/payment-options-dialog/payment-options-dialog.component';
-import { environment } from 'environments/environment';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SEASON_OFFERS_MORE_INFO } from '@shared/web-content/WEBSITE_CONTENT';
@@ -178,7 +177,7 @@ export class DashParticipateComponent implements OnInit {
         next: () => {
           const allPromises = [];
           const tid = sessionStorage.getItem('tid');
-          allPromises.push(this.paymentService.saveOrder(this.selectedSeason, OrderTypes.season, response).toPromise());
+          // allPromises.push(this.paymentService.saveOrder(this.selectedSeason, OrderTypes.season, response).toPromise());
           allPromises.push(this.paymentService.participate(this.selectedSeason, tid).toPromise());
 
           Promise.all(allPromises)

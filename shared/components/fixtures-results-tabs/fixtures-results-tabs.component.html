@@ -6,7 +6,8 @@
         <app-fixture-basic [matchData]="fixture"></app-fixture-basic>
       </li>
     </ul>
-    <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="fixtures?.length === 0 && showActionBtn">
+    <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="12px"
+      *ngIf="fixtures?.length === 0 && showActionBtn">
       <button class="link-button" fxFlex="100%" (click)="openMatchRequestForm()" mat-stroked-button color="primary">
         <span class="material-icons-round external-icon">sports_soccer</span>
         Request a Football Match!

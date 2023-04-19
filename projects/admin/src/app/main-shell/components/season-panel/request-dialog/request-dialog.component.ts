@@ -29,21 +29,21 @@ export class RequestDialogComponent {
 
   sendRequestToAdmin() {
     if (this.isReasonValid) {
-      const timestamp = new Date().getTime();
-      const uid = sessionStorage.getItem('uid');
-      const message = '';
+      const date = new Date().getTime();
+      const byUID = sessionStorage.getItem('uid');
+      const description = '';
       if (this.data.isShowMatch) {
-        message.concat('Match ID: ' + this.mid + '&nbsp;<br>')
+        description.concat('Match ID: ' + this.mid + '&nbsp;<br>')
       } else {
-        message.concat('Season ID: ' + this.data.seasonID + '&nbsp;<br>')
+        description.concat('Season ID: ' + this.data.seasonID + '&nbsp;<br>')
       }
-      message.concat(this.reason.trim());
-      const ticket: ISupportTicket = {
+      description.concat(this.reason.trim());
+      const ticket: Partial<ISupportTicket> = {
         status: TicketStatus.Open,
         type: TicketTypes.Season,
-        timestamp,
-        uid,
-        message,
+        date,
+        byUID,
+        description,
       }
       this.reason = null;
       this.mid = null;
@@ -51,7 +51,7 @@ export class RequestDialogComponent {
     }
   }
 
-  onCloseDialogWithData(ticket: ISupportTicket) {
+  onCloseDialogWithData(ticket: Partial<ISupportTicket>) {
     this.dialogRef.close(ticket);
   }
 

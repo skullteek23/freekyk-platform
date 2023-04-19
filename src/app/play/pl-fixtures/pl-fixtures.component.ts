@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { MatTabGroup } from '@angular/material/tabs';
 import { SnackbarService } from '@app/services/snackbar.service';
 
@@ -20,7 +20,7 @@ export class PlFixturesComponent implements OnInit, OnDestroy {
   @ViewChild(MatTabGroup) matTabGroup: MatTabGroup;
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private snackbarService: SnackbarService,
   ) { }
 

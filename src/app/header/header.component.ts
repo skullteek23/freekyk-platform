@@ -1,10 +1,8 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
-import { AccountAvatarService } from '../services/account-avatar.service';
 import { NotificationsService } from '../services/notifications.service';
 import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/Constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
@@ -13,64 +11,80 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   readonly desktopLinks = DESKTOP_LINKS;
-
   readonly adminURL = environment?.firebase?.adminRegister || '';
 
   @Output() menOpen = new Subject<boolean>();
 
   isLoading = true;
   isLogged = false;
+  isOnboarding = false;
   mobileLinks = MOBILE_LINKS;
   seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
-  profilePicture$: Observable<string | null>;
   notificationCount$: Observable<number | string>;
+  subscriptions = new Subscription();
 
   treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
   dataSource = new MatTreeNestedDataSource<ILink>();
+  photoUrl: string = null;
 
   constructor(
     private dialog: MatDialog,
-    private ngAuth: AngularFireAuth,
     private notificationService: NotificationsService,
-    private avatarServ: AccountAvatarService,
     private ngFire: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
-    this.profilePicture$ = this.avatarServ.getProfilePicture();
     this.getLiveSeasons();
-    this.ngAuth.user.subscribe((user) => {
-      if (user !== null) {
-        this.isLogged = true;
-        this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
-          map((resp) => (!!resp ? resp : null)),
-          map((resp) => (resp > 5 ? '5+' : resp)),
-          share()
-        );
-        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Settings', route: '/dashboard/account', icon: 'settings' });
-        this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
-      } else {
-        this.isLogged = false;
+    this.authService.getPhoto().subscribe({
+      next: response => {
+        this.photoUrl = response;
+      },
+    })
+    this.authService.isLoggedIn().subscribe({
+      next: (user) => {
+        if (user) {
+          this.isLogged = true;
+          this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
+            map((resp) => (!!resp ? resp : null)),
+            map((resp) => (resp > 5 ? '5+' : resp)),
+            share()
+          );
+          this.mobileLinks = MOBILE_LINKS.slice();
+          this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'My Account')]?.subLinks?.push({ name: 'Logout', isLogout: true, icon: 'logout' });
+          // this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
+
+        }
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    });
+    })
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.isOnboarding = event.url.includes('onboarding');
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   hasChild = (_: number, node: ILink) => !!node.subLinks && node.subLinks.length > 0;

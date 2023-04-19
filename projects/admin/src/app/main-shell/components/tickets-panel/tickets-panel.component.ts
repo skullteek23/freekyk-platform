@@ -6,9 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { ListOption } from '@shared/interfaces/others.model';
+import { TeamChatThreadComponent } from '@shared/dialogs/team-chat-thread/team-chat-thread.component';
+import { IUserChat } from '@shared/interfaces/team.model';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
-import { ReplyTicketDialogComponent } from './reply-ticket-dialog/reply-ticket-dialog.component';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-tickets-panel',
@@ -22,7 +23,7 @@ export class TicketsPanelComponent implements OnInit {
   readonly ticketType = TicketTypes;
   readonly tableColumns = {
     id: 'id',
-    name: 'name',
+    // name: 'name',
     message: 'message',
     response: 'response',
     status: 'status',
@@ -38,7 +39,7 @@ export class TicketsPanelComponent implements OnInit {
   };
   readonly displayedCols = [
     'id',
-    'name',
+    // 'name',
     'message',
     'response',
     'status',
@@ -57,7 +58,8 @@ export class TicketsPanelComponent implements OnInit {
   constructor(
     private ngFire: AngularFirestore,
     private snackbarService: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private apiGetService: ApiGetService
   ) { }
 
   ngOnInit(): void {
@@ -66,36 +68,21 @@ export class TicketsPanelComponent implements OnInit {
 
   getTickets() {
     this.isLoaderShown = true;
-    this.ngFire.collection('tickets').get().subscribe({
+    this.apiGetService.getAllTickets().subscribe({
       next: (response) => {
-        const list: ISupportTicket[] = [];
-        if (response) {
-          response.docs.forEach(element => {
-            const data = element.data() as ISupportTicket;
-            const id = element.id;
-            list.push({ id, ...data });
-          });
-        }
-        this.setDataSource(list);
+        this.setDataSource(response);
         this.isLoaderShown = false;
       },
       error: () => {
         this.isLoaderShown = false;
         this.snackbarService.displayError();
       }
-    });
+    })
   }
 
   setDataSource(data: ISupportTicket[]) {
     this.dataSource = new MatTableDataSource<any>(data);
     this.tableLength = data.length;
-  }
-
-  getValidName(data: ISupportTicket) {
-    if (data.contactInfo) {
-      return data.contactInfo.name || data.contactInfo.email || data.contactInfo.name || data.contactInfo.phone_no;
-    }
-    return this.LABEL_NA;
   }
 
   onChangeStatus(element: ISupportTicket, selection: MatSelectChange) {
@@ -121,10 +108,19 @@ export class TicketsPanelComponent implements OnInit {
       })
   }
 
-  replyTicket(ticket: ISupportTicket) {
-    this.dialog.open(ReplyTicketDialogComponent, { panelClass: 'fk-dialogs', data: ticket })
-      .afterClosed()
-      .subscribe(() => this.getTickets());
+  openChatThread(value: ISupportTicket) {
+    const chat: Partial<IUserChat> = {
+      title: value.title,
+      description: value.description,
+      byUID: value.byUID,
+      date: value.date,
+      id: value.id,
+    }
+    this.dialog.open(TeamChatThreadComponent, {
+      panelClass: 'large-dialogs',
+      disableClose: false,
+      data: chat
+    })
   }
 
 }

@@ -47,11 +47,11 @@ export class TeamjoinComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTeams();
-    this.shortcutData = {
-      icon: 'add_circle',
-      actionLabel: 'Create your own team',
+    // this.shortcutData = {
+    //   icon: 'add_circle',
+    //   actionLabel: 'Create your own team',
 
-    }
+    // }
   }
 
   onCloseDialog(): void {

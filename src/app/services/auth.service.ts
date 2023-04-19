@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { Router } from '@angular/router';
 import { logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
+import { Observable, Subject } from 'rxjs';
+import { ApiGetService } from '@shared/services/api.service';
 
 export type authUser = firebase.auth.UserCredential;
+export type authUserMain = authUser['user'];
 export type confirmationResult = firebase.auth.ConfirmationResult;
 export interface User {
   id: string;
@@ -24,19 +26,24 @@ var grecaptcha;
 
 export class AuthService {
 
+  private _user: authUserMain = null;
+  private _photoChanged = new Subject<string>();
 
   constructor(
-    private router: Router,
     private snackbarService: SnackbarService,
     private ngAuth: AngularFireAuth,
-    private ngFunc: AngularFireFunctions
+    private ngFunc: AngularFireFunctions,
+    private apiService: ApiGetService
   ) {
-    // ngAuth.onAuthStateChanged((user) => {
-    //   if (user !== null) {
-    //     // localStorage.setItem('uid', user.uid);
-    //     // sessionStorage.setItem('name', user.displayName);
-    //   }
-    // });
+    ngAuth.onAuthStateChanged(user => {
+      this._user = user;
+      this.saveUserCred(user);
+      this.updatePhoto(user?.photoURL);
+    });
+  }
+
+  updatePhoto(url: string) {
+    this._photoChanged.next(url || null);
   }
 
   login(logData: logDetails): Promise<authUser> {
@@ -64,8 +71,18 @@ export class AuthService {
         });
       }
       return this.ngAuth.signInWithPhoneNumber(`${INDIAN_DIAL_PREFIX}${input.toString()}`, reCaptchaVerifier);
+    } else {
+      console.log('invalid details');
+      this.snackbarService.displayError('Unknown error occurred! Try again later')
+      return Promise.reject();
     }
-    console.log('invalid details');
+  }
+
+  saveUserCred(user: authUserMain) {
+    if (user) {
+      localStorage.setItem('uid', user.uid);
+      localStorage.setItem('name', user.displayName);
+    }
   }
 
   resetCaptcha() {
@@ -78,15 +95,39 @@ export class AuthService {
     }
   }
 
+  isLoggedIn(): Observable<authUserMain> {
+    return this.ngAuth.authState;
+  }
+
+  getPhoto(): Subject<string> {
+    return this._photoChanged;
+  }
+
+  async isProfileExists(user: authUserMain): Promise<boolean> {
+    return await this.apiService.getPlayerOnboardingStatus(user.uid).toPromise();
+  }
+
   onLogout(): void {
-    this.ngAuth.signOut()
-      .then(() => {
-        this.snackbarService.displayCustomMsg('Logged out!');
-        localStorage.removeItem('uid');
-        sessionStorage.clear();
-        location.href = '/';
-      })
-      .catch((error) => this.handleAuthError(error.code));
+    const user = this.getUser();
+    if (user) {
+      this.ngAuth.signOut()
+        .then(() => {
+          this.snackbarService.displayCustomMsg('Logged out!');
+          localStorage.removeItem('uid');
+          this.resetUser();
+          sessionStorage.clear();
+          location.href = '/';
+        })
+        .catch((error) => this.handleAuthError(error.code));
+    }
+  }
+
+  resetUser() {
+    this._user = null;
+  }
+
+  getUser(): authUserMain {
+    return this._user;
   }
 
   storeUserInfo(data: User) {
@@ -129,7 +170,7 @@ export class AuthService {
     this.snackbarService.displayError('Session Expired! Please login again');
   }
   tooManyRequests(): void {
-    this.snackbarService.displayError('Request error! Please try again after sometime');
+    this.snackbarService.displayError('Too many requests! Please try again after sometime');
   }
   popupClosedByUser(): void {
     this.snackbarService.displayError('Please sign in using the popup box');
@@ -141,43 +182,62 @@ export class AuthService {
 
   // error mapper
   handleAuthError(error): void {
-    switch (error.code) {
-      case 'auth/email-already-in-use':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/account-exists-with-different-credential':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/network-request-failed':
-        this.networkFail();
-        break;
-      case 'auth/invalid-email':
-        this.emailIncorrect();
-        break;
-      case 'auth/wrong-password':
-        this.passwordIncorrect();
-        break;
-      case 'auth/weak-password':
-        this.passwordWeak();
-        break;
-      case 'auth/id-token-expired':
-        this.sessionExpired();
-        break;
-      case 'auth/user-not-found':
-        this.accountNotExist();
-        break;
-      case 'auth/uid-already-exists':
-        this.emailAlreadyRegistered();
-        break;
-      case 'auth/too-many-requests':
-        this.tooManyRequests();
-        break;
-      case 'auth/popup-closed-by-user':
-        this.popupClosedByUser();
-        break;
-      default:
-        this.snackbarService.displayError('Error occurred!');
-        break;
+    if (error?.code) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/account-exists-with-different-credential':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/network-request-failed':
+          this.networkFail();
+          break;
+        case 'auth/invalid-email':
+          this.emailIncorrect();
+          break;
+        case 'auth/wrong-password':
+          this.passwordIncorrect();
+          break;
+        case 'auth/weak-password':
+          this.passwordWeak();
+          break;
+        case 'auth/id-token-expired':
+          this.sessionExpired();
+          break;
+        case 'auth/user-not-found':
+          this.accountNotExist();
+          break;
+        case 'auth/uid-already-exists':
+          this.emailAlreadyRegistered();
+          break;
+        case 'auth/too-many-requests':
+          this.tooManyRequests();
+          break;
+        case 'auth/popup-closed-by-user':
+          this.popupClosedByUser();
+          break;
+        case 'auth/invalid-phone-number':
+          this.snackbarService.displayError('The format of the phone number provided is incorrect');
+          break;
+        case 'auth/invalid-app-credential':
+          this.snackbarService.displayError('Error: Invalid App Credential');
+          window.location.reload();
+          break;
+        case 'auth/invalid-verification-code':
+          this.snackbarService.displayError('Error: Invalid OTP');
+          break;
+        case 'auth/user-disabled':
+          this.snackbarService.displayError('Error: Account disabled by Admin');
+          break;
+        case 'auth/captcha-check-failed':
+          this.snackbarService.displayError('Error: Hostname match not found');
+          window.location.reload();
+          break;
+        default:
+          this.snackbarService.displayError('Unknown error occurred!');
+          break;
+      }
     }
   }
   // error mapper

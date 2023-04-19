@@ -10,9 +10,6 @@
     <span class="mat-subheading-1" [ngClass]="getStatusClass()">
       {{seasonData?.status}}
     </span>
-    <span class="mat-body-1">
-      Last updated on {{ seasonData?.lastUpdated | date: 'medium' }}
-    </span>
   </div>
 </mat-card>
 <mat-card class="info-card">
@@ -21,45 +18,39 @@
       <div class="text-container">
         <h4>Location</h4>
         <p class="mat-body-1">
-          {{ seasonData?.locCity + ", " + seasonData?.locState }}
+          {{ seasonData?.city + ", " + seasonData?.state }}
         </p>
       </div>
       <div class="text-container" fxLayoutAlign="start start" fxLayoutGap="30px" fxLayout>
-        <div>
+        <!-- <div>
           <h4>Fees</h4>
           <p class="mat-body-1">
-            {{ seasonData?.feesPerTeam }}
+            {{ seasonData?.fees }}
           </p>
-        </div>
-        <div>
-          <h4>Discount (%)</h4>
-          <p class="mat-body-1">
-            {{ seasonData?.discount}}
-          </p>
-        </div>
-        <div>
-          <h4>Fees per Team (After discount)</h4>
-          <p class="mat-body-2">
-            {{ payableFees | currency: 'INR':true }}
-          </p>
-        </div>
+        </div> -->
+        <!-- <div> -->
+        <h4>Entry Fees (per team)</h4>
+        <p class="mat-body-2">
+          {{ payableFees | currency: 'INR':true }}
+        </p>
+        <!-- </div> -->
       </div>
       <div class="text-container">
         <h4>Starts on</h4>
         <p class="mat-body-1">
-          {{ seasonData?.start_date | date: 'fullDate' }}
+          {{ seasonData?.startDate | date: 'fullDate' }}
         </p>
       </div>
       <div class="text-container">
         <h4>Total Participating Teams</h4>
         <p class="mat-body-1">
-          {{ seasonData?.p_teams }}
+          {{ seasonData?.participatingTeams }}
         </p>
       </div>
       <div class="text-container">
         <h4>Tournaments</h4>
         <p class="mat-body-1">
-          {{ containingTournaments }}
+          {{ formatters.formatTournamentType(seasonData?.type) || 'NA' }}
         </p>
       </div>
       <form [formGroup]="updateEntriesForm">

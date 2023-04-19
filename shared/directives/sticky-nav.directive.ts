@@ -5,7 +5,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/
 })
 export class StickyNavDirective {
 
-  @Input() offset = 112;
+  @Input() offset = 72;
   @Input() panelClass = '';
   @Input() disabled = false;
 

@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z8">
+<!-- <mat-card class="mat-elevation-z8">
   <div fxLayout fxLayoutAlign="space-between center" fxLayoutAlign.lt-md="center center">
     <span class="dash-h5 align">Team Members</span>
     <a (click)="noTeam ? onOpenTeamSettings() : (ind = 2)" fxHide.lt-md="true" class="mat-caption sec-menu">
@@ -20,7 +20,6 @@
     </mat-tab>
     <mat-tab [disabled]="noTeam" label="Team Members">
       <ng-template matTabContent>
-        <!-- list -->
         <ng-template #nomem>
           <ul>
             <li class="nofi">
@@ -30,22 +29,17 @@
         </ng-template>
         <app-member-list *ngIf="membersList.length > 0; else nomem" [membersArray]="membersList"
           [capId]="capId$ | async"></app-member-list>
-        <!-- list -->
       </ng-template>
     </mat-tab>
     <mat-tab [disabled]="noTeam" label="Invite Players">
       <ng-template matTabContent>
-        <!-- list -->
         <app-da-te-join-requests></app-da-te-join-requests>
-        <!-- list -->
       </ng-template>
     </mat-tab>
     <mat-tab [disabled]="noTeam" label="Manage Team">
       <ng-template matTabContent>
-        <!-- list -->
         <app-da-te-mang-players [membersArray]="membersList"></app-da-te-mang-players>
-        <!-- list -->
       </ng-template>
     </mat-tab>
   </mat-tab-group>
-</mat-card>
+</mat-card> -->

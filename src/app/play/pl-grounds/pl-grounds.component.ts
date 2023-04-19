@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ export class PlGroundsComponent implements OnInit, OnDestroy {
   groundsCache: GroundBasicInfo[] = [];
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private router: Router
   ) { }
 

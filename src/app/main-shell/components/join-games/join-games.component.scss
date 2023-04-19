@@ -1,0 +1,25 @@
+section {
+  margin-bottom: 12px;
+
+  .dash-h5 {
+    padding: 12px 12px 4px 12px;
+  }
+
+  ul {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    li {
+      display: inline-block;
+      height: 150px;
+      width: 200px;
+      margin: 4px 8px 12px;
+    }
+  }
+}
+
+.play_image {
+  max-height: 45vh;
+  width: 115%;
+}

@@ -104,7 +104,7 @@ export const SEASON_CANCELLATION_REASONS = [
 ];
 
 export class ProfileConstants {
-  static readonly MAX_BIRTH_DATE_ALLOWED = '1 January 2016';
+  static readonly MAX_BIRTH_DATE_ALLOWED = '31 December 2015';
   static readonly BIO_MAX_LIMIT = 129;
   static readonly TEAM_DESC_MAX_LIMIT = 300;
   static readonly ASK_QUESTION_TITLE = 200;
@@ -144,7 +144,7 @@ export enum MATCH_TYPES_PACKAGES {
   PackageOne = 'One match of 2 teams',
   PackageTwo = 'One knockout of 4 Teams',
   PackageThree = 'One league of 4 Teams',
-  PackageCustom = 'Full Season of 4+ Teams'
+  PackageCustom = 'Custom Tournament of 4+ Teams'
 };
 export enum DAYS {
   'Sun',

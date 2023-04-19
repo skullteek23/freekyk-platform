@@ -8,9 +8,11 @@ import { FAQs } from '@shared/web-content/FAQs';
   styleUrls: ['./faqs.component.scss'],
 })
 export class FaqsComponent implements OnInit {
+
   readonly content: IFaqQuestions[] = FAQs;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void { }
 }

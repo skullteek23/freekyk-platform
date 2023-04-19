@@ -1,0 +1,57 @@
+section {
+  padding: 12px;
+}
+
+.content {
+  margin-top: 20px;
+
+  .table {
+    margin-top: 25px;
+
+    mat-divider {
+      position: initial !important;
+    }
+
+    mat-divider.top-bar {
+      padding: 4px;
+    }
+
+    .sentiment {
+      margin-bottom: 12px;
+    }
+
+    .sentiment:last-child {
+      margin-top: 16px;
+    }
+  }
+}
+
+.dashboard-card {
+  height: auto !important;
+}
+
+.mat-card-actions {
+  margin-right: 0 !important;
+}
+
+.footer-container {
+  padding: 12px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--grey3);
+}
+
+.success-message {
+  margin-bottom: 20px;
+}
+
+.need-help-message {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.cancel-message {
+  width: 100%;
+  margin-top: 8px;
+}

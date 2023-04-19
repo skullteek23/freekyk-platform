@@ -55,7 +55,7 @@ export class AddSeasonComponent implements OnInit {
       fees: new FormControl(0,
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
-      discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
+      // discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
       lastRegistrationDate: new FormControl(null),
       ageCategory: new FormControl(null, [Validators.required])
     });

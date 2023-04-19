@@ -37,18 +37,14 @@
         {{messages.error.notAllowedCharacter}}
       </mat-error>
     </mat-form-field>
-
-    <div fxLayoutAlign="center center" fxLayoutGap="16px" fxLayout="row">
-      <a (click)="closeDialog()">Discard</a>
-      <button [disabled]="questionForm.invalid" type="button" (click)="submit()" class="primaryButton buttonText"
-        fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
-        <span class="material-icons-round">
-          {{data?.CTA?.icon}}
-        </span>
-        <span>
-          {{data?.CTA?.label}}
-        </span>
-      </button>
-    </div>
   </form>
+</div>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button [disabled]="questionForm.invalid" class="full-button buttonText primaryButton" fxFlex="100%"
+    (click)="submit()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">{{data?.CTA?.icon}}</span>
+    <span>
+      {{data?.CTA?.label}}
+    </span>
+  </button>
 </div>

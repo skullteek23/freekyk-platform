@@ -2,11 +2,13 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export class IActionShortcutData {
-  actionLabel: string = 'Action Name';
-  icon?: string = null;
-  imgUrl?: string = null;
-  secondaryLabel?: string = 'label 2';
-  secondaryIcon?: string = null;
+  icon: string = 'home';
+  label: string = 'Home';
+  highlight: boolean;
+  route: string = null;
+  extLink?: string = null;
+  disabled?: boolean = false;
+  svg?: string = null;
 }
 
 @Component({
@@ -17,15 +19,15 @@ export class IActionShortcutData {
 export class ActionShortcutButtonComponent implements OnInit {
 
   @Input() data = new IActionShortcutData();
-  @Output() actionTrigger = new Subject<void>();
+  @Output() actionClick = new Subject<IActionShortcutData>();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  onOpenAction() {
-    this.actionTrigger.next();
+  clickAction() {
+    this.actionClick.next(this.data);
   }
 
 }

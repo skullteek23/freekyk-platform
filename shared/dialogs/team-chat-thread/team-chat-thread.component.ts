@@ -1,13 +1,14 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, Output } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { IUserChat, IUserChatReply } from '@shared/interfaces/team.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { ConfirmationBoxComponent } from '../confirmation-box/confirmation-box.component';
 
 @Component({
   selector: 'app-team-chat-thread',
@@ -32,7 +33,8 @@ export class TeamChatThreadComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<TeamChatThreadComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IUserChat,
     private ngFire: AngularFirestore,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -62,8 +64,14 @@ export class TeamChatThreadComponent implements OnInit, OnDestroy {
         next: (response) => {
           if (response) {
             const temp: IUserChatReply[] = response.docs.map(el => ({ id: el.id, ...el.data() as IUserChatReply }));
-            temp.sort(ArraySorting.sortObjectByKey('date', 'desc'));
-            this.repliesList = temp;
+            temp.sort(ArraySorting.sortObjectByKey('date', 'asc'));
+            this.repliesList = [...temp.slice(), ...temp.slice(), ...temp.slice(), ...temp.slice()];
+            const element = document.getElementById('custom-replies-list-container');
+            if (element) {
+              setTimeout(() => {
+                this.scrollToBottom(element);
+              }, 0);
+            }
           } else {
             this.repliesList = [];
           }
@@ -76,6 +84,10 @@ export class TeamChatThreadComponent implements OnInit, OnDestroy {
       })
   }
 
+  scrollToBottom(el) {
+    el.scrollTop = el.scrollHeight - el.clientHeight;
+  }
+
   onAddReply() {
     if (this.replyForm.invalid || !this.replyForm.dirty) {
       return;
@@ -85,13 +97,22 @@ export class TeamChatThreadComponent implements OnInit, OnDestroy {
       return;
     }
 
+
     this.isLoaderShown = true;
     const reply: Partial<IUserChatReply> = {};
     reply.userChatID = this.data.id;
     reply.byUID = localStorage.getItem('uid');
-    reply.by = sessionStorage.getItem('name');
     reply.date = new Date().getTime();
     reply.reply = this.replyForm.value.replyValue.trim();
+
+
+    const isAdmin = JSON.parse(sessionStorage.getItem('isAdmin'));
+    if (isAdmin) {
+      reply.by = 'Freekyk Admin';
+    } else {
+      reply.by = sessionStorage.getItem('name');
+    }
+
     this.ngFire.collection('chatReplies').add(reply)
       .then(() => {
         this.snackbarService.displayCustomMsg('Your reply has been added!');
@@ -153,6 +174,16 @@ export class TeamChatThreadComponent implements OnInit, OnDestroy {
           this.isLoaderShown = false;
         });
     }
+  }
+
+  deleteThread() {
+    this.dialog.open(ConfirmationBoxComponent).afterClosed().subscribe({
+      next: response => {
+        if (response) {
+          this.dialogRef.close('delete-thread');
+        }
+      }
+    })
   }
 
 }

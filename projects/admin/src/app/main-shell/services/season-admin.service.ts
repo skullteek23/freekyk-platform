@@ -6,7 +6,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
 import { IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
-import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, LastParticipationDate, SeasonBasicInfo, statusType } from '@shared/interfaces/season.model';
+import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, ISeason, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
@@ -156,36 +156,31 @@ export class SeasonAdminService {
   getMaxSelectableSlots(): number {
     const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
     if (selectMatchTypeFormData && Object.keys(selectMatchTypeFormData).length) {
-      return this.getTotalMatches(selectMatchTypeFormData.containingTournaments, selectMatchTypeFormData.participatingTeamsCount);
+      return this.getTotalMatches(selectMatchTypeFormData.type, selectMatchTypeFormData.participatingTeamsCount);
     }
     return 0;
   }
 
-  getTotalMatches(tournaments: TournamentTypes[], teamsCount: number): number {
-    if (!tournaments?.length || !teamsCount) {
+  getTotalMatches(tournamentType: TournamentTypes, teamsCount: number): number {
+    if (!tournamentType || !teamsCount) {
       return 0;
     } else {
-      let fcpMatches = 0;
-      let fkcMatches = 0;
-      let fplMatches = 0;
-      if (tournaments.includes('FCP')) {
-        fcpMatches = this.calculateTotalCPMatches(teamsCount);
+      if (tournamentType === 'FCP') {
+        return this.calculateTotalCPMatches(teamsCount);
       }
-      if (tournaments.includes('FKC')) {
-        fkcMatches = this.calculateTotalKnockoutMatches(teamsCount);
+      if (tournamentType === 'FKC') {
+        return this.calculateTotalKnockoutMatches(teamsCount);
       }
-      if (tournaments.includes('FPL')) {
-        fplMatches = this.calculateTotalLeagueMatches(teamsCount);
+      if (tournamentType === 'FPL') {
+        return this.calculateTotalLeagueMatches(teamsCount);
       }
-      return fcpMatches + fkcMatches + fplMatches;
     }
   }
 
   markSeasonAsRemoved(id: string) {
     if (id) {
-      const update: Partial<SeasonBasicInfo> = {};
+      const update: Partial<ISeason> = {};
       update.status = 'REMOVED';
-      update.lastUpdated = new Date().getTime();
       return this.ngFire.collection('seasons').doc(id).update(update)
     }
   }
@@ -286,7 +281,7 @@ export class SeasonAdminService {
       .collection('seasons')
       .get()
       .pipe(
-        map((responseData) => (responseData.docs.map(doc => doc.data() as SeasonBasicInfo))),
+        map((responseData) => (responseData.docs.map(doc => doc.data() as ISeason))),
         map(resp => resp.map(resp => resp.name))
       );
   }

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { ILink } from '@shared/Constants/ROUTE_LINKS';
 import { Subscription } from 'rxjs';
-import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -10,33 +10,28 @@ import { LoadingService } from './services/loading.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  readonly links: ILink[] = [
+    { name: 'Home', route: '/', icon: 'home' },
+    { name: 'My Matches', route: '/my-matches', icon: 'sports_soccer' },
+    { name: 'My Team', route: '/my-team', icon: 'groups' },
+    { name: 'Account', route: '/account', icon: 'person' },
+  ]
+
   title = 'football-platform-v1';
   menuOpen = false;
-  dashOpen = false;
-  routeSubscription: Subscription = new Subscription();
-  isLoaderShown = false;
-  showFloatingButton = true;
+  isOnboarding = false;
+  subscriptions = new Subscription();
 
   constructor(
-    private router: Router,
-    private loadingService: LoadingService
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.routeSubscription = this.router.events.subscribe((event: any) => {
+    this.subscriptions.add(this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
-        // if (event instanceof NavigationEnd && !event.url.includes('/dashboard/home')) {
-        this.dashOpen = event.url.includes('dashboard');
-        if (event.url.includes('dashboard') || event.url.includes('login') || event.url.includes('signup')) {
-          this.showFloatingButton = false;
-        } else {
-          this.showFloatingButton = true;
-        }
+        this.isOnboarding = event.url.includes('onboarding');
       }
-    });
-    this.loadingService._loadingStatusChange.subscribe(response => {
-      this.isLoaderShown = response;
-    })
+    }));
   }
 
   onOpenMenu(eventValue: any): any {
@@ -44,8 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): any {
-    this.routeSubscription.unsubscribe();
     localStorage.removeItem('uid');
+    this.subscriptions.unsubscribe();
   }
 
 }

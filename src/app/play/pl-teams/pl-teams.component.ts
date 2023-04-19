@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-teams',
@@ -14,7 +14,7 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
   ) { }
 
   ngOnInit(): void {
@@ -26,21 +26,23 @@ export class PlTeamsComponent implements OnInit, OnDestroy {
   }
 
   getTeams(): void {
-    this.apiService.getTeams()
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.teams = response;
-            this.teamsCache = JSON.parse(JSON.stringify(response));
-          }
-          window.scrollTo(0, 0);
-        },
-        error: (error) => {
-          this.teams = [];
-          this.teamsCache = [];
-          window.scrollTo(0, 0);
-        }
-      })
+    // this.apiService.getTeams()
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response) {
+    //         this.teams = response;
+    //         this.teamsCache = JSON.parse(JSON.stringify(response));
+    //       }
+    //       window.scrollTo(0, 0);
+    //     },
+    //     error: (error) => {
+    //       this.teams = [];
+    //       this.teamsCache = [];
+    //       window.scrollTo(0, 0);
+    //     }
+    //   })
+    this.teams = [];
+    this.teamsCache = [];
   }
 
   applyFilter(searchValue: string) {

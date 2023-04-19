@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { ApiService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-pl-results',
@@ -17,7 +17,7 @@ export class PlResultsComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {

@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { RegexPatterns } from '@shared/Constants/REGEX';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -20,12 +20,16 @@ export class SignupComponent implements OnInit {
   isInvalidOtp = false;
   otpConfirmation: confirmationResult = null;
   formInput = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6'];
+  callbackUrl: string = null;
+  errorMessage = '';
 
   @ViewChildren('formRow') rows: any;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +61,10 @@ export class SignupComponent implements OnInit {
   }
 
   signupWithGoogle(): void {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     this.resetForm();
     this.isLoaderShown = true;
     this.authService.loginWithGoogle()
@@ -68,6 +76,10 @@ export class SignupComponent implements OnInit {
   }
 
   signupWithPhoneNumber() {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     if (this.authForm.valid) {
       this.isLoaderShown = true;
       this.initOtpForm();
@@ -87,6 +99,10 @@ export class SignupComponent implements OnInit {
   }
 
   verifyOTP() {
+    if (this.authService.getUser() !== null) {
+      this.redirectLoggedUser();
+      return;
+    }
     if (this.otpForm.valid) {
       this.isLoaderShown = true;
       const formValue = this.otpForm.value;
@@ -98,13 +114,13 @@ export class SignupComponent implements OnInit {
       }
       this.otpConfirmation.confirm(otp)
         .then((user) => {
-          this.isInvalidOtp = false;
+          this.errorMessage = '';
           this.postSignup(user);
         })
         .catch(error => {
-          // Invalid OTP
+          // Invalid OTP Or Account disabled
           this.setFocusOnOtpDigit(0);
-          this.isInvalidOtp = true;
+          this.authService.handleAuthError(error);
           this.otpForm.reset();
         })
         .finally(() => {
@@ -114,17 +130,16 @@ export class SignupComponent implements OnInit {
   }
 
   postSignup(user: authUser) {
+    this.authService.saveUserCred(user.user);
+    this.redirectLoggedUser();
+  }
+
+  redirectLoggedUser() {
+    const queryParams = this.route.snapshot.queryParams;
+    this.callbackUrl = queryParams.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/';
+    const callbackEncoded = encodeURIComponent(this.callbackUrl || '/');
+    this.router.navigate(['/onboarding'], { queryParams: { callback: callbackEncoded } });
     this.isLoaderShown = false;
-    alert('signed in!');
-    this.router.navigate(['/dashboard/home'])
-    // const name = this.name?.value.trim();
-    // this.authService.createProfile(name, user.user.uid)
-    //   .then(() => {
-    //     sessionStorage.setItem('name', name);
-    //     this.router.navigate(['/dashboard/participate'])
-    //   })
-    //   .catch((error) => this.authService.handleAuthError(error))
-    //   .finally(() => this.isLoaderShown = false);
   }
 
   resetForm(): void {
@@ -133,7 +148,7 @@ export class SignupComponent implements OnInit {
   }
 
   resetOtp(): void {
-    this.isInvalidOtp = false;
+    this.errorMessage = '';
     this.otpConfirmation = null;
     this.authService.resetCaptcha();
   }
@@ -172,20 +187,3 @@ export class SignupComponent implements OnInit {
     return this.otpForm.get('otp');
   }
 }
-
-// signup(): void {
-//   if (this.authForm.valid) {
-//     this.isLoaderShown = true;
-//     const userData: logDetails = {
-//       email: this.email?.value?.trim(),
-//       password: 'this.password?.value?.trim()',
-//       name: this.name?.value?.trim(),
-//     };
-//     this.authService.signup(userData)
-//       .then(this.postSignup.bind(this))
-//       .catch((error) => {
-//         this.isLoaderShown = false;
-//         this.authService.handleAuthError(error)
-//       })
-//   }
-// }

@@ -53,14 +53,13 @@ export class SelectMatchTypeComponent implements OnInit {
       package: new FormControl(MatchConstants.CREATE_TEXT, [Validators.required]),
       startDate: new FormControl(null, [Validators.required]),
       location: new FormGroup({
-        country: new FormControl(null, [Validators.required]),
         state: new FormControl(null, [Validators.required]),
         city: new FormControl(null, [Validators.required]),
       }),
       participatingTeamsCount: new FormControl(null,
         [Validators.required, Validators.min(MatchConstants.PARTICIPANTS_COUNT.MIN), Validators.max(MatchConstants.PARTICIPANTS_COUNT.MAX), Validators.pattern(RegexPatterns.num)]
       ),
-      containingTournaments: new FormControl(null, [Validators.required])
+      type: new FormControl(null, [Validators.required])
     });
   }
 
@@ -71,7 +70,7 @@ export class SelectMatchTypeComponent implements OnInit {
         ...selectMatchTypeFormData
       });
       if (selectMatchTypeFormData.hasOwnProperty('location')) {
-        this.onSelectCountry(selectMatchTypeFormData?.location?.country);
+        this.onSelectCountry('India');
         this.onSelectState(selectMatchTypeFormData?.location?.state);
       }
       if (selectMatchTypeFormData.hasOwnProperty('package')) {
@@ -93,7 +92,7 @@ export class SelectMatchTypeComponent implements OnInit {
   }
 
   onRestrictTournamentTypes(event: number) {
-    this.matchSelectForm.get('containingTournaments').reset();
+    this.matchSelectForm.get('type').reset();
     this.evaluateAvailableMatchType(event);
   }
 
@@ -111,25 +110,26 @@ export class SelectMatchTypeComponent implements OnInit {
   onCustomPackage(value: MATCH_TYPES_PACKAGES) {
     if (value === MATCH_TYPES_PACKAGES.PackageOne) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(2);
-      this.matchSelectForm.get('containingTournaments').setValue(['FCP']);
+      this.matchSelectForm.get('type').setValue('FCP');
       this.showAdditionFields = false;
     } else if (value === MATCH_TYPES_PACKAGES.PackageTwo) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(4);
-      this.matchSelectForm.get('containingTournaments').setValue(['FKC']);
+      this.matchSelectForm.get('type').setValue('FKC');
       this.showAdditionFields = false;
     } else if (value === MATCH_TYPES_PACKAGES.PackageThree) {
       this.matchSelectForm.get('participatingTeamsCount').setValue(4);
-      this.matchSelectForm.get('containingTournaments').setValue(['FPL']);
+      this.matchSelectForm.get('type').setValue('FPL');
       this.showAdditionFields = false;
     } else {
       this.matchSelectForm.get('participatingTeamsCount').reset();
-      this.matchSelectForm.get('containingTournaments').reset();
+      this.matchSelectForm.get('type').reset();
       this.showAdditionFields = true;
     }
   }
 
   getCountries() {
-    this.countries$ = this.locationService.getCountry();
+    // this.countries$ = this.locationService.getCountry();
+    this.onSelectCountry('India');
   }
 
   onSelectCountry(country: string): void {
@@ -148,10 +148,6 @@ export class SelectMatchTypeComponent implements OnInit {
 
   isPackageCustom(value: MATCH_TYPES_PACKAGES): boolean {
     return value === MATCH_TYPES_PACKAGES.PackageCustom;
-  }
-
-  get locationCountry(): FormControl {
-    return ((this.matchSelectForm.get('location') as FormGroup).controls['country'] as FormControl);
   }
 
   get locationState(): FormControl {

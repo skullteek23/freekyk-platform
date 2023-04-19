@@ -1,0 +1,12 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Rewards</span>
+</div>
+<section>
+  <app-no-items-message [centerText]="true" customText="Uh-Oh! Rewards are not available"></app-no-items-message>
+</section>

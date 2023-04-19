@@ -29,6 +29,8 @@ export class AuthService {
       if (user !== null) {
         this.user = user;
         sessionStorage.setItem('uid', user.uid);
+        sessionStorage.setItem('name', user.displayName);
+        sessionStorage.setItem('isAdmin', JSON.stringify(1));
       }
     });
 

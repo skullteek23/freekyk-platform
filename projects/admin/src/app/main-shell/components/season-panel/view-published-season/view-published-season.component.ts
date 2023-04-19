@@ -7,8 +7,8 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { LOADING_STATUS, MatchConstants, DUMMY_FIXTURE_TABLE_COLUMNS, DELETE_SEASON_SUBHEADING, REVOKE_MATCH_UPDATE_SUBHEADING, MATCH_CANCELLATION_REASONS, SEASON_CANCELLATION_REASONS } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
-import { IDummyFixture, ICancelData, MatchFixture, MatchStatus, ParseMatchProperties } from '@shared/interfaces/match.model';
-import { SeasonParticipants, SeasonAbout, SeasonBasicInfo, ISeasonPartner, ICloudCancelData } from '@shared/interfaces/season.model';
+import { IDummyFixture, ICancelData, MatchFixture, MatchStatus, ParseMatchProperties, Formatters } from '@shared/interfaces/match.model';
+import { SeasonParticipants, ISeasonPartner, ICloudCancelData, ISeason, ISeasonDescription } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { environment } from 'environments/environment';
@@ -53,9 +53,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isLoaderShown: boolean = false;
   messages = formsMessages;
-  seasonData: SeasonBasicInfo;
+  seasonData: ISeason;
   subscriptions = new Subscription();
-  seasonMoreData: SeasonAbout;
+  seasonMoreData: ISeasonDescription;
   seasonFixtures: IDummyFixture[] = [];
   seasonParticipants: SeasonParticipants[] = [];
   updateEntriesForm = new FormGroup({});
@@ -63,6 +63,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   partners: ISeasonPartner[] = [];
 
   @ViewChild(PhotoUploaderComponent) photoUploaderComponent: PhotoUploaderComponent;
+  formatters: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +76,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.formatters = Formatters;
     const params = this.route.snapshot.params;
     this.seasonID = params['seasonid'];
     if (this.seasonID) {
@@ -108,8 +110,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response && response[0]?.exists && response[1]?.exists) {
-            this.seasonData = response[0].data() as SeasonBasicInfo;
-            this.seasonMoreData = response[1].data() as SeasonAbout;
+            this.seasonData = response[0].data() as ISeason;
+            this.seasonMoreData = response[1].data() as ISeasonDescription;
             this.isRestrictedParticipants = this.seasonMoreData.allowedParticipants;
             this.getFixtures();
             this.getParticipants();
@@ -169,7 +171,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     if (this.isSeasonFinished || this.updateEntriesForm.invalid) {
       return;
     }
-    const updatedTextFields: Partial<SeasonAbout> = {};
+    const updatedTextFields: Partial<ISeasonDescription> = {};
     if (this.description.valid && this.description.dirty && this.description.value
       && (this.description.value !== this.seasonMoreData?.description)) {
       updatedTextFields.description = this.description.value.trim();
@@ -511,10 +513,6 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     }
   }
 
-  get containingTournaments(): string {
-    return this.seasonData?.cont_tour.join(', ');
-  }
-
   get isSeasonPublished(): boolean {
     return this.seasonData?.status === 'PUBLISHED';
   }
@@ -524,7 +522,8 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
   }
 
   get payableFees(): number {
-    return this.paymentService.getFeesAfterDiscount(this.seasonData?.feesPerTeam, this.seasonData?.discount);
+    // return this.paymentService.getFeesAfterDiscount(this.seasonData?.fees, this.seasonData?.discount);
+    return this.seasonData?.fees;
   }
 
   get description(): AbstractControl {

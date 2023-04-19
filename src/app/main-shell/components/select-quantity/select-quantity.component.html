@@ -1,0 +1,19 @@
+<div class="dash-h5">Select Quantity to Cancel</div>
+<div mat-dialog-content>
+  <div class="input-group" fxLayoutAlign="center center" fxLayoutGap="0px">
+    <button color="primary" [disabled]="quantity === 1" (click)="decrement()" mat-flat-button type="button"
+      class="button-minus">
+      -
+    </button>
+    <input type="number" [max]="data" step="1" name="quantity" class="quantity-field" [(ngModel)]="quantity">
+    <button [disabled]="quantity === data" color="primary" (click)="increment()" mat-flat-button type="button"
+      class="button-plus">
+      +
+    </button>
+  </div>
+</div>
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Close</button>
+  <button mat-raised-button color="warn" (click)="onCloseDialog(quantity)">Confirm & Cancel</button>
+</mat-dialog-actions>

@@ -1,8 +1,8 @@
-<div fxLayout="column" class="back-button">
-  <button [routerLink]="['/play/seasons']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/games']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
     <span>
-      View all Seasons
+      Go back
     </span>
   </button>
 </div>
@@ -14,7 +14,8 @@
           {{season?.name}}
         </span>
       </mat-card-title>
-      <mat-card-subtitle class="mat-caption ellipsis">Registration ends on {{ season?.lastRegDate | date: 'short' }}
+      <mat-card-subtitle class="mat-caption ellipsis">Registration ends on {{ season?.lastRegistrationDate | date:
+        'short' }}
       </mat-card-subtitle>
     </mat-card-header>
     <img mat-card-image [src]="season?.imgpath" alt="Season image" appFallbackImg
@@ -41,48 +42,45 @@
       <mat-chip-list class="age-group-chip">
         <mat-chip class="mat-caption">
           Age group:&nbsp;
-          <span class="mat-caption">
+          <span class="mat-body-2">
             {{ formatter.formatAgeCategory(season?.ageCategory).viewValue}}
           </span>
         </mat-chip>
         <mat-chip class="mat-caption">
-          Total Slots:&nbsp;
-          <span class="mat-caption">
-            {{ season?.p_teams }} Teams
+          Max Slots:&nbsp;
+          <span class="mat-body-2">
+            {{ season?.participatingTeams }} Teams
           </span>
         </mat-chip>
         <mat-chip class="mat-caption">
           Starts on:&nbsp;
-          <span class="mat-caption">
-            {{ season?.start_date | date: 'fullDate'}}
+          <span class="mat-body-2">
+            {{ season?.startDate | date: 'fullDate'}}
           </span>
         </mat-chip>
-        <mat-chip *ngIf="season.discountedFees === 0" selected>
+        <mat-chip *ngIf="season.fees === 0">
           Fees:&nbsp;
-          <span class="green">FREE</span>
+          <span class="green mat-body-2">FREE</span>
         </mat-chip>
-        <mat-chip *ngIf="season.discountedFees > 0" selected>
+        <mat-chip *ngIf="season.fees > 0">
           Fees:&nbsp;
-          <span class="striked mat-caption" *ngIf="season.discountedFees !== season.feesPerTeam">
-            {{ season.feesPerTeam | currency:'INR' }}</span>&nbsp;
-          <span class="mat-body-2">{{season.discountedFees | currency:'INR'}} (per team)</span>
+          <!-- <span class="striked mat-caption" *ngIf="season.discountedFees !== season.feesPerTeam">
+            {{ season.feesPerTeam | currency:'INR' }}</span>&nbsp; -->
+          <span class="mat-body-2">{{season.fees | currency:'INR'}} (per team)</span>
         </mat-chip>
         <mat-chip *ngIf="groundsList" class="mat-caption">
           Ground(s):&nbsp;
           <a *ngFor="let ground of groundsList" class="mat-caption"
-            (click)="openGround(ground); $event.stopPropagation()">{{ground.viewValue}}</a>
+            (click)="openGround(ground); $event.stopPropagation()" fxLayoutAlign="center center">
+            <span class="mat-body-2">
+              {{ground.viewValue}}
+            </span>
+            <span class="material-icons-round">chevron_right</span>
+          </a>
         </mat-chip>
       </mat-chip-list>
     </mat-card-content>
-    <mat-card-actions fxLayoutAlign="center center">
-
-      <button class="link-button" (click)="participate(); $event.stopPropagation()" mat-stroked-button color="primary">
-        <span class="material-icons-round red">whatshot</span>
-        PARTICIPATE NOW
-      </button>
-    </mat-card-actions>
     <mat-card-footer>
-
     </mat-card-footer>
   </mat-card>
 </section>
@@ -131,5 +129,15 @@
     </mat-card-content>
   </mat-card>
 </section>
+
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">whatshot</span>
+    <span>
+      PARTICIPATE NOW
+    </span>
+  </button>
+</div>
 
 <app-loading *ngIf="isLoaderShown"></app-loading>

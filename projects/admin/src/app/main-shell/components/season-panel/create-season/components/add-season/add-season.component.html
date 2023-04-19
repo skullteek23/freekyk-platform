@@ -31,13 +31,13 @@
             {{messages.error.requiredField}}
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" color="primary">
+        <!-- <mat-form-field appearance="outline" color="primary">
           <mat-label>Enter Discount (in %)</mat-label>
           <input type="number" matInput formControlName="discount" required />
           <mat-error *ngIf="detailsForm.get('discount').hasError('required')">
             {{messages.error.requiredField}}
           </mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field appearance="outline" color="primary">
           <mat-label>Last date to take participants</mat-label>
           <mat-select formControlName="lastRegistrationDate">

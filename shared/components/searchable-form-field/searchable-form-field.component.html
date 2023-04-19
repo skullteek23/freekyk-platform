@@ -1,8 +1,8 @@
-<mat-form-field appearance="outline" color="primary">
+<mat-form-field color="primary">
   <mat-label>{{label}}</mat-label>
-  <mat-select [required]="required" (selectionChange)="onSelect($event.value)" [formControl]="control">
+  <mat-select #selector [required]="required" (selectionChange)="onSelect($event.value)" [formControl]="control">
     <mat-option>
-      <ngx-mat-select-search [formControl]="searchControl" (ngModelChange)="filterList()"
+      <ngx-mat-select-search [disableInitialFocus]="false" [formControl]="searchControl" (ngModelChange)="filterList()"
         placeholderLabel="Search {{label}}" noEntriesFoundLabel="No {{label}} for selection">
         <span ngxMatSelectSearchClear class="material-icons-round">close</span>
       </ngx-mat-select-search>

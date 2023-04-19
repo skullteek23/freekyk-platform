@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, Subscription } from 'rxjs';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { LeagueTableModel, } from '@shared/interfaces/others.model';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ApiService } from '@shared/services/api.service';
+import { ISeason, SeasonBasicInfo } from '@shared/interfaces/season.model';
+import { ApiGetService } from '@shared/services/api.service';
 import { FormControl } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class PlStandingsComponent implements OnInit, OnDestroy {
 
   subscriptions = new Subscription();
-  seasonsList: SeasonBasicInfo[] = [];
+  seasonsList: ISeason[] = [];
   seasonsStrList: string[] = [];
   seasonFormControl: FormControl = new FormControl();
   isLoaderShown = false;
@@ -25,7 +25,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
   knockoutData: IKnockoutData = null;
 
   constructor(
-    private apiService: ApiService,
+    private apiService: ApiGetService,
     private snackbarService: SnackbarService,
     private router: Router
   ) { }
@@ -48,7 +48,7 @@ export class PlStandingsComponent implements OnInit, OnDestroy {
           this.seasonsStrList = [];
           if (response) {
             response.forEach(el => {
-              if (el.cont_tour.includes('FKC') || el.cont_tour.includes('FPL')) {
+              if (el.type === 'FKC' || el.type === 'FPL') {
                 this.seasonsStrList.push(el.name);
                 this.seasonsList.push(el);
               }

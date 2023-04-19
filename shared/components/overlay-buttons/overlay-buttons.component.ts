@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
-import { SeasonBasicInfo } from '@shared/interfaces/season.model';
-import { ApiService } from '@shared/services/api.service';
+import { ISeason } from '@shared/interfaces/season.model';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-overlay-buttons',
@@ -11,12 +11,12 @@ import { ApiService } from '@shared/services/api.service';
 })
 export class OverlayButtonsComponent implements OnInit {
 
-  seasonsList: SeasonBasicInfo[] = [];
+  seasonsList: ISeason[] = [];
   uid = null;
 
   constructor(
     private dialog: MatDialog,
-    private apiService: ApiService
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class OverlayButtonsComponent implements OnInit {
       });
   }
 
-  openLiveSeason(data: SeasonBasicInfo) {
+  openLiveSeason(data: ISeason) {
     this.dialog.open(LiveSeasonComponent, {
       panelClass: 'fk-dialogs',
       data

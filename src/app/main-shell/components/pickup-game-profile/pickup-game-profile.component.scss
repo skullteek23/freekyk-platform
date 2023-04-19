@@ -1,0 +1,73 @@
+section {
+  padding: 0 10px;
+  margin-top: 16px;
+}
+
+.small-icon {
+  font-size: 20px;
+}
+
+.match-time {
+  margin-bottom: 20px !important;
+}
+
+.team-container {
+  width: 100%;
+
+  .team-names-container {
+    width: 100%;
+
+    .team-title {
+      display: block;
+      margin-bottom: 12px;
+
+      &--first {
+        margin-left: 40px;
+      }
+
+      &--second {
+        margin-right: 40px;
+      }
+    }
+  }
+
+  .team {
+    .list-container {
+      width: 100%;
+      margin-bottom: 12px;
+
+      .button-slot {
+        margin-bottom: 12px;
+        margin-right: 0 !important;
+        width: 47%;
+
+        .user-booked {
+          border: 2px solid var(--premiumServiceColor);
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      .button-slot:nth-child(odd) {
+        margin-right: 0 !important;
+      }
+    }
+  }
+}
+
+.waiting-list-container {
+  width: 100%;
+  margin-bottom: 16px;
+  margin-left: auto;
+  text-align: end;
+
+  span {
+    margin-right: 17px;
+  }
+}
+
+.last-section {
+  height: 200px;
+}

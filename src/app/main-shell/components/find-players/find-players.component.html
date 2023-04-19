@@ -1,0 +1,49 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Find Players near you</span>
+</div>
+<mat-card class="feature-card" *ngIf="!playersListCache.length && !isLoaderShown">
+  <img class="play_image" mat-card-image src="assets/svgs/Banner/play_banner_small.svg"
+    alt="Freekyk Play Seasons Image">
+  <mat-card-content>
+    <div fxLayoutAlign="center" fxLayout="column">
+      <span class="overline center">Be a part of the football network</span>
+      <span class="mat-title center">Freekyk Players</span>
+      <p class="mat-body-1 center description">
+        Find players in your area and invite them to your team.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<section>
+  <app-search-lg searchPlaceholder="Search a Player" (searchItem)="applySearch($event)"></app-search-lg>
+  <mat-list *ngIf="playersListCache.length">
+    <mat-list-item *ngFor="let player of playersList" (click)="openProfile(player)">
+      <mat-card class="mat-elevation-z8 dashboard-card player-container" fxLayoutAlign="start center"
+        fxLayoutGap="12px">
+        <div class="image">
+          <img [src]="player.imgpath || player['imgpath_sm']" [alt]="player.name" appFallbackImg>
+        </div>
+        <div class="description" fxLayoutAlign="space-between center">
+          <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
+            <span class="mat-body-1">
+              {{player.name}}
+            </span>
+            <span class="mat-caption sec-menu" *ngIf="player.locCity || player.locState">
+              {{player.locCity}}, {{player.locState}}
+            </span>
+          </div>
+          <span class="material-icons-round clickable">
+            chevron_right
+          </span>
+        </div>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>
+</section>
+<app-loading *ngIf="isLoaderShown"></app-loading>

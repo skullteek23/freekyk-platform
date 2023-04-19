@@ -8,8 +8,11 @@
 
 <div class="container-2">
   <div class="chat-question">
-    <p class="mat-body-2">
-      {{data.title}}
+    <p class="mat-body-2" fxLayoutAlign="space-between center">
+      <span class="mat-body-2">
+        {{data.title}}
+      </span>
+      <a class="material-icons-round clickable" [matMenuTriggerFor]="deleteMenu">more_vert</a>
     </p>
     <p class="mat-body-1">
       {{data.description}}
@@ -21,7 +24,7 @@
     {{repliesList.length}} replies are shown below
   </p>
 
-  <div class="replies-list-container">
+  <div class="replies-list-container" id="custom-replies-list-container">
     <mat-list>
       <ng-container *ngFor="let replyItem of repliesList">
         <mat-list-item *ngIf="!isEditMode || (isEditMode && editId === replyItem.id)">
@@ -33,7 +36,7 @@
               [matMenuTriggerData]="replyItem">more_vert</a>
           </p>
           <p matLine fxLayoutAlign="space-between center" fxLayout="row" class="sub-line">
-            <span class="mat-caption">By {{ replyItem.by }} </span>
+            <span class="mat-caption" *ngIf="replyItem.by">By {{ replyItem.by }} </span>
             <span class="mat-caption"> {{ replyItem.date | date: CUSTOM_FORMAT }} </span>
           </p>
         </mat-list-item>
@@ -69,6 +72,14 @@
     </a>
     <a mat-menu-item>
       <span class="mat-body-1" disabled>Report Abuse</span>
+    </a>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #deleteMenu>
+  <ng-template matMenuContent>
+    <a mat-menu-item (click)="deleteThread()">
+      <span class="mat-body-1">Delete</span>
     </a>
   </ng-template>
 </mat-menu>

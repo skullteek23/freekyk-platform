@@ -1,7 +1,7 @@
 <mat-list>
   <mat-list-item *ngFor="let teamMember of members; last as last"
     (click)="openPlayerProfile(teamMember.id); $event.stopPropagation()">
-    <img matListAvatar [src]="teamMember.imgpath_sm" alt="Player Image" appFallbackImg />
+    <img matListAvatar [src]="teamMember.imgpath" alt="Player Image" appFallbackImg />
     <p matLine fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         <span class="mat-body-1">
@@ -21,7 +21,7 @@
       </ng-container>
     </p>
     <p matLine fxLayoutAlign="space-between center">
-      <span class="mat-caption sec-menu"> {{ teamMember.pl_pos }} </span>
+      <span class="mat-caption sec-menu"> {{ teamMember.position }} </span>
     </p>
     <mat-divider *ngIf="!last"></mat-divider>
   </mat-list-item>

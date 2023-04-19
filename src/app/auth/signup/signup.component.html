@@ -18,31 +18,7 @@
         Required field
       </mat-error>
     </mat-form-field>
-    <!-- <mat-form-field appearance="outline" color="primary">
-      <mat-label>Email</mat-label>
-      <input type="email" matInput name="email" autocomplete="email" formControlName="email" />
-      <mat-error *ngIf="email?.hasError('pattern')">
-        Invalid email! Please try again
-      </mat-error>
-      <mat-error *ngIf="email?.hasError('required')">
-        Required Field!
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" color="primary">
-      <mat-label>Password</mat-label>
-      <input type="password" matInput name="password" formControlName="password" />
-      <mat-hint *ngIf="password?.value?.length < 8" align="end">
-        {{ password?.value?.length > 0 ? password?.value?.length : 0 }} / 8
-      </mat-hint>
-      <mat-error *ngIf="password?.hasError('pattern')">
-        Password should have atleast 1 lowercase letter, 1 uppercase letter, 1
-        number, 1 special character
-      </mat-error>
-      <mat-error *ngIf="password?.hasError('required')">
-        Required Field!
-      </mat-error>
-    </mat-form-field> -->
-    <button [disabled]="authForm.invalid" (click)="signupWithPhoneNumber()" id="phone-signup-button"
+    <button type="button" [disabled]="authForm.invalid" (click)="signupWithPhoneNumber()"
       class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
       Continue
     </button>
@@ -56,7 +32,7 @@
       <span class="dash-h5 otp-title">OTP Verification</span>
     </div>
     <div>
-      <span class="mat-caption" *ngIf="number?.value">Verification code sent to (+91) {{number?.value}}</span>
+      <span class="mat-caption" *ngIf="number?.value">Verification code sent to ({{prefix}}) {{number?.value}}</span>
     </div>
     <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
       <div *ngFor="let input of formInput;  index as i">
@@ -66,12 +42,12 @@
         </mat-form-field>
       </div>
     </div>
-    <mat-error *ngIf="isInvalidOtp" class="mat-error-invalid-otp">Invalid OTP</mat-error>
     <button type="submit" [disabled]="otpForm.invalid" (click)="verifyOTP()" id="otp-verify-button"
       class="buttonText primaryButton wb" fxLayoutAlign="center center" fxLayoutGap="8px" fxLayout>
       Verify
     </button>
   </form>
+  <div id="phone-signup-button"></div>
   <div *ngIf="otpConfirmation" class="unable-to-signin">
     <mat-divider></mat-divider>
     <span class="mat-body-1"> Unable to signup?</span>
@@ -91,11 +67,5 @@
       </button>
     </div>
   </ng-container>
-  <!-- <div class="new-to-freekyk">
-    <mat-divider></mat-divider>
-    <p class="mat-caption center">
-      Already have an account? <a [routerLink]="['/login']">Login</a>
-    </p>
-  </div> -->
 </section>
 <app-loading *ngIf="isLoaderShown"></app-loading>
