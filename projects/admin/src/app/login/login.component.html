@@ -32,7 +32,7 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" color="primary">
-        <mat-label>Enter your Password</mat-label>
+        <mat-label>Enter your password</mat-label>
         <input type="password" name="password" matInput formControlName="password" />
         <mat-error *ngIf="password.hasError('required')">
           {{messages.error.requiredField}}
