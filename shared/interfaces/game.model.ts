@@ -7,7 +7,6 @@ export interface ISlotOption {
   uid: string;
 }
 export interface IPickupGameSlot {
-  orderID: string;
   seasonID: string;
   timestamp: number;
   uid: string;

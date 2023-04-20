@@ -23,13 +23,13 @@
   <mat-card class="dashboard-card mat-elevation-z8" *ngIf="order">
     <mat-card-header>
       <mat-card-title fxLayoutAlign="space-between center" fxLayoutGap="5px">
-        <span class="dash-h5" *ngIf="order.seasonName">
-          {{order.seasonName}}
+        <span class="dash-h5" *ngIf="order?.notes?.associatedEntityName">
+          {{order?.notes?.associatedEntityName}}
         </span>
-        <span class="dash-h5" *ngIf="!order.seasonName">
+        <span class="dash-h5" *ngIf="!order?.notes?.associatedEntityName">
           New Order#{{order?.id }}
         </span>
-        <button color="primary" mat-raised-button (click)="openSeason()" *ngIf="order.seasonName">
+        <button color="primary" mat-raised-button (click)="openSeason()" *ngIf="order?.notes?.associatedEntityName">
           View Game
         </button>
       </mat-card-title>
@@ -40,11 +40,11 @@
           <div class="dash-h5 heading">
             Activity
           </div>
-          <div class="mat-caption sec-menu" *ngIf="order?.notes?.length === 0">
+          <div class="mat-caption sec-menu" *ngIf="order?.notes?.logs?.length">
             No Activity!
           </div>
-          <ol *ngIf="order?.notes?.length">
-            <li *ngFor="let item of order?.notes">
+          <ol *ngIf="order?.notes?.logs?.length">
+            <li *ngFor="let item of order?.notes?.logs">
               {{item}}
             </li>
           </ol>

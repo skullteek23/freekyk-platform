@@ -87,8 +87,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   getSeason() {
-    if (this.order.seasonID) {
-      this.apiService.getSeason(this.order.seasonID).subscribe({
+    if (this.order?.notes?.associatedEntityID) {
+      this.apiService.getSeason(this.order.notes.associatedEntityID).subscribe({
         next: (response) => {
           this.season = response;
         },
@@ -100,11 +100,11 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   openSeason() {
-    if (this.order?.seasonID && this.season) {
+    if (this.order?.notes?.associatedEntityID && this.season) {
       if (this.season.type === 'FCP') {
-        this.router.navigate(['/pickup-game', this.order.seasonID]);
+        this.router.navigate(['/pickup-game', this.order?.notes?.associatedEntityID]);
       } else {
-        this.router.navigate(['/game', this.order.seasonID]);
+        this.router.navigate(['/game', this.order?.notes?.associatedEntityID]);
       }
     }
   }
@@ -114,32 +114,31 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   cancelOrder() {
-    const slots = this.currentSlotsCount;
+    const slots = this.order.notes.purchaseQty - this.order.notes.cancelledQty;
     if (slots > 1) {
       const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slots })
       dialogRef.afterClosed()
         .subscribe({
-          next: (response) => {
-            if (response > 0 && response <= slots) {
-              this.parsPickupSlot(response);
+          next: (count) => {
+            if (count > 0 && count <= slots) {
+              this.parsPickupSlot(count, slots);
             }
           }
         })
     } else if (slots === 1) {
-      this.parsPickupSlot(1);
+      this.parsPickupSlot(1, slots);
     } else {
       this.snackbarService.displayError('Error: No slots to cancel!');
     }
   }
 
-  async parsPickupSlot(response: number) {
+  async parsPickupSlot(count: number, slots: number) {
     this.isLoaderShown = true;
-    const slots = this.currentSlotsCount;
-    const pickupSlots = (await this.apiService.getPickupSlotByOrder(this.order).toPromise());
-    if (pickupSlots && pickupSlots[0]) {
-      pickupSlots[0].slots.sort();
-      const slot = JSON.parse(JSON.stringify(pickupSlots[0]));
-      for (let i = 0; i < response; i++) {
+    const pickupSlot = (await this.apiService.getPickupSlot(this.order?.notes.qtyEntityID).toPromise());
+    if (pickupSlot) {
+      pickupSlot.slots.sort();
+      const slot = JSON.parse(JSON.stringify(pickupSlot));
+      for (let i = 0; i < count; i++) {
         if (slot.slots.length) {
           slot.slots.pop();
         }
@@ -147,15 +146,16 @@ export class OrderComponent implements OnInit, OnDestroy {
       const update: Partial<IPickupGameSlot> = {
         slots: slot.slots
       }
-      this.order.notes.push(`Cancelled ${response} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`);
+
+      this.order.notes.logs.push(`Cancelled ${count} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`);
+      this.order.notes.cancelledQty += count;
       const orderUpdate: Partial<RazorPayOrder> = {
-        notes: this.order.notes,
-        description: `${slots - response}`
+        notes: this.order.notes
       }
 
       // Refund Amount is 50% of total cancellable slots amount
       let refundAmt = 0;
-      refundAmt = (response * this.season.fees) / 2;
+      refundAmt = (count * this.season.fees) / 2;
 
       if (refundAmt > 0) {
         const allPromises = [];
@@ -167,10 +167,9 @@ export class OrderComponent implements OnInit, OnDestroy {
           allPromises.push(this.apiPostService.updatePickupSlot(slot.id, update));
         }
 
-
         Promise.all(allPromises)
           .then(() => {
-            this.snackbarService.displayCustomMsg(response + ' Slot(s) cancelled successfully!')
+            this.snackbarService.displayCustomMsg(count + ' slot(s) cancelled successfully!')
           })
           .catch(() => {
             this.snackbarService.displayError();
@@ -187,6 +186,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   get currentSlotsCount() {
-    return Number(this.order?.description);
+    return this.order?.notes?.purchaseQty - this.order?.notes?.cancelledQty;
   }
 }

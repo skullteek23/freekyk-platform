@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { IOrderNotes, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { Router } from '@angular/router';
 import { FunctionsApiService } from './functions-api.service';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
@@ -33,7 +33,7 @@ export interface ICheckoutOptions {
     contact?: string;
     method?: string;
   },
-  notes?: any;
+  notes?: Partial<IOrderNotes>;
   theme?: {
     hide_topbar?: boolean;
     color?: string;
@@ -108,10 +108,9 @@ export class PaymentService {
     return participateFunc({ season, participantId });
   }
 
-  saveOrder(seasonID: string, orderType: number, options: Partial<RazorPayOrder>, response: any) {
-    console.log(response);
+  saveOrder(options: Partial<RazorPayOrder>, response: any) {
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.SAVE_RAZORPAY_ORDER);
-    return participateFunc({ seasonID, orderType, options, response });
+    return participateFunc({ options, response });
   }
 
   updateOrder(response: any) {

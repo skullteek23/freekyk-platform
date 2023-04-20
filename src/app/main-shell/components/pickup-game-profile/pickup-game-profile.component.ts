@@ -296,7 +296,12 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
           const totalSlots = this.displayedSlots.filter(el => el.selected).length;
           const options: Partial<ICheckoutOptions> = {
             ...UNIVERSAL_OPTIONS,
-            description: `${totalSlots} Slot(s)`,
+            prefill: {
+              contact: user.phoneNumber,
+              name: user.displayName,
+              email: user.email
+            },
+            description: `${this.season.name} x${totalSlots} Slot(s)`,
             order_id: order.id,
             amount: this.payableFees * 100,
             handler: this.handlePaymentSuccess.bind(this),
@@ -322,21 +327,12 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   }
 
   handlePaymentSuccess(response): void {
-    this.showLoader();
     if (response) {
+      this.showLoader();
       this.paymentService.verifyPayment(response)
         .subscribe({
           next: () => {
-            const allPromises = [];
-            const totalSlots = this.displayedSlots.filter(el => el.selected).length;
-            const options: Partial<RazorPayOrder> = {
-              description: totalSlots.toString(),
-              notes: [`Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`]
-            }
-            allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, options, response).toPromise());
-            allPromises.push(this.updatePickupSlot(response['razorpay_order_id']));
-
-            Promise.all(allPromises)
+            Promise.all(this.getPromises(response))
               .then(() => {
                 this.snackBarService.displayCustomMsg('Your slot has been booked!');
                 this.openOrder(response['razorpay_order_id']);
@@ -357,7 +353,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         });
     } else {
       this.hideLoader();
-      this.snackBarService.displayError();
+      this.snackBarService.displayError('Error: Payment Verification could not be initiated!');
     }
   }
 
@@ -365,38 +361,60 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     this.payableFees = 0;
   }
 
-  updatePickupSlot(orderID: string) {
-    const selectedPositions: number[] = [];
+  getPromises(response): any[] {
+    const uid = this.authService.getUser()?.uid || null;
+    const totalSlots = this.displayedSlots.filter(el => el.selected).length;
 
+    const selectedPositions: number[] = [];
     this.displayedSlots.forEach(slot => {
       if (slot.selected) {
         selectedPositions.push(slot.position);
       }
     });
 
-    let existingSlot: IPickupGameSlot;
-    const uid = this.authService.getUser()?.uid || null;
-
-    if (uid) {
-      existingSlot = this.allSlots.find(el => el.uid === uid);
-    }
 
     const update: Partial<IPickupGameSlot> = {
       slots: selectedPositions
     }
 
-    if (existingSlot) {
-      update.slots = update.slots.concat(existingSlot.slots);
-      return this.apiPostService.updatePickupSlot(existingSlot.id, update);
-    } else {
-      const data: IPickupGameSlot = {
-        slots: selectedPositions,
-        uid: uid,
-        timestamp: new Date().getTime(),
-        orderID,
-        seasonID: this.seasonID
+    if (uid) {
+      const allPromises = [];
+      let pickupSlotID = this.apiService.getUniqueDocID();
+
+      const existingSlot = this.allSlots?.find(el => el.uid === uid);
+      if (existingSlot?.hasOwnProperty('slots')) {
+
+        pickupSlotID = existingSlot.id;
+        update.slots = update.slots.concat(existingSlot.slots);
+        allPromises.push(this.apiPostService.updatePickupSlot(existingSlot.id, update));
+
+      } else {
+
+        const data: IPickupGameSlot = {
+          slots: selectedPositions,
+          uid: uid,
+          timestamp: new Date().getTime(),
+          seasonID: this.seasonID,
+        }
+        allPromises.push(this.apiPostService.savePickupSlotWithCustomID(pickupSlotID, data));
+
       }
-      return this.apiPostService.savePickupSlot(data);
+
+      const options: Partial<RazorPayOrder> = {
+        notes: {
+          associatedEntityID: this.season.id,
+          associatedEntityName: this.season.name,
+          purchaseQty: totalSlots,
+          cancelledQty: 0,
+          qtyEntityID: pickupSlotID,
+          logs: [
+            `Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`
+          ]
+        }
+      }
+      allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
+
+      return allPromises;
     }
   }
 

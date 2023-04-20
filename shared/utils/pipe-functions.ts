@@ -113,9 +113,15 @@ export function manipulateSeasonTypeData(source: Observable<ngFireDoc>): Observa
   );
 }
 
-export function manipulatePickupSlotData(source: Observable<ngFireDocQuery>): Observable<IPickupGameSlot[]> {
+export function manipulatePickupSlotsData(source: Observable<ngFireDocQuery>): Observable<IPickupGameSlot[]> {
   return source.pipe(
     map((resp) => resp.docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot)))
+  );
+}
+
+export function manipulatePickupSlotData(source: Observable<ngFireDoc>): Observable<IPickupGameSlot> {
+  return source.pipe(
+    map((resp) => ({ id: resp.id, ...(resp.data() as IPickupGameSlot), } as IPickupGameSlot))
   );
 }
 

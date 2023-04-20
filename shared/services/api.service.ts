@@ -14,7 +14,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotsData, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -26,6 +26,10 @@ export class ApiGetService {
   constructor(
     private angularFirestore: AngularFirestore
   ) { }
+
+  getUniqueDocID(): string {
+    return this.angularFirestore.createId();
+  }
 
   getPlayers(limit?: number): Observable<IPlayer[]> {
     let query;
@@ -330,13 +334,12 @@ export class ApiGetService {
 
   getSeasonBookedSlots(seasonID: string): Observable<IPickupGameSlot[]> {
     return this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get()
-      .pipe(manipulatePickupSlotData)
+      .pipe(manipulatePickupSlotsData)
   }
 
-  getPickupSlotByOrder(order: Partial<RazorPayOrder>): Observable<IPickupGameSlot[]> {
-    if (order) {
-      console.log(order.id)
-      return this.angularFirestore.collection('pickupSlots', (query) => query.where('orderID', '==', order.id)).get()
+  getPickupSlot(docID: string): Observable<IPickupGameSlot> {
+    if (docID) {
+      return this.angularFirestore.collection('pickupSlots').doc(docID).get()
         .pipe(manipulatePickupSlotData)
     }
   }
@@ -384,6 +387,10 @@ export class ApiPostService {
     return this.angularFirestore.collection('/pickupSlots').add(doc);
   }
 
+  savePickupSlotWithCustomID(docID: string, doc: IPickupGameSlot): Promise<any> {
+    return this.angularFirestore.collection('/pickupSlots').doc(docID).set(doc);
+  }
+
   saveTicket(doc: Partial<ISupportTicket>): Promise<any> {
     return this.angularFirestore.collection('tickets').add(doc);
   }
@@ -392,8 +399,8 @@ export class ApiPostService {
     return this.angularFirestore.collection('tickets').doc(docID).delete();
   }
 
-  saveWaitingListEntry(doc: IPickupGameSlot): Promise<any> {
-    return this.angularFirestore.collection('/waitingList').add(doc);
+  saveWaitingListEntry(docID: string, doc: IPickupGameSlot): Promise<any> {
+    return this.angularFirestore.collection('/waitingList').doc(docID).set(doc);
   }
 
   updatePickupSlot(docID: string, update: Partial<IPickupGameSlot>): Promise<any> {

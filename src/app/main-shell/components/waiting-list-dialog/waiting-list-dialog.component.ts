@@ -80,7 +80,12 @@ export class WaitingListDialogComponent implements OnInit {
       if (order) {
         const options: Partial<ICheckoutOptions> = {
           ...UNIVERSAL_OPTIONS,
-          description: `1 Waiting List Entry`,
+          prefill: {
+            contact: user.phoneNumber,
+            name: user.displayName,
+            email: user.email
+          },
+          description: `${this.data.name} x1 Waiting List Slot`,
           order_id: order.id,
           amount: this.data.fees * 100,
           handler: this.handlePaymentSuccess.bind(this),
@@ -107,15 +112,7 @@ export class WaitingListDialogComponent implements OnInit {
       this.paymentService.verifyPayment(response)
         .subscribe({
           next: () => {
-            const allPromises = [];
-            const options: Partial<RazorPayOrder> = {
-              description: '1',
-              notes: [`Purchased 1 waiting list slot on ${this.datePipe.transform(new Date(), 'short')}`]
-            }
-            allPromises.push(this.paymentService.saveOrder(this.data.id, OrderTypes.season, options, response).toPromise());
-            allPromises.push(this.saveToWaitingList(response['razorpay_order_id']));
-
-            Promise.all(allPromises)
+            Promise.all(this.getPromises(response))
               .then(() => {
                 this.snackbarService.displayCustomMsg('You have been added to the waiting list!');
               })
@@ -123,6 +120,7 @@ export class WaitingListDialogComponent implements OnInit {
                 this.snackbarService.displayError(error?.message);
               })
               .finally(() => {
+                this.hideLoader();
                 this.getWaitingList();
               })
           },
@@ -133,19 +131,35 @@ export class WaitingListDialogComponent implements OnInit {
         });
     } else {
       this.hideLoader();
-      this.snackbarService.displayError();
+      this.snackbarService.displayError('Error: Payment Verification could not be initiated!');
     }
   }
 
-  saveToWaitingList(orderID: string) {
+  getPromises(response): any[] {
+    const allPromises = [];
+    const id = this.apiService.getUniqueDocID();
+    const options: Partial<RazorPayOrder> = {
+      notes: {
+        associatedEntityID: this.data.id,
+        associatedEntityName: this.data.name,
+        purchaseQty: 1,
+        cancelledQty: 0,
+        qtyEntityID: id,
+        logs: [
+          `Purchased 1 slot (waiting list) on ${this.datePipe.transform(new Date(), 'short')}`
+        ]
+      }
+    }
     const data: IPickupGameSlot = {
       slots: [],
       uid: this.authService.getUser().uid,
       timestamp: new Date().getTime(),
-      orderID,
       seasonID: this.data.id
     }
-    return this.apiPostService.saveWaitingListEntry(data);
+    allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
+    allPromises.push(this.apiPostService.saveWaitingListEntry(id, data));
+
+    return allPromises;
   }
 
   dismissDialog() {

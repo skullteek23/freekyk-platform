@@ -2,11 +2,10 @@ import { RazorPayOrder } from '@shared/interfaces/order.model';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { environment } from '../../environments/environment';
-import { ISeason } from '@shared/interfaces/season.model';
 const db = admin.firestore();
 const Razorpay = require('razorpay');
 
-export async function saveRazorpayOrder(data: { seasonID: string, orderType: number, options: Partial<RazorPayOrder>, response: any }, context: any): Promise<any> {
+export async function saveRazorpayOrder(data: { options: Partial<RazorPayOrder>, response: any }, context: any): Promise<any> {
 
   const ORDER_ID = data?.response?.razorpay_order_id || null;
   const PAYMENT_ID = data?.response?.razorpay_payment_id || null;
@@ -16,11 +15,8 @@ export async function saveRazorpayOrder(data: { seasonID: string, orderType: num
   try {
     var instance = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET })
     let order: Partial<RazorPayOrder> = await instance?.orders?.fetch(ORDER_ID);
-    const seasonName = ((await db.collection('seasons').doc(data.seasonID).get()).data() as ISeason).name;
     if (order && ORDER_ID && PAYMENT_ID) {
       order['razorpay_payment_id'] = PAYMENT_ID;
-      order.seasonID = data?.seasonID;
-      order.seasonName = seasonName;
       order = {
         ...order,
         ...options

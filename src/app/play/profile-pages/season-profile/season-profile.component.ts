@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Location } from "@angular/common";
+import { DatePipe, Location } from "@angular/common";
 import { EnlargeService } from 'src/app/services/enlarge.service';
 import { ISeasonPartner } from '@shared/interfaces/season.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
@@ -17,12 +17,13 @@ import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats
 import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
 import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { OrderTypes } from '@shared/interfaces/order.model';
+import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { AuthService, authUserMain } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',
   styleUrls: ['./season-profile.component.scss'],
+  providers: [DatePipe]
 })
 export class SeasonProfileComponent implements OnInit, OnDestroy {
 
@@ -49,7 +50,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
     private snackBarService: SnackbarService,
     private location: Location,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -243,7 +245,16 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           const allPromises = [];
-          allPromises.push(this.paymentService.saveOrder(this.seasonID, OrderTypes.season, { description: 'All Players' }, response).toPromise());
+          const options: Partial<RazorPayOrder> = {
+            notes: {
+              associatedEntityID: this.seasonID,
+              associatedEntityName: this.season.name,
+              logs: [
+                `Purchased Season Team Entry on ${this.datePipe.transform(new Date(), 'short')}`
+              ]
+            }
+          }
+          allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
           // const tid = sessionStorage.getItem('tid');
           // allPromises.push(this.participate(season, tid).toPromise());
 

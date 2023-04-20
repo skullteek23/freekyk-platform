@@ -58,75 +58,75 @@ export class DashParticipateComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedSeasonID = this.route.snapshot.params['season'];
-    this.getSeasons();
+    // this.getSeasons();
   }
 
-  getSeasons() {
-    const uid = localStorage.getItem('uid');
-    this.status = OperationStatus.loading;
-    forkJoin([
-      this.ngFire.collection('seasons').get(),
-      this.ngFire.collection('orders', (query) => query.where('receipt', '==', uid)).get()
-    ]).subscribe({
-      next: (response) => {
-        if (response && response.length === 2) {
-          this.ordersList = response[1].docs.map(el => ({ id: el.id, ...el.data() as Partial<RazorPayOrder> }));
-          const list = response[0].docs.map(season => {
-            const docData = season.data() as SeasonBasicInfo;
-            const docID = season.id;
-            const slotExists = this.ordersList.find(order => order.seasonID === docID);
+  // getSeasons() {
+  //   const uid = localStorage.getItem('uid');
+  //   this.status = OperationStatus.loading;
+  //   forkJoin([
+  //     this.ngFire.collection('seasons').get(),
+  //     this.ngFire.collection('orders', (query) => query.where('receipt', '==', uid)).get()
+  //   ]).subscribe({
+  //     next: (response) => {
+  //       if (response && response.length === 2) {
+  //         this.ordersList = response[1].docs.map(el => ({ id: el.id, ...el.data() as Partial<RazorPayOrder> }));
+  //         const list = response[0].docs.map(season => {
+  //           const docData = season.data() as SeasonBasicInfo;
+  //           const docID = season.id;
+  //           const slotExists = this.ordersList.find(order => order.seasonID === docID);
 
-            docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
-            if (slotExists) {
-              docData.slotBooked = true;
-              docData.isAmountDue = slotExists.amount_due / 100; // in rupees
-            } else {
-              docData.slotBooked = false;
-              docData.isAmountDue = null;
-            }
-            docData.isFreeSeason = docData.discountedFees === 0;
+  //           docData.discountedFees = this.paymentService.getFeesAfterDiscount(docData.feesPerTeam, docData.discount);
+  //           if (slotExists) {
+  //             docData.slotBooked = true;
+  //             docData.isAmountDue = slotExists.amount_due / 100; // in rupees
+  //           } else {
+  //             docData.slotBooked = false;
+  //             docData.isAmountDue = null;
+  //           }
+  //           docData.isFreeSeason = docData.discountedFees === 0;
 
-            return { id: docID, ...docData };
-          });
-          this.seasons = list.filter(season => season.status !== 'REMOVED' && season.status !== 'FINISHED');
-          this.seasons.sort(ArraySorting.sortObjectByKey('isAmountDue', 'desc'));
-        } else {
-          this.ordersList = [];
-          this.seasons = [];
-        }
-        this.status = OperationStatus.default;
+  //           return { id: docID, ...docData };
+  //         });
+  //         this.seasons = list.filter(season => season.status !== 'REMOVED' && season.status !== 'FINISHED');
+  //         this.seasons.sort(ArraySorting.sortObjectByKey('isAmountDue', 'desc'));
+  //       } else {
+  //         this.ordersList = [];
+  //         this.seasons = [];
+  //       }
+  //       this.status = OperationStatus.default;
 
-        if (this.selectedSeasonID && this.seasons.length && this.ordersList.length) {
-          const season = this.seasons.find(s => s.id === this.selectedSeasonID);
-          this.initCheckoutFlow(season);
-        }
-      },
-      error: () => {
-        this.snackBarService.displayError('Error getting seasons!');
-        this.status = OperationStatus.default;
-      }
-    });
-  }
+  //       if (this.selectedSeasonID && this.seasons.length && this.ordersList.length) {
+  //         const season = this.seasons.find(s => s.id === this.selectedSeasonID);
+  //         this.initCheckoutFlow(season);
+  //       }
+  //     },
+  //     error: () => {
+  //       this.snackBarService.displayError('Error getting seasons!');
+  //       this.status = OperationStatus.default;
+  //     }
+  //   });
+  // }
 
-  initCheckoutFlow(season: SeasonBasicInfo) {
-    this.selectedSeason = season;
-    this.status = OperationStatus.loading;
-    this.isSeasonEntryValid(season)
-      .then(() => {
-        const order = this.ordersList.find(or => or.seasonID === season.id);
-        if (order) {
-          this.openPartialPaymentPage(order.id, order.amount_due);
-        } else {
-          this.paymentService.generateOrder(season.discountedFees, MatchConstants.MINIMUM_PAYMENT_AMOUNT)
-            .then(this.openNewCheckoutPage.bind(this, season.discountedFees))
-            .catch(this.onErrorOrderGeneration.bind(this))
-        }
-      })
-      .catch(() => {
-        this.status = OperationStatus.default;
-        this.selectedSeason = null;
-      })
-  }
+  // initCheckoutFlow(season: SeasonBasicInfo) {
+  //   this.selectedSeason = season;
+  //   this.status = OperationStatus.loading;
+  //   this.isSeasonEntryValid(season)
+  //     .then(() => {
+  //       const order = this.ordersList.find(or => or.seasonID === season.id);
+  //       if (order) {
+  //         this.openPartialPaymentPage(order.id, order.amount_due);
+  //       } else {
+  //         this.paymentService.generateOrder(season.discountedFees, MatchConstants.MINIMUM_PAYMENT_AMOUNT)
+  //           .then(this.openNewCheckoutPage.bind(this, season.discountedFees))
+  //           .catch(this.onErrorOrderGeneration.bind(this))
+  //       }
+  //     })
+  //     .catch(() => {
+  //       this.status = OperationStatus.default;
+  //       this.selectedSeason = null;
+  //     })
+  // }
 
   openPartialPaymentPage(orderID: string, amountDue: number) {
     const options: Partial<ICheckoutOptions> = {

@@ -29,8 +29,8 @@
         </div>
         <div class="description" fxLayoutAlign="space-between center">
           <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
-            <span class="mat-body-2" *ngIf="order.seasonName; else orderNumber">
-              {{order.seasonName}}
+            <span class="mat-body-2" *ngIf="order?.notes?.associatedEntityName; else orderNumber">
+              {{order?.notes?.associatedEntityName}}
             </span>
             <ng-template #orderNumber>
               <span class="mat-body-2">

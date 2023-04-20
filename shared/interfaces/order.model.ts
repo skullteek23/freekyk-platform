@@ -3,6 +3,15 @@ export enum OrderTypes {
   match = 1
 }
 
+export interface IOrderNotes {
+  associatedEntityID: string;
+  associatedEntityName: string;
+  purchaseQty: number;
+  cancelledQty: number;
+  qtyEntityID: string;
+  logs: string[];
+}
+
 export interface RazorPayOrder {
   amount: number;
   amount_due: number;
@@ -14,12 +23,9 @@ export interface RazorPayOrder {
   id: string;
   status: string;
   razorpay_payment_id: string;
-  seasonID: string;
-  seasonName: string;
-  notes?: any[];
+  notes?: Partial<IOrderNotes>;
   offers?: any[];
   offer_id?: string;
   receipt?: string;
-  type?: OrderTypes;
   description?: string;
 }
