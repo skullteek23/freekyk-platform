@@ -60,17 +60,21 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.apiService.getOrder(this.orderID)
         .subscribe({
           next: response => {
+            console.log(response)
             if (response) {
               this.order = response;
               this.getSeason();
               this.calculateGst();
               this.showSuccess = true;
+            } else {
+              this.router.navigate(['/orders']);
             }
             this.isLoaderShown = false;
           },
           error: (error) => {
             this.snackbarService.displayError();
             this.isLoaderShown = false;
+            this.router.navigate(['/orders']);
           }
         })
     }

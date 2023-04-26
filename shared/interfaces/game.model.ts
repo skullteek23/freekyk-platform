@@ -14,3 +14,11 @@ export interface IPickupGameSlot {
   name?: string;
   id?: string;
 }
+
+export interface ILockedSlot {
+  seasonID: string;
+  uid: string;
+  lockedSlots: number[];
+  timestamp: number;
+  id?: string;
+}

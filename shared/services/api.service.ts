@@ -5,7 +5,7 @@ import { ValidationErrors } from '@angular/forms';
 import { authUserMain, User } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
-import { IPickupGameSlot } from '@shared/interfaces/game.model';
+import { ILockedSlot, IPickupGameSlot } from '@shared/interfaces/game.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties, TournamentTypes } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
@@ -14,7 +14,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, manipulateFixtureData, manipulateGroundBulkData, manipulateGroundData, manipulateKnockoutData, manipulateLeagueData, manipulateOrderData, manipulateOrdersData, manipulatePendingOrderData, manipulatePickupSlotData, manipulatePickupSlotDataListener, manipulatePickupSlotsData, manipulatePickupSlotWithNamesData, manipulatePlayerBulkData, manipulatePlayerDataV2, manipulatePlayersData, manipulateSeasonBulkData, manipulateSeasonData, manipulateSeasonDataV2, manipulateSeasonNamesData, manipulateSeasonPartnerData, manipulateSeasonTypeData, manipulateTeamBulkData, manipulateTeamData, manipulateTeamPlayerData, manipulateTeamsData, manipulateTicketData, manipulateWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePickupSlotWithNamesData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -37,20 +37,20 @@ export class ApiGetService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('players', query).get()
-      .pipe(manipulatePlayersData);
+      .pipe(parsePlayersData);
   }
 
   getPlayer(docID: string): Observable<IPlayer> {
     if (docID) {
       return this.angularFirestore.collection('players').doc(docID).get()
-        .pipe(manipulatePlayerDataV2);
+        .pipe(parsePlayerDataV2);
     }
   }
 
   getTeamPlayers(listIDs: string[]): Observable<ITeamPlayer[]> {
     if (listIDs.length) {
       return this.getPlayers()
-        .pipe(manipulateTeamPlayerData.bind(this, listIDs))
+        .pipe(parseTeamPlayerData.bind(this, listIDs))
     }
     return null;
   }
@@ -61,7 +61,7 @@ export class ApiGetService {
         this.angularFirestore.collection('players').doc(docID).get(),
         this.angularFirestore.collection('playerMore').doc(docID).get(),
         this.angularFirestore.collection('playerStatistics').doc(docID).get()
-      ]).pipe(manipulatePlayerBulkData)
+      ]).pipe(parsePlayerBulkData)
     }
   }
 
@@ -71,17 +71,17 @@ export class ApiGetService {
       query = (query) => query.where('status', '!=', 'REMOVED').limit(limit);
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   getSeasonType(seasonID: string): Observable<TournamentTypes> {
     return this.angularFirestore.collection('seasons').doc(seasonID).get()
-      .pipe(manipulateSeasonTypeData)
+      .pipe(parseSeasonTypeData)
   }
 
   getSeason(docID: string): Observable<ISeason> {
     return this.angularFirestore.collection('seasons').doc(docID).get()
-      .pipe(manipulateSeasonData)
+      .pipe(parseSeasonData)
   }
 
   getPublishedSeasons(limit?: number): Observable<ISeason[]> {
@@ -92,7 +92,7 @@ export class ApiGetService {
       query = (query) => query.where('status', '==', 'PUBLISHED')
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   // getPublishedSeasonWithPaymentInfo(limit?: number): Observable<ISeason[]> {
@@ -107,7 +107,7 @@ export class ApiGetService {
   //     return forkJoin([
   //       this.angularFirestore.collection('seasons', query).get(),
   //       this.getUserOrders(uid)
-  //     ]).pipe(manipulateSeasonOrdersData)
+  //     ]).pipe(parseSeasonOrdersData)
   //   } else {
   //     return this.getPublishedSeasons(limit);
   //   }
@@ -118,7 +118,7 @@ export class ApiGetService {
     currentDate.setHours(0, 0, 0, 0);
     const currentTimestamp = currentDate.getTime();
     return this.angularFirestore.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   getAllMatches(limit?: number): Observable<MatchFixture[]> {
@@ -127,7 +127,7 @@ export class ApiGetService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData)
+      .pipe(parseFixtureData)
   }
 
   getTeams(limit?: number): Observable<ITeam[]> {
@@ -136,12 +136,12 @@ export class ApiGetService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('teams', query).get()
-      .pipe(manipulateTeamsData)
+      .pipe(parseTeamsData)
   }
 
   getTeam(teamID: string): Observable<ITeam> {
     return this.angularFirestore.collection('teams').doc(teamID).get()
-      .pipe(manipulateTeamData)
+      .pipe(parseTeamData)
   }
 
   getTeamAllInfo(docID: string): Observable<Partial<TeamAllInfo>> {
@@ -152,7 +152,7 @@ export class ApiGetService {
         this.angularFirestore.collection('teamStatistics').doc(docID).get(),
         this.angularFirestore.collection('teamMedia').doc(docID).get(),
         this.angularFirestore.collection('teamMembers').doc(docID).get(),
-      ]).pipe(manipulateTeamBulkData)
+      ]).pipe(parseTeamBulkData)
     }
     return null;
   }
@@ -160,7 +160,7 @@ export class ApiGetService {
   getTeamFixtures(teamID: string): Observable<MatchFixture[]> {
     if (teamID) {
       return this.angularFirestore.collection('allMatches', query => query.where('teams', 'array-contains', teamID)).get()
-        .pipe(manipulateFixtureData)
+        .pipe(parseFixtureData)
     }
   }
 
@@ -169,7 +169,7 @@ export class ApiGetService {
       const comparator = ParseMatchProperties.getComparatorTimestampForBackendQuery();
       const query = (query) => query.where('date', '>', comparator).where('teams', 'array-contains', teamID).orderBy('date', 'asc').limit(1)
       return this.angularFirestore.collection('allMatches', query).get()
-        .pipe(manipulateFixtureData)
+        .pipe(parseFixtureData)
     }
   }
 
@@ -182,7 +182,7 @@ export class ApiGetService {
       query = (query) => query.where('date', '>', comparator)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData)
+      .pipe(parseFixtureData)
   }
 
   getLiveFixtures(limit?: number): Observable<MatchFixture[]> {
@@ -195,7 +195,7 @@ export class ApiGetService {
       query = (query) => query.where('date', '>', comparator).where('date', '<', currentTime)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData)
+      .pipe(parseFixtureData)
   }
 
   getResults(limit?: number): Observable<MatchFixture[]> {
@@ -207,19 +207,19 @@ export class ApiGetService {
       query = (query) => query.where('date', '<=', comparator)
     }
     return this.angularFirestore.collection('allMatches', query).get()
-      .pipe(manipulateFixtureData)
+      .pipe(parseFixtureData)
   }
 
   getGrounds(): Observable<GroundBasicInfo[]> {
     return this.angularFirestore.collection('grounds').get()
-      .pipe(manipulateGroundData)
+      .pipe(parseGroundData)
   }
 
   getGroundAllInfo(docID: string): Observable<Partial<GroundAllInfo>> {
     return forkJoin([
       this.angularFirestore.collection('grounds').doc(docID).get(),
       this.angularFirestore.collection('groundDetails').doc(docID).get(),
-    ]).pipe(manipulateGroundBulkData)
+    ]).pipe(parseGroundBulkData)
   }
 
   getSeasonAllInfo(docID: string): Observable<Partial<SeasonAllInfo>> {
@@ -228,14 +228,14 @@ export class ApiGetService {
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('moreInfo').get(),
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('statistics').get(),
       this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('media').get(),
-    ]).pipe(manipulateSeasonBulkData)
+    ]).pipe(parseSeasonBulkData)
   }
 
   getSeasonMatches(season: string): Observable<MatchFixture[]> {
     if (season) {
       const query = (query) => query.where('season', '==', season)
       return this.angularFirestore.collection('allMatches', query).get()
-        .pipe(manipulateFixtureData)
+        .pipe(parseFixtureData)
     }
   }
 
@@ -243,14 +243,14 @@ export class ApiGetService {
     if (season) {
       const query = (query) => query.where('season', '==', season).where('type', '==', 'FKC')
       return this.angularFirestore.collection('allMatches', query).get()
-        .pipe(manipulateKnockoutData)
+        .pipe(parseKnockoutData)
     }
   }
 
   getLeagueTable(season: Partial<ISeason>): Observable<LeagueTableModel[]> {
     if (season?.type === 'FPL') {
       return this.angularFirestore.collection('leagues').doc(season.id).get()
-        .pipe(manipulateLeagueData)
+        .pipe(parseLeagueData)
     }
     return of(null);
   }
@@ -259,28 +259,28 @@ export class ApiGetService {
     if (seasonID) {
       const query = (query) => query.where('seasonID', '==', seasonID)
       return this.angularFirestore.collection('partners', query).get()
-        .pipe(manipulateSeasonPartnerData)
+        .pipe(parseSeasonPartnerData)
     }
   }
 
   getUserPendingOrders(userID: string): Observable<Partial<RazorPayOrder>[]> {
     if (userID) {
       return this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', userID)).get()
-        .pipe(manipulatePendingOrderData)
+        .pipe(parsePendingOrderData)
     }
   }
 
   getUserOrders(userID: string): Observable<Partial<RazorPayOrder>[]> {
     if (userID) {
       return this.angularFirestore.collection('orders', (query) => query.where('receipt', '==', userID)).get()
-        .pipe(manipulateOrdersData)
+        .pipe(parseOrdersData)
     }
   }
 
   getOrder(orderID: string): Observable<Partial<RazorPayOrder>> {
     if (orderID) {
       return this.angularFirestore.collection('orders').doc(orderID).get()
-        .pipe(manipulateOrderData)
+        .pipe(parseOrderData)
     }
   }
 
@@ -292,7 +292,7 @@ export class ApiGetService {
       query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FCP')
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   getLeagues(limit?: number) {
@@ -303,7 +303,7 @@ export class ApiGetService {
       query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FPL')
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   getKnockouts(limit?: number) {
@@ -314,7 +314,7 @@ export class ApiGetService {
       query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'FKC')
     }
     return this.angularFirestore.collection('seasons', query).get()
-      .pipe(manipulateSeasonDataV2)
+      .pipe(parseSeasonDataV2)
   }
 
   checkDuplicateTeamName(comparator: string): Observable<ValidationErrors | null> {
@@ -329,18 +329,26 @@ export class ApiGetService {
 
   getSeasonNames() {
     return this.getSeasons()
-      .pipe(manipulateSeasonNamesData);
+      .pipe(parseSeasonNamesData);
   }
 
   getSeasonBookedSlots(seasonID: string): Observable<IPickupGameSlot[]> {
     return this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get()
-      .pipe(manipulatePickupSlotsData)
+      .pipe(parsePickupSlotsData)
   }
 
   getPickupSlot(docID: string): Observable<IPickupGameSlot> {
     if (docID) {
       return this.angularFirestore.collection('pickupSlots').doc(docID).get()
-        .pipe(manipulatePickupSlotData)
+        .pipe(parsePickupSlotData)
+    }
+  }
+
+  getLockedSlots(seasonID: string): Observable<ILockedSlot> {
+    if (seasonID) {
+      const query = query => query.where('seasonID', '==', seasonID);
+      return this.angularFirestore.collection('lockedPickupSlots', query).get()
+        .pipe(parseLockedSlotData)
     }
   }
 
@@ -348,7 +356,7 @@ export class ApiGetService {
     return forkJoin([
       this.angularFirestore.collection('waitingList', query => query.where('seasonID', '==', seasonID)).get(),
       this.getPlayers()
-    ]).pipe(manipulateWaitingListData)
+    ]).pipe(parseWaitingListData)
   }
 
   addSeasonSlotListener(seasonID: string): Observable<IPickupGameSlot[]> {
@@ -356,12 +364,12 @@ export class ApiGetService {
       this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).snapshotChanges(),
       this.getPlayers()
     ])
-      .pipe(manipulatePickupSlotDataListener);
+      .pipe(parsePickupSlotDataListener);
   }
 
   getUserTickets(userID: string): Observable<ISupportTicket[]> {
     return this.angularFirestore.collection('tickets', query => query.where('byUID', '==', userID)).get()
-      .pipe(manipulateTicketData)
+      .pipe(parseTicketData)
   }
 
   getAllTickets(limit?: number): Observable<ISupportTicket[]> {
@@ -370,7 +378,7 @@ export class ApiGetService {
       query = (query) => query.limit(limit);
     }
     return this.angularFirestore.collection('tickets', query).get()
-      .pipe(manipulateTicketData)
+      .pipe(parseTicketData)
   }
 }
 
@@ -385,6 +393,14 @@ export class ApiPostService {
 
   savePickupSlot(doc: IPickupGameSlot): Promise<any> {
     return this.angularFirestore.collection('/pickupSlots').add(doc);
+  }
+
+  lockPickupSlot(docID: string, doc: ILockedSlot): Promise<any> {
+    return this.angularFirestore.collection('/lockedPickupSlots').doc(docID).set(doc);
+  }
+
+  deleteLockedPickupSlot(docID: string): Promise<any> {
+    return this.angularFirestore.collection('/lockedPickupSlots').doc(docID).delete();
   }
 
   savePickupSlotWithCustomID(docID: string, doc: IPickupGameSlot): Promise<any> {

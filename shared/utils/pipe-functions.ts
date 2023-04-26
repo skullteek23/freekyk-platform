@@ -12,7 +12,7 @@ import { LeagueTableModel, ListOption } from "@shared/interfaces/others.model";
 import { IKnockoutData } from "@shared/components/knockout-bracket/knockout-bracket.component";
 import { ValidationErrors } from "@angular/forms";
 import { ITeamPlayer } from "@shared/components/team-player-members-list/team-player-members-list.component";
-import { IPickupGameSlot } from "@shared/interfaces/game.model";
+import { ILockedSlot, IPickupGameSlot } from "@shared/interfaces/game.model";
 import { ISupportTicket } from "@shared/interfaces/ticket.model";
 import { DocumentChangeAction } from "@angular/fire/firestore";
 
@@ -26,13 +26,13 @@ export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
 export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
 export type ngFireSnapshotChange = DocumentChangeAction<unknown>[];
 
-export function manipulatePlayersData(source: Observable<ngFireDocQuery>) {
+export function parsePlayersData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as IPlayer), } as IPlayer))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
-export function manipulateTeamPlayerData(list: string[], source: Observable<IPlayer[]>): Observable<ITeamPlayer[]> {
+export function parseTeamPlayerData(list: string[], source: Observable<IPlayer[]>): Observable<ITeamPlayer[]> {
   return source.pipe(
     map((resp) => resp
       .filter(player => list.includes(player.id))
@@ -41,19 +41,19 @@ export function manipulateTeamPlayerData(list: string[], source: Observable<IPla
   );
 }
 
-export function manipulatePlayerData(source: Observable<ngFireDoc>): Observable<PlayerBasicInfo> {
+export function parsePlayerData(source: Observable<ngFireDoc>): Observable<PlayerBasicInfo> {
   return source.pipe(
     map((resp) => ({ id: resp.id, ...(resp.data() as PlayerBasicInfo), } as PlayerBasicInfo)),
   );
 }
 
-export function manipulatePlayerDataV2(source: Observable<ngFireDoc>): Observable<IPlayer> {
+export function parsePlayerDataV2(source: Observable<ngFireDoc>): Observable<IPlayer> {
   return source.pipe(
     map((resp) => ({ id: resp.id, ...(resp.data() as IPlayer), } as IPlayer)),
   );
 }
 
-// export function manipulateSeasonData(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
+// export function parseSeasonData(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
 //   return source.pipe(
 //     map(response => {
 //       const seasonList: ISeason[] = [];
@@ -76,7 +76,7 @@ export function manipulatePlayerDataV2(source: Observable<ngFireDoc>): Observabl
 //   );
 // }
 
-export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
+export function parseSeasonDataV2(source: Observable<ngFireDocQuery>): Observable<ISeason[]> {
   return source.pipe(
     map(response => {
       let seasonList: ISeason[] = [];
@@ -95,37 +95,48 @@ export function manipulateSeasonDataV2(source: Observable<ngFireDocQuery>): Obse
   );
 }
 
-export function manipulateSeasonNamesData(source: Observable<ISeason[]>): Observable<string[]> {
+export function parseSeasonNamesData(source: Observable<ISeason[]>): Observable<string[]> {
   return source.pipe(
     map(resp => resp.map(resp => resp.name))
   );
 }
 
-export function manipulateSeasonData(source: Observable<ngFireDoc>): Observable<ISeason> {
+export function parseSeasonData(source: Observable<ngFireDoc>): Observable<ISeason> {
   return source.pipe(
     map(resp => ({ id: resp.id, ...resp.data() as ISeason }))
   );
 }
 
-export function manipulateSeasonTypeData(source: Observable<ngFireDoc>): Observable<TournamentTypes> {
+export function parseSeasonTypeData(source: Observable<ngFireDoc>): Observable<TournamentTypes> {
   return source.pipe(
     map(resp => resp.exists ? (resp.data() as ISeason).type : null)
   );
 }
 
-export function manipulatePickupSlotsData(source: Observable<ngFireDocQuery>): Observable<IPickupGameSlot[]> {
+export function parsePickupSlotsData(source: Observable<ngFireDocQuery>): Observable<IPickupGameSlot[]> {
   return source.pipe(
     map((resp) => resp.docs.map(res => ({ id: res.id, ...(res.data() as IPickupGameSlot), } as IPickupGameSlot)))
   );
 }
 
-export function manipulatePickupSlotData(source: Observable<ngFireDoc>): Observable<IPickupGameSlot> {
+export function parseLockedSlotData(source: Observable<ngFireDocQuery>): Observable<ILockedSlot> {
+  return source.pipe(
+    map((resp) => {
+      if (resp && !resp.empty) {
+        return resp.docs[0].data() as ILockedSlot;
+      }
+      return null;
+    })
+  );
+}
+
+export function parsePickupSlotData(source: Observable<ngFireDoc>): Observable<IPickupGameSlot> {
   return source.pipe(
     map((resp) => ({ id: resp.id, ...(resp.data() as IPickupGameSlot), } as IPickupGameSlot))
   );
 }
 
-export function manipulatePickupSlotDataListener(source: Observable<[ngFireSnapshotChange, IPlayer[]]>): Observable<IPickupGameSlot[]> {
+export function parsePickupSlotDataListener(source: Observable<[ngFireSnapshotChange, IPlayer[]]>): Observable<IPickupGameSlot[]> {
   return source.pipe(
     map((resp) => {
       if (resp?.length && resp[0]) {
@@ -150,7 +161,7 @@ export function manipulatePickupSlotDataListener(source: Observable<[ngFireSnaps
   );
 }
 
-export function manipulateWaitingListData(source: Observable<[ngFireDocQuery, IPlayer[]]>): Observable<ListOption[]> {
+export function parseWaitingListData(source: Observable<[ngFireDocQuery, IPlayer[]]>): Observable<ListOption[]> {
   return source.pipe(
     map(resp => {
       let list: ListOption[] = [];
@@ -170,7 +181,7 @@ export function manipulateWaitingListData(source: Observable<[ngFireDocQuery, IP
   );
 }
 
-export function manipulatePickupSlotWithNamesData(list: IPickupGameSlot[], source: Observable<IPlayer[]>): Promise<IPickupGameSlot[]> {
+export function parsePickupSlotWithNamesData(list: IPickupGameSlot[], source: Observable<IPlayer[]>): Promise<IPickupGameSlot[]> {
   return source.pipe(
     map(resp => {
       let pickupSlots: IPickupGameSlot[] = [];
@@ -183,7 +194,7 @@ export function manipulatePickupSlotWithNamesData(list: IPickupGameSlot[], sourc
   ).toPromise();
 }
 
-export function manipulateSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<SeasonAllInfo>> {
+export function parseSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<SeasonAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<SeasonAllInfo> = {};
@@ -208,7 +219,7 @@ export function manipulateSeasonBulkData(source: Observable<[ngFireDoc, ngFireDo
   );
 }
 
-export function manipulatePlayerBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<PlayerAllInfo>> {
+export function parsePlayerBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<PlayerAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<PlayerAllInfo> = {};
@@ -231,7 +242,7 @@ export function manipulatePlayerBulkData(source: Observable<[ngFireDoc, ngFireDo
   );
 }
 
-export function manipulateTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<TeamAllInfo>> {
+export function parseTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<TeamAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<TeamAllInfo> = {};
@@ -259,7 +270,7 @@ export function manipulateTeamBulkData(source: Observable<[ngFireDoc, ngFireDoc,
   );
 }
 
-export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDoc]>): Observable<Partial<GroundAllInfo>> {
+export function parseGroundBulkData(source: Observable<[ngFireDoc, ngFireDoc]>): Observable<Partial<GroundAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<GroundAllInfo> = {};
@@ -281,7 +292,7 @@ export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDo
   );
 }
 
-// export function manipulateSeasonOrdersData(source: Observable<[ngFireDocQuery, Partial<RazorPayOrder>[]]>): Observable<ISeason[]> {
+// export function parseSeasonOrdersData(source: Observable<[ngFireDocQuery, Partial<RazorPayOrder>[]]>): Observable<ISeason[]> {
 //   return source.pipe(
 //     map(response => {
 //       const seasonList: ISeason[] = [];
@@ -312,33 +323,33 @@ export function manipulateGroundBulkData(source: Observable<[ngFireDoc, ngFireDo
 //   );
 // }
 
-export function manipulateTeamsData(source: Observable<ngFireDocQuery>) {
+export function parseTeamsData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ITeam), } as ITeam))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
 
-export function manipulateTeamData(source: Observable<ngFireDoc>) {
+export function parseTeamData(source: Observable<ngFireDoc>) {
   return source.pipe(
     map((resp) => ({ id: resp.id, ...(resp.data() as ITeam), } as ITeam)),
   );
 }
 
-export function manipulateOrdersData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
+export function parseOrdersData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as Partial<RazorPayOrder>), } as Partial<RazorPayOrder>))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('created_at', 'desc'))),
   );
 }
 
-export function manipulateOrderData(source: Observable<ngFireDoc>): Observable<Partial<RazorPayOrder>> {
+export function parseOrderData(source: Observable<ngFireDoc>): Observable<Partial<RazorPayOrder>> {
   return source.pipe(
-    map((resp) => ({ id: resp.id, ...(resp.data() as Partial<RazorPayOrder>), } as Partial<RazorPayOrder>)),
+    map((resp) => resp.exists ? ({ id: resp.id, ...(resp.data() as Partial<RazorPayOrder>), } as Partial<RazorPayOrder>) : null),
   );
 }
 
-export function manipulateMatchData(source: Observable<ngFireDocQuery>): Observable<MatchFixture[]> {
+export function parseMatchData(source: Observable<ngFireDocQuery>): Observable<MatchFixture[]> {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => {
       const data = doc.data() as MatchFixture;
@@ -354,41 +365,41 @@ export function manipulateMatchData(source: Observable<ngFireDocQuery>): Observa
   );
 }
 
-export function manipulateFixtureData(source: Observable<ngFireDocQuery>) {
+export function parseFixtureData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    manipulateMatchData,
+    parseMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date'))),
   );
 }
 
-export function manipulateTicketData(source: Observable<ngFireDocQuery>): Observable<ISupportTicket[]> {
+export function parseTicketData(source: Observable<ngFireDocQuery>): Observable<ISupportTicket[]> {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ISupportTicket), } as ISupportTicket))),
     map((resp: ISupportTicket[]) => resp.sort(ArraySorting.sortObjectByKey('timestamp', 'desc'))),
   );
 }
 
-export function manipulateResultData(source: Observable<ngFireDocQuery>) {
+export function parseResultData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
-    manipulateMatchData,
+    parseMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
   );
 }
 
-export function manipulateGroundData(source: Observable<ngFireDocQuery>) {
+export function parseGroundData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as GroundBasicInfo), } as GroundBasicInfo))),
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
 
-export function manipulateSeasonPartnerData(source: Observable<ngFireDocQuery>) {
+export function parseSeasonPartnerData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as ISeasonPartner), } as ISeasonPartner))),
   );
 }
 
-export function manipulatePendingOrderData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
+export function parsePendingOrderData(source: Observable<ngFireDocQuery>): Observable<Partial<RazorPayOrder>[]> {
   return source.pipe(
     map((resp) => {
       const data: Partial<RazorPayOrder>[] = [];
@@ -404,7 +415,7 @@ export function manipulatePendingOrderData(source: Observable<ngFireDocQuery>): 
   );
 }
 
-export function manipulateLeagueData(source: Observable<ngFireDoc>): Observable<LeagueTableModel[]> {
+export function parseLeagueData(source: Observable<ngFireDoc>): Observable<LeagueTableModel[]> {
   return source.pipe(
     map((resp) => {
       let tableData: LeagueTableModel[] = [];
@@ -427,9 +438,9 @@ export function parseOnboardingStatus(source: Observable<ngFireDoc>): Observable
   return source.pipe(map(resp => resp.exists))
 }
 
-export function manipulateKnockoutData(source: Observable<ngFireDocQuery>): Observable<IKnockoutData> {
+export function parseKnockoutData(source: Observable<ngFireDocQuery>): Observable<IKnockoutData> {
   return source.pipe(
-    manipulateMatchData,
+    parseMatchData,
     map((resp: MatchFixture[]) => createKnockoutData(resp)),
   );
 }

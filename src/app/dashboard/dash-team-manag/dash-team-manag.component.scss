@@ -1,3 +1,8 @@
+.content {
+  height: calc(100vh - 119px);
+  overflow-y: auto;
+}
+
 section {
   padding: 12px;
 

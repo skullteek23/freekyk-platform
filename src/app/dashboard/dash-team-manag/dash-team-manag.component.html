@@ -1,25 +1,27 @@
-<section class="container grey-bg">
-  <div class="name">
-    <span class="mat-body-1" *ngIf="team?.name">
-      You're a member of Team <span class="mat-body-2">{{ team?.name }}.</span>
-    </span>
-    <span class="mat-body-1" *ngIf="!team || !team.name">
-      You do not have a team yet!
-    </span>
-  </div>
-  <ul class="shortcuts">
-    <li class="shortcut" *ngFor="let shortcut of shortcuts">
-      <app-action-shortcut-button (actionClick)="selectAction($event)" [data]="shortcut"></app-action-shortcut-button>
-    </li>
-  </ul>
-</section>
-<router-outlet></router-outlet>
-<section fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="20px" fxLayoutGap.gt-sm="20px">
-  <app-team-members [members]="team?.members" [captainID]="team?.captain?.id"></app-team-members>
+<div class="content">
+  <section class="container grey-bg">
+    <div class="name">
+      <span class="mat-body-1" *ngIf="team?.name">
+        You're a member of Team <span class="mat-body-2">{{ team?.name }}.</span>
+      </span>
+      <span class="mat-body-1" *ngIf="!team || !team.name">
+        You do not have a team yet!
+      </span>
+    </div>
+    <ul class="shortcuts">
+      <li class="shortcut" *ngFor="let shortcut of shortcuts">
+        <app-action-shortcut-button (actionClick)="selectAction($event)" [data]="shortcut"></app-action-shortcut-button>
+      </li>
+    </ul>
+  </section>
+  <router-outlet></router-outlet>
+  <section fxLayout.lt-md="column" fxLayout="row wrap" fxLayoutGap.lt-md="20px" fxLayoutGap.gt-sm="20px">
+    <app-team-members [members]="team?.members" [captainID]="team?.captain?.id"></app-team-members>
 
-  <app-my-stats-card [data]="teamStats" *ngIf="teamStats" label="My Team Statistics"></app-my-stats-card>
+    <app-my-stats-card [data]="teamStats" *ngIf="teamStats" label="My Team Statistics"></app-my-stats-card>
 
-  <div id="communication"> </div>
-  <app-team-communication></app-team-communication>
-</section>
+    <div id="communication"> </div>
+    <app-team-communication></app-team-communication>
+  </section>
+</div>
 <app-loading *ngIf="isLoaderShown"></app-loading>
