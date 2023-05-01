@@ -2,7 +2,7 @@ import { AuthService } from '@admin/services/auth.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ValidationErrors } from '@angular/forms';
-import { authUserMain, User } from '@app/services/auth.service';
+import { authUserMain } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { ILockedSlot, IPickupGameSlot } from '@shared/interfaces/game.model';
@@ -10,13 +10,13 @@ import { GroundBasicInfo } from '@shared/interfaces/ground.model';
 import { MatchFixture, ParseMatchProperties, TournamentTypes } from '@shared/interfaces/match.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
+import { ICompletedActivity, IPoint, IPointsLog, IRedeemedReward, IReward } from '@shared/interfaces/reward.model';
 import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePickupSlotWithNamesData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, manipulateRewardsData, manipulatePointsData, parseCompletedActivities } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +59,6 @@ export class ApiGetService {
     if (docID) {
       return forkJoin([
         this.angularFirestore.collection('players').doc(docID).get(),
-        this.angularFirestore.collection('playerMore').doc(docID).get(),
         this.angularFirestore.collection('playerStatistics').doc(docID).get()
       ]).pipe(parsePlayerBulkData)
     }
@@ -380,6 +379,29 @@ export class ApiGetService {
     return this.angularFirestore.collection('tickets', query).get()
       .pipe(parseTicketData)
   }
+
+  isActivityCompleted(activityID: number, uid: string): Observable<boolean> {
+    const query = query => query.where('activityID', '==', activityID).where('uid', '==', uid);
+    return this.angularFirestore.collection('completedActivities', query).get()
+      .pipe(parseCompletedActivity)
+  }
+
+  getUserCompletedActivities(uid): Observable<ICompletedActivity[]> {
+    const query = query => query.where('uid', '==', uid);
+    return this.angularFirestore.collection('completedActivities', query).get()
+      .pipe(parseCompletedActivities)
+  }
+
+  addUserPointsListener(uid: string) {
+    return this.angularFirestore.collection('points').doc(uid).valueChanges()
+      .pipe(manipulatePointsData)
+  }
+
+  getRewards(): Observable<IReward[]> {
+    return this.angularFirestore.collection('rewards').get()
+      .pipe(manipulateRewardsData)
+
+  }
 }
 
 @Injectable({
@@ -388,7 +410,7 @@ export class ApiGetService {
 export class ApiPostService {
   constructor(
     private angularFirestore: AngularFirestore,
-    private authService: AuthService
+    private authService: AuthService,
   ) { }
 
   savePickupSlot(doc: IPickupGameSlot): Promise<any> {
@@ -439,6 +461,19 @@ export class ApiPostService {
     return user.updateProfile(data);
   }
 
+  updatePlayerInfo(docID: string, doc: Partial<PlayerAllInfo>): Promise<any> {
+    if (Object.keys(doc).length && docID) {
+      const allPromises = [];
+      const user = this.authService.getUser();
+      allPromises.push(this.angularFirestore.collection('players').doc(docID).update({ ...doc }));
+      if ((doc.name || doc.imgpath) && user) {
+        allPromises.push(this.updateProfile({ displayName: doc.name, photoURL: doc.imgpath }, user));
+      }
+
+      return Promise.all(allPromises);
+    }
+  }
+
   addPlayer(data: Partial<IPlayer>, image: File): Promise<any> {
     const user = this.authService.getUser();
     if (!data || !user || !image) {
@@ -446,8 +481,43 @@ export class ApiPostService {
     }
     const allPromises = [];
     allPromises.push(this.angularFirestore.collection('players').doc(user.uid).set(data));
-    allPromises.push(this.updateProfile({ displayName: data.name, photoURL: data.imgpath }, user))
+    allPromises.push(this.updateProfile({ displayName: data.name, photoURL: data.imgpath }, user));
 
     return Promise.all(allPromises);
+  }
+
+  completeRewardableActivity(doc: ICompletedActivity): Promise<any> {
+    return this.angularFirestore.collection('completedActivities').add(doc);
+  }
+
+  setUserPoints(docID: string, doc: any, doc2: IPointsLog): Promise<any> {
+    if (docID && doc && doc2) {
+      const batch = this.angularFirestore.firestore.batch();
+      batch.update(this.angularFirestore.firestore.collection('points').doc(docID), doc);
+      batch.set(this.angularFirestore.firestore.collection('pointLogs').doc(), doc2);
+
+      return batch.commit();
+    }
+    return null;
+  }
+
+  setUserPointsForActivity(docID: string, doc: any, doc2: IPointsLog, doc3: ICompletedActivity): Promise<any> {
+    if (docID && doc && doc2 && doc3) {
+      const batch = this.angularFirestore.firestore.batch();
+      batch.update(this.angularFirestore.firestore.collection('points').doc(docID), doc);
+      batch.set(this.angularFirestore.firestore.collection('pointLogs').doc(), doc2);
+      batch.set(this.angularFirestore.firestore.collection('completedActivities').doc(), doc3);
+
+      return batch.commit();
+    }
+    return null;
+  }
+
+  setupEmptyPoints(docID: string, doc: IPoint): Promise<any> {
+    return this.angularFirestore.collection('points').doc(docID).set(doc);
+  }
+
+  saveRedeemedReward(doc: IRedeemedReward): Promise<any> {
+    return this.angularFirestore.collection('redeemedRewards').add(doc);
   }
 }

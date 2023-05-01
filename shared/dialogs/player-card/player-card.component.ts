@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { AuthService } from '@app/services/auth.service';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
+import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { PlayerAllInfo } from '@shared/utils/pipe-functions';
 import { map } from 'rxjs/operators';
@@ -22,16 +24,24 @@ export class PlayerCardComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PlayerCardComponent>,
-    private ngFire: AngularFirestore,
     private socialShareService: SocialShareService,
+    private apiService: ApiGetService,
+    private authService: AuthService,
+    private rewardService: GenerateRewardService,
     @Inject(MAT_DIALOG_DATA) public docID: string,
-    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {
     if (this.docID) {
       this.getPlayerInfo();
     }
+    this.authService.isLoggedIn().subscribe({
+      next: async (user) => {
+        if (user) {
+          await this.rewardService.completeActivity(RewardableActivities.openPlayerCard, this.docID);
+        }
+      }
+    })
   }
 
   getPlayerInfo() {
@@ -40,7 +50,9 @@ export class PlayerCardComponent implements OnInit {
         if (response) {
           this.data = response;
           this.parsePlayerStats();
-          this.getTeamName();
+          if (this.data.teamID) {
+            this.getTeamName();
+          }
         }
       });
   }

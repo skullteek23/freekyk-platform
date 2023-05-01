@@ -1,10 +1,10 @@
-import { BasicStats, IPlayer, IPlayerMore, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
+import { BasicStats, IPlayer, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
-import { ISeason, ISeasonDescription, ISeasonPartner, SeasonAbout, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
-import { ITeam, ITeamDescription, ITeamMembers, TeamBasicInfo, TeamMedia, TeamMembers, TeamStats } from "@shared/interfaces/team.model";
+import { ISeason, ISeasonDescription, ISeasonPartner, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
+import { ITeam, ITeamDescription, ITeamMembers, TeamMedia, TeamStats } from "@shared/interfaces/team.model";
 import { MatchFixture, ParseMatchProperties, TournamentTypes } from "@shared/interfaces/match.model";
 import { GroundBasicInfo, GroundMoreInfo } from "@shared/interfaces/ground.model";
 import { RazorPayOrder } from "@shared/interfaces/order.model";
@@ -15,12 +15,13 @@ import { ITeamPlayer } from "@shared/components/team-player-members-list/team-pl
 import { ILockedSlot, IPickupGameSlot } from "@shared/interfaces/game.model";
 import { ISupportTicket } from "@shared/interfaces/ticket.model";
 import { DocumentChangeAction } from "@angular/fire/firestore";
+import { ICompletedActivity, IPoint, IReward } from "@shared/interfaces/reward.model";
 
 // export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
 export interface TeamAllInfo extends ITeam, ITeamDescription, ITeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
-export interface PlayerAllInfo extends IPlayer, IPlayerMore, BasicStats { };
+export interface PlayerAllInfo extends IPlayer, BasicStats { };
 
 export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
 export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
@@ -219,19 +220,17 @@ export function parseSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc, ng
   );
 }
 
-export function parsePlayerBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<PlayerAllInfo>> {
+export function parsePlayerBulkData(source: Observable<[ngFireDoc, ngFireDoc]>): Observable<Partial<PlayerAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<PlayerAllInfo> = {};
-      if (response?.length === 3) {
+      if (response?.length === 2) {
         const data_1: IPlayer = response[0].exists ? ({ id: response[0].id, ...response[0].data() as IPlayer }) : null;
-        const data_2: IPlayerMore = response[1].exists ? ({ ...response[1].data() as IPlayerMore }) : null;
-        const data_3: IPlayerStats = response[2].exists ? ({ ...response[2].data() as IPlayerStats }) : null;
-        if (data_1 || data_2 || data_3) {
+        const data_2: IPlayerStats = response[1].exists ? ({ ...response[1].data() as IPlayerStats }) : null;
+        if (data_1 || data_2) {
           data = {
             ...data_1,
             ...data_2,
-            ...data_3,
           }
           return data;
         }
@@ -445,6 +444,21 @@ export function parseKnockoutData(source: Observable<ngFireDocQuery>): Observabl
   );
 }
 
+export function parseCompletedActivity(source: Observable<ngFireDocQuery>): Observable<boolean> {
+  return source.pipe(map((resp) => !resp.empty));
+}
+
+export function parseCompletedActivities(source: Observable<ngFireDocQuery>): Observable<ICompletedActivity[]> {
+  return source.pipe(map((resp) => resp?.empty ? [] : resp.docs.map(doc => ({ id: doc.id, ...doc.data() as ICompletedActivity }))));
+}
+
+export function manipulatePointsData(source: Observable<IPoint>): Observable<IPoint> {
+  return source.pipe(map((resp) => resp ? (resp as IPoint) : null));
+}
+
+export function manipulateRewardsData(source: Observable<ngFireDocQuery>): Observable<IReward[]> {
+  return source.pipe(map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IReward })) : []));
+}
 
 
 function getFeesAfterDiscount(fees: number, discount: number): number {

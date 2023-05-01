@@ -29,3 +29,19 @@ export interface RazorPayOrder {
   receipt?: string;
   description?: string;
 }
+
+export interface IRefundOrder {
+  id: string;
+  entity: string;
+  amount: number;
+  currency: string;
+  payment_id: string;
+  notes: any[];
+  receipt: string;
+  acquirer_data: any;
+  created_at: number;
+  batch_id: string;
+  status: string;
+  speed_processed: string;
+  speed_requested: string;
+}

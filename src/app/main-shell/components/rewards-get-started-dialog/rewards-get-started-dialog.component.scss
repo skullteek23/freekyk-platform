@@ -1,0 +1,36 @@
+.activity-container {
+  height: calc(100vh - 150px);
+  overflow-y: scroll;
+
+  .list-item {
+    border: 1px solid var(--grey3);
+    border-radius: 5px;
+    padding: 0 12px !important;
+    height: 56px;
+    margin-bottom: 8px;
+
+    .content {
+      width: 100%;
+    }
+  }
+}
+
+.get-started-container {
+  height: calc(100vh - 112px);
+  overflow-y: auto;
+
+  .heading {
+    margin: 24px 0;
+  }
+
+  .description {
+    text-align: justify;
+  }
+
+  .banner-container {
+    max-height: 50%;
+    height: 50%;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+}

@@ -34,7 +34,8 @@ import { MyAccountComponent } from './components/my-account/my-account.component
 import { MyAddressesComponent } from './components/my-addresses/my-addresses.component';
 import { OrderComponent } from './components/order/order.component';
 import { SelectQuantityComponent } from './components/select-quantity/select-quantity.component';
-
+import { RewardEarnDialogComponent } from './components/reward-earn-dialog/reward-earn-dialog.component';
+import { RewardsGetStartedDialogComponent } from './components/rewards-get-started-dialog/rewards-get-started-dialog.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -64,6 +65,8 @@ import { SelectQuantityComponent } from './components/select-quantity/select-qua
     MyAddressesComponent,
     OrderComponent,
     SelectQuantityComponent,
+    RewardEarnDialogComponent,
+    RewardsGetStartedDialogComponent,
   ],
   imports: [
     CommonModule,

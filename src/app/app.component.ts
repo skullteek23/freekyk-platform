@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ILink } from '@shared/Constants/ROUTE_LINKS';
 import { Subscription } from 'rxjs';
+import { GenerateRewardService } from './main-shell/services/generate-reward.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private router: Router
+    private router: Router,
+    private generateRewardService: GenerateRewardService
   ) { }
 
   ngOnInit(): void {

@@ -11,6 +11,9 @@ import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats
 import { NotificationsService } from '@app/services/notifications.service';
 import { NotificationBasic, NotificationTypes } from '@shared/interfaces/notification.model';
 import { TeamService } from '@app/services/team.service';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { RewardableActivities } from '@shared/interfaces/reward.model';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-team-profile',
@@ -39,11 +42,20 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private socialShareService: SocialShareService,
     private apiService: ApiGetService,
     private notificationService: NotificationsService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private rewardService: GenerateRewardService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.userID = localStorage.getItem('uid') || null;
+    this.authService.isLoggedIn().subscribe({
+      next: (user) => {
+        if (user) {
+          this.userID = user.uid;
+          this.rewardService.completeActivity(RewardableActivities.openTeamPage, this.userID);
+        }
+      }
+    })
     this.userTeamID = sessionStorage.getItem('tid') || null;
     this.formatter = Formatters;
     this.subscriptions.add(this.route.params.subscribe({

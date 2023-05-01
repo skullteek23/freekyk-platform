@@ -123,10 +123,12 @@ export class ProfileConstants {
     'image/jpeg',
     'image/jpg',
     'image/png',
-    'image/tiff',
     'image/webp',
-    'image/gif',
   ]
+}
+
+export class ImageUploadPaths {
+  static readonly profilePhoto: '/profileImages/profileimage_';
 }
 
 export class TeamConstants {

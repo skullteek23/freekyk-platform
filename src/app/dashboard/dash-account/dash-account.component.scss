@@ -1,11 +1,5 @@
-.dashboard-card {
-  margin-bottom: 16px;
-}
-
-.form {
-  width: 100%;
-}
-
-.back-button {
-  margin-bottom: 16px;
+section {
+  padding: 12px;
+  height: calc(100vh - 153px);
+  overflow-y: auto;
 }

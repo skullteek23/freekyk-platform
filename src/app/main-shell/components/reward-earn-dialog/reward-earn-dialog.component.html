@@ -1,0 +1,29 @@
+<div class="reward-container" fxLayout="column" fxLayoutGap="12px">
+  <div class="close-button" fxLayoutAlign="end center">
+    <span class="material-icons-round pointer" (click)="onCloseDialog()">close</span>
+  </div>
+  <div class="confetti-container">
+    <img src="assets/gifs/confetti-reward.gif" alt="Confetti SVG" appFallbackImg class="confetti">
+  </div>
+  <div fxLayout="column" fxLayoutGap="12px">
+    <span class="mat-body-2 center">
+      Wuhooo! You have earned <br>
+      <strong class="mat-subheading-2">
+        +{{data.points}} points
+      </strong><br>
+      <span class="mat-body-2" *ngIf="data.activityID">
+        for {{extendedDesc}}
+      </span> 😇
+    </span>
+    <button mat-flat-button color="primary" (click)="claimReward()">
+      <span class="material-icons-round left-icon">
+        celebration
+      </span>
+      <span>
+        Claim
+      </span>
+    </button>
+
+    <a (click)="learnMore()" class="center mat-caption">Learn More</a>
+  </div>
+</div>

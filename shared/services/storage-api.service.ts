@@ -11,10 +11,12 @@ export class StorageApiService {
   ) { }
 
   getPublicUrl(file: File, path: string): Promise<any> {
-    return this.upload(file, path);
+    if (file && path) {
+      return this.upload(file, path);
+    }
   }
 
-  async upload(file: File, path: string): Promise<any> {
+  private async upload(file: File, path: string): Promise<any> {
     const url = (await this.ngFirebaseStorage.upload(path, file)).ref.getDownloadURL();
     return url;
   }

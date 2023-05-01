@@ -9,16 +9,13 @@ export interface IPlayer {
   gender: 'M' | 'F';
   position: string;
   born: number;
-  id?: string
-}
-
-export interface IPlayerMore {
   nickname: string;
   bio: string;
   strongFoot: 'L' | 'R';
   jerseyNo: number;
-  id?: string;
+  id?: string
 }
+
 export interface IPlayerStats {
   apps: number;
   g: number;

@@ -16,6 +16,8 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
 import { AuthService } from '@app/services/auth.service';
+import { RewardsGetStartedDialogComponent } from '@app/main-shell/components/rewards-get-started-dialog/rewards-get-started-dialog.component';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-header',
@@ -33,10 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLogged = false;
   isOnboarding = false;
   mobileLinks = MOBILE_LINKS;
-  seasonsList: SeasonBasicInfo[] = [];
+  // seasonsList: SeasonBasicInfo[] = [];
   menuState: boolean;
   notificationCount$: Observable<number | string>;
   subscriptions = new Subscription();
+  userPoints: number = 0;
 
   treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
   dataSource = new MatTreeNestedDataSource<ILink>();
@@ -47,13 +50,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private notificationService: NotificationsService,
     private ngFire: AngularFirestore,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private apiService: ApiGetService
   ) { }
 
   ngOnInit(): void {
     this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
-    this.getLiveSeasons();
+    // this.getLiveSeasons();
     this.authService.getPhoto().subscribe({
       next: response => {
         this.photoUrl = response;
@@ -71,7 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.mobileLinks = MOBILE_LINKS.slice();
           this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'My Account')]?.subLinks?.push({ name: 'Logout', isLogout: true, icon: 'logout' });
           // this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });
-
+          this.getUserPoints(user.uid);
         }
         this.isLoading = false;
       }
@@ -83,36 +87,50 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }));
   }
 
+  getUserPoints(uid: string) {
+    this.subscriptions.add(this.apiService.addUserPointsListener(uid)
+      .subscribe({
+        next: (response) => {
+          if (response?.points >= 0) {
+            this.userPoints = response.points;
+          }
+        },
+        error: () => {
+          this.userPoints = 0;
+        }
+      }));
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   hasChild = (_: number, node: ILink) => !!node.subLinks && node.subLinks.length > 0;
 
-  getLiveSeasons() {
-    const currentTimestamp = new Date().getTime();
-    this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
-      .pipe(
-        map((resp) => {
-          const seasons: SeasonBasicInfo[] = [];
-          resp.forEach(doc => {
-            const data = doc.payload.doc.data() as SeasonBasicInfo;
-            const id = doc.payload.doc.id;
-            if (data.status === 'PUBLISHED') {
-              seasons.push({ id, ...data } as SeasonBasicInfo);
-            }
-          });
-          return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
-        }))
-      .subscribe({
-        next: (response: SeasonBasicInfo[]) => {
-          this.seasonsList = response;
-        },
-        error: () => {
-          this.seasonsList = [];
-        }
-      });
-  }
+  // getLiveSeasons() {
+  //   const currentTimestamp = new Date().getTime();
+  //   this.ngFire.collection('seasons', query => query.where('lastRegDate', '>=', currentTimestamp)).snapshotChanges()
+  //     .pipe(
+  //       map((resp) => {
+  //         const seasons: SeasonBasicInfo[] = [];
+  //         resp.forEach(doc => {
+  //           const data = doc.payload.doc.data() as SeasonBasicInfo;
+  //           const id = doc.payload.doc.id;
+  //           if (data.status === 'PUBLISHED') {
+  //             seasons.push({ id, ...data } as SeasonBasicInfo);
+  //           }
+  //         });
+  //         return seasons.sort(ArraySorting.sortObjectByKey('lastRegDate', 'desc'));
+  //       }))
+  //     .subscribe({
+  //       next: (response: SeasonBasicInfo[]) => {
+  //         this.seasonsList = response;
+  //       },
+  //       error: () => {
+  //         this.seasonsList = [];
+  //       }
+  //     });
+  // }
 
   scrollTop() {
     window.scrollTo(0, 0);
@@ -174,6 +192,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dialog.open(SubmitMatchRequestComponent, {
       panelClass: 'fk-dialogs'
     });
+  }
+
+  getStartedReward() {
+    this.dialog.open(RewardsGetStartedDialogComponent, {
+      panelClass: 'fk-dialogs',
+      disableClose: true,
+      data: this.userPoints
+    })
   }
 
   get playLinks(): ILink[] {

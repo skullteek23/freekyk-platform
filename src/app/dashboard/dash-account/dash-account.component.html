@@ -1,42 +1,48 @@
-<!-- <div fxLayout="column" class="back-button">
-  <button [routerLink]="['/dashboard/home']" class="buttonText secondaryButton" fxLayoutAlign="center center"
-    fxLayoutGap="8px">
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/account']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
     <span class="material-icons-round">chevron_left</span>
     <span>
-      Go to Dashboard
+      Go back
     </span>
   </button>
-</div> -->
+  <span class="dash-h5 heading">Edit Profile</span>
+</div>
 
-<mat-card class="dashboard-card mat-elevation-z8">
-  <span class="dash-h5">My Profile Settings</span>
-  <app-acc-profile></app-acc-profile>
-</mat-card>
+<section fxLayout="column" fxLayoutGap="12px">
+  <app-acc-profile (loader)="isLoaderShown = $event" [data]="player" *ngIf="player"></app-acc-profile>
+  <span class="mat-caption align">
+    (For security reasons, changing your email or password requires you to
+    re-login to your account)
+  </span>
 
-<mat-card class="dashboard-card mat-elevation-z8">
-  <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="center center">
-    <span class="mat-caption align">
-      (For security reasons, changing your email or password requires you to
-      re-login to your account)
-    </span>
-    <div class="button-container" fxLayout="column" fxLayoutGap="12px">
-      <button class="link-button" fxFlex="100%" (click)="onChangeCredentials('password')" mat-stroked-button
-        color="primary">
-        <span class="material-icons-round external-icon">password</span>
-        Change password
-      </button>
-      <button class="link-button" fxFlex="100%" (click)="onChangeCredentials('email')" mat-stroked-button
-        color="primary">
-        <span class="material-icons-round external-icon">email</span>
-        Change email
-      </button>
-      <button class="link-button" routerLink="/support" fxFlex="100%" mat-stroked-button color="primary">
-        <span class="material-icons-round external-icon">help</span>
-        Need help? Contact us!
-      </button>
-      <a (click)="onDeactivateAccount()" class="mat-caption" mat-button color="warn">
-        Deactivate Account
-      </a>
-    </div>
+  <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="12px">
+    <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('password')" mat-stroked-button
+      color="primary">
+      <span class="material-icons-round external-icon">password</span>
+      Change password
+    </button>
+    <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('email')" mat-stroked-button
+      color="primary">
+      <span class="material-icons-round external-icon">email</span>
+      Change email
+    </button>
+    <button class="link-button" routerLink="/support/tickets" fxFlex="100%" mat-stroked-button color="primary">
+      <span class="material-icons-round external-icon">help</span>
+      Need help? Contact us!
+    </button>
+    <a (click)="onDeactivateAccount()" class="mat-caption" disabled mat-button color="warn">
+      Deactivate Account
+    </a>
   </div>
-</mat-card>
+</section>
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px"
+  *ngIf="accProfileComponent?.infoForm?.dirty && accProfileComponent?.infoForm?.valid">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+    (click)="saveChanges(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">save</span>
+    <span>
+      Save Changes
+    </span>
+  </button>
+</div>
+<app-loading *ngIf="isLoaderShown"></app-loading>

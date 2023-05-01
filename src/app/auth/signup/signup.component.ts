@@ -1,7 +1,6 @@
 import { AuthService, authUser, confirmationResult, INDIAN_DIAL_PREFIX } from '@app/services/auth.service';
-import { Component, Input, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SnackbarService } from '@app/services/snackbar.service';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -29,7 +28,6 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
