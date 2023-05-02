@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { IPoint, RewardMessage, RewardableActivities } from '@shared/interfaces/reward.model';
+import { RewardMessage } from '@shared/interfaces/reward.model';
 
 export interface IEarnedRewardDialogData {
   points: number;
@@ -24,7 +24,7 @@ export class RewardEarnDialogComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.data.activityID) {
+    if (this.data.activityID >= 0) {
       this.extendedDesc = RewardMessage[this.data.activityID];
     }
   }

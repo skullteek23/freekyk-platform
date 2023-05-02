@@ -1,25 +1,29 @@
+import { AuthService } from '@app/services/auth.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService, authUserMain } from '@app/services/auth.service';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { authUserMain } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { AccProfileComponent } from './acc-profile/acc-profile.component';
-import { ApiGetService, ApiPostService } from '@shared/services/api.service';
-import { RemoveUnchangedKeysFromFormGroup } from '@shared/utils/custom-functions';
-import { StorageApiService } from '@shared/services/storage-api.service';
 import { ImageUploadPaths } from '@shared/constants/constants';
+import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { IPlayer } from '@shared/interfaces/user.model';
+import { ApiGetService, ApiPostService } from '@shared/services/api.service';
+import { StorageApiService } from '@shared/services/storage-api.service';
+import { RemoveUnchangedKeysFromFormGroup } from '@shared/utils/custom-functions';
+import { ProfileComponent } from '../profile/profile.component';
+
 @Component({
-  selector: 'app-dash-account',
-  templateUrl: './dash-account.component.html',
-  styleUrls: ['./dash-account.component.scss'],
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.scss']
 })
-export class DashAccountComponent implements OnInit {
+export class EditProfileComponent implements OnInit {
 
   player: Partial<IPlayer> = null;
   user: authUserMain = null;
   isLoaderShown = false;
 
-  @ViewChild(AccProfileComponent) accProfileComponent: AccProfileComponent;
+  @ViewChild(ProfileComponent) profileComponent: ProfileComponent;
 
   constructor(
     private dialog: MatDialog,
@@ -27,7 +31,8 @@ export class DashAccountComponent implements OnInit {
     private apiPostService: ApiPostService,
     private snackBarService: SnackbarService,
     private authService: AuthService,
-    private storageApiService: StorageApiService
+    private storageApiService: StorageApiService,
+    private generateRewardService: GenerateRewardService
   ) { }
 
   ngOnInit(): void {
@@ -54,15 +59,6 @@ export class DashAccountComponent implements OnInit {
     })
   }
 
-  onChangeCredentials(changeElement: 'email' | 'password'): void {
-    // // log out user and then login again
-    // this.dialog.open(UpdateInfoComponent, {
-    //   data: changeElement,
-    //   autoFocus: false,
-    //   disableClose: true,
-    // });
-  }
-
   onDeactivateAccount(): void {
     // const dialogRef = this.dialog.open(DeactivateProfileRequestComponent, {
     //   panelClass: 'fk-dialogs',
@@ -85,24 +81,30 @@ export class DashAccountComponent implements OnInit {
   }
 
   async saveChanges() {
-    if (this.accProfileComponent?.infoForm?.valid && this.accProfileComponent?.infoForm?.dirty && this.user) {
+    if (this.profileComponent?.infoForm?.valid && this.profileComponent?.infoForm?.dirty && this.user) {
       this.isLoaderShown = true;
-      const url = await this.storageApiService.getPublicUrl(this.accProfileComponent.infoForm.value.imgpath, ImageUploadPaths.profilePhoto + `${this.user.uid}`);
-      const value = RemoveUnchangedKeysFromFormGroup(this.accProfileComponent?.infoForm, this.player);
+      const url = await this.storageApiService.getPublicUrl(this.profileComponent.infoForm.value.imgpath, ImageUploadPaths.profilePhoto + `${this.user.uid}`);
+      const value = RemoveUnchangedKeysFromFormGroup(this.profileComponent?.infoForm, this.player);
       if (url) {
         value.imgpath = url;
       }
-      this.apiPostService.updatePlayerInfo(this.user.uid, value)
-        .then(() => {
-          this.snackBarService.displayCustomMsg('Changes saved successfully!')
-          this.getPlayerInfo();
-        })
-        .catch(error => {
-          this.snackBarService.displayError('Error: Unable to save changes');
-        })
-        .finally(() => {
-          this.isLoaderShown = false;
-        })
+      if (Object.keys(value).length) {
+        this.apiPostService.updatePlayerInfo(this.user.uid, value)
+          .then(() => {
+            this.snackBarService.displayCustomMsg('Changes saved successfully!')
+            this.getPlayerInfo();
+            this.generateRewardService.completeActivity(RewardableActivities.completeProfile, this.user.uid);
+          })
+          .catch(error => {
+            this.snackBarService.displayError('Error: Unable to save changes!');
+          })
+          .finally(() => {
+            this.isLoaderShown = false;
+          })
+      } else {
+        this.isLoaderShown = false;
+        this.snackBarService.displayError(`Error: Required field(s) can't be empty!`)
+      }
     }
   }
 }

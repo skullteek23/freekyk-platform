@@ -7,7 +7,8 @@ import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-brac
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { ILockedSlot, IPickupGameSlot } from '@shared/interfaces/game.model';
 import { GroundBasicInfo } from '@shared/interfaces/ground.model';
-import { MatchFixture, ParseMatchProperties, TournamentTypes } from '@shared/interfaces/match.model';
+import { IMatchRequest, MatchFixture, ParseMatchProperties, TournamentTypes } from '@shared/interfaces/match.model';
+import { NotificationBasic } from '@shared/interfaces/notification.model';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { LeagueTableModel, ListOption } from '@shared/interfaces/others.model';
 import { ICompletedActivity, IPoint, IPointsLog, IRedeemedReward, IReward } from '@shared/interfaces/reward.model';
@@ -15,7 +16,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, manipulateRewardsData, manipulatePointsData, parseCompletedActivities } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -366,6 +367,13 @@ export class ApiGetService {
       .pipe(parsePickupSlotDataListener);
   }
 
+  getUserNotifications(userID: string): Observable<NotificationBasic[]> {
+    if (userID) {
+      return this.angularFirestore.collection('notifications', query => query.where('receiverID', '==', userID)).get()
+        .pipe(parseNotificationsData)
+    }
+  }
+
   getUserTickets(userID: string): Observable<ISupportTicket[]> {
     return this.angularFirestore.collection('tickets', query => query.where('byUID', '==', userID)).get()
       .pipe(parseTicketData)
@@ -394,12 +402,12 @@ export class ApiGetService {
 
   addUserPointsListener(uid: string) {
     return this.angularFirestore.collection('points').doc(uid).valueChanges()
-      .pipe(manipulatePointsData)
+      .pipe(parsePointsData)
   }
 
   getRewards(): Observable<IReward[]> {
     return this.angularFirestore.collection('rewards').get()
-      .pipe(manipulateRewardsData)
+      .pipe(parseRewardsData)
 
   }
 }
@@ -474,11 +482,12 @@ export class ApiPostService {
     }
   }
 
-  addPlayer(data: Partial<IPlayer>, image: File): Promise<any> {
+  addPlayer(data: Partial<IPlayer>): Promise<any> {
     const user = this.authService.getUser();
-    if (!data || !user || !image) {
-      return;
+    if (!data || !user) {
+      return Promise.reject();
     }
+
     const allPromises = [];
     allPromises.push(this.angularFirestore.collection('players').doc(user.uid).set(data));
     allPromises.push(this.updateProfile({ displayName: data.name, photoURL: data.imgpath }, user));
@@ -519,5 +528,17 @@ export class ApiPostService {
 
   saveRedeemedReward(doc: IRedeemedReward): Promise<any> {
     return this.angularFirestore.collection('redeemedRewards').add(doc);
+  }
+
+  updateNotification(docID: string, doc: Partial<NotificationBasic>): Promise<any> {
+    return this.angularFirestore.collection('notifications').doc(docID).update({ ...doc });
+  }
+
+  addNotification(doc: Partial<NotificationBasic>): Promise<any> {
+    return this.angularFirestore.collection('notifications').add(doc);
+  }
+
+  addMatchRequest(doc: IMatchRequest): Promise<any> {
+    return this.angularFirestore.collection('matchRequests').add(doc);
   }
 }

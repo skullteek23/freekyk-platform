@@ -36,6 +36,9 @@ import { OrderComponent } from './components/order/order.component';
 import { SelectQuantityComponent } from './components/select-quantity/select-quantity.component';
 import { RewardEarnDialogComponent } from './components/reward-earn-dialog/reward-earn-dialog.component';
 import { RewardsGetStartedDialogComponent } from './components/rewards-get-started-dialog/rewards-get-started-dialog.component';
+import { MyNotificationsComponent } from './components/my-notifications/my-notifications.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { ProfileComponent } from './components/profile/profile.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -67,6 +70,9 @@ import { RewardsGetStartedDialogComponent } from './components/rewards-get-start
     SelectQuantityComponent,
     RewardEarnDialogComponent,
     RewardsGetStartedDialogComponent,
+    MyNotificationsComponent,
+    EditProfileComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

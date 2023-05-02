@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/Constants/REGEX';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-signup',
@@ -28,6 +29,8 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private apiPostService: ApiPostService,
+    private apiGetService: ApiGetService
   ) { }
 
   ngOnInit(): void {
@@ -112,6 +115,7 @@ export class SignupComponent implements OnInit {
       }
       this.otpConfirmation.confirm(otp)
         .then((user) => {
+          this.apiPostService.setupEmptyPoints(user.user.uid, { points: 0 });
           this.errorMessage = '';
           this.postSignup(user);
         })

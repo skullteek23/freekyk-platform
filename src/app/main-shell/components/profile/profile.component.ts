@@ -1,18 +1,19 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, } from '@angular/forms';
-import { positionGroup } from '@shared/interfaces/others.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/Constants/REGEX';
+import { ProfileConstants, PLAYING_POSITIONS } from '@shared/constants/constants';
+import { positionGroup } from '@shared/interfaces/others.model';
 import { LocationService } from '@shared/services/location-cities.service';
-import { PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
-import { PlayerAllInfo } from '@shared/utils/pipe-functions';
 import { CustomValidators } from '@shared/utils/custom-functions';
+import { PlayerAllInfo } from '@shared/utils/pipe-functions';
 import { Subject } from 'rxjs';
+
 @Component({
-  selector: 'app-acc-profile',
-  templateUrl: './acc-profile.component.html',
-  styleUrls: ['./acc-profile.component.scss'],
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-export class AccProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit {
 
   readonly BIO_MAX_LIMIT = ProfileConstants.BIO_MAX_LIMIT;
   readonly positions: positionGroup[] = PLAYING_POSITIONS;
@@ -37,7 +38,6 @@ export class AccProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getCountries();
     if (!this.infoForm) {
       this.initForm(null);
     }
@@ -56,7 +56,7 @@ export class AccProfileComponent implements OnInit {
         Validators.min(1), Validators.max(99), Validators.pattern(RegexPatterns.num)
       ]),
       location: new FormGroup({
-        locCountry: new FormControl(value?.locCountry || null),
+        // locCountry: new FormControl('India'),
         locState: new FormControl(value?.locState || null),
         locCity: new FormControl(value?.locCity || null),
       }),
@@ -67,22 +67,10 @@ export class AccProfileComponent implements OnInit {
       ]),
     });
 
-    if (value?.locCountry) {
-      this.onSelectCountry(value?.locCountry);
-    }
+    this.onSelectCountry('India');
     if (value?.locState) {
       this.onSelectState(value?.locState);
     }
-  }
-
-  getCountries() {
-    this.showLoader();
-    this.locationService.getCountry().subscribe(response => {
-      if (response) {
-        this.countries = response;
-      }
-      this.hideLoader();
-    });
   }
 
   onSelectCountry(country: string): void {

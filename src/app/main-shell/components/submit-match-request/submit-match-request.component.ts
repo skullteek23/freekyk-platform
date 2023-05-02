@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { AuthService, authUserMain } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { IMatchRequest } from '@shared/interfaces/match.model';
+import { RewardableActivities } from '@shared/interfaces/reward.model';
+import { ApiPostService } from '@shared/services/api.service';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
 
@@ -20,20 +23,30 @@ export class SubmitMatchRequestComponent implements OnInit {
   requestForm: FormGroup;
   showError = false;
   showCompletion = false;
+  user: authUserMain = null;
   countries$: Observable<string[]>;
   cities$: Observable<string[]>;
   states$: Observable<string[]>;
 
   constructor(
     public dialogRef: MatDialogRef<SubmitMatchRequestComponent>,
-    private ngFire: AngularFirestore,
     private snackbarService: SnackbarService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private generateRewardService: GenerateRewardService,
+    private authService: AuthService,
+    private apiPostService: ApiPostService
   ) { }
 
   ngOnInit(): void {
-    this.initForm();
-    this.getCountries();
+    this.authService.isLoggedIn().subscribe({
+      next: (user) => {
+        if (user) {
+          this.user = user;
+        }
+        this.initForm();
+        this.getCountries();
+      }
+    })
   }
 
   initForm() {
@@ -47,8 +60,8 @@ export class SubmitMatchRequestComponent implements OnInit {
       }),
       ground: new FormControl(null, [Validators.required]),
       budget: new FormControl(null, [Validators.required]),
-      contactNo: new FormControl(null, [Validators.required]),
-      name: new FormControl(null, [Validators.required]),
+      contactNo: new FormControl(this.user.phoneNumber, [Validators.required]),
+      name: new FormControl(this.user.displayName, [Validators.required]),
     })
   }
 
@@ -85,7 +98,7 @@ export class SubmitMatchRequestComponent implements OnInit {
       return;
     }
     const request: IMatchRequest = {
-      matches: this.requestForm.value.matches.trim(),
+      matches: this.requestForm.value.matches?.trim(),
       perTeamPlayers: this.requestForm.value.perTeamPlayers.trim(),
       location: {
         country: this.requestForm.value.location.country,
@@ -94,19 +107,23 @@ export class SubmitMatchRequestComponent implements OnInit {
       },
       ground: this.requestForm.value.ground.trim(),
       budget: this.requestForm.value.budget.trim(),
-      contactNo: this.requestForm.value.contactNo,
+      contactNo: Number(this.requestForm.value.contactNo),
       name: this.requestForm.value.name.trim(),
       date: new Date().getTime()
     }
-    this.ngFire.collection('matchRequests').add(request)
+    this.apiPostService.addMatchRequest(request)
       .then(() => {
         this.showCompletion = true;
         this.requestForm?.reset();
+        const uid = this.authService.getUser()?.uid;
+        if (uid) {
+          this.generateRewardService.completeActivity(RewardableActivities.requestMatch, uid);
+        }
       })
       .catch((response) => this.snackbarService.displayError())
   }
 
   get isSubmitDisabled(): boolean {
-    return this.requestForm?.invalid;
+    return this.requestForm?.invalid || this.showCompletion;
   }
 }

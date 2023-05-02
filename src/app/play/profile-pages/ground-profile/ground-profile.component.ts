@@ -11,7 +11,7 @@ import {
 } from '@shared/interfaces/ground.model';
 import { SocialShareService } from '@app/services/social-share.service';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
-import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-match-request/submit-match-request.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GroundAllInfo } from '@shared/utils/pipe-functions';
 import { ApiGetService } from '@shared/services/api.service';

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-match-request/submit-match-request.component';
 import { MatchFixture, ParseMatchProperties } from '@shared/interfaces/match.model';
 
 @Component({

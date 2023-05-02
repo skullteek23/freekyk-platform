@@ -15,6 +15,7 @@ import { ICommunicationDialogData, UserQuestionsCommunicationComponent } from '@
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@app/services/auth.service';
 import { ApiPostService } from '@shared/services/api.service';
+import { SupportTicketService } from './support-ticket.service';
 
 @Component({
   selector: 'app-support',
@@ -36,7 +37,8 @@ export class SupportComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
-    private apiPostService: ApiPostService
+    private apiPostService: ApiPostService,
+    private supportService: SupportTicketService
   ) { }
 
   ngOnInit(): void {
@@ -97,6 +99,7 @@ export class SupportComponent implements OnInit {
           })
           .finally(() => {
             this.isLoaderShown = false;
+            this.supportService.updateList();
           })
       }
     })

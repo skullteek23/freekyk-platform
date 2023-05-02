@@ -16,6 +16,9 @@ import { ILockedSlot, IPickupGameSlot } from "@shared/interfaces/game.model";
 import { ISupportTicket } from "@shared/interfaces/ticket.model";
 import { DocumentChangeAction } from "@angular/fire/firestore";
 import { ICompletedActivity, IPoint, IReward } from "@shared/interfaces/reward.model";
+import { NotificationBasic } from "@shared/interfaces/notification.model";
+import { createKnockoutData } from "./custom-functions";
+import { NotificationTypes } from "@shared/interfaces/notification.model";
 
 // export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
@@ -378,6 +381,13 @@ export function parseTicketData(source: Observable<ngFireDocQuery>): Observable<
   );
 }
 
+export function parseNotificationsData(source: Observable<ngFireDocQuery>): Observable<NotificationBasic[]> {
+  return source.pipe(
+    map((resp) => resp.empty ? [] : resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as NotificationBasic), } as NotificationBasic))),
+    map((resp: NotificationBasic[]) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
+  );
+}
+
 export function parseResultData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     parseMatchData,
@@ -452,97 +462,10 @@ export function parseCompletedActivities(source: Observable<ngFireDocQuery>): Ob
   return source.pipe(map((resp) => resp?.empty ? [] : resp.docs.map(doc => ({ id: doc.id, ...doc.data() as ICompletedActivity }))));
 }
 
-export function manipulatePointsData(source: Observable<IPoint>): Observable<IPoint> {
+export function parsePointsData(source: Observable<IPoint>): Observable<IPoint> {
   return source.pipe(map((resp) => resp ? (resp as IPoint) : null));
 }
 
-export function manipulateRewardsData(source: Observable<ngFireDocQuery>): Observable<IReward[]> {
+export function parseRewardsData(source: Observable<ngFireDocQuery>): Observable<IReward[]> {
   return source.pipe(map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IReward })) : []));
-}
-
-
-function getFeesAfterDiscount(fees: number, discount: number): number {
-  if (fees === 0) {
-    return 0;
-  }
-  return (fees - ((discount / 100) * fees));
-}
-
-function createKnockoutData(matches: MatchFixture[]): IKnockoutData {
-  if (matches?.length) {
-    const round2matches = matches.filter(el => el.fkcRound === 2);
-    const round4matches = matches.filter(el => el.fkcRound === 4);
-    const round8matches = matches.filter(el => el.fkcRound === 8);
-    const round16matches = matches.filter(el => el.fkcRound === 16);
-
-    const data: Partial<IKnockoutData> = {};
-    data.match = round2matches[0];
-    if (round4matches.length) {
-      data.next = [
-        {
-          match: round4matches[0]
-        },
-        {
-          match: round4matches[1]
-        },
-      ]
-    }
-
-    if (round8matches.length) {
-      data.next[0].next = [
-        {
-          match: round8matches[0]
-        },
-        {
-          match: round8matches[1]
-        },
-      ]
-      data.next[1].next = [
-        {
-          match: round8matches[2]
-        },
-        {
-          match: round8matches[3]
-        },
-      ]
-    }
-
-    if (round16matches.length) {
-      data.next[0].next[0].next = [
-        {
-          match: round16matches[0]
-        },
-        {
-          match: round16matches[1]
-        },
-      ]
-      data.next[1].next[0].next = [
-        {
-          match: round16matches[2]
-        },
-        {
-          match: round16matches[3]
-        }
-      ]
-      data.next[0].next[1].next = [
-        {
-          match: round16matches[4]
-        },
-        {
-          match: round16matches[5]
-        }
-      ]
-      data.next[1].next[1].next = [
-        {
-          match: round16matches[6]
-        },
-        {
-          match: round16matches[7]
-        }
-      ]
-    }
-
-    return data as IKnockoutData;
-  }
-  return null;
 }

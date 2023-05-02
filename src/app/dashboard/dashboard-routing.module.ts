@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
-import { DashAccountComponent } from './dash-account/dash-account.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
 import { DashParticipateComponent } from './dash-participate/dash-participate.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
@@ -20,10 +19,6 @@ const routes: Routes = [
       { path: 'team-management', component: DashTeamManagComponent },
       { path: 'participate', component: DashParticipateComponent },
       { path: 'participate/:season', component: DashParticipateComponent },
-      {
-        path: 'account',
-        component: DashAccountComponent,
-      },
       { path: 'error', component: ErrorComponent },
     ],
   },

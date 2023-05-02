@@ -1,17 +1,15 @@
 import { NgModule } from '@angular/core';
-import { canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { Routes, RouterModule } from '@angular/router';
 import { OnboardingGuard } from './auth/onboarding.guard';
 import { SignupGuardGuard } from './auth/signup-guard.guard';
 import { SignupComponent } from './auth/signup/signup.component';
-import { DashAccountComponent } from './dashboard/dash-account/dash-account.component';
 import { MyMatchesComponent } from './dashboard/dash-home/my-matches/my-matches.component';
 import { DashTeamManagComponent } from './dashboard/dash-team-manag/dash-team-manag.component';
 import { ErrorComponent } from './error/error.component';
 import { ChallengesComponent } from './main-shell/components/challenges/challenges.component';
 import { CreateInstantMatchComponent } from './main-shell/components/create-instant-match/create-instant-match.component';
 import { CreateTeamDialogComponent } from './main-shell/components/create-team-dialog/create-team-dialog.component';
-import { FindGroundsComponent } from './main-shell/components/find-grounds/find-grounds.component';
 import { FindPlayersComponent } from './main-shell/components/find-players/find-players.component';
 import { GetTeamComponent } from './main-shell/components/get-team/get-team.component';
 import { HomeComponent } from './main-shell/components/home/home.component';
@@ -28,7 +26,7 @@ import { SeasonProfileComponent } from './play/profile-pages/season-profile/seas
 import { TeamProfileComponent } from './play/profile-pages/team-profile/team-profile.component';
 import { JoinTeamDialogComponent } from './main-shell/components/join-team-dialog/join-team-dialog.component';
 import { OnboardUserGuard } from './auth/onboard-user.guard';
-import { MyNotificationsComponent } from './dashboard/dash-home/my-notifications/my-notifications.component';
+import { MyNotificationsComponent } from './main-shell/components/my-notifications/my-notifications.component';
 import { PickupGameProfileComponent } from './main-shell/components/pickup-game-profile/pickup-game-profile.component';
 import { PlStandingsComponent } from './play/pl-standings/pl-standings.component';
 import { PlGroundsComponent } from './play/pl-grounds/pl-grounds.component';
@@ -36,7 +34,10 @@ import { MyOrdersComponent } from './main-shell/components/my-orders/my-orders.c
 import { MyAccountComponent } from './main-shell/components/my-account/my-account.component';
 import { MyAddressesComponent } from './main-shell/components/my-addresses/my-addresses.component';
 import { OrderComponent } from './main-shell/components/order/order.component';
+import { EditProfileComponent } from './main-shell/components/edit-profile/edit-profile.component';
+
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
+
 const routes: Routes = [
   { path: 'home', pathMatch: 'full', redirectTo: '' },
   { path: 'app', pathMatch: 'full', redirectTo: '' },
@@ -92,7 +93,7 @@ const routes: Routes = [
   },
 
   { path: 'account', component: MyAccountComponent, ...canActivate(redirectUnauthorizedGuard) },
-  { path: 'edit-profile', component: DashAccountComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'edit-profile', component: EditProfileComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'notifications', component: MyNotificationsComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
@@ -8,6 +8,7 @@ import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IUserChat } from '@shared/interfaces/team.model';
 import { TeamChatThreadComponent } from '@shared/dialogs/team-chat-thread/team-chat-thread.component';
+import { SupportTicketService } from '../support-ticket.service';
 
 @Component({
   selector: 'app-acc-tickets',
@@ -23,45 +24,69 @@ export class AccTicketsComponent implements OnInit {
   tickets: ISupportTicket[] = [];
   isLoaderShown = false;
   isLogged = false;
+  userID: string = null;
+
+  @Input() set refreshList(value: boolean) {
+    if (value) {
+      this.getTickets();
+    }
+  }
 
   constructor(
     private snackBarService: SnackbarService,
     private authService: AuthService,
     private apiService: ApiGetService,
     private dialog: MatDialog,
-    private apiPostService: ApiPostService
+    private apiPostService: ApiPostService,
+    private supportService: SupportTicketService
   ) { }
 
   ngOnInit(): void {
-    this.getTickets();
+    this.initTickets();
+    this.initListener();
   }
 
-  getTickets(): void {
-    this.showLoader();
+  initTickets(): void {
     this.authService.isLoggedIn().subscribe({
       next: user => {
         this.isLogged = user && user.hasOwnProperty('uid');
         if (user) {
-          this.showLoader();
-          this.apiService.getUserTickets(user.uid)
-            .subscribe({
-              next: (response) => {
-                if (response) {
-                  this.tickets = response;
-                }
-                this.hideLoader();
-              },
-              error: () => {
-                this.snackBarService.displayError('Unable to get tickets.');
-                this.hideLoader();
-              }
-            })
+          this.userID = user.uid;
+          this.getTickets();
         } else {
-          this.hideLoader();
           this.tickets = [];
         }
       }
     });
+  }
+
+  initListener() {
+    this.supportService._onListChange().subscribe({
+      next: (response) => {
+        if (response) {
+          this.getTickets();
+        }
+      }
+    })
+  }
+
+  getTickets() {
+    if (this.userID) {
+      this.showLoader();
+      this.apiService.getUserTickets(this.userID)
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.tickets = response;
+            }
+            this.hideLoader();
+          },
+          error: () => {
+            this.snackBarService.displayError('Error: Unable to get tickets!');
+            this.hideLoader();
+          }
+        });
+    }
   }
 
   // openTicketForm() {

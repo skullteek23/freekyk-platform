@@ -14,7 +14,7 @@ import { ArraySorting } from '@shared/utils/array-sorting';
 import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-match-request/submit-match-request.component';
 import { AuthService } from '@app/services/auth.service';
 import { RewardsGetStartedDialogComponent } from '@app/main-shell/components/rewards-get-started-dialog/rewards-get-started-dialog.component';
 import { ApiGetService } from '@shared/services/api.service';
@@ -67,11 +67,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       next: (user) => {
         if (user) {
           this.isLogged = true;
-          this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
-            map((resp) => (!!resp ? resp : null)),
-            map((resp) => (resp > 5 ? '5+' : resp)),
-            share()
-          );
+          // this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
+          //   map((resp) => (!!resp ? resp : null)),
+          //   map((resp) => (resp > 5 ? '5+' : resp)),
+          //   share()
+          // );
           this.mobileLinks = MOBILE_LINKS.slice();
           this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'My Account')]?.subLinks?.push({ name: 'Logout', isLogout: true, icon: 'logout' });
           // this.mobileLinks[this.mobileLinks.findIndex(el => el.name === 'More')].subLinks.push({ name: 'Logout', isLogout: true, icon: 'logout' });

@@ -9,34 +9,36 @@
 </div>
 
 <section fxLayout="column" fxLayoutGap="12px">
-  <app-acc-profile (loader)="isLoaderShown = $event" [data]="player" *ngIf="player"></app-acc-profile>
-  <span class="mat-caption align">
+  <app-profile (loader)="isLoaderShown = $event" [data]="player" *ngIf="player"></app-profile>
+
+  <!-- <span class="mat-caption align">
     (For security reasons, changing your email or password requires you to
     re-login to your account)
-  </span>
+  </span> -->
 
   <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="12px">
-    <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('password')" mat-stroked-button
+    <mat-divider></mat-divider>
+    <!-- <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('password')" mat-stroked-button
       color="primary">
       <span class="material-icons-round external-icon">password</span>
       Change password
-    </button>
-    <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('email')" mat-stroked-button
+    </button> -->
+    <!-- <button class="link-button" fxFlex="100%" disabled (click)="onChangeCredentials('email')" mat-stroked-button
       color="primary">
       <span class="material-icons-round external-icon">email</span>
       Change email
-    </button>
+    </button> -->
     <button class="link-button" routerLink="/support/tickets" fxFlex="100%" mat-stroked-button color="primary">
       <span class="material-icons-round external-icon">help</span>
       Need help? Contact us!
     </button>
-    <a (click)="onDeactivateAccount()" class="mat-caption" disabled mat-button color="warn">
+    <a (click)="onDeactivateAccount()" class="mat-caption" mat-button color="warn">
       Deactivate Account
     </a>
   </div>
 </section>
 <div class="buttons-container" fxLayout="column" fxLayoutGap="12px"
-  *ngIf="accProfileComponent?.infoForm?.dirty && accProfileComponent?.infoForm?.valid">
+  *ngIf="profileComponent?.infoForm?.dirty && profileComponent?.infoForm?.valid">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="saveChanges(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <span class="material-icons-round external-icon">save</span>

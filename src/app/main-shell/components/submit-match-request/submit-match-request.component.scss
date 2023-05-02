@@ -1,0 +1,11 @@
+mat-form-field,
+form {
+  width: 100%;
+}
+
+.container-2 {
+  height: calc(100vh - 104px) !important;
+  min-height: calc(100vh - 104px) !important;
+  max-height: calc(100vh - 104px) !important;
+  overflow-y: auto;
+}

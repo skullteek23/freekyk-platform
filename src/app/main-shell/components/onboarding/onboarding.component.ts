@@ -57,8 +57,8 @@ export class OnboardingComponent implements OnInit {
     this.nameDetailsForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaWithSpace)]),
       imgpath: new FormControl(null, Validators.required),
-      gender: new FormControl('M', Validators.required),
-      born: new FormControl(null, Validators.required, CustomValidators.minSignupAge.bind(this)),
+      gender: new FormControl(null, Validators.required),
+      born: new FormControl(null, [Validators.required, CustomValidators.minSignupAge.bind(this)]),
     });
     this.locationForm = new FormGroup({
       city: new FormControl(null, Validators.required),
@@ -106,60 +106,62 @@ export class OnboardingComponent implements OnInit {
   }
 
   async submit(stepper: MatVerticalStepper): Promise<any> {
-    if (this.locationForm.valid && this.nameDetailsForm.valid) {
-      const uid = this.authService.getUser().uid;
-      this.isLoaderShown = true;
-      const path = ImageUploadPaths.profilePhoto + `${uid}`;
-      const url = await this.storageApiService.getPublicUrl(this.nameDetailsForm.value.imgpath, path);
-      if (url && uid) {
-        const playerInfo: Partial<IPlayer> = {
-          name: this.nameDetailsForm.value.name,
-          teamID: null,
-          imgpath: url,
-          isCaptain: false,
-          locCity: this.locationForm.value.city,
-          locState: this.locationForm.value.state,
-          locCountry: 'India',
-          gender: this.nameDetailsForm.value.gender,
-          position: this.locationForm.value.position,
-          born: new Date(this.nameDetailsForm.value.born).getTime(),
-        };
-        const allPromises = [];
-        allPromises.push(this.apiPostService.setupEmptyPoints(uid, { points: 0 }));
-        allPromises.push(this.apiPostService.addPlayer(playerInfo, this.nameDetailsForm.value.imgpath));
-        const snapshotSuccess = await Promise.all(allPromises);
-        if (snapshotSuccess) {
-          this.authService.updatePhoto(url);
-          this.snackBarService.displayCustomMsg('Profile updated successfully!');
-          this.isLoaderShown = false;
-          stepper.next();
-        }
-        this.isLoaderShown = false;
-      }
-      this.isLoaderShown = false;
+    const uid = this.authService.getUser().uid;
+    if (this.locationForm.invalid || this.nameDetailsForm.invalid || !uid || !this.imgpath.value) {
+      this.snackBarService.displayError('Error: Invalid details!');
+      return;
     }
+    const path = ImageUploadPaths.profilePhoto + `${uid}`;
+    this.isLoaderShown = true;
+    const url = await this.storageApiService.getPublicUrl(this.imgpath.value, path);
+    if (!url) {
+      this.isLoaderShown = false;
+      this.snackBarService.displayError('Error: Photo upload failed!');
+      return;
+    }
+    const playerInfo: Partial<IPlayer> = {
+      name: this.nameDetailsForm.value.name,
+      teamID: null,
+      imgpath: url,
+      isCaptain: false,
+      locCity: this.locationForm.value.city,
+      locState: this.locationForm.value.state,
+      locCountry: 'India',
+      gender: this.nameDetailsForm.value.gender,
+      position: this.locationForm.value.position,
+      born: new Date(this.nameDetailsForm.value.born).getTime(),
+    };
+    const snapshot = await this.apiPostService.addPlayer(playerInfo);
+    if (!snapshot) {
+      this.snackBarService.displayError('Error: Profile update failed!');
+      this.isLoaderShown = false;
+      return;
+    }
+    this.authService.updatePhoto(url);
+    this.snackBarService.displayCustomMsg('Profile updated successfully!');
+    this.isLoaderShown = false;
+    stepper.next();
   }
 
-  async navigateOut() {
+  navigateOut() {
     const uid = this.authService.getUser().uid;
     if (uid) {
       this.generateRewardService.addActivityPoints(RewardableActivities.onboarding, uid);
     }
     const queryParams = this.route.snapshot.queryParams;
-    this.callbackUrl = queryParams.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/';
+    this.callbackUrl = queryParams?.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/';
     this.router.navigate([this.callbackUrl]);
   }
 
-  get imgpath() {
+  get imgpath(): AbstractControl {
     return this.nameDetailsForm.get('imgpath');
   }
 
-  get city() {
-
+  get city(): FormControl {
     return this.locationForm.controls['city'] as FormControl;
   }
 
-  get state() {
+  get state(): FormControl {
     return this.locationForm.controls['state'] as FormControl;
   }
 }

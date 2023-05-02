@@ -1,0 +1,33 @@
+mat-list {
+  overflow-y: auto;
+  height: calc(100vh - 152px);
+  padding: 0 12px;
+
+  mat-list-item:nth-child(1) {
+    margin-top: 12px;
+  }
+
+  mat-list-item {
+    height: 80px;
+    width: 100%;
+    margin-bottom: 12px;
+    border-radius: var(--borderRadiusCard);
+    padding: 8px 12px;
+    background-color: white;
+  }
+
+  @media screen and (max-width: 600px) {
+    .limit-width {
+      max-width: 200px;
+      width: 200px;
+    }
+
+    .time-width {
+      width: 75px;
+    }
+
+    .no-left {
+      margin-left: 0 !important;
+    }
+  }
+}

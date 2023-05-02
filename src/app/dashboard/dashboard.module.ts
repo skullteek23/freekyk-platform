@@ -4,10 +4,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashHomeComponent } from './dash-home/dash-home.component';
 import { DashTeamManagComponent } from './dash-team-manag/dash-team-manag.component';
-import { DashAccountComponent } from './dash-account/dash-account.component';
 import { DashFooterComponent } from './dash-footer/dash-footer.component';
 import { DashParticipateComponent } from './dash-participate/dash-participate.component';
-import { AccProfileComponent } from './dash-account/acc-profile/acc-profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DaTeJoinRequestsComponent } from './dash-team-manag/da-te-members/da-te-join-requests/da-te-join-requests.component';
 import { DaTeMembersComponent } from './dash-team-manag/da-te-members/da-te-members.component';
@@ -37,26 +35,23 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DeactivateProfileRequestComponent } from '../dashboard/dialogs/deactivate-profile-request/deactivate-profile-request.component';
 import { UploadTeamPhotoComponent } from './dialogs/upload-team-photo/upload-team-photo.component';
 import { JoinTeamRequestDialogComponent } from './dialogs/join-team-request-dialog/join-team-request-dialog.component';
-import { UpcomingMatchComponent } from './dash-home/upcoming-match/upcoming-match.component';
 import { MyMatchesComponent } from './dash-home/my-matches/my-matches.component';
 
 import { MyTeamMenuComponent } from './dash-home/my-team-menu/my-team-menu.component';
-import { MyNotificationsComponent } from './dash-home/my-notifications/my-notifications.component';
 import { TeamMembersComponent } from './dash-team-manag/team-members/team-members.component';
 import { ManageMembersComponent } from './dialogs/manage-members/manage-members.component';
 import { InvitedPlayersListComponent } from './dash-team-manag/invited-players-list/invited-players-list.component';
 import { TeamCommunicationComponent } from './dash-team-manag/team-communication/team-communication.component';
 import { PendingPaymentComponent } from './dash-home/pending-payment/pending-payment.component';
+import { UpcomingMatchComponent } from './dash-home/upcoming-match/upcoming-match.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     DashHomeComponent,
     DashTeamManagComponent,
-    DashAccountComponent,
     DashFooterComponent,
     DashParticipateComponent,
-    AccProfileComponent,
     DaTeJoinRequestsComponent,
     DaTeMembersComponent,
     DaTeGalleryComponent,
@@ -79,7 +74,6 @@ import { PendingPaymentComponent } from './dash-home/pending-payment/pending-pay
     UpcomingMatchComponent,
     MyMatchesComponent,
     MyTeamMenuComponent,
-    MyNotificationsComponent,
     TeamMembersComponent,
     ManageMembersComponent,
     InvitedPlayersListComponent,

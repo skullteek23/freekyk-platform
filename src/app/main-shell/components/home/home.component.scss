@@ -31,3 +31,8 @@ section {
     }
   }
 }
+
+.content-container {
+  height: calc(100vh - 115px);
+  overflow-y: auto;
+}

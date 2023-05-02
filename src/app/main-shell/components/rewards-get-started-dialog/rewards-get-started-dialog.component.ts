@@ -89,7 +89,7 @@ export class RewardsGetStartedDialogComponent implements OnInit {
   }
 
   signup() {
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/signup'], { queryParams: { callback: encodeURIComponent('/rewards') } });
     this.onCloseDialog();
   }
 

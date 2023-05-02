@@ -14,6 +14,7 @@ import { TeamService } from '@app/services/team.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { AuthService } from '@app/services/auth.service';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 @Component({
   selector: 'app-team-profile',
@@ -44,7 +45,8 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
     private notificationService: NotificationsService,
     private teamService: TeamService,
     private rewardService: GenerateRewardService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -174,6 +176,8 @@ export class TeamProfileComponent implements OnInit, OnDestroy {
         senderName: this.userTeamID,
       };
       this.notificationService.sendNotification(notification)
+        .then(() => this.snackBarService.displayCustomMsg(`${notification.receiverName} will be notified soon!`))
+        .catch(() => this.snackBarService.displayError('Notification send failed!'))
         .finally(() => this.isLoaderShown = false);
     }
   }

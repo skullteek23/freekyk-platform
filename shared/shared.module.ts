@@ -84,7 +84,7 @@ import { StandingsTabsComponent } from './components/standings-tabs/standings-ta
 import { KnockoutBracketComponent } from './components/knockout-bracket/knockout-bracket.component';
 import { MyStatsCardComponent } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
-import { SubmitMatchRequestComponent } from '@app/shared/dialogs/submit-match-request/submit-match-request.component';
+import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-match-request/submit-match-request.component';
 
 const customConfig: ShareButtonsConfig = environment.socialShare;
 

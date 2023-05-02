@@ -22,6 +22,7 @@ export class MyAccountComponent implements OnInit {
     { viewValue: 'Notifications', value: '/notifications' },
     { viewValue: 'Addresses', value: '/addresses' },
   ];
+  isLoaderShown = false;
 
   constructor(
     private authService: AuthService,
@@ -38,6 +39,7 @@ export class MyAccountComponent implements OnInit {
       .subscribe({
         next: user => {
           if (user) {
+            this.showLoader();
             this.apiService.getPlayerAllInfo(user.uid)
               .subscribe({
                 next: (response) => {
@@ -46,6 +48,10 @@ export class MyAccountComponent implements OnInit {
                   }
                   this.parseStats();
                   this.parseProfileDetails();
+                  this.hideLoader();
+                },
+                error: () => {
+                  this.hideLoader();
                 }
               })
           }
@@ -123,5 +129,13 @@ export class MyAccountComponent implements OnInit {
     } else {
       return `${city}, ${state}`;
     }
+  }
+
+  showLoader() {
+    this.isLoaderShown = true;
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false;
   }
 }

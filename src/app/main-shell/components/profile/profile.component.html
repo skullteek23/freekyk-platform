@@ -7,14 +7,14 @@
 
   <form [formGroup]="infoForm" *ngIf="infoForm" fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutGap.gt-sm="20px">
     <div class="names" fxLayout="row" fxLayoutGap="20px">
-      <mat-form-field fxFlex.gt-sm="30%" fxFlex.lt-md="50%" appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" fxFlex.lt-md="50%" color="primary">
         <mat-label>Full Name</mat-label>
         <input type="text" matInput name="name" formControlName="name" />
         <mat-error *ngIf="infoForm.get('name')?.hasError('pattern')">
           Only letters, and spaces are allowed!
         </mat-error>
       </mat-form-field>
-      <mat-form-field fxFlex.gt-sm="30%" fxFlex="auto" appearance="outline" color="primary">
+      <mat-form-field fxFlex.gt-sm="30%" fxFlex="auto appearance=" color="primary">
         <mat-label>Add Nickname</mat-label>
         <input type="text" matInput name="nickname" formControlName="nickname" />
         <mat-error *ngIf="infoForm.get('nickname')?.hasError('pattern')">
@@ -48,7 +48,7 @@
       </mat-radio-group>
     </div>
     <div class="clubbed-fields" fxLayout="row" fxLayoutGap="20px">
-      <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%" appearance="outline" color="primary" floatLabel="always">
+      <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%" color="primary" floatLabel="always">
         <mat-label>Add Playing Position</mat-label>
         <mat-select formControlName="position" placeholder="Select Position">
           <mat-optgroup *ngFor="let group of positions" [label]="group.position">
@@ -59,7 +59,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field fxFlex.gt-sm="33%" fxFlex="auto" appearance="outline" color="primary" floatLabel="always">
+      <mat-form-field fxFlex.gt-sm="33%" fxFlex="auto appearance=" color="primary" floatLabel="always">
         <mat-label>Add Jersey Number</mat-label>
         <input type="tel" matInput name="jerseyNo" formControlName="jerseyNo" placeholder="Add Jersey #" />
         <mat-error *ngIf="infoForm.get('jerseyNo')?.hasError('pattern')">
@@ -69,7 +69,7 @@
     </div>
 
     <!-- <div class="clubbed-fields" fxLayout="row" fxLayoutGap="20px">
-        <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%" appearance="outline" color="primary">
+        <mat-form-field fxFlex.gt-sm="33%" fxFlex.lt-md="50%"   color="primary">
           <mat-label>My Height</mat-label>
           <input type="tel" matInput name="height" formControlName="height" />
 
@@ -79,7 +79,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field fxFlex="auto" appearance="outline" color="primary">
+        <mat-form-field fxFlex="auto"   color="primary">
           <mat-label>My Weight</mat-label>
           <input type="tel" matInput name="weight" formControlName="weight" />
           <mat-error *ngIf="infoForm.get('weight')?.hasError('pattern')">
@@ -90,10 +90,10 @@
       </div> -->
 
     <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px">
-      <div class="dropdown-container" fxFlex.gt-sm="33%" fxFlex.lt-md="100%">
+      <!-- <div class="dropdown-container" fxFlex.gt-sm="33%" fxFlex.lt-md="100%">
         <app-searchable-form-field label="Add Location Country" [list]="countries" [control]="locationCountry"
           (selectionChange)="onSelectCountry($event)"></app-searchable-form-field>
-      </div>
+      </div> -->
 
       <div class="dropdown-container" fxFlex-gt-sm="33%" fxFlex.lt-md="100%" fxLayout="row" fxLayoutGap="20px">
         <app-searchable-form-field fxFlex="50%" label="Add Location State" [list]="states" [control]="locationState"

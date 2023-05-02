@@ -9,7 +9,7 @@ import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { ILockedSlot, IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
@@ -19,7 +19,8 @@ import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-dialog.component';
-import { debounceTime } from 'rxjs/operators';
+import { RewardableActivities } from '@shared/interfaces/reward.model';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 
 
 
@@ -64,7 +65,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private snackBarService: SnackbarService,
     private apiPostService: ApiPostService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private generateRewardService: GenerateRewardService
   ) { }
 
   ngAfterViewInit(): void {
@@ -368,7 +370,6 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         selectedSlots.push(dpSlot.position);
       }
     })
-    console.log(selectedSlots.length, this.lockID)
     if (selectedSlots.length && this.lockID) {
       const data: ILockedSlot = {
         uid,
@@ -400,7 +401,11 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
           next: () => {
             Promise.all(this.getPromises(response))
               .then(() => {
+                const uid = this.authService.getUser()?.uid || null;
                 this.snackBarService.displayCustomMsg('Your slot has been booked!');
+                if (uid) {
+                  this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, uid);
+                }
                 this.openOrder(response['razorpay_order_id']);
                 this.resetFees();
                 this.slotsSubscriptions.unsubscribe();
