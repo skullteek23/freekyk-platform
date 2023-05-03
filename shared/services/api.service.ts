@@ -16,7 +16,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2 } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -403,6 +403,11 @@ export class ApiGetService {
   addUserPointsListener(uid: string) {
     return this.angularFirestore.collection('points').doc(uid).valueChanges()
       .pipe(parsePointsData)
+  }
+
+  getUserPoints(uid: string) {
+    return this.angularFirestore.collection('points').doc(uid).get()
+      .pipe(parsePointsDataV2)
   }
 
   getRewards(): Observable<IReward[]> {

@@ -1071,3 +1071,23 @@ section.features-section {
 .active-link-group {
   border-bottom: 2px solid var(--primaryColor);
 }
+
+.my-rewards-container {
+  app-reward-activity-list {
+    .activity-container {
+      height: calc(100vh - 150px);
+      overflow-y: scroll;
+      padding: 12px;
+    }
+  }
+}
+
+.reward-tab-container {
+  app-reward-activity-list {
+    .activity-container {
+      height: calc(100vh - 299px);
+      overflow-y: scroll;
+      padding: 12px;
+    }
+  }
+}

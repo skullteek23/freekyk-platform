@@ -39,6 +39,7 @@ import { RewardsGetStartedDialogComponent } from './components/rewards-get-start
 import { MyNotificationsComponent } from './components/my-notifications/my-notifications.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { RewardActivityListComponent } from './components/reward-activity-list/reward-activity-list.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -73,6 +74,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     MyNotificationsComponent,
     EditProfileComponent,
     ProfileComponent,
+    RewardActivityListComponent,
   ],
   imports: [
     CommonModule,

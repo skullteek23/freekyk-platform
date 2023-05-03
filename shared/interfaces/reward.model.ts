@@ -16,6 +16,12 @@ export interface IPointsLog {
   entity: string;
 }
 
+export interface ActivityListOption {
+  points: number;
+  description: string;
+  route?: string;
+}
+
 export enum RewardableActivities {
   onboarding = 0,
   openPlayerCard = 1,

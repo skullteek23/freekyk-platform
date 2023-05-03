@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AuthService } from '@app/services/auth.service';
+import { ActivityListOption } from '@shared/interfaces/reward.model';
+import { ApiGetService } from '@shared/services/api.service';
 
 @Component({
   selector: 'app-rewards',
@@ -7,9 +12,43 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RewardsComponent implements OnInit {
 
-  constructor() { }
+  userPoints = 0;
+  isLoaderShown = false;
+  activitiesList: ActivityListOption[] = []
+
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private apiGetService: ApiGetService,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+    this.authService.isLoggedIn().subscribe({
+      next: user => {
+        if (user) {
+          this.getUserPoints(user.uid);
+        }
+      }
+    })
   }
 
+  getUserPoints(uid: string) {
+    this.isLoaderShown = true;
+    this.apiGetService.getUserPoints(uid).subscribe({
+      next: response => {
+        if (response?.points >= 0) {
+          this.userPoints = response.points;
+        }
+        this.isLoaderShown = false;
+      },
+      error: () => {
+        this.isLoaderShown = false;
+      }
+    })
+  }
+
+  openInfo() {
+
+  }
 }

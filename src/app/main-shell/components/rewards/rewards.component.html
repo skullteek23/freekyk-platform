@@ -5,8 +5,27 @@
       Go back
     </span>
   </button>
-  <span class="dash-h5 heading">Rewards</span>
+  <span class="dash-h5 heading">Rewards & Points</span>
 </div>
+
 <section>
-  <app-no-items-message [centerText]="true" customText="Uh-Oh! Rewards are not available"></app-no-items-message>
+  <div class="total-points-container" fxLayoutAlign="space-between center">
+    <div fxLayoutGap="12px" fxLayoutAlign="start center">
+      <span class="mat-body-1">Total Points: </span>
+      <span class="mat-body-1 point"> {{userPoints}} </span>
+    </div>
+    <a (click)="openInfo()" class="mat-caption">How it works?</a>
+  </div>
 </section>
+
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab label="Earn">
+    <div class="reward-tab-container">
+      <app-reward-activity-list></app-reward-activity-list>
+    </div>
+  </mat-tab>
+  <mat-tab label="Redeem"></mat-tab>
+  <mat-tab label="Purchase"></mat-tab>
+</mat-tab-group>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>
