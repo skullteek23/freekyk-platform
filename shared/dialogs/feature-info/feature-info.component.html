@@ -8,10 +8,10 @@
   <div class="dialogData">
     <ng-container *ngIf="data?.multiDescription">
       <div fxLayout="column" fxLayoutGap="8px" *ngFor="let segment of data.multiDescription">
-        <p class="mat-body-1 left">Heading {{ segment.subheading }}</p>
+        <p class="mat-body-2 left">{{ segment.subheading }}</p>
 
         <div class="mat-body-2 left">
-          <p class="mat-body" *ngIf="segment.description" [innerHtml]="segment.description">
+          <p class="mat-body-1" *ngIf="segment.description" [innerHtml]="segment.description">
         </div>
       </div>
     </ng-container>

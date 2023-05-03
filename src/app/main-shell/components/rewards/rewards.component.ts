@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
+import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
 import { ActivityListOption } from '@shared/interfaces/reward.model';
 import { ApiGetService } from '@shared/services/api.service';
+import { FREEKYK_REWARDS_DESCRIPTION } from '@shared/web-content/WEBSITE_CONTENT';
 
 @Component({
   selector: 'app-rewards',
@@ -49,6 +51,18 @@ export class RewardsComponent implements OnInit {
   }
 
   openInfo() {
-
+    const data: IFeatureInfoOptions = {
+      heading: 'How Rewards Work?',
+      multiDescription: [
+        {
+          subheading: 'Freekyk Rewards Program',
+          description: FREEKYK_REWARDS_DESCRIPTION
+        }
+      ]
+    }
+    this.dialog.open(FeatureInfoComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    })
   }
 }

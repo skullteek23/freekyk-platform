@@ -24,7 +24,9 @@
       <app-reward-activity-list></app-reward-activity-list>
     </div>
   </mat-tab>
-  <mat-tab label="Redeem"></mat-tab>
+  <mat-tab label="Redeem">
+    <app-no-items-message [centerText]="true" customText="Uh-Oh! No rewards to redeem."></app-no-items-message>
+  </mat-tab>
   <mat-tab label="Purchase"></mat-tab>
 </mat-tab-group>
 
