@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { logDetails } from '@shared/interfaces/others.model';
 import { SnackbarService } from './snackbar.service';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
 import { Observable, Subject } from 'rxjs';
 import { ApiGetService } from '@shared/services/api.service';

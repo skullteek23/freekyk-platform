@@ -1,7 +1,7 @@
 import { AuthService, authUser, confirmationResult, INDIAN_DIAL_PREFIX } from '@app/services/auth.service';
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 

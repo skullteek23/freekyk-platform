@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
-import { TeamMemberListFilter } from '@shared/Constants/FILTERS';
+import { TeamMemberListFilter } from '@shared/constants/FILTERS';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { FilterData, QueryInfo } from '@shared/interfaces/others.model';
 import { Tmember } from '@shared/interfaces/team.model';

@@ -1,61 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
-import { IOrderNotes, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
+import { ICheckoutOptions, IOrderNotes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { Router } from '@angular/router';
 import { FunctionsApiService } from './functions-api.service';
-import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
-import { SnackbarService } from '@app/services/snackbar.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
-import { ISeason } from '@shared/interfaces/season.model';
 declare let Razorpay: any;
 
-export enum LoadingStatus {
-  default = 0,
-  loading = 1,
-  success = 2,
-  failed = 3,
-}
 
-export interface ICheckoutOptions {
-  key: string;
-  amount: number;
-  currency: string;
-  name: string;
-  order_id: string;
-  handler: () => Promise<any>;
-  description?: string;
-  image?: string;
-  prefill?: {
-    name?: string;
-    email?: string;
-    contact?: string;
-    method?: string;
-  },
-  notes?: Partial<IOrderNotes>;
-  theme?: {
-    hide_topbar?: boolean;
-    color?: string;
-    backdrop_color?: string;
-  };
-  modal?: {
-    backdropclose?: boolean;
-    escape?: boolean;
-    handleback?: boolean;
-    confirm_close?: boolean;
-    ondismiss?: () => {};
-    animation?: boolean;
-  };
-  customer_id?: string;
-  timeout?: number;
-  remember_customer?: boolean;
-  send_sms_hash?: boolean;
-  allow_rotation?: boolean;
-  retry?: {
-    enabled?: boolean;
-  };
-}
+
 
 @Injectable({
   providedIn: 'root',
@@ -114,7 +68,6 @@ export class PaymentService {
   }
 
   updateOrder(response: any) {
-
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.UPDATE_RAZORPAY_ORDER);
     return participateFunc({ response });
   }
@@ -131,8 +84,8 @@ export class PaymentService {
     return this.functionsApiService.generateOrder(data);
   }
 
-  getNewOrder(uid: string, fees: string): Promise<Partial<RazorPayOrder>> {
-    const data = { uid, fees };
+  getNewOrder(uid: string, fees: string, partialAmt?: string): Promise<Partial<RazorPayOrder>> {
+    const data = { uid, fees, partialAmt };
     return this.functionsApiService.generateNewOrder(data);
   }
 

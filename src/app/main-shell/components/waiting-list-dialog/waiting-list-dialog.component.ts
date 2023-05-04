@@ -4,12 +4,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
+import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
-import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
-import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
+import { PaymentService } from '@shared/services/payment.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 
 @Component({

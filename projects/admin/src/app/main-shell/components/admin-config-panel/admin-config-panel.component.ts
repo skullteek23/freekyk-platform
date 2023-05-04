@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { LastParticipationDate } from '@shared/interfaces/season.model';
 

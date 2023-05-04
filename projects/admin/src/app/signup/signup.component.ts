@@ -8,7 +8,7 @@ import { formsMessages } from '@shared/constants/messages';
 import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 import { Observable } from 'rxjs';
 import { AuthService } from '@admin/services/auth.service';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 
 @Component({
   selector: 'app-signup',

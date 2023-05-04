@@ -2,7 +2,7 @@ import { GroundAdminService } from '@admin/main-shell/services/ground-admin.serv
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { YES_OR_NO_OPTIONS } from '@shared/constants/constants';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { IGroundDetails, ownershipTypes, playLevels, turfTypes } from '@shared/interfaces/ground.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { LocationService } from '@shared/services/location-cities.service';

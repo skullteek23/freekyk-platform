@@ -6,7 +6,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { SnackbarService } from '../services/snackbar.service';
 import { heroCallToAction, ListOption } from '@shared/interfaces/others.model';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { SUPPORT_PAGE } from '@shared/web-content/WEBSITE_CONTENT';

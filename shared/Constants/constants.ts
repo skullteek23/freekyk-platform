@@ -56,6 +56,7 @@ export class MatchConstants {
   static readonly SEASON_CANCELLATION_ONT_PERCENTAGE_MODIFIER = 0.8 // 80 %
   static readonly CANCELLATION_FIRST_N_MATCHES = 3;
   static readonly MINIMUM_PAYMENT_AMOUNT = 150;
+  static readonly MINIMUM_POINTS_RECHARGE = 25;
 }
 export const PLAYING_POSITIONS = [
   {

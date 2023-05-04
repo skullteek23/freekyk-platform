@@ -17,15 +17,15 @@ export class GenerateRewardService {
   ) {
   }
 
-  openRewardDialog(points: number, activityID: number): Promise<any> {
+  private openRewardDialog(data: IEarnedRewardDialogData): Promise<any> {
     const dialogRef = this.dialog.open(RewardEarnDialogComponent, {
       disableClose: false,
-      data: { points, activityID } as IEarnedRewardDialogData
+      data
     });
     return dialogRef.afterClosed().toPromise();
   }
 
-  addActivityPoints(activityID: number, uid: string): void {
+  private addActivityPoints(activityID: number, uid: string): void {
     const points = RewardPoints[activityID];
     const update = {
       points: firebase.firestore.FieldValue.increment(points)
@@ -45,7 +45,12 @@ export class GenerateRewardService {
 
     this.apiPostService.setUserPointsForActivity(uid, update, log, completedActivity)
       .then(() => {
-        this.openRewardDialog(points, activityID);
+        const data: IEarnedRewardDialogData = {
+          points,
+          activityID,
+          isAdded: false
+        }
+        this.openRewardDialog(data);
       });
   }
 
@@ -63,7 +68,12 @@ export class GenerateRewardService {
 
     this.apiPostService.setUserPoints(uid, update, log)
       .then(() => {
-        this.openRewardDialog(addCount, null);
+        const data: IEarnedRewardDialogData = {
+          points: addCount,
+          activityID: null,
+          isAdded: false
+        }
+        this.openRewardDialog(data);
       });
   }
 

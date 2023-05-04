@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ILink } from '@shared/Constants/ROUTE_LINKS';
+import { ILink } from '@shared/constants/ROUTE_LINKS';
 
 
 @Component({

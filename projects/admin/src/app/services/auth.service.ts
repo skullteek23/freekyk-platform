@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { Admin, AssignedRoles, FirebaseUser, FirebaseUserCredential } from '@shared/interfaces/admin.model';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';

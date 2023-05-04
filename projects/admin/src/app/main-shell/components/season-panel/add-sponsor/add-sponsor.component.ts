@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstantsSecondary } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { ISeasonPartner } from '@shared/interfaces/season.model';
 

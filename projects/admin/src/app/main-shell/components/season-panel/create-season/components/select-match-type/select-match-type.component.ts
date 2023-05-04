@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { MatchConstants, MATCH_TYPES_PACKAGES } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';

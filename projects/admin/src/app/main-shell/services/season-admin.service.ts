@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
 import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
 import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, ISeason, statusType } from '@shared/interfaces/season.model';

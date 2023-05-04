@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators }
 import { MatDialog } from '@angular/material/dialog';
 import { MatVerticalStepper } from '@angular/material/stepper';
 import { FunctionsApiService } from '@shared/services/functions-api.service';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { RULES } from '@shared/web-content/MATCH-RELATED';

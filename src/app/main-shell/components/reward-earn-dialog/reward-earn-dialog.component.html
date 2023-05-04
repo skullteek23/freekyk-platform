@@ -6,7 +6,7 @@
     <img src="assets/gifs/confetti-reward.gif" alt="Confetti SVG" appFallbackImg class="confetti">
   </div>
   <div fxLayout="column" fxLayoutGap="12px">
-    <span class="mat-body-2 center">
+    <span class="mat-body-2 center" *ngIf="!data.isAdded; else addedPoints">
       Wuhooo! You have earned <br>
       <strong class="mat-subheading-2">
         +{{data.points}} points
@@ -15,6 +15,17 @@
         for {{extendedDesc}}
       </span> 😇
     </span>
+    <ng-template #addedPoints>
+      <span class="mat-body-2 center">
+        Wuhooo! You have added <br>
+        <strong class="mat-subheading-2">
+          +{{data.points}} points
+        </strong><br>
+        <span class="mat-body-2">
+          in your wallet
+        </span> 😇
+      </span>
+    </ng-template>
     <button mat-flat-button color="primary" (click)="claimReward()">
       <span class="material-icons-round left-icon">
         celebration

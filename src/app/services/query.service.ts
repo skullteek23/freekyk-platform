@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { FilterHeadingMap, FilterSymbolMap, FilterValueMap, } from '@shared/Constants/FILTERS';
+import { FilterHeadingMap, FilterSymbolMap, FilterValueMap, } from '@shared/constants/FILTERS';
 import { QueryInfo } from '@shared/interfaces/others.model';
 
 @Injectable({

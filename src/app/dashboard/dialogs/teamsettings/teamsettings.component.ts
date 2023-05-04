@@ -9,7 +9,7 @@ import { LocationService } from '@shared/services/location-cities.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { TeamBasicInfo, TeamMoreInfo, } from '@shared/interfaces/team.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 
 @Component({

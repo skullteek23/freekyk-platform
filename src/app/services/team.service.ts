@@ -14,7 +14,7 @@ import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.compon
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { DashState } from '../dashboard/store/dash.reducer';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { Observable } from 'rxjs';
 import { TeamgalleryComponent } from '@app/dashboard/dialogs/teamgallery/teamgallery.component';
 import { UploadTeamPhotoComponent } from './../dashboard/dialogs/upload-team-photo/upload-team-photo.component';

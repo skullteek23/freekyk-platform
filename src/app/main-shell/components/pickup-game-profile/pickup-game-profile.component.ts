@@ -5,15 +5,15 @@ import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
-import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
+import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { ILockedSlot, IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
-import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
+import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import * as _ from 'lodash';
@@ -398,24 +398,26 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
       this.showLoader();
       this.paymentService.verifyPayment(response)
         .subscribe({
-          next: () => {
-            Promise.all(this.getPromises(response))
-              .then(() => {
-                const uid = this.authService.getUser()?.uid || null;
-                this.snackBarService.displayCustomMsg('Your slot has been booked!');
-                if (uid) {
-                  this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, uid);
-                }
-                this.openOrder(response['razorpay_order_id']);
-                this.resetFees();
-                this.slotsSubscriptions.unsubscribe();
-              })
-              .catch((error) => {
-                this.snackBarService.displayError(error?.message);
-              })
-              .finally(() => {
-                this.dismissDialog();
-              })
+          next: (response) => {
+            if (response) {
+              Promise.all(this.getPromises(response))
+                .then(() => {
+                  const uid = this.authService.getUser()?.uid || null;
+                  this.snackBarService.displayCustomMsg('Your slot has been booked!');
+                  if (uid) {
+                    this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, uid);
+                  }
+                  this.openOrder(response['razorpay_order_id']);
+                  this.resetFees();
+                  this.slotsSubscriptions.unsubscribe();
+                })
+                .catch((error) => {
+                  this.snackBarService.displayError(error?.message);
+                })
+                .finally(() => {
+                  this.dismissDialog();
+                })
+            }
           },
           error: (error) => {
             this.dismissDialog();

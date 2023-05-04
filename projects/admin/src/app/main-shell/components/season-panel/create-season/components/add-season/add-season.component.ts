@@ -1,6 +1,6 @@
 import { Component, OnInit, SecurityContext, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';

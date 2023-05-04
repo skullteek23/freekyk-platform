@@ -6,7 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { CLOUD_FUNCTIONS } from '@shared/Constants/CLOUD_FUNCTIONS';
+import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { TeamBasicInfo } from '@shared/interfaces/team.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';

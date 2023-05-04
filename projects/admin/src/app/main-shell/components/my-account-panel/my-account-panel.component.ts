@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { Admin } from '@shared/interfaces/admin.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';

@@ -1,10 +1,9 @@
 import { environment } from '../../environments/environment';
 import * as functions from 'firebase-functions';
-import { MINIMUM_PAYMENT_AMOUNT } from './utils/utilities';
 
 const Razorpay = require('razorpay');
 
-export async function generateOrder(data: { uid: string, fees: string }, context: any): Promise<any> {
+export async function generateOrder(data: { uid: string, fees: string, partialAmt: string }, context: any): Promise<any> {
   if (!data?.uid || !data?.fees) {
     throw new functions.https.HttpsError('invalid-argument', 'Error Occurred! Please try again');
   }
@@ -12,11 +11,14 @@ export async function generateOrder(data: { uid: string, fees: string }, context
   const fees = data.fees;
   const options: any = {
     currency: 'INR',
-    partial_payment: true,
     amount: Number(fees) * 100, // amount in paise
-    first_payment_min_amount: MINIMUM_PAYMENT_AMOUNT * 100,
     receipt: data.uid
   };
+
+  if (data.hasOwnProperty('partialAmt') && Number(data.partialAmt) > 0) {
+    options['partial_payment'] = true;
+    options['first_payment_min_amount'] = Number(data.partialAmt) * 100;
+  }
 
   const instanceOptions = {
     key_id: environment.razorPay.key_id,

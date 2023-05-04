@@ -471,5 +471,7 @@ export function parsePointsDataV2(source: Observable<ngFireDoc>): Observable<IPo
 }
 
 export function parseRewardsData(source: Observable<ngFireDocQuery>): Observable<IReward[]> {
-  return source.pipe(map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IReward })) : []));
+  return source.pipe(
+    map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IReward })) : []),
+  );
 }

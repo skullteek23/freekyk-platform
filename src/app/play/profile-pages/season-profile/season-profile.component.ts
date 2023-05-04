@@ -14,10 +14,10 @@ import { Subscription } from 'rxjs';
 import { Formatters } from '@shared/interfaces/team.model';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
-import { ICheckoutOptions, PaymentService } from '@shared/services/payment.service';
-import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
+import { PaymentService } from '@shared/services/payment.service';
+import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { AuthService, authUserMain } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',

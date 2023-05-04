@@ -6,7 +6,7 @@ import { GenerateRewardService } from '@app/main-shell/services/generate-reward.
 import { AuthService, authUserMain } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { ImageUploadPaths, PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { positionGroup } from '@shared/interfaces/others.model';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { IPlayer } from '@shared/interfaces/user.model';
@@ -146,7 +146,7 @@ export class OnboardingComponent implements OnInit {
   navigateOut() {
     const uid = this.authService.getUser().uid;
     if (uid) {
-      this.generateRewardService.addActivityPoints(RewardableActivities.onboarding, uid);
+      this.generateRewardService.completeActivity(RewardableActivities.onboarding, uid);
     }
     const queryParams = this.route.snapshot.queryParams;
     this.callbackUrl = queryParams?.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/';

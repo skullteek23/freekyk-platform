@@ -120,7 +120,8 @@ export interface IReward {
   description: string;
   validity: number; // in hours
   rewardFor: IRewardReceiver;
-  id?: string
+  id?: string;
+  progress?: number;
 }
 
 export interface IRedeemedReward {

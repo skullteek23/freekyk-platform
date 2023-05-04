@@ -4,7 +4,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { NotificationsService } from '../services/notifications.service';
-import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/Constants/ROUTE_LINKS';
+import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
 import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
 import { AngularFirestore } from '@angular/fire/firestore';

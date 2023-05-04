@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { SnackbarService } from '@app/services/snackbar.service';
 import { MATCH_ABORT_REASONS, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { IFeatureInfoOptions, FeatureInfoComponent } from '@shared/dialogs/feature-info/feature-info.component';
 import { ICancelData, MatchFixture, MatchStatus } from '@shared/interfaces/match.model';
 import { RULES } from '@shared/web-content/MATCH-RELATED';

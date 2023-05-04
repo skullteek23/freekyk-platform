@@ -18,16 +18,72 @@
   </div>
 </section>
 
-<mat-tab-group mat-stretch-tabs>
+<mat-tab-group mat-stretch-tabs (selectedTabChange)="onChangeTab($event)">
   <mat-tab label="Earn">
     <div class="reward-tab-container">
       <app-reward-activity-list></app-reward-activity-list>
     </div>
   </mat-tab>
   <mat-tab label="Redeem">
-    <app-no-items-message [centerText]="true" customText="Uh-Oh! No rewards to redeem."></app-no-items-message>
+    <app-no-items-message [centerText]="true" *ngIf="!rewardsList.length"
+      customText="Uh-Oh! No rewards to redeem."></app-no-items-message>
+    <mat-list fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+      <mat-list-item *ngFor="let reward of rewardsList" (click)="openReward(reward)">
+        <mat-card class="mat-elevation-z8 dashboard-card">
+          <img mat-card-image [src]="reward.imgpath" [alt]="reward.name" appFallbackImg>
+          <mat-card-content>
+            <span class="mat-body-2">
+              {{reward.name}}
+            </span>
+            <div class="progress-bar" fxLayout="column" fxLayoutGap="4px">
+              <span class="mat-caption sec-menu" *ngIf="userPoints < reward.valuePoints">
+                {{userPoints}} of {{reward.valuePoints}} Points
+              </span>
+              <a class="mat-caption" *ngIf="userPoints > reward.valuePoints">
+                Redeem
+              </a>
+              <div class="bar" *ngIf="reward.progress >= 0">
+                <div class="progress" [style.width]="reward.progress.toString() + '%'"></div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-list-item>
+    </mat-list>
+
   </mat-tab>
-  <mat-tab label="Purchase"></mat-tab>
+  <mat-tab label="Purchase">
+    <div class="amount-container" fxLayout="column" fxLayoutGap="12px">
+      <div fxLayoutAlign="end center">
+        <span class="mat-caption">
+          1 Point = 1 &#x20B9;
+        </span>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Enter Amount</mat-label>
+        <input matInput type="number" name="enter-amount" required min="minVal" max="100000" id="enter-amount"
+          [(ngModel)]="purchaseAmt">
+        <mat-error *ngIf="purchaseAmt < minVal">
+          Minimum amount must be &#x20B9;{{minVal}}
+        </mat-error>
+        <span matSuffix>&#x20B9;</span>
+      </mat-form-field>
+      <mat-chip-list fxLayoutAlign="center center">
+        <mat-chip *ngFor="let quickAmount of quickAmountList" (click)="increment(quickAmount)">
+          +{{quickAmount}}
+        </mat-chip>
+      </mat-chip-list>
+      <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="purchaseAmt >= minVal">
+        <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+          (click)="addPoints(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+          <span class="material-icons-round external-icon">payments</span>
+          <span>
+            Add Points
+          </span>
+        </button>
+      </div>
+    </div>
+  </mat-tab>
 </mat-tab-group>
 
 <app-loading *ngIf="isLoaderShown"></app-loading>

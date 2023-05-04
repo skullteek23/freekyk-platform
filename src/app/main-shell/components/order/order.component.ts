@@ -60,7 +60,6 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.apiService.getOrder(this.orderID)
         .subscribe({
           next: response => {
-            console.log(response)
             if (response) {
               this.order = response;
               this.getSeason();
@@ -190,6 +189,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   get currentSlotsCount() {
-    return this.order?.notes?.purchaseQty - this.order?.notes?.cancelledQty;
+    const cancelledQty = this.order?.notes?.cancelledQty;
+    if (cancelledQty === null || cancelledQty === undefined) {
+      return 0;
+    }
+    return this.order?.notes?.purchaseQty - cancelledQty;
   }
 }

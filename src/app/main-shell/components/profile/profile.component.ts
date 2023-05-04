@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { ProfileConstants, PLAYING_POSITIONS } from '@shared/constants/constants';
 import { positionGroup } from '@shared/interfaces/others.model';
 import { LocationService } from '@shared/services/location-cities.service';

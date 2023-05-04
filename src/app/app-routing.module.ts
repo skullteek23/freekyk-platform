@@ -76,7 +76,6 @@ const routes: Routes = [
   { path: 'players', component: FindPlayersComponent },
   { path: 'standings', component: PlStandingsComponent },
   { path: 'challenges', component: ChallengesComponent },
-  { path: 'rewards', component: RewardsComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
 
   {
@@ -98,6 +97,7 @@ const routes: Routes = [
   { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'addresses', component: MyAddressesComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'rewards', component: RewardsComponent, ...canActivate(redirectUnauthorizedGuard) },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },
   { path: 'onboarding', component: OnboardingComponent, canActivate: [OnboardingGuard] },

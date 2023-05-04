@@ -6,6 +6,7 @@ import { RewardMessage } from '@shared/interfaces/reward.model';
 export interface IEarnedRewardDialogData {
   points: number;
   activityID: number;
+  isAdded: boolean;
 }
 
 @Component({

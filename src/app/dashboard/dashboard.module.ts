@@ -27,7 +27,7 @@ import { TeamgalleryComponent } from './dialogs/teamgallery/teamgallery.componen
 import { HttpClientModule } from '@angular/common/http';
 import { LocationService } from '../../../shared/services/location-cities.service';
 import { environment } from 'environments/environment';
-import { RazorPayAPI } from '@shared/Constants/RAZORPAY';
+import { RazorPayAPI } from '@shared/constants/RAZORPAY';
 import { PaymentService } from '../../../shared/services/payment.service';
 import { MaterialModule } from '@shared/material.module';
 import { CommonModule } from '@angular/common';

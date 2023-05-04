@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ILink } from '@shared/Constants/ROUTE_LINKS';
+import { ILink } from '@shared/constants/ROUTE_LINKS';
 import { Subscription } from 'rxjs';
 import { GenerateRewardService } from './main-shell/services/generate-reward.service';
 

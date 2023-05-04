@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { ICheckoutOptions } from '@shared/services/payment.service';
+import { ICheckoutOptions } from '@shared/interfaces/order.model';
 import { environment } from 'environments/environment';
 
 export const RazorPayAPI = new InjectionToken<any>('razorPay');

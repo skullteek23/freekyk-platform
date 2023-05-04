@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RouteLinks } from '@shared/Constants/ROUTE_LINKS';
+import { RouteLinks } from '@shared/constants/ROUTE_LINKS';
 import { PLAY_PAGE } from '@shared/web-content/WEBSITE_CONTENT';
 import { ListOption } from '@shared/interfaces/others.model';
 import { MatDialog } from '@angular/material/dialog';

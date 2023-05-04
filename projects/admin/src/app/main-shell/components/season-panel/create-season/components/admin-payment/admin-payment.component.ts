@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { UNIVERSAL_OPTIONS } from '@shared/Constants/RAZORPAY';
-import { RegexPatterns } from '@shared/Constants/REGEX';
+import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
+import { RegexPatterns } from '@shared/constants/REGEX';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { ICheckoutOptions, LoadingStatus, PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
