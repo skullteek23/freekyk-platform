@@ -1,6 +1,12 @@
+.container-reward {
+  height: 100%;
+}
+
 .get-started-container {
-  height: calc(100vh - 112px);
+  height: calc(100vh - 105px);
   overflow-y: auto;
+
+  padding: 12px;
 
   .heading {
     margin: 24px 0;

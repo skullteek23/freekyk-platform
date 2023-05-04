@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IEarnedRewardDialogData, RewardEarnDialogComponent } from '../components/reward-earn-dialog/reward-earn-dialog.component';
-import { ICompletedActivity, IPoint, IPointsLog, LogType, RewardMessage, RewardPoints } from '@shared/interfaces/reward.model';
+import { ICompletedActivity, IPointsLog, LogType, RewardMessage, RewardPoints } from '@shared/interfaces/reward.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import firebase from 'firebase/app';
 
@@ -14,10 +14,9 @@ export class GenerateRewardService {
     private dialog: MatDialog,
     private apiPostService: ApiPostService,
     private apiService: ApiGetService,
-  ) {
-  }
+  ) { }
 
-  private openRewardDialog(data: IEarnedRewardDialogData): Promise<any> {
+  openRewardDialog(data: IEarnedRewardDialogData): Promise<any> {
     const dialogRef = this.dialog.open(RewardEarnDialogComponent, {
       disableClose: false,
       data
@@ -54,7 +53,7 @@ export class GenerateRewardService {
       });
   }
 
-  addPoints(addCount: number, uid: string, entity: any): void {
+  addPoints(addCount: number, uid: string, entity: any): Promise<any> {
     const update = {
       points: firebase.firestore.FieldValue.increment(addCount)
     }
@@ -66,15 +65,7 @@ export class GenerateRewardService {
       entity,
     }
 
-    this.apiPostService.setUserPoints(uid, update, log)
-      .then(() => {
-        const data: IEarnedRewardDialogData = {
-          points: addCount,
-          activityID: null,
-          isAdded: false
-        }
-        this.openRewardDialog(data);
-      });
+    return this.apiPostService.setUserPoints(uid, update, log);
   }
 
   async completeActivity(activityID: number, uid: string): Promise<any> {

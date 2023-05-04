@@ -65,12 +65,6 @@ button:disabled {
   cursor: not-allowed !important;
 }
 
-@media only screen and (max-width: 959px) {
-  p>ul {
-    display: none;
-  }
-}
-
 img {
   height: 100%;
   width: auto;

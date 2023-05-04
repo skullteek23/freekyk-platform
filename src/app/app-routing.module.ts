@@ -35,6 +35,9 @@ import { MyAccountComponent } from './main-shell/components/my-account/my-accoun
 import { MyAddressesComponent } from './main-shell/components/my-addresses/my-addresses.component';
 import { OrderComponent } from './main-shell/components/order/order.component';
 import { EditProfileComponent } from './main-shell/components/edit-profile/edit-profile.component';
+import { EarnRewardComponent } from './main-shell/components/earn-reward/earn-reward.component';
+import { RedeemRewardComponent } from './main-shell/components/redeem-reward/redeem-reward.component';
+import { PurchasePointsComponent } from './main-shell/components/purchase-points/purchase-points.component';
 
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 
@@ -97,7 +100,14 @@ const routes: Routes = [
   { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'addresses', component: MyAddressesComponent, ...canActivate(redirectUnauthorizedGuard) },
-  { path: 'rewards', component: RewardsComponent, ...canActivate(redirectUnauthorizedGuard) },
+  {
+    path: 'rewards', component: RewardsComponent, ...canActivate(redirectUnauthorizedGuard),
+    children: [
+      { path: 'earn', component: EarnRewardComponent },
+      { path: 'redeem', component: RedeemRewardComponent },
+      { path: 'purchase', component: PurchasePointsComponent },
+    ]
+  },
 
   { path: 'signup', component: SignupComponent, canActivate: [SignupGuardGuard] },
   { path: 'onboarding', component: OnboardingComponent, canActivate: [OnboardingGuard] },

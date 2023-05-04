@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
-import { RazorPayOrder } from '@shared/interfaces/order.model';
+import { IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ISeason } from '@shared/interfaces/season.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';
@@ -18,6 +18,8 @@ import { SelectQuantityComponent } from '../select-quantity/select-quantity.comp
   providers: [DatePipe]
 })
 export class OrderComponent implements OnInit, OnDestroy {
+
+  readonly type = IItemType;
 
   gstAmount = 0;
   amount = 0;
@@ -90,8 +92,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   getSeason() {
-    if (this.order?.notes?.associatedEntityID) {
-      this.apiService.getSeason(this.order.notes.associatedEntityID).subscribe({
+    if (this.order?.notes?.seasonID) {
+      this.apiService.getSeason(this.order.notes.seasonID).subscribe({
         next: (response) => {
           this.season = response;
         },
@@ -103,11 +105,11 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   openSeason() {
-    if (this.order?.notes?.associatedEntityID && this.season) {
+    if (this.season) {
       if (this.season.type === 'FCP') {
-        this.router.navigate(['/pickup-game', this.order?.notes?.associatedEntityID]);
+        this.router.navigate(['/pickup-game', this.season.id]);
       } else {
-        this.router.navigate(['/game', this.order?.notes?.associatedEntityID]);
+        this.router.navigate(['/game', this.season.id]);
       }
     }
   }
@@ -117,8 +119,13 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   cancelOrder() {
-    const slots = this.order.notes.purchaseQty - this.order.notes.cancelledQty;
-    if (slots > 1) {
+    const slots = this.cancellableQty();
+    if ((this.order.notes.itemType !== this.type.pickupSlot) || slots < 1 || !slots) {
+      this.snackbarService.displayError('Error: No slots to cancel!');
+      return;
+    } else if (slots === 1) {
+      this.parsPickupSlot(1, slots);
+    } else {
       const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slots })
       dialogRef.afterClosed()
         .subscribe({
@@ -128,16 +135,12 @@ export class OrderComponent implements OnInit, OnDestroy {
             }
           }
         })
-    } else if (slots === 1) {
-      this.parsPickupSlot(1, slots);
-    } else {
-      this.snackbarService.displayError('Error: No slots to cancel!');
     }
   }
 
   async parsPickupSlot(count: number, slots: number) {
     this.isLoaderShown = true;
-    const pickupSlot = (await this.apiService.getPickupSlot(this.order?.notes.qtyEntityID).toPromise());
+    const pickupSlot = (await this.apiService.getPickupSlot(this.order?.notes?.itemID).toPromise());
     if (pickupSlot) {
       pickupSlot.slots.sort();
       const slot = JSON.parse(JSON.stringify(pickupSlot));
@@ -151,7 +154,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       }
 
       this.order.notes.logs.push(`Cancelled ${count} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`);
-      this.order.notes.cancelledQty += count;
+      this.order.notes.itemCancelledQty += count;
       const orderUpdate: Partial<RazorPayOrder> = {
         notes: this.order.notes
       }
@@ -188,11 +191,32 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  get currentSlotsCount() {
-    const cancelledQty = this.order?.notes?.cancelledQty;
+  get isCancellable() {
+    return this.cancellableQty() > 1;
+  }
+
+  cancellableQty(): number {
+    const quantity = this.order?.notes?.itemQty;
+    const cancelledQty = this.order?.notes?.itemCancelledQty;
     if (cancelledQty === null || cancelledQty === undefined) {
       return 0;
     }
-    return this.order?.notes?.purchaseQty - cancelledQty;
+    return quantity - cancelledQty;
+  }
+
+  refundOrder() {
+    if (this.order.notes.itemType !== this.type.pointsPurchase) {
+      return;
+    }
+    // refund order
+    this.paymentService.initOrderRefund(this.order, this.order.amount)
+  }
+
+  triggerAction() {
+    if (this.order.notes.itemType === this.type.pointsPurchase) {
+      this.router.navigate(['/rewards', 'redeem']);
+    } else if (this.order.notes.itemType === this.type.pickupSlot) {
+      this.openSeason();
+    }
   }
 }

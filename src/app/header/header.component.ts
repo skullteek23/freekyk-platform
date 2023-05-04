@@ -1,16 +1,11 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, share } from 'rxjs/operators';
 import { LogoutComponent } from '../auth/logout/logout.component';
-import { NotificationsService } from '../services/notifications.service';
 import { DESKTOP_LINKS, ILink, MOBILE_LINKS } from '@shared/constants/ROUTE_LINKS';
 import { environment } from 'environments/environment';
-import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { LiveSeasonComponent } from '@app/shared/dialogs/live-season/live-season.component';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
@@ -18,6 +13,7 @@ import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-m
 import { AuthService } from '@app/services/auth.service';
 import { RewardsGetStartedDialogComponent } from '@app/main-shell/components/rewards-get-started-dialog/rewards-get-started-dialog.component';
 import { ApiGetService } from '@shared/services/api.service';
+import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
 
 @Component({
   selector: 'app-header',
@@ -47,8 +43,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private notificationService: NotificationsService,
-    private ngFire: AngularFirestore,
     private router: Router,
     private authService: AuthService,
     private apiService: ApiGetService

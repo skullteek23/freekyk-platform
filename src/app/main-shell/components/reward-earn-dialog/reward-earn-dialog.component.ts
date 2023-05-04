@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { IFeatureInfoOptions, FeatureInfoComponent } from '@shared/dialogs/feature-info/feature-info.component';
 import { RewardMessage } from '@shared/interfaces/reward.model';
+import { REWARDS_HOW_IT_WORKS } from '@shared/web-content/WEBSITE_CONTENT';
 
 export interface IEarnedRewardDialogData {
   points: number;
@@ -21,7 +23,8 @@ export class RewardEarnDialogComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     public dialogRef: MatDialogRef<RewardEarnDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IEarnedRewardDialogData
+    @Inject(MAT_DIALOG_DATA) public data: IEarnedRewardDialogData,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -37,12 +40,21 @@ export class RewardEarnDialogComponent implements OnInit, AfterViewInit {
   }
 
   claimReward() {
-    this.router.navigate(['/rewards']);
+    this.router.navigate(['/rewards/redeem']);
+    this.dialog.closeAll();
     this.onCloseDialog();
   }
 
-  learnMore() {
-    this.router.navigate(['/rewards']);
-    this.onCloseDialog();
+  openInfo() {
+    const data: IFeatureInfoOptions = {
+      heading: 'How Rewards Work?',
+      multiDescription: [
+        { subheading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
+      ]
+    }
+    this.dialog.open(FeatureInfoComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    })
   }
 }

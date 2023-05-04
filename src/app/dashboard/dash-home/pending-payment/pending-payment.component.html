@@ -9,7 +9,7 @@
         (click)="openCheckoutFlow(pendingPayment); $event.stopPropagation()">
         <p matLine fxLayoutAlign="space-between center">
           <span class="mat-body-1 ellipsis">
-            {{pendingPayment?.notes?.associatedEntityName}}
+            {{pendingPayment?.notes?.seasonName || pendingPayment?.notes?.itemName}}
           </span>
           <span class="material-icons-round">
             chevron_right

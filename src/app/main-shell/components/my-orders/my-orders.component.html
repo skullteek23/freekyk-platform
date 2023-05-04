@@ -27,27 +27,27 @@
         <div class="image">
           <img src="assets/images/placeholder_product.png" alt="Product Order" appFallbackImg>
         </div>
-        <div class="description" fxLayoutAlign="space-between center">
-          <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
-            <span class="mat-body-2" *ngIf="order?.notes?.associatedEntityName; else orderNumber">
-              {{order?.notes?.associatedEntityName}}
-            </span>
-            <ng-template #orderNumber>
-              <span class="mat-body-2">
-                Order#{{order.id}}
-              </span>
-            </ng-template>
-            <span class="mat-body-1" *ngIf="order.amount >= 0">
-              {{(order.amount / 100) | currency: 'INR'}}
-            </span>
-            <span class="mat-caption sec-menu">
-              Ordered on {{order?.created_at * 1000 | date: 'mediumDate'}}
-            </span>
+        <div class="description" fxLayout="column">
+          <div [ngSwitch]="order?.notes?.itemType" fxLayout="column" fxLayoutAlign="stretch start">
+            <span *ngSwitchCase="type.pickupSlot">{{order?.notes?.seasonName}}</span>
+            <span *ngSwitchCase="type.pointsPurchase">{{order?.notes.itemName}}</span>
+            <span *ngSwitchDefault>{{order?.notes.itemName}}</span>
           </div>
-          <span class="material-icons-round clickable">
-            chevron_right
+          <ng-template #orderNumber>
+            <span class="mat-body-2">
+              Order#{{order.id}}
+            </span>
+          </ng-template>
+          <span class="mat-body-1" *ngIf="order.amount >= 0">
+            {{(order.amount / 100) | currency: 'INR'}}
+          </span>
+          <span class="mat-caption sec-menu">
+            Ordered on {{order?.created_at * 1000 | date: 'mediumDate'}}
           </span>
         </div>
+        <span class="material-icons-round clickable">
+          chevron_right
+        </span>
       </mat-card>
     </mat-list-item>
   </mat-list>

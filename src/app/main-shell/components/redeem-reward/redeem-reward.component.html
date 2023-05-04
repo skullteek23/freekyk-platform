@@ -1,0 +1,25 @@
+<app-no-items-message [centerText]="true" *ngIf="!rewardsList.length"
+  customText="Uh-Oh! No rewards to redeem."></app-no-items-message>
+<mat-list fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+  <mat-list-item *ngFor="let reward of rewardsList" (click)="openReward(reward)">
+    <mat-card class="mat-elevation-z8 dashboard-card">
+      <img mat-card-image [src]="reward.imgpath" [alt]="reward.name" appFallbackImg>
+      <mat-card-content>
+        <span class="mat-body-2">
+          {{reward.name}}
+        </span>
+        <div class="progress-bar" fxLayout="column" fxLayoutGap="4px">
+          <span class="mat-caption sec-menu" *ngIf="userPoints < reward.valuePoints">
+            {{userPoints}} of {{reward.valuePoints}} Points
+          </span>
+          <a class="mat-caption" *ngIf="userPoints > reward.valuePoints">
+            Redeem
+          </a>
+          <div class="bar" *ngIf="reward.progress >= 0">
+            <div class="progress" [style.width]="reward.progress.toString() + '%'"></div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-list-item>
+</mat-list>

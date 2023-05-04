@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { RazorPayOrder } from '@shared/interfaces/order.model';
+import { IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { Subscription } from 'rxjs';
 
@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./my-orders.component.scss']
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
+
+  readonly type = IItemType;
 
   orders: Partial<RazorPayOrder>[] = [];
   isLoaderShown = false;

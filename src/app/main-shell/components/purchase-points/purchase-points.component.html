@@ -1,0 +1,30 @@
+<div class="amount-container" fxLayout="column" fxLayoutGap="12px">
+  <div fxLayoutAlign="end center">
+    <span class="mat-caption">
+      1 Point = 1 &#x20B9;
+    </span>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter Amount</mat-label>
+    <input matInput type="number" name="enter-amount" required min="minVal" max="100000" id="enter-amount"
+      [(ngModel)]="purchaseAmt">
+    <mat-error *ngIf="purchaseAmt < minVal">
+      Minimum amount must be &#x20B9;{{minVal}}
+    </mat-error>
+    <span matSuffix>&#x20B9;</span>
+  </mat-form-field>
+  <mat-chip-list fxLayoutAlign="center center">
+    <mat-chip *ngFor="let quickAmount of quickAmountList" (click)="increment(quickAmount)">
+      +{{quickAmount}}
+    </mat-chip>
+  </mat-chip-list>
+  <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="purchaseAmt >= minVal">
+    <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
+      (click)="addPoints(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+      <span class="material-icons-round external-icon">payments</span>
+      <span>
+        Add Points
+      </span>
+    </button>
+  </div>
+</div>

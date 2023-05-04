@@ -13,64 +13,12 @@ section {
   }
 }
 
-mat-list {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 12px;
 
-  mat-list-item:nth-child(odd) {
-    margin-right: 0 !important;
-  }
 
-  mat-list-item {
-    .dashboard-card {
-      padding: 4px !important;
-      border-radius: 8px !important;
 
-      .mat-card-content {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
 
-      .mat-card-image {
-        margin-bottom: 0 !important;
-      }
-    }
 
-    img {
-      height: 65%;
-      max-height: 65%;
-    }
 
-    height: 150px;
-    margin-bottom: 12px;
-    margin-right: 0 !important;
-    width: 47%;
-
-    .bar {
-      height: 10px;
-      border-radius: var(--borderRadiusCard);
-      background-color: white;
-      border: 2px solid var(--grey3);
-      overflow: hidden;
-
-      .progress {
-        height: 100%;
-        background-color: var(--primaryColor);
-        transition: width 0.8s ease-in-out;
-      }
-    }
-  }
-}
-
-.amount-container {
-  padding: 12px;
-  height: calc(100vh - 299px);
-  overflow-y: auto;
-}
-
-.buttons-container {
-  margin-top: 24px;
+.active-tab {
+  border-bottom: 2px solid var(--primaryColor);
 }

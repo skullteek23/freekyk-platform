@@ -6,7 +6,7 @@ import { AuthService } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
-import { ICheckoutOptions, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, IItemType, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';
@@ -140,11 +140,13 @@ export class WaitingListDialogComponent implements OnInit {
     const id = this.apiService.getUniqueDocID();
     const options: Partial<RazorPayOrder> = {
       notes: {
-        associatedEntityID: this.data.id,
-        associatedEntityName: this.data.name,
-        purchaseQty: 1,
-        cancelledQty: 0,
-        qtyEntityID: id,
+        itemName: 'Waiting List Slot',
+        itemID: null,
+        seasonID: this.data.id,
+        seasonName: this.data.name,
+        itemQty: 1,
+        itemCancelledQty: 0,
+        itemType: IItemType.pickupSlotWaiting,
         logs: [
           `Purchased 1 slot (waiting list) on ${this.datePipe.transform(new Date(), 'short')}`
         ]

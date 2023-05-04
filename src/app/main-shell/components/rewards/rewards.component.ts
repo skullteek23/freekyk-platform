@@ -1,19 +1,16 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
-import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { RewardService } from '@app/main-shell/services/reward.service';
 import { AuthService, authUserMain } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
-import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { MatchConstants } from '@shared/constants/constants';
 import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
-import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model';
-import { ActivityListOption, IReward } from '@shared/interfaces/reward.model';
+import { ListOption } from '@shared/interfaces/others.model';
+import { IReward } from '@shared/interfaces/reward.model';
 import { ApiGetService } from '@shared/services/api.service';
-import { PaymentService } from '@shared/services/payment.service';
-import { FREEKYK_REWARDS_DESCRIPTION } from '@shared/web-content/WEBSITE_CONTENT';
+import { REWARDS_HOW_IT_WORKS } from '@shared/web-content/WEBSITE_CONTENT';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rewards',
@@ -21,16 +18,17 @@ import { FREEKYK_REWARDS_DESCRIPTION } from '@shared/web-content/WEBSITE_CONTENT
   styleUrls: ['./rewards.component.scss'],
   providers: [DatePipe]
 })
-export class RewardsComponent implements OnInit {
-
-  readonly minVal = MatchConstants.MINIMUM_POINTS_RECHARGE;
+export class RewardsComponent implements OnInit, OnDestroy {
 
   userPoints = 0;
   isLoaderShown = false;
-  activitiesList: ActivityListOption[] = [];
-  rewardsList: IReward[] = [];
-  purchaseAmt = 0;
-  quickAmountList = [100, 500, 1000, 2000];
+  activeLink = '';
+  subscriptions = new Subscription();
+  links: ListOption[] = [
+    { viewValue: 'Earn', value: '/rewards/earn' },
+    { viewValue: 'Redeem', value: '/rewards/redeem' },
+    { viewValue: 'Purchase', value: '/rewards/purchase' },
+  ];
   user: authUserMain = null;
 
   constructor(
@@ -38,13 +36,18 @@ export class RewardsComponent implements OnInit {
     private dialog: MatDialog,
     private apiGetService: ApiGetService,
     private router: Router,
-    private paymentService: PaymentService,
-    private snackBarService: SnackbarService,
-    private datePipe: DatePipe,
-    private generateRewardService: GenerateRewardService
+    private rewardService: RewardService
   ) { }
 
   ngOnInit(): void {
+    this.subscriptions.add(
+      this.router.events.subscribe((event: any) => {
+        if (event instanceof NavigationEnd) {
+          this.activeLink = event.url.slice('/rewards/'.length);
+          window.scrollTo(0, 0);
+        }
+      })
+    )
     this.authService.isLoggedIn().subscribe({
       next: user => {
         if (user) {
@@ -52,7 +55,20 @@ export class RewardsComponent implements OnInit {
           this.getUserPoints();
         }
       }
+    });
+    this.rewardService._loading().subscribe({
+      next: (status) => {
+        if (status) {
+          this.showLoader();
+        } else {
+          this.hideLoader();
+        }
+      }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   getUserPoints() {
@@ -61,6 +77,7 @@ export class RewardsComponent implements OnInit {
       next: response => {
         if (response?.points >= 0) {
           this.userPoints = response.points;
+          this.rewardService.setPoints(this.userPoints);
         }
         this.hideLoader();
       },
@@ -74,142 +91,13 @@ export class RewardsComponent implements OnInit {
     const data: IFeatureInfoOptions = {
       heading: 'How Rewards Work?',
       multiDescription: [
-        { subheading: 'Freekyk Rewards Program', description: FREEKYK_REWARDS_DESCRIPTION }
+        { subheading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
       ]
     }
     this.dialog.open(FeatureInfoComponent, {
       panelClass: 'fk-dialogs',
       data
     })
-  }
-
-  onChangeTab(change: MatTabChangeEvent) {
-    switch (change.index) {
-      case 1:
-        this.getRewards();
-        break;
-    }
-  }
-
-  getRewards() {
-    this.showLoader();
-    this.apiGetService.getRewards().subscribe({
-      next: (response) => {
-        if (response) {
-          response.map(el => {
-            el.progress = 1 - ((this.userPoints / el.valuePoints) * 100);
-          });
-          this.rewardsList = response;
-        }
-        this.hideLoader();
-      },
-      error: () => {
-        this.rewardsList = [];
-        this.hideLoader();
-      }
-    })
-  }
-
-  openReward(reward: IReward) {
-    console.log(reward);
-  }
-
-  async addPoints() {
-    if (this.purchaseAmt >= this.minVal && this.user) {
-      this.showLoader();
-      const order = await this.paymentService.getNewOrder(this.user.uid, this.purchaseAmt.toString());
-      if (order) {
-        const options: Partial<ICheckoutOptions> = {
-          ...UNIVERSAL_OPTIONS,
-          prefill: {
-            contact: this.user.phoneNumber,
-            name: this.user.displayName,
-            email: this.user.email
-          },
-          description: `+${this.purchaseAmt} Points Purchase`,
-          order_id: order.id,
-          amount: this.purchaseAmt * 100,
-          handler: this.success.bind(this),
-          modal: {
-            backdropclose: false,
-            escape: false,
-            confirm_close: true,
-            ondismiss: this.dismissDialog.bind(this)
-          }
-        }
-        this.paymentService.openCheckoutPage(options);
-      }
-    }
-  }
-
-  dismissDialog() {
-    this.hideLoader();
-  }
-
-  success(response) {
-    if (response) {
-      this.showLoader();
-      this.paymentService.verifyPayment(response).subscribe({
-        next: (resp) => {
-          if (resp) {
-            Promise.all(this.getPromises(response))
-              .then(() => {
-                this.openOrder(response['razorpay_order_id']);
-                this.resetAmt();
-              })
-              .catch((error) => {
-                this.snackBarService.displayError(error?.message);
-              })
-              .finally(() => {
-                this.dismissDialog();
-              })
-          }
-        },
-        error: (error) => {
-          this.dismissDialog();
-          this.snackBarService.displayError(error?.message);
-        }
-      })
-    } else {
-      this.dismissDialog();
-      this.snackBarService.displayError('Error: Payment Verification could not be initiated!');
-    }
-  }
-
-  resetAmt() {
-    this.purchaseAmt = 0;
-  }
-
-  openOrder(orderID: string) {
-    if (orderID) {
-      this.router.navigate(['/order', orderID])
-    }
-  }
-
-  getPromises(response): any[] {
-    const options: Partial<RazorPayOrder> = {
-      notes: {
-        associatedEntityID: null,
-        associatedEntityName: `${this.purchaseAmt} Points Purchase`,
-        purchaseQty: this.purchaseAmt,
-        cancelledQty: null,
-        qtyEntityID: null,
-        logs: [
-          `Added ${this.purchaseAmt} points on ${this.datePipe.transform(new Date(), 'short')}`
-        ]
-      }
-    }
-
-    const allPromises = [];
-    const entity = 'by purchasing';
-    allPromises.push(this.generateRewardService.addPoints(this.purchaseAmt, this.user.uid, entity))
-    allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
-
-    return allPromises;
-  }
-
-  increment(incrementValue: number) {
-    this.purchaseAmt += incrementValue;
   }
 
   showLoader() {

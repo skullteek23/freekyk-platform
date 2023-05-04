@@ -40,6 +40,9 @@ import { MyNotificationsComponent } from './components/my-notifications/my-notif
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RewardActivityListComponent } from './components/reward-activity-list/reward-activity-list.component';
+import { EarnRewardComponent } from './components/earn-reward/earn-reward.component';
+import { RedeemRewardComponent } from './components/redeem-reward/redeem-reward.component';
+import { PurchasePointsComponent } from './components/purchase-points/purchase-points.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -75,6 +78,9 @@ import { RewardActivityListComponent } from './components/reward-activity-list/r
     EditProfileComponent,
     ProfileComponent,
     RewardActivityListComponent,
+    EarnRewardComponent,
+    RedeemRewardComponent,
+    PurchasePointsComponent,
   ],
   imports: [
     CommonModule,

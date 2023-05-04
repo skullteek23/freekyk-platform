@@ -9,7 +9,7 @@ import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { ILockedSlot, IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { MatchFixture } from '@shared/interfaces/match.model';
-import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
@@ -34,7 +34,6 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
 
   readonly customDateFormat = MatchConstants.GROUND_SLOT_DATE_FORMAT;
   readonly oneHourMilliseconds = 3600000;
-
   readonly ONE_SIDE_COUNT = 7;
 
   seasonID: string = null;
@@ -203,6 +202,10 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   }
 
   selectSlot(slot: Partial<ISlotOption>, index: number) {
+    if (this.playerUID && slot.uid === this.playerUID) {
+      this.router.navigate(['/orders']);
+      return;
+    }
     if (slot.booked) {
       return;
     }
@@ -398,8 +401,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
       this.showLoader();
       this.paymentService.verifyPayment(response)
         .subscribe({
-          next: (response) => {
-            if (response) {
+          next: (verificationResult) => {
+            if (verificationResult) {
               Promise.all(this.getPromises(response))
                 .then(() => {
                   const uid = this.authService.getUser()?.uid || null;
@@ -483,11 +486,13 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
 
       const options: Partial<RazorPayOrder> = {
         notes: {
-          associatedEntityID: this.season.id,
-          associatedEntityName: this.season.name,
-          purchaseQty: totalSlots,
-          cancelledQty: 0,
-          qtyEntityID: pickupSlotID,
+          seasonID: this.season.id,
+          seasonName: this.season.name,
+          itemQty: totalSlots,
+          itemCancelledQty: 0,
+          itemID: pickupSlotID,
+          itemName: `Pickup Game Slots`,
+          itemType: IItemType.pickupSlot,
           logs: [
             `Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`
           ]

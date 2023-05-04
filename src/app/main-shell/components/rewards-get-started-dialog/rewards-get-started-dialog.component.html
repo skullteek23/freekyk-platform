@@ -20,16 +20,20 @@
   <div class="dialogData my-rewards-container" *ngIf="userID" fxLayout="column" fxLayoutGap="12px">
     <app-reward-activity-list (activityChange)="onCloseDialog()"></app-reward-activity-list>
     <mat-divider></mat-divider>
-    <div class="bottom-points">
+    <div class="bottom-points" fxLayoutAlign="space-between center">
       <span class="mat-body-1">
         Total Points Earned: <strong>{{points}}</strong>
       </span>
+      <a class="mat-body-2" (click)="addPoints()">
+        +Add Points
+      </a>
     </div>
   </div>
 </section>
 <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="!userID">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="signup(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">payments</span>
     <span>
       Join Now
     </span>

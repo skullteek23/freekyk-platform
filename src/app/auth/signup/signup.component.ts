@@ -115,7 +115,9 @@ export class SignupComponent implements OnInit {
       }
       this.otpConfirmation.confirm(otp)
         .then((user) => {
-          this.apiPostService.setupEmptyPoints(user.user.uid, { points: 0 });
+          if (user?.additionalUserInfo?.isNewUser) {
+            this.apiPostService.setupEmptyPoints(user.user.uid, { points: 0 });
+          }
           this.errorMessage = '';
           this.postSignup(user);
         })

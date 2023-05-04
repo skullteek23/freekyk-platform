@@ -34,7 +34,6 @@ import { GroundSlotsComponent } from './components/season-panel/create-season/co
 import { GroundSlotSelectionComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slot-selection/ground-slot-selection.component';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
-import { AdminPaymentComponent } from './components/season-panel/create-season/components/admin-payment/admin-payment.component';
 import { ViewSummaryComponent } from './components/season-panel/create-season/components/view-summary/view-summary.component';
 import { ViewPublishedSeasonComponent } from './components/season-panel/view-published-season/view-published-season.component';
 import { RegisterGroundComponent } from './components/grounds-panel/register-ground/register-ground.component';
@@ -111,7 +110,6 @@ const routes: Routes = [
     GroundFiltersComponent,
     GroundSlotsComponent,
     GroundSlotSelectionComponent,
-    AdminPaymentComponent,
     ViewSummaryComponent,
     ViewPublishedSeasonComponent,
     RegisterGroundComponent,

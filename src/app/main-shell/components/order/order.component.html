@@ -23,16 +23,33 @@
   <mat-card class="dashboard-card mat-elevation-z8" *ngIf="order">
     <mat-card-header>
       <mat-card-title fxLayoutAlign="space-between center" fxLayoutGap="5px">
-        <span class="dash-h5" *ngIf="order?.notes?.associatedEntityName">
-          {{order?.notes?.associatedEntityName}}
-        </span>
-        <span class="dash-h5" *ngIf="!order?.notes?.associatedEntityName">
+        <div class="dash-h5" *ngIf="order?.notes?.itemName">
+          {{order?.notes?.itemName}}
+        </div>
+        <div class="mat-body-1" *ngIf="!order?.notes?.itemName">
           New Order#{{order?.id }}
-        </span>
-        <button color="primary" mat-raised-button (click)="openSeason()" *ngIf="order?.notes?.associatedEntityName">
-          View Game
+        </div>
+        <button color="primary" mat-raised-button (click)="triggerAction()" *ngIf="order?.notes?.itemType >= 0">
+          <span [ngSwitch]="order?.notes?.itemType">
+            <span *ngSwitchCase="type.pickupSlot">View Game</span>
+            <span *ngSwitchCase="type.pointsPurchase">Redeem</span>
+          </span>
         </button>
       </mat-card-title>
+      <mat-card-subtitle *ngIf="order?.notes?.itemType >= 0">
+        <span *ngIf="order?.notes?.itemType === type.pickupSlot">
+          {{ order?.notes?.itemQty}} Slot(s) for {{order?.notes?.seasonName}}
+        </span>
+        <span *ngIf="order?.notes?.itemType === type.pointsPurchase">
+          Added {{order?.notes?.itemQty}} to Rewards Wallet
+        </span>
+        <span *ngIf="order?.notes?.itemType === type.pickupSlotWaiting">
+          Added in waiting list of {{order?.notes?.seasonName}}
+        </span>
+        <span *ngIf="order?.notes?.itemType === type.leagueOrKnockout">
+          Team participation confirmed for {{order?.notes?.seasonName}}
+        </span>
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="content">
@@ -87,9 +104,16 @@
   <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
     Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
   </div>
-  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center" *ngIf="currentSlotsCount">
+  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
+    *ngIf="isCancellable && order?.notes?.itemType === type.pickupSlot">
     <a (click)="cancelOrder()" class="mat-body-1" mat-button color="warn">
       Cancel Order
+    </a>
+  </div>
+  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
+    *ngIf="isCancellable && order?.notes?.itemType === type.pointsPurchase">
+    <a (click)="refundOrder()" class="mat-body-1" mat-button color="warn">
+      Refund Order
     </a>
   </div>
 </section>

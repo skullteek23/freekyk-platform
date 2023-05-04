@@ -19,6 +19,6 @@ export class PendingPaymentComponent implements OnInit {
   }
 
   openCheckoutFlow(order: Partial<RazorPayOrder>) {
-    this.router.navigate(['/dashboard/participate', order?.notes?.associatedEntityID]);
+    // this.router.navigate(['/dashboard/participate', order?.notes?.associatedEntityID]);
   }
 }

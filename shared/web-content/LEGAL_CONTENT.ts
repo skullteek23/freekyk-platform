@@ -174,7 +174,17 @@ export const TERMS_AND_CONDITIONS = {
 
   <p>As long as the website and the information and services on the website are provided free of charge, we will not be
     liable for any loss or damage of any nature.</p>
-`
+
+   <h3>Freekyk Rewards</h3>
+
+   <ul>
+    <li><strong>Minimum Purchase Requirement:</strong> Reward points earned through Freekyk India cannot be redeemed for a purchase amount less than Rs. 300.</li> <br>
+    <li><strong>Eligible Purchases:</strong> Reward points can only be redeemed for the purchase of Freekyk matches/tournaments.</li> <br>
+    <li><strong>Expiration of Reward Points:</strong> Reward points earned through Freekyk India will expire after two months from the date they were earned.</li> <br>
+    <li><strong>Eligibility for Rewards:</strong> Users who have a valid Freekyk India account and have earned reward points through eligible purchases are eligible to redeem their reward points.</li> <br>
+    <li><strong>Changes to the Rewards Program:</strong> Freekyk India reserves the right to modify or terminate the rewards program, including these terms and conditions, at any time without notice.</li> <br>
+    <li><strong>Governing Law:</strong> These terms and conditions shall be governed by and construed in accordance with the laws of India, and any disputes arising out of or in connection with these terms and conditions shall be subject to the exclusive jurisdiction of the courts of India.</li>
+   </ul>`
 }
 export const PRIVACY_POLICY = {
   miniDescription: `<p>At Freekyk India, accessible from https://www.freekyk.com/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Freekyk India and how we use it.</p>

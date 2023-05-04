@@ -42,13 +42,22 @@ export interface ICheckoutOptions {
   };
 }
 
+export enum IItemType {
+  pickupSlot = 0,
+  pointsPurchase = 1,
+  leagueOrKnockout = 2,
+  pickupSlotWaiting = 3,
+}
+
 export interface IOrderNotes {
-  associatedEntityID: string;
-  associatedEntityName: string;
-  purchaseQty: number;
-  cancelledQty: number;
-  qtyEntityID: string;
+  itemID: string;
+  itemName: string;
+  itemQty: number;
+  itemCancelledQty: number;
+  itemType: IItemType;
   logs: string[];
+  seasonID?: string;
+  seasonName?: string;
 }
 
 export interface RazorPayOrder {

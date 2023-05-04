@@ -17,7 +17,7 @@ import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats
 import { PaymentService } from '@shared/services/payment.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { ICheckoutOptions, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, IItemType, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { AuthService, authUserMain } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',
@@ -247,8 +247,13 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
           const allPromises = [];
           const options: Partial<RazorPayOrder> = {
             notes: {
-              associatedEntityID: this.seasonID,
-              associatedEntityName: this.season.name,
+              itemID: this.seasonID,
+              itemName: 'Season Team Entry',
+              seasonID: this.seasonID,
+              seasonName: this.season.name,
+              itemQty: 1,
+              itemCancelledQty: 0,
+              itemType: IItemType.leagueOrKnockout,
               logs: [
                 `Purchased Season Team Entry on ${this.datePipe.transform(new Date(), 'short')}`
               ]

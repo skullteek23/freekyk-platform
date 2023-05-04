@@ -23,7 +23,6 @@ export class RewardsGetStartedDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<RewardsGetStartedDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public points: number,
     private authService: AuthService,
-    private apiService: ApiGetService,
     private router: Router
   ) { }
 
@@ -45,7 +44,12 @@ export class RewardsGetStartedDialogComponent implements OnInit {
   }
 
   signup() {
-    this.router.navigate(['/signup'], { queryParams: { callback: encodeURIComponent('/rewards') } });
+    this.router.navigate(['/signup'], { queryParams: { callback: encodeURIComponent('/rewards/earn') } });
+    this.onCloseDialog();
+  }
+
+  addPoints() {
+    this.router.navigate(['/rewards/purchase']);
     this.onCloseDialog();
   }
 

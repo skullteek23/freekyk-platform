@@ -1,13 +1,11 @@
 <div class="reward-container" fxLayout="column" fxLayoutGap="12px">
-  <div class="close-button" fxLayoutAlign="end center">
-    <span class="material-icons-round pointer" (click)="onCloseDialog()">close</span>
-  </div>
-  <div class="confetti-container">
+  <div class="confetti-container" fxLayout="row" fxLayoutAlign="center start">
     <img src="assets/gifs/confetti-reward.gif" alt="Confetti SVG" appFallbackImg class="confetti">
+    <span class="material-icons-round close-button" mat-dialog-close (click)="onCloseDialog()">close</span>
   </div>
   <div fxLayout="column" fxLayoutGap="12px">
     <span class="mat-body-2 center" *ngIf="!data.isAdded; else addedPoints">
-      Wuhooo! You have earned <br>
+      Woohooo! You have earned <br>
       <strong class="mat-subheading-2">
         +{{data.points}} points
       </strong><br>
@@ -17,7 +15,7 @@
     </span>
     <ng-template #addedPoints>
       <span class="mat-body-2 center">
-        Wuhooo! You have added <br>
+        Woohooo! You have added <br>
         <strong class="mat-subheading-2">
           +{{data.points}} points
         </strong><br>
@@ -31,10 +29,10 @@
         celebration
       </span>
       <span>
-        Claim
+        Redeem
       </span>
     </button>
 
-    <a (click)="learnMore()" class="center mat-caption">Learn More</a>
+    <a (click)="openInfo()" class="center mat-caption">Learn More</a>
   </div>
 </div>
