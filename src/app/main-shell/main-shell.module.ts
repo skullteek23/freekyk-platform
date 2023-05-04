@@ -43,6 +43,10 @@ import { RewardActivityListComponent } from './components/reward-activity-list/r
 import { EarnRewardComponent } from './components/earn-reward/earn-reward.component';
 import { RedeemRewardComponent } from './components/redeem-reward/redeem-reward.component';
 import { PurchasePointsComponent } from './components/purchase-points/purchase-points.component';
+import { GoalsComponent } from './components/leaderboard/components/goals/goals.component';
+import { PlayedComponent } from './components/leaderboard/components/played/played.component';
+import { PointsComponent } from './components/leaderboard/components/points/points.component';
+import { LeaderboardTableComponent } from './components/leaderboard/components/leaderboard-table/leaderboard-table.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -81,6 +85,10 @@ import { PurchasePointsComponent } from './components/purchase-points/purchase-p
     EarnRewardComponent,
     RedeemRewardComponent,
     PurchasePointsComponent,
+    GoalsComponent,
+    PlayedComponent,
+    PointsComponent,
+    LeaderboardTableComponent,
   ],
   imports: [
     CommonModule,

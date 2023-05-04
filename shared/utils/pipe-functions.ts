@@ -1,6 +1,6 @@
-import { BasicStats, IPlayer, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
+import { IPlayer, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
 import { ISeason, ISeasonDescription, ISeasonPartner, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
@@ -24,7 +24,7 @@ import { NotificationTypes } from "@shared/interfaces/notification.model";
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
 export interface TeamAllInfo extends ITeam, ITeamDescription, ITeamMembers, TeamMedia, TeamStats { };
 export interface GroundAllInfo extends GroundBasicInfo, GroundMoreInfo { };
-export interface PlayerAllInfo extends IPlayer, BasicStats { };
+export interface PlayerAllInfo extends IPlayer, IPlayerStats { };
 
 export type ngFireDoc = firebase.firestore.DocumentSnapshot<unknown>;
 export type ngFireDocQuery = firebase.firestore.QuerySnapshot<unknown>;
@@ -36,6 +36,13 @@ export function parsePlayersData(source: Observable<ngFireDocQuery>) {
     map(resp => resp.sort(ArraySorting.sortObjectByKey('name'))),
   );
 }
+
+export function parsePlayersStatsData(source: Observable<ngFireDocQuery>) {
+  return source.pipe(
+    map((resp) => resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as IPlayerStats), } as IPlayerStats))),
+  );
+}
+
 export function parseTeamPlayerData(list: string[], source: Observable<IPlayer[]>): Observable<ITeamPlayer[]> {
   return source.pipe(
     map((resp) => resp

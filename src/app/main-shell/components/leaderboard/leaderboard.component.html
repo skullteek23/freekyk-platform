@@ -7,6 +7,15 @@
   </button>
   <span class="dash-h5 heading">Leaderboard</span>
 </div>
-<section>
-  <app-no-items-message [centerText]="true" customText="Uh-Oh! Leaderboard is not available."></app-no-items-message>
-</section>
+<nav mat-tab-nav-bar color="primary" mat-stretch-tabs>
+  <a mat-tab-link *ngFor="let link of links" (click)="activeLink = link.value" [routerLink]="[link.value]"
+    routerLinkActive="active-tab" [active]="activeLink == link.value">
+    {{ link.viewValue}}
+  </a>
+</nav>
+
+<!-- <div class="main-content">
+  <router-outlet></router-outlet>
+</div> -->
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

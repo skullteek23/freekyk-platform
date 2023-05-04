@@ -38,6 +38,9 @@ import { EditProfileComponent } from './main-shell/components/edit-profile/edit-
 import { EarnRewardComponent } from './main-shell/components/earn-reward/earn-reward.component';
 import { RedeemRewardComponent } from './main-shell/components/redeem-reward/redeem-reward.component';
 import { PurchasePointsComponent } from './main-shell/components/purchase-points/purchase-points.component';
+import { GoalsComponent } from './main-shell/components/leaderboard/components/goals/goals.component';
+import { PlayedComponent } from './main-shell/components/leaderboard/components/played/played.component';
+import { PointsComponent } from './main-shell/components/leaderboard/components/points/points.component';
 
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 
@@ -79,7 +82,14 @@ const routes: Routes = [
   { path: 'players', component: FindPlayersComponent },
   { path: 'standings', component: PlStandingsComponent },
   { path: 'challenges', component: ChallengesComponent },
-  { path: 'leaderboard', component: LeaderboardComponent },
+  {
+    path: 'leaderboard', component: LeaderboardComponent,
+    children: [
+      { path: 'goals', component: GoalsComponent },
+      { path: 'played', component: PlayedComponent },
+      { path: 'points', component: PointsComponent },
+    ]
+  },
 
   {
     path: 'my-matches', component: MyMatchesComponent,

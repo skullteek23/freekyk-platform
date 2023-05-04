@@ -1,3 +1,7 @@
 section {
   padding: 12px;
 }
+
+.active-tab {
+  border-bottom: 2px solid var(--primaryColor);
+}
