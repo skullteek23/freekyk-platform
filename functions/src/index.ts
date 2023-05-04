@@ -36,5 +36,3 @@ export const publishSeason = functions.region('asia-south1').https.onCall(season
 export const addAdminUser = functions.region('asia-south1').https.onCall(createAdminUser);
 export const cancelSeason = functions.region('asia-south1').https.onCall(seasonCancellation);
 // callable functions
-
-// trigger functions
