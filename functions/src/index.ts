@@ -38,7 +38,3 @@ export const cancelSeason = functions.region('asia-south1').https.onCall(seasonC
 // callable functions
 
 // trigger functions
-// export const onUpdateMatch = functions.region('asia-south1').firestore.document('allMatches/{matchId}').onUpdate(matchUpdateTrigger);
-// export const onUploadProfilePhoto = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize(generateThumbnail);
-// export const generateTicketMail = functions.region('asia-south1').storage.bucket(environment.firebase.storageBucket).object().onFinalize();
-// trigger functions
