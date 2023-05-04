@@ -403,7 +403,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
               Promise.all(this.getPromises(response))
                 .then(() => {
                   const uid = this.authService.getUser()?.uid || null;
-                  this.snackBarService.displayCustomMsg('Your slot has been booked!');
+                  this.snackBarService.displayCustomMsg('Your slot has been confirmed!');
                   if (uid) {
                     this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, uid);
                   }

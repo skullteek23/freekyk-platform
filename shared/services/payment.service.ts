@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
-import { ICheckoutOptions, IOrderNotes, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model';
 import { Router } from '@angular/router';
 import { FunctionsApiService } from './functions-api.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';

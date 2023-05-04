@@ -3,8 +3,9 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { SnackbarService } from '@app/services/snackbar.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { RegexPatterns } from '@shared/constants/REGEX';
+import { ICheckoutOptions } from '@shared/interfaces/order.model';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
-import { ICheckoutOptions, LoadingStatus, PaymentService } from '@shared/services/payment.service';
+import { PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,9 +15,8 @@ import { Subscription } from 'rxjs';
 })
 export class AdminPaymentComponent implements OnInit {
 
-  readonly loadingStatus = LoadingStatus;
+  // readonly loadingStatus = LoadingStatus;
 
-  status = LoadingStatus.default;
   paymentForm: FormGroup;
   subscriptions = new Subscription();
   errorMessage = '';
@@ -54,7 +54,6 @@ export class AdminPaymentComponent implements OnInit {
     this.isSuccess.setValue(false);
     const fees = this.amount.value;
     if (fees) {
-      this.status = this.loadingStatus.loading;
       this.paymentService.generateOrder(Number(fees), null)
         .then((response) => {
           if (response) {
@@ -78,7 +77,6 @@ export class AdminPaymentComponent implements OnInit {
       // case for 0 participation fees
       this.success();
     } else {
-      this.status = this.loadingStatus.default;
       this.snackBarService.displayError('Please finish previous steps!');
     }
   }
@@ -107,11 +105,9 @@ export class AdminPaymentComponent implements OnInit {
 
   failure() {
     this.isSuccess.setValue(false);
-    this.status = this.loadingStatus.failed;
   }
 
   success() {
-    this.status = this.loadingStatus.success;
     this.isSuccess.setValue(true);
   }
 
