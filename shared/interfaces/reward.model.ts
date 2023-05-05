@@ -1,5 +1,6 @@
 export interface IPoint {
   points: number;
+  id?: string;
 }
 
 export enum LogType {

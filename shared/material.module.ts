@@ -32,6 +32,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTreeModule } from '@angular/material/tree';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatSortModule } from '@angular/material/sort';
 // angular material
 
 @NgModule({
@@ -69,7 +70,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
     MatPaginatorModule,
     MatBadgeModule,
     MatTreeModule,
-    CdkTreeModule
+    CdkTreeModule,
+    MatSortModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -104,7 +106,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
     MatPaginatorModule,
     MatBadgeModule,
     MatTreeModule,
-    CdkTreeModule
+    CdkTreeModule,
+    MatSortModule
   ],
 })
 export class MaterialModule { }

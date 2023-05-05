@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { PlayerAllInfo } from '@shared/utils/pipe-functions';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { ILeaderBoardTableData } from '../components/leaderboard/components/leaderboard-table/leaderboard-table.component';
-import { ArraySorting } from '@shared/utils/array-sorting';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +25,15 @@ export class LeaderboardService {
     this.players.next(data);
   }
 
-  parseStats(response: PlayerAllInfo[], statsKey: string): ILeaderBoardTableData[] {
-    if (!response || !statsKey) {
+  parseStats(response: any[], statsKey: string): ILeaderBoardTableData[] {
+    if (!response) {
       return [];
     }
-    response.sort(ArraySorting.sortObjectByKey(statsKey));
     return response.map(el => ({
       name: el.name,
       imgpath: el.imgpath,
       id: el.id,
-      statistic: el[statsKey]
+      statistic: Number(el[statsKey])
     }));
   }
 

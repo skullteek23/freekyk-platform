@@ -473,6 +473,12 @@ export function parsePointsData(source: Observable<IPoint>): Observable<IPoint> 
   return source.pipe(map((resp) => resp ? (resp as IPoint) : null));
 }
 
+export function parseAllPointsData(source: Observable<ngFireDocQuery>): Observable<IPoint[]> {
+  return source.pipe(
+    map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IPoint })) : []),
+  );
+}
+
 export function parsePointsDataV2(source: Observable<ngFireDoc>): Observable<IPoint> {
   return source.pipe(map((resp) => resp ? (resp.data() as IPoint) : null));
 }

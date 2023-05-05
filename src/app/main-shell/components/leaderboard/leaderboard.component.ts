@@ -46,10 +46,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         }
       }
     })
-    this.getPlayers();
+    this.getStats();
   }
 
-  getPlayers() {
+  getStats() {
     this.showLoader();
     forkJoin([
       this.apiGetService.getPlayers(),
@@ -66,7 +66,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
             return acc;
           }, []);
         }
-        console.log(mixed)
         this.leaderboardService.setPlayerList(mixed);
         this.hideLoader();
       },
