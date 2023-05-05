@@ -1022,7 +1022,8 @@ section.features-section {
 
 .buttons-container {
   height: 48px !important;
-  position: sticky;
+  position: fixed;
+  width: 100%;
   bottom: 60px;
   z-index: 200;
 
@@ -1038,8 +1039,9 @@ section.features-section {
 .fk-dialogs {
   .buttons-container {
     height: 48px !important;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    width: 100%;
     z-index: 200;
 
     .full-button {
