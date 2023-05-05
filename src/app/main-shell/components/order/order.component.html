@@ -110,11 +110,5 @@
       Cancel Order
     </a>
   </div>
-  <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
-    *ngIf="isCancellable && order?.notes?.itemType === type.pointsPurchase">
-    <a (click)="refundOrder()" class="mat-body-1" mat-button color="warn">
-      Refund Order
-    </a>
-  </div>
 </section>
 <app-loading *ngIf="isLoaderShown"></app-loading>

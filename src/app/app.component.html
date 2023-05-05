@@ -1,7 +1,7 @@
 <header>
   <app-header (menOpen)="onOpenMenu($event)"></app-header>
 </header>
-<main [fxHide]="menuOpen">
+<main [fxHide]="menuOpen" class="main-content">
   <router-outlet></router-outlet>
 </main>
 <app-bottom-nav [fxHide]="menuOpen || isOnboarding" [links]="links"></app-bottom-nav>
