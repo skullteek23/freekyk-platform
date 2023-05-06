@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
     { icon: 'sports_handball', label: 'Create match', highlight: false, route: '/match/create' },
   ];
   readonly actionShortcutDataRow_2: IActionShortcutData[] = [
-    { icon: 'emoji_events', label: 'Rewards', highlight: false, route: '/rewards/earn' },
+    { icon: 'emoji_events', label: 'Rewards & Points', highlight: false, route: '/rewards/earn' },
     { icon: 'leaderboard', label: ' Leaderboard', highlight: true, route: '/leaderboard/played' },
     { icon: 'record_voice_over', label: 'Be an organizer', highlight: true, route: null, extLink: environment.firebase.adminRegister },
     { icon: 'support_agent', label: 'Support', highlight: false, route: '/support/faqs' },

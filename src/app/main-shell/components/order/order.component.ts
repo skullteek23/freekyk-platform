@@ -205,6 +205,10 @@ export class OrderComponent implements OnInit, OnDestroy {
     return quantity - cancelledQty;
   }
 
+  viewPolicy() {
+
+  }
+
   refundOrder() {
     if (this.order.notes.itemType !== this.type.pointsPurchase) {
       return;

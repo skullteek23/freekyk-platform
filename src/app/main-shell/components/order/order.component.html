@@ -67,7 +67,7 @@
           </ol>
         </div>
         <div class="dash-h5 heading">
-          Details
+          Payment Summary
         </div>
         <div class="table" fxLayout="column">
           <mat-divider class="top-bar"></mat-divider>
@@ -103,6 +103,9 @@
   </mat-card>
   <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
     Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
+  </div>
+  <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+    <a class="mat-body-1" (click)="viewPolicy()">View Cancellation Policy</a>
   </div>
   <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
     *ngIf="isCancellable && order?.notes?.itemType === type.pickupSlot">
