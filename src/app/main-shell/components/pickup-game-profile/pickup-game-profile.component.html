@@ -76,8 +76,8 @@
         <div class="team">
           <ul fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center" class="list-container">
             <li *ngFor="let slot of displayedSlots; let i = index" class="button-slot">
-              <button [ngClass]="{'user-booked': playerUID && slot.uid === playerUID}"
-                [color]="slot.selected ? 'primary' : ''" mat-raised-button (click)="selectSlot(slot, i)">
+              <button [ngClass]="{'user-booked': user && slot.uid === user?.uid}"
+                [color]="slot.selected ? 'primary' : ''" mat-raised-button (click)="selectSlot(slot)">
                 <span class="material-icons-round filled" *ngIf="slot.booked">
                   check_circle
                 </span>
@@ -123,12 +123,12 @@
     </span>
   </p>
 </section>
-<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="payableFees > 0">
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <!-- <span class="material-icons-round external-icon">whatshot</span> -->
     <span>
-      Confirm & Pay {{payableFees | currency: 'INR'}}
+      Confirm & Pay {{amount | currency: 'INR'}}
     </span>
   </button>
 </div>

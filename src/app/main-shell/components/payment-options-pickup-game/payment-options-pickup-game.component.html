@@ -1,0 +1,32 @@
+<span class="dash-h5">
+  Options to book:
+</span>
+<mat-checkbox [(ngModel)]="isPointsUsed" color="primary" (change)="calculateAmount($event)" class="example-margin">Use
+  Freekyk Points
+  (Balance: {{data.credit}})</mat-checkbox>
+<mat-nav-list>
+  <mat-list-item>
+    <a (click)="confirmPay()">
+      <div class="iconSize" fxLayoutAlign="start center">
+        <mat-icon class="icon material-icons-round filled"> credit_score </mat-icon>
+        <span class="mat-body-1">Confirm & Pay Now: {{finalAmount}}</span>
+      </div>
+    </a>
+  </mat-list-item>
+  <mat-list-item>
+    <a (click)="payLater()">
+      <div class="iconSize" fxLayoutAlign="start center">
+        <mat-icon class="icon material-icons-round filled"> watch_later </mat-icon>
+        <span class="mat-body-1">Confirm & Pay Later</span>
+      </div>
+    </a>
+  </mat-list-item>
+  <mat-list-item>
+    <a (click)="useCustomCode()">
+      <div class="iconSize" fxLayoutAlign="start center">
+        <mat-icon class="icon material-icons-round filled"> code </mat-icon>
+        Use Code
+      </div>
+    </a>
+  </mat-list-item>
+</mat-nav-list>

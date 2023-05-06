@@ -15,8 +15,10 @@ export async function saveRazorpayOrder(data: { options: Partial<RazorPayOrder>,
   try {
     var instance = new Razorpay({ key_id: KEY_ID, key_secret: KEY_SECRET })
     let order: Partial<RazorPayOrder> = await instance?.orders?.fetch(ORDER_ID);
-    if (order && ORDER_ID && PAYMENT_ID) {
-      order['razorpay_payment_id'] = PAYMENT_ID;
+    if (order && ORDER_ID) {
+      if (PAYMENT_ID) {
+        order['razorpay_payment_id'] = PAYMENT_ID;
+      }
       order = {
         ...order,
         ...options

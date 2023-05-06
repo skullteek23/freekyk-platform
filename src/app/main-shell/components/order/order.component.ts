@@ -69,11 +69,12 @@ export class OrderComponent implements OnInit, OnDestroy {
               this.showSuccess = true;
             } else {
               this.router.navigate(['/orders']);
+              this.snackbarService.displayError('Error: Unable to get order details!');
             }
             this.isLoaderShown = false;
           },
           error: (error) => {
-            this.snackbarService.displayError();
+            this.snackbarService.displayError('Error: Unable to get order details!');
             this.isLoaderShown = false;
             this.router.navigate(['/orders']);
           }

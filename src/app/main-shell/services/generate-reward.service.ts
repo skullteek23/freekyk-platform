@@ -54,6 +54,9 @@ export class GenerateRewardService {
   }
 
   addPoints(addCount: number, uid: string, entity: any): Promise<any> {
+    if (addCount <= 0 || !addCount) {
+      return null;
+    }
     const update = {
       points: firebase.firestore.FieldValue.increment(addCount)
     }
@@ -62,6 +65,24 @@ export class GenerateRewardService {
       points: addCount,
       uid,
       type: LogType.credit,
+      entity,
+    }
+
+    return this.apiPostService.setUserPoints(uid, update, log);
+  }
+
+  subtractPoints(subtractCount: number, uid: string, entity: any): Promise<any> {
+    if (subtractCount <= 0 || !subtractCount) {
+      return null;
+    }
+    const update = {
+      points: firebase.firestore.FieldValue.increment(-subtractCount)
+    }
+    const log: IPointsLog = {
+      timestamp: new Date().getTime(),
+      points: subtractCount,
+      uid,
+      type: LogType.debit,
       entity,
     }
 

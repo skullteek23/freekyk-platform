@@ -47,6 +47,7 @@ import { GoalsComponent } from './components/leaderboard/components/goals/goals.
 import { PlayedComponent } from './components/leaderboard/components/played/played.component';
 import { PointsComponent } from './components/leaderboard/components/points/points.component';
 import { LeaderboardTableComponent } from './components/leaderboard/components/leaderboard-table/leaderboard-table.component';
+import { PaymentOptionsPickupGameComponent } from './components/payment-options-pickup-game/payment-options-pickup-game.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -89,6 +90,7 @@ import { LeaderboardTableComponent } from './components/leaderboard/components/l
     PlayedComponent,
     PointsComponent,
     LeaderboardTableComponent,
+    PaymentOptionsPickupGameComponent,
   ],
   imports: [
     CommonModule,

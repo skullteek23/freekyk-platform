@@ -1,26 +1,25 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { AuthService } from '@app/services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService, authUserMain } from '@app/services/auth.service';
 import { SnackbarService } from '@app/services/snackbar.service';
-import { MatchConstants } from '@shared/constants/constants';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { ILockedSlot, IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
-import { MatchFixture } from '@shared/interfaces/match.model';
-import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions } from '@shared/interfaces/order.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';
-import { ApiGetService, ApiPostService } from '@shared/services/api.service';
+import { ApiGetService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
-import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { WaitingListDialogComponent } from '../waiting-list-dialog/waiting-list-dialog.component';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { IPaymentOption, IPaymentOptionsData, ISelectedPaymentOption, PaymentOptionsPickupGameComponent } from '../payment-options-pickup-game/payment-options-pickup-game.component';
+import { PickupGameService } from '@app/main-shell/services/pickup-game.service';
 
 
 
@@ -28,11 +27,9 @@ import { GenerateRewardService } from '@app/main-shell/services/generate-reward.
   selector: 'app-pickup-game-profile',
   templateUrl: './pickup-game-profile.component.html',
   styleUrls: ['./pickup-game-profile.component.scss'],
-  providers: [DatePipe]
 })
 export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
 
-  readonly customDateFormat = MatchConstants.GROUND_SLOT_DATE_FORMAT;
   readonly oneHourMilliseconds = 3600000;
   readonly ONE_SIDE_COUNT = 7;
 
@@ -40,19 +37,18 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   season: Partial<SeasonAllInfo> = null;
   isLoaderShown = false;
   startDate = '';
-  match: MatchFixture;
   ground: ListOption;
   ageCatFormatter: any;
   displayedSlots: Partial<ISlotOption>[] = [];
   allSlots: IPickupGameSlot[] = [];
   reportingTime: number = null;
-  payableFees = 0;
+  amount = 0;
   emptySlotsCount = 0;
-  playerUID: string = null;
-  waitingList: ListOption[] = [];
   subscriptions = new Subscription();
   slotsSubscriptions = new Subscription();
-  lockID = null;
+  currentLockID = null;
+  user: authUserMain = null;
+  paymentOption: ISelectedPaymentOption = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,16 +57,20 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private paymentService: PaymentService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef,
     private snackBarService: SnackbarService,
-    private apiPostService: ApiPostService,
-    private datePipe: DatePipe,
-    private generateRewardService: GenerateRewardService
+    private generateRewardService: GenerateRewardService,
+    private _bottomSheet: MatBottomSheet,
+    private pickupGameService: PickupGameService
   ) { }
 
   ngAfterViewInit(): void {
-    this.initUser();
     this.ageCatFormatter = Formatters;
+    this.authService.isLoggedIn()
+      .subscribe(user => {
+        if (user) {
+          this.user = user;
+        }
+      });
     this.subscriptions.add(this.route.params.subscribe({
       next: (params) => {
         if (params && params.hasOwnProperty('seasonid')) {
@@ -79,28 +79,11 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         }
       }
     }));
-    this.subscriptions.add(this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationStart && event?.url?.endsWith('/pay')) {
-        this.showLoader();
-        this.participate();
-      } else if (event instanceof NavigationStart && event?.url?.endsWith('/waiting-list')) {
-        this.openWaitingList();
-      }
-    }));
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     this.slotsSubscriptions.unsubscribe();
-  }
-
-  initUser() {
-    this.authService.isLoggedIn()
-      .subscribe(response => {
-        if (response) {
-          this.playerUID = response.uid;
-        }
-      });
   }
 
   getSeasonInfo(): void {
@@ -111,43 +94,24 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
           next: (response) => {
             if (response) {
               this.season = response;
-              this.seasonID = response.id;
-              this.createStartDate();
+              this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
+              this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
+              this.amount = 0;
               this.getSeasonMatches();
               this.getSeasonBookedSlots();
-
-              this.reportingTime = this.season.startDate - (MatchConstants.ONE_HOUR_IN_MILLIS / 4);
-              this.payableFees = 0;
             } else {
-              this.router.navigate(['error'])
+              this.router.navigate(['/error']);
             }
             this.hideLoader();
             window.scrollTo(0, 0);
           },
           error: (error) => {
-            this.season = null;
             this.hideLoader();
-            window.scrollTo(0, 0);
+            this.snackBarService.displayError();
             this.router.navigate(['/error']);
           }
         }))
     }
-  }
-
-  openGround(data: ListOption) {
-    this.dialog.open(ViewGroundCardComponent, {
-      panelClass: 'fk-dialogs',
-      data
-    });
-  }
-
-  redirectToUrl(path: string, encodePath: string): void {
-    const encodedString = encodeURIComponent(encodePath);
-    this.router.navigate([path], { queryParams: { callback: encodedString } });
-  }
-
-  getWaitingList() {
-    return this.apiService.getSeasonWaitingList(this.seasonID).toPromise();
   }
 
   getSeasonMatches() {
@@ -155,14 +119,10 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
       this.apiService.getSeasonMatches(this.season.name)
         .subscribe({
           next: (response) => {
-            if (response) {
-              this.match = response[0];
-              this.ground = { viewValue: this.match.ground, value: this.match.groundID }
-            }
+            this.ground = this.pickupGameService.getMatchGround(response[0])
           },
           error: (error) => {
-            this.match = null;
-            this.ground = null;
+            this.ground = this.pickupGameService.getMatchGround(null);
           }
         })
     }
@@ -174,35 +134,56 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         .subscribe({
           next: (response) => {
             if (response) {
-              this.allSlots = response;
+              this.parseSlots(response);
             }
-            this.createBookedSlotList();
           },
           error: () => {
             this.allSlots = [];
-            this.createBookedSlotList();
+            this.parseSlots(null);
           }
         }))
     }
   }
 
-  createStartDate() {
-    if (this.season?.startDate) {
-      const today = new Date().getTime();
-      const timeDiff = Math.abs(this.season.startDate - today);
-      const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      if (diffDays === 0) {
-        this.startDate = 'today';
-      } else if (diffDays === 1) {
-        this.startDate = 'tomorrow';
-      } else {
-        this.startDate = `in ${diffDays} days`;
+  async parseSlots(response: IPickupGameSlot[]) {
+    this.allSlots = response || [];
+    this.displayedSlots = this.pickupGameService.createSlots(response);
+    this.emptySlotsCount = 0;
+
+    // Add Waiting List members
+    if (this.displayedSlots.length < this.ONE_SIDE_COUNT * 2) {
+      const waitingList = await this.getWaitingList();
+      if (waitingList) {
+        waitingList.forEach((element, index) => {
+          const slot: Partial<ISlotOption> = {
+            name: element.viewValue,
+            booked: true,
+            selected: false,
+            uid: element.value,
+            position: this.displayedSlots.length + index
+          };
+          if (this.displayedSlots.length < this.ONE_SIDE_COUNT * 2) {
+            this.displayedSlots.push(slot);
+          }
+        });
       }
     }
+
+    // Adding empty slots where position is not booked
+    if (this.displayedSlots.length < this.ONE_SIDE_COUNT * 2) {
+      for (let i = 0; i < this.ONE_SIDE_COUNT * 2; i++) {
+        if (!this.displayedSlots.find(el => el.position === i) && this.displayedSlots.length < this.ONE_SIDE_COUNT * 2) {
+          this.displayedSlots.push(this.pickupGameService.getEmptySlot(i));
+        }
+      }
+    }
+
+    this.displayedSlots.sort(ArraySorting.sortObjectByKey('position'));
+    this.emptySlotsCount = this.displayedSlots.filter(el => !el.name).length;
   }
 
-  selectSlot(slot: Partial<ISlotOption>, index: number) {
-    if (this.playerUID && slot.uid === this.playerUID) {
+  selectSlot(slot: Partial<ISlotOption>) {
+    if (this.user && slot.uid === this.user.uid) {
       this.router.navigate(['/orders']);
       return;
     }
@@ -210,327 +191,266 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
       return;
     }
     if (!slot.selected) {
-      slot.selected = true;
-      this.payableFees += this.season.fees;
+      this.amount += this.season.fees;
     } else {
-      slot.selected = false;
-      this.payableFees -= this.season.fees;
+      this.amount -= this.season.fees;
     }
+    slot.selected = !slot.selected;
   }
 
-  async createBookedSlotList() {
-    this.displayedSlots = [];
-    this.emptySlotsCount = 0;
-    this.payableFees = 0;
-
-    // Adding booked slots
-    this.allSlots.forEach(el => {
-      if (Array.isArray(el.slots)) {
-        el.slots.forEach((position, index) => {
-          const slot: Partial<ISlotOption> = {
-            name: this.getShortenText(el.name, 8) + this.getEnumerableIndex(index),
-            booked: true,
-            selected: false,
-            uid: el.uid,
-            position: position
-          }
-          this.displayedSlots.push(slot);
-        });
-      }
-    });
-
-    if (this.displayedSlots.length < 14) {
-
-      // Add Waiting List members
-      const waitingList = await this.getWaitingList();
-      waitingList.forEach((waitee, index) => {
-        const slot: Partial<ISlotOption> = {
-          name: waitee.viewValue,
-          booked: true,
-          selected: false,
-          uid: waitee.value,
-          position: this.displayedSlots.length + index
-        };
-        this.displayedSlots.push(slot);
-      });
+  async getStarted() {
+    if (this.amount <= 0) {
+      return;
     }
-
-    if (this.displayedSlots.length < 14) {
-      // Adding empty slots where position is not booked
-      for (let i = 0; i < 14; i++) {
-        const emptySlot: Partial<ISlotOption> = {
-          name: '',
-          booked: false,
-          selected: false,
-          uid: null,
-          position: i
-        }
-        if (!this.displayedSlots.find(el => el.position === i)) {
-          this.displayedSlots.push(emptySlot);
-        }
-      }
-    }
-    this.displayedSlots.sort(ArraySorting.sortObjectByKey('position'));
-    this.emptySlotsCount = this.displayedSlots.filter(el => !el.name).length;
-  }
-
-  getEnumerableIndex(index: number) {
-    if (index >= 1) {
-      return `+${index}`;
-    }
-    return '';
-  }
-
-  getShortenText(value: string, maxLength: number): string {
-    if (!!value) {
-      return value.length > maxLength
-        ? value.slice(0, maxLength).concat('...')
-        : value;
-    }
-    return value;
-  }
-
-  getStarted() {
     this.showLoader();
-    this.redirectToUrl('/signup', `/pickup-game/${this.season.id}/pay`);
+    const isLoggedIn = this.user.uid !== null;
+    const isOnBoarded = await this.authService.isProfileExists(this.user);
+    if (isLoggedIn && isOnBoarded) {
+      // User has completed signup and onboarding
+      this.hideLoader();
+      this.openOptions();
+    } else if (isLoggedIn && !isOnBoarded) {
+      // User is signed up but not on-boarded
+      this.hideLoader();
+      this.pickupGameService.redirectToUrl('/onboarding', `/pickup-game/${this.season.id}`);
+    } else {
+      // User is not signed up
+      this.hideLoader();
+      this.pickupGameService.redirectToUrl('/signup', `/pickup-game/${this.season.id}`);
+    }
   }
 
-  participate() {
-    this.resetLock();
-    this.authService.isLoggedIn().subscribe({
-      next: async (user) => {
-        if (user && this.payableFees > 0) {
-          this.showLoader();
-
-          if (await this.isSlotLocked()) {
-            this.snackBarService.displayError('Selected slot(s) is already booked!');
-            this.hideLoader();
-            return;
+  async openOptions() {
+    const userPoints = await this.apiService.getUserPoints(this.user.uid).toPromise();
+    const options = {
+      data: {
+        credit: userPoints?.points || 0,
+        amount: this.amount
+      } as IPaymentOptionsData
+    }
+    const response: ISelectedPaymentOption = await this._bottomSheet.open(PaymentOptionsPickupGameComponent, options).afterDismissed().toPromise();
+    if (response && (response.pointsUsed > 0 || response.amount > 0)) {
+      this.paymentOption = response;
+      switch (this.paymentOption.mode) {
+        case IPaymentOption.payNow:
+          if (await this.prepareSlotSuccess()) {
+            this.payNow();
           }
-
-          this.lockID = this.apiService.getUniqueDocID();
-          const lockStatus = await this.lockSlot(user.uid);
-          const totalSlots = this.displayedSlots.filter(el => el.selected && !el.booked).length;
-          if (!lockStatus || !this.lockID || !totalSlots) {
-            this.snackBarService.displayError("Error: Unable to book your slot!");
-            this.resetLock();
-            this.hideLoader();
-            return;
+          break;
+        case IPaymentOption.payLater:
+          if (await this.prepareSlotSuccess()) {
+            this.payLater();
           }
+          break;
+        case IPaymentOption.customCode:
+          break;
 
-          const order = await this.paymentService.getNewOrder(user.uid, this.payableFees.toString());
-          if (!order) {
-            this.snackBarService.displayError("Error: Order generation failed!");
-            this.resetLock();
-            this.hideLoader();
-            return;
-          }
+        default:
+          this.snackBarService.displayError('Please select an option!');
+          break;
+      }
+    } else {
+      this.snackBarService.displayError('Error: Invalid option selected!');
+    }
+  }
 
-          const options: Partial<ICheckoutOptions> = {
-            ...UNIVERSAL_OPTIONS,
-            prefill: {
-              contact: user.phoneNumber,
-              name: user.displayName,
-              email: user.email
-            },
-            description: `${this.season.name} x${totalSlots} Slot(s)`,
-            order_id: order.id,
-            amount: this.payableFees * 100,
-            handler: this.handlePaymentSuccess.bind(this),
-            modal: {
-              backdropclose: false,
-              escape: false,
-              confirm_close: true,
-              ondismiss: this.dismissDialog.bind(this)
-            }
-          }
-          this.paymentService.openCheckoutPage(options);
-        } else {
-          this.redirectToUrl('/signup', `/pickup-game/${this.season.id}/pay`);
+  async prepareSlotSuccess(): Promise<any> {
+    this.showLoader();
+    // Check if slot is already locked
+    if (await this.isSlotLocked()) {
+      this.snackBarService.displayError('Error: Selected slot(s) is already booked!');
+      this.hideLoader();
+      return false;
+    } else {
+      // lock the slot
+      this.currentLockID = this.apiService.getUniqueDocID();
+      const lockStatus = await this.pickupGameService.lockSlot(this.user.uid, this.currentLockID, this.seasonID, this.displayedSlots);
+      if (!lockStatus || !this.currentLockID) {
+        this.snackBarService.displayError('Error: Unable to book your slot!');
+        this.hideLoader();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async payNow() {
+    this.showLoader();
+
+    // If points are used, subtract points and save log
+    let order;
+    let pointsDeduction;
+
+    if (this.paymentOption.pointsUsed > 0 && this.paymentOption.amount > 0) {
+      pointsDeduction = await this.generateRewardService.subtractPoints(this.paymentOption.pointsUsed, this.user.uid, 'by spending on game');
+      if (!pointsDeduction) {
+        this.snackBarService.displayError("Error: Unable to use points for booking!");
+        this.hideLoader();
+        return null;
+      }
+      order = await this.paymentService.getNewOrder(this.user.uid, this.amount.toString(), null);
+      if (!order) {
+        this.snackBarService.displayError("Error: Order generation failed!");
+        this.hideLoader();
+        return null;
+      }
+    }
+
+    // If actual money is used, generate razorpay order
+    if (this.paymentOption.amount > 0) {
+
+    }
+  }
+
+  openCheckoutOptions(orderID: string, amount: number) {
+    if (orderID) {
+      // create payment options
+      const totalSlots = this.displayedSlots.filter(el => el.selected && !el.booked).length;
+      const options: Partial<ICheckoutOptions> = {
+        ...UNIVERSAL_OPTIONS,
+        prefill: {
+          contact: this.user.phoneNumber,
+          name: this.user.displayName,
+          email: this.user.email
+        },
+        description: `${this.season.name} x${totalSlots} Slot(s)`,
+        order_id: orderID,
+        amount: amount * 100,
+        handler: this.paymentVerify.bind(this),
+        modal: {
+          backdropclose: false,
+          escape: false,
+          confirm_close: true,
+          ondismiss: this.dismiss.bind(this)
         }
       }
-    })
+
+      // Open Checkout Page
+      this.paymentService.openCheckoutPage(options);
+    } else {
+      this.snackBarService.displayError('Error: Invalid Order details!');
+    }
+  }
+
+  async paymentVerify(response) {
+    this.showLoader();
+
+    try {
+      const verificationResult = await this.paymentService.verifyPayment(response).toPromise();
+      if (verificationResult) {
+        const data = {
+          displaySlots: this.displayedSlots,
+          allSlots: this.allSlots,
+          uid: this.user.uid,
+          season: this.season,
+          response
+        }
+        const saveResult = Promise.all(this.pickupGameService.saveInfo(data));
+        if (saveResult) {
+          this.snackBarService.displayCustomMsg('Your slot has been confirmed!');
+          this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, this.user.uid);
+          console.log(response);
+          this.pickupGameService.openOrder(response['razorpay_order_id']);
+          this.hideLoader();
+        }
+      }
+    } catch (error) {
+      this.hideLoader();
+      this.snackBarService.displayError(error?.message);
+    }
+  }
+
+  dismiss() {
+    this.hideLoader();
+    if (this.currentLockID) {
+      this.pickupGameService.deleteLock(this.currentLockID)
+    }
+  }
+
+  async payLater() {
+    this.showLoader();
+
+    // generate order
+    const order = await this.getOrder();
+    if (order) {
+      await this.generateRewardService.subtractPoints(this.paymentOption.pointsUsed, this.user.uid, 'by spending on game');
+
+      const data = {
+        displaySlots: this.displayedSlots,
+        allSlots: this.allSlots,
+        uid: this.user.uid,
+        season: this.season,
+        response: {
+
+        }
+      }
+      const saveResult = Promise.all([this.pickupGameService.saveInfo(data)]);
+      if (saveResult) {
+        this.snackBarService.displayCustomMsg('Your slot has been confirmed!');
+        this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, this.user.uid);
+        this.pickupGameService.openOrder(order.id);
+        this.hideLoader();
+      }
+    }
+
   }
 
   async isSlotLocked(): Promise<boolean> {
     const lockedSlot: ILockedSlot = await this.apiService.getLockedSlots(this.seasonID).toPromise();
-    if (lockedSlot && lockedSlot.lockedSlots?.length) {
-      return this.displayedSlots.some(element => element.selected && lockedSlot.lockedSlots.includes(element.position) && !this.isLockExpired(lockedSlot.timestamp));
+    if (lockedSlot?.lockedSlots?.length) {
+      return this.displayedSlots.some(element =>
+        element.selected
+        && lockedSlot.lockedSlots.includes(element.position)
+        && !this.pickupGameService.isLockExpired(lockedSlot.timestamp)
+      );
     }
     return false;
   }
 
-  isLockExpired(timestamp: number): boolean {
-    const current = new Date().getTime();
-    const diff = current - timestamp;
-    return diff > MatchConstants.FIVE_MINUTES_IN_MILLIS;
+  getWaitingList() {
+    return this.apiService.getSeasonWaitingList(this.seasonID).toPromise();
   }
 
-  async lockSlot(uid: string): Promise<any> {
-    const selectedSlots: number[] = [];
-    this.displayedSlots.forEach(dpSlot => {
-      if (dpSlot.selected) {
-        selectedSlots.push(dpSlot.position);
-      }
-    })
-    if (selectedSlots.length && this.lockID) {
-      const data: ILockedSlot = {
-        uid,
-        seasonID: this.seasonID,
-        lockedSlots: selectedSlots,
-        timestamp: new Date().getTime()
-      }
-      try {
-        await this.apiPostService.lockPickupSlot(this.lockID, data)
-        return true;
-      } catch (error) {
-        return null;
-      }
+  async getOrder() {
+    const order = await this.paymentService.getNewOrder(this.user.uid, this.amount.toString(), null);
+    if (!order) {
+      this.snackBarService.displayError("Error: Order generation failed!");
+      this.hideLoader();
+      return null;
     }
-    return null;
-  }
-
-  openOrder(orderID: string) {
-    if (orderID) {
-      this.router.navigate(['/order', orderID])
-    }
-  }
-
-  handlePaymentSuccess(response): void {
-    if (response) {
-      this.showLoader();
-      this.paymentService.verifyPayment(response)
-        .subscribe({
-          next: (verificationResult) => {
-            if (verificationResult) {
-              Promise.all(this.getPromises(response))
-                .then(() => {
-                  const uid = this.authService.getUser()?.uid || null;
-                  this.snackBarService.displayCustomMsg('Your slot has been confirmed!');
-                  if (uid) {
-                    this.generateRewardService.completeActivity(RewardableActivities.joinPickupGame, uid);
-                  }
-                  this.openOrder(response['razorpay_order_id']);
-                  this.resetFees();
-                  this.slotsSubscriptions.unsubscribe();
-                })
-                .catch((error) => {
-                  this.snackBarService.displayError(error?.message);
-                })
-                .finally(() => {
-                  this.dismissDialog();
-                })
-            }
-          },
-          error: (error) => {
-            this.dismissDialog();
-            this.snackBarService.displayError(error?.message);
-          }
-        });
-    } else {
-      this.dismissDialog();
-      this.snackBarService.displayError('Error: Payment Verification could not be initiated!');
-    }
-  }
-
-  deleteLock() {
-    this.apiPostService.deleteLockedPickupSlot(this.lockID);
-  }
-
-  resetFees() {
-    this.payableFees = 0;
-  }
-
-  resetLock() {
-    this.lockID = null;
-  }
-
-  getPromises(response): any[] {
-    const uid = this.authService.getUser()?.uid || null;
-    const totalSlots = this.displayedSlots.filter(el => el.selected).length;
-
-    const selectedPositions: number[] = [];
-    this.displayedSlots.forEach(slot => {
-      if (slot.selected) {
-        selectedPositions.push(slot.position);
-      }
-    });
-
-
-    const update: Partial<IPickupGameSlot> = {
-      slots: selectedPositions
-    }
-
-    if (uid) {
-      const allPromises = [];
-      let pickupSlotID = this.apiService.getUniqueDocID();
-
-      const existingSlot = this.allSlots?.find(el => el.uid === uid);
-      if (existingSlot?.hasOwnProperty('slots')) {
-
-        pickupSlotID = existingSlot.id;
-        update.slots = update.slots.concat(existingSlot.slots);
-        allPromises.push(this.apiPostService.updatePickupSlot(existingSlot.id, update));
-
-      } else {
-
-        const data: IPickupGameSlot = {
-          slots: selectedPositions,
-          uid: uid,
-          timestamp: new Date().getTime(),
-          seasonID: this.seasonID,
-        }
-        allPromises.push(this.apiPostService.savePickupSlotWithCustomID(pickupSlotID, data));
-
-      }
-
-      const options: Partial<RazorPayOrder> = {
-        notes: {
-          seasonID: this.season.id,
-          seasonName: this.season.name,
-          itemQty: totalSlots,
-          itemCancelledQty: 0,
-          itemID: pickupSlotID,
-          itemName: `Pickup Game Slots`,
-          itemType: IItemType.pickupSlot,
-          logs: [
-            `Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`
-          ]
-        }
-      }
-      allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
-
-      return allPromises;
-    }
-  }
-
-  openWaitingList() {
-    const user = this.authService.getUser();
-    if (user) {
-      this.dialog.open(WaitingListDialogComponent, {
-        panelClass: 'fk-dialogs',
-        data: this.season,
-      });
-    } else {
-      this.redirectToUrl('/signup', `/pickup-game/${this.season.id}/waiting-list`);
-    }
-  }
-
-  dismissDialog() {
-    this.hideLoader();
-    if (this.lockID) {
-      this.deleteLock();
-    }
+    return order;
   }
 
   showLoader() {
     this.isLoaderShown = true;
-    this.cdr.detectChanges();
   }
 
   hideLoader() {
     this.isLoaderShown = false;
-    this.cdr.detectChanges();
   }
 
+  openGround(data: ListOption) {
+    this.dialog.open(ViewGroundCardComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    });
+  }
+
+  async openWaitingList() {
+    const isLoggedIn = this.user.uid !== null;
+    const isOnBoarded = await this.authService.isProfileExists(this.user);
+    if (isLoggedIn && isOnBoarded) {
+      // User has completed signup and onboarding
+      this.dialog.open(WaitingListDialogComponent, {
+        panelClass: 'fk-dialogs',
+        data: this.season,
+      });
+    } else if (isLoggedIn && !isOnBoarded) {
+      // User is signed up but not on-boarded
+      this.pickupGameService.redirectToUrl('/onboarding', `/pickup-game/${this.season.id}`);
+    } else {
+      // User is not signed up
+      this.pickupGameService.redirectToUrl('/signup', `/pickup-game/${this.season.id}`);
+    }
+  }
 }

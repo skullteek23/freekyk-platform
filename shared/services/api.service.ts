@@ -423,7 +423,6 @@ export class ApiGetService {
   getRewards(): Observable<IReward[]> {
     return this.angularFirestore.collection('rewards').get()
       .pipe(parseRewardsData)
-
   }
 }
 
@@ -435,6 +434,10 @@ export class ApiPostService {
     private angularFirestore: AngularFirestore,
     private authService: AuthService,
   ) { }
+
+  getBatch() {
+    return this.angularFirestore.firestore.batch();
+  }
 
   savePickupSlot(doc: IPickupGameSlot): Promise<any> {
     return this.angularFirestore.collection('/pickupSlots').add(doc);
@@ -556,4 +559,18 @@ export class ApiPostService {
   addMatchRequest(doc: IMatchRequest): Promise<any> {
     return this.angularFirestore.collection('matchRequests').add(doc);
   }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiRefService {
+  constructor(
+    private angularFirestore: AngularFirestore,
+  ) { }
+
+  getPickupSlotRef(docID?: string) {
+    return this.angularFirestore.firestore.collection('/pickupSlots').doc(docID);
+  }
+
 }
