@@ -1,0 +1,44 @@
+<div class="back-button" fxLayoutAlign="start center">
+  <button (click)="goBack()" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      View All Orders
+    </span>
+  </button>
+  <span class="dash-h5 heading">Pending Payments</span>
+</div>
+
+<section>
+  <mat-list *ngIf="orders?.length">
+    <mat-list-item *ngFor="let order of orders">
+      <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
+        <div class="description" fxLayout="column" fxFLex="auto">
+          <div [ngSwitch]="order?.notes?.itemType" fxLayout="column" fxLayoutAlign="stretch start">
+            <span *ngSwitchCase="type.pickupSlot">{{order?.notes?.seasonName}}</span>
+            <span *ngSwitchCase="type.pointsPurchase">{{order?.notes.itemName}}</span>
+            <span *ngSwitchDefault>{{order?.notes.itemName}}</span>
+          </div>
+          <ng-template #orderNumber>
+            <span class="mat-body-2">
+              Order#{{order.id}}
+            </span>
+          </ng-template>
+          <span class="mat-caption" *ngIf="order.amount >= 0">
+            {{(order.amount) | currency: 'INR'}}
+          </span>
+          <span class="mat-caption sec-menu">
+            Ordered on {{order?.created_at * 1000 | date: 'mediumDate'}}
+          </span>
+        </div>
+        <div fxFLex="20%">
+          <button color="warn" mat-flat-button (click)="payNow(order)">
+            Pay {{ order.amount_due | currency: 'INR' }}
+          </button>
+        </div>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>
+  <app-no-items-message customText="Woohoo! No pending payments." *ngIf="!orders?.length"></app-no-items-message>
+</section>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

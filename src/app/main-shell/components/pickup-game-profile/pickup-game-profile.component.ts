@@ -199,19 +199,24 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     }
     this.showLoader();
     const isLoggedIn = this.user?.uid !== null;
-    const isOnBoarded = await this.authService.isProfileExists(this.user);
-    if (isLoggedIn && isOnBoarded) {
-      // User has completed signup and onboarding
-      this.hideLoader();
-      this.openOptions();
-    } else if (isLoggedIn && !isOnBoarded) {
-      // User is signed up but not on-boarded
-      this.hideLoader();
-      this.pickupGameService.redirectToUrl('/onboarding', `/pickup-game/${this.season.id}`);
-    } else {
+
+    if (!isLoggedIn) {
       // User is not signed up
       this.hideLoader();
       this.pickupGameService.redirectToUrl('/signup', `/pickup-game/${this.season.id}`);
+    } else if (isLoggedIn && !await this.authService.isProfileExists(this.user)) {
+      // User is signed up but not on-boarded
+      this.hideLoader();
+      this.pickupGameService.redirectToUrl('/onboarding', `/pickup-game/${this.season.id}`);
+    } else if (await this.paymentService.isPendingOrder(this.user.uid)) {
+      // User is not signed up
+      this.hideLoader();
+      this.snackBarService.displayError('Complete your pending payments!');
+      this.pickupGameService.redirectToUrl('/pending-payments', `/pickup-game/${this.season.id}`);
+    } else {
+      // User has completed signup and onboarding
+      this.hideLoader();
+      this.openOptions();
     }
   }
 

@@ -16,7 +16,7 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -397,6 +397,12 @@ export class ApiGetService {
     const query = query => query.where('activityID', '==', activityID).where('uid', '==', uid);
     return this.angularFirestore.collection('completedActivities', query).get()
       .pipe(parseCompletedActivity)
+  }
+
+  isPendingOrder(uid: string): Observable<boolean> {
+    const query = query => query.where('amount_due', '>=', 0).where('receipt', '==', uid);
+    return this.angularFirestore.collection('orders', query).get()
+      .pipe(checkPendingOrderExists)
   }
 
   getUserCompletedActivities(uid): Observable<ICompletedActivity[]> {

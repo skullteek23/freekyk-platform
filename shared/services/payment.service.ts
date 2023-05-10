@@ -8,7 +8,7 @@ import { FunctionsApiService } from './functions-api.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import { authUserMain } from '@app/services/auth.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
-import { ApiPostService } from './api.service';
+import { ApiGetService, ApiPostService } from './api.service';
 declare var Razorpay: any;
 
 @Injectable({
@@ -20,8 +20,8 @@ export class PaymentService {
     private ngFunc: AngularFireFunctions,
     private functionsApiService: FunctionsApiService,
     private generateRewardService: GenerateRewardService,
-    private router: Router,
-    private apiPostService: ApiPostService
+    private apiPostService: ApiPostService,
+    private apiGetService: ApiGetService
   ) { }
 
   async generateOrder(amount: number, minAmount: number): Promise<any> {
@@ -104,6 +104,10 @@ export class PaymentService {
 
   payWithPoints(user: authUserMain, amount: number) {
     return this.generateRewardService.subtractPoints(amount, user.uid, 'booking pickup game slots(s)');
+  }
+
+  isPendingOrder(userID: string): Promise<boolean> {
+    return this.apiGetService.isPendingOrder(userID).toPromise();
   }
 
 

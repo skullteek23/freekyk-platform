@@ -49,6 +49,7 @@ import { PointsComponent } from './components/leaderboard/components/points/poin
 import { LeaderboardTableComponent } from './components/leaderboard/components/leaderboard-table/leaderboard-table.component';
 import { PaymentOptionsPickupGameComponent } from './components/payment-options-pickup-game/payment-options-pickup-game.component';
 import { PointTransactionLogsDialogComponent } from './components/point-transaction-logs-dialog/point-transaction-logs-dialog.component';
+import { PendingPaymentComponent } from './components/pending-payment/pending-payment.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -93,6 +94,7 @@ import { PointTransactionLogsDialogComponent } from './components/point-transact
     LeaderboardTableComponent,
     PaymentOptionsPickupGameComponent,
     PointTransactionLogsDialogComponent,
+    PendingPaymentComponent,
   ],
   imports: [
     CommonModule,

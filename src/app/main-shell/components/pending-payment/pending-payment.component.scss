@@ -1,0 +1,38 @@
+mat-list {
+  width: 100%;
+  height: calc(100vh - 157px);
+  overflow-y: auto;
+
+  padding: 12px;
+
+  mat-list-item {
+    height: 80px;
+    width: 100%;
+    margin-bottom: 12px;
+
+    .team-container {
+      width: 100%;
+
+      .image {
+        height: 100px;
+        max-height: 81px;
+        width: 130px;
+        max-width: 130px;
+        overflow: hidden;
+        background-color: var(--grey5);
+        border-radius: var(--dashCardBorder) 0 0 var(--dashCardBorder);
+        margin-left: -16px;
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .description {
+      width: 100%;
+    }
+  }
+}

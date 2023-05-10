@@ -421,11 +421,24 @@ export function parsePendingOrderData(source: Observable<ngFireDocQuery>): Obser
       const data: Partial<RazorPayOrder>[] = [];
       resp.docs.map((doc) => {
         const docData = doc.data() as Partial<RazorPayOrder>;
-        if (docData.amount_due > 0) {
-          data.push({ ...docData, amount_due: docData.amount_due / 100 });
+        if (docData.amount_due > 0 && !docData?.notes?.pointsUsed) {
+          data.push({ ...docData, amount_due: docData.amount_due / 100, amount: docData.amount / 100 });
         }
       })
       return data;
+    }
+    ),
+  );
+}
+
+export function checkPendingOrderExists(source: Observable<ngFireDocQuery>): Observable<boolean> {
+  return source.pipe(
+    parsePendingOrderData,
+    map((resp) => {
+      if (resp?.length > 0) {
+        return true;
+      }
+      return false;
     }
     ),
   );

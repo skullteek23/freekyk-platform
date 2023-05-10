@@ -64,5 +64,4 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   hideLoader() {
     this.isLoaderShown = false;
   }
-
 }

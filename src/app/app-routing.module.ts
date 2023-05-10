@@ -41,6 +41,7 @@ import { PurchasePointsComponent } from './main-shell/components/purchase-points
 import { GoalsComponent } from './main-shell/components/leaderboard/components/goals/goals.component';
 import { PlayedComponent } from './main-shell/components/leaderboard/components/played/played.component';
 import { PointsComponent } from './main-shell/components/leaderboard/components/points/points.component';
+import { PendingPaymentComponent } from './main-shell/components/pending-payment/pending-payment.component';
 
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 
@@ -109,6 +110,7 @@ const routes: Routes = [
   { path: 'notifications', component: MyNotificationsComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'orders', component: MyOrdersComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'order/:orderid', component: OrderComponent, ...canActivate(redirectUnauthorizedGuard) },
+  { path: 'pending-payments', component: PendingPaymentComponent, ...canActivate(redirectUnauthorizedGuard) },
   { path: 'addresses', component: MyAddressesComponent, ...canActivate(redirectUnauthorizedGuard) },
   {
     path: 'rewards', component: RewardsComponent, ...canActivate(redirectUnauthorizedGuard),

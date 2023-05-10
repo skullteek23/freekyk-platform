@@ -274,10 +274,7 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.paymentService.openCheckoutPage(checkoutOptions);
         }
       }
-    })
-    if (this.isPendingAmount && !this.isPendingCash && this.orderID && this.order?.amount_due > 0) {
-
-    }
+    });
   }
 
   async verifyPayment(response) {
@@ -290,7 +287,7 @@ export class OrderComponent implements OnInit, OnDestroy {
           logs.push(`Paid partial amount on ${this.datePipe.transform(new Date(), 'short')}`);
           const update: Partial<RazorPayOrder> = {
             notes: {
-              ... this.order.notes,
+              ...this.order.notes,
               logs
             }
           }

@@ -24,10 +24,10 @@
   <mat-list *ngIf="orders?.length">
     <mat-list-item *ngFor="let order of orders" (click)="openOrder(order.id)">
       <mat-card class="mat-elevation-z8 dashboard-card team-container" fxLayoutAlign="start center" fxLayoutGap="12px">
-        <div class="image">
+        <div class="image" fxFlex="20%">
           <img src="assets/images/placeholder_product.png" alt="Product Order" appFallbackImg>
         </div>
-        <div class="description" fxLayout="column">
+        <div class="description" fxLayout="column" fxFlex="auto">
           <div [ngSwitch]="order?.notes?.itemType" fxLayout="column" fxLayoutAlign="stretch start">
             <span *ngSwitchCase="type.pickupSlot">{{order?.notes?.seasonName}}</span>
             <span *ngSwitchCase="type.pointsPurchase">{{order?.notes.itemName}}</span>
@@ -38,13 +38,16 @@
               Order#{{order.id}}
             </span>
           </ng-template>
-          <span class="mat-body-1" *ngIf="order.amount >= 0">
+          <span class="mat-body-1" *ngIf="order.amount >= 0" fxFlex="10%">
             {{(order.amount / 100) | currency: 'INR'}}
           </span>
-          <span class="mat-caption sec-menu">
+          <span class="mat-caption sec-menu" fxFlex="10%">
             Ordered on {{order?.created_at * 1000 | date: 'mediumDate'}}
           </span>
         </div>
+        <span class="material-icons-round red" *ngIf="order.amount_due > (order?.notes?.pointsUsed || 0)">
+          priority_high
+        </span>
         <span class="material-icons-round clickable">
           chevron_right
         </span>

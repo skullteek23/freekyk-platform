@@ -22,8 +22,8 @@
   </div>
   <div class="warnings" fxLayoutAlign="space-between center" *ngIf="isPendingAmount && !isPendingCash">
     <div class="message-container" fxLayoutAlign="start center" fxLayoutGap="6px">
-      <span class="material-icons-round">
-        warning
+      <span class="material-icons-round red">
+        priority_high
       </span>
       <span class="mat-caption">
         Pay Remaining Amount
@@ -35,11 +35,11 @@
   </div>
   <div class="warnings" fxLayoutAlign="space-between center" *ngIf="isPendingCash && order?.amount_due > 0">
     <div class="message-container" fxLayoutAlign="start center" fxLayoutGap="6px">
-      <span class="material-icons-round red">
-        warning
+      <span class="material-icons-round">
+        info
       </span>
       <span class="mat-body-1">
-        {{order?.amount_due | currency: 'INR'}} to be paid in cash to the Organizer before match
+        {{order?.amount_due / 100 | currency: 'INR'}} to be paid in cash to the Organizer before match
       </span>
     </div>
     <span class="mat-body-2"></span>
