@@ -1,0 +1,48 @@
+.list-container {
+  height: calc(100vh - 112px);
+  overflow-y: auto;
+
+  padding: 12px;
+
+  mat-list {
+    width: 100%;
+
+    mat-list-item {
+      height: 80px;
+      width: 100%;
+      margin-bottom: 12px;
+
+      .content-container {
+        width: 100%;
+
+        .points-container {
+          width: 100px;
+          min-width: 100px;
+          max-width: 100px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: end;
+        }
+
+        .credit {
+          width: 100%;
+          color: var(--primaryColor);
+        }
+
+        .debit {
+          width: 100%;
+          color: var(--red);
+        }
+      }
+    }
+  }
+}
+
+.dashboard-card {
+  padding: 0 12px !important;
+}
+
+.need-help-message {
+  margin-top: 12px;
+}

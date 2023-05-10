@@ -1,32 +1,53 @@
-<span class="dash-h5">
-  Options to book:
-</span>
-<mat-checkbox [(ngModel)]="isPointsUsed" color="primary" (change)="calculateAmount($event)" class="example-margin">Use
-  Freekyk Points
-  (Balance: {{data.credit}})</mat-checkbox>
-<mat-nav-list>
-  <mat-list-item>
-    <a (click)="confirmPay()">
-      <div class="iconSize" fxLayoutAlign="start center">
-        <mat-icon class="icon material-icons-round filled"> credit_score </mat-icon>
-        <span class="mat-body-1">Confirm & Pay Now: {{finalAmount}}</span>
-      </div>
-    </a>
-  </mat-list-item>
-  <mat-list-item>
-    <a (click)="payLater()">
-      <div class="iconSize" fxLayoutAlign="start center">
-        <mat-icon class="icon material-icons-round filled"> watch_later </mat-icon>
-        <span class="mat-body-1">Confirm & Pay Later</span>
-      </div>
-    </a>
-  </mat-list-item>
-  <mat-list-item>
-    <a (click)="useCustomCode()">
-      <div class="iconSize" fxLayoutAlign="start center">
-        <mat-icon class="icon material-icons-round filled"> code </mat-icon>
-        Use Code
-      </div>
-    </a>
-  </mat-list-item>
-</mat-nav-list>
+<section class="payment-option-container">
+  <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="heading dash-h5">
+    Booking Summary:
+  </span>
+  <div class="details-container" *ngIf="dialogData" fxLayout="column" fxLayoutGap="8px">
+    <div class="detail" fxLayoutAlign="space-between center">
+      <span class="mat-caption">Slots</span>
+      <span class="mat-body-1"> {{dialogData.slotsCount}} </span>
+    </div>
+    <div class="detail" fxLayoutAlign="space-between center">
+      <span class="mat-caption">Payable Amount</span>
+      <span class="mat-body-1"> {{dialogData.amount | currency :'INR'}} </span>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="heading">
+    <span class="dash-h5">Payment Options:</span>
+    <span (click)="openInfo()" class="material-icons-round sec-menu">info</span>
+  </span>
+
+  <div class="links-container" fxLayout="column" fxLayoutGap="4px">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <li class="mat-tree-node" (click)="dismiss(node);treeControl.collapseAll()">
+          <button mat-button class="custom-button-container" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <span class="material-icons-round external-icon filled" *ngIf="node.icon">{{node.icon}}</span>
+            <span class="mat-body-1 main-text">
+              {{node.label}}
+            </span>
+          </button>
+        </li>
+      </mat-tree-node>
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li>
+          <div fxLayoutAlign="start center" fxLayoutGap="8px" class="mat-tree-node" matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.label">
+            <span class="mat-icon-rtl-mirror material-icons-round">
+              {{treeControl.isExpanded(node) ? 'expand_less' : 'expand_more'}}
+            </span>
+            <span class="mat-body-1">
+              {{node.label}}
+            </span>
+          </div>
+          <ul class="example-tree-ul" [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </ul>
+        </li>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </div>
+</section>

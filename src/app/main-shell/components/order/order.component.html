@@ -15,10 +15,34 @@
       <span class="mat-body-1">
         Your order is successful!
       </span>
-      <span class="mat-caption" *ngIf="order?.id">
+      <span class="mat-caption sec-menu" *ngIf="order?.id">
         Order ID:<br> #{{order?.id}}
       </span>
     </div>
+  </div>
+  <div class="warnings" fxLayoutAlign="space-between center" *ngIf="isPendingAmount && !isPendingCash">
+    <div class="message-container" fxLayoutAlign="start center" fxLayoutGap="6px">
+      <span class="material-icons-round">
+        warning
+      </span>
+      <span class="mat-caption">
+        Pay Remaining Amount
+      </span>
+    </div>
+    <button color="warn" class="noResponseButton buttonText" (click)="payRemaining()">
+      <span>Pay {{order.amount_due | currency: 'INR'}}</span>
+    </button>
+  </div>
+  <div class="warnings" fxLayoutAlign="space-between center" *ngIf="isPendingCash && order?.amount_due > 0">
+    <div class="message-container" fxLayoutAlign="start center" fxLayoutGap="6px">
+      <span class="material-icons-round red">
+        warning
+      </span>
+      <span class="mat-body-1">
+        {{order?.amount_due | currency: 'INR'}} to be paid in cash to the Organizer before match
+      </span>
+    </div>
+    <span class="mat-body-2"></span>
   </div>
   <mat-card class="dashboard-card mat-elevation-z8" *ngIf="order">
     <mat-card-header>
@@ -29,7 +53,8 @@
         <div class="mat-body-1" *ngIf="!order?.notes?.itemName">
           New Order#{{order?.id }}
         </div>
-        <button color="primary" mat-raised-button (click)="triggerAction()" *ngIf="order?.notes?.itemType >= 0">
+        <button color="primary" class="secondaryButton buttonText" (click)="triggerAction()"
+          *ngIf="order?.notes?.itemType >= 0">
           <span [ngSwitch]="order?.notes?.itemType">
             <span *ngSwitchCase="type.pickupSlot">View Game</span>
             <span *ngSwitchCase="type.pointsPurchase">Redeem</span>
@@ -72,11 +97,16 @@
         <div class="table" fxLayout="column">
           <mat-divider class="top-bar"></mat-divider>
           <div fxLayoutAlign="space-between center" fxLayout="row" class="sentiment">
-            <span class="mat-body-1 sec-menu">Item Total</span>
+            <span class="mat-caption sec-menu">Item Total</span>
             <span class="mat-body-2 sec-menu">{{amount | currency: 'INR'}}</span>
           </div>
+          <div fxLayoutAlign="space-between center" fxLayout="row" class="sentiment"
+            *ngIf="order?.notes?.pointsUsed > 0">
+            <span class="mat-caption sec-menu">Freekyk Points</span>
+            <span class="mat-body-2 filled">(-)&nbsp;{{order?.notes?.pointsUsed | currency: 'INR'}}</span>
+          </div>
           <div fxLayoutAlign="space-between center" fxLayout="row" class="sentiment">
-            <span class="mat-body-1 sec-menu">Taxes</span>
+            <span class="mat-caption sec-menu">Taxes</span>
             <span class="mat-body-2 sec-menu"> {{ gstAmount | currency: 'INR'}} </span>
           </div>
           <mat-divider class="bottom-bar"></mat-divider>
@@ -87,12 +117,12 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-footer>
+    <!-- <mat-card-footer>
       <div class="footer-container">
         Upon cancellation, 50% amount will be deducted and rest will be credited to the original payment source within
         2-3 working days.
       </div>
-    </mat-card-footer>
+    </mat-card-footer> -->
     <!-- <mat-card-actions>
       <div class="buttons-container-alt" fxLayout="column" fxLayoutGap="12px">
         <button class="link-button" fxFlex="100%" (click)="cancelOrder()" mat-stroked-button color="primary">
@@ -104,14 +134,15 @@
   <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
     Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
   </div>
-  <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
-    <a class="mat-body-1" (click)="viewPolicy()">View Cancellation Policy</a>
-  </div>
   <div class="cancel-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center"
     *ngIf="isCancellable && order?.notes?.itemType === type.pickupSlot">
     <a (click)="cancelOrder()" class="mat-body-1" mat-button color="warn">
       Cancel Order
     </a>
+  </div>
+  <div *ngIf="isCancellable && order?.notes?.itemType === type.pickupSlot" class="need-help-message" fxLayout="row"
+    fxLayoutGap="20px" fxLayoutAlign="center center">
+    <span class="mat-caption" (click)="viewPolicy()">View Cancellation Policy</span>
   </div>
 </section>
 <app-loading *ngIf="isLoaderShown"></app-loading>

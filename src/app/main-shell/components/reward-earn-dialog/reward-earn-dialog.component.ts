@@ -40,7 +40,7 @@ export class RewardEarnDialogComponent implements OnInit, AfterViewInit {
   }
 
   claimReward() {
-    this.router.navigate(['/rewards/redeem']);
+    this.router.navigate(['/games']);
     this.dialog.closeAll();
     this.onCloseDialog();
   }
@@ -49,7 +49,7 @@ export class RewardEarnDialogComponent implements OnInit, AfterViewInit {
     const data: IFeatureInfoOptions = {
       heading: 'How Rewards Work?',
       multiDescription: [
-        { subheading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
+        { heading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
       ]
     }
     this.dialog.open(FeatureInfoComponent, {

@@ -265,3 +265,5 @@ export const PRIVACY_POLICY = {
   <p>Freekyk India does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.</p>
   `
 }
+
+export const ORDER_CANCELLATION_POLICY = `<p>Order cancellation policy as follows:<br><ul><li>Upon cancellation, 50% of the total amount will be deducted and rest will be credited to the Freekyk Points instantly.</li><li>Cancellation will be disabled after Match Start Time.</li></ul></p>`

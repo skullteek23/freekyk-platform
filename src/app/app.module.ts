@@ -33,7 +33,7 @@ import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.compone
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
 import { BottomNavComponent } from './main-shell/components/bottom-nav/bottom-nav.component';
 import { MainShellModule } from './main-shell/main-shell.module';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -76,7 +76,8 @@ import { DatePipe } from '@angular/common';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: DateAdapter, useClass: AppDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
-    DatePipe
+    DatePipe,
+    CurrencyPipe
   ],
   bootstrap: [AppComponent],
 })

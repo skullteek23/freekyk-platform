@@ -200,15 +200,15 @@ export class DashParticipateComponent implements OnInit {
     this.paymentService.verifyPayment(response)
       .subscribe({
         next: () => {
-          this.paymentService.updateOrder(response).toPromise()
-            .then(() => {
-              this.status = OperationStatus.success;
-              this.snackBarService.displayCustomMsg('Your payment is completed!');
-            })
-            .catch((error) => {
-              this.status = OperationStatus.default;
-              this.snackBarService.displayError(error.message);
-            })
+          // this.paymentService.updateOrder(response).toPromise()
+          //   .then(() => {
+          //     this.status = OperationStatus.success;
+          //     this.snackBarService.displayCustomMsg('Your payment is completed!');
+          //   })
+          //   .catch((error) => {
+          //     this.status = OperationStatus.default;
+          //     this.snackBarService.displayError(error.message);
+          //   })
         },
         error: (error) => {
           this.snackBarService.displayError(error?.message);

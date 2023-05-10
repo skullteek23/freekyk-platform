@@ -4,12 +4,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '@app/services/snackbar.service';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
-import { IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
+import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ISeason } from '@shared/interfaces/season.model';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';
 import { Subscription } from 'rxjs';
 import { SelectQuantityComponent } from '../select-quantity/select-quantity.component';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { MatchConstants } from '@shared/constants/constants';
+import { FeatureInfoComponent, IFeatureInfoOptions } from '@shared/dialogs/feature-info/feature-info.component';
+import { ORDER_CANCELLATION_POLICY } from '@shared/web-content/LEGAL_CONTENT';
+import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
+import { AuthService } from '@app/services/auth.service';
+import { IEarnedRewardDialogData } from '../reward-earn-dialog/reward-earn-dialog.component';
 
 @Component({
   selector: 'app-order',
@@ -29,6 +36,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   orderID: string;
   isLoaderShown = false;
   season: ISeason;
+  isPendingAmount = false;
+  isPendingCash = false;
 
   constructor(
     private router: Router,
@@ -38,7 +47,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private generateRewardService: GenerateRewardService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -58,32 +69,37 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   getOrder() {
     if (this.orderID) {
-      this.isLoaderShown = true;
+      this.showLoader();
       this.apiService.getOrder(this.orderID)
         .subscribe({
           next: response => {
             if (response) {
               this.order = response;
               this.getSeason();
-              this.calculateGst();
+              this.calculateOrderValues();
               this.showSuccess = true;
             } else {
               this.router.navigate(['/orders']);
               this.snackbarService.displayError('Error: Unable to get order details!');
             }
-            this.isLoaderShown = false;
+            this.hideLoader();
           },
           error: (error) => {
             this.snackbarService.displayError('Error: Unable to get order details!');
-            this.isLoaderShown = false;
+            this.hideLoader();
             this.router.navigate(['/orders']);
           }
         })
     }
   }
 
-  calculateGst() {
-    const amountTemp = (this.order?.amount / 100);
+  calculateOrderValues() {
+    let amountTemp = (this.order?.amount / 100);
+    if (this.order?.notes?.pointsUsed > 0) {
+      amountTemp -= this.order?.notes?.pointsUsed;
+    }
+    this.isPendingAmount = this.order.amount_due > (this.order?.notes?.pointsUsed || 0);
+    this.isPendingCash = this.order?.notes?.cashPending >= 0
     this.gstAmount = 0.18 * amountTemp;
     this.amount = amountTemp - this.gstAmount;
   }
@@ -140,9 +156,9 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   async parsPickupSlot(count: number, slots: number) {
-    this.isLoaderShown = true;
+    this.showLoader();
     const pickupSlot = (await this.apiService.getPickupSlot(this.order?.notes?.itemID).toPromise());
-    if (pickupSlot) {
+    if (pickupSlot?.slots?.length) {
       pickupSlot.slots.sort();
       const slot = JSON.parse(JSON.stringify(pickupSlot));
       for (let i = 0; i < count; i++) {
@@ -162,12 +178,13 @@ export class OrderComponent implements OnInit, OnDestroy {
 
       // Refund Amount is 50% of total cancellable slots amount
       let refundAmt = 0;
-      refundAmt = (count * this.season.fees) / 2;
+      refundAmt = (count * this.season.fees) * MatchConstants.ORDER_REFUND_MULTIPLIER;
+      const playerID = this.order.receipt;
 
       if (refundAmt > 0) {
         const allPromises = [];
         allPromises.push(this.apiPostService.updateOrder(orderUpdate, this.orderID));
-        allPromises.push(this.paymentService.initOrderRefund(this.order, refundAmt));
+        allPromises.push(this.generateRewardService.addPoints(refundAmt, playerID, 'Order Refund'));
         if (slot.slots.length <= 0) {
           allPromises.push(this.apiPostService.deletePickupSlot(slot.id));
         } else {
@@ -176,24 +193,30 @@ export class OrderComponent implements OnInit, OnDestroy {
 
         Promise.all(allPromises)
           .then(() => {
-            this.snackbarService.displayCustomMsg(count + ' slot(s) cancelled successfully!')
+            this.snackbarService.displayCustomMsg(count + ' slot(s) cancelled successfully!');
+            const data: IEarnedRewardDialogData = {
+              points: refundAmt,
+              activityID: null,
+              isAdded: true
+            }
+            this.generateRewardService.openRewardDialog(data);
           })
           .catch(() => {
             this.snackbarService.displayError();
           })
           .finally(() => {
             this.getOrder();
-            this.isLoaderShown = false;
+            this.hideLoader();
           })
       }
     } else {
-      this.isLoaderShown = false;
+      this.hideLoader();
       this.snackbarService.displayError('Error: Pickup slot not found!')
     }
   }
 
   get isCancellable() {
-    return this.cancellableQty() > 1;
+    return this.cancellableQty() >= 1;
   }
 
   cancellableQty(): number {
@@ -206,22 +229,93 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   viewPolicy() {
-
-  }
-
-  refundOrder() {
-    if (this.order.notes.itemType !== this.type.pointsPurchase) {
-      return;
+    const data: IFeatureInfoOptions = {
+      heading: 'Order Cancellation Policy',
+      multiDescription: [
+        { description: ORDER_CANCELLATION_POLICY }
+      ]
     }
-    // refund order
-    this.paymentService.initOrderRefund(this.order, this.order.amount)
+    this.dialog.open(FeatureInfoComponent, {
+      panelClass: 'fk-dialogs',
+      data
+    })
   }
 
   triggerAction() {
     if (this.order.notes.itemType === this.type.pointsPurchase) {
-      this.router.navigate(['/rewards', 'redeem']);
+      this.router.navigate(['/games']);
     } else if (this.order.notes.itemType === this.type.pickupSlot) {
       this.openSeason();
     }
+  }
+
+  payRemaining() {
+    this.authService.isLoggedIn().subscribe({
+      next: user => {
+        if (this.isPendingAmount && !this.isPendingCash && this.orderID && this.order?.amount_due > 0 && user) {
+          const checkoutOptions: Partial<ICheckoutOptions> = {
+            ...UNIVERSAL_OPTIONS,
+            prefill: {
+              contact: user.phoneNumber,
+              name: user.displayName,
+              email: user.email
+            },
+            order_id: this.orderID,
+            amount: this.order?.amount_due * 100,
+            handler: this.verifyPayment.bind(this),
+            modal: {
+              backdropclose: false,
+              escape: false,
+              confirm_close: true,
+              ondismiss: this.dismiss.bind(this)
+            }
+          };
+          this.paymentService.openCheckoutPage(checkoutOptions);
+        }
+      }
+    })
+    if (this.isPendingAmount && !this.isPendingCash && this.orderID && this.order?.amount_due > 0) {
+
+    }
+  }
+
+  async verifyPayment(response) {
+    if (response) {
+      this.showLoader();
+      try {
+        const verificationResult = await this.paymentService.verifyPayment(response).toPromise();
+        if (verificationResult) {
+          const logs = this.order.notes.logs;
+          logs.push(`Paid pending amount on ${this.datePipe.transform(new Date(), 'short')}`);
+          const update: Partial<RazorPayOrder> = {
+            notes: {
+              ... this.order.notes,
+              logs
+            }
+          }
+          const saveResult = await this.paymentService.updateOrder(update, this.orderID);
+          if (saveResult) {
+            this.snackbarService.displayCustomMsg('Your pending payment is successful!');
+            this.getOrder();
+            this.hideLoader();
+          }
+        }
+      } catch (error) {
+        this.hideLoader();
+        this.snackbarService.displayError(error?.message);
+      }
+    }
+  }
+
+  dismiss() {
+    this.hideLoader();
+  }
+
+  showLoader() {
+    this.isLoaderShown = true;
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false;
   }
 }

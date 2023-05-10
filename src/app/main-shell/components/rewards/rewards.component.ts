@@ -11,6 +11,7 @@ import { IReward } from '@shared/interfaces/reward.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { REWARDS_HOW_IT_WORKS } from '@shared/web-content/WEBSITE_CONTENT';
 import { Subscription } from 'rxjs';
+import { PointTransactionLogsDialogComponent } from '../point-transaction-logs-dialog/point-transaction-logs-dialog.component';
 
 @Component({
   selector: 'app-rewards',
@@ -91,12 +92,19 @@ export class RewardsComponent implements OnInit, OnDestroy {
     const data: IFeatureInfoOptions = {
       heading: 'How Rewards Work?',
       multiDescription: [
-        { subheading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
+        { heading: 'Freekyk Rewards Program', description: REWARDS_HOW_IT_WORKS }
       ]
     }
     this.dialog.open(FeatureInfoComponent, {
       panelClass: 'fk-dialogs',
       data
+    })
+  }
+
+  openPointsLog() {
+    this.dialog.open(PointTransactionLogsDialogComponent, {
+      panelClass: 'fk-dialogs',
+      data: this.user.uid
     })
   }
 

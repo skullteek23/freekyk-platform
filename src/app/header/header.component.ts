@@ -10,7 +10,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { SubmitMatchRequestComponent } from '@app/main-shell/components/submit-match-request/submit-match-request.component';
-import { AuthService } from '@app/services/auth.service';
+import { AuthService, authUserMain } from '@app/services/auth.service';
 import { RewardsGetStartedDialogComponent } from '@app/main-shell/components/rewards-get-started-dialog/rewards-get-started-dialog.component';
 import { ApiGetService } from '@shared/services/api.service';
 import { ISocialGroupConfig, SocialGroupComponent } from '@shared/dialogs/social-group/social-group.component';
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   treeControl = new NestedTreeControl<ILink>(node => node.subLinks);
   dataSource = new MatTreeNestedDataSource<ILink>();
-  photoUrl: string = null;
+  user: authUserMain = null;
 
   constructor(
     private dialog: MatDialog,
@@ -51,15 +51,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataSource.data = MOBILE_LINKS;
     this.menuState = false;
-    // this.getLiveSeasons();
-    this.authService.getPhoto().subscribe({
-      next: response => {
-        this.photoUrl = response;
-      },
-    })
     this.authService.isLoggedIn().subscribe({
       next: (user) => {
         if (user) {
+          this.user = user;
           this.isLogged = true;
           // this.notificationCount$ = this.notificationService.notifsCountChanged.pipe(
           //   map((resp) => (!!resp ? resp : null)),

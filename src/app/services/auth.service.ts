@@ -104,7 +104,10 @@ export class AuthService {
   }
 
   async isProfileExists(user: authUserMain): Promise<boolean> {
-    return await this.apiService.getPlayerOnboardingStatus(user.uid).toPromise();
+    if (user?.uid) {
+      return await this.apiService.getPlayerOnboardingStatus(user.uid).toPromise();
+    }
+    return false;
   }
 
   onLogout(): void {

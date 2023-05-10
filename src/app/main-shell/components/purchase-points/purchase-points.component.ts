@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { RewardService } from '@app/main-shell/services/reward.service';
 import { AuthService, authUserMain } from '@app/services/auth.service';
@@ -10,19 +10,21 @@ import { MatchConstants } from '@shared/constants/constants';
 import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { PaymentService } from '@shared/services/payment.service';
 import { IEarnedRewardDialogData } from '../reward-earn-dialog/reward-earn-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-purchase-points',
   templateUrl: './purchase-points.component.html',
   styleUrls: ['./purchase-points.component.scss']
 })
-export class PurchasePointsComponent implements OnInit {
+export class PurchasePointsComponent implements OnInit, OnDestroy {
 
   readonly minVal = MatchConstants.MINIMUM_POINTS_RECHARGE;
 
   purchaseAmt = 0;
   quickAmountList = [100, 500, 1000, 2000];
   user: authUserMain = null;
+  subscriptions = new Subscription();
 
   constructor(
     private authService: AuthService,
@@ -31,6 +33,7 @@ export class PurchasePointsComponent implements OnInit {
     private datePipe: DatePipe,
     private generateRewardService: GenerateRewardService,
     private router: Router,
+    private route: ActivatedRoute,
     private rewardService: RewardService
   ) { }
 
@@ -42,6 +45,17 @@ export class PurchasePointsComponent implements OnInit {
         }
       }
     });
+    this.subscriptions.add(this.route.params.subscribe({
+      next: (params) => {
+        if (params && params.hasOwnProperty('amount')) {
+          this.purchaseAmt = Number(params['amount']);
+        }
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   async addPoints() {
@@ -91,8 +105,13 @@ export class PurchasePointsComponent implements OnInit {
                   isAdded: true
                 }
                 this.generateRewardService.openRewardDialog(data);
-                this.openOrder(response['razorpay_order_id']);
                 this.resetAmt();
+                const queryParams = this.route.snapshot.queryParams;
+                if (queryParams) {
+                  this.router.navigate([queryParams?.hasOwnProperty('callback') ? decodeURIComponent(queryParams.callback) : '/games']);
+                } else {
+                  this.openOrder(response['razorpay_order_id']);
+                }
               })
               .catch((error) => {
                 this.snackBarService.displayError(error?.message);
@@ -136,7 +155,7 @@ export class PurchasePointsComponent implements OnInit {
     }
 
     const allPromises = [];
-    const entity = 'by purchasing';
+    const entity = 'purchasing points';
     allPromises.push(this.generateRewardService.addPoints(this.purchaseAmt, this.user.uid, entity))
     allPromises.push(this.paymentService.saveOrder(options, response).toPromise());
 

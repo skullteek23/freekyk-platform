@@ -6,6 +6,9 @@ import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model'
 import { Router } from '@angular/router';
 import { FunctionsApiService } from './functions-api.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
+import { authUserMain } from '@app/services/auth.service';
+import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
+import { ApiPostService } from './api.service';
 declare let Razorpay: any;
 
 
@@ -19,8 +22,9 @@ export class PaymentService {
   constructor(
     private ngFunc: AngularFireFunctions,
     private functionsApiService: FunctionsApiService,
-
-    private router: Router
+    private generateRewardService: GenerateRewardService,
+    private router: Router,
+    private apiPostService: ApiPostService
   ) { }
 
   async generateOrder(amount: number, minAmount: number): Promise<any> {
@@ -67,9 +71,13 @@ export class PaymentService {
     return participateFunc({ options, response });
   }
 
-  updateOrder(response: any) {
+  savePointsOrder(orderID: string, order: Partial<RazorPayOrder>) {
+    return this.apiPostService.saveOrder(orderID, order);
+  }
+
+  updateOrder(options: Partial<RazorPayOrder>, orderID: string) {
     const participateFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.UPDATE_RAZORPAY_ORDER);
-    return participateFunc({ response });
+    return participateFunc({ options, orderID });
   }
 
   getFeesAfterDiscount(fees: number, discount: number): number {
@@ -94,6 +102,10 @@ export class PaymentService {
       const myFunc = this.ngFunc.httpsCallable(CLOUD_FUNCTIONS.REFUND_RAZORPAY_ORDER);
       return myFunc({ paymentID: order?.razorpay_payment_id, refundAmt }).toPromise();
     }
+  }
+
+  payWithPoints(user: authUserMain, amount: number) {
+    return this.generateRewardService.subtractPoints(amount, user.uid, 'booking pickup game slots(s)');
   }
 
 

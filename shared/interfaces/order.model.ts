@@ -56,6 +56,8 @@ export interface IOrderNotes {
   itemCancelledQty: number;
   itemType: IItemType;
   logs: string[];
+  pointsUsed?: number;
+  cashPending?: number;
   seasonID?: string;
   seasonName?: string;
 }

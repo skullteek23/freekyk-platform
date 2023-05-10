@@ -1,0 +1,36 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <button matTooltip="Close" mat-icon-button mat-dialog-close (click)="onCloseDialog()">
+    <mat-icon class="material-icons-round"> close </mat-icon>
+  </button>
+  <span class="mat-body-1">Points History</span>
+</mat-toolbar>
+
+<section class="dialgoData transaction-data">
+  <div class="list-container">
+    <mat-list>
+      <mat-list-item class="mat-elevation-z8 dashboard-card" *ngFor="let log of logs">
+        <div class="content-container" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="text-container" fxLayout="column" fxLayout="center start" fxLayoutGap="8px">
+            <span class="mat-body-1">
+              {{log.details}}
+            </span>
+            <span class="mat-body-2 sec-menu">
+              {{ log.timestamp | date: CUSTOM_FORMAT }}
+            </span>
+          </div>
+          <span class="points-container" [class]="log.class">
+            <span *ngIf="log.class  === 'credit'" class="mat-body-2">+</span><span *ngIf="log.class  === 'debit'"
+              class="mat-body-2">-</span><span class="dash-h5">{{log.points}}</span><span
+              class="mat-caption sec-menu">&nbsp;Pts</span>
+          </span>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+    Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
+  </div>
+</section>
+
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

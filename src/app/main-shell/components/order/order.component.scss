@@ -61,7 +61,16 @@ section {
   margin-top: 20px;
 }
 
-.cancel-message {
+.cancel-message,
+.warnings {
   width: 100%;
   margin-top: 8px;
+}
+
+.warnings {
+  width: 100%;
+  background-color: var(--grey4);
+  margin-bottom: 12px;
+  padding: 12px;
+  height: 60px;
 }

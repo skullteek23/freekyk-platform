@@ -1,4 +1,4 @@
-<section class="container primary-bg whiteText compactSpace" *ngIf="content" fxLayout="column" fxLayoutGap="12px">
+<section class="container compactSpace" *ngIf="content" fxLayout="column" fxLayoutGap="12px">
   <div fxLayout="column">
     <span class="dash-h5 ">
       {{ content.heading }}
@@ -10,7 +10,7 @@
   <ul fxLayout.gt-sm="row wrap" fxLayout="column" fxLayoutGap.lt-md="20px" *ngIf="content.listPoints">
     <li fxFlex="100%" fxFlex.gt-sm="50%" fxLayoutGap="16px" *ngFor="let point of content.listPoints; let i = index"
       fxLayoutAlign="start start">
-      <div fxFlex="40px" class="step_number mat-body-2" fxLayoutAlign="center center">
+      <div fxFlex="20px" class="step_number mat-body-2" fxLayoutAlign="center center">
         {{ i + 1 }}
       </div>
       <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap.lt-md="8px">

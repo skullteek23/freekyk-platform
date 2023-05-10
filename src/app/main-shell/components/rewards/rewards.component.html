@@ -5,16 +5,26 @@
       Go back
     </span>
   </button>
-  <span class="dash-h5 heading">Rewards & Points</span>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+    <span class="dash-h5 heading">
+      Rewards & Points
+    </span>
+    <span (click)="openInfo()" class="material-icons-round sec-menu">info</span>
+  </div>
 </div>
 
 <section>
   <div class="total-points-container" fxLayoutAlign="space-between center">
     <div fxLayoutGap="12px" fxLayoutAlign="start center">
       <span class="mat-body-1">Total Points: </span>
-      <span class="mat-body-1 point"> {{userPoints}} </span>
+      <span class="dash-h5 point"> {{userPoints}} </span>
     </div>
-    <a (click)="openInfo()" class="mat-caption">How it works?</a>
+    <a (click)="openPointsLog()" *ngIf="user?.uid" class="mat-caption" fxLayoutGap="2px" fxLayoutAlign="center center">
+      <span class="mat-cation">
+        View History
+      </span>
+      <span class="material-icons-round">chevron_right</span>
+    </a>
   </div>
 </section>
 

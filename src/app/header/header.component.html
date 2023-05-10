@@ -203,6 +203,30 @@
     </button>
   </div>
 
+  <div class="profile-container" *ngIf="isLogged" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+    <div class="account-circle-container" (click)="onCloseMenu()" [routerLink]="['/account']">
+      <app-account-avatar [dataImg]="user.photoURL" [margins]="false"></app-account-avatar>
+    </div>
+    <div class="text-container" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
+      <span class="mat-body-1">
+        {{user.displayName}}
+      </span>
+      <div fxLayoutAlign="start center" fxLayoutGap="4px">
+        <span class="mat-caption">
+          {{user.phoneNumber}}
+        </span>
+        <span class="material-icons-round filled verified-icon">
+          check_circle
+        </span>
+        <span class="mat-caption">
+          Verified
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
   <div class="links-container" fxLayout="column" fxLayoutGap="4px">
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>

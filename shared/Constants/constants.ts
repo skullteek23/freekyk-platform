@@ -57,6 +57,7 @@ export class MatchConstants {
   static readonly CANCELLATION_FIRST_N_MATCHES = 3;
   static readonly MINIMUM_PAYMENT_AMOUNT = 150;
   static readonly MINIMUM_POINTS_RECHARGE = 25;
+  static readonly ORDER_REFUND_MULTIPLIER = 0.5;
 }
 export const PLAYING_POSITIONS = [
   {

@@ -1,21 +1,28 @@
+import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-export interface IPaymentOptionsData {
-  amount: number;
-  credit: number;
+export enum IPaymentOptionModes {
+  freekykPoints = 0,
+  payNow = 1,
+  bookWithCash = 2,
+  bookOnline = 3
 }
 
-export enum IPaymentOption {
-  payNow = 0,
-  payLater = 1,
-  customCode = 2
+export interface IPaymentOptions {
+  mode: IPaymentOptionModes;
+  label: string;
+  icon: string;
+  amount: number;
+  disabled?: boolean;
+  subOption?: IPaymentOptions[]
 }
 
-export interface ISelectedPaymentOption {
-  mode: IPaymentOption;
+export interface IPaymentOptionsDialogData {
+  options: IPaymentOptions[];
+  slotsCount: number;
   amount: number;
-  pointsUsed: number;
 }
 
 @Component({
@@ -25,40 +32,24 @@ export interface ISelectedPaymentOption {
 })
 export class PaymentOptionsPickupGameComponent implements OnInit {
 
-  finalAmount: number = 0;
-  isPointsUsed = false;
+  treeControl = new NestedTreeControl<IPaymentOptions>(node => node.subOption);
+  dataSource = new MatTreeNestedDataSource<IPaymentOptions>();
 
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<PaymentOptionsPickupGameComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: IPaymentOptionsData
+    @Inject(MAT_BOTTOM_SHEET_DATA) public dialogData: IPaymentOptionsDialogData
   ) { }
 
   ngOnInit(): void {
-    this.finalAmount = this.data.amount;
+    this.dataSource.data = this.dialogData.options;
   }
 
-  calculateAmount(event) {
-    if (event.checked) {
-      this.finalAmount = this.data.amount - this.data.credit;
-    } else {
-      this.finalAmount = this.data.amount;
-    }
-  }
+  openInfo() { }
 
-  confirmPay() {
-    this.dismiss({ mode: IPaymentOption.payNow, amount: this.finalAmount, pointsUsed: this.isPointsUsed ? this.data.credit : 0 });
-  }
-
-  payLater() {
-    this.dismiss({ mode: IPaymentOption.payLater, amount: this.finalAmount, pointsUsed: 0 });
-  }
-
-  useCustomCode() {
-    this.dismiss({ mode: IPaymentOption.customCode, amount: this.finalAmount, pointsUsed: 0 });
-  }
-
-  dismiss(option: ISelectedPaymentOption) {
+  dismiss(option?: IPaymentOptions) {
     this._bottomSheetRef.dismiss(option);
   }
+
+  hasChild = (_: number, node: IPaymentOptions) => !!node.subOption && node.subOption.length > 0;
 
 }

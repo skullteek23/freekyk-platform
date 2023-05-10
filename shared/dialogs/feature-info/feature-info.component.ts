@@ -3,9 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LOREM_IPSUM_LONG } from '../../web-content/WEBSITE_CONTENT';
 
 export interface IFeatureInfoOptions {
-  heading: string;
+  heading?: string;
   description?: string;
-  multiDescription?: { subheading: string; description: string }[]
+  multiDescription?: IFeatureInfoOptions[]
 }
 @Component({
   selector: 'app-feature-info',

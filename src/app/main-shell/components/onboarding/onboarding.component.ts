@@ -138,7 +138,6 @@ export class OnboardingComponent implements OnInit {
       return;
     }
     this.authService.updatePhoto(url);
-    this.snackBarService.displayCustomMsg('Profile updated successfully!');
     this.isLoaderShown = false;
     stepper.next();
   }

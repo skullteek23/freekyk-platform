@@ -116,6 +116,7 @@ const routes: Routes = [
       { path: 'earn', component: EarnRewardComponent },
       { path: 'redeem', component: RedeemRewardComponent },
       { path: 'purchase', component: PurchasePointsComponent },
+      { path: 'purchase/:amount', component: PurchasePointsComponent },
     ]
   },
 

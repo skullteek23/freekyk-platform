@@ -1,6 +1,6 @@
 import { IPlayer, IPlayerStats, PlayerBasicInfo } from "@shared/interfaces/user.model";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { ArraySorting } from "./array-sorting";
 import firebase from 'firebase/app';
 import { ISeason, ISeasonDescription, ISeasonPartner, SeasonMedia, SeasonStats } from "@shared/interfaces/season.model";
@@ -15,7 +15,7 @@ import { ITeamPlayer } from "@shared/components/team-player-members-list/team-pl
 import { ILockedSlot, IPickupGameSlot } from "@shared/interfaces/game.model";
 import { ISupportTicket } from "@shared/interfaces/ticket.model";
 import { DocumentChangeAction } from "@angular/fire/firestore";
-import { ICompletedActivity, IPoint, IReward } from "@shared/interfaces/reward.model";
+import { ICompletedActivity, IPoint, IPointsLog, IReward } from "@shared/interfaces/reward.model";
 import { NotificationBasic } from "@shared/interfaces/notification.model";
 import { createKnockoutData } from "./custom-functions";
 import { NotificationTypes } from "@shared/interfaces/notification.model";
@@ -143,7 +143,7 @@ export function parseLockedSlotData(source: Observable<ngFireDocQuery>): Observa
 
 export function parsePickupSlotData(source: Observable<ngFireDoc>): Observable<IPickupGameSlot> {
   return source.pipe(
-    map((resp) => ({ id: resp.id, ...(resp.data() as IPickupGameSlot), } as IPickupGameSlot))
+    map((resp) => resp.exists ? ({ id: resp.id, ...resp.data() as IPickupGameSlot }) : null)
   );
 }
 
@@ -486,5 +486,10 @@ export function parsePointsDataV2(source: Observable<ngFireDoc>): Observable<IPo
 export function parseRewardsData(source: Observable<ngFireDocQuery>): Observable<IReward[]> {
   return source.pipe(
     map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IReward })) : []),
+  );
+}
+export function parsePointLogsData(source: Observable<ngFireDocQuery>): Observable<IPointsLog[]> {
+  return source.pipe(
+    map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IPointsLog })) : []),
   );
 }
