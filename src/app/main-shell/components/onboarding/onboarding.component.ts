@@ -50,7 +50,7 @@ export class OnboardingComponent implements OnInit {
 
   initOnboarding() {
     this.initForm();
-    this.getStates('India');
+    this.getStates();
   }
 
   initForm() {
@@ -67,9 +67,9 @@ export class OnboardingComponent implements OnInit {
     })
   }
 
-  getStates(country: string): void {
+  getStates(): void {
     this.isLoaderShown = true;
-    this.locationService.getStateByCountry(country)
+    this.locationService.getStateByCountry()
       .subscribe(
         response => {
           if (response) {

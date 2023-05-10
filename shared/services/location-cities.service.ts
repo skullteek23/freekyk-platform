@@ -56,6 +56,7 @@ export class LocationService implements OnDestroy {
       })),
       map((resp) => (Object.values(resp) as any[]).map((val: any) => val.country_name)),
       catchError(err => {
+        console.log(err);
         this.snackBarService.displayError('Unable to fetch countries!');
         return of(null);
       })
@@ -72,6 +73,7 @@ export class LocationService implements OnDestroy {
       })),
       map((resp) => (Object.values(resp) as any[]).map((val: any) => val.state_name)),
       catchError(err => {
+        console.log(err);
         this.snackBarService.displayError('Unable to fetch states!');
         return of(null);
       })
@@ -88,6 +90,7 @@ export class LocationService implements OnDestroy {
       })),
       map((resp) => (Object.values(resp) as any[]).map((val: any) => val.city_name)),
       catchError(err => {
+        console.log(err);
         this.snackBarService.displayError('Unable to fetch cities!');
         return of(null);
       })
