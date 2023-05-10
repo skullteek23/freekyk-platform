@@ -444,6 +444,22 @@ export function checkPendingOrderExists(source: Observable<ngFireDocQuery>): Obs
   );
 }
 
+export function checkGameOrderCancellation(source: Observable<ngFireDocQuery>): Observable<boolean> {
+  return source.pipe(
+    map((resp) => {
+      if (!resp?.empty) {
+        const fixture = resp.docs[0].data() as MatchFixture;
+        // If fixture start time is larger or equal than current time
+        // then game is cancellable
+        return fixture.date >= new Date().getTime();
+      } else {
+        return false;
+      }
+    }
+    ),
+  );
+}
+
 export function parseLeagueData(source: Observable<ngFireDoc>): Observable<LeagueTableModel[]> {
   return source.pipe(
     map((resp) => {

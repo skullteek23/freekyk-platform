@@ -135,23 +135,35 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/support/faqs']);
   }
 
-  cancelOrder() {
+  async cancelOrder() {
+    this.showLoader();
     const slots = this.cancellableQty();
-    if ((this.order.notes.itemType !== this.type.pickupSlot) || slots < 1 || !slots) {
+    if (this.order.notes.itemType !== this.type.pickupSlot) {
+      this.hideLoader();
       this.snackbarService.displayError('Error: No slots to cancel!');
       return;
-    } else if (slots === 1) {
-      this.parsPickupSlot(1, slots);
-    } else {
-      const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slots })
-      dialogRef.afterClosed()
-        .subscribe({
-          next: (count) => {
-            if (count > 0 && count <= slots) {
-              this.parsPickupSlot(count, slots);
+    } else if (slots < 1 || !slots) {
+      this.hideLoader();
+      this.snackbarService.displayError('Error: No slots to cancel!');
+      return;
+    } else if ((await this.apiService.isPickupGameOrderCancellable(this.order?.notes?.seasonName).toPromise())) {
+      this.hideLoader();
+      if (slots === 1) {
+        this.parsPickupSlot(1, slots);
+      } else {
+        const dialogRef = this.dialog.open(SelectQuantityComponent, { data: slots })
+        dialogRef.afterClosed()
+          .subscribe({
+            next: (count) => {
+              if (count > 0 && count <= slots) {
+                this.parsPickupSlot(count, slots);
+              }
             }
-          }
-        })
+          })
+      }
+    } else {
+      this.hideLoader();
+      this.snackbarService.displayError('Error: Cancellation not allowed!');
     }
   }
 
