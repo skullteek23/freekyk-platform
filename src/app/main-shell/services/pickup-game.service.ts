@@ -14,6 +14,7 @@ import { IPaymentOptionModes, IPaymentOptions, IPaymentOptionsDialogData } from 
 import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-ground-card.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WaitingListDialogComponent } from '../components/waiting-list-dialog/waiting-list-dialog.component';
+import { ICommunicationDialogData, UserQuestionsCommunicationComponent } from '@shared/dialogs/user-questions-communication/user-questions-communication.component';
 
 export interface ISaveInfo {
   displaySlots: Partial<ISlotOption>[];

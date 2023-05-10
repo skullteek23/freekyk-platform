@@ -27,4 +27,12 @@ export class GameComponent implements OnInit {
       }
     }
   }
+
+  get participantType() {
+    if (this.game?.type === 'FCP') {
+      return 'per Player'
+    } else {
+      return 'per Team'
+    }
+  }
 }

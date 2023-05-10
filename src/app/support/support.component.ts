@@ -53,27 +53,40 @@ export class SupportComponent implements OnInit {
   }
 
   openTicketForm() {
-    const data: ICommunicationDialogData = {
-      heading: 'Raise a Ticket!',
-      showTips: false,
-      CTA: {
-        icon: 'send',
-        label: 'Submit'
-      }
-    }
-    const dialogRef = this.dialog.open(UserQuestionsCommunicationComponent, {
-      panelClass: 'large-dialogs',
-      disableClose: true,
-      data
-    });
+    this.authService.isLoggedIn().subscribe({
+      next: user => {
+        if (user?.uid) {
+          const data: ICommunicationDialogData = {
+            heading: 'Raise a Ticket!',
+            showTips: false,
+            CTA: {
+              icon: 'send',
+              label: 'Submit'
+            }
+          }
+          const dialogRef = this.dialog.open(UserQuestionsCommunicationComponent, {
+            panelClass: 'large-dialogs',
+            disableClose: true,
+            data
+          });
 
-    dialogRef.afterClosed()
-      .subscribe(response => {
-        if (response?.hasOwnProperty('title')) {
-          // this.saveQuestion(response);
-          this.saveTicket(response);
+          dialogRef.afterClosed()
+            .subscribe(response => {
+              if (response?.hasOwnProperty('title')) {
+                // this.saveQuestion(response);
+                this.saveTicket(response);
+              }
+            })
+        } else {
+          this.redirectToUrl('/signup', '/support/tickets');
         }
-      })
+      }
+    });
+  }
+
+  redirectToUrl(nextRoute: string, redirectPath: string): void {
+    const encodedString = encodeURIComponent(redirectPath);
+    this.router.navigate([nextRoute], { queryParams: { callback: encodedString } });
   }
 
   saveTicket(response) {

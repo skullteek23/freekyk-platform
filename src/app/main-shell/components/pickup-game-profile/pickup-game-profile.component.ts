@@ -495,4 +495,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   hideLoader() {
     this.isLoaderShown = false;
   }
+
+  needHelp() {
+    this.router.navigate(['/support/faqs']);
+  }
 }

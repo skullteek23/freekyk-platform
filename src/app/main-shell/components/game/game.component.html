@@ -9,12 +9,19 @@
       {{game.city}}, {{game.state}}
     </span>
   </mat-card-subtitle>
-  <mat-card-actions fxLayoutAlign="end center">
+  <mat-card-actions fxLayoutAlign="center end" fxLayout="column">
     <div fxLayoutAlign="start center">
       <span class="mat-body-2 red">
         {{game.fees | currency: 'INR'}}
       </span>
       <span class="material-icons-round">chevron_right</span>
     </div>
+    <div fxLayoutAlign="end center" class="participant-type">
+      <span class="mat-caption sec-menu">
+        {{participantType}}
+      </span>
+    </div>
   </mat-card-actions>
+  <mat-card-footer>
+  </mat-card-footer>
 </mat-card>

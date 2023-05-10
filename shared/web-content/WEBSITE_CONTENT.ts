@@ -64,11 +64,11 @@ export const LANDING_PAGE = {
   },
   howItWorks: {
     heading: 'How it works?',
-    description: `Playing football made easy as ordering food from Swiggy.`,
+    description: `Playing football made easy in simple steps: `,
     listPoints: [
-      { heading: `Find a team`, description: `Sign up for an account and find a suitable team.` },
-      { heading: `Join any game`, description: `Participate in upcoming matches or seasons and book your slot in seconds.` },
-      { heading: `Let's Play!`, description: `Show up on the matchday, play against your opponents and view your stats after each match.` },
+      { heading: `Create a Profile`, description: `Sign up for an account and add your details.` },
+      { heading: `Join any game`, description: `Participate in upcoming games and book your slot in seconds.` },
+      { heading: `Let's Play!`, description: `Show up on the matchday, play against your opponents and monitor your stats.` },
     ],
   },
   communityNumbers: {

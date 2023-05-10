@@ -15,17 +15,11 @@
 
 .custom-button-container {
   width: 100%;
-
-}
-
-.mat-button {
-  text-align: left !important;
-  padding: 0 !important;
 }
 
 .example-tree-ul {
   color: var(--grey1);
-  margin-left: 30px;
+  margin-left: 12px;
 
 }
 
@@ -51,4 +45,8 @@
     width: 100%;
   }
 
+}
+
+.end-icon {
+  margin-left: auto;
 }
