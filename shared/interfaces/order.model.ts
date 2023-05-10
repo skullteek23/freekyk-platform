@@ -9,14 +9,16 @@ export interface ICheckoutOptions {
   currency: string;
   name: string;
   order_id: string;
-  handler: () => Promise<any>;
+  handler: (response) => Promise<any>;
   description?: string;
   image?: string;
+  partial_payment?: boolean;
   prefill?: {
     name?: string;
     email?: string;
     contact?: string;
     method?: string;
+    partial_payment?: boolean;
   },
   notes?: Partial<IOrderNotes>;
   theme?: {

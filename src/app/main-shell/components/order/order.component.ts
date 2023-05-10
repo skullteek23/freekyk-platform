@@ -197,7 +197,8 @@ export class OrderComponent implements OnInit, OnDestroy {
             const data: IEarnedRewardDialogData = {
               points: refundAmt,
               activityID: null,
-              isAdded: true
+              isAdded: true,
+              showCTA: true,
             }
             this.generateRewardService.openRewardDialog(data);
           })
@@ -268,7 +269,7 @@ export class OrderComponent implements OnInit, OnDestroy {
               escape: false,
               confirm_close: true,
               ondismiss: this.dismiss.bind(this)
-            }
+            },
           };
           this.paymentService.openCheckoutPage(checkoutOptions);
         }
@@ -286,16 +287,16 @@ export class OrderComponent implements OnInit, OnDestroy {
         const verificationResult = await this.paymentService.verifyPayment(response).toPromise();
         if (verificationResult) {
           const logs = this.order.notes.logs;
-          logs.push(`Paid pending amount on ${this.datePipe.transform(new Date(), 'short')}`);
+          logs.push(`Paid partial amount on ${this.datePipe.transform(new Date(), 'short')}`);
           const update: Partial<RazorPayOrder> = {
             notes: {
               ... this.order.notes,
               logs
             }
           }
-          const saveResult = await this.paymentService.updateOrder(update, this.orderID);
+          const saveResult = await this.paymentService.updateOrder(update, this.orderID).toPromise();
           if (saveResult) {
-            this.snackbarService.displayCustomMsg('Your pending payment is successful!');
+            this.snackbarService.displayCustomMsg('Your partial payment is successful!');
             this.getOrder();
             this.hideLoader();
           }

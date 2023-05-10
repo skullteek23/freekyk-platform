@@ -24,7 +24,7 @@
         </span> 😇
       </span>
     </ng-template>
-    <button mat-flat-button color="primary" (click)="claimReward()">
+    <button mat-flat-button color="primary" (click)="claimReward()" *ngIf="data.showCTA">
       <span class="material-icons-round left-icon">
         celebration
       </span>

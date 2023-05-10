@@ -9,10 +9,7 @@ import { SeasonAllInfo } from '@shared/utils/pipe-functions';
 import { authUserMain } from '@app/services/auth.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { ApiPostService } from './api.service';
-declare let Razorpay: any;
-
-
-
+declare var Razorpay: any;
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +47,7 @@ export class PaymentService {
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
     razorpayInstance.on('payment.failed', this.handleFailure.bind(this));
+
   }
 
   handleFailure(response): void {

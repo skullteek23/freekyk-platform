@@ -30,7 +30,7 @@
       </span>
     </div>
     <button color="warn" class="noResponseButton buttonText" (click)="payRemaining()">
-      <span>Pay {{order.amount_due | currency: 'INR'}}</span>
+      <span>Pay {{order.amount_due / 100 | currency: 'INR'}}</span>
     </button>
   </div>
   <div class="warnings" fxLayoutAlign="space-between center" *ngIf="isPendingCash && order?.amount_due > 0">

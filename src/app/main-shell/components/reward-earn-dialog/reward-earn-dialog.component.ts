@@ -9,6 +9,7 @@ export interface IEarnedRewardDialogData {
   points: number;
   activityID: number;
   isAdded: boolean;
+  showCTA: boolean;
 }
 
 @Component({

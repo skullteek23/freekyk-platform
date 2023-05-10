@@ -102,7 +102,8 @@ export class PurchasePointsComponent implements OnInit, OnDestroy {
                 const data: IEarnedRewardDialogData = {
                   points: this.purchaseAmt,
                   activityID: null,
-                  isAdded: true
+                  isAdded: true,
+                  showCTA: true,
                 }
                 this.generateRewardService.openRewardDialog(data);
                 this.resetAmt();

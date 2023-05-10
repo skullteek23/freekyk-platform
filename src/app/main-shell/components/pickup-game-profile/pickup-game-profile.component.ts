@@ -14,7 +14,7 @@ import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
 import { IPaymentOptionModes, IPaymentOptions, PaymentOptionsPickupGameComponent } from '../payment-options-pickup-game/payment-options-pickup-game.component';
-import { PickupGameService } from '@app/main-shell/services/pickup-game.service';
+import { ISaveInfo, PickupGameService } from '@app/main-shell/services/pickup-game.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ICheckoutOptions } from '@shared/interfaces/order.model';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
@@ -218,7 +218,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   async openOptions() {
     const totalSlots = this.displayedSlots.filter(el => el.selected).length;
     const userPoints = await this.apiService.getUserPoints(this.user.uid).toPromise();
-    const options: MatBottomSheetConfig = this.pickupGameService.getPaymentOptions(userPoints?.points, this.amount, totalSlots);
+    const bookingAmount = await this.getBookingAmt();
+    const options: MatBottomSheetConfig = this.pickupGameService.getPaymentOptions(userPoints?.points, this.amount, totalSlots, bookingAmount);
     const response: IPaymentOptions = await this._bottomSheet.open(PaymentOptionsPickupGameComponent, options).afterDismissed().toPromise();
     this.showLoader();
     if (!response || !await this.checkSlotAvailability()) {
@@ -229,14 +230,17 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
       case IPaymentOptionModes.freekykPoints:
         this.payWithPoints(userPoints.points);
         break;
+
       case IPaymentOptionModes.payNow:
         this.payNow();
         break;
+
       case IPaymentOptionModes.bookOnline:
-        this.bookOnline();
+        this.payAtVenue(bookingAmount, false);
         break;
+
       case IPaymentOptionModes.bookWithCash:
-        this.bookCash();
+        this.payAtVenue(bookingAmount, true);
         break;
 
       default:
@@ -274,7 +278,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     }
     try {
       await this.paymentService.payWithPoints(this.user, this.amount);
-      const data = {
+      const data: ISaveInfo = {
         displaySlots: this.displayedSlots,
         allSlots: this.allSlots,
         uid: this.user.uid,
@@ -282,7 +286,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         amount: this.amount,
         orderID: this.apiService.getUniqueDocID()
       }
-      const saveResult = await this.pickupGameService.saveInfoForPointsPayment(data);
+      const saveResult = await this.pickupGameService.savePointsOrderInfo(data);
       if (saveResult) {
         this.onConfirmSlot(data.orderID);
         return;
@@ -307,18 +311,35 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         this.hideLoader();
         return null;
       }
-      this.openCheckoutOptions(order.id, this.amount);
+      this.openCheckoutOptions(order.id, this.amount, this.handlePayNowVerification.bind(this));
     } else {
       this.dismiss();
       this.snackBarService.displayError('Error: Invalid bill amount.');
     }
   }
 
-  bookOnline() { }
+  async payAtVenue(bookingAmount: number, isCash: boolean) {
+    if (bookingAmount >= 0 && this.amount > 0) {
+      this.showLoader();
+      const order = await this.paymentService.getNewOrder(this.user.uid, this.amount.toString(), bookingAmount.toString());
+      if (!order) {
+        this.snackBarService.displayError("Error: Order generation failed!");
+        this.hideLoader();
+        return null;
+      }
+      if (isCash) {
+        const remainingAmount = this.amount - bookingAmount;
+        this.openCheckoutOptions(order.id, bookingAmount, this.handlePayAtVenueVerification.bind(this, remainingAmount));
+      } else {
+        this.openCheckoutOptions(order.id, bookingAmount, this.handlePayAtVenueVerification.bind(this, 0));
+      }
+    } else {
+      this.dismiss();
+      this.snackBarService.displayError('Error: Invalid booking/bill amount.');
+    }
+  }
 
-  bookCash() { }
-
-  openCheckoutOptions(orderID: string, amount: number) {
+  openCheckoutOptions(orderID: string, amount: number, verificationCallback: (response) => Promise<any>) {
     if (orderID) {
       const totalSlots = this.displayedSlots.filter(el => el.selected && !el.booked).length;
       const options: Partial<ICheckoutOptions> = {
@@ -326,12 +347,12 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         prefill: {
           contact: this.user.phoneNumber,
           name: this.user.displayName,
-          email: this.user.email
+          email: this.user.email,
         },
         description: `${this.season.name} x${totalSlots} Slot(s)`,
         order_id: orderID,
-        amount: amount * 100,
-        handler: this.paymentVerify.bind(this),
+        amount,
+        handler: this.paymentVerify.bind(this, verificationCallback),
         modal: {
           backdropclose: false,
           escape: false,
@@ -339,6 +360,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
           ondismiss: this.dismiss.bind(this)
         }
       }
+      options.prefill.partial_payment = true;
 
       // Open Checkout Page
       this.paymentService.openCheckoutPage(options);
@@ -347,27 +369,57 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  async paymentVerify(response) {
+  async paymentVerify(postVerify: (data) => Promise<any>, response) {
     this.showLoader();
     try {
       const verificationResult = await this.paymentService.verifyPayment(response).toPromise();
-      if (verificationResult) {
-        const data = {
-          displaySlots: this.displayedSlots,
-          allSlots: this.allSlots,
-          uid: this.user.uid,
-          season: this.season,
-          response
-        }
-        const saveResult = await this.pickupGameService.saveInfo(data);
-        if (saveResult) {
-          this.onConfirmSlot(response['razorpay_order_id']);
-        }
+      if (verificationResult && postVerify) {
+        postVerify(response);
       }
     } catch (error) {
       this.dismiss();
       this.snackBarService.displayError(error?.message || 'Error: Payment verification failed!');
     }
+  }
+
+  async handlePayNowVerification(response) {
+    try {
+      const data: ISaveInfo = {
+        displaySlots: this.displayedSlots,
+        allSlots: this.allSlots,
+        uid: this.user.uid,
+        season: this.season,
+        response
+      }
+      const saveResult = await this.pickupGameService.savePayNowOrderInfo(data);
+      if (saveResult) {
+        this.onConfirmSlot(response['razorpay_order_id']);
+      }
+    } catch (error) {
+      this.dismiss();
+      this.snackBarService.displayError(error?.message || 'Error: Payment verification failed!');
+    }
+  }
+
+  async handlePayAtVenueVerification(cashPending: number = 0, response) {
+    try {
+      const data: ISaveInfo = {
+        displaySlots: this.displayedSlots,
+        allSlots: this.allSlots,
+        uid: this.user.uid,
+        season: this.season,
+        response,
+        cashPending
+      }
+      const saveResult = await this.pickupGameService.savePayLaterOrderInfo(data);
+      if (saveResult) {
+        this.onConfirmSlot(response['razorpay_order_id']);
+      }
+    } catch (error) {
+      this.dismiss();
+      this.snackBarService.displayError(error?.message || 'Error: Payment verification failed!');
+    }
+
   }
 
   // async payLater() {
@@ -430,6 +482,10 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     const isLoggedIn = this.user.uid !== null;
     const isOnBoarded = await this.authService.isProfileExists(this.user);
     this.pickupGameService.openWaitingList(isLoggedIn, isOnBoarded, this.season);
+  }
+
+  async getBookingAmt(): Promise<number> {
+    return 10;
   }
 
   showLoader() {

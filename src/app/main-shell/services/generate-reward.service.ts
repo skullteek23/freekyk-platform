@@ -47,7 +47,8 @@ export class GenerateRewardService {
         const data: IEarnedRewardDialogData = {
           points,
           activityID,
-          isAdded: false
+          isAdded: false,
+          showCTA: true,
         }
         this.openRewardDialog(data);
       });

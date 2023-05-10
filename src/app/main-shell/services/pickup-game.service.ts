@@ -15,6 +15,17 @@ import { ViewGroundCardComponent } from '@shared/dialogs/view-ground-card/view-g
 import { MatDialog } from '@angular/material/dialog';
 import { WaitingListDialogComponent } from '../components/waiting-list-dialog/waiting-list-dialog.component';
 
+export interface ISaveInfo {
+  displaySlots: Partial<ISlotOption>[];
+  allSlots: IPickupGameSlot[];
+  uid: string;
+  season: Partial<SeasonAllInfo>;
+  response?: any;
+  amount?: number;
+  orderID?: string;
+  cashPending?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -124,7 +135,7 @@ export class PickupGameService {
     this.apiPostService.deleteLockedPickupSlot(docID);
   }
 
-  saveInfo(data: { displaySlots: Partial<ISlotOption>[], allSlots: IPickupGameSlot[], uid: string, season: Partial<SeasonAllInfo>, response?: any }): Promise<any> {
+  savePayNowOrderInfo(data: ISaveInfo): Promise<any> {
     let pickupSlotID = this.apiService.getUniqueDocID();
     const allPromises = [];
     const totalSlots = data.displaySlots.filter(el => el.selected).length;
@@ -172,7 +183,7 @@ export class PickupGameService {
     return Promise.all(allPromises);
   }
 
-  saveInfoForPointsPayment(data: { displaySlots: Partial<ISlotOption>[], allSlots: IPickupGameSlot[], uid: string, season: Partial<SeasonAllInfo>, amount: number, orderID: string }): Promise<any> {
+  savePointsOrderInfo(data: ISaveInfo): Promise<any> {
     let pickupSlotID = this.apiService.getUniqueDocID();
     const allPromises = [];
     const totalSlots = data.displaySlots.filter(el => el.selected).length;
@@ -234,6 +245,57 @@ export class PickupGameService {
     return Promise.all(allPromises);
   }
 
+  savePayLaterOrderInfo(data: ISaveInfo): Promise<any> {
+    let pickupSlotID = this.apiService.getUniqueDocID();
+    const allPromises = [];
+    const totalSlots = data.displaySlots.filter(el => el.selected).length;
+    const selectedPositions: number[] = [];
+    const update: Partial<IPickupGameSlot> = {
+      slots: selectedPositions
+    }
+    const existingSlot = data.allSlots?.find(el => el.uid === data.uid);
+    const options: Partial<RazorPayOrder> = {
+      notes: {
+        seasonID: data.season.id,
+        seasonName: data.season.name,
+        itemQty: totalSlots,
+        itemCancelledQty: 0,
+        itemID: pickupSlotID,
+        itemName: `Pickup Game Slots`,
+        itemType: IItemType.pickupSlot,
+        logs: [
+          `Purchased ${totalSlots} slot(s) on ${this.datePipe.transform(new Date(), 'short')}`
+        ],
+      }
+    }
+    if (data.hasOwnProperty('cashPending') && data.cashPending > 0) {
+      options.notes['cashPending'] = data.cashPending;
+    }
+
+    data.displaySlots.forEach(slot => {
+      if (slot.selected) {
+        selectedPositions.push(slot.position);
+      }
+    });
+
+    if (existingSlot?.hasOwnProperty('slots')) {
+      pickupSlotID = existingSlot.id;
+      update.slots = update.slots.concat(existingSlot.slots);
+      allPromises.push(this.apiPostService.updatePickupSlot(existingSlot.id, update));
+    } else {
+      const addData: IPickupGameSlot = {
+        slots: selectedPositions,
+        uid: data.uid,
+        timestamp: new Date().getTime(),
+        seasonID: data.season.id,
+      }
+      allPromises.push(this.apiPostService.savePickupSlotWithCustomID(pickupSlotID, addData));
+    }
+    allPromises.push(this.paymentService.saveOrder(options, data.response).toPromise());
+
+    return Promise.all(allPromises);
+  }
+
   saveOrder() {
 
   }
@@ -262,8 +324,7 @@ export class PickupGameService {
     return null;
   }
 
-  getPaymentOptions(points: number, amount: number, slots: number): MatBottomSheetConfig {
-    const bookingAmount = 10;
+  getPaymentOptions(points: number, amount: number, slots: number, bookingAmt: number): MatBottomSheetConfig {
     const options = new MatBottomSheetConfig();
     const dataOptions: IPaymentOptions[] = [];
     dataOptions.push({
@@ -288,14 +349,14 @@ export class PickupGameService {
       amount: amount,
       subOption: [
         {
-          label: `Book @ ${this.currencyPipe.transform(bookingAmount, 'INR')}, Pay remaining in cash`,
+          label: `Book @ ${this.currencyPipe.transform(bookingAmt, 'INR')}, Pay remaining in cash`,
           icon: 'local_atm',
           disabled: false,
           mode: IPaymentOptionModes.bookWithCash,
           amount: amount,
         },
         {
-          label: `Book @ ${this.currencyPipe.transform(bookingAmount, 'INR')}, Pay remaining online`,
+          label: `Book @ ${this.currencyPipe.transform(bookingAmt, 'INR')}, Pay remaining online`,
           icon: 'add_card',
           disabled: false,
           mode: IPaymentOptionModes.bookOnline,
