@@ -75,6 +75,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         }
       }
     }));
+    this.snackBarService.displayCustomMsg('Please select slots to confirm');
   }
 
   ngOnDestroy(): void {
