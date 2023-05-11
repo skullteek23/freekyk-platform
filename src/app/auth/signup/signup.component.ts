@@ -1,9 +1,10 @@
-import { AuthService, authUser, confirmationResult, INDIAN_DIAL_PREFIX } from '@app/services/auth.service';
+import { AuthService, INDIAN_DIAL_PREFIX } from '@app/services/auth.service';
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiGetService, ApiPostService } from '@shared/services/api.service';
+import { confirmationResult, authUser } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-signup',
