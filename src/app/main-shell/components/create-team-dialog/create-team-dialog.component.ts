@@ -12,7 +12,7 @@ import { StorageApiService } from '@shared/services/storage-api.service';
 import { ITeam } from '@shared/interfaces/team.model';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
   selector: 'app-create-team-dialog',

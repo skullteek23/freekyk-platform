@@ -4,7 +4,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'environments/environment';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Injectable({
   providedIn: 'root'

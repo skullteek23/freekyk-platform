@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PaymentService, } from '@shared/services/payment.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ICheckoutOptions, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
 import { SeasonAbout, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import * as fromApp from '../../store/app.reducer';

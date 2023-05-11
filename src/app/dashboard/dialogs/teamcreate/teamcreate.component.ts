@@ -8,7 +8,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';

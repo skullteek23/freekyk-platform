@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { RazorPayOrder } from '@shared/interfaces/order.model';
 import { Observable, of } from 'rxjs';

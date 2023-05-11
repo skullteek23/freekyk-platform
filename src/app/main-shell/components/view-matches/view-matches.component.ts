@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { Subscription } from 'rxjs';

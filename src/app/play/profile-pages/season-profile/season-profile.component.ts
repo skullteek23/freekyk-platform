@@ -16,9 +16,9 @@ import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-brac
 import { IStatisticsCard } from '@app/dashboard/dash-home/my-stats-card/my-stats-card.component';
 import { PaymentService } from '@shared/services/payment.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
-import { SnackbarService } from '@app/services/snackbar.service';
-import { ICheckoutOptions, IItemType, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';
-import { AuthService, authUserMain } from '@app/services/auth.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
+import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
+import { AuthService } from '@app/services/auth.service';
 @Component({
   selector: 'app-season-profile',
   templateUrl: './season-profile.component.html',

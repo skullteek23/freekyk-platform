@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ISelectTeam, ISelectMatchType } from '@shared/interfaces/season.model';
 import { ITeamInfo, TeamBasicInfo } from '@shared/interfaces/team.model';
 import { map } from 'rxjs/operators';

@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
 import { ICheckoutOptions, IItemType, OrderTypes, RazorPayOrder } from '@shared/interfaces/order.model';

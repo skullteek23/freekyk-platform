@@ -13,7 +13,6 @@ import { AdminConfigPanelComponent } from './components/admin-config-panel/admin
 import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
 import { RegistrationsPanelComponent } from './components/registrations-panel/registrations-panel.component';
-import { MainShellComponent } from './main-shell.component';
 import { AddSeasonComponent } from './components/season-panel/create-season/components/add-season/add-season.component';
 import { ChipSelectionInputComponent } from './components/season-panel/update-match-report/components/chip-selection-input/chip-selection-input.component';
 import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
@@ -55,41 +54,37 @@ import { TicketsPanelComponent } from './components/tickets-panel/tickets-panel.
 
 const routes: Routes = [
   {
-
     path: '',
-    component: MainShellComponent,
+    pathMatch: 'full',
+    component: SeasonPanelComponent,
     children: [
-      {
-        path: 'seasons',
-        component: SeasonPanelComponent,
-        children: [
-          { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
-          { path: 'list', component: ViewSeasonsTableComponent },
-          { path: 'create', component: CreateSeasonComponent },
-          { path: ':seasonid', component: ViewPublishedSeasonComponent },
-        ],
-      },
-      {
-        path: 'grounds', component: GroundsPanelComponent,
-        children: [
-          { path: '', component: ViewGroundsTableComponent, pathMatch: 'full' },
-          { path: 'list', component: ViewGroundsTableComponent },
-          { path: 'register', component: RegisterGroundComponent },
-          { path: ':groundid', component: ViewRegisteredGroundComponent },
-        ],
-      },
-      { path: 'account', component: MyAccountPanelComponent },
-      { path: 'manage-requests', component: RegistrationsPanelComponent },
-      { path: 'match-requests', component: MatchRequestsPanelComponent },
-      { path: 'configurations', component: AdminConfigPanelComponent },
-      { path: 'tickets', component: TicketsPanelComponent },
-    ]
+      { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
+      { path: 'list', component: ViewSeasonsTableComponent },
+      { path: 'create', component: CreateSeasonComponent },
+      { path: ':seasonid', component: ViewPublishedSeasonComponent },
+    ],
   },
+  {
+    path: 'seasons', redirectTo: ''
+  },
+  {
+    path: 'grounds', component: GroundsPanelComponent,
+    children: [
+      { path: '', component: ViewGroundsTableComponent, pathMatch: 'full' },
+      { path: 'list', component: ViewGroundsTableComponent },
+      { path: 'register', component: RegisterGroundComponent },
+      { path: ':groundid', component: ViewRegisteredGroundComponent },
+    ],
+  },
+  { path: 'account', component: MyAccountPanelComponent },
+  { path: 'manage-requests', component: RegistrationsPanelComponent },
+  { path: 'match-requests', component: MatchRequestsPanelComponent },
+  { path: 'configurations', component: AdminConfigPanelComponent },
+  { path: 'tickets', component: TicketsPanelComponent },
 ];
 
 @NgModule({
   declarations: [
-    MainShellComponent,
     SeasonPanelComponent,
     AddSeasonComponent,
     GroundsPanelComponent,

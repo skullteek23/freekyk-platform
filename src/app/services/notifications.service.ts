@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NotificationBasic, NotificationTypes, } from '@shared/interfaces/notification.model';
-import { SnackbarService } from './snackbar.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { IJoinTeamDialogData, JoinTeamRequestDialogComponent } from '@app/dashboard/dialogs/join-team-request-dialog/join-team-request-dialog.component';
 import { ApiPostService } from '@shared/services/api.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';

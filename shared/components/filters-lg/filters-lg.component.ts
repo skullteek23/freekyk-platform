@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { FilterData } from '../../interfaces/others.model';
 
 @Component({

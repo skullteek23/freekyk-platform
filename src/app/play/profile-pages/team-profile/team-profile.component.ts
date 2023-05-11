@@ -14,7 +14,7 @@ import { TeamService } from '@app/services/team.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { AuthService } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
   selector: 'app-team-profile',

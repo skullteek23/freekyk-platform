@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { MatchConstants, ProfileConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';

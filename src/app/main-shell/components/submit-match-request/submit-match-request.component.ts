@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
-import { AuthService, authUserMain } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { AuthService } from '@app/services/auth.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { IMatchRequest } from '@shared/interfaces/match.model';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { ApiPostService } from '@shared/services/api.service';
 import { LocationService } from '@shared/services/location-cities.service';
 import { Observable } from 'rxjs';
+import { authUserMain } from '@shared/interfaces/user.model';
 
 @Component({
   selector: 'app-submit-match-request',

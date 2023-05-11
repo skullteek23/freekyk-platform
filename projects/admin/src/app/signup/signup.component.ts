@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
 import { LocationService } from '@shared/services/location-cities.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
-import { Observable } from 'rxjs';
 import { AuthService } from '@admin/services/auth.service';
 import { RegexPatterns } from '@shared/constants/REGEX';
 
@@ -19,23 +16,22 @@ export class SignupComponent implements OnInit {
 
   readonly messages = formsMessages;
 
-  countries$: Observable<string[]>;
-  cities$: Observable<string[]>;
+  countries: string[] = [];
+  states: string[] = [];
+  cities: string[] = [];
   isLoaderShown = false;
   isRegistrationSent = false;
   signupForm: FormGroup;
-  states$: Observable<string[]>;
 
   constructor(
     private locationService: LocationService,
-    private ngFirestore: AngularFirestore,
     private snackbarService: SnackbarService,
     private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.getCountries();
+    window.scrollTo(0, 0);
   }
 
   initForm() {
@@ -44,19 +40,20 @@ export class SignupComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       contactNumber: new FormControl(null, [Validators.pattern(RegexPatterns.phoneNumber)]),
       location: new FormGroup({
-        country: new FormControl(null, [Validators.required]),
-        state: new FormControl(null, [Validators.required]),
-        city: new FormControl(null, [Validators.required]),
+        // locCountry: new FormControl('India'),
+        locState: new FormControl(null),
+        locCity: new FormControl(null),
       }),
       company: new FormControl(null, [Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(60)]),
       gst: new FormControl(null, Validators.pattern(RegexPatterns.gstNumber)),
       selfGround: new FormControl(0, [Validators.required]),
     });
+    this.onSelectCountry('India');
   }
 
   async onSubmit(): Promise<any> {
     if (this.signupForm.valid && this.signupForm.value) {
-      this.isLoaderShown = true;
+      this.showLoader();
       const email = this.email?.value;
       if (email) {
         const request: Admin = {
@@ -76,31 +73,62 @@ export class SignupComponent implements OnInit {
         };
         this.authService.registerUserByEmail(request)
           .then(() => {
-            this.isLoaderShown = false;
+            this.hideLoader();
+            window.scrollTo(0, 0);
             this.isRegistrationSent = true;
           })
           .catch((error) => {
-            this.isLoaderShown = false;
+            this.hideLoader();
+            window.scrollTo(0, 0);
             this.snackbarService.displayError(error?.message);
           });
       }
     }
   }
 
-  getCountries() {
-    this.countries$ = this.locationService.getCountry();
+  onSelectCountry(country: string): void {
+    this.showLoader();
+    this.locationService.getStateByCountry(country)
+      .subscribe(response => {
+        if (response) {
+          this.states = response;
+        }
+        this.hideLoader();
+      });
   }
 
-  onSelectCountry(country: MatSelectChange): void {
-    this.states$ = this.locationService.getStateByCountry(country.value);
+  onSelectState(state: string): void {
+    this.showLoader();
+    this.locationService.getCityByState(state)
+      .subscribe(response => {
+        if (response) {
+          this.cities = response;
+        }
+        this.hideLoader();
+      });
   }
 
-  onSelectState(state: MatSelectChange): void {
-    this.cities$ = this.locationService.getCityByState(state.value);
+  get locationCountry(): FormControl {
+    return ((this.signupForm.get('location') as FormGroup)?.controls['locCountry'] as FormControl);
+  }
+
+  get locationState(): FormControl {
+    return ((this.signupForm.get('location') as FormGroup)?.controls['locState'] as FormControl);
+  }
+
+  get locationCity(): FormControl {
+    return ((this.signupForm.get('location') as FormGroup)?.controls['locCity'] as FormControl);
   }
 
   get email() {
     return this.signupForm?.get('email');
   }
 
+  showLoader() {
+    this.isLoaderShown = true;
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false;
+  }
 }

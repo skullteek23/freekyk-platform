@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { filter, map, switchMap, take, tap } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { CAPTAIN_ONLY, Tmember } from '@shared/interfaces/team.model';
 import { TeamService } from 'src/app/services/team.service';
 import { Store } from '@ngrx/store';

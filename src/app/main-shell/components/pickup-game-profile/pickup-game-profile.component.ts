@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, authUserMain } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { AuthService } from '@app/services/auth.service';
+import { authUserMain } from '@shared/interfaces/user.model';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { IPickupGameSlot, ISlotOption } from '@shared/interfaces/game.model';
 import { ListOption } from '@shared/interfaces/others.model';
 import { Formatters } from '@shared/interfaces/team.model';

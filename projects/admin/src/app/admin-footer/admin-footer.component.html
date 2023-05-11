@@ -1,0 +1,24 @@
+<div fxLayout="column" class="container upper_space" fxLayoutGap="20px">
+  <!-- follow links -->
+
+  <mat-divider fxHide.gt-sm="true"></mat-divider>
+
+  <!-- freekyk intro -->
+  <div fxLayout="column" fxLayoutAlign="space-evenly start" class="gap-bottom">
+    <a class="logo" [routerLink]="['/']" fxLayoutAlign="start center">
+      <img src="assets/images/brand_logo_2.png" alt="Freekyk Logo" appFallbackImg />
+    </a>
+    <p class="mat-body-1">
+      Freekyk is an online platform which facilitates end-to-end football for
+      all passionate football lovers without any interruptions.
+    </p>
+    <div fxLayoutGap="20px">
+      <p class="mat-body-1">Copyright © 2023. Freekyk.<br> All rights reserved.</p>
+      <a [routerLink]="['/terms']" class="mat-caption"> Terms & Conditions </a>
+      <a [routerLink]="['/privacypolicy']" class="mat-caption">
+        Privacy Policy
+      </a>
+    </div>
+  </div>
+  <!-- freekyk intro -->
+</div>

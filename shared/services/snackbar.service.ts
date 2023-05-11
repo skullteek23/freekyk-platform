@@ -35,5 +35,4 @@ export class SnackbarService {
     }
     this.displayCustomMsg(errorMessage, true);
   }
-
 }

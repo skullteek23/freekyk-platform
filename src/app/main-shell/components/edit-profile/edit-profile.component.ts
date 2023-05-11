@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { authUserMain } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ImageUploadPaths } from '@shared/constants/constants';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
 import { IPlayer } from '@shared/interfaces/user.model';

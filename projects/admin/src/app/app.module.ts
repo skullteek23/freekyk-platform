@@ -1,4 +1,5 @@
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire';
@@ -12,8 +13,6 @@ import { SignupComponent } from './signup/signup.component';
 import { ErrorComponent } from './error/error.component';
 import { MaterialModule } from '@shared/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthGuard } from './guards/auth.guard';
-import { LoggedUserRedirectGuard } from './guards/logged-user-redirect.guard';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SharedModule } from '@shared/shared.module';
@@ -21,23 +20,29 @@ import { SnackBarModule } from '@shared/modules/snack-bar/snack-bar.module';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { AdminHeaderComponent } from './admin-header/admin-header.component';
+import { AdminLoginGuard } from './guards/admin-login.guard';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { AdminFooterComponent } from './admin-footer/admin-footer.component';
+
+const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/login']);
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./main-shell/main-shell.module').then((m) => m.MainShellModule),
-    canActivate: [AuthGuard]
+    ...canActivate(redirectUnauthorizedGuard),
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [
-      LoggedUserRedirectGuard
-    ]
+    canActivate: [AdminLoginGuard]
   },
   {
     path: 'register',
-    component: SignupComponent
+    component: SignupComponent,
+    canActivate: [AdminLoginGuard]
+
   },
   {
     path: '**',
@@ -54,12 +59,13 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    ErrorComponent
+    ErrorComponent,
+    AdminHeaderComponent,
+    AdminFooterComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
-    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     MaterialModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
@@ -68,6 +74,7 @@ const routes: Routes = [
     SharedModule,
     SnackBarModule,
     HttpClientModule,
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [

@@ -3,9 +3,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { Admin, AssignedRoles, FirebaseUser, FirebaseUserCredential } from '@shared/interfaces/admin.model';
+import { authUserMain } from '@shared/interfaces/user.model';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -43,6 +44,10 @@ export class AuthService {
     return uid !== null && uid !== undefined && uid !== '';
   }
 
+  getUser(): Observable<authUserMain> {
+    return this.ngAuth.authState;
+  }
+
   logIn(email: string, password: string): Promise<FirebaseUserCredential> {
     if (email && password) {
       return this.ngAuth.signInWithEmailAndPassword(email, password);
@@ -75,9 +80,9 @@ export class AuthService {
     return this.ngAuth.user.pipe(take(1));
   }
 
-  getUser(): FirebaseUser {
-    return this.user || null;
-  }
+  // getUser(): FirebaseUser {
+  //   return this.user || null;
+  // }
 
   getAdminDetails(): Admin {
     const user = sessionStorage.getItem('user');

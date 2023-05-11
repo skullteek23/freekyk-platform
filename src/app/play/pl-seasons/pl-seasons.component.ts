@@ -11,7 +11,7 @@ import { FilterData } from '@shared/interfaces/others.model';
 import { ShareData } from '@shared/components/sharesheet/sharesheet.component';
 import { ApiGetService } from '@shared/services/api.service';
 import { Router } from '@angular/router';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
   selector: 'app-pl-seasons',

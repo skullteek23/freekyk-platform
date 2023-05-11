@@ -2,7 +2,7 @@ import { AuthService } from '@admin/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { formsMessages } from '@shared/constants/messages';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { Admin } from '@shared/interfaces/admin.model';

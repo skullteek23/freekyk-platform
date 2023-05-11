@@ -10,7 +10,7 @@ import { SeasonAdminService } from '../../../services/season-admin.service';
 import { seasonFlowMessages } from '@shared/constants/messages';
 import { AdminPaymentComponent } from './components/admin-payment/admin-payment.component';
 import { GenerateFixturesComponent } from './components/generate-fixtures/generate-fixtures.component';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({

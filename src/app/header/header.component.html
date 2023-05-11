@@ -203,6 +203,8 @@
     </button>
   </div>
 
+  <mat-divider></mat-divider>
+
   <div class="profile-container" *ngIf="isLogged" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
     <div class="account-circle-container" (click)="onCloseMenu()" [routerLink]="['/edit-profile']">
       <app-account-avatar [dataImg]="user.photoURL" [margins]="false"></app-account-avatar>

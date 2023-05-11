@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { GroundBasicInfo, GroundMoreInfo, GroundPrivateInfo, IGroundInfo } from '@shared/interfaces/ground.model';
 import { IFilter } from '@shared/interfaces/others.model';
 import { ISelectMatchType } from '@shared/interfaces/season.model';

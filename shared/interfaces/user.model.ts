@@ -1,3 +1,7 @@
+import firebase from 'firebase/app';
+export type authUser = firebase.auth.UserCredential;
+export type authUserMain = authUser['user'];
+export type confirmationResult = firebase.auth.ConfirmationResult;
 export interface IPlayer {
   name: string;
   teamID: string;

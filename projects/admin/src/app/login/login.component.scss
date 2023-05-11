@@ -1,47 +1,90 @@
-header {
+// .auth-form {
+//   width: 100%;
+
+//   mat-form-field {
+//     width: 100%;
+//   }
+// }
+.forgot_password {
+  color: black;
+  opacity: 1;
+  width: 100%;
   text-align: center;
+  margin: 14px;
+}
+
+.terms {
+  text-align: center;
+  margin: 24px 0 !important;
+}
+
+.forgot_password:hover {
+  opacity: 0.8;
+}
+
+.wb {
+  max-width: 100% !important;
+}
+
+.mat-form-field {
   width: 100%;
 }
 
-section {
+button {
   width: 100%;
-  margin-bottom: 40px;
+}
 
-  .submit-button {
-    margin: auto;
-    margin-top: 20px;
-    max-width: 100%;
+.auth-form {
+  width: 300px;
+}
+
+.mat-divider {
+  width: 80%;
+  margin-bottom: 8px;
+}
+
+.signin-buttons {
+  width: 300px;
+}
+
+.loading-container {
+  height: 80vh;
+  width: 80vw;
+  margin: 0 auto;
+}
+
+@media only screen and (min-width: 959px) {
+  .mat-form-field {
+    width: 360px;
+  }
+
+  button {
+    width: 360px;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .auth-form {
+    width: 100%;
+  }
+
+  .signin-buttons {
+    width: 100%;
+  }
+
+  .mat-divider {
     width: 100%;
   }
 }
 
-.form-container,
-.success-container {
-  width: 100%;
-  max-width: 415px;
+.row {
+  display: inline-block;
+}
 
-  p {
-    text-align: center;
-  }
+input.form-control {
+  text-align: center;
 }
 
 .shortcut {
-  text-align: center;
-  margin-top: 16px;
-}
-
-.placeholder {
-  height: 500px !important;
-  width: 600px !important;
-  border: none !important;
-}
-
-@media screen and (max-width: 600px) {
-  .placeholder {
-    border: none !important;
-    height: 300px !important;
-    width: 320px !important;
-    max-width: 320px;
-    overflow: hidden;
-  }
+  margin-top: 24px;
 }

@@ -1,8 +1,9 @@
-import { AuthService, authUserMain } from '@app/services/auth.service';
+import { AuthService } from '@app/services/auth.service';
+import { authUserMain } from '@shared/interfaces/user.model';
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { PaymentService } from '@shared/services/payment.service';

@@ -4,7 +4,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, V
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { CloudFunctionStatsData, MatchFixture, ReportSummary } from '@shared/interfaces/match.model';
 import { ListOption } from '@shared/interfaces/others.model';

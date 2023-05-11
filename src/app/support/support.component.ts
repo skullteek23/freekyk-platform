@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NavigationEnd, Router } from '@angular/router';
-import { SnackbarService } from '../services/snackbar.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { heroCallToAction, ListOption } from '@shared/interfaces/others.model';
 import { ISupportTicket, TicketStatus, TicketTypes } from '@shared/interfaces/ticket.model';
 import { RegexPatterns } from '@shared/constants/REGEX';

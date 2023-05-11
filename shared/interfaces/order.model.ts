@@ -9,7 +9,7 @@ export interface ICheckoutOptions {
   currency: string;
   name: string;
   order_id: string;
-  handler: (response) => Promise<any>;
+  handler: () => Promise<any>;
   description?: string;
   image?: string;
   partial_payment?: boolean;

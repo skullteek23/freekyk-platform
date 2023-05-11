@@ -1,46 +1,27 @@
-header {
-  text-align: center;
-  width: 100%;
-}
+@import '../login/login.component.scss';
 
-section {
-  width: 100%;
+.radio-group {
+  margin: 8px 0 24px !important;
 
-  .submit-button {
-    margin: auto;
-    margin-top: 20px;
-    max-width: 100%;
-    width: 100%;
+  mat-radio-group {
+    margin-top: 12px;
   }
 }
 
-.form-container,
-.success-container {
+.extra-box {
+  padding: 12px;
+  border-radius: 20px;
+  background: var(--grey4);
   width: 100%;
-  max-width: 415px;
+  margin-bottom: 24px;
 
-  p {
-    text-align: center;
-  }
 }
 
 .shortcut {
   text-align: center;
-  margin-top: 16px;
 }
 
-.placeholder {
-  height: 500px !important;
-  width: 600px !important;
-  border: none !important;
-}
-
-@media screen and (max-width: 600px) {
-  .placeholder {
-    border: none !important;
-    height: 300px !important;
-    width: 320px !important;
-    max-width: 320px;
-    overflow: hidden;
-  }
+.success-container {
+  padding: 12px;
+  margin: 48px 0;
 }

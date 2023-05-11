@@ -8,7 +8,7 @@ import {
   ActiveSquadMember,
   MemberResponseNotification,
 } from '@shared/interfaces/team.model';
-import { SnackbarService } from './snackbar.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TeamState } from '../dashboard/dash-team-manag/store/team.reducer';
 import { TeamCommState } from '../dashboard/dash-team-manag/da-te-communication/store/teamComm.reducer';
 import { AngularFireDatabase } from '@angular/fire/database';

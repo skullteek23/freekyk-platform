@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { ICheckoutOptions } from '@shared/interfaces/order.model';

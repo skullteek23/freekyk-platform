@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { IActionShortcutData } from '@shared/components/action-shortcut-button/action-shortcut-button.component';
 import { ApiGetService } from '@shared/services/api.service';
 import { TeamAllInfo } from '@shared/utils/pipe-functions';

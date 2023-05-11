@@ -61,7 +61,6 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
     SharedModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAnalyticsModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({
@@ -69,6 +68,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
       maxAge: 5,
     }),
     NgImageSliderModule,
+    AngularFireModule.initializeApp(environment.firebase),
     MainShellModule
   ],
   providers: [

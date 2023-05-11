@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { PlayerBasicInfo } from '@shared/interfaces/user.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { NotificationBasic } from '@shared/interfaces/notification.model';

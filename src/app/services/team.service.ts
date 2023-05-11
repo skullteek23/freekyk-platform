@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { filter, map, take, tap } from 'rxjs/operators';
 import { MatchFixture } from '@shared/interfaces/match.model';
 import { NO_TEAM, CAPTAIN_ONLY, ALREADY_IN_TEAM, TeamMedia, TeamMembers, TeamBasicInfo, TeamMoreInfo, TeamStats, MEMBER_ONLY, Tmember, INCOMPLETE_PROFILE, PHOTO_NOT_UPLOADED, } from '@shared/interfaces/team.model';
-import { SnackbarService } from './snackbar.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TeamsettingsComponent } from '../dashboard/dialogs/teamsettings/teamsettings.component';
 import { TeamcreateComponent } from '../dashboard/dialogs/teamcreate/teamcreate.component';
 import { TeamjoinComponent } from '../dashboard/dialogs/teamjoin/teamjoin.component';

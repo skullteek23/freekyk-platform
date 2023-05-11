@@ -1,3 +1,7 @@
-<div class="container">
+<header>
+  <app-admin-header (menOpen)="onOpenMenu($event)"></app-admin-header>
+</header>
+<main [fxHide]="menuOpen" class="main-content">
   <router-outlet></router-outlet>
-</div>
+</main>
+<app-admin-footer></app-admin-footer>

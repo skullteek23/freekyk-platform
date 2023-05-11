@@ -5,7 +5,7 @@ import { LeagueTableModel, } from '@shared/interfaces/others.model';
 import { ISeason, SeasonBasicInfo } from '@shared/interfaces/season.model';
 import { ApiGetService } from '@shared/services/api.service';
 import { FormControl } from '@angular/forms';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { Router } from '@angular/router';
 

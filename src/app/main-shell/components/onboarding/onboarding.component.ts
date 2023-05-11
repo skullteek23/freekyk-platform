@@ -3,13 +3,13 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { MatVerticalStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
-import { AuthService, authUserMain } from '@app/services/auth.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { AuthService } from '@app/services/auth.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { ImageUploadPaths, PLAYING_POSITIONS, ProfileConstants } from '@shared/constants/constants';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { positionGroup } from '@shared/interfaces/others.model';
 import { RewardableActivities } from '@shared/interfaces/reward.model';
-import { IPlayer } from '@shared/interfaces/user.model';
+import { IPlayer, authUserMain } from '@shared/interfaces/user.model';
 import { ApiPostService } from '@shared/services/api.service';
 import { LocationService } from '@shared/services/location-cities.service';
 import { StorageApiService } from '@shared/services/storage-api.service';

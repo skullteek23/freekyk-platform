@@ -1,8 +1,7 @@
-import { AuthService } from '@admin/services/auth.service';
+import { AuthService } from '@app/services/auth.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ValidationErrors } from '@angular/forms';
-import { authUserMain } from '@app/services/auth.service';
 import { IKnockoutData } from '@shared/components/knockout-bracket/knockout-bracket.component';
 import { ITeamPlayer } from '@shared/components/team-player-members-list/team-player-members-list.component';
 import { ILockedSlot, IPickupGameSlot } from '@shared/interfaces/game.model';
@@ -15,7 +14,7 @@ import { ICompletedActivity, IPoint, IPointsLog, IRedeemedReward, IReward } from
 import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
-import { IPlayer } from '@shared/interfaces/user.model';
+import { IPlayer, authUserMain } from '@shared/interfaces/user.model';
 import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists, checkGameOrderCancellation, parseMatchData } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';

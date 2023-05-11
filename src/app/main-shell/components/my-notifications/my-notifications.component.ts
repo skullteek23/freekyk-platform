@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@app/services/auth.service';
 import { NotificationsService } from '@app/services/notifications.service';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { MatchConstants } from '@shared/constants/constants';
 import { NotificationBasic, NotificationFormatter } from '@shared/interfaces/notification.model';
 import { ApiGetService } from '@shared/services/api.service';

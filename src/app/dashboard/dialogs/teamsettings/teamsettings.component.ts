@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LocationService } from '@shared/services/location-cities.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { TeamBasicInfo, TeamMoreInfo, } from '@shared/interfaces/team.model';
 import { TeamState } from '../../dash-team-manag/store/team.reducer';
 import { RegexPatterns } from '@shared/constants/REGEX';

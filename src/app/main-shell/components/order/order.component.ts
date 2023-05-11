@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { IPickupGameSlot } from '@shared/interfaces/game.model';
 import { ICheckoutOptions, IItemType, RazorPayOrder } from '@shared/interfaces/order.model';
 import { ISeason } from '@shared/interfaces/season.model';

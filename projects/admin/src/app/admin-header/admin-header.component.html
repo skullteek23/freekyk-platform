@@ -1,0 +1,88 @@
+<mat-toolbar class="white-bg" [disabled]="menuState" appStickyNav panelClass="sticky-header">
+  <div class="container" ngClass.lt-md="nogap" fxLayoutAlign="space-between center">
+    <!-- brand logo -->
+    <a class="logo" (click)="onCloseMenu(); scrollTop()" [routerLink]="['/']" fxLayoutAlign="center center">
+      <img src="assets/images/brand_logo_2.png" alt="Freekyk Logo" />
+    </a>
+    <!-- brand logo -->
+    <div fxHide.gt-sm="true" fxLayoutAlign="center center" fxLayoutGap="4px">
+
+      <button mat-icon-button color="primary" (click)="onToggleMenu()">
+        <mat-icon *ngIf="!menuState; else close" class="material-icons-round">
+          menu
+        </mat-icon>
+        <ng-template #close>
+          <mat-icon class="material-icons-round"> close </mat-icon>
+        </ng-template>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>
+
+
+<!-- Mobile Expanded view -->
+<div class="full-header" *ngIf="menuState" fxLayout="column" fxLayoutGap="20px">
+  <div fxLayout="column" fxLayoutGap="8px" *ngIf="!user">
+    <button (click)="onToggleMenu()" [routerLink]="['/login']" class="buttonText primaryButton">
+      Login
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="profile-container" *ngIf="user" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+    <div class="account-circle-container" (click)="onCloseMenu()" [routerLink]="['/account']">
+      <app-account-avatar [dataImg]="user.photoURL" [margins]="false"></app-account-avatar>
+    </div>
+    <div class="text-container" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="4px">
+      <span class="mat-body-1">
+        {{user.displayName}}
+      </span>
+      <div fxLayoutAlign="start center" fxLayoutGap="4px">
+        <span class="mat-caption">
+          {{user.email}}
+        </span>
+        <span class="material-icons-round filled verified-icon">
+          check_circle
+        </span>
+      </div>
+      <div fxLayoutAlign="start center" fxLayoutGap="4px">
+        <span class="mat-caption">
+          (Account Activated)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="links-container" fxLayout="column" fxLayoutGap="4px">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <li class="mat-tree-node">
+          <div class="custom-button-container">
+            <button class="link-button" fxFlex="100%" (click)="openLink(node);treeControl.collapseAll()"
+              mat-stroked-button [color]="node.isLogout ? 'warn' : 'primary'">
+              <span class="material-icons-round external-icon" *ngIf="node.icon">{{node.icon}}</span>
+              {{node.name}}
+            </button>
+          </div>
+        </li>
+      </mat-tree-node>
+      <!-- <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li>
+          <div class="mat-tree-node" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+            {{node.name}}
+            <span class="mat-icon-rtl-mirror material-icons-round">
+              {{treeControl.isExpanded(node) ? 'expand_less' : 'expand_more'}}
+            </span>
+          </div>
+          <ul class="example-tree-ul" [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </ul>
+        </li>
+      </mat-nested-tree-node> -->
+    </mat-tree>
+  </div>
+</div>
+<!-- Mobile Expanded view -->

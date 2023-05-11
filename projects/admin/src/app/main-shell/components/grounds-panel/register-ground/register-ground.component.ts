@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup } from '@angular/forms';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { SnackbarService } from '@app/services/snackbar.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 import { groundFlowMessages } from '@shared/constants/messages';
 import { ITiming } from '@shared/interfaces/others.model';
 import { Subscription } from 'rxjs';

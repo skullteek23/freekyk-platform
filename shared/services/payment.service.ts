@@ -3,12 +3,11 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { ICheckoutOptions, RazorPayOrder } from '@shared/interfaces/order.model';
-import { Router } from '@angular/router';
 import { FunctionsApiService } from './functions-api.service';
 import { SeasonAllInfo } from '@shared/utils/pipe-functions';
-import { authUserMain } from '@app/services/auth.service';
 import { GenerateRewardService } from '@app/main-shell/services/generate-reward.service';
 import { ApiGetService, ApiPostService } from './api.service';
+import { authUserMain } from '@shared/interfaces/user.model';
 declare var Razorpay: any;
 
 @Injectable({

@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { logDetails } from '@shared/interfaces/others.model';
-import { SnackbarService } from './snackbar.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import firebase from 'firebase/app';
 import { Observable, Subject } from 'rxjs';
 import { ApiGetService } from '@shared/services/api.service';
+import { authUser, authUserMain } from '@shared/interfaces/user.model';
 
-export type authUser = firebase.auth.UserCredential;
-export type authUserMain = authUser['user'];
-export type confirmationResult = firebase.auth.ConfirmationResult;
+
 export interface User {
   id: string;
   name: string;
