@@ -45,6 +45,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   slotsSubscriptions = new Subscription();
   currentLockID = null;
   user: authUserMain = null;
+  isGameFinished = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -90,6 +91,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
             if (response) {
               this.season = response;
               this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
+              const today = new Date().getTime();
+              this.isGameFinished = today > this.season.startDate;
               this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
               this.amount = 0;
               this.getSeasonMatches();

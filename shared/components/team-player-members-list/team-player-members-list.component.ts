@@ -9,6 +9,7 @@ export interface ITeamPlayer {
   id: string;
   position: string;
   imgpath: string;
+  customText?: string;
 }
 
 @Component({

@@ -522,3 +522,4 @@ export function parsePointLogsData(source: Observable<ngFireDocQuery>): Observab
     map((resp) => !resp?.empty ? resp.docs.map(doc => ({ id: doc.id, ...doc.data() as IPointsLog })) : []),
   );
 }
+

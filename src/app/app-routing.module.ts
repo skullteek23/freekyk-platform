@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { OnboardingGuard } from './auth/onboarding.guard';
 import { SignupGuardGuard } from './auth/signup-guard.guard';
 import { SignupComponent } from './auth/signup/signup.component';
-import { MyMatchesComponent } from './dashboard/dash-home/my-matches/my-matches.component';
 import { DashTeamManagComponent } from './dashboard/dash-team-manag/dash-team-manag.component';
 import { ErrorComponent } from './error/error.component';
 import { ChallengesComponent } from './main-shell/components/challenges/challenges.component';
@@ -42,6 +41,7 @@ import { GoalsComponent } from './main-shell/components/leaderboard/components/g
 import { PlayedComponent } from './main-shell/components/leaderboard/components/played/played.component';
 import { PointsComponent } from './main-shell/components/leaderboard/components/points/points.component';
 import { PendingPaymentComponent } from './main-shell/components/pending-payment/pending-payment.component';
+import { MyMatchesComponent } from './main-shell/components/my-matches/my-matches.component';
 
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 

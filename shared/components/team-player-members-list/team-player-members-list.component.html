@@ -13,15 +13,10 @@
       </span>
       <span class="material-icons-round" *ngIf="showProfileButton"
         (click)="openPlayerProfile(teamMember.id); $event.stopPropagation()">chevron_right</span>
-      <ng-container *ngIf="showRemoveButton">
-        <a *ngIf="captainID !== teamMember.id" (click)="removePlayer(teamMember.id); $event.stopPropagation()"
-          class="red mat-caption">
-          Remove
-        </a>
-      </ng-container>
     </p>
     <p matLine fxLayoutAlign="space-between center">
-      <span class="mat-caption sec-menu"> {{ teamMember.position }} </span>
+      <span class="mat-caption sec-menu" *ngIf="!teamMember.customText"> {{ teamMember.position }} </span>
+      <span class="mat-caption sec-menu" *ngIf="teamMember.customText"> {{ teamMember.customText }} </span>
     </p>
     <mat-divider *ngIf="!last"></mat-divider>
   </mat-list-item>

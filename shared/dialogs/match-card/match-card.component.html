@@ -64,10 +64,19 @@
     </mat-tab>
     <mat-tab label="Lineup">
       <ng-template matTabContent>
-        <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column">
+        <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column" *ngIf="data.type === 'FCP'">
+          <div fxLayout="column" fxLayoutGap="16px">
+            <ng-container *ngIf="lineup?.length > 0">
+              <span class="mat-body-2">
+                Confirmed Players
+              </span>
+              <app-team-player-members-list [list]="lineup"></app-team-player-members-list>
+            </ng-container>
+          </div>
+        </div>
+        <div class="filter-spacing seperator" fxLayoutGap="20px" fxLayout="column" *ngIf="data.type !== 'FCP'">
           <div fxLayout="column" fxLayoutGap="16px">
             <ng-container *ngIf="homeLineup?.length > 0">
-
               <span class="mat-body-1">
                 {{ data?.home.name + " Lineup" | titlecase }}
               </span>

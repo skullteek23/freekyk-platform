@@ -16,8 +16,9 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists, checkGameOrderCancellation } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists, checkGameOrderCancellation, parseMatchData } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -337,6 +338,12 @@ export class ApiGetService {
       .pipe(parseSeasonNamesData);
   }
 
+  getSeasonByName(name: string): Observable<ISeason[]> {
+    const query = (query) => query.where('name', '==', name);
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(parseSeasonDataV2);
+  }
+
   getSeasonBookedSlots(seasonID: string): Observable<IPickupGameSlot[]> {
     return this.angularFirestore.collection('pickupSlots', query => query.where('seasonID', '==', seasonID)).get()
       .pipe(parsePickupSlotsData)
@@ -439,6 +446,42 @@ export class ApiGetService {
   isPickupGameOrderCancellable(season: string): Observable<boolean> {
     return this.angularFirestore.collection('allMatches', query => query.where('season', '==', season)).get()
       .pipe(checkGameOrderCancellation)
+  }
+
+  getUserPickupGames(userID: string): Observable<MatchFixture[]> {
+    if (userID) {
+      const queryPickupSlots = query => query.where('uid', '==', userID);
+      return this.angularFirestore.collection('pickupSlots', queryPickupSlots).get().pipe(
+        parsePickupSlotsData,
+        switchMap(async (userSlots) => {
+          const seasonIDs: string[] = userSlots?.map(el => el.seasonID);
+          const seasonNames: string[] = [];
+          if (userSlots && seasonIDs?.length) {
+
+            const seasons = await this.getSeasons().toPromise();
+            seasons.forEach(season => {
+              if (seasonIDs.includes(season.id)) {
+                seasonNames.push(season.name);
+              }
+            });
+
+            const matchesQuery = query => query.where('season', 'in', seasonNames);
+            return this.angularFirestore.collection('allMatches', matchesQuery).get()
+              .pipe(parseMatchData).toPromise();
+          } else {
+            return null;
+          }
+        })
+      )
+    }
+  }
+
+  readBatchDocuments(documentIds: string[], collection: string): Observable<any[]> {
+    const documentObservables = documentIds.map((docId) =>
+      this.angularFirestore.collection(collection).doc(docId).get()
+    );
+
+    return combineLatest(documentObservables)
   }
 }
 

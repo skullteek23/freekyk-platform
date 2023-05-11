@@ -43,17 +43,19 @@ export class PickupGameService {
   ) { }
 
   getStartDate(date: number): string {
-    if (date) {
-      const today = new Date().getTime();
+    const today = new Date().getTime();
+    if (date && date >= today) {
       const timeDiff = Math.abs(date - today);
       const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
       if (diffDays === 0) {
-        return 'today';
+        return 'Game starts today';
       } else if (diffDays === 1) {
-        return 'tomorrow';
+        return 'Game starts tomorrow';
       } else {
-        return `in ${diffDays} days`;
+        return `Game starts in ${diffDays} days`;
       }
+    } else {
+      return 'Game finished';
     }
   }
 
@@ -329,7 +331,7 @@ export class PickupGameService {
     const options = new MatBottomSheetConfig();
     const dataOptions: IPaymentOptions[] = [];
     dataOptions.push({
-      label: `Pay with Freekyk Points (Balance: ${points})`,
+      label: `Pay with Freekyk Points <span class="mat-caption">(Balance: ${points})</span>`,
       icon: 'payments',
       disabled: points <= 0,
       mode: IPaymentOptionModes.freekykPoints,

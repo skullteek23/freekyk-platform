@@ -4,7 +4,7 @@
   </span>
   <div class="details-container" *ngIf="dialogData" fxLayout="column" fxLayoutGap="8px">
     <div class="detail" fxLayoutAlign="space-between center">
-      <span class="mat-caption">Slots</span>
+      <span class="mat-caption">Slot(s)</span>
       <span class="mat-body-1"> {{dialogData.slotsCount}} </span>
     </div>
     <div class="detail" fxLayoutAlign="space-between center">
@@ -26,8 +26,7 @@
         <li class="mat-tree-node" (click)="dismiss(node);treeControl.collapseAll()">
           <div mat-button class="custom-button-container" fxLayoutAlign="space-between center">
             <span class="material-icons-round external-icon filled" *ngIf="node.icon">{{node.icon}}</span>
-            <span class="mat-body-1 main-text">
-              {{node.label}}
+            <span class="mat-body-1 main-text" [innerHTML]="node.label">
             </span>
             <span class="material-icons-round end-icon">
               chevron_right

@@ -19,9 +19,6 @@
     </div>
     <p>
       <span class="mat-body-1">
-        Game starts&nbsp;
-      </span>
-      <span class="mat-body-2">
         {{startDate}} @ <a (click)="openGround(ground)"> {{ground?.viewValue}}</a>
       </span>
     </p>
@@ -130,7 +127,7 @@
   </div>
 </div>
 
-<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0">
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0 && !isGameFinished">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <!-- <span class="material-icons-round external-icon">whatshot</span> -->

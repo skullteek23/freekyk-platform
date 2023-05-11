@@ -1,1 +1,11 @@
-<p>my-matches works!</p>
+<section>
+  <mat-card class="dashboard-card">
+    <div class="title" fxLayoutAlign="space-between center" fxLayout="row">
+      <span mat-card-title class="dash-h5 align">My Matches</span>
+      <a [routerLink]="['/matches']" class="mat-caption sec-menu">View all</a>
+    </div>
+    <app-fixtures-results-tabs [matches]="matches"></app-fixtures-results-tabs>
+  </mat-card>
+</section>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>
