@@ -189,6 +189,10 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     if (slot.booked) {
       return;
     }
+    if (this.isGameFinished) {
+      this.snackBarService.displayCustomMsg('Game is finished!');
+      return;
+    }
     if (!slot.selected) {
       this.amount += this.season.fees;
     } else {

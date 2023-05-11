@@ -5,18 +5,20 @@
       Go back
     </span>
   </button>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <span class="dash-h5 heading">
+      {{season?.name}}
+    </span>
+  </div>
+
 </div>
 <div class="content-container" [ngClass]="{'content-container': amount > 0 }">
-
   <section fxLayout="column" fxLayoutGap="4px" *ngIf="season">
-    <div fxLayoutAlign="space-between center">
-      <span class="dash-h5">
-        {{season?.name}}
-      </span>
+    <!-- <div fxLayoutAlign="space-between center">
       <span class="mat-body-2 red" *ngIf="emptySlotsCount">
         {{emptySlotsCount}} slots left!!
       </span>
-    </div>
+    </div> -->
     <p>
       <span class="mat-body-1">
         {{startDate}} @ <a (click)="openGround(ground)"> {{ground?.viewValue}}</a>
@@ -29,12 +31,18 @@
       </span>
     </p>
 
-    <p class="match-time">
-      Match time is
+    <p class="match-time" fxLayoutAlign="center center" fxLayoutGap="4px">
+      <span class="mat-body-1">
+        Match time is
+      </span>
       <span class="mat-body-2">
         {{season?.startDate | date: 'h a'}} - {{season?.startDate + oneHourMilliseconds | date: 'h a'}}
       </span>
+      <span class="mat-body-2 red slots-remaining" fxFlexAlign="end" *ngIf="emptySlotsCount">
+        {{emptySlotsCount}} slots left!!
+      </span>
     </p>
+    <mat-divider></mat-divider>
 
     <mat-chip-list>
       <mat-chip selected>
@@ -52,6 +60,7 @@
         </span>
       </mat-chip>
     </mat-chip-list>
+
   </section>
 
   <section>
@@ -102,6 +111,7 @@
   </section>
 
   <section fxLayout="column" fxLayoutGap="4px" class="last-section">
+    <mat-divider></mat-divider>
     <p>
       Full Match Recording:
       <span class="mat-body-2">

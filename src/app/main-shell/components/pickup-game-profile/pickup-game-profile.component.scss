@@ -8,7 +8,7 @@ section {
 }
 
 .match-time {
-  margin-bottom: 20px !important;
+  margin-bottom: 12px !important;
 }
 
 .team-container {
@@ -86,4 +86,12 @@ section {
 .content-container {
   height: calc(100vh - 200px);
   overflow-y: auto;
+}
+
+mat-chip-list {
+  margin-top: 12px;
+}
+
+.slots-remaining {
+  margin-left: auto;
 }
