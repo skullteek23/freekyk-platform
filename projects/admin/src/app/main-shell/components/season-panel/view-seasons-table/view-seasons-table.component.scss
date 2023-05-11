@@ -1,56 +1,59 @@
-.table-container {
-  height: 500px;
-  padding: 0px;
-  overflow: hidden;
-  overflow-y: auto;
+section {
+  margin-top: 16px;
 }
 
-@media screen and (max-width: 959px) {
-  .table-container {
-    height: 450px;
-  }
+.back-button {
+  margin-left: 16px;
 }
 
-.selected-row:hover {
-  background-color: var(--grey4);
-  cursor: pointer;
-}
-
-table {
+mat-list {
   width: 100%;
-  border: 1px solid var(--grey5);
-}
+  height: calc(100vh - 212px);
+  overflow-y: auto;
+  padding: 12px;
 
-.mat-column-season {
-  width: 300px;
-  text-align: left;
-}
+  mat-list-item {
+    height: 80px;
+    width: 100%;
+    margin-bottom: 12px;
 
-.mat-column-actions,
-.mat-column-sno {
-  text-align: center;
-}
+    .dashboard-card {
+      padding: 12px 0 !important;
+    }
 
-a.disabled {
-  cursor: not-allowed !important;
-  color: grey !important;
-}
+    .data-container {
+      width: 100%;
 
-.row:hover span,
-.row:hover div .material-icons-round {
-  color: var(--primaryDarkColor);
-}
+      .image {
+        height: 100px;
+        max-height: 81px;
+        width: 50px;
+        max-width: 50px;
+        overflow: hidden;
+        background-color: var(--grey5);
+        border-radius: var(--dashCardBorder) 0 0 var(--dashCardBorder);
+        margin-left: -16px;
 
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+      }
 
+      mat-chip {
+        width: 100%;
 
-.season-ended .row:hover span,
-.season-ended .row:hover div .material-icons-round,
-.season-ended span,
-.season-ended div .material-icons-round {
-  opacity: 0.5;
-}
+        span.mat-caption {
+          white-space: nowrap;
+        }
+      }
+    }
 
-.button-container {
-  margin-top: 20px;
-  margin-bottom: 8px !important;
+    .description {
+      width: 100%;
+    }
+
+  }
+
 }

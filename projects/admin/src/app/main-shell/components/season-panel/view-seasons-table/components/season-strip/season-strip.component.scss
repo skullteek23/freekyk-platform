@@ -1,0 +1,24 @@
+.data-container {
+  width: 100%;
+
+  .image {
+    height: 100px;
+    max-height: 81px;
+    width: 130px;
+    max-width: 130px;
+    overflow: hidden;
+    background-color: var(--grey5);
+    border-radius: var(--dashCardBorder) 0 0 var(--dashCardBorder);
+    margin-left: -16px;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.description {
+  width: 100%;
+}

@@ -50,12 +50,12 @@ import { RescheduleMatchDialogComponent } from './components/season-panel/resche
 import { AddSponsorComponent } from './components/season-panel/add-sponsor/add-sponsor.component';
 import { MatchRequestsPanelComponent } from './components/match-requests-panel/match-requests-panel.component';
 import { TicketsPanelComponent } from './components/tickets-panel/tickets-panel.component';
+import { SeasonStripComponent } from './components/season-panel/view-seasons-table/components/season-strip/season-strip.component';
 
 
 const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
+    path: 'seasons',
     component: SeasonPanelComponent,
     children: [
       { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
@@ -65,7 +65,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'seasons', redirectTo: ''
+    path: '', redirectTo: 'seasons', pathMatch: 'full',
   },
   {
     path: 'grounds', component: GroundsPanelComponent,
@@ -120,6 +120,7 @@ const routes: Routes = [
     AddSponsorComponent,
     MatchRequestsPanelComponent,
     TicketsPanelComponent,
+    SeasonStripComponent,
   ],
   imports: [
     CommonModule,

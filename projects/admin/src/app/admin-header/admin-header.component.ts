@@ -43,7 +43,7 @@ export class AdminHeaderComponent implements OnInit {
         } else {
           this.user = null;
         }
-        this.dataSource.data = MOBILE_LINKS;
+        this.dataSource.data = this.mobileLinks;
       }
     })
   }
@@ -67,6 +67,8 @@ export class AdminHeaderComponent implements OnInit {
   onLogout(): void {
     this.onCloseMenu();
     this.authService.logOut();
+    this.mobileLinks.pop();
+    this.dataSource.data = this.mobileLinks;
   }
 
   openLink(link: ILink) {

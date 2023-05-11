@@ -1,7 +1,7 @@
 import { MatchConstants } from '@shared/constants/constants';
 import { ListOption } from './others.model';
 
-export type TournamentTypes = 'FKC' | 'FCP' | 'FPL';
+export type TournamentTypes = 'FKC' | 'FCP' | 'FPL' | 'Pickup';
 export type KnockoutRounds = 2 | 4 | 8 | 16;
 export type CancellationTypes = 'abort-match' | 'cancel-match' | 'cancel-season';
 export enum MatchStatus {
@@ -46,9 +46,9 @@ export const StatusMessage = [
 ]
 
 export const TournamentTypes = {
-  FKC: 'Knockout Tournament',
+  FKC: 'Knockout',
   FPL: 'League',
-  FCP: 'Instant Match'
+  FCP: 'Pickup Game'
 }
 
 export class ParseMatchProperties {

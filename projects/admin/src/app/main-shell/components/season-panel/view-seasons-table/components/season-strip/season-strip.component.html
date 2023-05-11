@@ -1,0 +1,18 @@
+<mat-card class="mat-elevation-z8 dashboard-card data-container" fxLayoutAlign="start center" fxLayoutGap="12px">
+  <div class="image">
+    <img [src]="data.imgpath" [alt]="data.name" appFallbackImg>
+  </div>
+  <div class="description" fxLayoutAlign="space-between center">
+    <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
+      <span class="mat-body-1">
+        {{data.name}}
+      </span>
+      <span class="mat-caption sec-menu" *ngIf="data.city || data.state">
+        {{data.city}}, {{data.state}}
+      </span>
+    </div>
+    <span class="material-icons-round clickable">
+      chevron_right
+    </span>
+  </div>
+</mat-card>

@@ -209,9 +209,9 @@ app-fixture-table {
 .mat-tab-group {
   .mat-tab-label-container {
     .mat-tab-label-active {
-      background-color: var(--primaryColor);
-      color: white;
-      border-radius: 10px 10px 0px 0px;
+      // background-color: var(--primaryColor);
+      // color: white;
+      // border-radius: 10px 10px 0px 0px;
     }
   }
 }
@@ -261,4 +261,10 @@ app-fixture-table {
       }
     }
   }
+}
+
+
+.buttons-container {
+  position: sticky !important;
+  bottom: 0px !important;
 }

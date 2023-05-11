@@ -1,9 +1,66 @@
-<div fxLayoutAlign="end center" class="button-container">
-  <button (click)="createSeason()" class="primaryButton buttonText">
-    Create New
-  </button>
+<div class="back-button" fxLayoutAlign="start center">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <span class="dash-h5 heading">
+      Matches & Tournaments
+    </span>
+  </div>
 </div>
-<div class="table-container">
+
+<section>
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="Upcoming">
+      <mat-list>
+        <app-no-items-message *ngIf="!upcomingSeasons.length"
+          customText="Uh-Oh! You have not created any match or tournament yet."></app-no-items-message>
+        <mat-list-item *ngFor="let season of upcomingSeasons" (click)="onSelectSeason(season)">
+          <mat-card class="mat-elevation-z8 dashboard-card data-container" fxLayoutAlign="start center"
+            fxLayoutGap="12px">
+            <div class="image">
+              <img [src]="season.imgpath" [alt]="season.name" appFallbackImg>
+            </div>
+            <div class="description" fxLayoutAlign="space-between center">
+              <div class="description" fxLayout="column" fxLayoutAlign="stretch start">
+                <span class="mat-body-1">
+                  {{season.name}}
+                </span>
+                <span class="mat-caption sec-menu" *ngIf="season.city || season.state">
+                  {{season.startDate | date: 'medium'}}
+                </span>
+                <span *ngIf="isSeasonLive(season.status)" matTooltip="Live"
+                  class="material-icons-round red">sensors</span>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="end center">
+                <mat-chip-list>
+                  <mat-chip>
+                    <span class="mat-caption">
+                      {{formatter.formatTournamentType(season.type)}}
+                    </span>
+                  </mat-chip>
+                </mat-chip-list>
+                <span class="material-icons-round clickable">
+                  chevron_right
+                </span>
+              </div>
+            </div>
+          </mat-card>
+
+        </mat-list-item>
+      </mat-list>
+    </mat-tab>
+    <mat-tab label="Finished">
+      <mat-list>
+        <app-no-items-message *ngIf="!finishedSeasons.length"
+          customText="Uh-Oh! Matches are not finished yet."></app-no-items-message>
+        <mat-list-item *ngFor="let season of finishedSeasons" (click)="onSelectSeason(season)">
+          <app-season-strip [data]="season"></app-season-strip>
+        </mat-list-item>
+      </mat-list>
+    </mat-tab>
+  </mat-tab-group>
+</section>
+
+
+<!-- <div class="table-container">
   <table mat-table [dataSource]="seasons">
     <ng-container matColumnDef="sno">
       <th mat-header-cell *matHeaderCellDef>S.No.</th>
@@ -51,4 +108,13 @@
     <tr mat-row *matRowDef="let myRowData; columns: cols" class="selected-row" routerLink="/seasons/{{myRowData.id}}">
     </tr>
   </table>
+</div> -->
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px">
+  <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button [routerLink]="['/seasons/create']"
+    fxLayoutAlign="center center" fxLayoutGap="4px">
+    <span class="material-icons-round external-icon">add_circle</span>
+    <span>
+      Create New
+    </span>
+  </button>
 </div>
