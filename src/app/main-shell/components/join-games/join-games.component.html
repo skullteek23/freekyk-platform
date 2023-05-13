@@ -5,21 +5,11 @@
       Go back
     </span>
   </button>
+  <span class="dash-h5 heading">Join Games in your Area</span>
 </div>
-<mat-card class="feature-card" *ngIf="noGame && !isLoaderShown">
-  <img class="play_image" mat-card-image src="assets/svgs/Banner/be_part_of_seasons.svg"
-    alt="Freekyk Play Seasons Image">
-  <mat-card-content>
-    <div fxLayoutAlign="center" fxLayout="column">
-      <span class="overline center">Be a part of the football network</span>
-      <span class="mat-title center">Freekyk Seasons</span>
-      <p class="mat-body-1 center description">
-        Pre-defined tournament formats consisting of Premier
-        Leagues, Knockouts & community plays good enough to give you the perfect football experience.
-      </p>
-    </div>
-  </mat-card-content>
-</mat-card>
+<section>
+  <app-no-items-message *ngIf="noGame" customText="No games for now, but check back later!"></app-no-items-message>
+</section>
 <section *ngIf="instantMatchesList.length">
   <div>
     <span class="dash-h5 heading">Pickup Games</span>

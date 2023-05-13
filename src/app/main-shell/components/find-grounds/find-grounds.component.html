@@ -1,1 +1,50 @@
-<p>find-grounds works!</p>
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Find Grounds in your area</span>
+</div>
+
+<section class="features-section">
+  <app-no-items-message *ngIf="!grounds.length"></app-no-items-message>
+  <app-search-lg searchPlaceholder="Search for a Ground" (searchItem)="applyFilter($event)"
+    *ngIf="grounds.length"></app-search-lg>
+  <ul>
+    <li *ngFor="let ground of grounds">
+      <mat-card class="mat-elevation-z8 dashboard-card" *ngIf="ground"
+        (click)="openGround(ground); $event.stopPropagation()">
+        <mat-card-header>
+          <mat-card-title *ngIf="ground.name">
+            <span class="dash-h5 align ellipsis">
+              {{ground.name}}
+            </span>
+          </mat-card-title>
+
+        </mat-card-header>
+        <img mat-card-image [src]="ground.imgpath" [alt]="ground.name" appFallbackImg>
+        <mat-card-content *ngIf="ground.locCity && ground.locState">
+          <div fxLayoutAlign="start center" fxLayoutGap="8px">
+            <span class="material-icons-round">
+              place
+            </span>
+            <span class="mat-caption">
+              {{ground.locCity}}, {{ground.locState}}
+            </span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button color="primary" mat-button (click)="openGround(ground); $event.stopPropagation()" fxLayout="column"
+            fxLayoutAlign="center center" fxLayoutGap="8px">
+            <span> View ground </span>
+            <span class="material-icons-round"> chevron_right </span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </li>
+  </ul>
+</section>
+<app-loading *ngIf="isLoaderShown">
+</app-loading>

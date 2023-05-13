@@ -28,7 +28,6 @@ import { OnboardUserGuard } from './auth/onboard-user.guard';
 import { MyNotificationsComponent } from './main-shell/components/my-notifications/my-notifications.component';
 import { PickupGameProfileComponent } from './main-shell/components/pickup-game-profile/pickup-game-profile.component';
 import { PlStandingsComponent } from './play/pl-standings/pl-standings.component';
-import { PlGroundsComponent } from './play/pl-grounds/pl-grounds.component';
 import { MyOrdersComponent } from './main-shell/components/my-orders/my-orders.component';
 import { MyAccountComponent } from './main-shell/components/my-account/my-account.component';
 import { MyAddressesComponent } from './main-shell/components/my-addresses/my-addresses.component';
@@ -42,6 +41,7 @@ import { PlayedComponent } from './main-shell/components/leaderboard/components/
 import { PointsComponent } from './main-shell/components/leaderboard/components/points/points.component';
 import { PendingPaymentComponent } from './main-shell/components/pending-payment/pending-payment.component';
 import { MyMatchesComponent } from './main-shell/components/my-matches/my-matches.component';
+import { FindGroundsComponent } from './main-shell/components/find-grounds/find-grounds.component';
 
 const redirectUnauthorizedGuard = () => redirectUnauthorizedTo(['/signup']);
 
@@ -77,7 +77,7 @@ const routes: Routes = [
   { path: 'teams/join', component: JoinTeamDialogComponent },
   { path: 'team/:teamid', component: TeamProfileComponent },
 
-  { path: 'grounds', component: PlGroundsComponent },
+  { path: 'grounds', component: FindGroundsComponent },
   { path: 'ground/:groundid', component: GroundProfileComponent },
 
   { path: 'players', component: FindPlayersComponent },
