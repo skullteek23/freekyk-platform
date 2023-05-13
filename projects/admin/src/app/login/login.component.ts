@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit {
     if (environment.production) {
       this.validators = [
         Validators.pattern(RegexPatterns.adminID),
-        Validators.minLength(10), Validators.maxLength(10)
       ];
     } else {
       this.validators = [];

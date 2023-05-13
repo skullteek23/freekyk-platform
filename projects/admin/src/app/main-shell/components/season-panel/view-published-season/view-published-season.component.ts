@@ -169,7 +169,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     if (this.season?.name && environment) {
       switch (this.season.type) {
         case 'Pickup':
-          const url = environment?.firebase?.url + '/pickup-game';
+          const url = environment?.firebase?.url + '/pickup-game/';
           window.open(`${url}${this.season?.id}`, '_blank');
           break;
 

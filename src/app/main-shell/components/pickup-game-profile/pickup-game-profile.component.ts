@@ -240,13 +240,13 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         this.payNow();
         break;
 
-      case IPaymentOptionModes.bookOnline:
-        this.payAtVenue(bookingAmount, false);
-        break;
+      // case IPaymentOptionModes.bookOnline:
+      //   this.payAtVenue(bookingAmount, false);
+      //   break;
 
-      case IPaymentOptionModes.bookWithCash:
-        this.payAtVenue(bookingAmount, true);
-        break;
+      // case IPaymentOptionModes.bookWithCash:
+      //   this.payAtVenue(bookingAmount, true);
+      //   break;
 
       default:
         this.snackBarService.displayError('Error: Invalid option selected!');
@@ -355,8 +355,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
           email: this.user.email,
         },
         description: `${this.season.name} x${totalSlots} Slot(s)`,
-        order_id: orderID,
-        amount,
+        amount: amount * 100,
         handler: this.paymentVerify.bind(this, verificationCallback),
         modal: {
           backdropclose: false,
@@ -366,7 +365,6 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         }
       }
       options.prefill.partial_payment = true;
-
       // Open Checkout Page
       this.paymentService.openCheckoutPage(options);
     } else {

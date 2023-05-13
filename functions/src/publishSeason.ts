@@ -39,8 +39,6 @@ export async function seasonPublish(data: any, context: any): Promise<any> {
   addPropertyToMore('format', data, season);
   addPropertyToMore('groundName', data, season);
   addPropertyToMore('groundLink', data, season);
-  console.log(season);
-
 
   // season info
   const batch = db.batch();
