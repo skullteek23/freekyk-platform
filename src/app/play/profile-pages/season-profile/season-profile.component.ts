@@ -296,8 +296,8 @@ export class SeasonProfileComponent implements OnInit, OnDestroy {
   }
 
   enlargePhoto(): void {
-    if (this.season?.imgpath) {
-      this.enlargeService.onOpenPhoto(this.season.imgpath);
+    if (this.season?.more?.imgpath) {
+      this.enlargeService.onOpenPhoto(this.season?.more?.imgpath);
     }
   }
 
