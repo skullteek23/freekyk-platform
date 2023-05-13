@@ -205,21 +205,21 @@ export function parsePickupSlotWithNamesData(list: IPickupGameSlot[], source: Ob
   ).toPromise();
 }
 
-export function parseSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc, ngFireDoc, ngFireDoc]>): Observable<Partial<SeasonAllInfo>> {
+export function parseSeasonBulkData(source: Observable<[ngFireDoc, ngFireDoc]>): Observable<Partial<SeasonAllInfo>> {
   return source.pipe(
     map(response => {
       let data: Partial<SeasonAllInfo> = {};
-      if (response?.length === 4) {
+      if (response?.length === 2) {
         const data_1: ISeason = response[0].exists ? ({ id: response[0].id, ...response[0].data() as ISeason }) : null;
         const data_2: ISeasonDescription = response[1].exists ? ({ ...response[1].data() as ISeasonDescription }) : null;
-        const data_3: SeasonStats = response[2].exists ? ({ ...response[2].data() as SeasonStats }) : null;
-        const data_4: SeasonMedia = response[3].exists ? ({ ...response[3].data() as SeasonMedia }) : null;
-        if (data_1 || data_2 || data_3 || data_4) {
+        // const data_3: SeasonStats = response[2].exists ? ({ ...response[2].data() as SeasonStats }) : null;
+        // const data_4: SeasonMedia = response[3].exists ? ({ ...response[3].data() as SeasonMedia }) : null;
+        if (data_1 || data_2) {
           data = {
             ...data_1,
             ...data_2,
-            ...data_3,
-            ...data_4,
+            // ...data_3,
+            // ...data_4,
           }
           return data;
         }

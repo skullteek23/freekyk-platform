@@ -272,3 +272,9 @@ app-fixture-table {
 .mat-vertical-content {
   padding: 0 12px 24px 24px !important
 }
+
+.fixtures-admin-panel {
+  .mat-expansion-panel-body {
+    padding: 0 !important;
+  }
+}

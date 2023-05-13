@@ -3,6 +3,9 @@
     <span class="dash-h5 heading">
       Matches & Tournaments
     </span>
+    <button mat-icon-button (click)="getSeasons()" matTooltip="Refresh Page">
+      <span class="material-icons-round">refresh</span>
+    </button>
   </div>
 </div>
 
@@ -118,3 +121,5 @@
     </span>
   </button>
 </div>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

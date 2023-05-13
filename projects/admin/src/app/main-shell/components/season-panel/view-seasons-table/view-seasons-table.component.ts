@@ -25,6 +25,7 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   formatter: any;
   upcomingSeasons: ISeason[] = [];
   finishedSeasons: ISeason[] = [];
+  isLoaderShown = false;
 
   constructor(
     private ngFire: AngularFirestore,
@@ -46,14 +47,17 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   }
 
   getSeasons(): void {
+    this.showLoader();
     this.adminApiService.getSeasons().subscribe({
       next: (response) => {
         if (response) {
           this.upcomingSeasons = response.filter(season => season.status === 'PUBLISHED');
           this.finishedSeasons = response.filter(season => season.status === 'FINISHED' || season.status === 'CANCELLED' || season.status === 'REMOVED');
         }
+        this.hideLoader();
       },
       error: () => {
+        this.hideLoader();
         this.snackbarService.displayError('Error: Unable to get seasons list!');
       }
     })
@@ -87,6 +91,14 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
 
   isSeasonLive(status: statusType): boolean {
     return this.seasonAdminService.isSeasonLive(status);
+  }
+
+  showLoader() {
+    this.isLoaderShown = true;
+  }
+
+  hideLoader() {
+    this.isLoaderShown = false;
   }
 
   // isSeasonFinished(status: statusType): boolean {

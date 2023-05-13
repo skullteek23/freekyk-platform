@@ -1,4 +1,105 @@
-<div fxLayoutAlign="start center" class="back-button">
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/seasons']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      All Seasons
+    </span>
+  </button>
+  <span class="dash-h5 heading">{{season?.name}}</span>
+  <button mat-icon-button (click)="getSeasonInfo()" matTooltip="Refresh Page">
+    <span class="material-icons-round">refresh</span>
+  </button>
+</div>
+<section>
+  <mat-accordion class="example-headers-align">
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Game Type
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div class="info-container">
+          <app-season-property-line label="Match / Tournament Type"
+            [value]="formatters.formatTournamentType(season.type)" [showChip]="true"></app-season-property-line>
+          <app-season-property-line label="Participation" value="{{season.participatingTeams}} Teams"
+            [showChip]="true"></app-season-property-line>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Basic Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div class="info-container">
+          <app-season-property-line label="Match/Tournament Name" value="{{season.name}}"></app-season-property-line>
+          <app-season-property-line label="Location City" value="{{season.city}}"></app-season-property-line>
+          <app-season-property-line label="Location State" value="{{season.state}}"></app-season-property-line>
+          <app-season-property-line label="Ground Name" value="{{season.more?.groundName}}"
+            *ngIf="season.more?.groundName"></app-season-property-line>
+          <app-season-property-line label="Ground Location Link" [showLink]="true" value="{{season.more?.groundLink}}"
+            *ngIf="season.more?.groundLink"></app-season-property-line>
+          <app-season-property-line label="Start Time"
+            value="{{season.startDate | date: 'medium'}}"></app-season-property-line>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Advanced Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <div class="info-container">
+          <app-season-property-line label="Playing Format" value="{{season.more?.format}}v{{season.more?.format}}"
+            *ngIf="season.more?.format" [showChip]="true"></app-season-property-line>
+          <app-season-property-line label="Fees {{season.type === 'Pickup' ? '(per Player)' : '(per Team)'}}"
+            value="{{season.fees | currency: 'INR'}}" [selectedChip]="true" [showChip]="true"
+            [showChip]="true"></app-season-property-line>
+          <app-season-property-line label="Age Category"
+            value="{{teamFormatters.formatAgeCategory(season.ageCategory)?.viewValue}}"
+            [showChip]="true"></app-season-property-line>
+          <app-season-property-line label="Rules & Description" *ngIf="season.description"
+            value="{{season.description}}"></app-season-property-line>
+        </div>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="fixtures-admin-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          All Scheduled/Finished Matches
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <app-fixtures-results-tabs [matches]="matches"></app-fixtures-results-tabs>
+      </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Participants
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <span class="mat-body-2">
+          Confirmed Players
+        </span>
+        <app-team-player-members-list [list]="participants"></app-team-player-members-list>
+      </ng-template>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</section>
+<!-- <div fxLayoutAlign="start center" class="back-button">
   <span class="material-icons-round">keyboard_arrow_left</span>
   <a [routerLink]="['/seasons/list']">Go Back to All Seasons</a>
 </div>
@@ -22,18 +123,18 @@
         </p>
       </div>
       <div class="text-container" fxLayoutAlign="start start" fxLayoutGap="30px" fxLayout>
-        <!-- <div>
+        <div>
           <h4>Fees</h4>
           <p class="mat-body-1">
             {{ seasonData?.fees }}
           </p>
-        </div> -->
-        <!-- <div> -->
-        <h4>Entry Fees (per team)</h4>
-        <p class="mat-body-2">
-          {{ payableFees | currency: 'INR':true }}
-        </p>
-        <!-- </div> -->
+        </div>
+        <div>
+          <h4>Entry Fees (per team)</h4>
+          <p class="mat-body-2">
+            {{ payableFees | currency: 'INR':true }}
+          </p>
+        </div>
       </div>
       <div class="text-container">
         <h4>Starts on</h4>
@@ -84,7 +185,7 @@
             </mat-form-field>
           </ng-template>
         </div>
-        <!-- <div class="text-container">
+        <div class="text-container">
           <h4 fxLayoutAlign="start center" fxLayoutGap="4px">
             <span>
               Rules
@@ -113,7 +214,7 @@
               </mat-error>
             </mat-form-field>
           </ng-template>
-        </div> -->
+        </div>
       </form>
     </div>
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="seasonData?.more?.imgpath">
@@ -174,20 +275,16 @@
 <div *ngIf="seasonFixtures.length && isSeasonPublished" class="mat-caption trouble-text">
   Have trouble with any match data? Raise a quest to revoke match data immediately. <a (click)="onRaiseRequest()">Click
     here</a>
-</div>
-<div *ngIf="seasonFixtures.length" class="trouble-text" fxLayout.lt-md="column" fxLayoutGap="20px"
-  fxLayoutAlign="center center">
-  <button [routerLink]="['/seasons/list']" class="buttonText secondaryButton">
-    Go Back
+</div>-->
+<div class="trouble-text" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutAlign="center center">
+  <button (click)="goToURL()" class="buttonText primaryButton">
+    View on Freekyk.com
   </button>
-  <button *ngIf="isShowViewSeason" (click)="goToURL()" class="buttonText primaryButton">
-    View your season
-  </button>
-  <button *ngIf="isShowDeleteSeason" (click)="removeSeason()" class="buttonText noResponseButton">
+  <!-- <button *ngIf="isShowDeleteSeason" (click)="removeSeason()" class="buttonText noResponseButton">
     Remove season
   </button>
   <button *ngIf="isSeasonPublished" (click)="openCancelSeasonDialog()" class="buttonText noResponseButton">
     Cancel season
-  </button>
+  </button> -->
 </div>
 <app-loading *ngIf="isLoaderShown"></app-loading>

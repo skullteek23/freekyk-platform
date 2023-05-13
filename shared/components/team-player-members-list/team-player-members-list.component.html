@@ -21,3 +21,4 @@
     <mat-divider *ngIf="!last"></mat-divider>
   </mat-list-item>
 </mat-list>
+<app-no-items-message customText="Participants will show here!" *ngIf="!members.length"></app-no-items-message>

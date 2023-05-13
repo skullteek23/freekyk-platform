@@ -43,9 +43,7 @@
   <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
     <app-tick-animation></app-tick-animation>
     <span class="mat-caption center">Woohooo! Your Match/Tournament is LIVE.</span>
-    <span class="mat-caption center">Go to <a [routerLink]="['/seasons', seasonID]"
-        routerLinkActive="router-link-active">Season</a>
-    </span>
+    <a [routerLink]="['/seasons', seasonID]">View Season</a>
   </div>
 </section>
 

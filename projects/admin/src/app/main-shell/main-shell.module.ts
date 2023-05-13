@@ -54,6 +54,7 @@ import { GroundSlotSelectionComponent } from './components/season-panel/create-s
 import { GroundSlotsComponent } from './components/season-panel/create-season/components/old/select-ground/components/ground-slots/ground-slots.component';
 import { SelectGroundComponent } from './components/season-panel/create-season/components/old/select-ground/select-ground.component';
 import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
+import { SeasonPropertyLineComponent } from './components/season-panel/view-published-season/components/season-property-line/season-property-line.component';
 
 
 const routes: Routes = [
@@ -126,6 +127,7 @@ const routes: Routes = [
     SeasonStripComponent,
     BasicInfoComponent,
     AdvancedInfoComponent,
+    SeasonPropertyLineComponent,
   ],
   imports: [
     CommonModule,

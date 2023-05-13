@@ -1,0 +1,18 @@
+<div class="line">
+  <span class="mat-caption sec-menu" fxFlex="40%" [innerHtml]="label">
+  </span>
+  <mat-chip-list class="value-container" fxFlex="60%" fxLayoutAlign="end center" *ngIf="showChip; else withoutChip">
+    <mat-chip [selected]="selectedChip">
+      <span class="mat-body-1">
+        {{value}}
+      </span>
+    </mat-chip>
+  </mat-chip-list>
+  <ng-template #withoutChip>
+    <span class="mat-body-1 value-container" [matTooltip]="value" *ngIf="!showLink" [innerHtml]="value">
+    </span>
+    <a [href]="value" target="_blank" *ngIf="showLink">
+      Open Link
+    </a>
+  </ng-template>
+</div>

@@ -25,7 +25,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 export class ApiGetService {
 
   constructor(
-    private angularFirestore: AngularFirestore
+    protected angularFirestore: AngularFirestore
   ) { }
 
   getUniqueDocID(): string {
@@ -230,9 +230,9 @@ export class ApiGetService {
   getSeasonAllInfo(docID: string): Observable<Partial<SeasonAllInfo>> {
     return forkJoin([
       this.angularFirestore.collection('seasons').doc(docID).get(),
-      this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('moreInfo').get(),
-      this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('statistics').get(),
-      this.angularFirestore.collection(`seasons/${docID}/additionalInfo`).doc('media').get(),
+      this.angularFirestore.collection('seasonMoreInfo').doc(docID).get(),
+      // this.angularFirestore.collection('seasonStatistics').doc(docID).get(),
+      // this.angularFirestore.collection('seasonMedia').doc(docID).get(),
     ]).pipe(parseSeasonBulkData)
   }
 

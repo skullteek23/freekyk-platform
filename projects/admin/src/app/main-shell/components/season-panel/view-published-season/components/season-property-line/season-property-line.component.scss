@@ -1,0 +1,12 @@
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.value-container {
+  max-width: 60%;
+  text-align: end;
+}
