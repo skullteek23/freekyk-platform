@@ -27,7 +27,7 @@ export class JoinGamesComponent implements OnInit {
   }
 
   getInstantMatches() {
-    this.apiService.getCommunityPlays()
+    this.apiService.getPickupGames()
       .subscribe({
         next: (response) => {
           if (response) {

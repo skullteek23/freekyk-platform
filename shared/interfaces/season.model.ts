@@ -44,7 +44,7 @@ export interface ISeason {
   more?: {
     leftOverMatchCount?: number;
     imgpath?: string;
-    format?: string;
+    format?: number;
     groundName?: string;
     groundLink?: string;
   }

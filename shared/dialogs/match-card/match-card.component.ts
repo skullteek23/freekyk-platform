@@ -49,7 +49,7 @@ export class MatchCardComponent implements OnInit {
       .pipe(map((resp) => (resp.data() as MatchFixture)))
       .subscribe(response => {
         this.data = response;
-        if (this.data.type === 'FCP') {
+        if (this.data.type === 'Pickup') {
           this.getPickupGameLineup();
         } else {
           this.getMatchLineup();

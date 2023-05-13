@@ -36,7 +36,7 @@
 
   <mat-form-field appearance="outline" color="primary" fxFlex="40%">
     <mat-label>Start Date</mat-label>
-    <input type="datetime-local" matInput formControlName="startDate" required />
+    <input type="" matInput formControlName="startDate" required />
     <mat-error *ngIf="basicInfoForm?.get('startDate')?.hasError('required')">
       {{messages.error.requiredField}}
     </mat-error>

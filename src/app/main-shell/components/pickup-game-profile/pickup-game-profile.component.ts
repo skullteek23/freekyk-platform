@@ -29,8 +29,8 @@ import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
 export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
 
   readonly oneHourMilliseconds = 3600000;
-  readonly ONE_SIDE_COUNT = 7;
 
+  ONE_SIDE_COUNT = 7;
   seasonID: string = null;
   season: Partial<SeasonAllInfo> = null;
   isLoaderShown = false;
@@ -87,17 +87,18 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   getSeasonInfo(): void {
     if (this.seasonID) {
       this.showLoader();
-      this.subscriptions.add(this.apiService.getSeasonAllInfo(this.seasonID)
+      this.apiService.getSeasonAllInfo(this.seasonID)
         .subscribe({
           next: (response) => {
             if (response) {
               this.season = response;
+              this.ONE_SIDE_COUNT = this.season.more.format;
               this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
               const today = new Date().getTime();
               this.isGameFinished = today > this.season.startDate;
               this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
               this.amount = 0;
-              this.getSeasonMatches();
+              this.parseSeasonGround();
               this.getSeasonBookedSlots();
             } else {
               this.router.navigate(['/error']);
@@ -110,22 +111,12 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
             this.snackBarService.displayError();
             this.router.navigate(['/error']);
           }
-        }))
+        });
     }
   }
 
-  getSeasonMatches() {
-    if (this.season?.name) {
-      this.apiService.getSeasonMatches(this.season.name)
-        .subscribe({
-          next: (response) => {
-            this.ground = this.pickupGameService.getMatchGround(response[0])
-          },
-          error: (error) => {
-            this.ground = this.pickupGameService.getMatchGround(null);
-          }
-        })
-    }
+  parseSeasonGround() {
+    this.ground = this.pickupGameService.getMatchGround(this.season)
   }
 
   getSeasonBookedSlots() {
@@ -488,8 +479,8 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     return order;
   }
 
-  openGround(data: ListOption) {
-    this.pickupGameService.openGround(data);
+  goToURL() {
+    window.open(this.season.more.groundLink, '_blank');
   }
 
   async openWaitingList() {

@@ -81,6 +81,7 @@ section {
 .need-help-message {
   width: 100%;
   height: 56px;
+  padding: 12px;
 }
 
 .content-container {
@@ -94,4 +95,16 @@ mat-chip-list {
 
 .slots-remaining {
   margin-left: auto;
+}
+
+.ground-link {
+  display: inline-flex !important;
+
+  .material-icons-round {
+    font-size: 18px;
+  }
+}
+
+.description-heading {
+  margin-top: 4px;
 }

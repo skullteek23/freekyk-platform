@@ -123,7 +123,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   openSeason() {
     if (this.season) {
-      if (this.season.type === 'FCP') {
+      if (this.season.type === 'Pickup') {
         this.router.navigate(['/pickup-game', this.season.id]);
       } else {
         this.router.navigate(['/game', this.season.id]);

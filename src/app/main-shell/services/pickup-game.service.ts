@@ -94,11 +94,11 @@ export class PickupGameService {
     }
   }
 
-  getMatchGround(match: MatchFixture): ListOption {
-    if (!match) {
+  getMatchGround(season: Partial<SeasonAllInfo>): ListOption {
+    if (!season) {
       return { value: null, viewValue: MatchConstants.LABEL_NOT_AVAILABLE };
     }
-    return { viewValue: match.ground, value: match.groundID } as ListOption;
+    return { viewValue: season.more.groundName, value: season.more.groundName } as ListOption;
   }
 
   getEnumerableIndex(index: number) {

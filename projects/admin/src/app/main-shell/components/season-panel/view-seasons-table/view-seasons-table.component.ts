@@ -1,14 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ISeason, statusType } from '@shared/interfaces/season.model';
-import { ArraySorting } from '@shared/utils/array-sorting';
 import { SeasonAdminService } from '../../../services/season-admin.service';
-import { Admin, AssignedRoles } from '@shared/interfaces/admin.model';
 import { Formatters } from '@shared/interfaces/match.model';
-import { ApiGetService } from '@shared/services/api.service';
 import { AdminApiService } from '@admin/services/admin-api.service';
 import { SnackbarService } from '@shared/services/snackbar.service';
 
@@ -17,7 +12,7 @@ import { SnackbarService } from '@shared/services/snackbar.service';
   templateUrl: './view-seasons-table.component.html',
   styleUrls: ['./view-seasons-table.component.scss']
 })
-export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
+export class ViewSeasonsTableComponent implements OnInit {
 
   // cols = ['sno', 'season', 'startDate', 'status'];
   // seasons: ISeason[] = [];
@@ -38,12 +33,6 @@ export class ViewSeasonsTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getSeasons();
     this.formatter = Formatters;
-  }
-
-  ngOnDestroy(): void {
-    // if (this.subscriptions) {
-    //   this.subscriptions.unsubscribe();
-    // }
   }
 
   getSeasons(): void {

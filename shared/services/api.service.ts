@@ -300,6 +300,17 @@ export class ApiGetService {
       .pipe(parseSeasonDataV2)
   }
 
+  getPickupGames(limit?: number) {
+    let query;
+    if (limit && limit > 0) {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'Pickup').limit(limit);
+    } else {
+      query = (query) => query.where('status', '==', 'PUBLISHED').where('type', '==', 'Pickup')
+    }
+    return this.angularFirestore.collection('seasons', query).get()
+      .pipe(parseSeasonDataV2)
+  }
+
   getLeagues(limit?: number) {
     let query;
     if (limit && limit > 0) {

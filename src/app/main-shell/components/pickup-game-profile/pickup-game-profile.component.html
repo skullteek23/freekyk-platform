@@ -20,7 +20,9 @@
     </div> -->
     <p>
       <span class="mat-body-1">
-        {{startDate}} @ <a (click)="openGround(ground)"> {{ground?.viewValue}}</a>
+        {{startDate}} @ <a class="ground-link" (click)="goToURL()" fxLayoutAlign="start center" fxLayoutGap="4px"> <span
+            class="mat-body-1">
+            {{ground?.viewValue}} </span> <span class="material-icons-round">open_in_new</span> </a>
       </span>
     </p>
     <p>
@@ -48,7 +50,7 @@
         {{season?.fees | currency: 'INR'}} per person
       </mat-chip>
       <mat-chip>
-        7v7 Format
+        {{season.more.format}}v{{season.more.format}} Format
       </mat-chip>
       <mat-chip fxLayoutAlign="start center">
         <span class="material-icons-round">
@@ -109,31 +111,44 @@
     </mat-card>
   </section>
 
-  <section fxLayout="column" fxLayoutGap="4px" class="last-section">
+  <section fxLayout="column" fxLayoutGap="12px" class="last-section">
     <mat-divider></mat-divider>
-    <p>
-      Full Match Recording:
+    <!-- <p fxLayout="column">
+      <span class="mat-caption">
+        Full Match Recording:
+      </span>
       <span class="mat-body-2">
         Yes
       </span>
-    </p>
-    <p>
-      Reporting Time:
+    </p> -->
+    <p fxLayout="column">
+      <span class="mat-caption">
+        Reporting Time:
+      </span>
       <span class="mat-body-2" *ngIf="reportingTime">
         {{reportingTime | date: 'h:mm a'}}
       </span>
     </p>
-    <p>
-      Cancellation Charges:
+    <p fxLayout="column">
+      <span class="mat-caption">
+        Cancellation Charges:
+      </span>
       <span class="mat-body-2">
         50%
       </span>
     </p>
+    <p fxLayout="column">
+      <span class="mat-caption">
+        Description:
+      </span>
+      <span class="mat-body-2">
+        {{season?.description}}
+      </span>
+    </p>
   </section>
-
-  <div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
-    Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us!</a>
-  </div>
+</div>
+<div class="need-help-message" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+  Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us</a>
 </div>
 
 <div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0 && !isGameFinished">

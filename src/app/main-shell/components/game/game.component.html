@@ -4,12 +4,15 @@
       {{game.name}}
     </span>
   </mat-card-title>
-  <mat-card-subtitle *ngIf="game.city && game.state">
-    <span class="mat-body-2">
-      {{game.city}}, {{game.state}}
+  <mat-card-subtitle fxLayout="column">
+    <span class="mat-body-1" *ngIf="game?.more?.groundName">
+      {{game?.more?.groundName}}
+    </span>
+    <span class="mat-caption" *ngIf="game?.city && game?.state">
+      ({{game?.city}}, {{game?.state }})
     </span>
   </mat-card-subtitle>
-  <mat-card-actions fxLayoutAlign="center end" fxLayout="column">
+  <mat-card-actions fxLayoutAlign="center start" fxLayout="column">
     <div fxLayoutAlign="start center">
       <span class="mat-body-2 red">
         {{game.fees | currency: 'INR'}}

@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
 
   joinGame() {
     if (this.game.id) {
-      if (this.game.type === 'FCP') {
+      if (this.game.type === 'Pickup') {
         this.router.navigate(['/pickup-game', this.game.id])
       } else {
         this.router.navigate(['/game', this.game.id])
@@ -29,7 +29,7 @@ export class GameComponent implements OnInit {
   }
 
   get participantType() {
-    if (this.game?.type === 'FCP') {
+    if (this.game?.type === 'Pickup') {
       return 'per Player'
     } else {
       return 'per Team'
