@@ -203,7 +203,7 @@
     </button>
   </div>
 
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="isLogged"></mat-divider>
 
   <div class="profile-container" *ngIf="isLogged" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
     <div class="account-circle-container" (click)="onCloseMenu()" [routerLink]="['/edit-profile']">

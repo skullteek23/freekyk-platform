@@ -95,7 +95,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
               this.ONE_SIDE_COUNT = this.season.more.format;
               this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
               const today = new Date().getTime();
-              this.isGameFinished = today > this.season.startDate;
+              this.isGameFinished = today > (this.season.startDate + this.oneHourMilliseconds);
               this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
               this.amount = 0;
               this.parseSeasonGround();

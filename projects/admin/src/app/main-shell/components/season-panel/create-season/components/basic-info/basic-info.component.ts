@@ -27,13 +27,14 @@ export class BasicInfoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getSeasons();
     this.initForm();
     this.onSelectCountry('India');
   }
 
   initForm() {
     this.basicInfoForm = new FormGroup({
-      name: new FormControl('Pickup Game 1', [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50), this.seasonNameUnique.bind(this)]),
+      name: new FormControl('Pickup Game ', [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50), this.seasonNameUnique.bind(this)]),
       location: new FormGroup({
         state: new FormControl('Uttar Pradesh', [Validators.required]),
         city: new FormControl('Ghaziabad', [Validators.required]),
