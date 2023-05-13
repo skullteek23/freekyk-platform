@@ -20,6 +20,7 @@ export class BasicInfoComponent implements OnInit {
   states$: Observable<string[]>;
   startTime: string = null;
   endTime: string = null;
+  today = new Date();
 
   constructor(
     private adminApiService: AdminApiService,
@@ -34,13 +35,13 @@ export class BasicInfoComponent implements OnInit {
 
   initForm() {
     this.basicInfoForm = new FormGroup({
-      name: new FormControl('Pickup Game ', [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50), this.seasonNameUnique.bind(this)]),
+      name: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50), this.seasonNameUnique.bind(this)]),
       location: new FormGroup({
-        state: new FormControl('Uttar Pradesh', [Validators.required]),
-        city: new FormControl('Ghaziabad', [Validators.required]),
+        state: new FormControl(null, [Validators.required]),
+        city: new FormControl(null, [Validators.required]),
       }),
-      groundName: new FormControl('Adidas Base', [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)]),
-      groundLink: new FormControl('https:://www.link.com'),
+      groundName: new FormControl(null, [Validators.required, Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(50)]),
+      groundLink: new FormControl(null, Validators.required),
       startDate: new FormControl(null, Validators.required),
     });
   }
