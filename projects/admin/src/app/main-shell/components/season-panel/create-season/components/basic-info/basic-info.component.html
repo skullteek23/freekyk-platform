@@ -6,7 +6,7 @@
       {{messages.error.requiredField}}
     </mat-error>
     <mat-error *ngIf="basicInfoForm.get('name').errors?.nameTaken">
-      Season name is already taken! Please choose another name
+      Name already taken
     </mat-error>
   </mat-form-field>
 
@@ -36,7 +36,7 @@
 
   <mat-form-field appearance="outline" color="primary" fxFlex="40%">
     <mat-label>Start Date</mat-label>
-    <input type="" matInput formControlName="startDate" required />
+    <input type="date" matInput formControlName="startDate" required />
     <mat-error *ngIf="basicInfoForm?.get('startDate')?.hasError('required')">
       {{messages.error.requiredField}}
     </mat-error>

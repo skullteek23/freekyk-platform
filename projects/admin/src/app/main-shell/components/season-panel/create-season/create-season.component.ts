@@ -29,6 +29,9 @@ export class CreateSeasonComponent implements OnDestroy, OnInit, CanComponentDea
   // @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
   // @ViewChild(AdminPaymentComponent) adminPaymentComponent: AdminPaymentComponent;
 
+  // maxSlots = 0;
+  // seasonID: string = '';
+
   readonly messages = seasonFlowMessages;
 
   isLoaderShown = false;
@@ -37,8 +40,6 @@ export class CreateSeasonComponent implements OnDestroy, OnInit, CanComponentDea
   subscriptions = new Subscription();
   formData: any;
   seasonID: any;
-  // maxSlots = 0;
-  // seasonID: string = '';
 
   constructor(
     private seasonAdminService: SeasonAdminService,
@@ -81,8 +82,7 @@ export class CreateSeasonComponent implements OnDestroy, OnInit, CanComponentDea
         // const file = this.seasonAdminService._selectedFile;
         // this.seasonAdminService.uploadSeasonPhoto(file)
         // .catch(this.handleError.bind(this))
-        // .finally(() => {
-        // });
+        // .finally(() => { });
       })
       .catch(this.handleError.bind(this));
   }

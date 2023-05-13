@@ -151,7 +151,7 @@
   Need help?&nbsp;<a class="mat-body-1" (click)="needHelp()">Contact us</a>
 </div>
 
-<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0 && !isGameFinished">
+<div class="buttons-container" fxLayout="column" fxLayoutGap="12px" *ngIf="amount > 0">
   <button class="full-button buttonText primaryButton" fxFlex="100%" mat-button
     (click)="getStarted(); $event.stopPropagation()" fxLayoutAlign="center center" fxLayoutGap="4px">
     <!-- <span class="material-icons-round external-icon">whatshot</span> -->

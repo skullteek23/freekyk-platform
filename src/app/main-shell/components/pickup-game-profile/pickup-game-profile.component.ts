@@ -46,7 +46,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   slotsSubscriptions = new Subscription();
   currentLockID = null;
   user: authUserMain = null;
-  isGameFinished = false;
+  // isGameFinished = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,7 +95,7 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
               this.ONE_SIDE_COUNT = this.season.more.format;
               this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
               const today = new Date().getTime();
-              this.isGameFinished = today > this.season.startDate;
+              // this.isGameFinished = today > this.season.startDate;
               this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
               this.amount = 0;
               this.parseSeasonGround();
@@ -181,10 +181,10 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
     if (slot.booked) {
       return;
     }
-    if (this.isGameFinished) {
-      this.snackBarService.displayCustomMsg('Game is finished!');
-      return;
-    }
+    // if (this.isGameFinished) {
+    //   this.snackBarService.displayCustomMsg('Game is finished!');
+    //   return;
+    // }
     if (!slot.selected) {
       this.amount += this.season.fees;
     } else {

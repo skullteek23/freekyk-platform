@@ -38,7 +38,7 @@ export class PlayerCardComponent implements OnInit {
     this.authService.isLoggedIn().subscribe({
       next: async (user) => {
         if (user) {
-          await this.rewardService.completeActivity(RewardableActivities.openPlayerCard, this.docID);
+          await this.rewardService.completeActivity(RewardableActivities.openPlayerCard, user.uid);
         }
       }
     })
