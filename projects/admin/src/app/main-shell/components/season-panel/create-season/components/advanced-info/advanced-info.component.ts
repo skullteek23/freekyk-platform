@@ -18,6 +18,8 @@ export class AdvancedInfoComponent implements OnInit {
   advancedInfoForm: FormGroup = new FormGroup({});
   messages = formsMessages;
 
+  readonly DEFAULT_AGE_GROUP = 99;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -26,11 +28,11 @@ export class AdvancedInfoComponent implements OnInit {
 
   initForm() {
     this.advancedInfoForm = new FormGroup({
-      format: new FormControl(6, Validators.required),
-      fees: new FormControl(180,
+      format: new FormControl(null, Validators.required),
+      fees: new FormControl(null,
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
-      ageCategory: new FormControl(99, [Validators.required]),
+      ageCategory: new FormControl(this.DEFAULT_AGE_GROUP, [Validators.required]),
       description: new FormControl(null, [Validators.maxLength(this.descriptionLimit)
       ]),
       rewards: new FormControl(null)
