@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import { Subject } from 'rxjs';
 
@@ -24,6 +25,7 @@ export class SearchableFormFieldComponent implements OnInit, AfterViewInit {
   }
   @Input() label = 'Label';
   @Input() enableOpenOnResponse = false;
+  @Input() appearance: MatFormFieldAppearance = 'standard';
   @Output() selectionChange = new Subject<string>();
   @ViewChild(MatSelect) select: MatSelect;
 

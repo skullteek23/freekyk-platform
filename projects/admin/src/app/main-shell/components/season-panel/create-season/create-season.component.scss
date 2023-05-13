@@ -1,26 +1,36 @@
-.container-2 {
-  height: 100%;
-  overflow-y: auto;
-}
+// .container-2 {
+//   height: 100%;
+//   overflow-y: auto;
+// }
 
-.action-buttons-container {
-  margin-top: 20px;
-}
+// .action-buttons-container {
+//   margin-top: 20px;
+// }
 
-.title-heading {
-  text-align: center;
-  margin-top: 20px;
-  height: 40px;
-  margin-bottom: 0px !important;
-}
+// .title-heading {
+//   text-align: center;
+//   margin-top: 20px;
+//   height: 40px;
+//   margin-bottom: 0px !important;
+// }
 
-.success-container {
-  margin: 200px;
-}
+// .success-container {
+//   margin: 200px;
+// }
 
-.error {
-  color: var(--red);
-}
+// .error {
+//   color: var(--red);
+// }
 .success {
   height: 400px;
+}
+
+section {
+  padding: 12px;
+}
+
+mat-vertical-stepper {
+  margin-top: 8px;
+  height: calc(100vh - 125px);
+  overflow-y: auto;
 }

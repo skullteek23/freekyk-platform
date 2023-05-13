@@ -29,7 +29,7 @@ export class LiveSeasonComponent implements OnInit {
   }
 
   onEnlargeImage() {
-    this.enlargeService.onOpenPhoto(this.data.imgpath);
+    this.enlargeService.onOpenPhoto(this.data?.more?.imgpath);
   }
 
   onNavigate() {

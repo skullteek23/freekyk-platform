@@ -84,7 +84,7 @@
             </mat-form-field>
           </ng-template>
         </div>
-        <div class="text-container">
+        <!-- <div class="text-container">
           <h4 fxLayoutAlign="start center" fxLayoutGap="4px">
             <span>
               Rules
@@ -113,11 +113,11 @@
               </mat-error>
             </mat-form-field>
           </ng-template>
-        </div>
+        </div> -->
       </form>
     </div>
-    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <app-photo-uploader [url]="seasonData?.imgpath" actionBtnLabel="{{isSeasonPublished ? 'Change Photo' : ''}}"
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="seasonData?.more?.imgpath">
+      <app-photo-uploader [url]="seasonData?.more?.imgpath" actionBtnLabel="{{isSeasonPublished ? 'Change Photo' : ''}}"
         (changeUpload)="onChangeSeasonPhoto($event)">
       </app-photo-uploader>
     </div>

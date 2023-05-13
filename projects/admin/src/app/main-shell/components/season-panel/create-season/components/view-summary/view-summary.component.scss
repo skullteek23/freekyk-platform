@@ -1,17 +1,17 @@
 .summary-container {
-  min-height: 400px;
-  max-height: 400px;
-  overflow-y: auto;
   table {
     width: 100%;
   }
+
   td.mat-column-label {
-    width: 30%;
+    width: 40%;
   }
+
   td.mat-column-value {
-    width: 70%;
+    width: 60%;
   }
 }
+
 .action-buttons-container {
   margin-top: 20px;
 }

@@ -29,9 +29,9 @@
     </mat-form-field>
 
     <div formGroupName="location" fxLayout="column" fxLayoutGap="8px">
-      <app-searchable-form-field label="Add Location State" [list]="states" [control]="locationState"
+      <app-searchable-form-field label="Location State" [list]="states" [control]="locationState"
         (selectionChange)="onSelectState($event)"></app-searchable-form-field>
-      <app-searchable-form-field label="Add Location City" [list]="cities"
+      <app-searchable-form-field label="Location City" [list]="cities"
         [control]="locationCity"></app-searchable-form-field>
     </div>
 

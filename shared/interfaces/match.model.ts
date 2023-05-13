@@ -48,7 +48,9 @@ export const StatusMessage = [
 export const TournamentTypes = {
   FKC: 'Knockout',
   FPL: 'League',
-  FCP: 'Pickup Game'
+  FCP: 'CP',
+  Pickup: 'Pickup Game',
+  Custom: 'Custom'
 }
 
 export class ParseMatchProperties {

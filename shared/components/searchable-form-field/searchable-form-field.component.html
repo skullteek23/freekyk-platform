@@ -1,5 +1,5 @@
-<mat-form-field color="primary">
-  <mat-label>{{label}}</mat-label>
+<mat-form-field color="primary" [appearance]="appearance">
+  <mat-label>Select {{label}}</mat-label>
   <mat-select #selector [required]="required" (selectionChange)="onSelect($event.value)" [formControl]="control">
     <mat-option>
       <ngx-mat-select-search [disableInitialFocus]="false" [formControl]="searchControl" (ngModelChange)="filterList()"

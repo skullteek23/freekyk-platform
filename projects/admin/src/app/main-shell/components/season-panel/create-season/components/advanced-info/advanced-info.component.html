@@ -1,0 +1,55 @@
+<form [formGroup]="advancedInfoForm" class="select-match-type-form-container" fxLayout="column">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label> Select Playing Format </mat-label>
+    <mat-select panelClass="select-format" [multiple]="false" formControlName="format">
+      <mat-option *ngFor="let format of FORMATS" [value]="format">
+        <span class="mat-body-1"> {{format}}v{{format}}</span>
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="advancedInfoForm?.get('format')?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Fees (per Player)</mat-label>
+    <input type="number" min="1" matInput formControlName="fees" />
+    <mat-error *ngIf="advancedInfoForm.get('fees').hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Select Age Category</mat-label>
+    <mat-select formControlName="ageCategory">
+      <mat-option *ngFor="let option of ageCategoryList" [value]="option.value">
+        {{ option.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="text-area-field" appearance="outline" color="primary">
+    <mat-label>Rules & Description</mat-label>
+    <textarea row="3" [maxLength]="descriptionLimit" matInput formControlName="description"
+      placeholder="Mention Rules & Description in max {{descriptionLimit}} words"></textarea>
+    <mat-hint align="end">{{description?.value?.length}} / {{descriptionLimit}}</mat-hint>
+    <mat-error *ngIf="description?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+    <mat-error *ngIf="description?.hasError('pattern')">
+      {{messages.error.notAllowedCharacter}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label> Select Rewards </mat-label>
+    <mat-select [disabled]="true" panelClass="select-rewards" [multiple]="false" formControlName="rewards">
+      <mat-option *ngFor="let reward of []" [value]="reward">
+        <span class="mat-body-1"> {{reward}}</span>
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="advancedInfoForm?.get('rewards')?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+</form>

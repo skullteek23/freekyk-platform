@@ -1,0 +1,44 @@
+<form [formGroup]="basicInfoForm" class="select-match-type-form-container" fxLayout="column">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Enter Match/Tournament Name</mat-label>
+    <input type="text" matInput formControlName="name" required />
+    <mat-error *ngIf="basicInfoForm.get('name').hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+    <mat-error *ngIf="basicInfoForm.get('name').errors?.nameTaken">
+      Season name is already taken! Please choose another name
+    </mat-error>
+  </mat-form-field>
+
+  <div class="dropdown-container" fxLayout="column">
+    <app-searchable-form-field appearance="outline" label="State" [list]="states$ | async" [control]="locationState"
+      (selectionChange)="onSelectState($event)"></app-searchable-form-field>
+    <app-searchable-form-field appearance="outline" label="City" [list]="cities$ | async"
+      [control]="locationCity"></app-searchable-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Enter Ground Name</mat-label>
+    <input type="text" matInput formControlName="groundName" required />
+    <mat-error *ngIf="basicInfoForm.get('groundName').hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Provide Ground Location Link</mat-label>
+    <input type="text" matInput formControlName="groundLink" required />
+    <span matSuffix class="material-icons-round sec-menu">info</span>
+    <mat-error *ngIf="basicInfoForm.get('groundLink').hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" color="primary" fxFlex="40%">
+    <mat-label>Start Date</mat-label>
+    <input type="datetime-local" matInput formControlName="startDate" required />
+    <mat-error *ngIf="basicInfoForm?.get('startDate')?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+</form>

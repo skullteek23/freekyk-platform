@@ -16,6 +16,6 @@ export class CanDeactivateGuardService implements CanDeactivate<CanComponentDeac
   constructor() { }
 
   canDeactivate(component: CanComponentDeactivate): Guard {
-    return component.canDeactivate ? component.canDeactivate() : true;
+    return component.canDeactivate ? component.canDeactivate() : false;
   }
 }

@@ -5,12 +5,13 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CLOUD_FUNCTIONS } from '@shared/constants/CLOUD_FUNCTIONS';
 import { IGroundSelection, OWNERSHIP_TYPES } from '@shared/interfaces/ground.model';
-import { IDummyFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
-import { ICloudCancelData, IDummyFixtureOptions, ISeasonCloudFnData, ISeasonDetails, ISeasonFixtures, ISelectGrounds, ISelectMatchType, ISelectTeam, ISeason, statusType } from '@shared/interfaces/season.model';
+import { IDummyFixture, MatchFixture, MatchStatus, TournamentTypes, } from '@shared/interfaces/match.model';
+import { ICloudCancelData, IDummyFixtureOptions, ISelectMatchType, ISeason, statusType } from '@shared/interfaces/season.model';
 import { ArraySorting } from '@shared/utils/array-sorting';
 import { MatchConstants, MatchConstantsSecondary } from '@shared/constants/constants';
 import { AdminConfigurationSeason } from '@shared/interfaces/admin.model';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { AdminApiService } from '@admin/services/admin-api.service';
 
 
 export interface Slot {
@@ -35,6 +36,7 @@ export class SeasonAdminService {
     private ngFire: AngularFirestore,
     private ngFunctions: AngularFireFunctions,
     private ngStorage: AngularFireStorage,
+    private apiService: AdminApiService
   ) {
   }
 
@@ -93,27 +95,43 @@ export class SeasonAdminService {
     sessionStorage.removeItem('seasonDetails');
   }
 
-  publishSeason(seasonID: string): Promise<any> {
-    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
-    const selectGroundFormData: ISelectGrounds = JSON.parse(sessionStorage.getItem('selectGround'));
-    const seasonFixturesFormData: ISeasonFixtures = JSON.parse(sessionStorage.getItem('seasonFixtures'));
-    const seasonDetailsFormData: ISeasonDetails = JSON.parse(sessionStorage.getItem('seasonDetails'));
+  publishSeason(formData: any, seasonID): Promise<any> {
+    // const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
+    // const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
+    // const selectGroundFormData: ISelectGrounds = JSON.parse(sessionStorage.getItem('selectGround'));
+    // const seasonFixturesFormData: ISeasonFixtures = JSON.parse(sessionStorage.getItem('seasonFixtures'));
+    // const seasonDetailsFormData: ISeasonDetails = JSON.parse(sessionStorage.getItem('seasonDetails'));
     const uid = sessionStorage.getItem('uid');
-    if (selectMatchTypeFormData && selectGroundFormData && seasonFixturesFormData && seasonDetailsFormData && seasonID && uid) {
+    if (formData && uid) {
+      const fixtures = this.getPickupGameFixture(formData);
       const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.PUBLISH_SEASON);
-      const data: ISeasonCloudFnData = {
-        matchType: selectMatchTypeFormData,
-        seasonDetails: seasonDetailsFormData,
-        fixtures: seasonFixturesFormData,
-        teams: selectTeamFormData,
-        grounds: selectGroundFormData,
-        seasonID,
-        adminID: uid
-      }
-      return callable(data).toPromise();
+      return callable({ ...formData, uid, seasonID, fixtures }).toPromise();
     }
     return Promise.reject();
+  }
+
+  getPickupGameFixture(config: any) {
+    const data: MatchFixture[] = [];
+    data.push({
+      id: this.apiService.getUniqueDocID(),
+      date: new Date(config.startDate).getTime(),
+      home: {
+        name: null,
+        logo: null
+      },
+      away: {
+        name: null,
+        logo: null
+      },
+      teams: [null],
+      season: config.name,
+      premium: false,
+      status: MatchStatus.ONT,
+      type: 'Pickup',
+      ground: config.groundName,
+      groundID: config.groundLink
+    } as MatchFixture)
+    return data;
   }
 
   setSelectedFile(fileObj: File) {
@@ -318,4 +336,5 @@ export class SeasonAdminService {
   getDifference(a: number, b: number): number {
     return a - b;
   }
+
 }

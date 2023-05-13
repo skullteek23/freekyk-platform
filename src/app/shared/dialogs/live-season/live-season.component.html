@@ -8,7 +8,8 @@
   </button>
 </mat-toolbar>
 <div class="feedback-container container-2" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="16px">
-  <img (click)="onEnlargeImage()" class="season-image" [src]="data.imgpath" alt="Season - {{data.name}}" appFallbackImg>
+  <img (click)="onEnlargeImage()" class="season-image" [src]="data?.more?.imgpath" alt="Season - {{data.name}}"
+    appFallbackImg>
   <div fxLayoutAlign="center center">
     <button (click)="onNavigate()" class="primaryButton buttonText">Participate</button>
   </div>

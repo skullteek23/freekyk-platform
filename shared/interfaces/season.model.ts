@@ -35,19 +35,23 @@ export interface ISeason {
   fees: number;
   type: TournamentTypes;
   startDate: number;
-  participatingTeams: number;
+  ageCategory: AGE_CATEGORY;
   status: statusType;
   createdBy: string;
+  participatingTeams: number;
   lastRegistrationDate: number;
-  ageCategory: AGE_CATEGORY;
-  leftOverMatchCount: number;
   id?: string;
-  imgpath?: string;
+  more?: {
+    leftOverMatchCount?: number;
+    imgpath?: string;
+    format?: string;
+    groundName?: string;
+    groundLink?: string;
+  }
 }
 
 export interface ISeasonDescription {
   description: string;
-  rules: string;
   allowedParticipants?: string[];
 }
 export interface SeasonAbout {
@@ -122,14 +126,15 @@ export interface IDummyFixtureOptions {
 
 export interface ISeasonSummaryData {
   name: string;
+  reportingTime: string;
   startDate: string;
   endDate: string;
   grounds: string;
   location: string;
   fees: string;
-  // discount: number;
-  participants: string;
-  type: string;
+  allowedAgeCategory: string;
+  format: string;
+  type: TournamentTypes;
 }
 
 export interface ISummaryDataSource {

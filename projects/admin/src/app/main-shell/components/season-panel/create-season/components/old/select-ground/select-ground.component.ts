@@ -8,7 +8,7 @@ import { IFilter } from '@shared/interfaces/others.model';
 import { ISelectMatchType } from '@shared/interfaces/season.model';
 import { LocationService } from '@shared/services/location-cities.service';
 import { forkJoin, Subscription } from 'rxjs';
-import { SeasonAdminService } from '../../../../../services/season-admin.service';
+import { SeasonAdminService } from '@admin/main-shell/services/season-admin.service';
 
 @Component({
   selector: 'app-select-ground',

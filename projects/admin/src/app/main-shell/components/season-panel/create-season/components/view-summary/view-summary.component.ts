@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@shared/services/snackbar.service';
@@ -8,6 +8,8 @@ import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confi
 import { Formatters } from '@shared/interfaces/match.model';
 import { ISeasonSummaryData, ISummaryDataSource, ISelectMatchType, ISelectTeam, ISelectGrounds, ISeasonFixtures, ISeasonDetails } from '@shared/interfaces/season.model';
 import { PaymentService } from '@shared/services/payment.service';
+import { Formatters as TeamFormatters } from '@shared/interfaces/team.model';
+import { RemoveUnchangedKeysFromFormGroup } from '@shared/utils/custom-functions';
 
 @Component({
   selector: 'app-view-summary',
@@ -18,57 +20,46 @@ import { PaymentService } from '@shared/services/payment.service';
 export class ViewSummaryComponent implements OnInit {
 
   @Output() clickNext = new EventEmitter<void>();
+  @Input() set data(value: any) {
+    if (value) {
+      this.initSummary(value);
+      this.setDataSource();
+    }
+  }
 
   cols = ['label', 'value'];
   summaryData: Partial<ISeasonSummaryData>;
   dataSource = new MatTableDataSource<ISummaryDataSource>([]);
-  formatter: any;
+  formatter = Formatters;
+  teamFormatter = TeamFormatters;
 
   constructor(
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private currencyPipe: CurrencyPipe,
-    private paymentService: PaymentService,
-    private snackbarService: SnackbarService
   ) { }
 
-  ngOnInit(): void {
-    this.formatter = Formatters;
-    this.initSummary();
-    this.setDataSource();
-  }
+  ngOnInit(): void { }
 
-  initSummary() {
-    const selectMatchTypeFormData: ISelectMatchType = JSON.parse(sessionStorage.getItem('selectMatchType'));
-    const selectTeamFormData: ISelectTeam = JSON.parse(sessionStorage.getItem('selectTeam'));
-    const selectGroundFormData: ISelectGrounds = JSON.parse(sessionStorage.getItem('selectGround'));
-    const seasonFixturesFormData: ISeasonFixtures = JSON.parse(sessionStorage.getItem('seasonFixtures'));
-    const seasonDetailsFormData: ISeasonDetails = JSON.parse(sessionStorage.getItem('seasonDetails'));
-    const data: Partial<ISeasonSummaryData> = {};
-    if (selectMatchTypeFormData && selectGroundFormData && seasonDetailsFormData && seasonFixturesFormData && seasonFixturesFormData?.fixtures?.length) {
-      data.name = seasonDetailsFormData.name;
-      data.startDate = this.getDate(seasonFixturesFormData?.fixtures[0]?.date, 'fullDate');
-      data.endDate = this.getDate(seasonFixturesFormData?.fixtures[seasonFixturesFormData?.fixtures?.length - 1]?.date, 'fullDate');
-      data.grounds = selectGroundFormData.map(ground => ground.name).join(", ");
-      data.location = selectMatchTypeFormData.location.city + ", " + selectMatchTypeFormData.location.state + ", India";
-      // data.discount = seasonDetailsFormData.discount;
-      data.type = selectMatchTypeFormData.type;
+  initSummary(value: any) {
+    const data: any = {};
+    data.name = value?.name;
+    data.reportingTime = this.getDate(new Date(value?.startDate).getTime() - (MatchConstants.ONE_HOUR_IN_MILLIS / 4), 'shortTime');
+    data.startDate = this.getDate(value?.startDate, 'medium');
+    data.endDate = this.getDate(new Date(value?.startDate).getTime() + MatchConstants.ONE_HOUR_IN_MILLIS, 'shortTime');
+    data.grounds = value.groundName;
+    data.location = `${value.location.city}, ${value.location.state}, India`;
+    data.type = this.formatter.formatTournamentType(value.type);
+    data.fees = `${this.currencyPipe.transform(value.fees, 'INR')} (per Player)`;
+    data.format = `${value.format}v${value.format}`;
+    data.allowedAgeCategory = this.teamFormatter.formatAgeCategory(value.allowedAgeCategory).viewValue;
 
-      let finalFees = seasonDetailsFormData.fees.toString();
-      // if (seasonDetailsFormData.discount > 0) {
-      //   finalFees = this.paymentService.getFeesAfterDiscount(seasonDetailsFormData.fees, seasonDetailsFormData.discount).toString();
-      // }
-      data.fees = this.currencyPipe.transform(finalFees, 'INR');
-
-      if (selectTeamFormData) {
-        data.participants = selectTeamFormData.participants.map(team => team.name).join(", ");
-      } else {
-        data.participants = 'Any team can participate';
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key] === null || data[key] === undefined || data[key] === '') {
+        data[key] = MatchConstants.LABEL_NOT_AVAILABLE;
       }
-    } else {
-      this.snackbarService.displayError('Please finish previous steps!');
     }
-    this.summaryData = data;
+    this.summaryData = JSON.parse(JSON.stringify(data));
   }
 
   getDate(value: number, format: string) {
@@ -81,16 +72,20 @@ export class ViewSummaryComponent implements OnInit {
   setDataSource() {
     if (this.summaryData) {
       const data: ISummaryDataSource[] = [];
-      data.push({ label: 'Season Name', value: this.summaryData.name });
+      data.push({ label: 'Name', value: this.summaryData.name });
+      data.push({ label: 'Format', value: this.summaryData.format });
+      data.push({ label: 'Type', value: this.summaryData.type });
+      data.push({ label: 'Reporting Time', value: this.summaryData.reportingTime });
+      data.push({ label: 'Timings', value: `${this.summaryData.startDate} - ${this.summaryData.endDate}` });
       data.push({ label: 'Location', value: this.summaryData.location });
-      data.push({ label: 'Season Starts on', value: this.summaryData.startDate });
-      data.push({ label: 'Allowed Participants', value: this.summaryData.participants });
-      // data.push({ label: 'Discount (%)', value: this.summaryData.discount });
-      data.push({ label: 'Entry Fees (per team)', value: this.summaryData.fees });
-      data.push({ label: 'Tournament Type', value: this.formatter.formatTournamentType(this.summaryData.type) });
-      data.push({ label: 'Stadiums', value: this.summaryData.grounds });
-      data.push({ label: 'Season Ends on', value: this.summaryData.endDate });
+      data.push({ label: 'Age Category', value: this.summaryData.allowedAgeCategory });
+      data.push({ label: 'Fees', value: this.summaryData.fees });
+      data.push({ label: 'Ground(s)', value: this.summaryData.grounds });
+
       this.dataSource = new MatTableDataSource<ISummaryDataSource>(data);
+
+      const element = document.getElementById('view-summary-submit-button');
+      element.scrollIntoView({ behavior: 'smooth' })
     }
   }
 

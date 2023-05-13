@@ -1,13 +1,13 @@
 import { Component, OnInit, SecurityContext, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegexPatterns } from '@shared/constants/REGEX';
 import { PhotoUploaderComponent } from '@shared/components/photo-uploader/photo-uploader.component';
 import { MatchConstantsSecondary, MatchConstants } from '@shared/constants/constants';
 import { formsMessages } from '@shared/constants/messages';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ISeasonDetails, LastParticipationDate } from '@shared/interfaces/season.model';
-import { SeasonAdminService } from '../../../../../services/season-admin.service';
 import { allowedAgeCategories, Formatters } from '@shared/interfaces/team.model';
+import { SeasonAdminService } from '@admin/main-shell/services/season-admin.service';
 
 @Component({
   selector: 'app-add-season',
@@ -55,7 +55,6 @@ export class AddSeasonComponent implements OnInit {
       fees: new FormControl(0,
         [Validators.required, Validators.min(MatchConstants.SEASON_PRICE.MIN), Validators.max(MatchConstants.SEASON_PRICE.MAX)]
       ),
-      // discount: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
       lastRegistrationDate: new FormControl(null),
       ageCategory: new FormControl(null, [Validators.required])
     });

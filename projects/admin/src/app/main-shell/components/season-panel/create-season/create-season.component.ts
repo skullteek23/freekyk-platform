@@ -1,49 +1,53 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatHorizontalStepper } from '@angular/material/stepper';
-import { Subscription } from 'rxjs';
-import { AddSeasonComponent } from './components/add-season/add-season.component';
+import { MatVerticalStepper } from '@angular/material/stepper';
+import { Observable, Subscription } from 'rxjs';
 import { SelectMatchTypeComponent } from './components/select-match-type/select-match-type.component';
-import { SelectTeamsComponent } from './components/select-teams/select-teams.component';
-import { SelectGroundComponent } from './components/select-ground/select-ground.component';
-import { SeasonAdminService } from '../../../services/season-admin.service';
-import { seasonFlowMessages } from '@shared/constants/messages';
-import { AdminPaymentComponent } from './components/admin-payment/admin-payment.component';
-import { GenerateFixturesComponent } from './components/generate-fixtures/generate-fixtures.component';
 import { SnackbarService } from '@shared/services/snackbar.service';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { BasicInfoComponent } from './components/basic-info/basic-info.component';
+import { AdvancedInfoComponent } from './components/advanced-info/advanced-info.component';
+import { SeasonAdminService } from '@admin/main-shell/services/season-admin.service';
+import { seasonFlowMessages } from '@shared/constants/messages';
+import { CanComponentDeactivate } from '@shared/guards/can-deactivate-guard.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
+import { AdminApiService } from '@admin/services/admin-api.service';
 
 @Component({
   selector: 'app-create-season',
   templateUrl: './create-season.component.html',
   styleUrls: ['./create-season.component.scss']
 })
-export class CreateSeasonComponent implements OnDestroy, OnInit {
+export class CreateSeasonComponent implements OnDestroy, OnInit, CanComponentDeactivate {
 
   @ViewChild(SelectMatchTypeComponent) selectMatchTypeComponent: SelectMatchTypeComponent;
-  @ViewChild(SelectTeamsComponent) selectTeamsComponent: SelectTeamsComponent;
-  @ViewChild(SelectGroundComponent) selectGroundComponent: SelectGroundComponent;
-  @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
-  @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
-  @ViewChild(AdminPaymentComponent) adminPaymentComponent: AdminPaymentComponent;
+  @ViewChild(BasicInfoComponent) basicInfoComponent: BasicInfoComponent;
+  @ViewChild(AdvancedInfoComponent) advancedInfoComponent: AdvancedInfoComponent;
+  // @ViewChild(SelectTeamsComponent) selectTeamsComponent: SelectTeamsComponent;
+  // @ViewChild(SelectGroundComponent) selectGroundComponent: SelectGroundComponent;
+  // @ViewChild(AddSeasonComponent) addSeasonComponent: AddSeasonComponent;
+  // @ViewChild(GenerateFixturesComponent) generateFixturesComponent: GenerateFixturesComponent;
+  // @ViewChild(AdminPaymentComponent) adminPaymentComponent: AdminPaymentComponent;
 
   readonly messages = seasonFlowMessages;
 
   isLoaderShown = false;
   isSeasonLive = false;
   errorMessage = '';
-  maxSlots = 0;
   subscriptions = new Subscription();
-  seasonID: string = '';
+  formData: any;
+  seasonID: any;
+  // maxSlots = 0;
+  // seasonID: string = '';
 
   constructor(
     private seasonAdminService: SeasonAdminService,
     private snackbarService: SnackbarService,
-    private ngFire: AngularFirestore
+    private dialog: MatDialog,
+    private apiService: AdminApiService
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     if (this.subscriptions) {
@@ -51,69 +55,34 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     }
   }
 
-  onSaveMatchType(stepper: MatHorizontalStepper) {
-    if (this.matchSelectForm?.valid) {
-      sessionStorage.setItem('selectMatchType', JSON.stringify(this.matchSelectForm.value));
+  save(stepper: MatVerticalStepper, form: FormGroup, elementID: string) {
+    if (form?.valid) {
+      this.formData = {
+        ...this.formData,
+        ...form.value
+      }
       stepper.next();
+      const element = document.getElementById(elementID);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }
 
-  onSaveTeam(stepper: MatHorizontalStepper) {
-    if (this.teamSelectForm?.valid) {
-      sessionStorage.setItem('selectTeam', JSON.stringify(this.teamSelectForm.value));
-      this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
-      stepper.next();
-    }
-  }
-
-  onSkipAndSaveTeam(stepper: MatHorizontalStepper) {
-    sessionStorage.removeItem('selectTeam');
-    this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
-    stepper.next();
-  }
-
-  onSaveGround(stepper: MatHorizontalStepper) {
-    if (this.isValidGroundSelection()) {
-      this.errorMessage = '';
-      sessionStorage.setItem('selectGround', JSON.stringify(this.seasonAdminService._selectedGrounds));
-      stepper.next();
-    }
-  }
-
-  onConfirmFixtures(stepper: MatHorizontalStepper) {
-    if (this.fixturesForm.valid) {
-      this.errorMessage = '';
-      sessionStorage.setItem('seasonFixtures', JSON.stringify(this.fixturesForm.value));
-      stepper.next();
-    }
-  }
-
-  onSaveDetails(stepper: MatHorizontalStepper) {
-    if (this.detailsForm?.valid) {
-      sessionStorage.setItem('seasonDetails', JSON.stringify(this.detailsForm.value));
-      stepper.next();
-    }
-  }
-
-  // onFinishPayment(stepper: MatHorizontalStepper) {
-  //   if (this.paymentForm.valid) {
-  //     stepper.next();
-  //   }
-  // }
-
-  onPublishSeason() {
-    this.seasonID = this.ngFire.createId();
+  publish() {
     this.isLoaderShown = true;
-    this.seasonAdminService.publishSeason(this.seasonID)
+    this.seasonID = this.apiService.getUniqueDocID();
+    this.seasonAdminService.publishSeason(this.formData, this.seasonID)
       .then(() => {
-        const file = this.seasonAdminService._selectedFile;
-        this.seasonAdminService.uploadSeasonPhoto(this.seasonID, file)
-          .catch(this.handleError.bind(this))
-          .finally(() => {
-            this.seasonAdminService.clearSavedData();
-            this.isLoaderShown = false;
-            this.isSeasonLive = true;
-          });
+        window.scrollTo(0, 0);
+        this.isLoaderShown = false;
+        this.isSeasonLive = true;
+        // this.seasonAdminService.clearSavedData();
+        // const file = this.seasonAdminService._selectedFile;
+        // this.seasonAdminService.uploadSeasonPhoto(file)
+        // .catch(this.handleError.bind(this))
+        // .finally(() => {
+        // });
       })
       .catch(this.handleError.bind(this));
   }
@@ -124,42 +93,97 @@ export class CreateSeasonComponent implements OnDestroy, OnInit {
     this.snackbarService.displayError(error?.message);
   }
 
-  isValidGroundSelection(): boolean {
-    let totalSelectionLength: number = 0;
-    this.seasonAdminService._selectedGrounds.forEach(ground => {
-      totalSelectionLength += ground.slots.length;
-    });
-    if (totalSelectionLength < this.maxSlots) {
-      this.errorMessage = this.messages.selectGround.error.slotsUnderflow;
-    } else if (totalSelectionLength > this.maxSlots) {
-      this.errorMessage = this.messages.selectGround.error.slotsOverflow;
-    } else if (this.maxSlots === 0 || totalSelectionLength === 0) {
-      this.errorMessage = this.messages.selectGround.error.noSelection;
-    }
-    return (totalSelectionLength === this.maxSlots) && this.groundForm.valid && this.maxSlots > 0;
-  }
 
   get matchSelectForm(): FormGroup {
     return this.selectMatchTypeComponent?.matchSelectForm;
   }
 
-  get teamSelectForm(): FormGroup {
-    return this.selectTeamsComponent?.teamSelectForm;
+  get basicInfoForm(): FormGroup {
+    return this.basicInfoComponent?.basicInfoForm;
   }
 
-  get groundForm(): FormGroup {
-    return this.selectGroundComponent?.groundForm;
+  get advancedInfoForm(): FormGroup {
+    return this.advancedInfoComponent?.advancedInfoForm;
   }
 
-  get detailsForm(): FormGroup {
-    return this.addSeasonComponent?.detailsForm;
+  canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
+    return this.dialog.open(ConfirmationBoxComponent).afterClosed().toPromise();
   }
+  // onSaveTeam(stepper: MatVerticalStepper) {
+  //   if (this.teamSelectForm?.valid) {
+  //     sessionStorage.setItem('selectTeam', JSON.stringify(this.teamSelectForm.value));
+  //     this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
+  //     stepper.next();
+  //   }
+  // }
 
-  get fixturesForm(): FormGroup {
-    return this.generateFixturesComponent?.fixturesForm;
-  }
+  // onSkipAndSaveTeam(stepper: MatVerticalStepper) {
+  //   sessionStorage.removeItem('selectTeam');
+  //   this.maxSlots = this.seasonAdminService.getMaxSelectableSlots();
+  //   stepper.next();
+  // }
 
-  get paymentForm(): FormGroup {
-    return this.adminPaymentComponent?.paymentForm;
-  }
+  // onSaveGround(stepper: MatVerticalStepper) {
+  //   if (this.isValidGroundSelection()) {
+  //     this.errorMessage = '';
+  //     sessionStorage.setItem('selectGround', JSON.stringify(this.seasonAdminService._selectedGrounds));
+  //     stepper.next();
+  //   }
+  // }
+
+  // onConfirmFixtures(stepper: MatVerticalStepper) {
+  //   if (this.fixturesForm.valid) {
+  //     this.errorMessage = '';
+  //     sessionStorage.setItem('seasonFixtures', JSON.stringify(this.fixturesForm.value));
+  //     stepper.next();
+  //   }
+  // }
+
+  // onSaveDetails(stepper: MatVerticalStepper) {
+  //   if (this.detailsForm?.valid) {
+  //     sessionStorage.setItem('seasonDetails', JSON.stringify(this.detailsForm.value));
+  //     stepper.next();
+  //   }
+  // }
+
+  // onFinishPayment(stepper: MatVerticalStepper) {
+  //   if (this.paymentForm.valid) {
+  //     stepper.next();
+  //   }
+  // }
+
+  // isValidGroundSelection(): boolean {
+  //   let totalSelectionLength: number = 0;
+  //   this.seasonAdminService._selectedGrounds.forEach(ground => {
+  //     totalSelectionLength += ground.slots.length;
+  //   });
+  //   if (totalSelectionLength < this.maxSlots) {
+  //     this.errorMessage = this.messages.selectGround.error.slotsUnderflow;
+  //   } else if (totalSelectionLength > this.maxSlots) {
+  //     this.errorMessage = this.messages.selectGround.error.slotsOverflow;
+  //   } else if (this.maxSlots === 0 || totalSelectionLength === 0) {
+  //     this.errorMessage = this.messages.selectGround.error.noSelection;
+  //   }
+  //   return (totalSelectionLength === this.maxSlots) && this.groundForm.valid && this.maxSlots > 0;
+  // }
+
+  // get teamSelectForm(): FormGroup {
+  //   return this.selectTeamsComponent?.teamSelectForm;
+  // }
+
+  // get groundForm(): FormGroup {
+  //   return this.selectGroundComponent?.groundForm;
+  // }
+
+  // get detailsForm(): FormGroup {
+  //   return this.addSeasonComponent?.detailsForm;
+  // }
+
+  // get fixturesForm(): FormGroup {
+  //   return this.generateFixturesComponent?.fixturesForm;
+  // }
+
+  // get paymentForm(): FormGroup {
+  // return this.adminPaymentComponent?.paymentForm;
+  // }
 }

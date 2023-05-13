@@ -1,11 +1,62 @@
-<div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
+<div class="back-button" fxLayoutAlign="start center">
+  <button [routerLink]="['/seasons']" mat-button fxLayoutAlign="start center" fxLayoutGap="8px">
+    <span class="material-icons-round">chevron_left</span>
+    <span>
+      Go back
+    </span>
+  </button>
+  <span class="dash-h5 heading">Create a Match/Tournament</span>
+</div>
+<mat-vertical-stepper #seasonStepper [linear]="true">
+  <mat-step label="Select Match Type" [stepControl]="matchSelectForm">
+    <app-select-match-type></app-select-match-type>
+    <div class="action-buttons-container" id="select-match-type-next-button" fxLayout="row" fxLayoutAlign="end center"
+      fxLayoutGap="20px">
+      <button type="button" [disabled]="!matchSelectForm?.valid" class="primaryButton buttonText"
+        (click)="save(seasonStepper, matchSelectForm, 'basic-info-next-button')">Continue</button>
+    </div>
+  </mat-step>
+  <mat-step label="Enter Basic Details" [stepControl]="basicInfoForm">
+    <app-basic-info></app-basic-info>
+    <div class="action-buttons-container" id="basic-info-next-button" fxLayout="row" fxLayoutAlign="end center"
+      fxLayoutGap="20px">
+      <button type="button" [disabled]="!basicInfoForm?.valid" class="primaryButton buttonText"
+        (click)="save(seasonStepper, basicInfoForm, 'advanced-info-next-button')">Continue</button>
+    </div>
+  </mat-step>
+  <mat-step label="Enter Advanced Details" [stepControl]="advancedInfoForm">
+    <app-advanced-info></app-advanced-info>
+    <div class="action-buttons-container" id="advanced-info-next-button" fxLayout="row" fxLayoutAlign="end center"
+      fxLayoutGap="20px">
+      <button type="button" [disabled]="!matchSelectForm?.valid" class="primaryButton buttonText"
+        (click)="save(seasonStepper, advancedInfoForm, 'view-summary-next-button')">Continue</button>
+    </div>
+  </mat-step>
+  <mat-step label="Review & Publish">
+    <app-view-summary [data]="formData" (clickNext)="publish()"
+      *ngIf="seasonStepper.selectedIndex ===3 && !isSeasonLive"></app-view-summary>
+    <div id="view-summary-next-button"></div>
+  </mat-step>
+</mat-vertical-stepper>
+
+<section *ngIf="isSeasonLive">
+  <div class="success" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
+    <app-tick-animation></app-tick-animation>
+    <span class="mat-caption center">Woohooo! Your Match/Tournament is LIVE.</span>
+    <span class="mat-caption center">Go to <a [routerLink]="['/seasons', seasonID]"
+        routerLinkActive="router-link-active">Season</a>
+    </span>
+  </div>
+</section>
+
+<!-- <div class="container create-season-container" fxLayout="column" fxLayoutGap="20px">
   <div class="title-heading">
     <span class="mat-subheading-1">
       Create Season
     </span>
   </div>
 
-  <mat-horizontal-stepper #seasonStepper [linear]="true">
+  <mat-vertical-stepper #seasonStepper>
 
     <mat-step label="Match Type" [stepControl]="matchSelectForm" [editable]="true">
       <app-select-match-type *ngIf="seasonStepper.selectedIndex === 0" (stepper)="seasonStepper">
@@ -69,7 +120,7 @@
       </div>
     </mat-step>
 
-    <!-- <mat-step label="Payment" [editable]="false" [stepControl]="paymentForm">
+    <mat-step label="Payment" [editable]="false" [stepControl]="paymentForm">
       <app-admin-payment *ngIf="seasonStepper.selectedIndex === 5"></app-admin-payment>
       <div class="action-buttons-container" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
         <span class="mat-caption center">
@@ -79,7 +130,7 @@
           Next
         </button>
       </div>
-    </mat-step> -->
+    </mat-step>
 
     <mat-step label="Publish" [editable]="false">
       <ng-container *ngIf="seasonStepper.selectedIndex === 5 && isSeasonLive === false">
@@ -92,6 +143,6 @@
             routerLinkActive="router-link-active">Season</a></span>
       </div>
     </mat-step>
-  </mat-horizontal-stepper>
-</div>
+  </mat-vertical-stepper>
+</div> -->
 <app-loading *ngIf="isLoaderShown"></app-loading>

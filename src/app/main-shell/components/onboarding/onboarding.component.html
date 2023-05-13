@@ -52,11 +52,11 @@
     <form [formGroup]="locationForm" fxLayoutAlign="center start" fxLayout="column"
       *ngIf="stepper.selectedIndex === 1 && locationForm">
       <div class="dropdown-container">
-        <app-searchable-form-field fxFlex="auto" label="Select State" [list]="states" [control]="state"
+        <app-searchable-form-field fxFlex="auto" label="State" [list]="states" [control]="state"
           (selectionChange)="onSelectState($event)" [enableOpenOnResponse]="true"></app-searchable-form-field>
       </div>
       <div class="dropdown-container">
-        <app-searchable-form-field fxFlex="auto" label="Select City" [list]="cities" [control]="city"
+        <app-searchable-form-field fxFlex="auto" label="City" [list]="cities" [control]="city"
           [enableOpenOnResponse]="true"></app-searchable-form-field>
       </div>
       <mat-form-field color="primary">

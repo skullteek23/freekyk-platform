@@ -1,9 +1,10 @@
+import { SeasonAdminService } from '@admin/main-shell/services/season-admin.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DUMMY_FIXTURE_TABLE_COLUMNS } from '@shared/constants/constants';
 import { IDummyFixture } from '@shared/interfaces/match.model';
 import { ISelectMatchType, ISelectGrounds, ISeasonDetails, IDummyFixtureOptions } from '@shared/interfaces/season.model';
-import { SeasonAdminService } from '../../../../../services/season-admin.service';
+
 
 @Component({
   selector: 'app-generate-fixtures',

@@ -95,9 +95,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       description: new FormControl(this.seasonMoreData?.description,
         [Validators.maxLength(this.descriptionLimit)]
       ),
-      rules: new FormControl(this.seasonMoreData?.rules,
-        [Validators.maxLength(this.rulesLimit)]
-      ),
+      // rules: new FormControl(this.seasonMoreData?.rules,
+      //   [Validators.maxLength(this.rulesLimit)]
+      // ),
     });
   }
 
@@ -163,7 +163,7 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
     this.isEditMode = true;
     this.updateEntriesForm.setValue({
       description: this.seasonMoreData?.description,
-      rules: this.seasonMoreData?.rules
+      // rules: this.seasonMoreData?.rules
     });
   }
 
@@ -176,9 +176,9 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
       && (this.description.value !== this.seasonMoreData?.description)) {
       updatedTextFields.description = this.description.value.trim();
     }
-    if (this.rules.valid && this.rules.dirty && this.rules.value && (this.rules.value !== this.seasonMoreData?.rules)) {
-      updatedTextFields.rules = this.rules.value.trim();
-    }
+    // if (this.rules.valid && this.rules.dirty && this.rules.value && (this.rules.value !== this.seasonMoreData?.rules)) {
+    //   updatedTextFields.rules = this.rules.value.trim();
+    // }
     if (Object.keys(updatedTextFields).length) {
       this.isLoaderShown = true;
       this.ngFire.collection(`seasons/${this.seasonID}/additionalInfo`).doc('moreInfo').update({
@@ -405,11 +405,11 @@ export class ViewPublishedSeasonComponent implements OnInit, OnDestroy {
               })
               .catch(() => {
                 this.snackbarService.displayError('Error Updating Season Photo')
-                this.photoUploaderComponent.setManualPreview(this.seasonData.imgpath);
+                this.photoUploaderComponent.setManualPreview(this.seasonData?.more?.imgpath);
               })
               .finally(() => this.isLoaderShown = false)
           } else {
-            this.photoUploaderComponent.setManualPreview(this.seasonData.imgpath);
+            this.photoUploaderComponent.setManualPreview(this.seasonData?.more?.imgpath);
           }
         },
       })

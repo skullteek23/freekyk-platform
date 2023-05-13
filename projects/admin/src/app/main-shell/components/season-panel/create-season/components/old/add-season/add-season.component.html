@@ -50,7 +50,7 @@
       <div fxLayout fxLayout.lt-md="column" fxLayoutGap.gt-sm="20px" class="state-city-container">
         <mat-form-field class="text-area-field" appearance="outline" color="primary">
           <mat-label>Mention Season Description</mat-label>
-          <textarea [maxLength]="descriptionLimit" matInput formControlName="description"
+          <textarea [maxLength]="descriptionLimit" matInput formControlName="description" rows="3"
             placeholder="Mention season description" required></textarea>
           <mat-hint align="end">{{description?.value?.length}} / {{descriptionLimit}}</mat-hint>
           <mat-error *ngIf="description?.hasError('required')">

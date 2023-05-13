@@ -12,7 +12,8 @@ export class MatchConstants {
     FPL: 'FK-FPL'
   };
   static readonly TO_BE_DECIDED: 'TBD';
-  static readonly ALLOWED_PARTICIPATION_COUNT = [8, 10, 12, 14, 16, 18, 20, 24];
+  static readonly ALLOWED_PARTICIPATION_COUNT = [2, 4, 8, 10, 12, 14, 16, 18, 20, 24];
+  static readonly ALLOWED_MATCH_FORMAT = [6, 7, 8, 9, 10, 11];
   static readonly ALLOWED_KNOCKOUT_BRACKETS = [4, 8, 16];
   static readonly DEFAULT_LOGO: 'https://www.erithtown.com/wp-content/themes/victory/includes/images/badge-placeholder.png';
   static readonly SEASON_PRICE = {

@@ -13,11 +13,11 @@ import { AdminConfigPanelComponent } from './components/admin-config-panel/admin
 import { GroundsPanelComponent } from './components/grounds-panel/grounds-panel.component';
 import { MyAccountPanelComponent } from './components/my-account-panel/my-account-panel.component';
 import { RegistrationsPanelComponent } from './components/registrations-panel/registrations-panel.component';
-import { AddSeasonComponent } from './components/season-panel/create-season/components/add-season/add-season.component';
+import { AddSeasonComponent } from './components/season-panel/create-season/components/old/add-season/add-season.component';
 import { ChipSelectionInputComponent } from './components/season-panel/update-match-report/components/chip-selection-input/chip-selection-input.component';
 import { CreateSeasonComponent } from './components/season-panel/create-season/create-season.component';
 import { FixtureTableComponent } from './components/season-panel/fixture-table/fixture-table.component';
-import { GenerateFixturesComponent } from './components/season-panel/create-season/components/generate-fixtures/generate-fixtures.component';
+import { GenerateFixturesComponent } from './components/season-panel/create-season/components/old/generate-fixtures/generate-fixtures.component';
 import { RequestDialogComponent } from './components/season-panel/request-dialog/request-dialog.component';
 import { SeasonPanelComponent } from './components/season-panel/season-panel.component';
 import { UpdateMatchReportComponent } from './components/season-panel/update-match-report/update-match-report.component';
@@ -26,11 +26,7 @@ import { SharedModule } from '@shared/shared.module';
 import { MaterialModule } from '@shared/material.module';
 import { MatchReportSummaryComponent } from './components/season-panel/update-match-report/components/match-report-summary/match-report-summary.component';
 import { SelectMatchTypeComponent } from './components/season-panel/create-season/components/select-match-type/select-match-type.component';
-import { SelectTeamsComponent } from './components/season-panel/create-season/components/select-teams/select-teams.component';
-import { SelectGroundComponent } from './components/season-panel/create-season/components/select-ground/select-ground.component';
-import { GroundFiltersComponent } from './components/season-panel/create-season/components/select-ground/components/ground-filters/ground-filters.component';
-import { GroundSlotsComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slots/ground-slots.component';
-import { GroundSlotSelectionComponent } from './components/season-panel/create-season/components/select-ground/components/ground-slot-selection/ground-slot-selection.component';
+import { SelectTeamsComponent } from './components/season-panel/create-season/components/old/select-teams/select-teams.component';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
 import { ViewSummaryComponent } from './components/season-panel/create-season/components/view-summary/view-summary.component';
@@ -51,6 +47,13 @@ import { AddSponsorComponent } from './components/season-panel/add-sponsor/add-s
 import { MatchRequestsPanelComponent } from './components/match-requests-panel/match-requests-panel.component';
 import { TicketsPanelComponent } from './components/tickets-panel/tickets-panel.component';
 import { SeasonStripComponent } from './components/season-panel/view-seasons-table/components/season-strip/season-strip.component';
+import { BasicInfoComponent } from './components/season-panel/create-season/components/basic-info/basic-info.component';
+import { AdvancedInfoComponent } from './components/season-panel/create-season/components/advanced-info/advanced-info.component';
+import { GroundFiltersComponent } from './components/season-panel/create-season/components/old/select-ground/components/ground-filters/ground-filters.component';
+import { GroundSlotSelectionComponent } from './components/season-panel/create-season/components/old/select-ground/components/ground-slot-selection/ground-slot-selection.component';
+import { GroundSlotsComponent } from './components/season-panel/create-season/components/old/select-ground/components/ground-slots/ground-slots.component';
+import { SelectGroundComponent } from './components/season-panel/create-season/components/old/select-ground/select-ground.component';
+import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 
 
 const routes: Routes = [
@@ -60,7 +63,7 @@ const routes: Routes = [
     children: [
       { path: '', component: ViewSeasonsTableComponent, pathMatch: 'full' },
       { path: 'list', component: ViewSeasonsTableComponent },
-      { path: 'create', component: CreateSeasonComponent },
+      { path: 'create', component: CreateSeasonComponent, canDeactivate: [CanDeactivateGuardService], },
       { path: ':seasonid', component: ViewPublishedSeasonComponent },
     ],
   },
@@ -121,6 +124,8 @@ const routes: Routes = [
     MatchRequestsPanelComponent,
     TicketsPanelComponent,
     SeasonStripComponent,
+    BasicInfoComponent,
+    AdvancedInfoComponent,
   ],
   imports: [
     CommonModule,

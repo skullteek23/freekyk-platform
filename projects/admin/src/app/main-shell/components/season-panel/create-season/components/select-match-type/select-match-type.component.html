@@ -1,7 +1,30 @@
 <form [formGroup]="matchSelectForm" class="select-match-type-form-container" fxLayout="column">
 
-  <section class="section-container" fxLayout="column">
-    <mat-form-field appearance="outline" color="primary">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label> Select Type </mat-label>
+    <mat-select panelClass="select-match-type" (selectionChange)="restrictParticipatingTeams($event.value)"
+      [multiple]="false" formControlName="type" required>
+      <mat-option *ngFor="let matchType of types | keyvalue" [value]="matchType.key">
+        <span class="mat-body-1">{{ matchType.value }}</span>
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="matchSelectForm?.get('type')?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>Participating Teams</mat-label>
+    <mat-select [disabled]="isDisabled" formControlName="participatingTeams" required>
+      <mat-option *ngFor="let team of teamsList" [value]="team">
+        {{ team }} teams
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="participatingTeams?.hasError('required')">
+      {{messages.error.requiredField}}
+    </mat-error>
+  </mat-form-field>
+</form>
+<!-- <mat-form-field appearance="outline" color="primary">
       <mat-select panelClass="select-match-type" (selectionChange)="onCustomPackage($event.value)" [multiple]="false"
         placeholder="I WANT TO CREATE" formControlName="package" required>
         <mat-option *ngFor="let package of matchPackages" [value]="package.value">
@@ -14,8 +37,8 @@
       <mat-error *ngIf="matchSelectForm?.get('package')?.hasError('required')">
         {{messages.error.requiredField}}
       </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" color="primary">
+    </mat-form-field> -->
+<!-- <mat-form-field appearance="outline" color="primary">
       <mat-label>Start Date</mat-label>
       <input matInput [min]="minDate" [max]="maxDate" formControlName="startDate" [matDatepicker]="startDate"
         required />
@@ -24,13 +47,13 @@
       <mat-error *ngIf="matchSelectForm?.get('startDate')?.hasError('required')">
         {{messages.error.requiredField}}
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
-      <!-- <div class="dropdown-container" fxFlex.gt-sm="33%">
+<!-- <div fxFlex.gt-sm="100%" formGroupName="location" fxLayout="column">
+      <div class="dropdown-container" fxFlex.gt-sm="33%">
         <app-searchable-form-field label="Country" [list]="countries$ | async" [control]="locationCountry"
           (selectionChange)="onSelectCountry($event)"></app-searchable-form-field>
-      </div> -->
+      </div>
 
       <div class="dropdown-container" fxFlex-gt-sm="33%">
         <app-searchable-form-field label="State" [list]="states$ | async" [control]="locationState"
@@ -41,19 +64,18 @@
         <app-searchable-form-field label="City" [list]="cities$ | async"
           [control]="locationCity"></app-searchable-form-field>
       </div>
-    </div>
+    </div> -->
 
-  </section>
-  <section fxLayout="column" class="team-selection" *ngIf="showAdditionFields">
+<!-- <section fxLayout="column" class="team-selection" *ngIf="showAdditionFields">
     <mat-form-field appearance="outline" color="primary">
       <mat-label>Select Participating Teams</mat-label>
-      <mat-select formControlName="participatingTeamsCount" (selectionChange)="onRestrictTournamentTypes($event.value)"
+      <mat-select formControlName="participatingTeams" (selectionChange)="onRestrictTournamentTypes($event.value)"
         required>
         <mat-option *ngFor="let team of teamsList" [value]="team">
           {{ team }} teams
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="matchSelectForm?.get('participatingTeamsCount')?.hasError('required')">
+      <mat-error *ngIf="participatingTeams?.hasError('required')">
         {{messages.error.requiredField}}
       </mat-error>
     </mat-form-field>
@@ -64,9 +86,8 @@
           {{ type }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="matchSelectForm?.get('participatingTeamsCount')?.hasError('required')">
+      <mat-error *ngIf="participatingTeams?.hasError('required')">
         {{messages.error.requiredField}}
       </mat-error>
     </mat-form-field>
-  </section>
-</form>
+  </section> -->
