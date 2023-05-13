@@ -49,6 +49,7 @@ import { JerseyPipe } from './pipes/jersey.pipe';
 import { BioPipe } from './pipes/bio.pipe';
 import { ProfilePicPipe } from './pipes/profile-pic.pipe';
 import { ConfirmationBoxComponent } from './dialogs/confirmation-box/confirmation-box.component';
+import { LeaveRouteBoxComponent } from './dialogs/leave-route-box/leave-route-box.component';
 import { SearchLgComponent } from './components/search-lg/search-lg.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
 import { AccountAvatarComponent } from './components/account-avatar/account-avatar.component';
@@ -93,6 +94,7 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     HeroSectionComponent,
     IllustrationHeroSectionComponent,
     WhyChooseSectionComponent,
+    LeaveRouteBoxComponent,
     FeatureSectionComponent,
     FeatureInfoComponent,
     CovidSectionComponent,
@@ -250,7 +252,8 @@ const customConfig: ShareButtonsConfig = environment.socialShare;
     KnockoutBracketComponent,
     MyStatsCardComponent,
     LiveSeasonComponent,
-    SubmitMatchRequestComponent
+    SubmitMatchRequestComponent,
+    LeaveRouteBoxComponent
   ],
 })
 export class SharedModule { }

@@ -7,7 +7,7 @@
   </button>
   <span class="dash-h5 heading">Create a Match/Tournament</span>
 </div>
-<mat-vertical-stepper #seasonStepper [linear]="true">
+<mat-vertical-stepper #seasonStepper [linear]="true" *ngIf="!isSeasonLive">
   <mat-step label="Select Match Type" [stepControl]="matchSelectForm">
     <app-select-match-type></app-select-match-type>
     <div class="action-buttons-container" id="select-match-type-next-button" fxLayout="row" fxLayoutAlign="end center"
@@ -34,7 +34,7 @@
   </mat-step>
   <mat-step label="Review & Publish">
     <app-view-summary [data]="formData" (clickNext)="publish()"
-      *ngIf="seasonStepper.selectedIndex ===3 && !isSeasonLive"></app-view-summary>
+      *ngIf="seasonStepper.selectedIndex === 3"></app-view-summary>
     <div id="view-summary-next-button"></div>
   </mat-step>
 </mat-vertical-stepper>

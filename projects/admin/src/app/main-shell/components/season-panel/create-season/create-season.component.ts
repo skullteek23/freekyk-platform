@@ -10,8 +10,8 @@ import { SeasonAdminService } from '@admin/main-shell/services/season-admin.serv
 import { seasonFlowMessages } from '@shared/constants/messages';
 import { CanComponentDeactivate } from '@shared/guards/can-deactivate-guard.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationBoxComponent } from '@shared/dialogs/confirmation-box/confirmation-box.component';
 import { AdminApiService } from '@admin/services/admin-api.service';
+import { LeaveRouteBoxComponent } from '@shared/dialogs/leave-route-box/leave-route-box.component';
 
 @Component({
   selector: 'app-create-season',
@@ -107,7 +107,7 @@ export class CreateSeasonComponent implements OnDestroy, OnInit, CanComponentDea
   }
 
   canDeactivate(): boolean | Observable<boolean> | Promise<boolean> {
-    return this.dialog.open(ConfirmationBoxComponent).afterClosed().toPromise();
+    return this.dialog.open(LeaveRouteBoxComponent).afterClosed().toPromise();
   }
   // onSaveTeam(stepper: MatVerticalStepper) {
   //   if (this.teamSelectForm?.valid) {
