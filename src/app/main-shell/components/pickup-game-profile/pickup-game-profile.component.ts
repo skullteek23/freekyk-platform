@@ -19,6 +19,7 @@ import { ISaveInfo, PickupGameService } from '@app/main-shell/services/pickup-ga
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ICheckoutOptions } from '@shared/interfaces/order.model';
 import { UNIVERSAL_OPTIONS } from '@shared/constants/RAZORPAY';
+import { MatchConstants } from '@shared/constants/constants';
 
 @Component({
   selector: 'app-pickup-game-profile',
@@ -478,7 +479,11 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
   }
 
   goToURL() {
-    window.open(this.season.more.groundLink, '_blank');
+    if (this.season.more.groundLink.startsWith(MatchConstants.LINK_PRETEXT)) {
+      window.open(this.season.more.groundLink, '_blank');
+    } else {
+      window.open(MatchConstants.LINK_PRETEXT + this.season.more.groundLink, '_blank');
+    }
   }
 
   async openWaitingList() {

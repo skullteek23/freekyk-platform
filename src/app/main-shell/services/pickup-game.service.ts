@@ -66,7 +66,7 @@ export class PickupGameService {
         if (Array.isArray(el.slots)) {
           el.slots.forEach((position, index) => {
             const slot: Partial<ISlotOption> = {
-              name: this.getShortenText(el.name, 8) + this.getEnumerableIndex(index),
+              name: this.getEnumerableIndex(index) + el.name,
               booked: true,
               selected: false,
               uid: el.uid,

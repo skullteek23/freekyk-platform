@@ -31,6 +31,7 @@ export class MyTeamMenuComponent implements OnInit {
   }
 
   onOpenOption(value: TeamMenu) {
+    return;
     switch (value) {
       case TeamMenu.join:
         this.teamService.onOpenJoinTeamDialog();
@@ -42,7 +43,7 @@ export class MyTeamMenuComponent implements OnInit {
         this.teamService.onOpenInvitePlayersDialog();
         break;
       case TeamMenu.manage:
-        this.router.navigate(['/dashboard', 'team-management'])
+        this.router.navigate(['/my-team'])
         break;
     }
   }

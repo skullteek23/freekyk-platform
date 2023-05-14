@@ -41,12 +41,12 @@ export enum RewardableActivities {
 
 export const RewardPoints = {
   [RewardableActivities.onboarding]: 150,
-  [RewardableActivities.openPlayerCard]: 1,
-  [RewardableActivities.openTeamPage]: 1,
-  [RewardableActivities.completeProfile]: 1,
-  [RewardableActivities.openNotification]: 1,
-  [RewardableActivities.requestMatch]: 1,
-  [RewardableActivities.joinPickupGame]: 1,
+  [RewardableActivities.openPlayerCard]: 5,
+  [RewardableActivities.openTeamPage]: 5,
+  [RewardableActivities.completeProfile]: 15,
+  [RewardableActivities.openNotification]: 5,
+  [RewardableActivities.requestMatch]: 10,
+  [RewardableActivities.joinPickupGame]: 50,
   // [RewardableActivities.sendTeamRequest]: 15,
   // [RewardableActivities.createTeam]: 50,
   // [RewardableActivities.joinTeam]: 50,

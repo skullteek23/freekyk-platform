@@ -59,6 +59,7 @@ export class MatchConstants {
   static readonly MINIMUM_PAYMENT_AMOUNT = 150;
   static readonly MINIMUM_POINTS_RECHARGE = 25;
   static readonly ORDER_REFUND_MULTIPLIER = 0.5;
+  static readonly LINK_PRETEXT = 'https://';
 }
 export const PLAYING_POSITIONS = [
   {

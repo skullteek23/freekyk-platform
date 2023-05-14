@@ -53,16 +53,16 @@ section {
           align-items: center;
           flex-direction: row;
           justify-content: flex-start;
+        }
 
-          .filled {
-            font-size: 16px;
-          }
+        .filled {
+          font-size: 16px;
         }
       }
+    }
 
-      .button-slot:nth-child(odd) {
-        margin-right: 0 !important;
-      }
+    .button-slot:nth-child(odd) {
+      margin-right: 0 !important;
     }
   }
 }

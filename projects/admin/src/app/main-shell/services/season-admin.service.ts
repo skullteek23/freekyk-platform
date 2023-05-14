@@ -104,10 +104,24 @@ export class SeasonAdminService {
     const uid = sessionStorage.getItem('uid');
     if (formData && uid) {
       const fixtures = this.getPickupGameFixture(formData);
+      const startDate = this.getUserTimeZoneDate(formData.startDate);
       const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.PUBLISH_SEASON);
-      return callable({ ...formData, uid, seasonID, fixtures }).toPromise();
+      return callable({
+        ...formData,
+        startDate,
+        uid,
+        seasonID,
+        fixtures
+      }).toPromise();
     }
     return Promise.reject();
+  }
+
+  getUserTimeZoneDate(date: any) {
+    if (date) {
+      return new Date(new Date(date).toLocaleString()).getTime();
+    }
+    return new Date();
   }
 
   getPickupGameFixture(config: any) {

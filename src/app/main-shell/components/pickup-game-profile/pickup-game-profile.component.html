@@ -84,12 +84,12 @@
           <div class="team">
             <ul fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="space-between center" class="list-container">
               <li *ngFor="let slot of displayedSlots; let i = index" class="button-slot">
-                <button [ngClass]="{'user-booked': user && slot.uid === user?.uid}"
+                <button id="pickup-slot-button" [ngClass]="{'user-booked': user && slot.uid === user?.uid}"
                   [color]="slot.selected ? 'primary' : ''" mat-raised-button (click)="selectSlot(slot)">
                   <span class="material-icons-round" *ngIf="!slot.booked">
                     person
                   </span>
-                  <span class="mat-caption" *ngIf="slot.name">
+                  <span class="mat-caption player-name" *ngIf="slot.name">
                     {{slot.name}}
                   </span>
                   <span class="material-icons-round filled" *ngIf="slot.booked">
@@ -101,7 +101,7 @@
           </div>
         </div>
       </mat-card-content>
-      <mat-card-footer *ngIf="emptySlotsCount === 0">
+      <mat-card-footer *ngIf="false">
         <div class="waiting-list-container">
           <span class="mat-caption">
             Didn't get slots? <a (click)="openWaitingList()"> Join Waiting List</a>

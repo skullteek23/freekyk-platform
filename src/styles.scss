@@ -1091,3 +1091,27 @@ section.features-section {
 .mat-form-field-subscript-wrapper {
   margin-top: 4px;
 }
+
+#pickup-slot-button {
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 8px;
+
+    .player-name {
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .material-icons-round.filled {
+      width: 10%;
+      max-width: 10%;
+    }
+  }
+}

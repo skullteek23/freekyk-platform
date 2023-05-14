@@ -40,5 +40,6 @@
     <mat-error *ngIf="basicInfoForm?.get('startDate')?.hasError('required')">
       {{messages.error.requiredField}}
     </mat-error>
+    <mat-hint>Time is in 24 Hrs Format.</mat-hint>
   </mat-form-field>
 </form>

@@ -214,15 +214,28 @@
         {{user.displayName}}
       </span>
       <div fxLayoutAlign="start center" fxLayoutGap="4px">
-        <span class="mat-caption">
-          {{user.phoneNumber}}
-        </span>
-        <span class="material-icons-round filled verified-icon">
-          check_circle
-        </span>
-        <span class="mat-caption">
-          Verified
-        </span>
+        <ng-container *ngIf="user.phoneNumber; else email">
+          <span class="mat-caption">
+            {{user.phoneNumber}}
+          </span>
+          <span class="material-icons-round filled verified-icon">
+            verified
+          </span>
+          <span class="mat-caption">
+            Verified
+          </span>
+        </ng-container>
+        <ng-template #email>
+          <span class="mat-caption">
+            {{user.email || 'N/A'}}
+          </span>
+          <span class="material-icons-round filled verified-icon" *ngIf="user.emailVerified">
+            verified
+          </span>
+          <span class="mat-caption" *ngIf="user.emailVerified">
+            Verified
+          </span>
+        </ng-template>
       </div>
     </div>
   </div>
