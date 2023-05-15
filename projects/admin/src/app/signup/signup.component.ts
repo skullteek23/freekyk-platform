@@ -41,8 +41,8 @@ export class SignupComponent implements OnInit {
       contactNumber: new FormControl(null, [Validators.pattern(RegexPatterns.phoneNumber)]),
       location: new FormGroup({
         // locCountry: new FormControl('India'),
-        locState: new FormControl(null),
-        locCity: new FormControl(null),
+        state: new FormControl(null),
+        city: new FormControl(null),
       }),
       company: new FormControl(null, [Validators.pattern(RegexPatterns.alphaNumberWithSpace), Validators.maxLength(60)]),
       gst: new FormControl(null, Validators.pattern(RegexPatterns.gstNumber)),
@@ -61,7 +61,7 @@ export class SignupComponent implements OnInit {
           email: email.trim(),
           contactNumber: this.signupForm?.value?.contactNumber,
           location: {
-            country: this.signupForm?.value?.location.country,
+            country: 'India',
             state: this.signupForm?.value?.location.state,
             city: this.signupForm?.value?.location.city,
           },
@@ -109,15 +109,15 @@ export class SignupComponent implements OnInit {
   }
 
   get locationCountry(): FormControl {
-    return ((this.signupForm.get('location') as FormGroup)?.controls['locCountry'] as FormControl);
+    return ((this.signupForm.get('location') as FormGroup)?.controls['country'] as FormControl);
   }
 
   get locationState(): FormControl {
-    return ((this.signupForm.get('location') as FormGroup)?.controls['locState'] as FormControl);
+    return ((this.signupForm.get('location') as FormGroup)?.controls['state'] as FormControl);
   }
 
   get locationCity(): FormControl {
-    return ((this.signupForm.get('location') as FormGroup)?.controls['locCity'] as FormControl);
+    return ((this.signupForm.get('location') as FormGroup)?.controls['city'] as FormControl);
   }
 
   get email() {

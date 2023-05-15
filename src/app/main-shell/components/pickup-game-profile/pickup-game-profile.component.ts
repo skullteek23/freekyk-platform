@@ -77,7 +77,6 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
         }
       }
     }));
-    this.snackBarService.displayCustomMsg('Please select slots to confirm');
   }
 
   ngOnDestroy(): void {
@@ -97,6 +96,9 @@ export class PickupGameProfileComponent implements AfterViewInit, OnDestroy {
               this.startDate = this.pickupGameService.getStartDate(this.season.startDate);
               const today = new Date().getTime();
               this.isGameFinished = today > (this.season.startDate + this.oneHourMilliseconds);
+              if (!this.isGameFinished) {
+                this.snackBarService.displayCustomMsg('Please select slots to confirm');
+              }
               this.reportingTime = this.pickupGameService.getReportingTime(this.season.startDate);
               this.amount = 0;
               this.parseSeasonGround();
