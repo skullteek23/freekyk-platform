@@ -105,7 +105,7 @@ export class PlayerCardComponent implements OnInit {
 
   onShare(): void {
     const shareData = new ShareData();
-    shareData.share_url = `/play/players/${this.docID}`;
+    shareData.share_url = `/players/${this.docID}`;
     shareData.share_title = this.data.name;
     this.socialShareService.onShare(shareData);
   }

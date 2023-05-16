@@ -1,21 +1,14 @@
-aside {
-  position: fixed;
-  bottom: 0px;
-  margin: auto;
-  width: 100%;
-  z-index: 200;
-}
-
-.mat-toolbar {
+.bottom-nav {
   background-color: white;
+  width: 100%;
+  margin: auto;
 
-}
-
-.bottom-nav a {
-  color: black;
-  opacity: 0.5;
-  margin: 0 !important;
-  width: 84px;
+  a {
+    color: black;
+    opacity: 0.5;
+    margin: 0 !important;
+    width: 84px;
+  }
 }
 
 .router-link-active {

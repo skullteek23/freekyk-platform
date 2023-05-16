@@ -81,6 +81,7 @@ const routes: Routes = [
   { path: 'ground/:groundid', component: GroundProfileComponent },
 
   { path: 'players', component: FindPlayersComponent },
+  { path: 'players/:playerid', component: FindPlayersComponent },
   { path: 'standings', component: PlStandingsComponent },
   { path: 'challenges', component: ChallengesComponent },
   {
