@@ -72,7 +72,6 @@ export class PurchasePointsComponent implements OnInit, OnDestroy {
             email: this.user.email
           },
           description: `+${this.purchaseAmt} Points Purchase`,
-          order_id: order.id,
           amount: this.purchaseAmt * 100,
           handler: this.success.bind(this),
           modal: {
