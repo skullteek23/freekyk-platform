@@ -23,7 +23,7 @@
 <section>
   <app-search-lg searchPlaceholder="Search a Player" (searchItem)="applySearch($event)"></app-search-lg>
   <mat-list *ngIf="playersListCache.length">
-    <mat-list-item *ngFor="let player of playersList" (click)="openProfile(player)">
+    <mat-list-item *ngFor="let player of playersList" (click)="openProfile(player.id)">
       <mat-card class="mat-elevation-z8 dashboard-card player-container" fxLayoutAlign="start center"
         fxLayoutGap="12px">
         <div class="image">

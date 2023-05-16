@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { PlayerCardComponent } from '@shared/dialogs/player-card/player-card.component';
 import { IPlayer } from '@shared/interfaces/user.model';
 import { ApiGetService } from '@shared/services/api.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-find-players',
@@ -14,13 +16,20 @@ export class FindPlayersComponent implements OnInit {
   playersList: IPlayer[] = [];
   playersListCache: IPlayer[] = [];
   isLoaderShown = false;
+  subscriptions = new Subscription();
 
   constructor(
     private apiService: ApiGetService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.subscriptions.add(this.route.params.subscribe(params => {
+      if (params?.hasOwnProperty('playerid')) {
+        this.openProfile(params['playerid']);
+      }
+    }));
     this.getPlayers();
   }
 
@@ -45,10 +54,10 @@ export class FindPlayersComponent implements OnInit {
       })
   }
 
-  openProfile(player: IPlayer) {
+  openProfile(playerID: string) {
     this.dialog.open(PlayerCardComponent, {
       panelClass: 'fk-dialogs',
-      data: player.id,
+      data: playerID,
     });
   }
 
