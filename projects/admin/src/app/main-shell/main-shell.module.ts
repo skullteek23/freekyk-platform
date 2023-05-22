@@ -55,6 +55,7 @@ import { GroundSlotsComponent } from './components/season-panel/create-season/co
 import { SelectGroundComponent } from './components/season-panel/create-season/components/old/select-ground/select-ground.component';
 import { CanDeactivateGuardService } from '@shared/guards/can-deactivate-guard.service';
 import { SeasonPropertyLineComponent } from './components/season-panel/view-published-season/components/season-property-line/season-property-line.component';
+import { SuperAdminAccessGuard } from '@admin/guards/super-admin-access.guard';
 
 
 const routes: Routes = [
@@ -81,10 +82,10 @@ const routes: Routes = [
     ],
   },
   { path: 'account', component: MyAccountPanelComponent },
-  { path: 'manage-requests', component: RegistrationsPanelComponent },
+  { path: 'manage-requests', component: RegistrationsPanelComponent, canActivate: [SuperAdminAccessGuard] },
   { path: 'match-requests', component: MatchRequestsPanelComponent },
-  { path: 'configurations', component: AdminConfigPanelComponent },
-  { path: 'tickets', component: TicketsPanelComponent },
+  { path: 'configurations', component: AdminConfigPanelComponent, canActivate: [SuperAdminAccessGuard] },
+  { path: 'tickets', component: TicketsPanelComponent, canActivate: [SuperAdminAccessGuard] },
 ];
 
 @NgModule({

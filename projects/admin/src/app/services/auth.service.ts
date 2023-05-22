@@ -54,6 +54,17 @@ export class AuthService {
     }
   }
 
+  isSuperAdmin(userID: string): Observable<boolean> {
+    return this.ngFirestore.collection('admins').doc(userID).get().pipe(map(res => {
+      // Only allow login when user is activated and email exists
+      if (res.exists) {
+        const resData = res.data() as Admin;
+        return resData.role === AssignedRoles.superAdmin;
+      }
+      return false;
+    }));
+  }
+
   registerUserByEmail(formData: Admin): Promise<any> {
     if (formData && Object.keys(formData).length) {
       const callable = this.ngFunctions.httpsCallable(CLOUD_FUNCTIONS.CREATE_ADMIN_USER);
