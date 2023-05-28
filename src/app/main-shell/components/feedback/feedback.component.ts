@@ -69,7 +69,7 @@ export class FeedbackComponent implements OnInit {
     if (selectedIssues.length && this.isShowIssues) {
       // save more
       reason = {
-        reasons: this.allIssuesList.map(el => el.value)
+        reasons: selectedIssues.map(el => el.value)
       }
     }
     this.apiPostService.saveFeedback(this.dialogData.id, feedbackID, feedback, reason)
