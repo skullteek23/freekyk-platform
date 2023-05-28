@@ -20,7 +20,7 @@ export class MyAccountComponent implements OnInit {
   quickLinks: ListOption[] = [
     { viewValue: 'Orders', value: '/orders' },
     { viewValue: 'Notifications', value: '/notifications' },
-    { viewValue: 'Addresses', value: '/addresses' },
+    // { viewValue: 'Addresses', value: '/addresses' },
   ];
   isLoaderShown = false;
 
