@@ -66,10 +66,12 @@
   <app-tick-animation></app-tick-animation>
   <div fxLayout="column" fxLayoutGap="12px">
     <span class="dash-h5 center" *ngIf="rating >= 4">
-      Thank you for rating our game {{rating}} stars!
+      Thank you for rating our game <br>
+      {{rating}} stars!
     </span>
     <span class="dash-h5 center" *ngIf="rating < 4">
-      We're sorry to hear that you rated our game {{rating}} stars
+      We're sorry to hear that you rated our game <br>
+      {{rating}} stars!
     </span>
     <span class="mat-body-1 center sec-menu">
       We're committed to making the game even more enjoyable for you.
