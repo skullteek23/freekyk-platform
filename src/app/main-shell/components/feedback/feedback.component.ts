@@ -53,7 +53,6 @@ export class FeedbackComponent implements OnInit {
     if (newValue !== 0 && newValue !== this.rating) {
       this.rating = newValue;
     }
-    console.log(this.rating);
   }
 
   submitFeedback() {
