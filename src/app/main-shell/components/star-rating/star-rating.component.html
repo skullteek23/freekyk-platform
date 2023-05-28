@@ -1,0 +1,5 @@
+<ng-container *ngIf="form">
+  <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+    <app-input-stars formControlName="rating"></app-input-stars>
+  </form>
+</ng-container>

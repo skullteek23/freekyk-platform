@@ -1,0 +1,39 @@
+.feedback-container {
+  min-height: 30vh;
+
+
+  .dash-h5 {
+    margin: 12px 0;
+  }
+
+  .issues-container {
+    margin-top: 12px;
+  }
+
+  .star-rating {
+    margin-top: 24px;
+    margin-bottom: 12px;
+  }
+}
+
+.text-end {
+  text-align: end;
+}
+
+.feedback-container-full {
+  max-height: 100vh;
+
+  .more-issues-container {
+    height: 70vh;
+    overflow-y: auto;
+    padding: 8px 4px;
+  }
+}
+
+.submit-button-container {
+  margin: 24px;
+}
+
+section {
+  padding: 0 12px;
+}

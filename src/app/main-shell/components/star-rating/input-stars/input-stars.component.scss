@@ -1,0 +1,29 @@
+:host {
+  width: 100%;
+}
+
+.stars {
+  flex: 0 0 50%;
+}
+
+.star {
+  cursor: pointer !important;
+  width: 48px;
+  height: auto;
+
+  fill: white;
+  stroke: var(--premiumServiceColor);
+  stroke-width: 3px;
+
+  transform: scale(0.8);
+  transition: transform 200ms ease-in-out;
+
+  path {
+    transition: fill 200ms ease-in-out, stroke 100ms ease-in-out;
+  }
+}
+
+.active {
+  fill: var(--premiumServiceColor);
+  stroke: darken(#fbbe28, 5%);
+}

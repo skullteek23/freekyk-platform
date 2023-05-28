@@ -19,6 +19,7 @@ import { ICompletedActivity, IPoint, IPointsLog, IReward } from "@shared/interfa
 import { NotificationBasic } from "@shared/interfaces/notification.model";
 import { createKnockoutData } from "./custom-functions";
 import { NotificationTypes } from "@shared/interfaces/notification.model";
+import { IPendingFeedback } from "@shared/interfaces/feedback.model";
 
 // export interface SeasonAllInfo extends ISeason, SeasonAbout, SeasonStats, SeasonMedia { };
 export interface SeasonAllInfo extends ISeason, ISeasonDescription, SeasonStats, SeasonMedia { };
@@ -399,6 +400,13 @@ export function parseResultData(source: Observable<ngFireDocQuery>) {
   return source.pipe(
     parseMatchData,
     map((resp: MatchFixture[]) => resp.sort(ArraySorting.sortObjectByKey('date', 'desc'))),
+  );
+}
+
+export function parsePendingFeedbacksData(source: Observable<ngFireDocQuery>): Observable<IPendingFeedback[]> {
+  return source.pipe(
+    map((resp) => resp.empty ? [] : resp.docs.map((doc) => ({ id: doc.id, ...(doc.data() as IPendingFeedback), } as IPendingFeedback))),
+    map((resp: IPendingFeedback[]) => resp.sort(ArraySorting.sortObjectByKey('createdAt', 'desc'))),
   );
 }
 

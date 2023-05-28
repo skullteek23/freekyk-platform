@@ -122,7 +122,7 @@ export class ProfileConstants {
   static readonly DEACTIVATION_REASON_LIMIT = 500;
   static readonly FALLBACK_IMG_URL = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
   static readonly FEEDBACK_MESSAGE_LIMIT = 3000;
-  static readonly RATING_NUMBERS = [0, 1, 2, 3, 4, 5];
+  static readonly RATING_NUMBERS = [0, 1, 2, 3, 4];
   static readonly ALLOWED_PHOTO_FILE_TYPES_TEAM = [
     'image/jpeg',
     'image/jpg',

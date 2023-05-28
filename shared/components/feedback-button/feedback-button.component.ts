@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 
 @Component({
   selector: 'app-feedback-button',
@@ -17,11 +16,6 @@ export class FeedbackButtonComponent implements OnInit {
   }
 
   openFeedback() {
-    this.dialog.open(FeedbackComponent, {
-      panelClass: 'fk-dialogs',
-      disableClose: false,
-      closeOnNavigation: true
-    })
   }
 
 }

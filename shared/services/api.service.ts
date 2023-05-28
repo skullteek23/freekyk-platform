@@ -15,9 +15,10 @@ import { ISeasonPartner, ISeason } from '@shared/interfaces/season.model';
 import { ITeam } from '@shared/interfaces/team.model';
 import { ISupportTicket } from '@shared/interfaces/ticket.model';
 import { IPlayer, authUserMain } from '@shared/interfaces/user.model';
-import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists, checkGameOrderCancellation, parseMatchData } from '@shared/utils/pipe-functions';
+import { GroundAllInfo, parseFixtureData, parseGroundBulkData, parseGroundData, parseKnockoutData, parseLeagueData, parseOrderData, parseOrdersData, parsePendingOrderData, parsePickupSlotData, parsePickupSlotDataListener, parsePickupSlotsData, parsePlayerBulkData, parsePlayerDataV2, parsePlayersData, parseSeasonBulkData, parseSeasonData, parseSeasonDataV2, parseSeasonNamesData, parseSeasonPartnerData, parseSeasonTypeData, parseTeamBulkData, parseTeamData, parseTeamPlayerData, parseTeamsData, parseTicketData, parseWaitingListData, parseOnboardingStatus, parseTeamDuplicity, PlayerAllInfo, SeasonAllInfo, TeamAllInfo, parseLockedSlotData, parseCompletedActivity, parseRewardsData, parsePointsData, parseCompletedActivities, parseNotificationsData, parsePointsDataV2, parsePlayersStatsData, parseAllPointsData, parsePointLogsData, checkPendingOrderExists, checkGameOrderCancellation, parseMatchData, parsePendingFeedbacksData } from '@shared/utils/pipe-functions';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
+import { IFeedback, IFeedbackReason, IPendingFeedback } from '@shared/interfaces/feedback.model';
 
 @Injectable({
   providedIn: 'root'
@@ -486,12 +487,13 @@ export class ApiGetService {
     }
   }
 
-  readBatchDocuments(documentIds: string[], collection: string): Observable<any[]> {
-    const documentObservables = documentIds.map((docId) =>
-      this.angularFirestore.collection(collection).doc(docId).get()
-    );
-
-    return combineLatest(documentObservables)
+  getPendingFeedbacks(UID: string): Observable<IPendingFeedback[]> {
+    if (!UID) {
+      return null;
+    }
+    const query = query => query.where('uid', '==', UID);
+    return this.angularFirestore.collection('pendingFeedbacks', query).get()
+      .pipe(parsePendingFeedbacksData)
   }
 }
 
@@ -631,5 +633,20 @@ export class ApiPostService {
 
   addMatchRequest(doc: IMatchRequest): Promise<any> {
     return this.angularFirestore.collection('matchRequests').add(doc);
+  }
+
+  saveFeedback(deleteDocId: string, commonDocId: string, doc: IFeedback, doc2?: IFeedbackReason): Promise<any> {
+    const batch = this.angularFirestore.firestore.batch();
+    if (commonDocId && doc && batch && deleteDocId) {
+      batch.set(this.angularFirestore.firestore.collection('feedback').doc(commonDocId), doc);
+      batch.delete(this.angularFirestore.firestore.collection('pendingFeedbacks').doc(deleteDocId))
+    }
+    if (doc2 && batch) {
+      batch.set(this.angularFirestore.firestore.collection('feedbackReasons').doc(commonDocId), doc2);
+    }
+    if (batch) {
+      return batch.commit();
+    }
+    return null;
   }
 }

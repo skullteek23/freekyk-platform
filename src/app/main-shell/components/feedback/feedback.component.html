@@ -1,0 +1,96 @@
+<section class="feedback-container" fxLayout="column" *ngIf="!isShowMoreIssues && !isSubmitted">
+  <a class="mat-caption text-end" (click)="dismiss()">
+    Skip
+  </a>
+  <div fxLayout="column">
+    <span class="dash-h5 center">
+      Rate your Game
+    </span>
+    <span class="mat-body-1 center">
+      {{dialogData.itemHeading}}
+    </span>
+    <span class="mat-caption sec-menu center">
+      {{dialogData.itemDesc}}
+    </span>
+  </div>
+  <div class="star-rating">
+    <app-star-rating [selectedRating]="rating" (ratingChange)="onChangeRating($event)"></app-star-rating>
+  </div>
+
+  <div class="issues-container" *ngIf="isShowIssues" fxLayout="column" fxLayoutGap="8px">
+    <span class="mat-body-1">
+      Please select one or more issues
+    </span>
+    <mat-chip-list [multiple]="true">
+      <mat-chip *ngFor="let issue of highlights" (click)="selectIssue(issue)" [selected]="issue.selected">
+        {{issue.viewValue}}
+      </mat-chip>
+    </mat-chip-list>
+    <div class="more-issues">
+      <a (click)="openMoreIssues()" fxLayoutAlign="center center" fxLayoutGap="4px">
+        <span class="mat-caption">
+          More Issues
+        </span>
+        <span class="material-icons-round">
+          chevron_right
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="feedback-container-full" fxLayout="column" *ngIf="isShowMoreIssues && !isSubmitted">
+  <a class="mat-caption text-end" (click)="isShowMoreIssues = false">
+    <span class="material-icons-round">
+      close
+    </span>
+  </a>
+  <div class="more-issues-container">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let reason of reasons | keyvalue">
+        <mat-expansion-panel-header>
+          {{formatter.formatIssueHeading(reason.key)}}
+        </mat-expansion-panel-header>
+        <mat-chip-list [multiple]="true">
+          <mat-chip *ngFor="let reasonVal of reason.value" (click)="selectMoreIssue(reasonVal)"
+            [selected]="allIssuesList[reasonVal.value]?.selected">
+            {{reasonVal.viewValue}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</section>
+
+<section class="feedback-finish-message" fxLayout="column" *ngIf="isSubmitted">
+  <app-tick-animation></app-tick-animation>
+  <div fxLayout="column" fxLayoutGap="12px">
+    <span class="dash-h5 center" *ngIf="rating >= 4">
+      Thank you for rating our game {{rating}} stars!
+    </span>
+    <span class="dash-h5 center" *ngIf="rating < 4">
+      We're sorry to hear that you rated our game {{rating}} stars
+    </span>
+    <span class="mat-body-1 center sec-menu">
+      We're committed to making the game even more enjoyable for you.
+    </span>
+  </div>
+</section>
+
+<section *ngIf="!isSubmitted">
+  <div class="submit-button-container" fxLayoutAlign="center center">
+    <button mat-raised-button color="primary" [disabled]="rating <= 0" (click)="submitFeedback()">
+      Submit
+    </button>
+  </div>
+</section>
+
+<section *ngIf="isSubmitted">
+  <div class="submit-button-container" fxLayoutAlign="center center">
+    <button mat-raised-button color="primary" (click)="dismiss()">
+      Close
+    </button>
+  </div>
+</section>
+
+<app-loading *ngIf="isLoaderShown"></app-loading>

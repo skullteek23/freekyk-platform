@@ -1,7 +1,7 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { REGION } from '@angular/fire/functions';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,11 +29,13 @@ import { environment } from 'environments/environment';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from '@shared/utils/appDateAdapter';
-import { FeedbackComponent } from '@app/shared/dialogs/feedback/feedback.component';
 import { FeedbackButtonComponent } from '@shared/components/feedback-button/feedback-button.component';
 import { BottomNavComponent } from './main-shell/components/bottom-nav/bottom-nav.component';
 import { MainShellModule } from './main-shell/main-shell.module';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { FeedbackComponent } from './main-shell/components/feedback/feedback.component';
+import { StarRatingComponent } from './main-shell/components/star-rating/star-rating.component';
+import { InputStarsComponent } from './main-shell/components/star-rating/input-stars/input-stars.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
     TeamProfileComponent,
     FeedbackComponent,
     FeedbackButtonComponent,
+    StarRatingComponent,
+    InputStarsComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +63,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
     HttpClientModule,
     MaterialModule,
     SharedModule,
+    FormsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     AngularFireAnalyticsModule,

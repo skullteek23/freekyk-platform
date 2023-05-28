@@ -30,9 +30,3 @@ export interface IContactDetails {
   email: string;
   phone_no?: string;
 }
-
-export interface IFeedback {
-  rating: number;
-  message?: string;
-  uid?: string
-}
